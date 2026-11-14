@@ -56,6 +56,15 @@ final class FlowTests: XCTestCase {
         g.pause(); XCTAssertEqual(g.screen, .title, "no pause on the title")
     }
 
+    /// iOS QC r4 N2: the unlock debug jump shows another hero beside the current one.
+    func test_unlock_jump_names_a_different_hero() throws {
+        let c = try Repo.contentSet()
+        let g = Game(content: c, hero: realHero(c), store: MemoryStore(), isDebug: true)
+        g.debugStart(screen: "unlock", q: nil, beat: nil, stage: nil, stars: nil)
+        XCTAssertEqual(g.screen, .unlock)
+        XCTAssertNotEqual(g.unlockedHero?.mission.hero.id, g.heroId)
+    }
+
     func test_story_next_is_debounced() throws {
         let g = try game()
         g.start(); wait(g, 0.3)

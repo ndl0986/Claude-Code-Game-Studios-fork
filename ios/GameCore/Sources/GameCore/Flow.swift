@@ -301,7 +301,13 @@ public final class Game {
         case .results:
             startQuiz(); stars = s ?? 2; medalEarned = stage != "nomedal"; medalNew = stage == "newmedal"
             go(.results)
-        case .unlock: stars = s ?? 2; unlockedHero = hero; go(.unlock)
+        case .unlock:
+            // the two medallions differ (iOS QC r4 N2): the hero's next_hero when it exists, else any other hero
+            // loaded (the debug sample); a real run only reaches unlock when finishing opens a next hero
+            stars = s ?? 2
+            unlockedHero = content.heroes.first { $0.mission.hero.id == hero.mission.nextHero }
+                ?? content.heroes.first { $0.mission.hero.id != heroId } ?? hero
+            go(.unlock)
         case .play:
             go(.play)
             if let b = beat { play.debugJump(beat: b - 1, stage: name == "caption" ? "caption" : stage) }

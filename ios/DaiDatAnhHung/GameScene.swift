@@ -253,8 +253,12 @@ final class GameScene: SKScene {
             let s = D.star(q.r, color(q.color), C.goldDark); s.position = D.p(q.x, q.y); s.zRotation = -q.rot; fx.addChild(s)
         }
         for q in p.pops {
-            // keep pops below the HUD row (pause, sound, beat dots): Ối! never covers the pause button
-            let l = Font.label(game.ui(q.key), 40, color(q.color)); l.position = D.p(q.x, max(q.y, 235)); l.alpha = min(1, q.life * 2); fx.addChild(l)
+            // Ối! / Đỡ được! are the hero's pops: beside the head on the side away from the striker (the hero faces
+            // it), at head height, so they never sit on the head (iOS QC r4 N1) and stay under the goal plate and
+            // the HUD row. Render only: the core's pop position (shared with Android, not in the trace) is unchanged.
+            let l = Font.label(game.ui(q.key), 40, color(q.color))
+            let sx = max(p.cam + 120, min(p.cam + 1280 - 120, q.x - p.hero.face * 150))
+            l.position = D.p(sx, max(ground - 190, 235)); l.alpha = min(1, q.life * 2); fx.addChild(l)
         }
         worldHints.removeAllChildren()
         if let e = p.stallTarget { let a = arrowDown(); a.position = D.p(e.x, ground - 330 + sin(t * 8) * 10); worldHints.addChild(a) }
