@@ -106,6 +106,47 @@ rounds: TASK-003 r3 O5/O6, TASK-007 r2 B1/B4, and the TASK-006 iOS rounds.
     never stored for later. Locked states include the quiz card shake (0.5 s), the skip warning
     opening, the map's arrival sequence and screen transitions. This fixes QC r2 **B4**, where a
     card tapped during the shake turned lavender 0.5 s later.
+13b. **Screen-entry lock, rolling** (QC r6 **B7**). After one of these screens is **entered
+    from a different screen**, every press on it is **dropped, not queued**, until the child has
+    stopped pressing for **`screen_enter_lock`** (default **0.6 s**, range 0.3–1.0), and never
+    longer than **`screen_enter_lock_max`** (default **1.5 s**, range 1.0–3.0) from entry. The
+    screens: a story screen (intro, beat card,
+    caption, ending), a dialogue beat, the skip-warning card, the quiz, results, unlock and the
+    title. **Play-phase changes inside a mission count as entering:** a beat card, a caption and a
+    dialogue's first line each start the lock. Examples: play → beat card, play → caption or
+    ending, walk → dialogue line 1, ending → quiz, quiz → results, results → unlock or title. The
+    lock starts on the entered screen's first frame.
+    - **Rolling window:** at entry, `lock_end = t_enter + screen_enter_lock`. A press at
+      `t_press < lock_end` is dropped and **restarts** the window:
+      `lock_end = min(t_press + screen_enter_lock, t_enter + screen_enter_lock_max)`. A press at
+      `t_press ≥ lock_end` is accepted (then `advance_debounce` applies as usual). So a continuous
+      mash holds the first box until the mash pauses for 0.6 s, or 1.5 s pass; a deliberate tap
+      after a pause works at once; a child tapping because "nothing happens" is never held past
+      1.5 s.
+    - **The entry time is stamped on the press clock** (the platform's touch-event timestamps), the
+      same clock as `advance_debounce` (F3). Never compare a touch timestamp with a frame or wall
+      clock.
+    - Its buttons (Tiếp, Bỏ qua, ask, cards) **show at once** but take no input during the lock (an
+      optional subtle fade-in over the lock is allowed; nothing else changes).
+    - **What it guarantees:** the first box is on screen ≥ `screen_enter_lock`, and until the child
+      has stopped pressing for `screen_enter_lock` (at most `screen_enter_lock_max`); later boxes
+      ≥ `advance_debounce`, one per press, nothing skipped silently.
+    - **Why:** the story bottom row sits where the play pads were (Tiếp over Attack, Bỏ qua over
+      ◀). In r6 a child mashing Attack every ≈ 0.35 s as reach-the-flag ended skipped both
+      ending boxes; "Trần Quốc Toản đã hy sinh…" was on screen for 0.26 s, and the run landed in
+      the quiz.
+    - **Within** a screen (the next box or line of the same story screen, the next dialogue line,
+      the next quiz question), the lock doesn't apply; box-to-box advances keep only
+      `advance_debounce` (0.25 s, Rule 12, F3), which still applies after the lock too.
+    - **Exception: every ending box.** Each box of the `ending` screen takes the rolling lock as if
+      entered, with the same keys (no new key). It is the one screen that tells the hero's death,
+      and it is short (2 boxes in TQT), so the line "…đã hy sinh…" can't be mashed past. A
+      deliberate reader is barely slowed: one tap per box after a 0.6 s pause.
+    - **One exception, small phones only:** at 0.40 ≤ k < 0.48 the quiz's Tiếp lies over the third
+      card slot (`quiz-and-results.md` §5.2), so a second tap on Tiếp could pick a card on the next
+      question. There, each new question takes the lock too.
+    - **Pause and sound are exempt** (top-left, nowhere near the play pads; a child must always be
+      able to pause), and so is the pause menu.
 
 **Visibility and feedback**
 
@@ -141,7 +182,7 @@ Clear-all (Rule 11) forces every pad to `released` and every pointer to `cancell
 | Hints & onboarding | (none) | pad positions for the hand | Hints GDD |
 | Map & timeline | (none) | taps and drags | Map GDD |
 | Audio & voice-over | (none) | menu press (one tone) | Audio GDD |
-| Content data | `tuning.json` `pad_min`, `pad_gap`, `advance_debounce`, `drag_threshold` | (none) | Content contract |
+| Content data | `tuning.json` `pad_min`, `pad_gap`, `advance_debounce`, `drag_threshold`, `screen_enter_lock` | (none) | Content contract |
 
 ## Formulas
 
@@ -224,7 +265,15 @@ both advance.
   and the windup restarts its telegraph (Combat edge case).
 - **If two advance taps straddle a screen change** (the last caption line, then the next beat):
   the debounce applies across the change, so the second tap never skips the new screen's first
-  line.
+  line; the screen-entry lock (Rule 13b) also drops it.
+- **If a pointer is already down on a play pad when the screen changes** (a thumb held on Attack
+  as the beat ends): it **never activates a menu button**. A menu button fires only for a pointer
+  that went down on it after the screen appeared and after the lock (Rules 8, 13b). The held
+  pointer is ignored by every menu button until it lifts.
+- **If a child mashes Attack through a beat end** (≈ 0.35 s apart): every press restarts the
+  rolling lock, so the caption's or ending's first box holds until `screen_enter_lock_max`
+  (1.5 s); after that, presses advance one box per press under `advance_debounce`, and nothing
+  is skipped silently. **On the ending, every box holds the same way** (each takes the lock). A child who stops for 0.6 s and then taps advances at once.
 - **If the device has no gesture insets or notch**: the safe rect is the screen; same rules.
 - **If haptics are unavailable**: no haptics; nothing else changes.
 - **If a thumb stays on a pad while a story or dialogue screen hides it** (e.g. ▶ through the
@@ -274,7 +323,7 @@ Combat, Mission flow and Hints already list Input as a dependency.
 
 ## Acceptance Criteria
 
-Criteria 1–9 and 13–15 are logic (unit tests on the input layer); 10–12 and 16 need QC on devices.
+Criteria 1–9, 13–15 and 17–21 are logic (unit tests on the input layer); 10–12 and 16 need QC on devices.
 
 1. **GIVEN** ▶ held by pointer A, **WHEN** pointer B taps attack, **THEN** the hero keeps moving
    and a swing starts (multi-touch).
@@ -312,6 +361,28 @@ Criteria 1–9 and 13–15 are logic (unit tests on the input layer); 10–12 an
 16. **GIVEN** the reference phones, **WHEN** each screen in the Rule 3 table is captured, **THEN**
     pause and sound are top-left on every screen that has them, and the VI|EN chip shows only on
     the title, the map and in pause.
+17. **GIVEN** the TQT reach-the-flag beat ending with Attack pressed every 0.35 s for 3 s through the
+    beat end (a scripted trace, on both apps), **WHEN** the ending shows (entry t = 0), **THEN** the
+    presses at 0.35, 0.70, 1.05 and 1.40 s are dropped (not queued); box 1 holds until 1.5 s
+    (`screen_enter_lock_max`); the press at 1.75 s shows box 2; each later press advances one box
+    under `advance_debounce`; and the quiz starts only after each ending box has been advanced once.
+18. **GIVEN** a thumb held down on Attack as a caption appears, **WHEN** it slides onto Tiếp and
+    lifts, **THEN** nothing advances (a pointer that went down before the screen never fires a
+    menu button).
+19. **GIVEN** a caption that appeared 0.2 s ago, **WHEN** pause is tapped, **THEN** the game pauses at
+    once (pause and sound are exempt from the lock); **GIVEN** no press since entry, **WHEN** a press
+    comes at 0.59 s (touch timestamp vs the entry stamp), **THEN** it is dropped (and the window
+    moves to 1.19 s); **GIVEN** no press since entry, **WHEN** the first press comes at 0.60 s,
+    **THEN** it is accepted (same press clock as F3).
+20. **GIVEN** a caption entered at t = 0, **WHEN** presses come every 0.3 s from 0.3 s, **THEN** the press
+    at 1.49 s is dropped and the press at 1.50 s is accepted (the `screen_enter_lock_max` cap);
+    **GIVEN** a single press at 0.2 s, **WHEN** the next press comes at 0.79 s, **THEN** it is dropped,
+    and **WHEN** it comes at 0.80 s instead, **THEN** it is accepted (the rolling window,
+    `lock_end` = 0.2 + 0.6).
+21. **GIVEN** the ending (2 boxes) and Next pressed every 0.35 s from its entry, **WHEN** the presses run
+    on, **THEN** presses at +0.35 … +1.40 are dropped and +1.75 shows box 2; presses at +2.10 … +3.15
+    are dropped and +3.50 starts the quiz. Each box is on screen ≥ `screen_enter_lock_max` (1.5 s), and
+    every dropped press is dropped, not queued.
 
 ## Open Questions
 
@@ -326,4 +397,6 @@ Criteria 1–9 and 13–15 are logic (unit tests on the input layer); 10–12 an
 |---|---|---|---|---|
 | `pad_gap` | 12 | 8–24 | pt_dp | F1: minimum gap between neighbouring pads (Rule 4) |
 | `drag_threshold` | 10 | 6–20 | pt_dp | Rule 16 (map, timeline) |
+| `screen_enter_lock` | 0.6 | 0.3–1.0 | s | Rule 13b: the rolling quiet window after a story, dialogue, quiz, results, unlock or title screen is entered (QC r6 B7; TASK-005p) |
+| `screen_enter_lock_max` | 1.5 | 1.0–3.0 | s | Rule 13b: the cap on the rolling lock from entry (TASK-005q) |
 
