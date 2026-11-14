@@ -149,10 +149,6 @@ class Figures(private val d: Draw) {
         c.restore()
         val topY = ground - 180f // bodies are ≤ 170 tall (hud.md §3.3)
         if (dizzy) for (i in 0 until 3) { val a = t * 5 + i * 2.1; d.star(x + cos(a).toFloat() * 34, topY + 20 + sin(a).toFloat() * 10, 9f, C.GLOW, C.GOLD_DARK, a.toFloat()) }
-        if (e.state == EnemyState.WINDUP) { // the telegraph: glow + a drawn "!" (a HUD glyph, not text in art)
-            val by = topY - 20
-            d.circle(x, by, 30f, C.GLOW, C.GOLD_DARK, 4f); d.rr(x - 5, by - 18, 10f, 24f, 5f, C.INK); d.circle(x, by + 14, 5.5f, C.INK)
-        }
     }
 
     /** A straw training dummy on a post: a hit makes it wobble and spring back (asset spec: never breaks). */
@@ -173,7 +169,6 @@ class Figures(private val d: Draw) {
         if (p.state == EnemyState.WINDUP) {
             val k = 0.5 + 0.5 * sin(t * 16)
             d.ellipse(x, ground - 90, 58f + k.toFloat() * 8, 116f, C.a(C.GLOW, 0.3 + 0.25 * k))
-            d.circle(x, ground - 205, 30f, C.GLOW, C.GOLD_DARK, 4f); d.rr(x - 5, ground - 223, 10f, 24f, 5f, C.INK); d.circle(x, ground - 191, 5.5f, C.INK)
         }
         val swing = when (p.state) { EnemyState.WINDUP -> 0.0; EnemyState.STRIKE -> 0.6; else -> null }
         hero(x, ground, p.face, false, false, swing, t, PARTNER_S, tunic = C.INDIGO, reach = 140f - 18f * PARTNER_S) // the stick reaches 140 (hud.md)
@@ -199,10 +194,31 @@ class Figures(private val d: Draw) {
         c.restore()
     }
 
-    fun arrowDown(x: Float, y: Float, t: Double) {
-        val b = (sin(t * 8) * 10).toFloat()
-        d.poly(C.GLOW, x - 14, y - 40 + b, x + 14, y - 40 + b, x + 14, y - 10 + b, x + 30, y - 10 + b, x, y + 22 + b, x - 30, y - 10 + b, x - 14, y - 10 + b)
-        c.drawPath(d.path, d.stroke(C.INK, 4f))
+    /**
+     * The stuck arrow (ASSET-034 placeholder; hud.md §3.3): star gold with an ink outline ≥ 3 px, never red. Drawn
+     * pointing down with its tip at y + 22 (CueLayout), rotated for the side placements; it bounces ±6 along its axis.
+     */
+    fun arrow(x: Float, y: Float, dir: com.galaxyandsun.daidatanhhung.core.CueLayout.Dir, t: Double) {
+        val b = (sin(t * 8) * com.galaxyandsun.daidatanhhung.core.CueLayout.A_BOUNCE).toFloat()
+        c.save(); c.translate(x, y)
+        c.rotate(when (dir) { com.galaxyandsun.daidatanhhung.core.CueLayout.Dir.DOWN -> 0f; com.galaxyandsun.daidatanhhung.core.CueLayout.Dir.LEFT -> 90f; else -> -90f })
+        d.poly(C.STAR_GOLD, -14f, -42 + b, 14f, -42 + b, 14f, -10 + b, 30f, -10 + b, 0f, 22 + b, -30f, -10 + b, -14f, -10 + b)
+        c.drawPath(d.path, d.stroke(0xFF3A2A20.toInt(), 5f)) // 5 px stroke: the outline is ≥ 3 px wherever it shows
+        d.poly(C.a(C.WHITE, 0.45), -8f, -38 + b, -2f, -38 + b, -2f, -14 + b, -8f, -14 + b) // the lighter highlight
+        c.restore()
+    }
+
+    /** The telegraph "!" bubble (ASSET-208 placeholder): a #FFD54F circle, ink outline, a drawn "!" and a tail toward [dir]. */
+    fun bubble(x: Float, y: Float, dir: com.galaxyandsun.daidatanhhung.core.CueLayout.Dir) {
+        val r = com.galaxyandsun.daidatanhhung.core.CueLayout.B_R.toFloat(); val tl = com.galaxyandsun.daidatanhhung.core.CueLayout.B_TAIL.toFloat()
+        val ink = 0xFF4A3428.toInt(); val fill = 0xFFFFD54F.toInt()
+        c.save(); c.translate(x, y)
+        c.rotate(when (dir) { com.galaxyandsun.daidatanhhung.core.CueLayout.Dir.DOWN -> 0f; com.galaxyandsun.daidatanhhung.core.CueLayout.Dir.LEFT -> 90f; else -> -90f })
+        d.poly(fill, -10f, r - 4, 10f, r - 4, 0f, r + tl); c.drawPath(d.path, d.stroke(ink, 4f))
+        d.circle(0f, 0f, r, fill, ink, 4f)
+        d.poly(fill, -8f, r - 8, 8f, r - 8, 0f, r + tl - 5) // the tail joins the disc without the outline between them
+        c.restore()
+        d.rr(x - 5, y - 18, 10f, 24f, 5f, ink); d.circle(x, y + 14, 5.5f, ink) // the "!" stays upright
     }
 
     // ---- Icons: generic objects, no history claim (quiz pictures in debug, background props) ----

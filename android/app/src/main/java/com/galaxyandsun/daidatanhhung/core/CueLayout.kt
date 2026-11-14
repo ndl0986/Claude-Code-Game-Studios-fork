@@ -21,9 +21,10 @@ object CueLayout {
     /** What the cue points at: its centre x, top, mid-height and half width. */
     data class Target(val x: Double, val top: Double, val midY: Double, val halfW: Double)
 
-    // The arrow (ASSET-034 placeholder): drawn pointing down with its tip at +22 and its back at −40, ±30 wide,
-    // bouncing ±10 along its axis. Rotated 90° for the side placements.
-    const val A_TIP = 22.0; const val A_BACK = 40.0; const val A_HALF = 30.0; const val A_BOUNCE = 10.0
+    // The arrow (ASSET-034 placeholder): 64 long, drawn pointing down with its tip at +22 and its back at −42, ±30 wide,
+    // bouncing ±6 (12) along its axis; above a target its tip rests on the target's top at the bounce's low point, so it
+    // fits below the bar exactly when the target's top ≥ 276 + 64 + 12 = 352 (hud.md §3.3). Rotated 90° for the sides.
+    const val A_TIP = 22.0; const val A_BACK = 42.0; const val A_HALF = 30.0; const val A_BOUNCE = 6.0
     // The bubble (ASSET-208 placeholder): a circle of radius 30 with a 12 px tail.
     const val B_R = 30.0; const val B_TAIL = 12.0
 
@@ -57,7 +58,7 @@ object CueLayout {
 
     /** The stuck arrow: above the target when its whole bounce fits below the bar; else from the side, at mid-height. */
     fun arrow(t: Target, heroX: Double?, banner: Boolean): Cue {
-        val above = Cue(t.x, t.top - GAP - A_TIP - A_BOUNCE, Dir.DOWN)
+        val above = Cue(t.x, t.top - A_TIP - A_BOUNCE, Dir.DOWN)
         if (!banner || arrowBox(above).top >= FLOOR) return above
         val y = max(t.midY, FLOOR + A_HALF)
         return side(t, heroX, y, t.halfW + GAP + A_TIP + A_BOUNCE, ::arrowBox)

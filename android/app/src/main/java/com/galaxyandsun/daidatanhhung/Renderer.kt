@@ -3,6 +3,8 @@ package com.galaxyandsun.daidatanhhung
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Typeface
+import com.galaxyandsun.daidatanhhung.core.CueLayout
+import com.galaxyandsun.daidatanhhung.core.StoryLayout
 import com.galaxyandsun.daidatanhhung.core.Action
 import com.galaxyandsun.daidatanhhung.core.ScreenFit
 import com.galaxyandsun.daidatanhhung.core.BeatType
@@ -202,7 +204,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         // story-screens.md §5.2: the picture is full-bleed (no frame corner under pause/sound)
         fig.background(if (intro) 0.0 else 5200.0, if (intro) "village" else "river", GROUND)
         if (!intro) d.rr(0f, 0f, W, H, 0f, C.a(0xFFFF965A.toInt(), 0.3))
-        fig.hero(if (intro) 760f else 640f, GROUND, 1, false, false, null, t, Figures.HERO_S)
+        if (intro) storyStill(g, card = false, labelTop = null) // the ending keeps its own still (ASSET-016): no placeholder
         val lines = if (intro) g.bundle.mission.intro else g.bundle.mission.ending.lines
         val line = lines[g.line.coerceIn(0, lines.size - 1)]
         // the text panel: box 1000 + 2 × 32, H 167, bottom-anchored on Tiếp's top − 8 (fit.intro/ending 1000 @ 38, weight 600)
@@ -221,6 +223,10 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         val beat = r.currentBeat
         val ground = r.ground.toFloat()
         fig.background(r.cam, beat.theme, ground)
+        // story-screens §5.2, dialogue §5.2 (r8, r8b): a beat card, a caption and a dialogue show the scene background only;
+        // no sprite, flag, fx, pop, play hint or top stack (only the pause/sound corner). Dialogue dims the scene 30%.
+        val storyPhase = r.phase == Phase.CARD || r.phase == Phase.CAPTION || r.phase == Phase.DIALOGUE
+        if (storyPhase) { storyScreen(g, r); return }
         d.c.save(); d.c.translate(-cam, 0f)
         if (r.beatType == BeatType.REACH && (r.phase == Phase.PLAY || r.phase == Phase.END)) fig.icon("flag", r.goalX.toFloat(), ground - 120, 150f)
         for (dm in r.dummies) fig.dummy(dm.x.toFloat(), ground, dm.down, dm.t)
@@ -240,8 +246,6 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         if (r.bannerRaised && r.beatType == BeatType.TRAINING) fig.icon("flag", h.x.toFloat() - h.face * 60f, ground - 250, 110f)
         if (r.beatType == BeatType.HOLD && (r.phase == Phase.PLAY || r.phase == Phase.END)) holdMeter(h.x.toFloat() + h.face * 130f, ground - 200, r.heldTotal / r.holdSeconds(r.beat)) // beside the hero, clear of the goal bar
         for (p in r.parts) d.star(p.x.toFloat(), p.y.toFloat(), p.r.toFloat(), p.color.toInt(), C.GOLD_DARK, p.rot.toFloat())
-        r.stallTargetX?.let { fig.arrowDown(it.toFloat(), ground - 230, t) } // above the heads (≤ 180), below the top stack
-        if (r.flagArrow) fig.arrowDown(r.goalX.toFloat(), ground - 230, t)
         if (r.cheerT >= 0 && r.t - r.cheerT < 0.6) { val k = ((r.t - r.cheerT) / 0.6).toFloat() // the cheer's stars, drawn here (no RNG)
             for (i in 0 until 10) { val a = i * 0.628; d.star(h.x.toFloat() + cos(a).toFloat() * 160 * k, ground - 260 + sin(a).toFloat() * 120 * k, 14f, C.GLOW, C.GOLD_DARK, a.toFloat()) } }
         d.c.restore()
@@ -282,11 +286,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             val ol = if (beat.theme == "camp") 0xFFFFF6E3.toInt() else OUTLINE_INK
             d.textOutlined(g.ui(p.textId), (px + side * 120).coerceIn(90f, W - 90), ground - 150 - rise, 40f, p.color.toInt(), ol, 8f); d.alpha = old
         }
-        // The telegraph "!" is the key cue: draw it again above the goal and banner layers.
-        for (e in r.enemies) if (e.state == com.galaxyandsun.daidatanhhung.core.EnemyState.WINDUP) {
-            val bx = e.x.toFloat() - cam; val by = ground - 200
-            d.circle(bx, by, 30f, C.GLOW, C.GOLD_DARK, 4f); d.rr(bx - 5, by - 18, 10f, 24f, 5f, C.INK); d.circle(bx, by + 14, 5.5f, C.INK)
-        }
+        cues(g, r, cam, ground, t)
         val vis = r.visibleButtons()
         if (r.phase != Phase.CAPTION && r.phase != Phase.CARD && r.phase != Phase.DIALOGUE) {
             // Only the beat's own pads are drawn (mission-flow rule 4): hidden, not greyed.
@@ -307,15 +307,50 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
                 HandHint.SPECIAL_TAP, HandHint.SPECIAL_HOLD -> fig.hand(special.first, special.second - 70, if (r.hand == HandHint.SPECIAL_HOLD) 0.0 else t)
                 HandHint.NONE -> Unit
             }
-        } else if (r.phase == Phase.DIALOGUE) {
-            dialogue(g, r, t)
-        } else if (r.phase == Phase.CAPTION) {
-            storyPanel(null, beat.scene[r.captionLine.coerceIn(0, beat.scene.size - 1)], g, t) // a caption: no heading (H 167)
-        } else {
-            val boxes = r.cardBoxes()
-            storyPanel(beat.title.get(g.lang), boxes[r.cardLine.coerceIn(0, boxes.size - 1)], g, t, badgeFor = beat.title)
         }
         skipWarning(g)
+    }
+
+    /** A beat card, caption or dialogue (r8): the background (drawn by play), then only the story layer. */
+    private fun storyScreen(g: Game, r: com.galaxyandsun.daidatanhhung.core.MissionRun) {
+        val t = r.t; val beat = r.currentBeat
+        if (r.phase == Phase.DIALOGUE) d.rr(0f, 0f, W, H, 0f, C.a(0, 0.30)) // dialogue §5.2: the scene dimmed 30%, under everything else
+        corner(g)
+        when (r.phase) {
+            Phase.DIALOGUE -> dialogue(g, r, t)
+            Phase.CAPTION -> storyPanel(null, beat.scene[r.captionLine.coerceIn(0, beat.scene.size - 1)], g, t, part = r.beat + 1) // no heading (H 167)
+            else -> { val boxes = r.cardBoxes()
+                storyPanel(beat.title.get(g.lang), boxes[r.cardLine.coerceIn(0, boxes.size - 1)], g, t, badgeFor = beat.title, part = r.beat + 1) }
+        }
+        skipWarning(g)
+    }
+
+    /** Target geometry for the cues, in screen px: centre x, top, head (or mid) height and half width (hud.md §3.3). */
+    private fun enemyTarget(x: Float, ground: Float) = CueLayout.Target(x.toDouble(), ground - 170.0, ground - 140.0, 40.0) // spec height: top ≈ 300
+    private fun partnerTarget(x: Float, ground: Float) = CueLayout.Target(x.toDouble(), ground - 162.0, ground - 121.0, 30.0) // PARTNER_S 0.62
+    private fun dummyTarget(x: Float, ground: Float) = CueLayout.Target(x.toDouble(), ground - 151.0, ground - 80.0, 30.0) // DUMMY_S 0.75
+    private fun flagTarget(x: Float, ground: Float) = CueLayout.Target(x + 15.0, ground - 240.0, ground - 120.0, 90.0) // icon 150 at ground − 120
+
+    /**
+     * hud.md §3.3 z-order: the stuck arrow and the telegraph "!" over the bar and pops. On a banner beat neither touches
+     * the motto bar (CueLayout); elsewhere they sit above the target as before.
+     */
+    private fun cues(g: Game, r: com.galaxyandsun.daidatanhhung.core.MissionRun, cam: Float, ground: Float, t: Double) {
+        val banner = r.currentBeat.usesBanner && (r.phase == Phase.PLAY || r.phase == Phase.END)
+        val heroX = r.hero.x - cam
+        val arrowAt = when {
+            r.stallTargetX == null -> null
+            r.beatType == BeatType.TRAINING && r.trainingStep == com.galaxyandsun.daidatanhhung.core.TrainingStep.DUMMIES -> dummyTarget(r.stallTargetX!!.toFloat() - cam, ground)
+            else -> enemyTarget(r.stallTargetX!!.toFloat() - cam, ground)
+        }
+        arrowAt?.let { val c = CueLayout.arrow(it, heroX, banner); fig.arrow(c.x.toFloat(), c.y.toFloat(), c.dir, t) }
+        if (r.flagArrow) { val c = CueLayout.arrow(flagTarget(r.goalX.toFloat() - cam, ground), heroX, banner); fig.arrow(c.x.toFloat(), c.y.toFloat(), c.dir, t) }
+        for (e in r.enemies) if (e.state == com.galaxyandsun.daidatanhhung.core.EnemyState.WINDUP) {
+            val c = CueLayout.bubble(enemyTarget(e.x.toFloat() - cam, ground), heroX, banner); fig.bubble(c.x.toFloat(), c.y.toFloat(), c.dir)
+        }
+        r.partner?.takeIf { it.state == com.galaxyandsun.daidatanhhung.core.EnemyState.WINDUP }?.let {
+            val c = CueLayout.bubble(partnerTarget(it.x.toFloat() - cam, ground), heroX, banner); fig.bubble(c.x.toFloat(), c.y.toFloat(), c.dir)
+        }
     }
 
     /**
@@ -367,11 +402,35 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         d.c.restore(); return true
     }
 
+    /**
+     * story-screens §5.2 (r8): until a screen has its real still, the hero's determined portrait in a drum-ring frame,
+     * centred on x 640 (StoryLayout.still: 256 on the intro and captions, 208 on beat cards; dropped below 192).
+     */
+    private fun storyStill(g: Game, card: Boolean, labelTop: Double?) {
+        val (r, gap) = cornerSize(g)
+        val box = StoryLayout.still(card, (18f + 4 * r + gap).toDouble(), labelTop) ?: return
+        val cx = box.cx.toFloat(); val cy = box.cy.toFloat(); val rad = (box.width / 2).toFloat()
+        d.circle(cx, cy, rad, C.GOLD_DARK); d.circle(cx, cy, rad - 4, C.GOLD) // the drum ring
+        for (i in 0 until 12) { val a = i * Math.PI / 6; d.circle(cx + cos(a).toFloat() * (rad - 10), cy + sin(a).toFloat() * (rad - 10), 3.5f, C.GOLD_DARK) }
+        d.circle(cx, cy, rad - 18, C.CREAM)
+        if (!portrait("pic.portrait_${g.heroId}_hero_determined", cx, cy, rad - 22)) { // debug placeholder: the hero cropped in the ring
+            d.c.save(); d.path.reset(); d.path.addCircle(cx, cy, rad - 18, android.graphics.Path.Direction.CW); d.c.clipPath(d.path)
+            fig.hero(cx, cy + (rad - 18) * 1.9f, 1, false, false, null, g.t, 0.95f * (rad - 18) / 120f, tunic = C.RED)
+            d.c.restore()
+        }
+    }
+
     /** A caption or beat card: header, one sentence, Next and Skip (D-07). */
-    private fun storyPanel(head: String?, line: Text, g: Game, t: Double, badgeFor: Text? = null) {
+    private fun storyPanel(head: String?, line: Text, g: Game, t: Double, badgeFor: Text? = null, part: Int? = null) {
         // story-screens.md §5.2: box 880 + 2 × 32; H 235 with a title (beat card), 167 without (caption); bottom-anchored
         val bottom = rowTop() - 8f; val hgt = if (head != null) 235f else 167f
         val top = max(bottom - hgt, cornerClear(g))
+        // r8b: "Phần n / Part n" (ui.play.beat + n, the 1-based beat index), 28 px star gold, ink outline 2 px, centred
+        // on max(corner_bottom + 8 + 16, panel top − 24); the placeholder still sits ≥ 8 above it
+        val labelTop = part?.let { StoryLayout.partLabelTop(top.toDouble(), cornerClear(g).toDouble()) }
+        storyStill(g, card = head != null, labelTop = labelTop)
+        if (part != null) d.textBox("${g.ui(UiIds.BEAT)} $part", W / 2, (labelTop!! + StoryLayout.LABEL_SIZE / 2).toFloat(), 400f,
+            StoryLayout.LABEL_SIZE.toFloat(), C.STAR_GOLD, 1, outline = OUTLINE_INK, outlineW = 4f)
         d.rr(168f, top, 944f, bottom - top, 36f, C.PANEL, C.GOLD, 6f)
         if (head != null) { d.textBox(head, W / 2, top + 32 + 30, 880f, 44f, C.GOLD, 1); badgeFor?.let { badge(g, it, W / 2 + 380, top) } } // fit.beat_title 880 @ 44
         val bodyTop = if (head != null) top + 32 + 68 else top + 32
@@ -480,6 +539,10 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
     }
 
     /** quiz-and-results.md §5.2: the small-k quiz layout applies at 0.40 ≤ k < 0.48 (pad_min > 72 dp / 0.48 world px). */
+    /**
+     * quiz §5.2: k < 0.48 (as iOS QuizLayout.small). iOS's extra "cards reach Tiếp" guard isn't needed here: at k ≥ 0.48
+     * Android's Tiếp goes below the cards (max(rowTop, cards bottom + 6)), so the cards never reach it.
+     */
     private fun smallK(g: Game) = fit.padMinWorld > g.tuning["pad_min"].toFloat() / 0.48f
 
     private fun quiz(g: Game) {
