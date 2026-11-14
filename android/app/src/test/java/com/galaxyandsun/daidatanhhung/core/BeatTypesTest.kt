@@ -195,18 +195,20 @@ class BeatTypesTest {
 
     // ---- D-07: skip and medal ----
 
-    @Test fun skipShowsOneWarningPerRunAndEndsOnlyTheSection() {
+    /** D-07 (leader's call): Keep reading → the next Skip warns again; Skip anyway → later skips are silent. */
+    @Test fun skipWarningReturnsUntilSkipAnywayAndSkipEndsOnlyTheSection() {
         val g = TestContent.fullGame()
         g.start(); idle(g)
         assertTrue(g.skip()); assertTrue(g.skipWarning)
         assertTrue(g.keepReading()); assertFalse(g.skipped); assertEquals(Screen.INTRO, g.screen)
-        assertTrue(g.skip()); assertFalse(g.skipWarning) // one warning per run: this skip goes through
-        assertTrue(g.skipped)
+        assertTrue(g.skip()); assertTrue("warns again after Keep reading", g.skipWarning)
+        assertTrue(g.confirmSkip()); assertTrue(g.skipped)
         assertEquals(Screen.PLAY, g.screen); assertEquals(Phase.WALK, g.run.phase) // play is never skipped
         var n = 0
         while (g.run.phase == Phase.WALK && n++ < 2000) g.step(dt, input(Action.RIGHT))
         assertEquals(Phase.CARD, g.run.phase)
-        assertTrue(g.skip()); assertEquals(Phase.PLAY, g.run.phase) // a card skip goes to its play
+        assertTrue(g.skip()); assertFalse("silent after Skip anyway", g.skipWarning)
+        assertEquals(Phase.PLAY, g.run.phase) // a card skip goes to its play
     }
 
     @Test fun noWarningOnceTheMedalIsEarned() {
@@ -229,7 +231,7 @@ class BeatTypesTest {
         assertTrue(store.flag("completed.tran-quoc-toan"))
         // A later run that skips earns no medal this run, but the saved medal stays.
         val g2 = TestContent.fullGame(store)
-        g2.debugJump("ending"); g2.skip()
+        g2.debugJump("ending"); g2.skip() // medal already earned: no warning
         assertEquals(Screen.QUIZ, g2.screen)
         finishQuiz(g2)
         assertFalse(g2.medalThisRun); assertTrue(store.flag("medal.tran-quoc-toan"))

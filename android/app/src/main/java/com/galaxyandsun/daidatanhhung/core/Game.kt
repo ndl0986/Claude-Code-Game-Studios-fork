@@ -137,14 +137,15 @@ class Game(
     /** The screen under the pause menu (play or quiz, P-05). */
     var pausedFrom = Screen.PLAY; private set
 
-    // ---- D-07: skip a story section, with one kind warning per run (none once the medal is earned) ----
+    // ---- D-07: skip a story section. The kind warning shows on every Skip until the child chooses
+    // "Skip anyway" once in this run (then later skips are silent); none once the medal is earned. ----
     fun skip(): Boolean {
         if (!onStoryBox) return false
         if (warnedThisRun || medalEarned) { doSkip(); return true }
-        skipWarning = true; warnedThisRun = true
+        skipWarning = true
         return true
     }
-    fun confirmSkip(): Boolean = skipWarning.also { if (it) { skipWarning = false; doSkip() } }
+    fun confirmSkip(): Boolean = skipWarning.also { if (it) { skipWarning = false; warnedThisRun = true; doSkip() } }
     fun keepReading(): Boolean = skipWarning.also { if (it) skipWarning = false }
 
     /** Skip ends only the current section (intro, card, caption or ending), never play. */
@@ -217,7 +218,8 @@ class Game(
         reset()
         when (target) {
             "intro" -> go(Screen.INTRO)
-            "play" -> { go(Screen.PLAY); if (beat > 1 || stage != null) run.debugStartBeat(beat - 1, stage == "telegraph", stage == "caption", stage == "card") }
+            "play" -> { go(Screen.PLAY); if (beat > 1 || stage != null) run.debugStartBeat(beat - 1, stage == "telegraph", stage == "caption", stage == "card")
+                when (stage) { "blocks", "special" -> run.debugTraining(stage); "meter" -> run.debugTraining("meter", 0.6); "encounter" -> run.debugEncounter() } }
             "skipwarn" -> { go(Screen.INTRO); skip() }
             "caption" -> { go(Screen.PLAY); run.debugStartBeat(beat - 1, telegraph = false, caption = true) }
             "pause" -> { go(Screen.PLAY); pause() }

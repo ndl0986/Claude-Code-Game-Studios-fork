@@ -31,8 +31,12 @@ class GameActivity : Activity() {
             }
         }
         val app = application as GameApp
-        val content = ContentLoader { path -> try { assets.open(path).bufferedReader().readText() } catch (e: Exception) { null } }
-            .load(extraHeroes = if (BuildConfig.DEBUG) listOf("sample") else emptyList())
+        // Debug only: `--es missionFile mission-full.json` plays a draft mission (content/drafts) in place of the bundled one.
+        val missionFile = if (BuildConfig.DEBUG) intent?.getStringExtra("missionFile") else null
+        val content = ContentLoader { path ->
+            val p = if (missionFile != null && path.endsWith("/mission.json")) path.replace("mission.json", missionFile) else path
+            try { assets.open(p).bufferedReader().readText() } catch (e: Exception) { if (p != path) try { assets.open(path).bufferedReader().readText() } catch (e2: Exception) { null } else null }
+        }.load(extraHeroes = if (BuildConfig.DEBUG) listOf("sample") else emptyList())
         val problems = Validator.validate(content, checkPictures = !BuildConfig.DEBUG)
         problems.forEach { Log.w(TAG, "content: $it") }
         // Release: a mission whose claims are not all approved is hidden and logged, never a crash (R12).

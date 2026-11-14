@@ -34,7 +34,7 @@ android {
     // Shared content (ADR-0001): data/ ships in every build; the sample hero only in debug builds.
     sourceSets {
         getByName("main") { assets.srcDirs("../../content/data") }
-        getByName("debug") { assets.srcDirs("../../content/samples") }
+        getByName("debug") { assets.srcDirs("../../content/samples", "../../content/drafts") } // drafts: debug `--es missionFile`
     }
 }
 

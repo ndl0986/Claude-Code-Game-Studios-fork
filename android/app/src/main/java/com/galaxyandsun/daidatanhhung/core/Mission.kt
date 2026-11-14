@@ -569,6 +569,23 @@ class MissionRun(
         if (caption && typeOf(beat) == BeatType.FIGHT) { queue.clear(); phase = Phase.CAPTION; captionLine = 0 }
     }
 
+    /** Debug: jump a training beat to its blocks or special step, or a hold to [meter] full. */
+    fun debugTraining(step: String, meter: Double = 0.0) {
+        tut.blocked = false; tut.specialTapped = false
+        if (beatType == BeatType.HOLD) { heldTotal = holdSeconds(beat) * meter; tut.holdPast25 = meter > 0.25; return }
+        if (beatType != BeatType.TRAINING) return
+        dummies.forEach { it.down = true; it.t = 1.0 }
+        trainingStep = TrainingStep.DUMMIES; advanceTraining()
+        if (step == "special") { blocksDone = blockCount(beat); trainingStep = TrainingStep.BLOCKS; advanceTraining() }
+        else partner?.let { it.state = EnemyState.WINDUP; it.t = 0.0; tut.windupSeen = true }
+    }
+
+    /** Debug: walk into reach-the-flag's first encounter. */
+    fun debugEncounter() {
+        if (beatType != BeatType.REACH) return
+        hero.x = xStart + encounterAt(beat).first() * WORLD_W; cam = maxOf(cam, hero.x - tuning["camera_follow_offset"])
+    }
+
     companion object {
         const val WORLD_W = 1280.0
         const val WORLD_H = 720.0
