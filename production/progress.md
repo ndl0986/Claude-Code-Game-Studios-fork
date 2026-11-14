@@ -42,6 +42,8 @@ Where the project stands, so work can resume from the repo. Newest entry first.
 5. Listen to the prototype's sound on a real phone; a real iPhone and low-end Android phone when possible.
 6. Open questions: monetization; "weeks" = MVP only.
 
+> **Warning (2026-11-14):** closing a workspace in Orca deletes its worktree folder and local branch. That happened to all 5 member worktrees once. They were recreated with plain `git worktree add` at the same paths (so `--resume` finds each member's conversation), on: game-dev-001 → `setup/TASK-002-engine-godot` (`82c016e`, unpushed), game-dev-002 → `setup/TASK-007-android-kotlin`, game-qc-android → `qa/TASK-003-android`, game-qc-ios → `qa/TASK-003-ios`, game-art-content → `design/TASK-004-art-bible-tqt-beats`. Close member **sessions** (the terminal), not the Orca workspace. Push work before closing anything.
+
 ### Resume here (after the Orca restart)
 
 1. Start the leader: `tools/team/start-leader.sh`. It resumes the saved leader conversation (id in the gitignored `production/session-state/leader-session.txt`) under the fixed name `game-leader`; `--fresh` starts a new one.
