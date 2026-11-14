@@ -147,7 +147,8 @@ claims stay pending (history sign-off is per claim).
 shows line 4 (the guard refuses again); then Tiếp, and the noise brings the king out (line 5).
 
 **Checks done:**
-- Every line fits the scene box (R8c at 38 px, weight 600) in VI and EN, ≤ 2 lines.
+- Every line fits its `dialogue_line` box (R8c at 38 px, weight 600): speaker lines in 720,
+  narrator lines in 880, VI and EN, ≤ 2 lines. No wording change was needed.
 - One sentence per box: the famous plea is split into lines 6 and 7.
 - D-17: no line addresses the child player. "Cậu", "cháu" and "ta" are characters speaking
   to each other.
