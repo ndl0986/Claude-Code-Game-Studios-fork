@@ -138,6 +138,10 @@ rounds: TASK-003 r3 O5/O6, TASK-007 r2 B1/B4, and the TASK-006 iOS rounds.
     - **Within** a screen (the next box or line of the same story screen, the next dialogue line,
       the next quiz question), the lock doesn't apply; box-to-box advances keep only
       `advance_debounce` (0.25 s, Rule 12, F3), which still applies after the lock too.
+    - **Exception: every ending box.** Each box of the `ending` screen takes the rolling lock as if
+      entered, with the same keys (no new key). It is the one screen that tells the hero's death,
+      and it is short (2 boxes in TQT), so the line "…đã hy sinh…" can't be mashed past. A
+      deliberate reader is barely slowed: one tap per box after a 0.6 s pause.
     - **One exception, small phones only:** at 0.40 ≤ k < 0.48 the quiz's Tiếp lies over the third
       card slot (`quiz-and-results.md` §5.2), so a second tap on Tiếp could pick a card on the next
       question. There, each new question takes the lock too.
@@ -269,7 +273,7 @@ both advance.
 - **If a child mashes Attack through a beat end** (≈ 0.35 s apart): every press restarts the
   rolling lock, so the caption's or ending's first box holds until `screen_enter_lock_max`
   (1.5 s); after that, presses advance one box per press under `advance_debounce`, and nothing
-  is skipped silently. A child who stops for 0.6 s and then taps advances at once.
+  is skipped silently. **On the ending, every box holds the same way** (each takes the lock). A child who stops for 0.6 s and then taps advances at once.
 - **If the device has no gesture insets or notch**: the safe rect is the screen; same rules.
 - **If haptics are unavailable**: no haptics; nothing else changes.
 - **If a thumb stays on a pad while a story or dialogue screen hides it** (e.g. ▶ through the
@@ -319,7 +323,7 @@ Combat, Mission flow and Hints already list Input as a dependency.
 
 ## Acceptance Criteria
 
-Criteria 1–9, 13–15 and 17–20 are logic (unit tests on the input layer); 10–12 and 16 need QC on devices.
+Criteria 1–9, 13–15 and 17–21 are logic (unit tests on the input layer); 10–12 and 16 need QC on devices.
 
 1. **GIVEN** ▶ held by pointer A, **WHEN** pointer B taps attack, **THEN** the hero keeps moving
    and a swing starts (multi-touch).
@@ -375,6 +379,11 @@ Criteria 1–9, 13–15 and 17–20 are logic (unit tests on the input layer); 1
     **GIVEN** a single press at 0.2 s, **WHEN** the next press comes at 0.79 s, **THEN** it is dropped,
     and **WHEN** it comes at 0.80 s instead, **THEN** it is accepted (the rolling window,
     `lock_end` = 0.2 + 0.6).
+21. **GIVEN** the AC17 trace continued (Attack every 0.35 s until 3.5 s), **WHEN** ending box 2 appears
+    at 1.75 s, **THEN** the presses at 2.10, 2.45, 2.80, 3.15 and 3.50 s are dropped and box 2 holds
+    until 3.25 s (1.75 + `screen_enter_lock_max`), i.e. ≥ 1.5 s; the next press after 3.25 s starts the
+    quiz. **GIVEN** the mash stops after 2.10 s, **THEN** box 2 holds until 2.70 s (the 0.6 s quiet
+    window) and the next tap advances.
 
 ## Open Questions
 
