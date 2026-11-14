@@ -9,9 +9,9 @@
 
 ## Summary
 
-A mission plays one hero's famous story in a fixed order: story intro, then 3–4 beats in story
-order, then a calm ending, then the quiz. Every beat is one of five types: walk, hold-meter,
-training, fight and reach-the-flag. A beat can't be failed; it only ends when its goal is met.
+A mission plays one hero's famous story in a fixed order: story intro, then 3–5 beats in story
+order, then a calm ending, then the quiz. Every beat is one of six types: walk, dialogue,
+hold-meter, training, fight and reach-the-flag. A beat can't be failed; it only ends when its goal is met.
 
 > **Quick reference** — Layer: `Core` · Priority: `Vertical Slice` · Key deps: `Side-scroll movement & combat, Content data & claims, Language & text`
 
@@ -43,7 +43,9 @@ it always ends at the quiz and then the map.
    3. `ending`;
    4. the quiz;
    5. results;
-   6. unlock (when there is a `next_hero`);
+   6. unlock, **only when Hero progression reports that this finish opened a hero that wasn't
+      open before** (Hero progression Rules 6 and 10.2). A replay, a null `next_hero`, or a
+      `next_hero` hidden by the release claim gate goes straight to the map;
    7. the map. **Vertical slice:** there is no map yet, so "the map" means the **title
       screen** everywhere in this GDD until the Map & timeline system ships.
    The player can't reorder or skip beats.
@@ -58,24 +60,31 @@ it always ends at the quiz and then the map.
      without their set-up: a child can't know why to hold the orange unless the story says so
      first.
    - **Beat end, every type:** `end_pause`, then a fight goes to its caption, and every other
-     type gets a cheer and the hero walks on.
+     type gets a cheer and the hero walks on. **A beat can turn its cheer off** with
+     `cheer: false` (proposed schema field, default `true`; TASK-020 W21). It then gets a
+     neutral page-turn sound and no cheer pose, for beats whose story ends on a quiet or sad
+     note (e.g. the king sending the hero home). Which beats set it is a content decision.
    - After a fight's caption (or a non-fight beat's end), the hero walks right to the next beat's
      start `beatX(i+1)` (F5). After the last beat comes the ending.
    - **Pads by phase:** during `walk_to` only move is shown; in play and beat end, the beat's
-     `buttons`; on story screens, no pads.
+     `buttons` (training: per step, Rule 7c); on story screens, no pads.
+   - **A hidden pad gives no input, but is not released** (Input Rules 9, 11). While a pad is
+     hidden (a story or dialogue screen, or a beat that doesn't list it), it produces no input.
+     If the same pointer is still down when the pad shows again, the hold continues. Release
+     comes only from up, cancel, or an Input Rule 11 trigger (pause, background, focus loss).
 3. **No failure.** No beat type has lives, health, a timer that ends it, or a lose screen.
    Mistakes cost time and give a small knock-back only (combat GDD). A beat ends only when its
    goal is met.
 4. **Only the beat's buttons are shown.** The HUD shows exactly the pads in the beat's
    `buttons`. Others are **hidden**, not greyed out, so a child never presses a button that
-   does nothing. Pause and sound are always shown. VI|EN is on the title screen and in the
-   pause menu only (P-04).
+   does nothing. Pause and sound are always shown, at the place Input Rule 3 sets for each
+   screen. VI|EN is on the title screen, the map and the pause menu only (P-04; Input Rule 3).
 5. **New buttons are taught where they first appear.** The first beat in a mission that lists a
    button teaches it. Hints & onboarding owns *how*; this system tells Hints which buttons are
    new in the beat.
 6. **Banner.** A beat with `uses_banner: true` shows the mission's `banner` Text as a text layer
    on the banner prop, in the current language. It is never part of the art (art bible §3, §7).
-7. **Six beat types** (`type` in `mission.schema.json`; `dialogue` added by TASK-016, schema 1.4 requested):
+7. **Six beat types** (`type` in `mission.schema.json`; `dialogue` added by TASK-016, schema 1.4):
 
 | Type | Buttons (typical) | The child does | Goal met when | Params (content) |
 |---|---|---|---|---|
@@ -108,11 +117,32 @@ it always ends at the quiz and then the map.
       doesn't count.
     - **Hold-meter:** `held_total` is capped at `hold_seconds` (F3). Hints' no-progress timer
       resets on every frame the meter rises.
+    - **Training pads per step** (TASK-020 W12): training shows only the pads its current step
+      uses, so no pad on screen does nothing (Rule 4). The steps run in a fixed order, so the set
+      is derived from the step, not read from `buttons`:
+      - dummies: move and attack;
+      - blocks (if `blocks` > 0): move, attack and defend;
+      - finish (if `finish_special`): move, attack, defend and special.
+      A pad appears at the start of the step that first uses it, and its teach hint follows
+      (Hints Rule 3). `buttons` must still list every pad used (R13).
+    - **Training caps the camera** (Combat Rule 15b): from `beat_play` start to `beat_end` the
+      camera follows right only up to `xStart − hero_edge_margin`, and the hero is held inside the
+      zone, so a child holding ▶ can't walk past the dummies and softlock the beat.
+    - **Validation R14b** (proposed contract rule, a dev ticket): on a training beat,
+      `dummies × dummy_spacing ≤ W − enemy_reach − 2 × hero_edge_margin` (990 with today's
+      tuning), so the last dummy lies inside the zone. It's a rule, not a schema cap, because
+      `dummy_spacing` is tunable. TQT: 3 × 300 = 900 passes.
+    - **Who reports the goal:** Mission flow owns training's step logic and emits its goal-met
+      event. Combat runs the dummies and the partner and reports hits and blocks (TASK-020 A5).
+    - **The special pad's icon is set per beat type** (TASK-020 W17, A3): hold-meter shows a
+      **clenched fist** (the hero's hand in the orange moment), and training's finish shows the
+      **banner**. The pad is called `special` in every GDD. Its label text per beat is content
+      (Luan, D-34); until it is decided, the label is the existing `ui.pad.special`.
 7d. **Dialogue beats** (TASK-016, Luan's Bình Than exchange):
     - **Order:** a dialogue beat has **no** separate beat card. Its `title` shows as the heading
       over its first line, and its lines are the story. There's no caption either.
     - **Speakers:** each line's `speaker` is `narrator` (no portrait, centred box, field type
-      `dialogue_line` at 880 wide), `hero` (reserved: the mission's hero), or another speaker
+      `dialogue_narrator`: 880 wide, at most 2 lines), `hero` (reserved: the mission's hero), or another speaker
       id (guard, king…). Speaker lines show a portrait (`pic.portrait_<hero_id>_<speaker>[_<mood>]`)
       and a box **720 wide** beside it (field type `dialogue_line`, R8c). The hero's portrait sits
       left and others right. Mood variants (e.g. pleading, puffed cheeks) are separate picture ids.
@@ -127,18 +157,19 @@ it always ends at the quiz and then the map.
       string.
     - **Skip and medal:** Skip works as on every story screen (Rule 15). Skipping a dialogue
       beat sets `story_skipped`, so no medal this run.
-    - **Legend marker (R4c, requested):** spoken lines of a dialogue beat that cite a legend
+    - **Legend marker (R4c):** spoken lines of a dialogue beat that cite a legend
       claim don't each need a marker, if the beat's **first line** is a narrator line carrying
       a legend marker (VI and EN) that cites the same claim or claims. Narration inside the beat
       is covered the same way.
     - **Language switch** mid-dialogue (from pause): the same line shows in the new language;
       ask taps already made stay counted.
     - **Hints:** if the ask button isn't tapped for `hint_delay`, the hint hand points at it
-      (Hints GDD, stuck hint for the current action).
+      (Hints Rule 4, `dialogue` row; Rule 8 names it as an exception). Lines showing "Tiếp" get
+      no hint.
 8. **No special in combat beats** (D-10: B, Luan 2026-11-14). Fights and reach-the-flag
-   encounters use move, attack and defend only. The banner pad appears only in hold-meter and
+   encounters use move, attack and defend only. The special pad appears only in hold-meter and
    training. A banner wave in combat may come later (combat GDD Rule 16).
-9. **All five types are built for the slice** (D-08: B, Luan 2026-11-14; P-02 is superseded).
+9. **All six types are built for the slice** (D-08: B, Luan 2026-11-14; P-02 is superseded).
    While an app is still building a type, a debug build may play it as a `fight` with the beat's
    text and log a warning. A release build fails validation if any beat uses a type the app does
    not implement.
@@ -149,7 +180,10 @@ it always ends at the quiz and then the map.
     meter. **Pause releases every held pad** (move, defend, special). On resume nothing is held
     until the child presses again. Combat restarts a current windup's telegraph from 0 on resume
     (combat GDD, edge cases), so the child always gets the full warning. The menu offers: keep playing, sound, VI|EN, and back to the map (the title screen in
-    the slice). Leaving discards mission progress (see Edge Cases).
+    the slice). **"Back to the map" asks first** (TASK-020 W18): a small picture card, "Về bản đồ?
+    / Leave the story?", with a big "Chơi tiếp / Keep playing" (default, right, play icon) and a
+    smaller "Về bản đồ / To the map" (left, map icon). Only the second leaves. Leaving discards
+    mission progress (see Edge Cases).
 12. **Language switch.** VI|EN is switched on the title screen or in the pause menu, which can
     be opened at any moment. On resume, all on-screen Text is in the new language. **Voice-over
     (planned `vo`, not in the slice):** a voice line playing when pause opens stops, and on resume
@@ -177,9 +211,15 @@ it always ends at the quiz and then the map.
       medal can't be lost.
     - Play, the quiz, stars and the unlock are **unaffected** by skipping. The medal is separate
       from the stars: stars measure the quiz, the medal rewards hearing the whole story.
-    - **Medal rule:** when the quiz finishes, if `story_skipped` is false (every box was advanced
-      with "Tiếp"), Mission flow reports `medal_earned` to Hero progression, which saves
-      `medal.<hero_id>` once, never lost (Hero progression GDD). A box counts as read when
+    - **Medal rule:** when the quiz finishes, `medal_earned` = `story_skipped` is false (every
+      box was advanced with "Tiếp"). It travels in the one completion report below; Hero
+      progression saves `medal.<hero_id>` once, never lost (Hero progression GDD).
+    - **One completion report** (TASK-020 W4): Quiz & stars reports "quiz finished {stars}" to
+      Mission flow only. Mission flow then sends **one** "mission completed {hero, stars,
+      medal_earned}" to Hero progression, at quiz finish and **before** results show. Hero
+      progression applies best-of (max) and derives the unlock, and Save & progress writes
+      completed, stars, medal and seen_open as one unit (Save Rule 4). Hero progression answers
+      with the newly opened hero, or none, which decides Rule 1.6. A box counts as read when
       advanced by "Tiếp"; reading speed is not checked.
 
 ### States and Transitions
@@ -188,7 +228,7 @@ it always ends at the quiz and then the map.
 |---|---|---|---|
 | `gate_check` | map (hero tapped) | `intro` / back to map | Claim gate passes / fails. A release map already hides a failing hero, so this is a safety re-check. Debug always passes |
 | `intro` | `gate_check` | `walk_to[0]` | Last intro box's "Tiếp / Next" |
-| `walk_to[i]` | `intro`, or the end of beat i−1 | `beat_card[i]` (non-fight) / `beat_play[i]` (fight) | Hero x ≥ `beat_start_x + i × beat_gap` |
+| `walk_to[i]` | `intro`, or the end of beat i−1 | `beat_card[i]` (non-fight) / `dialogue_line[i][1]` (dialogue) / `beat_play[i]` (fight) | Hero x ≥ `beatX(i)` (F5) |
 | `beat_card[i]` | `walk_to[i]` (non-fight only) | `beat_play[i]` | Last card box's "Tiếp / Next" |
 | `beat_play[i]` | `beat_card[i]` or `walk_to[i]` | `beat_end[i]` | The type's goal is met |
 | `dialogue_line[i][k]` | `walk_to[i]` (dialogue beats; no card) | the next line, or `beat_end[i]` after the last | "Tiếp", or an ask tap while `at_line ≤ k < at_line + taps` |
@@ -196,9 +236,10 @@ it always ends at the quiz and then the map.
 | `caption[i]` | `beat_end[i]` (fight only) | `walk_to[i+1]` or `ending` | Last caption box's "Tiếp / Next" |
 | `ending` | `beat_end[last]` | `quiz` | Last ending box's "Tiếp / Next" |
 | `quiz` | `ending` | `results` | Quiz & stars: last question answered right |
-| `results` | `quiz` | `unlock` / `map` | "Tiếp / Next"; `unlock` only if `next_hero` is not null |
+| `results` | `quiz` | `unlock` / `map` | "Tiếp / Next"; `unlock` only if Hero progression reported a newly opened hero (Rule 1.6) |
 | `unlock` | `results` | `map` | "Về bản đồ / To the map" |
-| `paused` | any state above | the same state / `map` | "Chơi tiếp / Keep playing" / "Về bản đồ" |
+| `paused` | any state above | the same state / `leave_confirm` | "Chơi tiếp / Keep playing" / "Về bản đồ" |
+| `leave_confirm` | `paused` | `paused` / `map` | "Chơi tiếp / Keep playing" (default) / "Về bản đồ / To the map" (Rule 11) |
 | `skip_warning` | any story screen (Skip tapped, medal not yet earned, no "Skip anyway" yet this run) | the same box / the next non-story state | "Đọc tiếp / Keep reading" / "Vẫn bỏ qua / Skip anyway" (sets `story_skipped`) |
 
 In the vertical slice, every `map` in this table is the **title screen**.
@@ -217,8 +258,8 @@ own pace.
 | Hints & onboarding | (none) | "new buttons in this beat", "beat started", card or caption closed, progress events (hero moved, meter rose, training step done). Hints owns the no-progress timer and `hint_delay` | Hints GDD |
 | Language & text | current language, language-changed event | Text ids to render | Language GDD |
 | Audio & voice-over | (none) | line id to voice, state changes for music | Audio GDD |
-| Quiz & stars | quiz finished + stars | "start quiz for hero X" | Quiz GDD |
-| Hero progression & unlock | `next_hero` from content; whether the medal is already earned | "mission completed" after the quiz, plus `medal_earned` when no story screen was skipped | Progression GDD |
+| Quiz & stars | "quiz finished {stars}" | "start quiz for hero X" | Quiz GDD |
+| Hero progression & unlock | whether the medal is already earned; the newly opened hero, or none (Rule 1.6) | **one** "mission completed {hero, stars, medal_earned}" at quiz finish, before results (Rule 15) | Progression GDD |
 
 ## Formulas
 
@@ -231,20 +272,21 @@ The F1 (mission length estimate) formula is defined as:
 |----------|------|-------|--------|-------------|
 | T_intro, T_card_i, T_ending | float (s) | 5–40 | calculated: boxes × T_box | Story time; T_box ≈ voice length of a box |
 | T_box | float (s) | 3–8 | estimate only, not a runtime value (re-measure when voice-over exists) | One sentence of ≤120 chars read aloud or read by the child |
-| T_play_i | float (s) | 10–90 | calculated per type (F2–F4; a fight or encounter set per combat F3: a 20–60 s child target, ≤ 60 s for an adult not blocking, combat AC14) | Play time of beat i |
+| T_play_i | float (s) | 3–60 | calculated per type (F2–F4; a fight or encounter set per combat F3: a 20–60 s child target, ≤ 60 s for an adult not blocking, combat AC14) | Play time of beat i |
 | end_pause | float (s) | 0–3 | `tuning.json` `end_pause` (0.6) | Pause after a beat |
 
 **Output Range:** target 3–5 minutes before the quiz, so a mission plus its quiz fits a
 5–15 minute session (concept). Above 6 minutes, cut scene boxes before cutting beats.
 **Example:** 3 intro boxes, 4 beats with 2 boxes each, 2 ending boxes, T_box 5 s gives
-65 s of story. Play: walk 12 s + hold 3 s + training 40 s + reach-the-flag 90 s = 145 s.
-end_pause 4 × 0.6 = 2.4 s. T_mission ≈ 212 s ≈ 3.5 min.
+65 s of story. Play: walk 12 s + hold 3 s + training 40 s + reach-the-flag 60 s (the cap,
+AC22) = 115 s. end_pause 4 × 0.6 = 2.4 s. T_mission ≈ 182 s ≈ 3.0 min. T_box 5 s is an adult or
+voiced pace; a child reading alone is slower (TASK-020 W1, with Luan).
 
 The F2 (walk time) formula is defined as:
 
 `T_walk = length_screens × world_width / hero_speed`
 
-The walk beat **starts** at `x_start` = the hero's x when play begins (at the beat start, `beat_start_x + i × beat_gap`). It **ends** when hero x ≥ `x_start + length_screens × world_width`.
+The walk beat **starts** at `x_start` = the hero's x when play begins (at the beat start, `beatX(i)`, F5). It **ends** when hero x ≥ `x_start + length_screens × world_width`.
 
 **Variables:**
 | Variable | Type | Range | Source | Description |
@@ -342,9 +384,6 @@ stays within F1's 3–5 min.
   `special`): validation **fails** the bundle under R13 (Core Rule 7b). The goal could never be met.
 - **If the child releases special at meter 0.99**: the meter holds at 0.99 (no drain), and the
   next press finishes it.
-- **If special is pressed during training before the dummies and blocks are done**: the special
-  pose plays, nothing finishes, and the hint shows the step still to do. Special completes
-  training only as the last step.
 - **If the hero is pushed back during walk or reach-the-flag**: progress is position-based, so
   the child walks forward again. Nothing resets.
 - **If the app goes to the background mid-beat**: the game enters `paused` automatically and
@@ -363,7 +402,18 @@ stays within F1's 3–5 min.
 - **If a release build finds a pending claim at `gate_check`**: the hero's place on the map is
   hidden. This is never a crash or an error screen in front of a child (R12).
 - **If a mission has 1 or 2 beats**: it is allowed (schema minItems 1). The design target stays
-  3–4 beats per hero.
+  3–5 beats per hero.
+- **If the child taps "Về bản đồ" in pause by mistake**: the leave card asks first (Rule 11);
+  "Chơi tiếp" returns to pause and nothing is lost. **If they confirm**: the run is discarded,
+  nothing is saved (Rule 14), and the map (the title in the slice) shows. Resuming at the last
+  beat start, held in memory, is an open question.
+- **If a thumb stays on ▶ through a story or dialogue screen**: the hidden pad gives no input.
+  When `walk_to` shows ▶ again with the same pointer still down, the hero walks on (Rule 2;
+  Input Rule 9). Nothing is released by the phase change.
+- **If a beat has `cheer: false`**: `end_pause`, then the page-turn sound, and the hero walks
+  on with no cheer pose. Progress dots still fill.
+- **If special is pressed during training before its step**: it can't be, since the pad is
+  hidden until the finish step (Rule 7c). Defend is likewise hidden during the dummies.
 - **If the child taps Skip, then "Keep reading"**: they return to the same box. `story_skipped`
   stays false, and the next Skip tap warns again.
 - **If the child skips only the ending**: `story_skipped` is true, so no medal this run. The
@@ -386,9 +436,10 @@ stays within F1's 3–5 min.
 | Language & text | this depends on it | Hard | Renders every Text; language-changed event |
 | Input & touch controls | this depends on it | Hard | Pad events; pad visibility per beat |
 | Hints & onboarding | depends on this | Soft (for this) | New-button list, beat start, no-progress signal |
-| Audio & voice-over | depends on this | Soft | Line ids to voice; music state |
-| Quiz & stars | depends on this (it is started by this) | Hard (for the loop) | "start quiz", "quiz finished + stars" |
-| Hero progression & unlock | depends on this | Hard | "mission completed", `next_hero` |
+| Audio & voice-over | depends on this | Soft | Line ids to voice (story boxes, dialogue lines, ask button); music state (dialogue = story cue) |
+| Quiz & stars | depends on this (it is started by this) | Hard (for the loop) | "start quiz", "quiz finished {stars}" |
+| Hero progression & unlock | depends on this | Hard | one "mission completed {hero, stars, medal_earned}"; newly opened hero back |
+| Map & timeline | both ways | Hard (Alpha) | "The map" is the home screen it returns to; the map starts missions (`design/gdd/map-and-timeline.md`) |
 | Save & progress | indirect, through Quiz & stars | — | Nothing saved mid-mission |
 
 The combat, quiz, hints, language, audio, input and progression GDDs must each list Mission
@@ -409,12 +460,18 @@ Art-director lens (art bible §§2–7):
 - **Training:** straw dummies wobble and spring back. They never break apart. The practice
   partner wears the hero's team colour, so the child never reads them as an enemy (§5).
 - **Banner:** the banner shape is plain cloth (§3), and the text layer sits on it.
-- **Beat end:** a cheer pose, plus a small star sparkle on the beat progress dots.
+- **Beat end:** a cheer pose, plus a small star sparkle on the beat progress dots. With
+  `cheer: false`, no cheer pose; the dots still fill quietly.
+- **Each beat shows its fact** (TASK-020 A8): a child who skips the story should still see the
+  fact a beat teaches in its play: the orange in the hold-meter pose, the six-word banner on the
+  training finish, the enemy helmets in the fight. The facts and depictions are content (Luan);
+  this rule only says play carries them, not text alone.
 - **Audio:**
   - each story box plays its voice line, by Text id (Audio GDD, planned `vo`);
-  - music changes per state: story (soft), walk or training (light), fight or flag (drums),
-    ending (quiet), as art bible §2 sets the mood;
-  - each pad press gives one tone (QC O6).
+  - music changes per state: story and dialogue (soft), walk or training (light), fight or flag
+    (drums), ending (quiet), as art bible §2 sets the mood;
+  - menu buttons give exactly one tone per press; play pads give no tap tone, only their action
+    sounds (QC O6; Audio & voice-over GDD Rule 6).
 
 📌 **Asset Spec**: after this GDD is approved, run `/asset-spec system:mission-flow` for the
 story frame, the meter ring, the dummies, the practice partner, the flag and the beat-end
@@ -433,8 +490,8 @@ sparkle.
 
 ## UI Requirements
 
-- **Story screen:** picture, one text box (one sentence), "Tiếp / Next" on the right, and the
-  pause top-right. The box fits the EN budget (`rules.json` `scene` 120).
+- **Story screen:** picture, one text box (one sentence), "Tiếp / Next" on the right, and pause
+  and sound top-left, as on every screen (Input Rule 3). The box fits the EN budget (`rules.json` `scene` 120).
 - **HUD during play:**
   - pause and sound, top-left;
   - beat progress dots, top-centre (one per beat, filled when done);
@@ -443,11 +500,15 @@ sparkle.
 - **Hold-meter ring** around the special pad, and a training checklist of three icons
   (dummies, shield, banner) that fill as each part is done. Icons only, no words.
 - **Pause menu:** keep playing, sound, VI|EN, back to the map (the title screen in the slice).
+  "Back to the map" opens the leave card (Rule 11): pictures for both choices, keep playing as
+  the big default.
 - **Skip:** a small "Bỏ qua / Skip" button on every story screen, smaller than "Tiếp" and away
   from it (bottom-left vs bottom-right), so a child doesn't tap it by accident.
 - **Skip warning:** a small card over the story with the medal picture, one short line
-  (`ui.story.skip_warning`), "Đọc tiếp / Keep reading" (big, default, right) and "Vẫn bỏ qua / Skip
-  anyway" (smaller, left). There is no red and no warning sign; the tone is gentle.
+  (`ui.story.skip_warning`), "Đọc tiếp / Keep reading" (big, default, right, **open-book icon**)
+  and "Vẫn bỏ qua / Skip anyway" (smaller, left, **skip-arrow icon**). Icons back up the words for
+  a child who can't read them yet (Language Rule 12, TASK-020 W20); once VO exists, the warning
+  line is voiced. There is no red and no warning sign; the tone is gentle.
 - **Medal on results:** earned shows the gold medal and `ui.medal.earned`. Not earned shows an
   outline medal and `ui.medal.missing`, which is encouraging, never a scold.
 
@@ -463,22 +524,25 @@ sparkle.
 | Art bible | `design/art/art-bible.md` §§2–7 | Moods per state, banner text layer, no injury |
 | Hero content | `design/narrative/heroes/tran-quoc-toan.md` §3, §6 | The approved 4-beat structure for Trần Quốc Toản |
 | Side-scroll movement & combat | `design/gdd/side-scroll-combat.md` | Fight rules, encounter time; no special in combat (D-10) |
-| Quiz & stars | `design/gdd/quiz-and-stars.md` (planned) | Quiz start and finish |
-| Hints & onboarding | `design/gdd/hints-and-onboarding.md` (planned) | Teaching new buttons, the no-progress hint |
+| Quiz & stars | `design/gdd/quiz-and-stars.md` | Quiz start and finish |
+| Hints & onboarding | `design/gdd/hints-and-onboarding.md` | Teaching new buttons, the no-progress hint |
 | Decisions | `production/team/decisions.md` P-01, D-06, D-07, D-08, D-10 (P-02 superseded) | Press/release, schema params, story skip, slice beat set, no special in combat |
 | Prototype evidence | `203d73e` `prototypes/tqt-mission/config.js`; QC r3 (Android) | Tuning values, `end_pause`, one tone per press |
 
-**Trần Quốc Toản's approved structure maps to types like this** (hero doc §6):
-- Beat 1, riverbank → `walk`
-- Beat 2, the orange → `hold-meter`
-- Beat 3, the banner → `training` (`uses_banner`)
-- Beat 4, battle → `reach-the-flag` with encounters (`uses_banner`)
+**Trần Quốc Toản's approved structure maps to types like this** (hero doc §6; TASK-016 added
+the Bình Than exchange):
+- Beat 1, riverbank → `walk` (1 screen)
+- Beat 2, at Bình Than → `dialogue` (`tqt.d1`)
+- Beat 3, the orange → `hold-meter`
+- Beat 4, the banner → `training` (`uses_banner`)
+- Beat 5, battle → `reach-the-flag` with encounters (`uses_banner`)
 
 ## Acceptance Criteria
 
 1. **GIVEN** a mission with 4 `fight` beats, **WHEN** it is played through, **THEN** the screens
    appear in exactly this order: intro → (walk) play 1 → caption 1 → … → play 4 → caption 4 →
-   ending → quiz → results → unlock → title screen (slice). **GIVEN** a non-fight beat,
+   ending → quiz → results → unlock (only when Hero progression reports a newly opened hero; on a
+   replay, results → title) → title screen (slice). **GIVEN** a non-fight beat,
    **THEN** its beat card appears **before** its play, and no caption follows it.
 2. **GIVEN** any beat in play, **WHEN** the hero is hit any number of times, **THEN** no lose
    screen, life counter or restart appears, and the beat stays in play until its goal is met.
@@ -548,6 +612,23 @@ sparkle.
     the first line unmarked, **THEN** validation fails R4.
 25. **GIVEN** a `dialogue` beat skipped with "Skip anyway", **WHEN** the quiz finishes, **THEN** no
     medal is reported for that run.
+26. **GIVEN** the quiz finishing, **WHEN** the event log is read, **THEN** exactly one "mission
+    completed {hero, stars, medal_earned}" reaches Hero progression, before results show, and
+    Quiz sends nothing to Hero progression directly.
+27. **GIVEN** a training beat with dummies 3, blocks 3 and `finish_special`, **WHEN** each step
+    is current, **THEN** the visible pads are: dummies {◀ ▶, attack}; blocks {◀ ▶, attack,
+    defend}; finish {◀ ▶, attack, defend, special}.
+28. **GIVEN** the pause menu, **WHEN** "Về bản đồ" is tapped, **THEN** the leave card shows and
+    nothing is discarded; **WHEN** "Chơi tiếp" is tapped on it, **THEN** pause shows again with
+    the run intact; **WHEN** "Về bản đồ" is tapped on it, **THEN** the title (slice) shows.
+29. **GIVEN** ▶ held from the end of beat 1 through the dialogue beat, never lifted, **WHEN**
+    `walk_to[2]` starts, **THEN** the hero walks right without a new press, and no move input
+    happened while the dialogue showed.
+30. **GIVEN** a non-fight beat with `cheer: false`, **WHEN** it ends, **THEN** no cheer pose or
+    `sfx_beat_end_cheer` plays, the page-turn sound plays, and the progress dot fills.
+31. **GIVEN** a training beat with dummies 4 and `dummy_spacing` 300 (1200 > 990), **WHEN**
+    content is validated, **THEN** it fails R14b; **GIVEN** the TQT training (3 × 300 = 900),
+    **THEN** it passes.
 
 ## Open Questions
 

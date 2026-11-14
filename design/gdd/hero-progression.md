@@ -1,6 +1,6 @@
 # Hero Progression & Unlock
 
-> **Status**: In Review
+> **Status**: Approved (peer review: game-dev-android, 2026-11-14)
 > **Author**: game-art-content (Luan decides)
 > **Last Updated**: 2026-11-14
 > **Last Verified**: 2026-11-14
@@ -72,10 +72,17 @@ a new hero is added after a child has already finished the previous one.
 7. **Playable.** A hero is playable if its folder is in `index.json` and, in a release build, all
    its cited claims are approved (R12). Unplayable heroes are skipped in Rules 2 and 4, as if
    they weren't there. Debug builds treat every bundled hero as playable.
+7b. **One completion report** (TASK-020 W4). At quiz finish, Mission flow sends **one**
+    "mission completed {hero, stars, medal_earned}" (Mission flow Rule 15). Quiz & stars doesn't
+    report to this system directly. On that report this system updates completed, stars and
+    medal, sets `seen_open` for every open hero, hands all of it to Save as **one** write (Save
+    Rule 4), and answers Mission flow with the hero that this finish newly opened, or none
+    (Rule 10.2). All of this happens before results show.
 8. **Best stars.** On quiz finish, `stars.<hero_id>` = max(saved, this run). Never lowered (Quiz
-   Rule 9).
-9. **Medal.** When Mission flow reports `medal_earned` (no story screen skipped this run),
-   `medal.<hero_id>` = true. Never cleared. A later run with skips doesn't remove it (Mission flow
+   Rule 9). **This system owns best-of**; Save only stores the value, keeping its F1 clamp to
+   1–3 as a guard.
+9. **Medal.** When the completion report has `medal_earned` true (no story screen skipped this
+   run), `medal.<hero_id>` = true. Never cleared. A later run with skips doesn't remove it (Mission flow
    Rule 15).
 10. **Results and unlock screens** (after the quiz):
     1. **Results:** this run's stars, the best stars (if higher), and the medal: gold if earned in
@@ -83,13 +90,16 @@ a new hero is added after a child has already finished the previous one.
        huy hiệu! / You earned the medal!") shows **only in the run that earns it**, first play or
        replay. The same string is reused; there's no separate "new medal" string.
     2. **Unlock**, only when this finish opened a hero that wasn't open before: "Mở khoá anh hùng
-       tiếp theo! / Next hero unlocked!" plus the hero's name.
+       tiếp theo! / Next hero unlocked!" plus the hero's name. The newly opened hero is computed
+       here (F1 before vs after the report) and returned to Mission flow, which goes to `unlock`
+       only when one is returned (Mission flow Rule 1.6).
     3. If no next playable hero exists: `ui.results.more_heroes`, then the title screen (the map
        after Alpha).
-11. **What is saved** (all on the device, nothing else, pillar *Safe for kids*):
-    `completed.<hero_id>`, `seen_open.<hero_id>`, `stars.<hero_id>` (1–3), `medal.<hero_id>`,
-    and `lang` (Language GDD). The format and migration belong to the D-04 save ADR. This changes
-    P-04 (3)'s `unlocked` list into `completed` + `seen_open` (D-16).
+11. **What is saved** (all on the device, nothing else, pillar *Safe for kids*): **the one list
+    is Save & progress Rule 1** (`save_version`, `lang`, `sound`, and per hero `completed`,
+    `seen_open`, `stars`, `medal`). This system owns the per-hero keys' meaning; Save owns the
+    list, the format and migration (ADR-0003). D-16 replaced P-04 (3)'s `unlocked` list with
+    `completed` + `seen_open`.
 
 ### States and Transitions
 
@@ -105,8 +115,8 @@ Per hero: `hidden` (not playable) → `locked` (playable, not open) → `open` �
 
 | System | In | Out | Owner |
 |---|---|---|---|
-| Quiz & stars | "quiz finished (hero, stars)" | (none) | Quiz GDD |
-| Mission flow & beat types | `medal_earned`; asks which heroes are open and if the medal is already earned (for the skip warning) | open and completed state, medal state | Mission flow GDD |
+| Mission flow & beat types | the one "mission completed {hero, stars, medal_earned}" (Rule 7b); asks which heroes are open and if the medal is already earned (for the skip warning) | open and completed state, medal state; the newly opened hero, or none | Mission flow GDD |
+| Quiz & stars | (none: Quiz reports to Mission flow) | best stars for the results screen | Quiz GDD |
 | Save & progress | saved keys | writes `completed`, `seen_open`, `stars`, `medal` | Save GDD / D-04 ADR |
 | Content data & claims | `index.json`, each `mission.json` `hero` (`timeline_order`, `next_hero`), claim status (R12) | (none) | Content contract |
 | Map & timeline (Alpha) | (none) | per hero: state, stars, medal, place | Map GDD |
@@ -149,7 +159,9 @@ but the counts never do, so show counts ("★ 7 · 🏅 2") rather than percenta
 
 - **If a release build has no playable hero** (every claim still pending, D-03 open): the title
   screen shows no hero to start. Behaviour matches R12's quiet guard; this is a known gate until
-  Luan signs off, never an error screen.
+  Luan signs off, never an error screen. In practice the release build gate fails first
+  (R12; `production/qa/builds/TASK-007-release-gate.log`), so a child never sees it (TASK-020
+  A14).
 - **If a content update removes a hero's folder**: it isn't playable, so it is skipped. Its saved
   keys stay (harmless), and the next hero opens from the hero before it (Rule 4).
 - **If two heroes share a `timeline_order`**: validation fails (Rule 1, unique).
@@ -170,13 +182,15 @@ but the counts never do, so show counts ("★ 7 · 🏅 2") rather than percenta
 
 | System | Direction | Hard/Soft | Interface |
 |---|---|---|---|
-| Quiz & stars | this depends on it | Hard | Quiz finished with stars |
-| Mission flow & beat types | this depends on it (medal), and it depends on this (open state, medal known) | Hard | `medal_earned`; open and medal state |
-| Save & progress | this depends on it | Hard | The saved keys (Rule 11) |
+| Quiz & stars | this depends on it, through Mission flow | Hard | Stars, inside the one completion report |
+| Mission flow & beat types | both ways | Hard | The one completion report {hero, stars, medal_earned}; open and medal state; the newly opened hero |
+| Save & progress | this depends on it | Hard | The saved keys (Rule 11); storage rules in `design/gdd/save-and-progress.md` |
 | Content data & claims | this depends on it | Hard | `timeline_order`, `next_hero`, R12 |
 | Map & timeline | depends on this | Hard (Alpha) | Per-hero state, stars, medal |
+| Language & text | this depends on it | Hard | Hero names, results, unlock and medal text (`design/gdd/language-and-text.md`) |
 
 Quiz & stars and Mission flow both list Hero progression as a dependent (bidirectional).
+Save & progress stores what this system hands it at quiz finish (Save Rule 4).
 
 ## Visual/Audio Requirements
 

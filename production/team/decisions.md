@@ -11,6 +11,113 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-31 The slice has too much reading for a 6-year-old, and no voice (TASK-020 W1)
+
+- **Flow:** cross-GDD review (`design/gdd/reviews/gdd-cross-review-TASK-020.md` W1) → mission text
+  (`content/data/mission.json`) and Audio GDD → playtest with children.
+- **Finding:** about 15 text boxes before the first real action (4 intro, the walk card, 9 dialogue
+  lines + 2 asks); about 26 story boxes in all. A child at the end of grade 1 reads roughly 40–60
+  syllables a minute (estimate), so the story alone takes 4–6 min, over the 3–5 min mission target.
+  Some words are above grade 1–2 ("vương hầu", "trăm quan", "xâm lược", "hy sinh").
+- **Options:** A. **record voice-over** for the intro, dialogue and ending of the slice · B. **cut**:
+  intro to 2 boxes, dialogue to ≤ 6 lines, simpler words · C. both · D. keep as is, and playtests
+  only with an adult reading aloud.
+- **Recommendation:** C, but B first (it's cheap and helps even with voice); then VO before
+  playtesting with 6–7-year-olds. Any re-wording of history lines comes back to you to sign off.
+- **Status:** Open.
+
+### D-32 What the medal means (TASK-020 W13)
+
+- **Flow:** Hero progression GDD (medal) + Mission flow Rule 15 (a box counts as read when advanced).
+- **Finding:** mashing "Tiếp" through all 26 boxes (~7 s) keeps the medal; an honest Skip loses it.
+  The medal is described as "hearing the whole story", which isn't true without voice.
+- **Options:** A. keep the rule; reword the medal as "turned every page" · B. after voice-over exists,
+  a box counts only once its clip has played (or a minimum time passed) · C. Skip costs nothing on
+  the first play.
+- **Recommendation:** A now, B when voice-over lands.
+- **Status:** Open.
+
+### D-33 Quiz Q1 and Q5 need new pictures/wording (TASK-020 W15)
+
+- **Flow:** quiz data (`content/data/quiz.json`) → claims (C01, C02) → your sign-off.
+- **Finding:** Q1's choices are dynasty flags and Q5's are helmets; a 6-year-old can't tell them
+  apart from pictures alone, and choices aren't voiced. Q1 ("…thời nhà nào?") sits under the name
+  "**Trần** Quốc Toản" and its why line teaches "surname = dynasty", which is wrong as a general rule.
+- **Proposal:** game-art-content rewrites Q1 (no surname giveaway) and makes Q5 use the enemy helmets
+  the child actually fought in beat 4. You sign off the new wording and the flag/helmet pictures.
+- **Status:** Open (game-art-content drafts on your go).
+
+### D-34 The orange: anger or determination? (TASK-020 W17, claim C06)
+
+- **Flow:** beat 2 hold-meter (`tqt.f2`) → claim C06 → audio cue and goal text.
+- **Finding:** C06 says he crushed the orange "lúc nào không biết" (without noticing) because he was
+  angry; the game makes it a deliberate 2.5 s hold, with a "determination, not anger" sound. The goal
+  also says "Hold down the flag button!" before the banner exists in the story.
+- **Options:** A. **determination** (gentler for children; the text says he squeezed it without
+  noticing while thinking hard) · B. **anger**, as in the sources.
+- **Team fix either way:** the pad shows a fist/orange icon on this beat, and the goal is reworded
+  ("Nắm chặt quả cam!").
+- **Recommendation:** A, worded so it stays true to C06 ("he was so upset he didn't notice").
+- **Related small call (TASK-020 W21):** should the Bình Than dialogue beat end without the cheer pose and cheer sound (a quiet page turn instead)? The team recommends **yes**: a solemn meeting isn't a victory. Answer with D-34.
+- **Status:** Open.
+
+### D-35 Concept wording on ads and purchases (TASK-020 A13)
+
+- **Flow:** `design/gdd/game-concept.md` line 67 vs the "Safe for kids" pillar.
+- **Finding:** line 67 says "no ads or purchases aimed at kids **unless Luan decides**"; the pillar
+  says none. The "unless" leaves an opening.
+- **Options:** A. **remove "unless Luan decides"** so it matches the pillar · B. keep it as an open
+  question for later.
+- **Recommendation:** A.
+- **Status:** Open.
+
+### D-30 Accept ADR-0003: how the game saves progress
+
+- **Flow:** Save & progress GDD → ADR-0003 (`docs/architecture/adr-0003-save-format-and-storage.md`)
+  → both apps replace today's simple key store with one save file.
+- **What it says:** one small file `save.json` with the same shape on iOS and Android (language,
+  sound, and per hero: completed, story seen, best stars, medal). Each change is written at once and
+  safely (a crash or force-close can't half-write it); a damaged file keeps whatever it can; a save
+  from a newer app version is never overwritten; today's slice progress is imported once.
+- **Tied to D-22 (backup):** if you choose "allow", iOS needs nothing; Android needs a small
+  manifest change that backs up only `save.json`.
+- **Reviewed:** written by game-dev-ios, approved by game-dev-android (2026-11-14).
+- **Options:** A. **Accept** (both devs build it after QC r3) · B. change something first.
+- **Recommendation:** A.
+- **Status:** Open.
+
+### D-29 Download size as heroes are added (revisit before hero 4)
+
+- **Flow:** ADR-0002 (≤ 60 MB download) + Audio GDD (music, sound, voice-over) → each timed content
+  update adds a hero.
+- **Finding:** at about 6.5 MB of shared music and sound plus about 18 MB per hero (art + voice-over),
+  60 MB fits about 3 heroes.
+- **Options (later):** A. raise the cap per update (simplest; app stores allow much larger apps) ·
+  B. lighter art and voice-over per hero · C. optional downloadable hero packs (breaks "fully offline,
+  no server" unless bundled through the stores' own asset delivery).
+- **Status:** Open; not needed until hero 3–4.
+
+### D-27 Show progress on the slice's title screen before the map exists? (QC G5)
+
+- **Flow:** QC G5 ("the title shows no progress") → Map & timeline GDD → the slice title screen.
+- **Options:** A. **a small hero card on the title now** with best stars and the medal (gold/outline),
+  reusing the results-screen pieces; it later becomes the map's timeline card · B. wait for the map
+  (Alpha); until then a child who finishes sees no progress.
+- **Recommendation:** A (cheap, fixes G5, nothing wasted).
+- **Status:** Open.
+
+### D-28 The map of Vietnam: today's outline, including Hoàng Sa and Trường Sa
+
+- **Flow:** Map & timeline GDD (TASK-018) → map art → store review for Vietnam.
+- **What:** the map shows **today's Vietnam**, traced from an authoritative source, **with the Hoàng
+  Sa and Trường Sa archipelagos**; historical borders are never drawn; each hero's place is labelled
+  with its modern location (e.g. "Bình Than: nay thuộc Bắc Ninh"), as a claim to sign off.
+- **Options:** A. as above *(recommended)* · B. a stylised map without the islands (not acceptable for
+  a Vietnamese audience; may breach publishing rules) · C. historical borders per era (every era
+  becomes a history claim to verify).
+- **Decide also:** which official source to trace (e.g. a national administrative map).
+- **Status:** Open.
+
 ### D-23 Voice-over and sound choices (not needed until voice recording)
 
 - **Flow:** Audio & voice-over GDD (`a2fd734`) → voice recording → the iOS audio setting.
@@ -30,6 +137,7 @@ it) · **Decided** (Luan's call, with the date).
   a new phone · B. **exclude** the save from backups, so nothing leaves the device even in the
   parent's backup, but progress is lost on a new phone.
 - **Recommendation:** A (non-personal flags; losing a child's medals on a new phone feels unkind). Both devs agree; on iOS A is the default (no code).
+- **Update (TASK-020 A15, ADR-0003):** backup is the only way data could leave the phone. iOS: no code; Android: allowBackup is false today, so "allow" is a manifest change backing up only save.json. Decide before a Kids-category submission.
 - **Status:** Open (privacy: your call).
 
 ### D-20 A language choice screen on first launch?
@@ -64,6 +172,27 @@ it) · **Decided** (Luan's call, with the date).
 - **Props:** (8) Trần army flag = gold cloth, vermilion border, no symbols, as a stand-in?
 - **Palette:** (9) approve the colour additions (warning yellow for the telegraph, one skin tone
   for everyone, enemy slate tones, quiz and material colours)?
+- **(10) Bình Than portraits:** Quốc Toản ×3 expressions, a kind guard in the hero's colours, the king
+  shown symbolically (beard, thick brows, warm eyes, gold robe; headdress ⟨placeholder⟩, never a
+  European crown).
+- **Recommended answers (game-art-content, 2026-11-14), to approve in one pass:**
+  1. Cream tunic; vermilion only on headband and sash (art bible §4: red is an accent).
+  2. Staff with padded ends (blunt; an improvised weapon fits a 15-year-old; spears stay enemy props).
+  3. Topknot + vermilion headband as a ⟨placeholder⟩ until checked against Kim Đồng "Tranh truyện
+     lịch sử" (ref 2); the two headband tails are his silhouette at phone size.
+  4. **Yes**, one girl among 2–3 unnamed followers ("gia nhân và người thân" doesn't exclude girls);
+     labelled invented (C12). ← **your pick**
+  5. Yes: dome helmet + quilted coat-armour as a ⟨placeholder⟩, to check against a Yuan-armour
+     source before final art. No nón lá, no facial caricature.
+  6. Slate-violet, **about 10% greyer** (keeps it apart from the hero and from the quiz lavender).
+     ← **your pick** (greyer / as is)
+  7. Keep the leader's plain pennant (no symbols or text).
+  8. Yes: gold flag with a vermilion border, no symbols (matches the Trần flag in quiz Q1).
+  9. Approve all palette rows as listed (the materials rows only need a glance).
+  10. Approve the portraits. King's headdress reference: **the Kết nối tri thức textbook
+      illustration of a Trần king** (the image children know from school). ← **your pick**
+      (that source, or name another)
+- **How to answer:** "D-18 all as recommended", or list the numbers you change.
 - **Status:** Open. Blocks final art only; the slice runs on placeholders meanwhile.
 
 ### D-16 Saved progress keys: work out unlocks instead of storing them
@@ -74,6 +203,7 @@ it) · **Decided** (Luan's call, with the date).
   `medal.<hero>` (never cleared) and `lang`. Unlocks are worked out from those.
 - **Why:** with timed content updates, a stored list can't open a hero added later for a child who
   already finished the previous one, and a hero inserted earlier in history breaks the chain.
+- **Update (TASK-020 W2):** the saved keys are now defined once in Save & progress Rule 1 (adds `save_version` and `sound`); ADR-0003 (D-30) implements them.
 - **Status:** Proposed. The leader applied it to the slice so both apps write it once; the devs' D-04
   save ADR formalises it. Luan can overturn it.
 
@@ -87,6 +217,7 @@ it) · **Decided** (Luan's call, with the date).
   · B. give blocking a small reward (a blocked enemy is stunned and the next hit counts double, or a
   block fills the banner meter) · C. decide after the slice playtest.
 - **Recommendation:** C, then B if children ignore defend.
+- **Update (TASK-020 A7):** still true in the cross-review: spamming attack wins every fight; defend has no payoff.
 - **Status:** Open.
 
 ### D-14 What stars measure, and what they're for
@@ -108,6 +239,7 @@ it) · **Decided** (Luan's call, with the date).
 - **Options:** A. accept · B. reseed per run (seed + run_count + question_index); both apps stay
   identical for the same run_count, and the fixture still tests the algorithm.
 - **Recommendation:** B (small change: devs + Quiz GDD rule 3).
+- **Update (TASK-020 W14):** still open; a per-run counter in the shuffle seed is the team's proposed fix (both apps).
 - **Status:** Open.
 
 ### D-12 Legend markers on short labels (R4b, for the devs + art)

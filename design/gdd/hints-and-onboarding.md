@@ -51,16 +51,20 @@ flags, `stall`/`idle`), plan reviews 1–2, and QC O2 (hints count from the capt
 
 3. **One teach hint at a time.** Priority: move, then attack, then defend, then special. A
    lower one waits until no higher one is showing. In the prototype, the defend hand shows only
-   while an enemy is winding up, so it never covers the attack hand.
+   while an enemy is winding up, so it never covers the attack hand. **In a training beat, teach
+   hints follow the step order** (dummies → blocks → flag): the flag hand shows only once the
+   finish step is current, never at training start (QC r2 B3).
 4. **Stuck hints** show after `hint_delay` (5 s) without progress:
 
 | Situation | "Progress" means | Hint |
 |---|---|---|
-| walk, reach-the-flag (no encounter), and walking between beats | Any movement, left or right (prototype: `if (mv) idle = 0`) | ▶ pulses |
+| walk, and walking between beats | Any movement, left or right (prototype: `if (mv) idle = 0`) | ▶ pulses |
 | fight, encounter | A hit landed | An arrow over the nearest non-fleeing enemy + attack pulses |
 | training | The current step advanced (dummy hit, block, special tap) | Pulse on the pad for the current step |
 | hold-meter | The meter rose | Hand on special again |
-| reach-the-flag (path clear) | Any movement, left or right | An arrow over the flag, if it is on screen; otherwise ▶ pulses |
+| reach-the-flag (path clear, no encounter active) | Any movement, left or right | An arrow over the flag, if it is on screen; otherwise ▶ pulses |
+| dialogue (ask button showing, Mission flow Rule 7d) | An ask tap or "Tiếp" | Hand on the ask button (the button also pulses) |
+| map: first view (Map Rule 8) | The open pin is tapped | Hand on the only open pin, shown at once on the first map view (not after `hint_delay`) and kept until that tap |
 
 5. **This system owns the no-progress timer** (`progress_timer`, called `stall`/`idle` in the
    prototype) and `hint_delay`. Mission flow and Combat only send events. **Timers reset** on progress, when a caption or beat card closes (QC O2: hints count from the
@@ -70,10 +74,14 @@ flags, `stall`/`idle`), plan reviews 1–2, and QC O2 (hints count from the capt
 6. **Hints never block.** A hint never pauses play, covers a pad's touch area, or stops the child
    doing something else. The hand is drawn above the pad and doesn't take touches.
 7. **Per run, not saved.** Teach flags are kept for one mission run, so a replay shows the hand
-   again briefly until each button is used once. Nothing is saved (Save keeps only `lang`,
-   stars and unlocks, P-04).
-8. **No hints on story screens.** Story boxes, the quiz and results use their own "Tiếp" pulse
-   (Mission flow, Quiz). This system covers play only.
+   again briefly until each button is used once. Hints saves nothing; the saved keys are listed
+   in Save & progress Rule 1.
+8. **No hints on story screens, with two named exceptions.** Story boxes, the quiz and results
+   use their own "Tiếp" pulse (Mission flow, Quiz). This system covers play, plus exactly two
+   non-play rows of Rule 4: the **dialogue ask button** (an action the child must take to move
+   the story on) and the **map's first view** (Map & timeline Rule 8). A dialogue line showing
+   "Tiếp" gets no hint. The map's locked-pin arrow is tap feedback owned by Map (Map Rule 3),
+   not a hint.
 
 ### States and Transitions
 
@@ -91,6 +99,7 @@ caption or card closing, or resume).
 | Side-scroll movement & combat | events `hit`, `block`, `pushed`, `windup_started`, `flee`, hero moved | (none) | Combat GDD |
 | Input & touch controls | pad positions and sizes | (none) | Input GDD |
 | Audio & voice-over | (none) | hint shown (post-slice: voice prompt id) | Audio GDD |
+| Map & timeline | "first map view", the open pin's position; pin tapped | (none) | Map GDD |
 | Content data | `tuning.json` `hint_delay` | (none) | Content contract |
 
 ## Formulas
@@ -137,10 +146,11 @@ hides them, and the timer restarts.
 | Side-scroll movement & combat | this depends on it | Hard | Combat events |
 | Input & touch controls | this depends on it | Hard | Pad positions |
 | Audio & voice-over | this depends on it (post-slice voice prompts) | Soft | Prompt ids |
+| Map & timeline | this depends on it | Soft | First map view, open-pin position (map row of Rule 4) |
 | Content data | this depends on it | Hard | `hint_delay` |
 
-Mission flow (Interactions table) and Combat (Interactions table) both list Hints as a
-dependent.
+Mission flow (Interactions table), Combat (Interactions table) and Map & timeline (Dependencies)
+all list Hints as a dependent.
 
 ## Visual/Audio Requirements
 
@@ -171,8 +181,8 @@ dependent.
 
 ## Acceptance Criteria
 
-Criteria 1–7 are logic and need unit tests (hint state from events). Criteria 8–9 need a
-screenshot per platform.
+Criteria 1–7 and 10 are logic and need unit tests (hint state from events). Criteria 8–9 and 11
+need a screenshot per platform.
 
 1. **GIVEN** the slice mission at `walk_to[0]` (later: the first beat with `move`), **WHEN** play
    starts, **THEN** the hand shows on ▶ until the hero first moves right, and never again in
@@ -182,7 +192,7 @@ screenshot per platform.
 3. **GIVEN** the first hit has landed and no block yet, **WHEN** an enemy is in `windup`,
    **THEN** the hand is on defend only during that windup, until the first block.
 4. **GIVEN** a fight at dt = 1/60 with `hint_delay` 5, **WHEN** no hit lands for 300 steps
-   (5.0 s, compared strictly: `stall > hint_delay`), **THEN** no stuck hint shows. **WHEN**
+   (5.0 s, compared strictly: `progress_timer > hint_delay`), **THEN** no stuck hint shows. **WHEN**
    none lands for 301 steps (5.0167 s: within one step after 5.0 s), **THEN** an arrow is over the nearest non-fleeing enemy and attack
    pulses (F1 boundary).
 5. **GIVEN** a stuck hint showing, **WHEN** a hit lands, a caption closes, or play resumes from
@@ -195,6 +205,11 @@ screenshot per platform.
    contains text, and the screenshots are identical apart from the HUD text.
 9. **GIVEN** a hint over a pad, **WHEN** the child taps the pad through the hand, **THEN** the
    pad fires (the hand takes no touches).
+10. **GIVEN** a dialogue beat with the ask button showing, **WHEN** no ask tap comes for 301
+    steps at dt = 1/60, **THEN** the hand points at the ask button; **WHEN** the ask is tapped,
+    **THEN** it hides and the timer restarts. On a line showing "Tiếp", no hint ever shows.
+11. **GIVEN** the first map view, **WHEN** it opens, **THEN** the hand is on the only open pin
+    until that pin is tapped.
 
 ## Open Questions
 

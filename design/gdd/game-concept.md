@@ -103,7 +103,7 @@ game follows the national calendar the child lives in.
 | ---- | ---- | ---- |
 | **Narrative** | 1 | Each mission is one hero's famous story, told with picture, voice and play (story-first) |
 | **Discovery** | 2 | Passing the quiz unlocks the next hero on the timeline; their place on the map lights up; storybooks arrive on celebration days |
-| **Challenge** | 3 | Simple, forgiving attack/defend action; 1–3 stars for replay mastery |
+| **Challenge** | 3 | Simple, forgiving attack/defend action; 1–3 stars for remembering the story in the quiz (Quiz & stars Rule 7) |
 | **Submission** | 4 | Calm pace, no timers that block play, soft failure, instant retry |
 | **Fantasy** | 5 | "I helped the hero"; child-sized role in the legend |
 | **Sensation** | 6 | Bright cartoon art, drums and voice, big clear feedback |
@@ -154,12 +154,17 @@ want trustworthy history, no ads or data collection, and a conversation starter.
 
 - **Onboarding curve**: the first mission teaches each touch action inside the story,
   with voice prompts and a hand icon, no reading required to start.
-- **Difficulty scaling**: later heroes add a little speed or more targets; stars, not
-  progress, reward the extra challenge.
+- **Difficulty scaling**: the one lever across heroes is **encounter composition**: how many
+  enemies, which kinds, and from which sides (mission data). Timing stays global and gentle
+  (`tuning.json`; the telegraph never drops below 0.8 s, R15), and a beat still fits the
+  60 s play cap. Stars measure only quiz recall (Quiz & stars Rule 7), never play skill, and
+  progress never depends on either (TASK-020 W16, A6).
 - **Feedback clarity**: big animation, sound and voice on every beat; stars and the next
   hero unlocking at the end.
-- **Recovery from failure**: a missed beat slows down and replays instantly; no lives,
-  no game-over screen, no shaming. Quiz mistakes show the right answer with the story picture.
+- **Recovery from failure**: a beat can't be failed; a mistake costs a moment and a small
+  knock-back, and a wordless stuck hint appears after a few seconds without progress. No lives,
+  no game-over screen, no shaming. A wrong quiz card greys out and the child tries again until
+  right; then the why line explains.
 
 ---
 
@@ -343,7 +348,9 @@ Vietnamese legends as told to children, school history lessons, national celebra
 - ~~Who is the named history reviewer?~~ **Decided (Luan, 2026-11-14): Luan signs off history.** game-art-content drafts each hero's content with cited sources; nothing is final until Luan signs it off.
 - **Monetization**: paid, free, school/government funded? (Luan decides; no ads to kids by default.)
 - ~~How storybook content arrives after release~~ **Decided (Luan, 2026-11-14): timed app updates**, no content download.
-- **Portrait or landscape?** Answer with the first prototype on a real phone.
+- ~~Portrait or landscape?~~ **Decided (Luan): landscape.** Every GDD and both apps are
+  landscape. Held in portrait, the app shows a picture-only "turn the phone" screen (title UX,
+  `design/ux/title.md`).
 - **Do children read the story scenes or skip them?** Answer with an MVP playtest.
 
 ---

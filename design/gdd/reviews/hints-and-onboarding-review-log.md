@@ -28,3 +28,6 @@ All findings were checked as fixed. Status set to Approved.
 
 ## Cross-GDD review fixes — 2026-11-14 (TASK-010, gdd-cross-review-2026-11-14.md)
 Consistency fixes C1–C5, S2 (pause releases held pads; the windup restarts on resume), stale "proposed" labels and D-09 done, plus alignment with Luan's D-08 (B) and D-10 (B, no special in combat). Status stays Approved; these are consistency edits, not design changes, except S2, which is new behaviour for both apps.
+
+## Update — 2026-11-14 — QC r2 B3 (TASK-019)
+Rule 3: in training, teach hints follow the step order (dummies, blocks, flag); the flag hand shows only when the finish step is current. game-dev-android to confirm in the Input GDD review.
