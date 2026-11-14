@@ -135,6 +135,11 @@ class MissionRun(
     private var encounterNext = 0
     /** True while a reach-the-flag encounter holds the camera. */
     var inEncounter = false; private set
+    /**
+     * Combat Rule 15b: in a training beat (beat_play start to beat_end) the camera follows right but
+     * never past this cap, and the hero never past cap + W − enemy_reach − hero_edge_margin; null otherwise.
+     */
+    var trainCap: Double? = null; private set
 
     val beats get() = mission.beats
     val currentBeat: Beat get() = beats[beat.coerceAtMost(beats.size - 1)]
@@ -238,6 +243,7 @@ class MissionRun(
             BeatType.WALK -> Unit
             BeatType.HOLD -> heldTotal = 0.0
             BeatType.TRAINING -> {
+                trainCap = maxOf(cam, xStart - tuning["hero_edge_margin"]) // fixed here; the camera stops following at it
                 dummies.clear(); blocksDone = 0; partner = null; bannerRaised = false
                 repeat(dummyCount(i)) { k -> dummies += Dummy(xStart + (k + 1) * tuning["dummy_spacing"]) }
                 trainingStep = if (dummies.isNotEmpty()) TrainingStep.DUMMIES else nextTrainingStep(TrainingStep.DUMMIES, i)
@@ -403,8 +409,19 @@ class MissionRun(
     /** The buttons the HUD shows now (mission-flow rule 4): the beat's buttons in play, move while walking. */
     fun visibleButtons(): Set<String> = when (phase) {
         Phase.WALK -> setOf("move")
-        Phase.PLAY, Phase.END -> currentBeat.buttons.toSet()
+        Phase.PLAY, Phase.END -> if (beatType == BeatType.TRAINING) currentBeat.buttons.toSet() intersect trainingPads(trainingStep) else currentBeat.buttons.toSet()
         else -> emptySet()
+    }
+
+    /**
+     * Mission flow Rule 7c (TASK-020 W12): training shows only the pads its current step uses, so no
+     * pad on screen does nothing; derived from the step, never read from data. A pad appears at the
+     * start of the step that first uses it.
+     */
+    private fun trainingPads(step: TrainingStep): Set<String> = when (step) {
+        TrainingStep.DUMMIES -> setOf("move", "attack")
+        TrainingStep.BLOCKS -> setOf("move", "attack", "defend")
+        TrainingStep.SPECIAL, TrainingStep.DONE -> setOf("move", "attack", "defend", "special")
     }
 
     private fun allowed(a: Action, vis: Set<String>) = when (a) {
@@ -456,7 +473,13 @@ class MissionRun(
             val m = edge + tuning["enemy_reach"] // G2 rule 1: the fight zone keeps an enemy in front always on screen
             h.x = h.x.coerceIn(lock + m, lock + WORLD_W - m); cam = lock
         }
-        else { h.x = maxOf(cam + edge, h.x); cam = maxOf(cam, h.x - tuning["camera_follow_offset"]) }
+        else {
+            val tc = trainCap
+            if (tc != null) h.x = minOf(h.x, tc + WORLD_W - tuning["enemy_reach"] - edge) // Rule 15b: stopped, never moved
+            h.x = maxOf(cam + edge, h.x)
+            val follow = h.x - tuning["camera_follow_offset"]
+            cam = maxOf(cam, if (tc != null) minOf(follow, tc) else follow) // follows, never left, never past the cap
+        }
         if (phase == Phase.WALK && beat < beats.size && h.x >= beatX(beat)) arriveAtBeat(beat)
         if (phase == Phase.DIALOGUE) { if (dialogueButton == "ask") stall += dt }
         else if (phase == Phase.PLAY) playStep(dt, held, tapped)
@@ -526,7 +549,7 @@ class MissionRun(
     private fun endBeat() {
         if (beatType == BeatType.FIGHT) { phase = Phase.CAPTION; captionLine = 0; return }
         sfx(Sfx.CHIME); cheerT = t // drawn by the app; the core RNG is used only by fights and dummies (iOS parity)
-        lockX = null; partner = null
+        lockX = null; partner = null; trainCap = null
         beat++
         phase = Phase.WALK
         missionDone = beat >= beats.size
