@@ -143,6 +143,10 @@ A platform the issue doesn't target (a design doc, for example) skips that QC; s
 - Browser prototypes: Chrome on Android, Safari on iOS (emulator/simulator browser is fine).
 - Bugs: one comment per bug with steps, expected, actual, screenshot, device. `/bug-report`
   format.
+- **Builds under test are frozen.** A dev hands QC a committed hash plus a copy of the build kept
+  outside the build folder (APK / .app), so it can't be overwritten mid-round. While a QC round runs,
+  devs never install on the QC device or emulator; they use their own AVD/Simulator for evidence, or
+  ask the QC session first through the leader. The QC session owns its device's lifecycle.
 
 ## 7. Worker role prompts (used when a session is started)
 
