@@ -11,6 +11,46 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-23 Voice-over and sound choices (not needed until voice recording)
+
+- **Flow:** Audio & voice-over GDD (`a2fd734`) → voice recording → the iOS audio setting.
+- **(a) iPhone silent switch:** A. **respect it** and the family's own music (text always carries the
+  content, plus a one-time picture hint about the switch) *(recommended)* · B. always play voice,
+  ignoring the silent switch and stopping the parent's music.
+- **(b) Vietnamese narrator accent:** **Northern standard**, matching textbook audio *(recommended)*,
+  or Southern; one accent for every hero.
+- **Status:** Open. Not needed before voice-over recording.
+
+### D-22 Let the phone's own backup keep the child's progress?
+
+- **Flow:** Save & progress GDD rule 11 → save-data ADR (D-04) → iOS/Android backup settings.
+- **What's saved:** only game flags (language, sound, which heroes are done or opened, best stars,
+  medals). No personal data, no network.
+- **Options:** A. **allow** the parent's normal iCloud / Google backup, so progress and medals survive
+  a new phone · B. **exclude** the save from backups, so nothing leaves the device even in the
+  parent's backup, but progress is lost on a new phone.
+- **Recommendation:** A (non-personal flags; losing a child's medals on a new phone feels unkind). Both devs agree; on iOS A is the default (no code).
+- **Status:** Open (privacy: your call).
+
+### D-20 A language choice screen on first launch?
+
+- **Flow:** concept ("first-launch choice + a toggle") → Language & text GDD rule 3 → new screen in
+  both apps → `/ux-design`.
+- **Options:** A. a picture-only first-launch screen: two big buttons, "Tiếng Việt" (lotus) and
+  "English" (book), VI pre-selected so one tap keeps it · B. keep the slice rule: VI by default,
+  switch on the title and pause.
+- **Recommendation:** B for the slice, A before the first release (it mostly helps English-speaking
+  families).
+- **Status:** Open.
+
+### D-21 Vietnamese length limits and max lines (for the devs + art)
+
+- **Finding:** only English text has length limits today; Vietnamese runs 0.4–1.7× English and short
+  UI words are often longer in Vietnamese ("Màn hình chính" vs "Home").
+- **Change:** a Vietnamese limit per field (1.6 × the English one) and max lines per field in
+  rules.json, a new check R8b, and the "read it all for a medal" line retyped as a dialog.
+- **Status:** AGREED by both devs (+ a `field` override on UI strings); game-dev-android writes data/TASK-005h-text-budgets.
+
 ### D-18 How Trần Quốc Toản and the invaders look (portrayal + palette), before final art
 
 - **Flow:** art bible → asset specs (TASK-014, 87 assets) → **Luan's look sign-off** → final art
@@ -234,6 +274,8 @@ it) · **Decided** (Luan's call, with the date).
 
 | Date | Decision |
 | --- | --- |
+| 2026-11-14 | **D-25 (design direction):** shorten the movement, especially the walk to Bình Than; add an exchange scene where Quốc Toản asks to join the meeting and is refused, then crushes the orange, to show his spirit and character. game-art-content proposes the scene and script (TASK-016); Luan approves before the build. |
+| 2026-11-14 | **D-24 (beat 1, Bình Than):** age **15** (born 1267); line approved: "Vua Trần họp các vương hầu và trăm quan ở bến Bình Than để bàn việc đánh giặc." (Toàn thư); card title "Khi các vương hầu họp bàn ở Bình Than" (one line; "hội nghị" dropped to fit). Wording approved by Luan; in the data C04 and C13 stay `pending` until a Toàn thư page and a source for 1267 are checked (rule R5). |
 | 2026-11-14 | **D-19: ADR-0002 accepted, minimum iOS 17 kept.** One 1.5× art set, ≤2048² images, 1440×1320 background tiles with a gradient sky band, per-step loading, ≤64 MB image memory at any moment, ≤60 MB download. Frame-rate and iOS-memory measurements follow on real devices. |
 | 2026-11-14 | **D-17:** Vietnamese text uses **no pronoun** where possible; when one is needed, address the child as **"em"** (as the textbooks do). The skip warning drops "bạn". |
 | 2026-11-14 | **D-08: B, the full structure** in the slice: walk (riverbank to Bình Than) → hold-meter (the orange) → training (dummies, blocks, raise the banner) → reach-the-flag with fight encounters. `mission-full.json` becomes the slice's mission. |
