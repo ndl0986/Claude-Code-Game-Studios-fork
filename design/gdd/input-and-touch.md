@@ -55,6 +55,10 @@ rounds: TASK-003 r3 O5/O6, TASK-007 r2 B1/B4, and the TASK-006 iOS rounds.
 
 5. **Per-pointer ownership.** Each pointer (finger) owns **at most one** pad at a time, so
    multi-touch works: hold ▶ with one thumb and tap attack with the other.
+5b. **Track pointers by identity, never by position** (iOS QC r2, iOS-R2-03). Each pad
+    remembers the **id** of the pointer that owns it. That pointer's release or cancel **always**
+    releases its pad, wherever the pointer has moved (inside the pad, onto another, or off every
+    pad). A pad is never released or kept held by hit-testing the release position.
 6. **Tie-break.** If two pointers land on the **same** pad, the **first** one owns it. The
    second is ignored until it moves onto **another** pad, which it then owns as if it had
    pressed there.
@@ -225,7 +229,7 @@ Combat, Mission flow and Hints already list Input as a dependency.
 
 ## Acceptance Criteria
 
-Criteria 1–9 are logic (unit tests on the input layer); 10–12 need QC on devices.
+Criteria 1–9 and 13–14 are logic (unit tests on the input layer); 10–12 need QC on devices.
 
 1. **GIVEN** ▶ held by pointer A, **WHEN** pointer B taps attack, **THEN** the hero keeps moving
    and a swing starts (multi-touch).
@@ -251,6 +255,11 @@ Criteria 1–9 are logic (unit tests on the input layer); 10–12 need QC on dev
     across, with ≥ `pad_gap` to its neighbours.
 12. **GIVEN** a child-sized thumb test (QC), **WHEN** pressing each pad 20 times, **THEN** no press
     activates a neighbouring pad.
+13. **GIVEN** a pointer pressed on defend, **WHEN** it sends a few small move events (inside or
+    outside the pad) and then releases anywhere, **THEN** no pad is held within one frame of the
+    release (identity tracking, iOS-R2-03; unit test).
+14. **GIVEN** a tap on the flag pad (training finish) with a small move under `drag_threshold`,
+    **WHEN** it releases, **THEN** it counts as a tap and the banner rises.
 
 ## Open Questions
 

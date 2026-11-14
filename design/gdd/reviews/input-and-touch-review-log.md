@@ -15,3 +15,6 @@ Reviewed-Content-Hash: .claude/skills/design-review/SKILL.md 4dcc8b81162613c7571
 Reviewed-Content-Hash: design/gdd/side-scroll-combat.md 4d973418c3c85d29ae2681eb097237054557b1ec
 Reviewed-Content-Hash: design/gdd/mission-flow.md 1f61e124f7f923be2e3bb886fff9bca161ce67b6
 Reviewed-Content-Hash: design/gdd/quiz-and-stars.md 222777502ac1a4a3282b720980105608d5787a2b
+
+## Update — 2026-11-14 — iOS QC r2 (iOS-R2-03, S2)
+Rule 5b: pointers are tracked by identity; a release or cancel always releases the owned pad, wherever the pointer moved. AC13 (small moves then release → nothing held within one frame) and AC14 (a flag tap with a small move under drag_threshold still counts).
