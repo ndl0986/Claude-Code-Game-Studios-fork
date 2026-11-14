@@ -27,6 +27,7 @@ an issue once Issues are on. The leader owns this file.
 | TASK-005d | Schema 1.1: beat params (D-06), R13–R16, tuning (D-09), quiz fixes (D-11), rng + quiz-shuffle fixtures | data | game-dev-android (+ ios review, art ACK) | MERGED (`3074d43`) | `data/TASK-005d-beat-params` | 2026-11-14 |
 | TASK-005e | R13 without special on reach-the-flag, dummy_spacing, dialog budget 60 | data | game-dev-android (+ ios review) | MERGED (`3861c09`) | `data/TASK-005e-slice-keys` | 2026-11-14 |
 | TASK-005f | R17 unique timeline_order, R18 next_hero by index order | data | game-dev-android (+ ios review) | MERGED | `data/TASK-005f-r17-r18` | 2026-11-14 |
+| TASK-005g | ADR-0002 follow-up: themes.json sky bands, assets width/height (schema 1.2), R19a/R19b/R20 | data | game-dev-ios (+ android review) | MERGED | `data/TASK-005g-assets-themes` | 2026-11-14 |
 | TASK-003b | Mission beat types from TASK-004: Special button, walk / hold-meter / training / reach-the-flag beats, arrows; BEAT_TYPES dispatch table first; art fixes: wrong-answer #9C8FB8 + circular-arrow icon, tangerine attack icon (not a pickaxe), vermilion only as a tunic accent; quiz to 5 questions once claims are signed | dev | unassigned | CANCELLED (browser); beat types and art fixes move to native tasks | — | 2026-11-14 |
 
 ## Team changes

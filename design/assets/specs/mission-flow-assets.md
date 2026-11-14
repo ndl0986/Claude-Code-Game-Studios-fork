@@ -5,6 +5,7 @@
 > **Generated**: 2026-11-14 · Task: TASK-014
 > **Review**: lean mode. art-director wrote the specs; technical-artist was skipped, so technical constraints were not validated. Sizes follow art bible §8 as set by game-art-content.
 > **Portrayal sign-off**: Luan (D-18) before any final art. Trần-era details are ⟨placeholder⟩.
+> **Backgrounds (ASSET-307–322)**: shipped per ADR-0002 (2880×1320 at 1.5×, sky band in code from `content/data/themes.json`), updated 2026-11-14 (TASK-014a).
 > **Status**: 26 assets specced / 0 approved / 0 in production / 0 done
 
 **Shared conventions:**
@@ -155,19 +156,21 @@ Negative: text, letters, numbers, watermark, blood, gore, injury, weapons pointe
 | Field | Value |
 |-------|-------|
 | Category | Environment |
-| Dimensions | 7680×2160 authored (2 screens wide, tileable horizontally); export 7680×2160 (2×) / 3840×1080 (1×) |
+| Dimensions | Author 3840×1760 (2×); ship **2880×1320 at 1.5×** as two tiles of 1440×1320, or parallax strips ≤ 2048 wide (ADR-0002). Taller authoring is cropped at export. Tileable horizontally |
 | Format | PNG (sRGB, alpha) |
 | Naming | `bg_river_sky.png` |
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
-| Texture Res | 1× and 2× per art bible §8 |
+| Texture Res | 1.5× shipped (ADR-0002: author 2×, ship 1.5×); R19b ≤ 1440×1320 per tile file |
 
 **Visual Description:** A clear morning sky graded from light blue at the top to a pale warm haze at the horizon, with a soft sun disc and 3–4 long horizontal cloud bands. It is the lowest detail and contrast of the set, with no outlines.
+
+**Sky band and safe area (ADR-0002):** above this tile the game draws a vertical gradient band from `themes.json` `river.sky_band` (top `#9CCBEA` → bottom `#BFE0F2`). The tile's **top ~10% (≈130 px at 1.5×) fades into `#BFE0F2`**, so there's no seam. Key elements (sun, cloud bands, sun shafts) stay **below ~15% from the tile's top**. No vertical parallax.
 
 **Art Bible Anchors:**
 - §2 Mission beat: clear morning sun, bright, open, breezy.
 - §6 Far sky: lowest detail, lowest contrast.
 
-**Generation Prompt:** Wide horizontally tileable side-scrolling game background layer, clear morning sky, soft gradient from light river blue to pale warm haze at the horizon, a soft sun disc, a few long flat cloud bands. Modern kids' cartoon, flat colours with soft gradients, no outlines, low contrast. Palette anchors #3E8FC4 (softened), #F3E6C8.
+**Generation Prompt:** Wide horizontally tileable side-scrolling game background layer, clear morning sky, soft gradient from light river blue to pale warm haze at the horizon, a soft sun disc, a few long flat cloud bands. Modern kids' cartoon, flat colours with soft gradients, no outlines, low contrast. Palette anchors #3E8FC4 (softened), #F3E6C8. The top 10% fades smoothly into flat #BFE0F2; sun, clouds and light shafts stay in the lower 85%.
 Negative: text, letters, watermark, blood, gore, injury, weapons pointed at viewer, scary faces, exaggerated ethnic features, conical hat, photorealistic, anime, characters, birds, red or orange sky, dark clouds, outlines, visible seams.
 
 **Status:** Needed
@@ -177,13 +180,15 @@ Negative: text, letters, watermark, blood, gore, injury, weapons pointed at view
 | Field | Value |
 |-------|-------|
 | Category | Environment |
-| Dimensions | 7680×2160 authored, tileable horizontally, transparent above the hills; export 2× / 1× (3840×1080) |
+| Dimensions | Author 3840×1760 (2×); ship **2880×1320 at 1.5×** as two tiles of 1440×1320, or parallax strips ≤ 2048 wide (ADR-0002). Taller authoring is cropped at export. Tileable horizontally |
 | Format | PNG (sRGB, alpha) |
 | Naming | `bg_river_far.png` |
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
-| Texture Res | 1× and 2× per art bible §8 |
+| Texture Res | 1.5× shipped (ADR-0002: author 2×, ship 1.5×); R19b ≤ 1440×1320 per tile file |
 
 **Visual Description:** Low rolling blue-green hills and a wide river bend glinting in simple light bands, with faint rice-field strips on the far bank. The silhouettes are soft, aerial-perspective pale and outline-free, with no buildings that could be read as a claimed place.
+
+**Anchoring (ADR-0002):** the layer is anchored to the ground line (bottom of the tile); the code-drawn sky band, not this layer, fills any height above 1320.
 
 **Art Bible Anchors:**
 - §4 Per-area temperature "River": cool and fresh, blue-greens, simple band reflections.
@@ -199,13 +204,15 @@ Negative: text, letters, watermark, blood, gore, injury, weapons pointed at view
 | Field | Value |
 |-------|-------|
 | Category | Environment |
-| Dimensions | 7680×2160 authored, tileable horizontally, transparent above the scenery; export 2× / 1× |
+| Dimensions | Author 3840×1760 (2×); ship **2880×1320 at 1.5×** as two tiles of 1440×1320, or parallax strips ≤ 2048 wide (ADR-0002). Taller authoring is cropped at export. Tileable horizontally |
 | Format | PNG (sRGB, alpha) |
 | Naming | `bg_river_mid.png` |
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
-| Texture Res | 1× and 2× per art bible §8 |
+| Texture Res | 1.5× shipped (ADR-0002: author 2×, ship 1.5×); R19b ≤ 1440×1320 per tile file |
 
 **Visual Description:** A busy wharf: a timber jetty on posts, 2–3 moored wooden boats with woven-bamboo canopies, bamboo clumps, banana plants and a few curved-eave thatched or tiled roofs. All architecture and boat forms are ⟨placeholder⟩. Water is drawn in simple flat bands and it uses soft thin outlines. Everything stays above the ground line so the play band is clear.
+
+**Anchoring (ADR-0002):** the layer is anchored to the ground line (bottom of the tile); the code-drawn sky band, not this layer, fills any height above 1320.
 
 **Art Bible Anchors:**
 - §6 Beat 1: a busy wharf with boats; Vietnamese first (bamboo, banana leaves, wide rivers).
@@ -222,13 +229,15 @@ Negative: text, letters, signs, watermark, blood, gore, injury, weapons pointed 
 | Field | Value |
 |-------|-------|
 | Category | Environment |
-| Dimensions | 3840×2160 authored, tileable horizontally; opaque from y = 1410 down, transparent above; export 2× / 1× |
+| Dimensions | Author 3840×1760 (2×); ship **2880×1320 at 1.5×** as two tiles of 1440×1320, or parallax strips ≤ 2048 wide (ADR-0002). Taller authoring is cropped at export. Tileable horizontally |
 | Format | PNG (sRGB, alpha) |
 | Naming | `bg_river_ground.png` |
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
-| Texture Res | 1× and 2× per art bible §8 |
+| Texture Res | 1.5× shipped (ADR-0002: author 2×, ship 1.5×); R19b ≤ 1440×1320 per tile file |
 
 **Visual Description:** A packed-earth riverbank path `#C9A57A` ⟨proposed⟩ with a bold, continuous rice-green `#7CB342` grass lip on its top edge and a slightly darker earth band below. It is sparse: a few pebbles only, and nothing that looks like a hazard. It has the highest contrast in the set, and the HUD pads sit over its lower half.
+
+**Anchoring (ADR-0002):** the layer is anchored to the ground line (bottom of the tile); the code-drawn sky band, not this layer, fills any height above 1320.
 
 **Art Bible Anchors:**
 - §3 Environment geometry: one clear continuous walkable band with a bold top edge.
@@ -244,11 +253,11 @@ Negative: text, letters, watermark, blood, gore, injury, weapons pointed at view
 | Field | Value |
 |-------|-------|
 | Category | Environment |
-| Dimensions | 3840×2160 authored, tileable horizontally, content only below y = 1500; export 2× / 1× |
+| Dimensions | Author 3840×1760 (2×); ship **2880×1320 at 1.5×** as two tiles of 1440×1320, or parallax strips ≤ 2048 wide (ADR-0002). Taller authoring is cropped at export. Tileable horizontally |
 | Format | PNG (sRGB, alpha) |
 | Naming | `bg_river_fg.png` |
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
-| Texture Res | 1× and 2× per art bible §8 |
+| Texture Res | 1.5× shipped (ADR-0002: author 2×, ship 1.5×); R19b ≤ 1440×1320 per tile file |
 
 **Visual Description:** Sparse clumps of reeds and grass tips along the bottom edge, at 60–80% opacity, softly blurred and outline-free. They are spaced at least one screen-third apart.
 
@@ -265,13 +274,15 @@ Negative: text, letters, watermark, blood, gore, injury, weapons pointed at view
 | Field | Value |
 |-------|-------|
 | Category | Environment |
-| Dimensions | 3840×2160 authored, non-tiling, transparent around it; placed on the play layer at the walk beat's end and kept in view for the orange beat; export 2× / 1× |
+| Dimensions | Author 3840×1760 (2×); ship **2880×1320 at 1.5×** as two tiles of 1440×1320, or parallax strips ≤ 2048 wide (ADR-0002). Taller authoring is cropped at export. Tileable horizontally |
 | Format | PNG (sRGB, alpha) |
 | Naming | `bg_river_gate.png` |
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
-| Texture Res | 1× and 2× per art bible §8 |
+| Texture Res | 1.5× shipped (ADR-0002: author 2×, ship 1.5×); R19b ≤ 1440×1320 per tile file |
 
 **Visual Description:** A **closed** timber gate with upswept eaves and two solid doors, and behind it, half-visible, a raised royal canopy on dark lacquer-brown posts `#7A3B2A` ⟨proposed; kept off vermilion so the hero stays the warmest accent⟩ with a bronze-gold `#E8A93B` roof trim. Both are ⟨placeholder: the Trần court setting is to be sourced; no specific building is claimed⟩. It is dignified and calm, and the gate is wide enough that the hero stops before it. The guards are separate characters (not specced here).
+
+**Anchoring (ADR-0002):** the layer is anchored to the ground line (bottom of the tile); the code-drawn sky band, not this layer, fills any height above 1320.
 
 **Art Bible Anchors:**
 - §6 Beat 2: a closed gate with a royal canopy; no specific building claimed as historical.
@@ -288,19 +299,21 @@ Negative: text, letters, signs, plaques, calligraphy, watermark, blood, gore, in
 | Field | Value |
 |-------|-------|
 | Category | Environment |
-| Dimensions | 7680×2160 authored, tileable horizontally; export 2× / 1× |
+| Dimensions | Author 3840×1760 (2×); ship **2880×1320 at 1.5×** as two tiles of 1440×1320, or parallax strips ≤ 2048 wide (ADR-0002). Taller authoring is cropped at export. Tileable horizontally |
 | Format | PNG (sRGB, alpha) |
 | Naming | `bg_village_sky.png` |
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
-| Texture Res | 1× and 2× per art bible §8 |
+| Texture Res | 1.5× shipped (ADR-0002: author 2×, ship 1.5×); R19b ≤ 1440×1320 per tile file |
 
 **Visual Description:** A warm late-morning sky that is softer and warmer than the river sky: pale blue graded to a straw-gold haze, with round puffy clouds. It has no outlines and low contrast.
+
+**Sky band and safe area (ADR-0002):** above this tile the game draws a vertical gradient band from `themes.json` `village.sky_band` (top `#A9D3EC` → bottom `#CDE6EE`). The tile's **top ~10% (≈130 px at 1.5×) fades into `#CDE6EE`**, so there's no seam. Key elements (sun, cloud bands, sun shafts) stay **below ~15% from the tile's top**. No vertical parallax.
 
 **Art Bible Anchors:**
 - §4 Per-area temperature "Countryside": warm-neutral, soft sky, the "home" palette.
 - §6 Far sky.
 
-**Generation Prompt:** Wide horizontally tileable side-scrolling game background layer, warm late-morning countryside sky, soft gradient from pale blue to straw-gold haze, a few round puffy clouds. Modern kids' cartoon, flat colours with soft gradients, no outlines, low contrast. Palette anchors #3E8FC4 (pale), #E8A93B (pale haze).
+**Generation Prompt:** Wide horizontally tileable side-scrolling game background layer, warm late-morning countryside sky, soft gradient from pale blue to straw-gold haze, a few round puffy clouds. Modern kids' cartoon, flat colours with soft gradients, no outlines, low contrast. Palette anchors #3E8FC4 (pale), #E8A93B (pale haze). The top 10% fades smoothly into flat #CDE6EE; sun, clouds and light shafts stay in the lower 85%.
 Negative: text, letters, watermark, blood, gore, injury, weapons pointed at viewer, scary faces, exaggerated ethnic features, conical hat, photorealistic, anime, red or orange sky, storm, characters, outlines, seams.
 
 **Status:** Needed
@@ -310,13 +323,15 @@ Negative: text, letters, watermark, blood, gore, injury, weapons pointed at view
 | Field | Value |
 |-------|-------|
 | Category | Environment |
-| Dimensions | 7680×2160 authored, tileable horizontally, transparent above; export 2× / 1× |
+| Dimensions | Author 3840×1760 (2×); ship **2880×1320 at 1.5×** as two tiles of 1440×1320, or parallax strips ≤ 2048 wide (ADR-0002). Taller authoring is cropped at export. Tileable horizontally |
 | Format | PNG (sRGB, alpha) |
 | Naming | `bg_village_far.png` |
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
-| Texture Res | 1× and 2× per art bible §8 |
+| Texture Res | 1.5× shipped (ADR-0002: author 2×, ship 1.5×); R19b ≤ 1440×1320 per tile file |
 
 **Visual Description:** Flat green rice fields in long horizontal strips, low blue hills beyond and a distant line of bamboo groves. It is soft, pale and outline-free.
+
+**Anchoring (ADR-0002):** the layer is anchored to the ground line (bottom of the tile); the code-drawn sky band, not this layer, fills any height above 1320.
 
 **Art Bible Anchors:**
 - §3 Environment geometry: long calm horizontals (rice fields).
@@ -332,13 +347,15 @@ Negative: text, letters, watermark, blood, gore, injury, weapons pointed at view
 | Field | Value |
 |-------|-------|
 | Category | Environment |
-| Dimensions | 7680×2160 authored, tileable horizontally, transparent above; export 2× / 1× |
+| Dimensions | Author 3840×1760 (2×); ship **2880×1320 at 1.5×** as two tiles of 1440×1320, or parallax strips ≤ 2048 wide (ADR-0002). Taller authoring is cropped at export. Tileable horizontally |
 | Format | PNG (sRGB, alpha) |
 | Naming | `bg_village_mid.png` |
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
-| Texture Res | 1× and 2× per art bible §8 |
+| Texture Res | 1.5× shipped (ADR-0002: author 2×, ship 1.5×); R19b ≤ 1440×1320 per tile file |
 
 **Visual Description:** The family home: a timber house with a curved tiled roof `#B5673F` ⟨proposed terracotta⟩ and a veranda, a low bamboo fence, banana plants, a lotus pot and an areca palm. Architecture is ⟨placeholder⟩. It has soft thin outlines and warm-neutral colour, with everything above the ground line.
+
+**Anchoring (ADR-0002):** the layer is anchored to the ground line (bottom of the tile); the code-drawn sky band, not this layer, fills any height above 1320.
 
 **Art Bible Anchors:**
 - §6 Setting: a family home and courtyard; Vietnamese first (bamboo, banana leaves, lotus).
@@ -354,13 +371,15 @@ Negative: text, letters, signs, watermark, blood, gore, injury, weapons pointed 
 | Field | Value |
 |-------|-------|
 | Category | Environment |
-| Dimensions | 3840×2160 authored, tileable horizontally; opaque from y = 1410 down; export 2× / 1× |
+| Dimensions | Author 3840×1760 (2×); ship **2880×1320 at 1.5×** as two tiles of 1440×1320, or parallax strips ≤ 2048 wide (ADR-0002). Taller authoring is cropped at export. Tileable horizontally |
 | Format | PNG (sRGB, alpha) |
 | Naming | `bg_village_ground.png` |
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
-| Texture Res | 1× and 2× per art bible §8 |
+| Texture Res | 1.5× shipped (ADR-0002: author 2×, ship 1.5×); R19b ≤ 1440×1320 per tile file |
 
 **Visual Description:** A swept, packed-earth courtyard `#D2B48A` ⟨proposed⟩ with a bold top edge and a few faint broom-sweep arcs. It has a lighter, even area where the dummies (ASSET-301, every 300 px) and the banner pole (ASSET-305) stand, and no other props.
+
+**Anchoring (ADR-0002):** the layer is anchored to the ground line (bottom of the tile); the code-drawn sky band, not this layer, fills any height above 1320.
 
 **Art Bible Anchors:**
 - §3: one clear continuous walkable band with a bold top edge.
@@ -376,11 +395,11 @@ Negative: text, letters, watermark, blood, gore, injury, weapons pointed at view
 | Field | Value |
 |-------|-------|
 | Category | Environment |
-| Dimensions | 3840×2160 authored, tileable horizontally, content only below y = 1500; export 2× / 1× |
+| Dimensions | Author 3840×1760 (2×); ship **2880×1320 at 1.5×** as two tiles of 1440×1320, or parallax strips ≤ 2048 wide (ADR-0002). Taller authoring is cropped at export. Tileable horizontally |
 | Format | PNG (sRGB, alpha) |
 | Naming | `bg_village_fg.png` |
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
-| Texture Res | 1× and 2× per art bible §8 |
+| Texture Res | 1.5× shipped (ADR-0002: author 2×, ship 1.5×); R19b ≤ 1440×1320 per tile file |
 
 **Visual Description:** An occasional banana-leaf tip and a low tuft of grass at the bottom edge, at 60–80% opacity, softly blurred and outline-free.
 
@@ -397,19 +416,21 @@ Negative: text, letters, watermark, blood, gore, injury, weapons pointed at view
 | Field | Value |
 |-------|-------|
 | Category | Environment |
-| Dimensions | 7680×2160 authored, tileable horizontally; export 2× / 1× (the cloud drift is an engine scroll) |
+| Dimensions | Author 3840×1760 (2×); ship **2880×1320 at 1.5×** as two tiles of 1440×1320, or parallax strips ≤ 2048 wide (ADR-0002). Taller authoring is cropped at export. Tileable horizontally |
 | Format | PNG (sRGB, alpha) |
 | Naming | `bg_camp_sky.png` |
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
-| Texture Res | 1× and 2× per art bible §8 |
+| Texture Res | 1.5× shipped (ADR-0002: author 2×, ship 1.5×); R19b ≤ 1440×1320 per tile file |
 
 **Visual Description:** A windy, dramatic sky of storm-indigo `#3B3F6B` clouds stretched diagonally, with 2–3 broad gold `#E8A93B` sun shafts breaking through toward the ground. The clouds are soft-edged and rounded, not jagged. The sky has no red, orange or lightning in it.
+
+**Sky band and safe area (ADR-0002):** above this tile the game draws a vertical gradient band from `themes.json` `camp.sky_band` (top `#2E3156` → bottom `#3B3F6B`). The tile's **top ~10% (≈130 px at 1.5×) fades into `#3B3F6B`**, so there's no seam. Key elements (sun, cloud bands, sun shafts) stay **below ~15% from the tile's top**. No vertical parallax.
 
 **Art Bible Anchors:**
 - §2 Battle beat: a cool world with a storm-indigo sky, gold shafts lighting the hero; never a red sky.
 - §3 Battle variant: clouds stretch diagonally.
 
-**Generation Prompt:** Wide horizontally tileable side-scrolling game background layer, a windy dramatic sky with soft rounded storm-indigo clouds #3B3F6B stretched diagonally, broad warm gold sun shafts #E8A93B breaking through, brave and exciting rather than frightening. Modern kids' cartoon, flat colours with soft gradients, no outlines.
+**Generation Prompt:** Wide horizontally tileable side-scrolling game background layer, a windy dramatic sky with soft rounded storm-indigo clouds #3B3F6B stretched diagonally, broad warm gold sun shafts #E8A93B breaking through, brave and exciting rather than frightening. Modern kids' cartoon, flat colours with soft gradients, no outlines. The top 10% fades smoothly into flat #3B3F6B; sun, clouds and light shafts stay in the lower 85%.
 Negative: text, letters, watermark, blood, gore, injury, weapons pointed at viewer, scary faces, exaggerated ethnic features, conical hat, photorealistic, anime, red sky, orange sky, fire, smoke, lightning, jagged clouds, darkness, seams.
 
 **Status:** Needed
@@ -419,13 +440,15 @@ Negative: text, letters, watermark, blood, gore, injury, weapons pointed at view
 | Field | Value |
 |-------|-------|
 | Category | Environment |
-| Dimensions | 7680×2160 authored, tileable horizontally, transparent above; export 2× / 1× |
+| Dimensions | Author 3840×1760 (2×); ship **2880×1320 at 1.5×** as two tiles of 1440×1320, or parallax strips ≤ 2048 wide (ADR-0002). Taller authoring is cropped at export. Tileable horizontally |
 | Format | PNG (sRGB, alpha) |
 | Naming | `bg_camp_far.png` |
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
-| Texture Res | 1× and 2× per art bible §8 |
+| Texture Res | 1.5× shipped (ADR-0002: author 2×, ship 1.5×); R19b ≤ 1440×1320 per tile file |
 
 **Visual Description:** Dark blue-grey hills and a wide, dark river with a few tiny plain banner silhouettes on poles along the far bank. The banners are ⟨placeholder⟩, plain cloth with no symbols, and stand for the army ahead. It is low contrast and outline-free.
+
+**Anchoring (ADR-0002):** the layer is anchored to the ground line (bottom of the tile); the code-drawn sky band, not this layer, fills any height above 1320.
 
 **Art Bible Anchors:**
 - §4 Per-area temperature "Battle": the world shifts cool, with a dark river.
@@ -441,13 +464,15 @@ Negative: text, letters, symbols on banners, watermark, blood, gore, injury, wea
 | Field | Value |
 |-------|-------|
 | Category | Environment |
-| Dimensions | 7680×2160 authored, tileable horizontally, transparent above; export 2× / 1× |
+| Dimensions | Author 3840×1760 (2×); ship **2880×1320 at 1.5×** as two tiles of 1440×1320, or parallax strips ≤ 2048 wide (ADR-0002). Taller authoring is cropped at export. Tileable horizontally |
 | Format | PNG (sRGB, alpha) |
 | Naming | `bg_camp_mid.png` |
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
-| Texture Res | 1× and 2× per art bible §8 |
+| Texture Res | 1.5× shipped (ADR-0002: author 2×, ship 1.5×); R19b ≤ 1440×1320 per tile file |
 
 **Visual Description:** A wind-whipped river with rounded curling wave crests, and reeds, bamboo and grass all leaning in one direction (to the right). It includes a pair of beached wooden boats ⟨placeholder⟩ and gold light catching the wave tops. The colours are cool, it uses soft thin outlines, and there are no figures.
+
+**Anchoring (ADR-0002):** the layer is anchored to the ground line (bottom of the tile); the code-drawn sky band, not this layer, fills any height above 1320.
 
 **Art Bible Anchors:**
 - §2 Battle mood carrier: the wind (water lines and grass lean one way).
@@ -464,13 +489,15 @@ Negative: text, letters, watermark, blood, gore, injury, weapons pointed at view
 | Field | Value |
 |-------|-------|
 | Category | Environment |
-| Dimensions | 3840×2160 authored, tileable horizontally; opaque from y = 1410 down; export 2× / 1× |
+| Dimensions | Author 3840×1760 (2×); ship **2880×1320 at 1.5×** as two tiles of 1440×1320, or parallax strips ≤ 2048 wide (ADR-0002). Taller authoring is cropped at export. Tileable horizontally |
 | Format | PNG (sRGB, alpha) |
 | Naming | `bg_camp_ground.png` |
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
-| Texture Res | 1× and 2× per art bible §8 |
+| Texture Res | 1.5× shipped (ADR-0002: author 2×, ship 1.5×); R19b ≤ 1440×1320 per tile file |
 
 **Visual Description:** An open, **level** riverbank of damp earth `#A88A68` ⟨proposed⟩ with a bold grass lip whose blades lean right. It is lit warm along the top edge so the band reads against the cool background. The Trần flag (ASSET-303) is placed on it at the beat's end, and there are no other props.
+
+**Anchoring (ADR-0002):** the layer is anchored to the ground line (bottom of the tile); the code-drawn sky band, not this layer, fills any height above 1320.
 
 **Art Bible Anchors:**
 - §3 Battle variant: the ground band stays level and readable.
@@ -486,11 +513,11 @@ Negative: text, letters, watermark, blood, gore, injury, weapons pointed at view
 | Field | Value |
 |-------|-------|
 | Category | Environment |
-| Dimensions | 3840×2160 authored, tileable horizontally, content only below y = 1500; export 2× / 1× |
+| Dimensions | Author 3840×1760 (2×); ship **2880×1320 at 1.5×** as two tiles of 1440×1320, or parallax strips ≤ 2048 wide (ADR-0002). Taller authoring is cropped at export. Tileable horizontally |
 | Format | PNG (sRGB, alpha) |
 | Naming | `bg_camp_fg.png` |
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
-| Texture Res | 1× and 2× per art bible §8 |
+| Texture Res | 1.5× shipped (ADR-0002: author 2×, ship 1.5×); R19b ≤ 1440×1320 per tile file |
 
 **Visual Description:** Sparse windswept grass tufts and a few drifting leaves along the bottom edge, all leaning right, at 60–80% opacity, softly blurred and outline-free.
 

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://galaxyandsun.com/daidatanhhung/content/themes.schema.json",
+  "title": "Beat themes (ADR-0002): the sky band drawn in code above the background tiles, a vertical gradient per theme.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "themes"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "$ref": "common.schema.json#/$defs/SchemaVersion"
+    },
+    "themes": {
+      "type": "object",
+      "propertyNames": {
+        "enum": [
+          "village",
+          "bamboo",
+          "river",
+          "camp"
+        ]
+      },
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "sky_band"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "sky_band": {
+            "type": "object",
+            "required": [
+              "top",
+              "bottom"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "top": {
+                "$ref": "#/$defs/Hex"
+              },
+              "bottom": {
+                "$ref": "#/$defs/Hex"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "Hex": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}$"
+    }
+  }
+}
