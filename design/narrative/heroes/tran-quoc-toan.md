@@ -130,7 +130,7 @@ claims stay pending (history sign-off is per claim).
 
 | # | Speaker | VI | EN | Claims |
 |---|---|---|---|---|
-| 1 | Narrator | Truyện kể rằng Quốc Toản đến bến Bình Than, xin được gặp vua. | The story says Quốc Toản came to Bình Than and asked to see the king. | C14 |
+| 1 | Narrator | Truyện kể rằng Quốc Toản đến bến Bình Than, xin được gặp vua. | The story says Quốc Toản came to Bình Than and asked to see the king. | C14, C15, C16 (the marked opening covers the scene's legend lines, R4c) |
 | 2 | Guard | Cậu còn nhỏ quá, chưa được vào họp đâu. | You are too young to join the meeting. | C05, C14 |
 | — | *(child taps "Xin vào! / Let me in!")* | | | |
 | 3 | Quốc Toản | Xin cho tôi gặp nhà vua! | Please let me see the King! | C14 |
@@ -267,7 +267,7 @@ builds show `UNSIGNED Cxx` badges.
 | File | What | Bundled? |
 |---|---|---|
 | `content/data/heroes/tran-quoc-toan/claims.json` | C01–C12 as in § 2. C06 and C08 carry the relabel condition (D6) | yes |
-| `content/data/heroes/tran-quoc-toan/mission.json` | **The slice mission (D-08: B, Luan 2026-11-14):** walk (riverbank) → hold-meter (the orange) → training (dummies 3, blocks 3, finish_special, banner) → reach-the-flag (2 encounters). No special pad on reach-the-flag (D-10: B) | yes |
+| `content/data/heroes/tran-quoc-toan/mission.json` | **The slice mission (D-08: B, Luan 2026-11-14):** walk (riverbank, 1 screen) → **dialogue** (Xin gặp vua, TASK-016) → hold-meter (the orange) → training (dummies 3, blocks 3, finish_special, banner) → reach-the-flag (2 encounters). No special pad on reach-the-flag (D-10: B) | yes |
 | `content/data/heroes/tran-quoc-toan/quiz.json` | Q1–Q5 as in § 4. Q3 and Q4 open with the legend marker. Each choice cites its question's claim | yes |
 | `content/drafts/heroes/tran-quoc-toan/mission-fights.json` | The earlier 4-fight version (P-02, now superseded). Kept as a draft only | no |
 
