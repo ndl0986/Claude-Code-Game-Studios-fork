@@ -9,23 +9,28 @@ public struct TouchPads: Sendable {
 
     public init() {}
 
+    /// Pointers that landed on a pad another pointer already holds: ignored until they lift (TASK-019 b).
+    var ignored: Set<Int> = []
+
     public mutating func down(_ id: Int, _ action: PadAction?) {
         guard let a = action else { return }
+        if holds.values.contains(a) { ignored.insert(id); return } // no second hold, no second tap
         holds[id] = a; taps.insert(a)
     }
 
     /// A move only switches between ◀ and ▶; it never starts or changes attack or defend.
     public mutating func moved(_ id: Int, _ action: PadAction?) {
-        guard let cur = holds[id], cur == .left || cur == .right, let a = action, a == .left || a == .right else { return }
+        guard let cur = holds[id], cur == .left || cur == .right, let a = action, a == .left || a == .right,
+              a == cur || !holds.values.contains(a) else { return } // never slide onto a pad another finger holds
         holds[id] = a
     }
 
-    public mutating func up(_ id: Int) { holds[id] = nil }
+    public mutating func up(_ id: Int) { holds[id] = nil; ignored.remove(id) }
 
     /// Releases every hold whose touch is no longer live (iOS-R2-03: an end event that never
     /// arrived for a moved touch must not leave a pad held).
-    public mutating func reconcile(live: Set<Int>) { holds = holds.filter { live.contains($0.key) } }
-    public mutating func clearAll() { holds = [:]; taps = [] }
+    public mutating func reconcile(live: Set<Int>) { holds = holds.filter { live.contains($0.key) }; ignored = ignored.filter { live.contains($0) } }
+    public mutating func clearAll() { holds = [:]; taps = []; ignored = [] }
 
     /// This step's input; taps are consumed.
     public mutating func take(confirm: Bool = false) -> StepInput {

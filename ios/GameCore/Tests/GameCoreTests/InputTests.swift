@@ -76,3 +76,20 @@ final class StuckInputTests: XCTestCase {
         XCTAssertTrue(g.quizCanAdvance)
     }
 }
+
+/// TASK-019 (b): a second pointer on an already-held pad is ignored until it lifts.
+final class SecondPointerTests: XCTestCase {
+    func test_second_finger_on_a_held_pad_neither_fires_nor_co_holds() {
+        var t = TouchPads()
+        t.down(1, .attack)
+        XCTAssertEqual(t.take().tapped, [.attack])
+        t.down(2, .attack)
+        XCTAssertTrue(t.take().tapped.isEmpty, "no second attack")
+        t.down(3, .defend); _ = t.take()
+        t.down(4, .defend)
+        t.up(3)
+        XCTAssertFalse(t.take().held.contains(.defend), "lifting the owner drops defend; the ignored finger doesn't keep it")
+        t.up(4); t.down(5, .defend)
+        XCTAssertTrue(t.take().held.contains(.defend), "after it lifts, a new press works")
+    }
+}
