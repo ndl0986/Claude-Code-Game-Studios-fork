@@ -1,4 +1,6 @@
-# TASK-006 iOS QC, round 5 (part 1: non-touch; touch NOT ASSESSED)
+# TASK-006 iOS QC, round 5: CLOSED
+
+**Closed (leader, 2026-11-14): FAIL (iOS-R5-01); touch NOT ASSESSED (macOS Accessibility).** Touch cases move to the r6 XCUITest harness.
 
 - **Build:** frozen `feat/TASK-006-ios-native` @ `1a8c443`. Fingerprint run from the game-dev-001 root =
   `02fb413a…01774a0` (**matches**); my copy matches it file by file. 0602974 was uninstalled first. Not rebuilt.
