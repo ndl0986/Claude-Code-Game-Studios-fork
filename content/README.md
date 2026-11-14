@@ -11,6 +11,7 @@ The first apps to read it (TASK-006 iOS, TASK-007 Android) are a **native vertic
 | `data/` | **yes**, the whole folder | `index.json`, `strings.json`, `sources.json`, `markers.json`, `rules.json`, `tuning.json`, `assets.json`, `heroes/<hero_id>/{mission,quiz,claims}.json`, `fonts/`, pictures and sounds |
 | `schema/` | no (tests only) | JSON Schema 2020-12, one per file type, plus `common.schema.json` |
 | `samples/` | no (tests only) | `heroes/sample/`: a full ⟨placeholder⟩ hero; the apps run it until real data lands |
+| `metrics/` | no (tests only) | `nunito-advances.json`: Nunito's advance per code point at the rendered weights (800, 600), per 1000 em, generated on Android by the debug-only `FontMetricsActivity`. The font's own `hmtx` is its wght 200 default and is ~8% narrower, so R8c uses this table. |
 | `fixtures/` | no (tests only) | Input plus expected output for the data rules both apps must agree on |
 
 - **Android:** `sourceSets.main.assets.srcDirs("../../content/data")`; debug builds may add `samples/`.
@@ -40,12 +41,12 @@ Schema **1.1** (D-06, a MINOR bump): optional training `blocks` / `finish_specia
 - **Claim** `{id, vi, en, label, sources[], relabel_condition?, signoff{status, by?, date?}}`.
   - `label` is one of fact, fact_as_recorded, interpretation, legend or invented.
 - **Source** `{id, citation, kind, location, status}`.
-  - `kind` is textbook, chronicle or literature.
+  - `kind` is textbook, chronicle, literature or **secondary** (a reference work or article citing one; schema 1.3).
   - `status` is to_confirm or confirmed.
 - **Mission** `{hero{id, name, timeline_order, place}, next_hero, intro[], banner?, beats[], ending{lines[], picture_id}}`.
   - The banner is defined once as Text, a text layer that is never baked into art. A beat with `uses_banner` shows it.
 - **Beat** `{id, type, theme, buttons[], title, scene[], goal, uses_banner?, params}`.
-  - `type` is one of fight, walk, hold-meter, training or reach-the-flag.
+  - `type` is one of fight, walk, hold-meter, training, reach-the-flag or **dialogue** (schema 1.4: `params.lines` 2–12 of {speaker, mood?, text}, optional `ask` {button: Text, taps 1–3, at_line}; `buttons` [], `scene` may be [], `goal` optional, no card or caption). Speaker `narrator` has no portrait; `hero` is reserved for the mission's hero (left); other speaker ids are on the right. Portraits are `pic.portrait_<hero_id>_<speaker>[_<mood>]` and must resolve for real heroes (R10; a missing mood variant fails). R8c field types: `dialogue_line` (speaker lines, 720/38/3/600) and `dialogue_narrator` (880/38/2/600); the ask button is a `button`.
   - `buttons` is a subset of move, attack, defend and special.
   - `params` are per type. A fight's are `enemies[]`, `max_active` and `from_left[]`, as in the prototype.
 - **Quiz** has 3–5 questions; `tuning.json` `quiz_count` is 5, so the file's question count decides (D-11b). Each has `prompt`, an optional `picture_id`, 3 choices `{text, picture_id}`, `correct_index` and `why` (shown after the right answer).
@@ -83,16 +84,20 @@ them against `data/` and `samples/`. `fixtures/validity.json` has one case per r
 | R3 | Every story Text has at least one claim (schema); only `strings.json` has none. |
 | R4 | A Text citing a **legend** claim contains a legend marker from `markers.json`, in VI and in EN. The writer authors the marker; it is never added automatically. A Text citing a fact_as_recorded claim may use "Sử chép rằng / The chronicle says". |
 | R4b | (D-12) R4 applies to **sentence** fields: intro, beat scene, ending lines, quiz prompt, quiz why. **Label** fields (hero name, place, banner, beat title, goal, quiz choice) are exempt from R4 only if, for each legend claim the label cites, a **marked** sentence citing that same claim exists in its scope. "Marked" is the R4 test: a legend marker in VI **and** in EN. Scope: any sentence of the mission for name, place, banner, title and goal; the choice's own question's prompt or why for a quiz choice. |
+| R4c | (schema 1.4) Dialogue lines and the ask button citing a legend claim pass R4 if the beat's **first line** is a `narrator` line marked in VI and EN that cites the same claim. Dialogue lines count as sentences in the R4b scope. |
 | R5 | A fact or fact_as_recorded claim can't be `approved` while any of its sources is `to_confirm`. R5b: only an invented claim may have no sources. |
 | R6 | An invented claim is never cited by quiz text. |
 | R7 | All text is Unicode NFC. |
-| R8 | No vi or en line is over 120 characters (schema), and EN fits `rules.json` `text_limits.en_budget` for its field type. For `strings.json` the type comes from the id: `ui.btn.*`, `ui.pad.*`, `ui.lang.*` and `*_confirm` / `*_keep_reading` are `button`; ids ending in `_warning` are `dialog` (60, TASK-005e); every other `ui.*` id is `ui`. |
+| R8 | No vi or en line is over 120 characters (schema), and EN fits `rules.json` `text_limits.en_budget` for its field type. For `strings.json` the type is the entry's optional `field` (button, ui, dialog; D-21) if set, else it comes from the id: `ui.btn.*`, `ui.pad.*`, `ui.lang.*` and `*_confirm` / `*_keep_reading` are `button`; ids ending in `_warning` are `dialog` (60, TASK-005e); every other `ui.*` id is `ui`. |
+| R8b | (D-21) VI fits `rules.json` `text_limits.vi_budget` for its field type (= floor(1.6 × en_budget), capped at 120). |
+| R8c | (D-21, Language & text GDD F1) Each VI and EN line fits its field's box: advances from `content/metrics/nunito-advances.json` at the field's `weight` × `font_px` / 1000, greedy word wrap at spaces into `box_width / (1 + allowance)`, at most `max_lines`; one word wider than the box fails. Values in `text_limits.fit.fields` (world px at 1×). |
 | R9 | Text ids are unique across the bundle. |
 | R10 | Every `picture_id` and asset id resolves in `assets.json` and the file exists. |
 | R11 | An app refuses a `schema_version` with a newer MAJOR number at **build** time. A newer MINOR number is fine. |
 | R12 | **Claim gate:** see below. |
 | R13 | Buttons per beat type (schema 1.1, D-06). Minimum: walk {move}; hold-meter {special}; fight {move, attack}; training {move, attack} + defend if `blocks` > 0 + special if `finish_special`; reach-the-flag {move} + attack if `encounters` is non-empty. `special` is allowed only on hold-meter and training with `finish_special`; never on walk, fight or reach-the-flag (D-10 B: no Special in fights or encounters for now). Defend is optional on a fight (blocking is taught, never required). |
 | R13b | reach-the-flag `encounters` are sorted by `at_screen`, strictly ascending, each `0 < at_screen < length_screens`. |
+| R13d | (schema 1.4) A `dialogue` beat has `buttons: []`; if it has `ask`, `at_line + taps ≤ lines`. The button is the ask button while `at_line ≤ L < at_line + taps` (L = the 1-based line showing); each ask tap shows line L + 1. |
 | R14 | `tuning.json`: `attack_range` ≥ `enemy_reach` − `stand_gap`, so the hero can reach the enemy in front of him (error). |
 | R15 | `tuning.json`: `telegraph` < 0.8 s is a **warning**, not an error. |
 | R16 | `rules.json`: each lower star's `max_retries` is ≥ the higher star's (2★ ≥ 3★); `null` means no limit. |

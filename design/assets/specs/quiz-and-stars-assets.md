@@ -10,6 +10,13 @@
 
 ---
 
+> **Q1 colour balance (TASK-011c, Android QC r2 finding G4):** the three flags use colours of
+> similar brightness and saturation (ochre-gold `#D9A441`, sky blue `#6FA8D6`, clay `#C98B6B`), so
+> the right answer doesn't stand out. None is red (red is the hero's team accent), green (means
+> "correct") or lavender (means "try again"). They differ mainly by **shape** (rectangle, triangle,
+> scalloped square). The Trần flag's gold links it to the Trần army flag the child reaches in beat
+> 4, a story cue rather than a colour giveaway.
+
 ## ASSET-001 — Quiz picture: Trần dynasty flag (Q1, correct)
 
 | Field | Value |
@@ -21,14 +28,14 @@
 | Replaces | content/data/pictures/quiz_flag_tran.png |
 | Texture Res | single 512×512 |
 
-**Visual Description:** A tall, upright rectangular banner on a short wooden pole with a rounded finial. The banner is flat vermilion with a bronze-gold border band and a soft fold at the free edge. Its silhouette is a vertical rectangle, which sets it apart from the triangle (ASSET-002) and the square (ASSET-003). The exact Trần flag design is ⟨placeholder⟩.
+**Visual Description:** A tall, upright rectangular banner on a short wooden pole with a rounded finial. The banner is flat ochre-gold `#D9A441` with an ink-brown border band (the same gold family as the Trần army flag at the end of beat 4, ASSET-303) and a soft fold at the free edge. Its silhouette is a vertical rectangle, which sets it apart from the triangle (ASSET-002) and the square (ASSET-003). The exact Trần flag design is ⟨placeholder⟩.
 
 **Art Bible Anchors:**
 - §3 Hero silhouette: the banner is a plain shape and colour, never painted characters
-- §4 Red must never read as blood: flat, clean vermilion area with no drips or gradient pooling
+- §4 Red must never read as blood: flat, clean ochre-gold area with no drips or gradient pooling
 - §4 Colour-blind safety: the flags differ by outline shape first, colour second
 
-**Generation Prompt:** Modern kids' cartoon icon, soft rounded shapes, flat colours with soft gradients, warm ink-brown outlines (#4A3428), Vietnamese motifs as accents. A single tall vertical rectangular cloth banner on a short wooden pole with a round knob on top. The cloth is flat vermilion (#D64A2E) with a bronze-gold (#E8A93B) border band and a gentle soft fold. Centred, front view, filling 80% of the frame, transparent background, flat even light, no shadow. Negative: text, letters, numbers, Chinese characters, symbols on the cloth, watermark, blood, gore, scary faces, photorealistic, anime, triangular pennant, swallowtail, torn cloth, fire, battle scene, people.
+**Generation Prompt:** Modern kids' cartoon icon, soft rounded shapes, flat colours with soft gradients, warm ink-brown outlines (#4A3428), Vietnamese motifs as accents. A single tall vertical rectangular cloth banner on a short wooden pole with a round knob on top. The cloth is flat #D9A441 with a bronze-gold (#E8A93B) border band and a gentle soft fold. Centred, front view, filling 80% of the frame, transparent background, flat even light, no shadow. Negative: text, letters, numbers, Chinese characters, symbols on the cloth, watermark, blood, gore, scary faces, photorealistic, anime, triangular pennant, swallowtail, torn cloth, fire, battle scene, people.
 
 **Status:** Needed
 
@@ -45,14 +52,14 @@
 | Replaces | content/data/pictures/quiz_flag_ly.png |
 | Texture Res | single 512×512 |
 
-**Visual Description:** A long triangular pennant flying sideways from the same wooden pole, with its rounded tip pointing right. The cloth is warm ochre-gold `#D9A441` with an ink-brown border band. The silhouette is a horizontal triangle, so it reads as a different flag even in greyscale. The exact Lý flag design is ⟨placeholder⟩.
+**Visual Description:** A long triangular pennant flying sideways from the same wooden pole, with its rounded tip pointing right. The cloth is soft sky blue `#6FA8D6` with an ink-brown border band. The silhouette is a horizontal triangle, so it reads as a different flag even in greyscale. The exact Lý flag design is ⟨placeholder⟩.
 
 **Art Bible Anchors:**
 - §3 Enemy silhouettes / UI grammar: the triangle's tip is rounded, with no sharp point
 - §4 Colour-blind safety: this is the triangle shape against the rectangle and the square
 - §1 P3: the cloth carries no word or symbol
 
-**Generation Prompt:** Modern kids' cartoon icon, soft rounded shapes, flat colours with soft gradients, warm ink-brown outlines (#4A3428), Vietnamese motifs as accents. A single long triangular pennant flag flying sideways from a short wooden pole with a round knob, the tip pointing right and rounded. The cloth is flat warm ochre-gold (#D9A441) with an ink-brown (#4A3428) edge band. Centred, side view, filling 80% of the frame, transparent background, flat even light, no shadow. Negative: text, letters, numbers, Chinese characters, symbols on the cloth, watermark, blood, gore, scary faces, photorealistic, anime, rectangular banner, red cloth, green cloth, torn cloth, people.
+**Generation Prompt:** Modern kids' cartoon icon, soft rounded shapes, flat colours with soft gradients, warm ink-brown outlines (#4A3428), Vietnamese motifs as accents. A single long triangular pennant flag flying sideways from a short wooden pole with a round knob, the tip pointing right and rounded. The cloth is flat warm sky blue (#6FA8D6) with an ink-brown (#4A3428) edge band. Centred, side view, filling 80% of the frame, transparent background, flat even light, no shadow. Negative: text, letters, numbers, Chinese characters, symbols on the cloth, watermark, blood, gore, scary faces, photorealistic, anime, rectangular banner, red cloth, green cloth, torn cloth, people.
 
 **Status:** Needed
 
@@ -69,14 +76,14 @@
 | Replaces | content/data/pictures/quiz_flag_le.png |
 | Texture Res | single 512×512 |
 
-**Visual Description:** A square flag on the same pole, with a scalloped (wavy) lower edge. The cloth is river blue `#3E8FC4` with a cream `#F3E6C8` inner border line. Its silhouette is a square with a wavy bottom, distinct from the rectangle and the triangle. The exact Lê flag design is ⟨placeholder⟩.
+**Visual Description:** A square flag on the same pole, with a scalloped (wavy) lower edge. The cloth is clay `#C98B6B` with a cream `#F3E6C8` inner border line. Its silhouette is a square with a wavy bottom, distinct from the rectangle and the triangle. The exact Lê flag design is ⟨placeholder⟩.
 
 **Art Bible Anchors:**
 - §4 Colour-blind safety: the square and wavy-edge shape gives a third distinct silhouette
 - §3 Environment geometry: gentle curves, no sharp corners
 - §1 P3: no word or symbol on the cloth
 
-**Generation Prompt:** Modern kids' cartoon icon, soft rounded shapes, flat colours with soft gradients, warm ink-brown outlines (#4A3428), Vietnamese motifs as accents. A single square flag with a soft scalloped wavy bottom edge on a short wooden pole with a round knob. The cloth is flat river blue (#3E8FC4) with a thin cream (#F3E6C8) inner border line. Centred, front view, filling 80% of the frame, transparent background, flat even light, no shadow. Negative: text, letters, numbers, Chinese characters, symbols on the cloth, stars on the cloth, watermark, blood, gore, scary faces, photorealistic, anime, triangular pennant, red cloth, green cloth, people.
+**Generation Prompt:** Modern kids' cartoon icon, soft rounded shapes, flat colours with soft gradients, warm ink-brown outlines (#4A3428), Vietnamese motifs as accents. A single square flag with a soft scalloped wavy bottom edge on a short wooden pole with a round knob. The cloth is flat clay (#C98B6B) with a thin cream (#F3E6C8) inner border line. Centred, front view, filling 80% of the frame, transparent background, flat even light, no shadow. Negative: text, letters, numbers, Chinese characters, symbols on the cloth, stars on the cloth, watermark, blood, gore, scary faces, photorealistic, anime, triangular pennant, red cloth, green cloth, people.
 
 **Status:** Needed
 

@@ -75,15 +75,16 @@ it always ends at the quiz and then the map.
    new in the beat.
 6. **Banner.** A beat with `uses_banner: true` shows the mission's `banner` Text as a text layer
    on the banner prop, in the current language. It is never part of the art (art bible §3, §7).
-7. **Five beat types** (`type` in `mission.schema.json`):
+7. **Six beat types** (`type` in `mission.schema.json`; `dialogue` added by TASK-016, schema 1.4 requested):
 
 | Type | Buttons (typical) | The child does | Goal met when | Params (content) |
 |---|---|---|---|---|
 | `walk` | move | Moves right through a place with no enemies. Bumping a prop or animal stops the hero briefly | The hero reaches the beat's end, `length_screens` widths from the start | `length_screens` |
 | `hold-meter` | special | Holds the special pad; a meter fills **only while held** and does **not drain** on release | The meter is full: `hold_seconds` of total holding | `hold_seconds` |
+| `dialogue` | none (no pads) | Reads an illustrated exchange: one line per box with the speaker's portrait (hero, guard, king…) or narrator text, tapping "Tiếp". On lines `at_line` … `at_line + taps − 1` a big ask button (e.g. "Xin vào! / Let me in!") replaces "Tiếp"; each ask tap shows the next line (Rule 7d) | The last line is advanced | `lines[]` of {`speaker`, `mood`?, `text`}; optional `ask` {`button` (a story **Text** with claims), `taps` 1–3, `at_line`}, with `at_line + taps ≤ lines` |
 | `training` | move, attack, defend, special | (a) hits `dummies` straw dummies; (b) blocks `blocks` padded practice strikes from a friendly partner; (c) taps special once to finish (e.g. raise the banner) | All three parts done, in that order | `dummies`; `blocks`, `finish_special` (schema 1.1, D-06) |
 | `fight` | move, attack, defend | Fights a group of enemies as the combat GDD defines | Every enemy in `enemies` has run away | `enemies`, `max_active`, `from_left` |
-| `reach-the-flag` | move, attack, defend | Moves right to a flag; optional enemy groups on the way lock the camera until they run away | The hero touches the flag | `length_screens`; optional `encounters[]` (schema 1.1, D-06) |
+| `reach-the-flag` | move, attack, defend | Moves right to a flag; optional enemy groups on the way lock the camera until they run away. In an encounter the hero stays inside the fight-zone bounds and auto-faces the nearest enemy on attack (combat Rules 2 and 15, G2), so holding ▶ can't pin him off-screen | The hero touches the flag | `length_screens`; optional `encounters[]` (schema 1.1, D-06) |
 
 7b. **Minimum buttons per type (validation R13, schema 1.1 / D-06).** A beat's `buttons` must
     include at least:
@@ -92,7 +93,8 @@ it always ends at the quiz and then the map.
     - `training`: {move, attack}, + defend if `blocks` > 0, + special if `finish_special`;
     - `fight`: {move, attack}. Defend is optional, because blocking is taught, never required
       (combat GDD);
-    - `reach-the-flag`: {move}, + attack if it has any encounter.
+    - `reach-the-flag`: {move}, + attack if it has any encounter;
+    - `dialogue`: **none**. `buttons` must be empty, and no pads are shown.
 
     `special` is allowed only on hold-meter and training with `finish_special` (D-10: B, Luan
     2026-11-14). R13 in `content/README.md` must match: no special on reach-the-flag.
@@ -106,6 +108,33 @@ it always ends at the quiz and then the map.
       doesn't count.
     - **Hold-meter:** `held_total` is capped at `hold_seconds` (F3). Hints' no-progress timer
       resets on every frame the meter rises.
+7d. **Dialogue beats** (TASK-016, Luan's Bình Than exchange):
+    - **Order:** a dialogue beat has **no** separate beat card. Its `title` shows as the heading
+      over its first line, and its lines are the story. There's no caption either.
+    - **Speakers:** each line's `speaker` is `narrator` (no portrait, centred box, field type
+      `dialogue_line` at 880 wide), `hero` (reserved: the mission's hero), or another speaker
+      id (guard, king…). Speaker lines show a portrait (`pic.portrait_<hero_id>_<speaker>[_<mood>]`)
+      and a box **720 wide** beside it (field type `dialogue_line`, R8c). The hero's portrait sits
+      left and others right. Mood variants (e.g. pleading, puffed cheeks) are separate picture ids.
+    - **Ask button timing:** with L = the 1-based index of the line showing, the button is the
+      **ask button** when `at_line ≤ L < at_line + taps`, otherwise "Tiếp". Each ask tap shows line
+      L + 1. Example {at_line 2, taps 2}: line 1 shows "Tiếp"; lines 2 and 3 show the ask button;
+      line 4 onward shows "Tiếp". Ask taps use the same press-time debounce as "Tiếp"
+      (`advance_debounce`, QC B1). The ask is the child's action in the scene: it's never failed,
+      and it can't be skipped except by Skip (Rule 15).
+    - **The ask button's words are the hero's own speech**, so `ask.button` is a story **Text**
+      with claims (e.g. "Xin vào! / Let me in!", C14), field type `button`. It isn't a UI
+      string.
+    - **Skip and medal:** Skip works as on every story screen (Rule 15). Skipping a dialogue
+      beat sets `story_skipped`, so no medal this run.
+    - **Legend marker (R4c, requested):** spoken lines of a dialogue beat that cite a legend
+      claim don't each need a marker, if the beat's **first line** is a narrator line carrying
+      a legend marker (VI and EN) that cites the same claim or claims. Narration inside the beat
+      is covered the same way.
+    - **Language switch** mid-dialogue (from pause): the same line shows in the new language;
+      ask taps already made stay counted.
+    - **Hints:** if the ask button isn't tapped for `hint_delay`, the hint hand points at it
+      (Hints GDD, stuck hint for the current action).
 8. **No special in combat beats** (D-10: B, Luan 2026-11-14). Fights and reach-the-flag
    encounters use move, attack and defend only. The banner pad appears only in hold-meter and
    training. A banner wave in combat may come later (combat GDD Rule 16).
@@ -162,6 +191,7 @@ it always ends at the quiz and then the map.
 | `walk_to[i]` | `intro`, or the end of beat i−1 | `beat_card[i]` (non-fight) / `beat_play[i]` (fight) | Hero x ≥ `beat_start_x + i × beat_gap` |
 | `beat_card[i]` | `walk_to[i]` (non-fight only) | `beat_play[i]` | Last card box's "Tiếp / Next" |
 | `beat_play[i]` | `beat_card[i]` or `walk_to[i]` | `beat_end[i]` | The type's goal is met |
+| `dialogue_line[i][k]` | `walk_to[i]` (dialogue beats; no card) | the next line, or `beat_end[i]` after the last | "Tiếp", or an ask tap while `at_line ≤ k < at_line + taps` |
 | `beat_end[i]` | `beat_play[i]` | `caption[i]` (fight) / `walk_to[i+1]` or `ending` (non-fight) | `end_pause` elapsed |
 | `caption[i]` | `beat_end[i]` (fight only) | `walk_to[i+1]` or `ending` | Last caption box's "Tiếp / Next" |
 | `ending` | `beat_end[last]` | `quiz` | Last ending box's "Tiếp / Next" |
@@ -266,7 +296,7 @@ Fight and reach-the-flag encounter times come from the Side-scroll movement & co
 The F5 (beat positions) formula is defined as:
 
 `beatX(0) = beat_start_x`; `beatX(i+1) = beatX(i) + extent(i) + beat_gap`, where
-`extent(i) = length_screens × world_width` (walk, reach-the-flag), `(dummies + 1) × dummy_spacing` (training), or `0` (fight, hold-meter).
+`extent(i) = length_screens × world_width` (walk, reach-the-flag), `(dummies + 1) × dummy_spacing` (training), or `0` (fight, hold-meter, dialogue).
 
 **Variables:**
 | Variable | Type | Range | Source | Description |
@@ -280,9 +310,28 @@ The F5 (beat positions) formula is defined as:
 
 **Output Range:** strictly increasing, since every term is ≥ 0 and `beat_gap` > 0. Beats never
 overlap, and a multi-screen beat pushes the next one along.
-**Example:** the Trần Quốc Toản slice (walk 3, hold-meter, training 3 dummies, flag 4):
-beatX(0) = 900; beatX(1) = 900 + 3840 + 1600 = 6340; beatX(2) = 6340 + 0 + 1600 = 7940;
-beatX(3) = 7940 + 1200 + 1600 = 10740. The flag beat then spans to 10740 + 5120 = 15860.
+**Example:** the Trần Quốc Toản slice after TASK-016 (walk 1, dialogue, hold-meter, training 3
+dummies, flag 4; `beat_gap` 800): beatX(0) = 900; beatX(1) = 900 + 1280 + 800 = 2980;
+beatX(2) = 2980 + 0 + 800 = 3780; beatX(3) = 3780 + 0 + 800 = 4580;
+beatX(4) = 4580 + 1200 + 800 = 6580. The flag beat then spans to 6580 + 5120 = 11700.
+
+The F6 (dialogue time) formula is defined as:
+
+`T_dialogue = lines × T_box + ask_taps × T_ask`
+
+**Variables:**
+| Variable | Type | Range | Source | Description |
+|----------|------|-------|--------|-------------|
+| lines | int | 2–12 | content (beat params) | Lines in the dialogue |
+| T_box | float (s) | 3–8 | estimate (F1); later Audio F1 when VO exists | Reading or listening time per line |
+| ask_taps | int | 0–3 | content (`ask.taps`) | Ask button taps |
+| T_ask | float (s) | ~1 | estimate | Finding and tapping the ask button |
+
+**Output Range:** 6–100 s. Keep a dialogue at **≤ 10 lines** (≈ 50 s), because it adds to the
+mission's F1 total.
+**Example:** the Bình Than exchange: 9 lines × 5 s + 2 × 1 s ≈ 47 s. With beat 1 shortened to 1
+screen (−7.7 s) and `beat_gap` 800 (−2.4 s per walk_to), the mission grows by about 25 s and
+stays within F1's 3–5 min.
 
 ## Edge Cases
 
@@ -483,10 +532,22 @@ sparkle.
     warning shows and the saved medal stays earned after the run.
 
 20. **GIVEN** the Trần Quốc Toản slice with `tuning.json` defaults, **WHEN** the mission loads,
-    **THEN** the beat starts are at x = 900, 6340, 7940, 10740 (F5).
+    **THEN** the beat starts are at x = 900, 2980, 3780, 4580, 6580 (F5, after TASK-016: walk 1
+    screen, the dialogue beat, `beat_gap` 800).
 21. **GIVEN** a training beat with blocks 3, **WHEN** the child presses and releases defend during
     the partner's windup and isn't holding it when the strike resolves, **THEN** that block does
     not count.
+22. **GIVEN** the Trần Quốc Toản reach-the-flag beat, **WHEN** each of combat AC23's three scripted
+    touch strategies is simulated, **THEN** the beat finishes in **≤ 60 s** (combat Rules 2, 2b, 15).
+23. **GIVEN** a `dialogue` beat with `ask` {at_line 2, taps 2} and 9 lines, **WHEN** it plays,
+    **THEN** line 1 shows "Tiếp"; lines 2 and 3 show the ask button, and each ask tap shows the next
+    line; lines 4–9 show "Tiếp"; two ask taps within `advance_debounce` advance only once; and no
+    pads are shown at any point.
+24. **GIVEN** a `dialogue` beat whose first line is a marked narrator line citing C14, **WHEN**
+    validated, **THEN** its spoken lines citing C14 pass without their own marker (R4c). **GIVEN**
+    the first line unmarked, **THEN** validation fails R4.
+25. **GIVEN** a `dialogue` beat skipped with "Skip anyway", **WHEN** the quiz finishes, **THEN** no
+    medal is reported for that run.
 
 ## Open Questions
 

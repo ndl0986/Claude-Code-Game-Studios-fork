@@ -73,7 +73,7 @@ are all proposals; approve them as a whole or change a row.
 **Quiz picture colours:**
 | Hex | Used for |
 |---|---|
-| `#D9A441` | Ochre flag (Q1) |
+| `#D9A441` · `#6FA8D6` · `#C98B6B` | Q1 flags: Trần ochre-gold · Lý sky blue · Lê clay (balanced so the right answer doesn't stand out; QC G4) |
 | `#5F8A8B` · `#8B7A66` | Helmet b teal-grey · helmet c taupe (Q5 distractors) |
 | `#F29A2E` | The orange: the **same** in the quiz picture and the beat-2 prop |
 | `#F5D04A` · `#8E9A4A` | Banana · coconut (muted olive, so no green competes with "correct") |
@@ -86,3 +86,17 @@ ground · `#B5673F` roof tiles · `#7A3B2A` lacquer-brown posts · `#D9CDB5` / `
 clouds and light · `#FFD27A` juice · `#FFFFFF` block spark.
 
 9. **Approve these palette additions** (or mark the rows to change)?
+
+## The Bình Than exchange scene (TASK-016): portraits (ASSET-327–329)
+
+- **Quốc Toản:** the same boy as the hero sheet, in three expressions (calm, pleading,
+  determined), facing right.
+- **Guard:** a kind, sturdy Trần guard in the hero's team colours (never the enemy dome-helmet or
+  slate-violet family). One hand raised palm-out; the spear upright and out of frame.
+- **King (Trần Nhân Tông):** a **symbolic image, not a likeness** (Luan, 2026-11-14): a Trần-era
+  royal headdress ⟨placeholder; never a European crown⟩, a full beard, thick brows, warm eyes, a
+  gold robe with lacquer-brown trim. There's a smiling variant for his praise line.
+
+10. **Approve the three portraits' direction?** In particular: the king's headdress form (to be
+    sourced; what should it look like?), and the guard's cap (Trần side, distinct from the
+    enemies).
