@@ -17,7 +17,7 @@ it) · **Decided** (Luan's call, with the date).
 - **Proposed:** one 1.5× art set (authored at 2×); no texture above 2048×2048 (the 4096² hero sheet
   is split); atlases by what's on screen together, loaded per mission; WebP (lossless sprites, lossy
   backgrounds) or PNG; ≤ 64 MB decoded textures per mission, ≤ 60 MB app download, ≤ 15 MB per
-  mission; a new size check (R19). Minimum iOS version 17 (stated in the ADR).
+  mission; a new size check (R19). Minimum iOS version 17 (stated in the ADR): per Apple's June 2026 figures it excludes at most 7% of active iPhones, and nothing in the slice needs it, so a lower minimum is Luan's option. ADR written as Proposed (`f9d81be`), in peer review.
 - **Before accepting:** both devs measure memory and frame time with a 2048² test atlas on a low-end
   Android emulator and the iPhone Duo; the numbers go into the ADR.
 - **Status:** Open (Luan accepts once measured; technical impact).
