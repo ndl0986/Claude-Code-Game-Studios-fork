@@ -1,0 +1,9 @@
+# build 203d73e; B4 spot-check + O6 first press; each trial: exit fs, reload, wait 10 s, one tap on Start
+trial=1 hold=0.05 at=1267,656 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"none",18527]]}
+trial=2 hold=0.2 at=1237,676 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"none",18346]]}
+trial=3 hold=input at=1297,636 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"running@0",15179]]}
+trial=4 hold=0.4 at=1267,646 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"none",32202]]}
+trial=5 hold=0.1 at=1327,656 before=intro/true {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[]}
+# trial 5 above invalid: reload did not happen (before=intro/true); re-run as 5b, plus 6
+trial=5b hold=0.1 at=1327,656 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"none",11645]]}
+trial=6b hold=input at=1237,656 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"running@0",12935]]}

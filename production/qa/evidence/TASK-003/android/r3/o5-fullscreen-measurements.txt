@@ -1,0 +1,13 @@
+# O5 re-test on 203d73e, fullscreen, 17:27:18
+{"result": {"type": "string", "value": "{\"vw\":915,\"vh\":412,\"fs\":true,\"ori\":\"landscape-primary\",\"insets\":{\"t\":0,\"r\":0,\"b\":32,\"l\":52},\"canvasCss\":[145,0,676,380],\"fsGestureInset\":32,\"pads\":[[\"left\",140,610,80],[\"right\",330,610,80],[\"defend\",950,625,80],[\"attack\",1150,590,92]]}"}}
+android bottom mandatorySystemGestures: device y 996-1080 (dumpsys window)
+pad bottoms in device px (xy.py, logical cy+r): left/right 957, defend 977, attack 945; canvas bottom 998
+pad diameters CSS px: k=676/1280; left/right/defend 2*80*k=84.5, attack 2*92*k=97.2
+--- tap on the lowest edge of ▶ (device 838,950), hold 0.3s
+{"result": {"type": "string", "value": "{\"held\":[],\"hx\":300}"}}
+{"result": {"type": "string", "value": "{\"afterLift_held\":[],\"hx\":624.5}"}}
+--- upward thumb slide from bottom edge (838,1078) to (838,860) over 0.4 s
+{"result": {"type": "string", "value": "{\"fs\":true,\"sc\":\"play\",\"ph\":\"walk\",\"held\":[]}"}}
+    mNavigationBar=Window{ca6abb8 u0 Taskbar}
+    mNavigationBarCanMove=false
+    mHasBottomNavigationBar=true
