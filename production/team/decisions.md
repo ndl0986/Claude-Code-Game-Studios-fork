@@ -11,6 +11,20 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-24 Beat 1 (Bình Than): who met, and Quốc Toản's age
+
+- **Flow:** Luan's correction (2026-11-14) → game-art-content rewrites beat 1 (TASK-011c) → Luan signs
+  off the wording (part of D-03).
+- **Correction:** the current card ("Đến bến Bình Than" / "Giặc Nguyên sắp sang xâm lược.") reads as
+  if Quốc Toản went to Bình Than and met the enemy. New order: the year he is X years old, the Nguyên
+  army prepares to invade, a meeting is held at bến Bình Than, then he goes there.
+- **Question 1:** who met at Bình Than? Luan wrote "các bô lão". The claim register (C04, textbook /
+  Toàn thư) says **the king met the vương hầu (princes and generals) at Bình Than, 1282**; the elders'
+  meeting (bô lão) is **Diên Hồng, 1284**. Draft uses "vua họp các vương hầu" unless Luan says otherwise.
+- **Question 2:** his age "X": no confirmed source yet (tradition ~15–16). It stays a pending claim
+  until the source is confirmed.
+- **Status:** Open.
+
 ### D-23 Voice-over and sound choices (not needed until voice recording)
 
 - **Flow:** Audio & voice-over GDD (`a2fd734`) → voice recording → the iOS audio setting.
