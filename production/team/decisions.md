@@ -172,6 +172,14 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Proposed (applied by the team; Luan can overturn)
 
+### P-06 Story screens show the step's background picture (slice)
+
+- **Flow:** intro / beat card / caption / ending boxes → the picture behind the text.
+- **What the team applied:** in the slice, story screens show the current step's background
+  (riverbank, training ground, road to battle); only the ending has its own picture. A picture per
+  story box comes later as content schema 1.2.
+- **Status:** Proposed.
+
 ### P-05 Quiz in the slice follows the Quiz & stars GDD
 
 - **Flow:** quiz question → answer → feedback → next question.

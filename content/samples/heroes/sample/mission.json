@@ -10,7 +10,7 @@
         "C01"
       ]
     },
-    "timeline_order": 1,
+    "timeline_order": 999,
     "place": {
       "id": "sample.hero.place",
       "vi": "⟨placeholder⟩ Nơi chốn",
@@ -20,7 +20,7 @@
       ]
     }
   },
-  "next_hero": "sample2",
+  "next_hero": null,
   "intro": [
     {
       "id": "sample.intro.1",
