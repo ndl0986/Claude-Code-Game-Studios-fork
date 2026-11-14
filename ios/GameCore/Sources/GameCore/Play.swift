@@ -247,8 +247,8 @@ public struct PlayState: Sendable {
         locked = false; partner = nil; dummies = []
         idle = 0; stall = 0
         beat += 1
-        if beat >= beats.count { finished = true; return }
-        phase = .walkTo
+        phase = .walkTo // after the last beat too: beat = count, phase walk_to (agreed with Android in the shared trace)
+        if beat >= beats.count { finished = true }
     }
 
     // MARK: the fixed step (dt = 1/60)
