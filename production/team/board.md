@@ -22,7 +22,9 @@ an issue once Issues are on. The leader owns this file.
 | TASK-012 | Hero progression & medal GDD + mission-flow D-07/parity updates | design | game-art-content | MERGED (`da7435c`), peer-approved by game-dev-android | `design/TASK-012-progression-medal` | 2026-11-14 |
 | TASK-014 | `/asset-spec` for the vertical slice | design | game-art-content | MERGED (`2c15f03`): 87 asset specs + manifest + D-18 look sheet; final art waits for D-18 | `design/TASK-014-asset-spec` | 2026-11-14 |
 | TASK-015 | GDDs: Language & text, Save & progress, Audio & voice-over | design | game-art-content | writing (plan approved) | `design/TASK-015-gdds` | 2026-11-14 |
-| TASK-016 | Bình Than scene (D-25): shorter walk + asking-to-join exchange + orange crush; script, beat design, GDD + schema, asset specs | design | game-art-content | plan | `design/TASK-016-binhthan-scene` | 2026-11-14 |
+| TASK-016 | Bình Than scene (D-25): shorter walk + asking-to-join dialogue + orange; script, dialogue beat, schema 1.4, data, portrait specs | design | game-art-content | MERGED (GDD `d113f7d`, schema `c6004a8`, data `23699c4`); apps building the dialogue beat | `design/TASK-016-binhthan-scene` | 2026-11-14 |
+| TASK-017 | G2 fight-zone, auto-face, swing facing (reach-the-flag fix) | design | game-art-content | MERGED (`b9f8544`) | `design/TASK-017-fight-zone` | 2026-11-14 |
+| TASK-018 | Map & timeline GDD (modern map incl. Hoàng Sa, Trường Sa; hero pins; timeline; QC G5) | design | game-art-content | plan approved, writing | `design/TASK-018-map` | 2026-11-14 |
 | TASK-013 | Full-screen layout on both apps: backdrop + HUD to the screen edges, gameplay stays 1280×720 (fixes the 20:9 letterbox) | dev | both devs | after the slice's first QC pass | — | 2026-11-14 |
 | TASK-005b | Tuning parity keys (19) in content/data/tuning.json | data | game-dev-android | MERGED (`012114c`) | `data/TASK-005b-tuning-parity` | 2026-11-14 |
 | TASK-005c | 24 UI strings VI/EN in content/data/strings.json | data | game-dev-android (+ art-content review) | MERGED (`a2109fe`) | `data/TASK-005c-ui-strings` | 2026-11-14 |
