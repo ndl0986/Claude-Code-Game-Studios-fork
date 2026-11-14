@@ -70,6 +70,10 @@ class ContentLoader(private val strict: Boolean = false, private val read: (Stri
          */
         val LENIENT = Json { ignoreUnknownKeys = true; explicitNulls = false }
 
+        /** A dialogue beat's params, or null. */
+        fun dialogueParams(beat: Beat): DialogueParams? =
+            if (beat.type != "dialogue") null else try { LENIENT.decodeFromJsonElement<DialogueParams>(beat.params) } catch (e: Exception) { null }
+
         /** A fight beat's params; other beat types play as a fight until D-08 decides them. */
         fun fightParams(beat: Beat): FightParams? =
             try { JSON.decodeFromJsonElement<FightParams>(beat.params) } catch (e: Exception) { null }

@@ -21,7 +21,7 @@ object Validator {
     }
 
     /** Sentence fields carry legend markers themselves (R4); label fields may lean on a marked sentence (R4b). */
-    val SENTENCE_FIELDS = setOf("intro", "scene", "ending", "quiz_prompt", "quiz_why")
+    val SENTENCE_FIELDS = setOf("intro", "scene", "ending", "quiz_prompt", "quiz_why", "dialogue_line", "dialogue_narrator")
 
     /** R4's test: a legend marker in VI and in EN. */
     fun marked(t: Text, markers: MarkersFile) = markers.legend.vi.any { t.vi.contains(it) } && markers.legend.en.any { t.en.contains(it) }
@@ -192,6 +192,7 @@ object Validator {
             "training" -> { need += listOf("move", "attack"); if ((int("blocks") ?: 0.0) > 0) need += "defend"
                 if (bool("finish_special")) { need += "special"; specialOk = true } }
             "reach-the-flag" -> { need += "move"; if (encounters.isNotEmpty()) need += "attack" } // D-10 B: no special
+            "dialogue" -> if (b.isNotEmpty()) return listOf("R13 ${beat.id}: a dialogue beat has no buttons")
         }
         val out = mutableListOf<String>()
         (need - b).forEach { out += "R13 ${beat.id}: ${beat.type} needs $it" }
@@ -203,6 +204,24 @@ object Validator {
             if (at.any { it <= 0 || it >= len }) out += "R13b ${beat.id}: at_screen outside (0, length_screens)"
         }
         return out
+    }
+
+    /** R13d: a dialogue's ask ends on or before its last line. */
+    fun askFits(lines: Int, taps: Int, atLine: Int): List<String> =
+        if (atLine + taps > lines) listOf("R13d ask at_line $atLine + taps $taps > $lines lines") else emptyList()
+
+    /** R4c: claims covered by a dialogue's first line (a narrator line marked in VI and EN), else empty. */
+    fun dialogueCovered(lines: List<DialogueLine>, markers: MarkersFile): Set<String> {
+        val first = lines.firstOrNull() ?: return emptySet()
+        return if (first.speaker == "narrator" && marked(first.text, markers)) first.text.claims.toSet() else emptySet()
+    }
+
+    /** R4 for a dialogue's lines and ask button with R4c's cover. */
+    fun dialogueLegend(lines: List<DialogueLine>, ask: Text?, labels: Map<String, String>, markers: MarkersFile): List<String> {
+        val cover = dialogueCovered(lines, markers)
+        return (lines.map { it.text } + listOfNotNull(ask)).flatMap { t ->
+            if (t.claims.filter { labels[it] == "legend" }.all { it in cover }) emptyList() else legendMarker(t, labels, markers)
+        }
     }
 
     /** R14: the attack reaches the enemy standing in front (error). */
@@ -229,8 +248,12 @@ object Validator {
         m.intro.forEach { out += "intro" to it }
         m.banner?.let { out += "banner" to it }
         for (b in m.beats) {
-            out += "beat_title" to b.title; out += "goal" to b.goal
+            out += "beat_title" to b.title; b.goal?.let { out += "goal" to it }
             b.scene.forEach { out += "scene" to it }
+            ContentLoader.dialogueParams(b)?.let { d ->
+                d.lines.forEach { out += (if (it.speaker == "narrator") "dialogue_narrator" else "dialogue_line") to it.text }
+                d.ask?.let { out += "button" to it.button }
+            }
         }
         m.ending.lines.forEach { out += "ending" to it }
         for (q in hero.quiz.questions) {
@@ -271,20 +294,29 @@ object Validator {
                 claim.sources.filterNot { it in sourceStatus }.forEach { out += "R2 ${claim.id}: unknown source $it" }
             }
             val m = hero.mission
-            val missionSentences = m.intro + m.beats.flatMap { it.scene } + m.ending.lines
+            val dialogues = m.beats.mapNotNull { ContentLoader.dialogueParams(it) }
+            val missionSentences = m.intro + m.beats.flatMap { it.scene } + m.ending.lines + dialogues.flatMap { d -> d.lines.map { it.text } }
+            val dialogueIds = dialogues.flatMap { d -> d.lines.map { it.text.id } + listOfNotNull(d.ask?.button?.id) }.toSet()
+            for (d in dialogues) {
+                out += dialogueLegend(d.lines, d.ask?.button, labels, c.markers)
+                d.ask?.let { out += askFits(d.lines.size, it.taps, it.atLine) }
+            }
             val choiceScope = hero.quiz.questions.flatMap { q -> q.choices.map { it.text.id to listOf(q.prompt, q.why) } }.toMap()
             for ((type, t) in texts(hero)) {
                 allIds += t.id
                 out += nfc(t.id, t.vi, t.en)
                 out += enBudget(t.id, type, t.en, t.vi, c.rules.textLimits)
                 out += viBudget(t.id, type, t.vi, c.rules.textLimits)
-                out += legend(type, t, labels, c.markers, choiceScope[t.id] ?: missionSentences)
+                if (t.id !in dialogueIds) out += legend(type, t, labels, c.markers, choiceScope[t.id] ?: missionSentences) // dialogue: R4c above
                 t.claims.filterNot { it in claims }.forEach { out += "R2 ${t.id}: unknown claim $it" }
             }
             out += quizInvented(quizTexts(hero).flatMap { it.claims }.distinct(), labels)
             val next = hero.mission.nextHero
             if (hero.mission.hero.id != heroId) out += "R2 heroes/$heroId: mission hero id is ${hero.mission.hero.id}"
             if (checkPictures) {
+                // R10: dialogue portraits pic.portrait_<hero_id>_<speaker>[_<mood>] (a missing mood fails)
+                dialogues.flatMap { it.lines }.filter { it.speaker != "narrator" }.forEach { l ->
+                    out += pictureResolves("pic.portrait_${heroId}_${l.speaker}" + (l.mood?.let { "_$it" } ?: ""), assetIds) }
                 val pics = listOf(hero.mission.ending.pictureId) +
                     hero.quiz.questions.flatMap { q -> listOfNotNull(q.pictureId) + q.choices.map { it.pictureId } }
                 pics.forEach { out += pictureResolves(it, assetIds) }

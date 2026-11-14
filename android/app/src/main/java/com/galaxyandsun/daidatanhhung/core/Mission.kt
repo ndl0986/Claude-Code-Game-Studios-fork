@@ -193,7 +193,7 @@ class MissionRun(
     }
 
     /** The card's boxes: the scene lines, then the goal (title is the card's header). */
-    fun cardBoxes() = currentBeat.scene + currentBeat.goal
+    fun cardBoxes() = currentBeat.scene + listOfNotNull(currentBeat.goal)
 
     fun startBeat(i: Int) = startPlay(i)
 

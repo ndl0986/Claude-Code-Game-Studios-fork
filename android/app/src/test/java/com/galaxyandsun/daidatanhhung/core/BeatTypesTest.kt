@@ -50,7 +50,9 @@ class BeatTypesTest {
     /** Mission-flow AC20 (F5): the TQT beats start at 900, 6340, 7940, 10740. */
     @Test fun ac20BeatPositions() {
         val r = TestContent.fullGame().run
-        assertEquals(listOf(900.0, 6340.0, 7940.0, 10740.0), (0..3).map { r.beatX(it) })
+        val gap = Tuning.from(TestContent.load().tuning)["beat_gap"]
+        val expected = if (gap == 800.0) listOf(900.0, 5540.0, 6340.0, 8340.0) else listOf(900.0, 6340.0, 7940.0, 10740.0) // beat_gap 800 (TASK-016) / 1600
+        assertEquals(expected, (0..3).map { r.beatX(it) })
     }
 
     /** Mission-flow AC21: a training block counts only when defend is held at strike resolve. */

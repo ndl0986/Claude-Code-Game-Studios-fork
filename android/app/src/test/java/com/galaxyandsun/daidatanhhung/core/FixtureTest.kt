@@ -112,6 +112,13 @@ class FixtureTest {
                     Validator.sizeMatches("case", d["width"]!!.jsonPrimitive.int to d["height"]!!.jsonPrimitive.int, a["width"]!!.jsonPrimitive.int to a["height"]!!.jsonPrimitive.int) }
                 "R19b" -> Validator.sizeLimits(c["id"]!!.jsonPrimitive.content, c["width"]!!.jsonPrimitive.int, c["height"]!!.jsonPrimitive.int)
                 "R20" -> Validator.themesCovered(c["themes"]!!.jsonArray.map { it.jsonPrimitive.content }.toSet(), c["beat_themes"]!!.jsonArray.map { it.jsonPrimitive.content })
+                "R13d" -> { val a = c["ask"]!!.jsonObject; Validator.askFits(c["lines"]!!.jsonPrimitive.int, a["taps"]!!.jsonPrimitive.int, a["at_line"]!!.jsonPrimitive.int) }
+                "R4c" -> Validator.dialogueLegend(c["lines"]!!.jsonArray.map { ContentLoader.JSON.decodeFromJsonElement<com.galaxyandsun.daidatanhhung.core.content.DialogueLine>(it) }, null, labels(), content.markers)
+                "ask" -> { val a = c["ask"]!!.jsonObject
+                    val d = com.galaxyandsun.daidatanhhung.core.content.DialogueParams(emptyList(), com.galaxyandsun.daidatanhhung.core.content.DialogueAsk(
+                        ContentLoader.JSON.decodeFromJsonElement<Text>(tj()), a["taps"]!!.jsonPrimitive.int, a["at_line"]!!.jsonPrimitive.int))
+                    assertEquals(c["expected_buttons"]!!.jsonArray.map { it.jsonPrimitive.content }, (1..c["lines"]!!.jsonPrimitive.int).map { d.buttonOn(it) })
+                    emptyList() }
                 "R14" -> Validator.attackReaches(c["tuning"]!!.jsonObject.mapValues { it.value.jsonPrimitive.content.toDouble() })
                 "R15" -> Validator.telegraphWarnings(c["tuning"]!!.jsonObject.mapValues { it.value.jsonPrimitive.content.toDouble() })
                 "R16" -> Validator.starThresholds(ContentLoader.JSON.decodeFromJsonElement<List<com.galaxyandsun.daidatanhhung.core.content.Threshold>>(c["thresholds"]!!))

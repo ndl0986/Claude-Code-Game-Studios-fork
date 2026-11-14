@@ -226,7 +226,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             // goal: body text, box 1040 @ 37 px, 1 line (rules.json fit.goal)
             // below the HUD row (pause/sound/medallions), as iOS: the 1040 box never meets the round buttons
             d.rr(W / 2 - 530, 168f, 1060f, 58f, 22f, C.a(C.CREAM, 0.88))
-            d.textBox(beat.goal.get(g.lang), W / 2, 197f, 1040f, 37f, C.INK, 1); badge(g, beat.goal, W / 2 + 430, 168f)
+            beat.goal?.let { gl -> d.textBox(gl.get(g.lang), W / 2, 197f, 1040f, 37f, C.INK, 1); badge(g, gl, W / 2 + 430, 168f) }
             if (beat.usesBanner) g.bundle.mission.banner?.let { b ->
                 d.rr(W / 2 - 450, 234f, 900f, 84f, 18f, C.a(C.RED, 0.9)); d.textBox(b.get(g.lang), W / 2, 276f, 880f, 28f, C.GOLD, 2); badge(g, b, W / 2 + 380, 234f) // fit.banner 880 @ 28, 2 lines
             }

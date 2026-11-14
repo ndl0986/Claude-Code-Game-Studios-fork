@@ -46,7 +46,8 @@ data class Beat(
     val buttons: List<String>,
     val title: Text,
     val scene: List<Text>,
-    val goal: Text,
+    /** Optional only for a dialogue beat (schema 1.4). */
+    val goal: Text? = null,
     @SerialName("uses_banner") val usesBanner: Boolean = false,
     val params: JsonObject,
     val theme: String,
@@ -208,3 +209,16 @@ data class Theme(@SerialName("sky_band") val skyBand: SkyBand)
 /** themes.json (ADR-0002 follow-up): per-theme sky band behind the background tiles. */
 @Serializable
 data class ThemesFile(@SerialName("schema_version") val schemaVersion: String, val themes: Map<String, Theme>)
+
+/** A dialogue beat's params (schema 1.4, TASK-016). */
+@Serializable
+data class DialogueLine(val speaker: String, val mood: String? = null, val text: Text)
+
+@Serializable
+data class DialogueAsk(val button: Text, val taps: Int, @SerialName("at_line") val atLine: Int)
+
+@Serializable
+data class DialogueParams(val lines: List<DialogueLine>, val ask: DialogueAsk? = null) {
+    /** "ask" while at_line ≤ L < at_line + taps (L 1-based), else "tiep" (R13d semantics). */
+    fun buttonOn(line1: Int): String = if (ask != null && line1 >= ask.atLine && line1 < ask.atLine + ask.taps) "ask" else "tiep"
+}
