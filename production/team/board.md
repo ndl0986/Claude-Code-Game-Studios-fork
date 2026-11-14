@@ -36,8 +36,8 @@ an issue once Issues are on. The leader owns this file.
 | TASK-005j | Shared sim trace fixture content/fixtures/trace-tqt.json (cross-app parity; Android generates + replays) | data | game-dev-android (+ ios replay) | MERGED (`b661802`); iOS replay test after iOS r3 freeze | `data/TASK-005j-trace` | 2026-11-14 |
 | TASK-005k | pad_gap + drag_threshold tuning keys (TASK-019), no schema change | data | game-dev-android (+ ios load-check) | MERGED | `data/TASK-005k-input-keys` | 2026-11-14 |
 | TASK-020 | /review-all-gdds across the 11 approved GDDs (independent reader) | design | game-dev-android (fixes: art-content) | plan approved, reviewing | `design/TASK-020-gdd-review` | 2026-11-14 |
-| TASK-021 | UX specs for slice screens + design/accessibility-requirements.md | design | game-art-content (+ ios review) | plan approved (8 files), writing | `design/TASK-021-ux` | 2026-11-14 |
-| TASK-022 | Architecture blueprint (/create-architecture) + critical-ADR list; then ADR-0003 save (Proposed) | docs | game-dev-ios (+ android review) | written (e5fbfdd, 65a071e); android review queued after TASK-020; ADR-0003 → Luan to Accept | `docs/TASK-022-architecture` | 2026-11-14 |
+| TASK-021 | UX specs for slice screens + design/accessibility-requirements.md | design | game-art-content (+ ios review) | written 849c17c..941f1b9 (9 files + accessibility), lean ux-review fixed; ios review queued | `design/TASK-021-ux` | 2026-11-14 |
+| TASK-022 | Architecture blueprint (/create-architecture) + critical-ADR list; then ADR-0003 save (Proposed) | docs | game-dev-ios (+ android review) | android REVISE (clear-all wording, Android backup cost, write-at-change durability) → dev-ios fixing; ADR-0003 → Luan to Accept after re-check | `docs/TASK-022-architecture` | 2026-11-14 |
 | TASK-003b | Mission beat types from TASK-004: Special button, walk / hold-meter / training / reach-the-flag beats, arrows; BEAT_TYPES dispatch table first; art fixes: wrong-answer #9C8FB8 + circular-arrow icon, tangerine attack icon (not a pickaxe), vermilion only as a tunic accent; quiz to 5 questions once claims are signed | dev | unassigned | CANCELLED (browser); beat types and art fixes move to native tasks | — | 2026-11-14 |
 
 ## Team changes
@@ -144,3 +144,4 @@ test-setup, smoke-check), those checks report NOT ASSESSED by design (ADR-0001).
 
 **After Android QC r3 (dev-android):** first-owner tie-break in PadHolds; 4% press squash; noisy/route clear; pad_gap (TASK-005k); rounded-corner insets (TASK-013); merge b661802 so TraceTest runs.
 **iOS QC r3 (2026-11-14):** frozen 9b0470a (72 tests), app fingerprint 544279664aaa…; game-qc-ios on iPhone 18 Pro. Trace replay: iOS matches Android on all 149 snapshots (GameCore 73). After iOS r3: second-pointer-ignored fix in TouchPads (TASK-019 Rule 6).
+**Leader correction (2026-11-14):** clear-all follows Input GDD Rule 11 only (cancel, focus loss, pause, background, audio route). A screen/beat change cancels only a pressed menu button, not held pads. iOS r3 over-clears on phase change; relax after r3.
