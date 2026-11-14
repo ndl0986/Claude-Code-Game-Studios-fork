@@ -81,8 +81,16 @@ low-end Android phones and primary-school children's hand-me-down devices. Witho
      taller screen shows more world height once the backdrop fills the screen (TASK-013). The iPhone
      Duo cover display (≈1.45:1) shows 1280 / 1.45 ≈ 880 world units of height, which is 1320 px at 1.5×.
      That covers every phone at 1.45:1 or wider. The specs' 3840×2160 authoring (1620 at 1.5×)
-     overscans for tablets; that extra height is cropped at export until a tablet set exists. Above the
-     tile, the sky continues as a colour band drawn in code, never a taller texture.
+     overscans for tablets; that extra height is cropped at export until a tablet set exists. No
+     vertical parallax is needed (game-art-content, 2026-11-14).
+   - **The sky band above the tile** is drawn in code, never a taller texture. It is a **vertical
+     gradient** that continues the tile's top edge, not a flat colour: for example river from light
+     blue into a warm haze, and camp into storm indigo #3B3F6B. Its two colours per theme come from
+     data, not code: a theme table `content/data/themes.json` with `sky_band: {top, bottom}` (hex) per
+     theme id (village, bamboo, river, camp). The table and its schema land in the follow-up data branch.
+   - **Art rule** (game-art-content adds it to the specs): every far-sky tile fades its top ~10%
+     (≈130 px at 1.5×) into the band's `bottom` colour, so the seam is invisible. Key sky elements
+     (sun, moon, birds, banners) stay below ~15% from the tile's top.
 3. **Atlases by what is on screen together, loaded per beat:** hero; enemies (all three kinds); one
    props atlas per theme (village, bamboo, river, camp); UI and icons; quiz pictures per hero.
    Backgrounds are standalone images (tiles).
@@ -130,6 +138,9 @@ low-end Android phones and primary-school children's hand-me-down devices. Witho
 
 ### Follow-up (after acceptance, separate data branch, agreed with game-art-content)
 - `assets.json` gains `width` and `height` per picture (schema **1.2**, a MINOR bump).
+- New `content/data/themes.json` (+ `themes.schema.json`): per theme id, `sky_band {top, bottom}` as
+  hex colours, written by game-art-content and read by both apps. Validation: every theme a beat uses
+  has an entry.
 - New rule **R19**: every picture is ≤ 2048 on both sides, and within its kind's expected 1.5× size.
   It starts as a warning, and becomes an error once the measurements confirm the budgets.
 
