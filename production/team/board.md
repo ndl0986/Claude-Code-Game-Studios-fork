@@ -18,10 +18,11 @@ an issue once Issues are on. The leader owns this file.
 | TASK-008 | `/map-systems` + key system GDDs | design | game-art-content | MERGED (`383d90c`): index + 4 approved slice GDDs; next `/review-all-gdds` (after TASK-009), then hero progression | `design/TASK-008-systems` | 2026-11-14 |
 | TASK-009 | Trần Quốc Toản real content as data (mission, quiz, claims pending; 16 placeholder pictures; mission-full in content/drafts/) | content | game-art-content | MERGED (`f80b595`); validated by game-dev-ios | `content/TASK-009-tqt-data` | 2026-11-14 |
 | TASK-010 | `/review-all-gdds` across the 4 slice GDDs | design | game-art-content | MERGED: CONCERNS, 0 blockers; fixes C1–C5, S2 applied; D-13..D-15 to Luan | `design/TASK-010-gdd-review` | 2026-11-14 |
-| TASK-011 | Slice plays the full structure (D-08 B): promote mission-full to data; skip + medal strings (D-07) | content | game-art-content | next | `content/TASK-011-tqt-full-beats` | 2026-11-14 |
+| TASK-011 | Slice plays the full structure (D-08 B): full mission in data; skip + medal strings (D-07) | content | game-art-content | MERGED; validated by game-dev-ios | `content/TASK-011-tqt-full-beats` | 2026-11-14 |
 | TASK-005b | Tuning parity keys (19) in content/data/tuning.json | data | game-dev-android | MERGED (`012114c`) | `data/TASK-005b-tuning-parity` | 2026-11-14 |
 | TASK-005c | 24 UI strings VI/EN in content/data/strings.json | data | game-dev-android (+ art-content review) | MERGED (`a2109fe`) | `data/TASK-005c-ui-strings` | 2026-11-14 |
 | TASK-005d | Schema 1.1: beat params (D-06), R13–R16, tuning (D-09), quiz fixes (D-11), rng + quiz-shuffle fixtures | data | game-dev-android (+ ios review, art ACK) | MERGED (`3074d43`) | `data/TASK-005d-beat-params` | 2026-11-14 |
+| TASK-005e | R13 without special on reach-the-flag, dummy_spacing, dialog budget 60 | data | game-dev-android (+ ios review) | MERGED (`3861c09`) | `data/TASK-005e-slice-keys` | 2026-11-14 |
 | TASK-003b | Mission beat types from TASK-004: Special button, walk / hold-meter / training / reach-the-flag beats, arrows; BEAT_TYPES dispatch table first; art fixes: wrong-answer #9C8FB8 + circular-arrow icon, tangerine attack icon (not a pickaxe), vermilion only as a tunic accent; quiz to 5 questions once claims are signed | dev | unassigned | CANCELLED (browser); beat types and art fixes move to native tasks | — | 2026-11-14 |
 
 ## Team changes

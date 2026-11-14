@@ -130,6 +130,36 @@
       "id": "ui.lang.en",
       "vi": "EN",
       "en": "EN"
+    },
+    {
+      "id": "ui.story.skip",
+      "vi": "Bỏ qua",
+      "en": "Skip"
+    },
+    {
+      "id": "ui.story.skip_warning",
+      "vi": "Nếu bỏ qua, bạn sẽ chưa nhận được huy hiệu của câu chuyện này nhé.",
+      "en": "If you skip, you won't get this story's medal yet."
+    },
+    {
+      "id": "ui.story.skip_confirm",
+      "vi": "Vẫn bỏ qua",
+      "en": "Skip anyway"
+    },
+    {
+      "id": "ui.story.keep_reading",
+      "vi": "Đọc tiếp",
+      "en": "Keep reading"
+    },
+    {
+      "id": "ui.medal.earned",
+      "vi": "Nhận được huy hiệu!",
+      "en": "You earned the medal!"
+    },
+    {
+      "id": "ui.medal.missing",
+      "vi": "Đọc hết câu chuyện để nhận huy hiệu nhé",
+      "en": "Read it all for a medal"
     }
   ]
 }
