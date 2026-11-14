@@ -14,11 +14,15 @@ enum class Screen(val id: String) {
 /**
  * What the game keeps on the device, and nothing else (P-04 / D-16 / D-07): `lang`, the best
  * `stars.<hero_id>` (never lowered), `completed.<hero_id>`, `seen_open.<hero_id>` (never re-locks)
- * and `medal.<hero_id>` (never cleared).
+ * and `medal.<hero_id>` (never cleared), plus the `sound` setting (Save GDD Rule 1).
  */
 interface Store {
     fun lang(): String?
     fun setLang(code: String)
+    /** The sound setting: true (on) when never set. */
+    fun sound(): Boolean
+    /** Written at once on the toggle (Save Rule 6). */
+    fun setSound(on: Boolean)
     fun stars(heroId: String): Int
     fun setStars(heroId: String, stars: Int)
     fun flag(key: String): Boolean
@@ -28,10 +32,13 @@ interface Store {
 /** A store in memory, for tests and for when device storage fails. */
 class MemoryStore : Store {
     var langCode: String? = null
+    var soundOn: Boolean? = null
     val starMap = mutableMapOf<String, Int>()
     val flags = mutableSetOf<String>()
     override fun lang() = langCode
     override fun setLang(code: String) { langCode = code }
+    override fun sound() = soundOn ?: true
+    override fun setSound(on: Boolean) { soundOn = on }
     override fun stars(heroId: String) = starMap[heroId] ?: 0
     override fun setStars(heroId: String, stars: Int) { starMap[heroId] = stars }
     override fun flag(key: String) = key in flags
@@ -61,7 +68,8 @@ class Game(
 
     var screen = Screen.TITLE; private set
     var lang = Lang.of(store.lang()); private set
-    var muted = false; private set
+    /** Sound off; read from the saved `sound` at launch (QC: mute came back on at every launch). */
+    var muted = !store.sound(); private set
     /** Seconds on the current screen (animations). */
     var t = 0.0; private set
     var line = 0; private set
@@ -209,7 +217,7 @@ class Game(
     /** Debug screenshots only: set the language without the title/pause rule. */
     fun forceLang(code: String) { lang = Lang.of(code); store.setLang(lang.code) }
 
-    fun toggleMute(): Boolean { muted = !muted; return true }
+    fun toggleMute(): Boolean { muted = !muted; store.setSound(!muted); return true }
 
     /** A quiz card. Returns the pick's result; the platform plays chime / soft for it. */
     fun answer(choice: Int): PickResult {

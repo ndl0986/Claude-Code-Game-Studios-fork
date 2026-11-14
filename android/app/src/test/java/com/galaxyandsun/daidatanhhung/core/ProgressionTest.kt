@@ -4,6 +4,7 @@ import com.galaxyandsun.daidatanhhung.core.content.Content
 import com.galaxyandsun.daidatanhhung.core.content.HeroBundle
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Assert.assertFalse
 import org.junit.Test
 
 /** D-16 / Hero progression GDD: derived unlocks that survive content updates. */
@@ -50,5 +51,16 @@ class ProgressionTest {
         val s = MemoryStore()
         Progression.markSeen(heroes("a" to 10), s)
         assertEquals(setOf("z", "a"), Progression.openHeroes(heroes("z" to 5, "a" to 10), s))
+    }
+    /** Save GDD Rule 1/6, AC1: `sound` defaults on, is written at once on the toggle and read at the next launch. */
+    @Test fun muteIsSavedAndReadAtLaunch() {
+        val store = MemoryStore()
+        val g = TestContent.game(store)
+        assertFalse("fresh install: sound on", g.muted)
+        g.toggleMute()
+        assertEquals(false, store.soundOn)
+        assertTrue("relaunch keeps mute", TestContent.game(store).muted)
+        TestContent.game(store).toggleMute()
+        assertFalse(TestContent.game(store).muted)
     }
 }
