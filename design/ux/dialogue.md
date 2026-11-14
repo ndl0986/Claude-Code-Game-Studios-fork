@@ -75,6 +75,11 @@ otherwise Tiếp. For Bình Than {at_line 2, taps 2}: line 1 Tiếp; lines 2–3
 ## 7. Interaction Map
 
 - Ask or Tiếp: release-inside, a 0.25 s debounce (B1); each ask tap shows line L + 1.
+- **Screen-entry lock, rolling (QC r6 B7, Input Rule 13b):** after the dialogue's first line
+  appears (entered from the walk), until the child has stopped pressing for `screen_enter_lock`
+  (0.6 s), at most `screen_enter_lock_max` (1.5 s), Tiếp, the ask button and Bỏ qua show at
+  once but take no input (presses dropped, not queued; an optional subtle fade-in). It doesn't
+  restart per line; the debounce covers line-to-line. Pause and sound are exempt.
 - Skip: as on story screens; it counts as a skipped story (no medal this run).
 - Stuck: no ask tap for `hint_delay` → the hint hand on the ask button.
 
@@ -99,4 +104,5 @@ D-17: lines between characters may use "cậu", "cháu" or "ta"; nothing address
 4. **GIVEN** Skip then "Vẫn bỏ qua" in this scene, **WHEN** the quiz finishes, **THEN** no medal.
 5. **GIVEN** no tap on the ask button for `hint_delay`, **WHEN** waiting, **THEN** the hint hand points at it.
 6. **GIVEN** the reference phones and a k 0.40 phone or emulator, **WHEN** lines 1, 2 (ask button) and a narrator line of the Bình Than dialogue are captured in VI and EN, **THEN** the title "Xin gặp vua" is inside the top of the panel on line 1; the panel's height is the same on every speaker line; the panel's bottom is Tiếp's top − 8; and no pixel of the panel, the title or a portrait is above `corner_bottom` + 8 (y 163 at k 0.527, 206 at k 0.40).
-6. **GIVEN** the lowest target Android phone, **WHEN** a line advances, **THEN** the next line and portrait show within 150 ms; checked on the narrowest phone and a 20:9 phone.
+7. **GIVEN** the lowest target Android phone, **WHEN** a line advances, **THEN** the next line and portrait show within 150 ms; checked on the narrowest phone and a 20:9 phone.
+8. **GIVEN** the walk into the dialogue beat with Attack-spot taps every 0.35 s, **WHEN** the dialogue appears, **THEN** line 1 holds until the taps stop for 0.6 s or 1.5 s pass (here 1.5 s), and no line is skipped.
