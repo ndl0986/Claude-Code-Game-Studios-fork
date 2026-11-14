@@ -135,13 +135,15 @@ rounds: TASK-003 r3 O5/O6, TASK-007 r2 B1/B4, and the TASK-006 iOS rounds.
       ◀). In r6 a child mashing Attack every ≈ 0.35 s as reach-the-flag ended skipped both
       ending boxes; "Trần Quốc Toản đã hy sinh…" was on screen for 0.26 s, and the run landed in
       the quiz.
-    - **Within** a screen (the next box or line of the same story screen, the next dialogue line,
-      the next quiz question), the lock doesn't apply; box-to-box advances keep only
-      `advance_debounce` (0.25 s, Rule 12, F3), which still applies after the lock too.
-    - **Exception: every ending box.** Each box of the `ending` screen takes the rolling lock as if
-      entered, with the same keys (no new key). It is the one screen that tells the hero's death,
-      and it is short (2 boxes in TQT), so the line "…đã hy sinh…" can't be mashed past. A
-      deliberate reader is barely slowed: one tap per box after a 0.6 s pause.
+    - **Every story box and every dialogue line takes the rolling lock** (QC r7, for r8): each box
+      of the intro, a beat card, a caption and the ending, and each dialogue line, starts the lock
+      as if entered, with the same keys (no new key). Under a continued mash each one holds
+      ≥ `screen_enter_lock_max` (1.5 s), so the hero's plea, the king's words and "…đã hy sinh…"
+      can't be mashed past. A child of 6–10 can't read a box in under 0.6 s, so a deliberate
+      reader is unaffected: one tap per box after a 0.6 s pause. `advance_debounce` still applies.
+      An ask tap ("Xin vào!") is a line advance too, so two quick ask taps advance one line.
+    - **The quiz keeps its own rules:** the next quiz question takes no lock (only the debounce),
+      except on small phones (below).
     - **One exception, small phones only:** at 0.40 ≤ k < 0.48 the quiz's Tiếp lies over the third
       card slot (`quiz-and-results.md` §5.2), so a second tap on Tiếp could pick a card on the next
       question. There, each new question takes the lock too.
@@ -273,7 +275,8 @@ both advance.
 - **If a child mashes Attack through a beat end** (≈ 0.35 s apart): every press restarts the
   rolling lock, so the caption's or ending's first box holds until `screen_enter_lock_max`
   (1.5 s); after that, presses advance one box per press under `advance_debounce`, and nothing
-  is skipped silently. **On the ending, every box holds the same way** (each takes the lock). A child who stops for 0.6 s and then taps advances at once.
+  is skipped silently. **Every later story box and dialogue line holds the same way** (each takes
+  the lock). A child who stops for 0.6 s and then taps advances at once.
 - **If the device has no gesture insets or notch**: the safe rect is the screen; same rules.
 - **If haptics are unavailable**: no haptics; nothing else changes.
 - **If a thumb stays on a pad while a story or dialogue screen hides it** (e.g. ▶ through the
@@ -323,7 +326,7 @@ Combat, Mission flow and Hints already list Input as a dependency.
 
 ## Acceptance Criteria
 
-Criteria 1–9, 13–15 and 17–21 are logic (unit tests on the input layer); 10–12 and 16 need QC on devices.
+Criteria 1–9, 13–15 and 17–22 are logic (unit tests on the input layer); 10–12 and 16 need QC on devices.
 
 1. **GIVEN** ▶ held by pointer A, **WHEN** pointer B taps attack, **THEN** the hero keeps moving
    and a swing starts (multi-touch).
@@ -364,8 +367,8 @@ Criteria 1–9, 13–15 and 17–21 are logic (unit tests on the input layer); 1
 17. **GIVEN** the TQT reach-the-flag beat ending with Attack pressed every 0.35 s for 3 s through the
     beat end (a scripted trace, on both apps), **WHEN** the ending shows (entry t = 0), **THEN** the
     presses at 0.35, 0.70, 1.05 and 1.40 s are dropped (not queued); box 1 holds until 1.5 s
-    (`screen_enter_lock_max`); the press at 1.75 s shows box 2; each later press advances one box
-    under `advance_debounce`; and the quiz starts only after each ending box has been advanced once.
+    (`screen_enter_lock_max`); the press at 1.75 s shows box 2, which takes its own lock (AC21); and
+    the quiz starts only after each ending box has been advanced once.
 18. **GIVEN** a thumb held down on Attack as a caption appears, **WHEN** it slides onto Tiếp and
     lifts, **THEN** nothing advances (a pointer that went down before the screen never fires a
     menu button).
@@ -383,6 +386,10 @@ Criteria 1–9, 13–15 and 17–21 are logic (unit tests on the input layer); 1
     on, **THEN** presses at +0.35 … +1.40 are dropped and +1.75 shows box 2; presses at +2.10 … +3.15
     are dropped and +3.50 starts the quiz. Each box is on screen ≥ `screen_enter_lock_max` (1.5 s), and
     every dropped press is dropped, not queued.
+22. **GIVEN** the Bình Than dialogue (9 lines) and a press every 0.35 s on the button's spot from its
+    entry, **WHEN** the presses run on, **THEN** each line holds ≥ 1.5 s (the press at +1.75 s after a
+    line appears advances it), no line is skipped, and a deliberate tap 0.6 s after the previous
+    press advances at once.
 
 ## Open Questions
 
