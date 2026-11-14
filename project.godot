@@ -16,6 +16,10 @@ config/features=PackedStringArray("4.7", "GL Compatibility")
 ; the installed 4.7.2 engine on 2026-11-14.
 window/handheld/orientation=4
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
