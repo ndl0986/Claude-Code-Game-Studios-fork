@@ -150,6 +150,16 @@ public struct PlayState: Sendable {
     }
     func speed(_ k: FightParams.Kind) -> Double { tuning["enemy_speed"] * (k == .leader ? tuning["leader_speed_mul"] : 1) }
 
+    /// Mission flow Rule 7c (TASK-020 W12): training shows only the pads its current step uses, so no pad
+    /// on screen does nothing; derived from the step, never read from data (same sets as Android).
+    static func trainingPads(_ s: TrainingStage) -> Set<String> {
+        switch s {
+        case .dummies: return ["move", "attack"]
+        case .blocks: return ["move", "attack", "defend"]
+        case .special, .done: return ["move", "attack", "defend", "special"]
+        }
+    }
+
     /// The pads shown now (parity item 3): walk_to = move only; beat_play / beat_end = the beat's buttons; story boxes = none.
     public var visiblePads: Set<PadAction> {
         switch phase {
@@ -157,7 +167,9 @@ public struct PlayState: Sendable {
         case .beatCard, .caption, .dialogueLine: return []
         case .beatPlay, .beatEnd:
             var out: Set<PadAction> = []
-            for b in currentBeat?.buttons ?? [] {
+            var buttons = Set(currentBeat?.buttons ?? [])
+            if currentBeat?.type == "training" { buttons.formIntersection(Self.trainingPads(trainingStage)) }
+            for b in buttons {
                 switch b { case "move": out.formUnion([.left, .right]); case "attack": out.insert(.attack); case "defend": out.insert(.defend); case "special": out.insert(.special); default: break }
             }
             return out

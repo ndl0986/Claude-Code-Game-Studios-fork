@@ -61,3 +61,30 @@ final class TrainingCapTests: XCTestCase {
         XCTAssertGreaterThan(p.cam, cam, "free scroll after training")
     }
 }
+
+/// Mission flow Rule 7c (TASK-020 W12): training shows only the pads its current step uses.
+final class TrainingPadsTests: XCTestCase {
+    func test_training_pads_appear_step_by_step() throws {
+        let c = try ContentSet.load(dataRoot: Repo.data), h = realHero(c)
+        var p = PlayState(tuning: c.tuning, beats: h.mission.beats, seed: 1)
+        p.debugJump(beat: beatIndex(h, "training"), stage: nil)
+        XCTAssertEqual(p.trainingStage, .dummies)
+        XCTAssertEqual(p.visiblePads, [.left, .right, .attack], "dummies: move + attack")
+        var step = 0
+        while p.trainingStage == .dummies && step < 6000 { p.update(1.0 / 60, botInput(p, step: step)); step += 1 }
+        XCTAssertEqual(p.trainingStage, .blocks)
+        XCTAssertEqual(p.visiblePads, [.left, .right, .attack, .defend], "blocks: + defend")
+        while p.trainingStage == .blocks && step < 12000 { p.update(1.0 / 60, StepInput(held: [.defend])); step += 1 }
+        XCTAssertEqual(p.trainingStage, .special)
+        XCTAssertEqual(p.visiblePads, [.left, .right, .attack, .defend, .special], "finish: + special")
+    }
+
+    /// A hidden pad does nothing: defend held during the dummies step never raises the guard.
+    func test_a_hidden_pad_is_filtered_out() throws {
+        let c = try ContentSet.load(dataRoot: Repo.data), h = realHero(c)
+        var p = PlayState(tuning: c.tuning, beats: h.mission.beats, seed: 1)
+        p.debugJump(beat: beatIndex(h, "training"), stage: nil)
+        for _ in 0..<10 { p.update(1.0 / 60, StepInput(held: [.defend])) }
+        XCTAssertFalse(p.hero.def, "defend is hidden during the dummies")
+    }
+}
