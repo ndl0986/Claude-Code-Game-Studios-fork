@@ -273,7 +273,10 @@ class MissionRun(
         return false
     }
 
-    // ---- Hints (first-use hands, the 5 s stall pulse) ----
+    /** Resuming from pause resets the hint timers (Hints GDD, leader's call). */
+    fun resetHintTimers() { stall = 0.0; idle = 0.0 }
+
+    // ---- Hints (first-use hands, the 5 s stall pulse; strictly > hint_delay) ----
     val stalled get() = phase == Phase.FIGHT && stall > tuning["hint_delay"]
     val pulseRight get() = (!tut.moved && beat == 0) || (phase == Phase.WALK && idle > tuning["hint_delay"])
     val pulseAttack get() = stalled

@@ -3,6 +3,9 @@ package com.galaxyandsun.daidatanhhung.core
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.io.File
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 class RngTest {
     /** The browser prototype's rng() with seed 1 (node, index.html @203d73e), first 5 values. */
@@ -16,8 +19,10 @@ class RngTest {
     @Test fun matchesTheSharedFixtureWhenPresent() {
         val f = File(TestContent.root, "fixtures/rng.json")
         if (!f.isFile) { println("fixtures/rng.json not present yet"); return }
-        val fx = TestContent.fixture("rng.json")
-        println("rng.json present: ${fx.keys}")
+        for (c in TestContent.fixture("rng.json")["cases"]!!.jsonArray.map { it.jsonObject }) {
+            val r = Mulberry32(c["seed"]!!.jsonPrimitive.content.toLong())
+            for (e in c["first"]!!.jsonArray) assertEquals(c.toString(), e.jsonPrimitive.content.toDouble(), r.next(), 0.0)
+        }
     }
 
     @Test fun sameSeedSameSequence() {

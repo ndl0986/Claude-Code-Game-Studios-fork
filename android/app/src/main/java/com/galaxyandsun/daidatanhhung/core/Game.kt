@@ -77,10 +77,7 @@ class Game(
         t += dt
         when (screen) {
             Screen.PLAY -> run.update(dt, input)
-            Screen.QUIZ -> {
-                val q = quiz ?: return
-                if (q.update(dt)) finishQuiz()
-            }
+            Screen.QUIZ -> quiz?.update(dt)
             else -> Unit
         }
         input.clearTaps()
@@ -94,12 +91,18 @@ class Game(
         Screen.INTRO -> { if (line < bundle.mission.intro.size - 1) line++ else go(Screen.PLAY); true }
         Screen.ENDING -> { if (line < bundle.mission.ending.lines.size - 1) line++ else startQuiz(); true }
         Screen.PLAY -> if (run.phase == Phase.CAPTION) { if (run.captionNext()) { line = 0; go(Screen.ENDING) }; true } else false
+        Screen.QUIZ -> quiz?.let { q -> if (!q.canAdvance) false else { if (q.advance()) finishQuiz(); true } } ?: false
         Screen.RESULTS -> { go(Screen.UNLOCK); true }
         else -> false
     }
 
-    fun pause(): Boolean = (screen == Screen.PLAY).also { if (it) screen = Screen.PAUSE }
-    fun resume(): Boolean = (screen == Screen.PAUSE).also { if (it) screen = Screen.PLAY }
+    /** The screen under the pause menu (play or quiz, P-05). */
+    var pausedFrom = Screen.PLAY; private set
+
+    fun pause(): Boolean = (screen == Screen.PLAY || screen == Screen.QUIZ).also { if (it) { pausedFrom = screen; screen = Screen.PAUSE } }
+
+    /** Resuming resets the 5 s hint timers (Hints GDD; the prototype froze them). */
+    fun resume(): Boolean = (screen == Screen.PAUSE).also { if (it) { screen = pausedFrom; if (screen == Screen.PLAY) run.resetHintTimers() } }
     fun home(): Boolean = (screen == Screen.PAUSE || screen == Screen.UNLOCK).also { if (it) { reset(); go(Screen.TITLE) } }
     fun replay(): Boolean = (screen == Screen.UNLOCK).also { if (it) { reset(); go(Screen.INTRO) } }
 
@@ -127,7 +130,7 @@ class Game(
     private fun startQuiz() {
         val qs = bundle.quiz.questions
         val n = QuizSession.count(tuning.int("quiz_count"), qs.size)
-        quiz = QuizSession(qs.take(n), tuning["feedback_time"])
+        quiz = QuizSession(qs.take(n), tuning["feedback_time"], tuning.seed)
         go(Screen.QUIZ)
     }
 
@@ -149,7 +152,7 @@ class Game(
             "intro" -> go(Screen.INTRO)
             "play" -> { go(Screen.PLAY); if (beat > 1 || stage != null) run.debugStartBeat(beat - 1, stage == "telegraph", stage == "caption") }
             "caption" -> { go(Screen.PLAY); run.debugStartBeat(beat - 1, telegraph = false, caption = true) }
-            "pause" -> { go(Screen.PLAY); screen = Screen.PAUSE }
+            "pause" -> { go(Screen.PLAY); pause() }
             "ending" -> go(Screen.ENDING)
             "quiz" -> { startQuiz(); repeat((question - 1).coerceAtLeast(0)) { skipQuestion() }; if (stage == "wrong") quiz?.let { answer((it.current.correctIndex + 1) % it.current.choices.size) } }
             "results" -> { stars = starCount; go(Screen.RESULTS) }
@@ -161,6 +164,6 @@ class Game(
     private fun skipQuestion() {
         val q = quiz ?: return
         q.pick(q.current.correctIndex); q.update(tuning["feedback_time"])
-        if (q.finished) finishQuiz()
+        if (q.advance()) finishQuiz()
     }
 }

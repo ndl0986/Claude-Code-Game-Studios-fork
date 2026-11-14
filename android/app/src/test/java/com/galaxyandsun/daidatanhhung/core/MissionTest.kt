@@ -148,6 +148,42 @@ class MissionTest {
         assertTrue(r.stalled); assertTrue(r.pulseAttack); assertNotNull(r.stallTarget)
     }
 
+    /** Strictly > hint_delay: with dt 1/60 the hint shows at step 301, not 300 (leader's parity call). */
+    @Test fun stallHintBoundaryIsStep301() {
+        val r = run(); walkToFight(r)
+        val def = InputFrame().apply { held += Action.DEFEND }
+        // The fight's first step already counted once in walkToFight.
+        val already = (r.stall / dt).let { Math.round(it).toInt() }
+        repeat(300 - already) { r.update(dt, def) }
+        assertFalse("step 300: stall=${r.stall}", r.stalled)
+        r.update(dt, def)
+        assertTrue("step 301: stall=${r.stall}", r.stalled)
+    }
+
+    @Test fun anyMovementResetsWalkIdle() {
+        val r = run()
+        repeat(400) { r.update(dt, InputFrame()) }
+        assertTrue(r.idle > 5)
+        r.update(dt, InputFrame().apply { held += Action.LEFT })
+        assertEquals(0.0, r.idle, 0.0)
+    }
+
+    @Test fun heroHitOnTheWindupsLastFrameCancelsTheStrike() {
+        val r = run()
+        r.debugStartBeat(0, telegraph = true, caption = false)
+        val e = r.enemies.first { it.state == EnemyState.WINDUP }
+        // Swing so the hit lands on the step the windup would end.
+        val swingToHit = tuning["attack_hit_at"] * tuning["attack_time"]
+        val stepsToEnd = Math.ceil(r.windupTime(e.kind) / dt).toInt()
+        val startAt = stepsToEnd - Math.ceil(swingToHit / dt).toInt()
+        repeat(startAt - 1) { r.update(dt, InputFrame()) }
+        r.update(dt, InputFrame().apply { tapped += Action.ATTACK })
+        var struck = false
+        repeat(60) { r.update(dt, InputFrame()); if (e.state == EnemyState.STRIKE) struck = true }
+        assertFalse("the hit should cancel the strike", struck)
+        assertTrue(e.hits >= 1)
+    }
+
     @Test fun firstUseHandsShowInOrder() {
         val r = run()
         assertEquals(HandHint.MOVE, r.hand)

@@ -9,7 +9,7 @@ import java.text.Normalizer
  */
 object Validator {
     /** The schema MAJOR.MINOR this app understands. */
-    const val SUPPORTED_SCHEMA = "1.0"
+    const val SUPPORTED_SCHEMA = "1.1"
 
     /** R4: a Text citing a legend claim carries a legend marker in VI and in EN. */
     fun legendMarker(text: Text, labels: Map<String, String>, markers: MarkersFile): List<String> {
@@ -59,6 +59,50 @@ object Validator {
     /** R11: a newer MAJOR fails the build; a newer MINOR is fine. */
     fun schemaCompatible(appSupports: String, fileVersion: String): Boolean =
         fileVersion.substringBefore('.').toInt() <= appSupports.substringBefore('.').toInt()
+
+    /** R13 / R13b: buttons per beat type, and reach-the-flag encounter order (schema 1.1, D-06). */
+    fun beatButtons(beat: Beat): List<String> {
+        val b = beat.buttons.toSet(); val p = beat.params
+        fun int(k: String) = (p[k] as? kotlinx.serialization.json.JsonPrimitive)?.content?.toDoubleOrNull()
+        fun bool(k: String) = (p[k] as? kotlinx.serialization.json.JsonPrimitive)?.content == "true"
+        val encounters = (p["encounters"] as? kotlinx.serialization.json.JsonArray).orEmpty()
+        val need = mutableSetOf<String>(); var specialOk = false
+        when (beat.type) {
+            "walk" -> need += "move"
+            "hold-meter" -> { need += "special"; specialOk = true }
+            "fight" -> need += listOf("move", "attack")
+            "training" -> { need += listOf("move", "attack"); if ((int("blocks") ?: 0.0) > 0) need += "defend"
+                if (bool("finish_special")) { need += "special"; specialOk = true } }
+            "reach-the-flag" -> { need += "move"; if (encounters.isNotEmpty()) need += "attack"; specialOk = true }
+        }
+        val out = mutableListOf<String>()
+        (need - b).forEach { out += "R13 ${beat.id}: ${beat.type} needs $it" }
+        if ("special" in b && !specialOk) out += "R13 ${beat.id}: special not allowed on ${beat.type}"
+        if (beat.type == "reach-the-flag") {
+            val len = int("length_screens") ?: 0.0
+            val at = encounters.map { ((it as kotlinx.serialization.json.JsonObject)["at_screen"] as kotlinx.serialization.json.JsonPrimitive).content.toDouble() }
+            if (at.zipWithNext().any { (a, c) -> c <= a }) out += "R13b ${beat.id}: encounters not strictly ascending"
+            if (at.any { it <= 0 || it >= len }) out += "R13b ${beat.id}: at_screen outside (0, length_screens)"
+        }
+        return out
+    }
+
+    /** R14: the attack reaches the enemy standing in front (error). */
+    fun attackReaches(v: Map<String, Double>): List<String> {
+        val need = (v["enemy_reach"] ?: 0.0) - (v["stand_gap"] ?: 0.0)
+        return if ((v["attack_range"] ?: 0.0) < need) listOf("R14 attack_range ${v["attack_range"]} < enemy_reach - stand_gap $need") else emptyList()
+    }
+
+    /** R15: a telegraph under 0.8 s is a warning (returned separately, never fails a build). */
+    fun telegraphWarnings(v: Map<String, Double>): List<String> =
+        if ((v["telegraph"] ?: 1.0) < 0.8) listOf("R15 warning: telegraph ${v["telegraph"]} s < 0.8 s") else emptyList()
+
+    /** R16: a lower star never allows fewer retries than a higher one (null = no limit). */
+    fun starThresholds(t: List<Threshold>): List<String> {
+        val sorted = t.sortedByDescending { it.stars }
+        return sorted.zipWithNext().filter { (hi, lo) -> lo.maxRetries != null && (hi.maxRetries == null || lo.maxRetries < hi.maxRetries) }
+            .map { (hi, lo) -> "R16 ${lo.stars}★ max_retries ${lo.maxRetries} < ${hi.stars}★ ${hi.maxRetries}" }
+    }
 
     /** Every Text in one hero's bundle, paired with its R8 field type. */
     fun texts(hero: HeroBundle): List<Pair<String, Text>> {
@@ -125,6 +169,9 @@ object Validator {
             for (q in hero.quiz.questions) if (q.correctIndex !in q.choices.indices) out += "R2 ${q.id}: correct_index out of range"
             if (next != null && next.isBlank()) out += "R2 heroes/$heroId: blank next_hero"
         }
+        for (hero in c.heroes.values) for (b in hero.mission.beats) out += beatButtons(b)
+        out += attackReaches(c.tuning.values.mapValues { it.value.value })
+        out += starThresholds(c.rules.quizStars.thresholds)
         out += duplicateIds(allIds)
         return out
     }

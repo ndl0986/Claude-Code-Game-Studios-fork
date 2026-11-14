@@ -10,7 +10,7 @@ import java.io.File
 /** Reads the repo's content/ folder: data/ plus samples/ (the debug build's hero). */
 object TestContent {
     /** Unit tests run with the module dir (android/app) as working dir. */
-    val root: File = listOf(File("../../content"), File("../content"), File("content")).first { File(it, "data").isDirectory }
+    val root: File = (System.getenv("CONTENT_ROOT")?.let { listOf(File(it)) } ?: emptyList()).plus(listOf(File("../../content"), File("../content"), File("content"))).first { File(it, "data").isDirectory }
 
     private fun read(path: String): String? =
         listOf(File(root, "data/$path"), File(root, "samples/$path")).firstOrNull { it.isFile }?.readText()

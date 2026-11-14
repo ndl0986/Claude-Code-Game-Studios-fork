@@ -42,9 +42,14 @@ class GameFlowTest {
         var wrongs = 0
         while (g.screen == Screen.QUIZ) {
             val cur = q.current
-            if (wrongs < 3) { assertEquals(PickResult.WRONG, g.answer((cur.correctIndex + 1) % 3)); wrongs++ }
+            if (wrongs < 3) { assertEquals(PickResult.WRONG, g.answer((cur.correctIndex + 1) % 3)); wrongs++
+                assertEquals(PickResult.IGNORED, g.answer(cur.correctIndex)) // during the 0.5 s shake (AC6)
+                repeat(31) { g.step(dt, InputFrame()) } }
             assertEquals(PickResult.RIGHT, g.answer(cur.correctIndex))
+            assertFalse(g.next()) // no Next before feedback_time (AC5)
             repeat(60) { g.step(dt, InputFrame()) }
+            assertEquals(Screen.QUIZ, g.screen) // never auto-advances
+            assertTrue(g.next())
         }
         assertEquals(Screen.RESULTS, g.screen)
         assertEquals(3, g.retries)
@@ -59,7 +64,7 @@ class GameFlowTest {
         val store = MemoryStore().apply { starMap["sample"] = 3 }
         val g = TestContent.game(store)
         g.debugJump("quiz")
-        while (g.screen == Screen.QUIZ) { g.answer((g.quiz!!.current.correctIndex + 1) % 3); g.answer(g.quiz!!.current.correctIndex); repeat(60) { g.step(dt, InputFrame()) } }
+        while (g.screen == Screen.QUIZ) { g.answer((g.quiz!!.current.correctIndex + 1) % 3); repeat(31) { g.step(dt, InputFrame()) }; g.answer(g.quiz!!.current.correctIndex); repeat(60) { g.step(dt, InputFrame()) }; g.next() }
         assertEquals(3, store.stars("sample"))
     }
 
@@ -72,6 +77,23 @@ class GameFlowTest {
         assertEquals(x, g.run.hero.x, 0.0)
         g.resume(); g.step(dt, i)
         assertTrue(g.run.hero.x > x)
+    }
+
+    @Test fun pauseOnTheQuizSwitchesLanguageAndReturns() {
+        val g = TestContent.game()
+        g.debugJump("quiz")
+        assertTrue(g.pause()); assertTrue(g.toggleLang()); assertTrue(g.resume())
+        assertEquals(Screen.QUIZ, g.screen); assertEquals(Lang.EN, g.lang)
+    }
+
+    @Test fun resumeResetsTheHintTimers() {
+        val g = TestContent.game()
+        g.debugJump("play")
+        repeat(400) { g.step(dt, InputFrame()) }
+        assertTrue(g.run.pulseRight)
+        g.pause(); g.resume()
+        assertFalse(g.run.pulseRight && g.run.idle > 0)
+        assertEquals(0.0, g.run.idle, 0.0)
     }
 
     @Test fun fullMissionPlaysToTheEnding() {
