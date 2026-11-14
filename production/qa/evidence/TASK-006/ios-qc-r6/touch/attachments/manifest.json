@@ -1,0 +1,95 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "93C71D52-EC20-4B54-B3A0-C91E19F7CABE.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "15b after holding ▶ 5 s_0_02E543D6-28C5-470E-B701-AFF1AE34769D.png",
+        "timestamp" : 1794673819.061
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "9ED32F27-0FFA-4F1C-ABE2-40ABD43D0540.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "15b_0_D27AAAC3-4FE6-4062-A9D2-23E026B729E1.txt",
+        "timestamp" : 1794673818.963
+      }
+    ],
+    "testIdentifier" : "TouchCasesUITests/test_15b_holding_right_in_training_stops_at_the_cap()",
+    "testIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/TouchCasesUITests/test_15b_holding_right_in_training_stops_at_the_cap"
+  },
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "5A346F26-8A5B-4730-8BC4-08D8DD1A6A03.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "B1 after two taps_0_2BD4B6F1-42BE-4439-A373-D8AAE711F44A.png",
+        "timestamp" : 1794673826.188
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "D7904D93-EB19-45E2-80CE-9672F9E4858D.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "B1 measured gap_0_C5E42294-9178-40AF-8304-DC858FF4AA57.txt",
+        "timestamp" : 1794673826.119
+      }
+    ],
+    "testIdentifier" : "TouchCasesUITests/test_B1_two_fast_taps_on_next_advance_one_box()",
+    "testIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/TouchCasesUITests/test_B1_two_fast_taps_on_next_advance_one_box"
+  },
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "4B588593-B18F-4F3D-99FD-DB82AD584521.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "after holding ▶ across the beat change_0_279B32D6-B620-4AE6-9ECF-0239A341E60C.png",
+        "timestamp" : 1794673845.03
+      }
+    ],
+    "testIdentifier" : "TouchCasesUITests/test_holding_right_across_a_beat_change_leaves_nothing_held()",
+    "testIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/TouchCasesUITests/test_holding_right_across_a_beat_change_leaves_nothing_held"
+  },
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "C7030C60-B38C-4672-ACA9-5400ED4B8862.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "R2-03 after the last release_0_21A90D63-4D55-4466-B318-BC2AE8CAA2C4.png",
+        "timestamp" : 1794673856.486
+      }
+    ],
+    "testIdentifier" : "TouchCasesUITests/test_R2_03_press_move_release_on_each_pad_leaves_nothing_held()",
+    "testIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/TouchCasesUITests/test_R2_03_press_move_release_on_each_pad_leaves_nothing_held"
+  },
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "B4EB7B18-B5BB-4587-BC06-4A400A1F3B31.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "slide ◀→▶ released_0_212FDD8C-34DC-43B5-B480-700DFC7EEAFC.png",
+        "timestamp" : 1794673865.145
+      }
+    ],
+    "testIdentifier" : "TouchCasesUITests/test_slide_from_left_to_right_walks_right_then_releases()",
+    "testIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/TouchCasesUITests/test_slide_from_left_to_right_walks_right_then_releases"
+  }
+]

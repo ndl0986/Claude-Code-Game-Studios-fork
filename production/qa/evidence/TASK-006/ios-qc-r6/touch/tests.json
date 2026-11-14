@@ -1,0 +1,89 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+      "deviceName" : "iPhone 18 Pro",
+      "modelName" : "iPhone 18 Pro",
+      "osBuildNumber" : "24A434",
+      "osVersion" : "27.0",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "12s",
+                  "durationInSeconds" : 12.303393959999084,
+                  "name" : "test_15b_holding_right_in_training_stops_at_the_cap()",
+                  "nodeIdentifier" : "TouchCasesUITests/test_15b_holding_right_in_training_stops_at_the_cap()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/TouchCasesUITests/test_15b_holding_right_in_training_stops_at_the_cap",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "7s",
+                  "durationInSeconds" : 7.154711961746216,
+                  "name" : "test_B1_two_fast_taps_on_next_advance_one_box()",
+                  "nodeIdentifier" : "TouchCasesUITests/test_B1_two_fast_taps_on_next_advance_one_box()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/TouchCasesUITests/test_B1_two_fast_taps_on_next_advance_one_box",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "18s",
+                  "durationInSeconds" : 18.810652017593384,
+                  "name" : "test_holding_right_across_a_beat_change_leaves_nothing_held()",
+                  "nodeIdentifier" : "TouchCasesUITests/test_holding_right_across_a_beat_change_leaves_nothing_held()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/TouchCasesUITests/test_holding_right_across_a_beat_change_leaves_nothing_held",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "11s",
+                  "durationInSeconds" : 11.451835036277771,
+                  "name" : "test_R2_03_press_move_release_on_each_pad_leaves_nothing_held()",
+                  "nodeIdentifier" : "TouchCasesUITests/test_R2_03_press_move_release_on_each_pad_leaves_nothing_held()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/TouchCasesUITests/test_R2_03_press_move_release_on_each_pad_leaves_nothing_held",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "8s",
+                  "durationInSeconds" : 8.672515988349915,
+                  "name" : "test_slide_from_left_to_right_walks_right_then_releases()",
+                  "nodeIdentifier" : "TouchCasesUITests/test_slide_from_left_to_right_walks_right_then_releases()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/TouchCasesUITests/test_slide_from_left_to_right_walks_right_then_releases",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "TouchCasesUITests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/TouchCasesUITests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            }
+          ],
+          "name" : "DaiDatAnhHungUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Passed"
+        }
+      ],
+      "name" : "DaiDatAnhHung",
+      "nodeType" : "Test Plan",
+      "result" : "Passed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ]
+}
