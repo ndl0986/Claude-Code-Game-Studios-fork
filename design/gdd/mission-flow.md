@@ -83,7 +83,7 @@ it always ends at the quiz and then the map.
 | `hold-meter` | special | Holds the special pad; a meter fills **only while held** and does **not drain** on release | The meter is full: `hold_seconds` of total holding | `hold_seconds` |
 | `training` | move, attack, defend, special | (a) hits `dummies` straw dummies; (b) blocks `blocks` padded practice strikes from a friendly partner; (c) taps special once to finish (e.g. raise the banner) | All three parts done, in that order | `dummies`; `blocks`, `finish_special` (schema 1.1, D-06) |
 | `fight` | move, attack, defend | Fights a group of enemies as the combat GDD defines | Every enemy in `enemies` has run away | `enemies`, `max_active`, `from_left` |
-| `reach-the-flag` | move, attack, defend | Moves right to a flag; optional enemy groups on the way lock the camera until they run away | The hero touches the flag | `length_screens`; optional `encounters[]` (schema 1.1, D-06) |
+| `reach-the-flag` | move, attack, defend | Moves right to a flag; optional enemy groups on the way lock the camera until they run away. In an encounter the hero stays inside the fight-zone bounds and auto-faces the nearest enemy on attack (combat Rules 2 and 15, G2), so holding ▶ can't pin him off-screen | The hero touches the flag | `length_screens`; optional `encounters[]` (schema 1.1, D-06) |
 
 7b. **Minimum buttons per type (validation R13, schema 1.1 / D-06).** A beat's `buttons` must
     include at least:
@@ -487,6 +487,8 @@ sparkle.
 21. **GIVEN** a training beat with blocks 3, **WHEN** the child presses and releases defend during
     the partner's windup and isn't holding it when the strike resolves, **THEN** that block does
     not count.
+22. **GIVEN** the Trần Quốc Toản reach-the-flag beat, **WHEN** each of combat AC23's three scripted
+    touch strategies is simulated, **THEN** the beat finishes in **≤ 60 s** (combat Rules 2, 2b, 15).
 
 ## Open Questions
 
