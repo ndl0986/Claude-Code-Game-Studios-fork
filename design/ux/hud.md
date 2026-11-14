@@ -83,13 +83,16 @@ the king's meeting at Bình Than!", 688 px).
 - **The stack starts at `max(330, corner_right + 8)`** and is 920 wide; its centre is
   `start + 460`, **clamped to 790–810**, so its right edge never passes x 1270.
 - **k ≥ ≈ 0.48: full width.** Down to k ≈ 0.48 (`corner_right` ≈ 343) the 920-wide stack fits.
-- **≈ 0.32 ≤ k < 0.48: the plates narrow.** Below k ≈ 0.48 even that overflows, so the goal
+- **0.40 ≤ k < 0.48: the plates narrow.** Below k ≈ 0.48 even that overflows, so the goal
   plate and the banner bar narrow to `1270 − start` (text box = plate − 40), never below **760**
   (text box 720). Font size and the bar's 112 height don't change. Every TQT goal still fits on
   1 line and the banner on ≤ 2 lines at a 720 box (F1, measured), and R8c must also check `goal`
   and `banner` at 720 (a data follow-up), so any new hero keeps narrow phones safe.
-- **k < ≈ 0.32: not supported.** The 760 floor would hit the corner, and no landscape phone we
-  target is that small. QC's narrowest supported phone must have k ≥ 0.32.
+- **k < 0.40: below the supported floor.** One shared floor, **k ≥ 0.40**, holds for the HUD,
+  the title and the story screens (leader's call after QC r5; the story panels need it,
+  `story-screens.md` §5.2). k 0.40 is a safe rect about **288 dp tall** (and ≥ 512 dp wide) after
+  insets; a 320 dp-tall phone is k ≈ 0.44. QC's narrowest supported phone must have k ≥ 0.40.
+  (The narrowing rule above would still hold down to k ≈ 0.32, but that is not tested.)
 
 **Vertical stack** (world px from the top of the 1280×720 world; drawn at `k_px`, Input F1):
 
@@ -239,6 +242,6 @@ insets; iOS home indicator, notch or Dynamic Island. Rounded corners wait for TA
 11. **GIVEN** the Android reference phone (k 0.527 dp per world px) and the iOS reference phone (k 0.517), with pause and sound at `pad_min`, **WHEN** a training and a reach-the-flag beat are captured in VI and EN, **THEN** no pixel of the dots, the goal plate or the banner bar overlaps the pause or sound button.
 12. **GIVEN** a push, a block and a hit during an encounter at its closest, **WHEN** captured, **THEN** each pop sits beside the fighter's head at head height and no pop pixel overlaps the banner bar.
 13. **GIVEN** a hit and a strike that land at spec height, **WHEN** frame-stepped, **THEN** the hero's swing arc reaches 175 world px in front of him and the enemy's weapon tip 140, so contact is visible; on a landed strike, the padded tip touches the hero's chest for ≥ 2 frames (≈ 33 ms) before the hero's pushed pose (Combat V/A, render-only).
-14. **GIVEN** a phone or emulator with k = 0.46 (e.g. a left gesture inset), **WHEN** a training beat is captured in VI and EN, **THEN** the stack starts at `corner_right` + 8, the goal plate and the banner bar narrow to `1270 − start` (≥ 760), nothing overlaps pause or sound, and the EN banner is ≤ 2 lines with no text cut.
+14. **GIVEN** a phone or emulator with k = 0.40 (the floor; e.g. a small phone with a left gesture inset), **WHEN** a training beat is captured in VI and EN, **THEN** the stack starts at `corner_right` + 8, the goal plate and the banner bar narrow to `1270 − start` (≥ 760), nothing overlaps pause or sound, and the EN banner is ≤ 2 lines with no text cut.
 15. **GIVEN** each theme (village, bamboo, river, camp), **WHEN** "Ối!/Oof!", "Đỡ được!/Blocked!" and a hit pop are captured over the sky band and over the mid layer (e.g. the mint mountains), **THEN** each pop has an outline (ink on light skies, cream on the camp) and measures ≥ 3:1 fill-to-outline and outline-to-background.
 16. **GIVEN** the banner bar in VI and EN, **WHEN** captured, **THEN** the gold text has an ink outline ≥ 2 px and the measured contrast is ≥ 3:1 at the text edge (target 3.18:1 outline-to-vermilion, 8.67:1 gold-to-outline).

@@ -70,11 +70,9 @@ fitted to the safe rect (Input F1), so `safe_bottom` = 720 on the reference phon
     y 390–557, all clear of the block (which ends at y 155).
 - **Fit condition:** `2 × pad_min / k + 52 + H ≤ safe_bottom`. For a beat card (H 235) that holds
   down to k ≈ 0.33 with `safe_bottom` 720, and k ≈ 0.40 with a large bottom inset
-  (`safe_bottom` ≈ 646). **Story screens are specced for k ≥ 0.40.** The text box can't narrow to
-  buy room: at 720 wide, 6 TQT story lines overflow 2 lines (F1, measured), so the panel never
-  slides beside the block. The HUD and title floor is 0.32 (`hud.md` §3.3, `title.md`); a
-  shared floor of 0.40 is proposed to the leader (every landscape phone we target is ≈ 0.44 or
-  more).
+  (`safe_bottom` ≈ 646). This sets the **shared supported floor, k ≥ 0.40**, for every screen (`hud.md` §3.3,
+  `title.md`). The text box can't narrow to buy room: at 720 wide, 6 TQT story lines overflow
+  2 lines (F1, measured), so the panel never slides beside the block.
 - **Dialogue screens** follow the same rule: the portrait and the box start below
   `corner_bottom` + 8 (`dialogue.md`).
 

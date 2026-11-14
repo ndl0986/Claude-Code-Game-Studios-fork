@@ -72,6 +72,7 @@ slice.
 | Requirement | Rule | Source |
 |---|---|---|
 | Touch size | Every pad and button ≥ 72 pt/dp (`pad_min`), with ≥ 12 pt (`pad_gap`) between pads | Input Rule 4, F1 |
+| Minimum screen | **Minimum supported landscape height ≈ 288 dp after insets (k 0.40; ≥ 512 dp wide).** A 320 dp-tall phone is k ≈ 0.44. Every screen is laid out and tested down to k 0.40 | `design/ux/hud.md` §3.3; `story-screens.md` §5.2 |
 | Safe areas | Pads clear of the notch, rounded corners and system gesture zones | Input Rule 2 (QC r3 O5). *NOT YET BUILT: rounded-corner insets wait for TASK-013* |
 | Forgiving touch | Thumb drift off a held pad doesn't release it; a second finger on the same pad is ignored | Input Rules 6, 9 |
 | No stuck input | Pause, background, focus loss or cancel release every pad | Input Rule 11 |
