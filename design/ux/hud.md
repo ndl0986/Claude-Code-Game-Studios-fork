@@ -24,7 +24,7 @@ score, no timer. The story is the screen; the HUD frames it.
 | Pause, sound | Always | Input Rule 3 |
 | Hold-meter ring | Hold-meter beats, around the special pad | Mission flow UI |
 | Training checklist | Training beats (3 icons) | Mission flow UI |
-| Text pops ("Ối!", "Đỡ được!") | On the event, over the hero | Combat V/A |
+| Text pops ("Ối!", "Đỡ được!", hit pops) | On the event, **beside the fighter's head at head height**, never above it (§3.3) | Combat V/A |
 | Hints (hand, pulse, arrow) | When triggered | Hints GDD |
 | **Never shown:** health, score, timers, enemy health, language chip in play | — | pillars; P-04 |
 
@@ -41,7 +41,7 @@ score, no timer. The story is the screen; the HUD frames it.
 │        └────────────────────────────────────────────────────┘     │
 │                                                                  │
 │                   (play area: hero, enemies,                     │
-│                    telegraph "!", pops below the HUD row)        │
+│                    telegraph "!", pops beside the head)          │
 │                                                                  │
 │                                              [🚩 flag]           │  ← hold-meter / training only
 │  [ ◀ ][ ▶ ]                           [🛡 defend][🗡 attack]      │  ← bottom safe edge
@@ -53,7 +53,7 @@ score, no timer. The story is the screen; the HUD frames it.
 | Zone | Anchor | Contents |
 |---|---|---|
 | Top-left | Safe rect top-left | Pause, sound (≥ 72 pt each) |
-| Top-centre | Safe rect top, centred | Progress dots; the goal line below them (`goal` field, 37 px body); on `uses_banner` beats, the banner motto bar below the goal line (§3.3) |
+| Top stack | **Centred in the free band x 330–1250 (centre x 790)**, right of the pause/sound block | Progress dots; the goal plate below them (`goal` field, box 880, 37 px body); on `uses_banner` beats, the banner motto bar below the goal plate (§3.3) |
 | Bottom-left | Safe rect bottom-left, above the gesture inset | ◀ ▶ (`pad_gap` apart) |
 | Bottom-right | Safe rect bottom-right, above the gesture inset | Defend, attack; flag above attack when present |
 | Play area | The 1280×720 world | Characters, telegraph, pops |
@@ -66,28 +66,48 @@ the goal line, in **every** language. It never grows up from the ground line, wh
 covered the fighters' legs (Android r5 evidence, `production/qa/evidence/TASK-007/android/r5-banner/`
 on the Android branch @ 5d58123).
 
+**Horizontal: the free band.** Pause and sound are ≥ `pad_min` (Input Rule 4), which is 137
+world px on the Android reference phone (k 0.527, Input F1), so the top-left block covers about
+x 18–315, y 18–155. A stack centred on x = 640 would collide with it. **The whole top stack
+(dots, goal plate, banner bar) is centred in the free band x 330–1250, centre x 790**, on every
+beat. The goal plate and the banner bar are both **920 wide** (an 880 text box plus 20 each
+side), which fills the band exactly. The `goal` field's `box_width` drops **1040 → 880** in
+`rules.json` (data follow-up); every TQT goal still fits on 1 line at 880 (widest: EN "Get to
+the king's meeting at Bình Than!", 688 px).
+
 **Vertical stack** (world px from the top of the 1280×720 world; drawn at `k_px`, Input F1):
 
 | Element | Top | Height | Bottom | Rule |
 |---|---|---|---|---|
 | Progress dots row | (as built) | — | ≈ 92 | unchanged |
-| Goal plate | dots bottom + 4 (≈ 96) | 56 (one 37 px line at 1.35 line height, plus padding) | ≈ 152 | **moves up on every beat** so the stack is the same on every beat; today it sits at ≈ 169–225 |
+| Goal plate | dots bottom + 4 (≈ 96) | 56 (one 37 px line at 1.35 line height, plus padding); 920 wide | ≈ 152 | **moves up on every beat** so the stack is the same on every beat; today it sits at ≈ 169–225 |
 | Banner bar | goal bottom + 4 (≈ 156) | **112, fixed** (two 37 px lines at 1.35 = 100, plus 6 padding top and bottom), whether the text is 1 line (VI) or 2 (EN) | ≈ 268 | text centred both ways |
 | Fighters' tops | — | — | ≥ banner bottom + 8 | see below |
 
-- **Width:** 920 (the 880 text box plus 20 each side), centred on the world's x = 640.
+- **Width:** 920 (the 880 text box plus 20 each side), centred on x = 790 (the free band).
 - **Clearance rule:** the banner bar's bottom stays ≥ 8 px above the highest point of every
-  hero and enemy body. With art at spec size (hero 180 world px tall, enemies ≤ 170, feet on
+  body: the hero, every enemy, the training partner and the straw dummies. With art at spec size (hero 180 world px tall, enemies ≤ 170, feet on
   `ground_y` 470; `side-scroll-combat-assets.md`), the highest head is at y ≈ 290 and the bar
   ends at ≈ 268: 22 px clear.
-- **The placeholders must be drawn at spec height.** In the r5 shots the placeholder hero's head
-  reaches y ≈ 225 (about 245 world px tall). At that size no 2-line bar fits between the goal
-  line and the heads, so the AC below fails until the placeholder hero and enemies are drawn at
-  spec height (180, ≤ 170).
-- **Props may pass behind it:** a raised staff, spear tip, pennant or the banner pole in the
-  training-finish pose may cross behind the bar; the bar never covers a face or body.
-- **Z-order:** the bar sits above the play layers and below the HUD buttons, hints and the enemy
-  telegraph "!" bubble, which must always stay visible (Combat V/A).
+- **Placeholder rule: every placeholder is drawn at spec height**, with feet on `ground_y` 470:
+  **hero ≤ 180** world px; **enemies ≤ 170**; **training partner ≤ 180** (a hero-style figure;
+  spec ≈ 160); **straw dummy ≤ 170** (a body, not a prop; spec ≈ 130). Today's placeholders are
+  taller (r5: hero ≈ 245, iOS dummy 206), and AC9 depends on this rule. Scaling is render-only on
+  both apps: the simulation has no y, so no trace or timing changes.
+- **Weapons keep their world length when bodies are scaled** (Combat V/A;
+  `side-scroll-combat-assets.md`): the enemy's weapon tip reaches `enemy_reach − stand_gap` =
+  **140** world px in front of it, and the hero's swing arc reaches `attack_range` = **175**, so
+  a strike that lands looks like it lands. Only bodies shrink to spec height.
+- **Only weapons, the pennant and the banner pole may pass behind the bar** (a raised staff, a
+  spear tip, the training-finish banner pole). Bodies, heads and faces never do.
+- **Z-order** (bottom to top): play layers (background, fighters, props) → **banner bar** →
+  pops → hints, the telegraph "!" bubble and the hurt swirl (ASSET-212) → HUD buttons. The "!"
+  sits above an enemy's head and can reach the bar's band, so it draws over the bar and always
+  stays visible (Combat V/A).
+- **Pops** ("Ối!", "Đỡ được!", hit pops) sit **beside the fighter's head, at head height**, on
+  the side away from the other fighter, never above the head. With bodies at spec height, the
+  highest head is at y ≈ 290, so a pop never reaches the bar's band (≤ 268). Both apps follow
+  this (iOS does it today).
 - **Colour:** vermilion `#D64A2E` with gold text `#FFC531` and an ink-brown outline on the bar,
   as built; one motif at most (Luan's rule 4).
 - **When:** the whole of every `uses_banner` beat, from `beat_play` start. It hides on story
@@ -106,9 +126,9 @@ iOS's home-indicator inset (QC r3 O5: pad bottoms clear of the gesture zone).
 | Special | ≥ 72 pt | ASSET-027 + the meter ring ASSET-028 (ASSET-326 pulse); icon per beat type: **fist** (ASSET-335) on hold-meter, **banner** on training | Hold-meter: hold; training finish: press (Mission flow Rule 7c) |
 | Pause, sound | ≥ 72 pt | ASSET-029–030 | Release-inside (P-01) |
 | Progress dots | ~24 px each | ASSET-032 | Filled when the beat is done |
-| Goal line | `goal` field (box 1040, 37 px) | text layer on a cream plate, top at dots bottom + 4 (§3.3) | Hidden on dialogue beats (no goal) |
-| Banner motto bar | 920 × 112 world px, fixed (§3.3) | vermilion bar + `banner` text layer (37 px, ≤ 2 lines) | `uses_banner` beats only; never overlaps a hero or enemy body |
-| Pops | label size | text layer | Above the hero's head, **below the HUD row** (iOS r2: "Ối!" kept clear of pause and sound) |
+| Goal line | `goal` field (box **880**, 37 px) on a 920-wide cream plate | text layer, top at dots bottom + 4, centred on x 790 (§3.3) | Hidden on dialogue beats (no goal) |
+| Banner motto bar | 920 × 112 world px, fixed, centred on x 790 (§3.3) | vermilion bar + `banner` text layer (37 px, ≤ 2 lines) | `uses_banner` beats only; never overlaps a body |
+| Pops | label size | text layer | **Beside the fighter's head at head height**, away from the other fighter; never above the head, never in the top stack (§3.3; iOS r2: "Ối!" kept clear of pause and sound) |
 
 ## 5. HUD States by Gameplay Context
 
@@ -184,4 +204,7 @@ insets; iOS home indicator, notch or Dynamic Island. Rounded corners wait for TA
 7. **GIVEN** the training beat, **WHEN** each step is current, **THEN** only that step's pads show (dummies: ◀ ▶ + attack; blocks: + defend; finish: + special with the banner icon).
 8. **GIVEN** the hold-meter beat, **WHEN** captured, **THEN** the special pad shows the fist icon, not the banner.
 9. **GIVEN** the training and reach-the-flag beats at k = 1 (the 1280×720 world drawn 1:1), in VI and in EN, **WHEN** each is captured with the hero and every enemy or dummy on screen (including an encounter at its closest), **THEN** no banner-bar pixel overlaps any hero or enemy body pixel (props such as a staff tip may pass behind), the bar is 112 px tall in both languages, and the goal plate and banner never overlap each other or the dots.
-10. **GIVEN** any non-banner beat, **WHEN** captured, **THEN** the goal plate is at the same position as on banner beats (dots bottom + 4).
+10. **GIVEN** any non-banner beat, **WHEN** captured, **THEN** the goal plate is at the same position as on banner beats (dots bottom + 4, centred on x 790).
+11. **GIVEN** the Android reference phone (k 0.527 dp per world px) and the iOS reference phone (k 0.517), with pause and sound at `pad_min`, **WHEN** a training and a reach-the-flag beat are captured in VI and EN, **THEN** no pixel of the dots, the goal plate or the banner bar overlaps the pause or sound button.
+12. **GIVEN** a push, a block and a hit during an encounter at its closest, **WHEN** captured, **THEN** each pop sits beside the fighter's head at head height and no pop pixel overlaps the banner bar.
+13. **GIVEN** a hit and a strike that land at spec height, **WHEN** frame-stepped, **THEN** the hero's swing arc reaches 175 world px in front of him and the enemy's weapon tip 140, so contact is visible.
