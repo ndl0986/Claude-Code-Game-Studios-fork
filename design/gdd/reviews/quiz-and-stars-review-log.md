@@ -25,3 +25,6 @@ Reviewed-Content-Hash: content/fixtures/quiz-scoring.json be04034063760252d0ea8b
 - Rule 5 is the slice rule too (P-05: "Tiếp" after why, no auto-advance, pause on the quiz screen). Card taps are ignored during the 0.5 s shake.
 - Minor: for two fingers, the first release in a frame wins.
 Awaiting game-dev-android confirmation.
+
+## Peer re-review — 2026-11-14 — game-dev-android: APPROVE @ f23c70c
+All findings were checked as fixed; the quiz-shuffle fixture is done in data/TASK-005d @ e5c1f07. Status set to Approved.

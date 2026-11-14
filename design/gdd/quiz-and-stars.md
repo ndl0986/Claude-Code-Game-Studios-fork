@@ -1,6 +1,6 @@
 # Quiz & Stars
 
-> **Status**: In Review
+> **Status**: Approved (peer review: game-dev-android, 2026-11-14)
 > **Author**: game-art-content (Luan decides)
 > **Last Updated**: 2026-11-14
 > **Last Verified**: 2026-11-14
@@ -292,6 +292,6 @@ or a playtest.
 | # | Question | Owner | By |
 |---|---|---|---|
 | D-11 | Done in data/TASK-005d @ f94f463: the `quiz-scoring.json` repeat-tap case now ignores the tap; `quiz_count` 5; validation R16 fails if t2 < t3 | game-dev-android (game-dev-ios reviews) | Done; merge with schema 1.1 |
-| — | `content/fixtures/quiz-shuffle.json` (new fixture for Rule 3 and AC8) | game-dev-android | Before the slice quiz story closes |
+| ~~—~~ | ~~`content/fixtures/quiz-shuffle.json`~~ Done in data/TASK-005d @ e5c1f07 | game-dev-android | Closed |
 | — | Should results show "best" stars beside this run's? (Rule 9 and the edge case assume yes) | Luan | With the `/ux-design` results screen |
 | — | The prototype auto-advanced after 0.9 s; Rule 5 waits for "Tiếp" so the `why` line can be heard. Check in the playtest that children don't find it slow | game-art-content, after the slice playtest | Playtest |

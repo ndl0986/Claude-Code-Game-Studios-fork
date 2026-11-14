@@ -43,7 +43,7 @@ flags, `stall`/`idle`), plan reviews 1–2, and QC O2 (hints count from the capt
 
 | Teach | Shows when | Where | Ends when |
 |---|---|---|---|
-| move | The first beat with `move` starts and the hero hasn't moved right yet | Hand on ▶ + ▶ pulses | The hero moves right once |
+| move | Slice: during `walk_to[0]` (walking to beat 1) while the hero hasn't moved right yet. Later: the first beat with `move` | Hand on ▶ + ▶ pulses | The hero moves right once |
 | attack | The first enemy or dummy is on screen and no hit has landed yet | Hand on attack | The first hit lands |
 | defend | An enemy or practice partner is in `windup` and the child hasn't blocked yet in this run | Hand on defend, only while a windup is showing | The first block |
 | special (tap) | A beat with `special` starts (training's finish step, or reach-the-flag) and special hasn't been tapped yet | Hand on special | The first tap |
@@ -56,14 +56,16 @@ flags, `stall`/`idle`), plan reviews 1–2, and QC O2 (hints count from the capt
 
 | Situation | "Progress" means | Hint |
 |---|---|---|
-| walk, reach-the-flag (no encounter), and walking between beats | The hero moved right | ▶ pulses |
+| walk, reach-the-flag (no encounter), and walking between beats | Any movement, left or right (prototype: `if (mv) idle = 0`) | ▶ pulses |
 | fight, encounter | A hit landed | An arrow over the nearest non-fleeing enemy + attack pulses |
 | training | The current step advanced (dummy hit, block, special tap) | Pulse on the pad for the current step |
 | hold-meter | The meter rose | Hand on special again |
-| reach-the-flag (path clear) | The hero moved right | An arrow over the flag, if it is on screen; otherwise ▶ pulses |
+| reach-the-flag (path clear) | Any movement, left or right | An arrow over the flag, if it is on screen; otherwise ▶ pulses |
 
 5. **Timers reset** on progress, when a caption or beat card closes (QC O2: hints count from the
-   caption closing, not from behind it), and when the game resumes from pause.
+   caption closing, not from behind it), and when the game resumes from pause. **The reset on
+   resume is new versus the prototype**, which froze the timers across a pause. Both apps add it on
+   purpose: a child coming back from pause gets a fresh `hint_delay`.
 6. **Hints never block.** A hint never pauses play, covers a pad's touch area, or stops the child
    doing something else. The hand is drawn above the pad and doesn't take touches.
 7. **Per run, not saved.** Teach flags are kept for one mission run, so a replay shows the hand
@@ -105,7 +107,7 @@ The F1 (stuck hint trigger) formula is defined as:
 
 **Output Range:** boolean. At 2 s, hints nag a child who is just watching an enemy walk in. At
 15 s, a stuck 6-year-old gives up first. 5 s is the prototype value, played through QC r3.
-**Example:** in a fight with no hit for 5.02 s, the arrow and attack pulse show. A hit at 6 s
+**Example:** in a fight with no hit, at dt 1/60 the hint first shows at step 301 (5.0167 s), the arrow and attack pulse show. A hit at 6 s
 hides them, and the timer restarts.
 
 ## Edge Cases
@@ -171,14 +173,16 @@ dependent.
 Criteria 1–7 are logic and need unit tests (hint state from events). Criteria 8–9 need a
 screenshot per platform.
 
-1. **GIVEN** the first beat with `move`, **WHEN** play starts, **THEN** the hand shows on ▶
-   until the hero first moves right, and never again in that run.
+1. **GIVEN** the slice mission at `walk_to[0]` (later: the first beat with `move`), **WHEN** play
+   starts, **THEN** the hand shows on ▶ until the hero first moves right, and never again in
+   that run.
 2. **GIVEN** a fight with no hit yet, **WHEN** the first enemy is on screen, **THEN** the hand is
    on attack. **WHEN** the first hit lands, **THEN** it hides for the rest of the run.
 3. **GIVEN** the first hit has landed and no block yet, **WHEN** an enemy is in `windup`,
    **THEN** the hand is on defend only during that windup, until the first block.
-4. **GIVEN** a fight, **WHEN** no hit lands for 5.0 s, **THEN** no stuck hint shows. **WHEN**
-   none lands for 5.02 s, **THEN** an arrow is over the nearest non-fleeing enemy and attack
+4. **GIVEN** a fight at dt = 1/60 with `hint_delay` 5, **WHEN** no hit lands for 300 steps
+   (5.0 s, compared strictly: `stall > hint_delay`), **THEN** no stuck hint shows. **WHEN**
+   none lands for 301 steps (5.0167 s: within one step after 5.0 s), **THEN** an arrow is over the nearest non-fleeing enemy and attack
    pulses (F1 boundary).
 5. **GIVEN** a stuck hint showing, **WHEN** a hit lands, a caption closes, or play resumes from
    pause, **THEN** it hides and the timer restarts from 0.
