@@ -680,6 +680,10 @@ public struct PlayState: Sendable {
             let k = queue.isEmpty ? FightParams.Kind.spear : queue.removeFirst().kind
             enemies.append(Enemy(id: 99, kind: k, x: hero.x + tuning["enemy_reach"], face: -1, state: .windup, t: 0, hits: 0, kb: 0, moving: false))
             spawnT = 99
+        } else if stage == "finish" && beats[beat].type == "training" {
+            // the finish step (special shows, W12's full pad set): dummies hit and blocks done
+            for i in dummies.indices { dummies[i].hit = true }
+            while trainingStage != .special && trainingStage != .done { if trainingStage == .blocks { blocksDone = beats[beat].params.blocks ?? 0 }; advanceTraining() }
         } else if stage == "blocks" && beats[beat].type == "training" {
             for i in dummies.indices { dummies[i].hit = true }
             tut.windupSeen = false; tut.blocked = false

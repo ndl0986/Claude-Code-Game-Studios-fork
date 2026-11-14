@@ -79,6 +79,16 @@ final class TrainingPadsTests: XCTestCase {
         XCTAssertEqual(p.visiblePads, [.left, .right, .attack, .defend, .special], "finish: + special")
     }
 
+    /// The `-stage finish` debug jump (iOS QC r5): straight to the finish step with W12's full pad set.
+    func test_finish_jump_shows_the_finish_step_and_its_pads() throws {
+        let c = try ContentSet.load(dataRoot: Repo.data), h = realHero(c)
+        var p = PlayState(tuning: c.tuning, beats: h.mission.beats, seed: 1)
+        p.debugJump(beat: beatIndex(h, "training"), stage: "finish")
+        XCTAssertEqual(p.trainingStage, .special)
+        XCTAssertEqual(p.visiblePads, [.left, .right, .attack, .defend, .special])
+        XCTAssertNil(p.partner, "no partner in the finish step")
+    }
+
     /// A hidden pad does nothing: defend held during the dummies step never raises the guard.
     func test_a_hidden_pad_is_filtered_out() throws {
         let c = try ContentSet.load(dataRoot: Repo.data), h = realHero(c)

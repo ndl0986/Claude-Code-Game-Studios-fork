@@ -4,8 +4,8 @@
     "id": "sample",
     "name": {
       "id": "sample.hero.name",
-      "vi": "⟨placeholder⟩ Anh hùng",
-      "en": "Hero",
+      "vi": "Anh hùng mới",
+      "en": "New hero",
       "claims": [
         "C01"
       ]

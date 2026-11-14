@@ -51,6 +51,9 @@ final class GameScene: SKScene {
     override func didMove(to view: SKView) {
         view.isMultipleTouchEnabled = true
         relayout()
+        #if DEBUG
+        debugAttach(view)
+        #endif
     }
 
     private func relayout() {
@@ -87,9 +90,16 @@ final class GameScene: SKScene {
         let dt = last == 0 ? 0 : min(currentTime - last, 0.25)
         last = currentTime; acc += dt; clock += dt
         while acc >= step {
-            game.step(step, pads.take())
+            let input = pads.take()
+            #if DEBUG
+            debugHeld = input.held
+            #endif
+            game.step(step, input)
             acc -= step
         }
+        #if DEBUG
+        debugPublish()
+        #endif
         playSounds()
         let key = uiKeyNow()
         if key != uiKey { uiKey = key; buildUI() }
@@ -170,7 +180,14 @@ final class GameScene: SKScene {
         audio.volume = Float(game.tuning["volume"])
         switch id {
         case "start": game.start()
-        case "next": game.next(at: press)
+        case "next":
+            #if DEBUG
+            let before = debugPlace()
+            game.next(at: press)
+            debugPresses.append((press, debugPlace() != before)); debugPresses = Array(debugPresses.suffix(8))
+            #else
+            game.next(at: press)
+            #endif
         case "lang": game.toggleLang()
         case "mute": game.toggleMute(); audio.muted = game.muted
         case "pause": releaseAllInput(); game.pause()
@@ -262,7 +279,7 @@ final class GameScene: SKScene {
             // Ối! / Đỡ được! are the hero's pops: beside the head on the side away from the striker (the hero faces
             // it), at head height, so they never sit on the head (iOS QC r4 N1) and stay under the goal plate and
             // the HUD row. Render only: the core's pop position (shared with Android, not in the trace) is unchanged.
-            let l = Font.label(game.ui(q.key), 40, color(q.color))
+            let l = Font.outlined(game.ui(q.key), 40, color(q.color)) // ink + cream outline (QC r5 N1)
             let sx = max(p.cam + 120, min(p.cam + 1280 - 120, q.x - p.hero.face * 150))
             l.position = D.p(sx, ground - 135); l.alpha = min(1, q.life * 2); fx.addChild(l)
         }
@@ -461,8 +478,12 @@ final class GameScene: SKScene {
             let h = HeroNode(scale: 0.9); h.update(face: 1, walk: false, defend: false, attack: nil, hurt: false, t: 0); h.position = CGPoint(x: ending ? 400 : 320, y: -(ph - 20)); layer(h, 3)
         }
         crop.addChild(inner)
-        add(crop, 240, 110)
-        add(D.rr(0, 0, 800, ph, 30, nil, C.gold, 8), 240, 110)
+        // QC r5 N2: the picture keeps 800:320 but starts below the pause/sound corner block (+ 8), so the
+        // frame never meets it; it ends at y 430 above the text as before (iOS-R3-03)
+        let top = max(110, layout.pause.cy + layout.pause.r + 8), f = (430 - top) / ph
+        let pic = SKNode(); pic.addChild(crop); pic.addChild(D.rr(0, 0, 800, ph, 30, nil, C.gold, 8 / f))
+        pic.setScale(f)
+        add(pic, 640 - 400 * f, top)
     }
 
     private func buildStory(_ lines: [Text], ending: Bool) {
@@ -738,4 +759,56 @@ final class GameScene: SKScene {
             }
         }
     }
+
+    // MARK: debug state for the UI tests (TASK-023 G; compiled out of Release)
+    #if DEBUG
+    /// A hidden accessibility element (`debugState`) whose value is a small JSON of the game state, for the
+    /// XCUITest touch cases: QC's touch tests read it instead of guessing from pixels. Debug builds only.
+    private var debugLabel: UILabel?
+    private var debugHeld: Set<PadAction> = []
+    /// "Tiếp" presses: the activating touch's UITouch.timestamp and whether the press advanced (B1).
+    private var debugPresses: [(TimeInterval, Bool)] = []
+    private var debugFrame = 0
+
+    private func debugAttach(_ v: SKView) {
+        let l = UILabel(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
+        l.alpha = 0.011; l.isAccessibilityElement = true; l.accessibilityIdentifier = "debugState"; l.accessibilityTraits = .staticText
+        v.addSubview(l); debugLabel = l
+    }
+
+    private func debugPlace() -> String {
+        let p = game.play
+        return "\(game.screen)|\(game.storyLine)|\(p.phase)|\(p.beat)|\(p.cardLine)|\(p.captionLine)|\(p.lineIndex)"
+    }
+
+    /// Scene point (y down) → normalized view coordinates (0…1), the aspect-fit mapping the scene uses.
+    private func debugNorm(_ x: Double, _ y: Double) -> [Double] {
+        guard let v = view else { return [0, 0] }
+        let w = v.bounds.width, h = v.bounds.height, s = min(w / 1280, h / 720)
+        return [((w - 1280 * s) / 2 + x * s) / w, ((h - 720 * s) / 2 + y * s) / h]
+    }
+
+    private func debugPublish() {
+        debugFrame += 1
+        guard debugFrame % 6 == 0, let l = debugLabel else { return }
+        let p = game.play
+        var pads: [String: [Double]] = [:]
+        for (n, c) in [("left", layout.left), ("right", layout.right), ("defend", layout.defend), ("attack", layout.attack), ("special", layout.special)] {
+            pads[n] = debugNorm(c.cx, c.cy)
+        }
+        var btns: [String: [Double]] = [:]
+        for b in buttons { btns[b.id] = debugNorm(b.rect.midX, b.rect.midY) }
+        let state: [String: Any] = [
+            "screen": "\(game.screen)", "story_line": game.storyLine, "phase": "\(p.phase)", "beat": p.beat,
+            "card_line": p.cardLine, "caption_line": p.captionLine, "line": p.lineIndex,
+            "training_step": "\(p.trainingStage)", "held": debugHeld.map(\.rawValue).sorted(),
+            "visible": p.visiblePads.map(\.rawValue).sorted(), "hero_x": p.hero.x, "cam": p.cam,
+            "train_cap": p.trainCap ?? NSNull(), "x_start": p.xStart,
+            "presses": debugPresses.map { ["t": $0.0, "advanced": $0.1] },
+            "pads": pads, "buttons": btns,
+        ]
+        if let d = try? JSONSerialization.data(withJSONObject: state, options: [.sortedKeys]) { l.accessibilityValue = String(data: d, encoding: .utf8) }
+    }
+    #endif
+
 }

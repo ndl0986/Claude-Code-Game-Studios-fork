@@ -89,11 +89,27 @@ enum Font {
     /// (Language & text GDD F1). Buttons, titles, goal and choices stay 800.
     static func body(_ size: Double) -> UIFont { UIFont(name: "Nunito-SemiBold", size: size) ?? .systemFont(ofSize: size, weight: .semibold) }
 
+    /// Text with a double outline, ink outside and cream inside, so it reads on every sky band from the
+    /// pale village to the navy camp (≥ 3:1 either way; iOS QC r5 N1): two stroked copies under the fill.
+    static func outlined(_ s: String, _ size: Double, _ c: SKColor) -> SKNode {
+        let n = SKNode()
+        for (stroke, w) in [(C.ink, 34.0), (C.cream, 16.0)] {
+            let l = label(s, size, .clear)
+            let a = NSMutableAttributedString(attributedString: l.attributedText!)
+            a.addAttributes([.strokeColor: stroke, .strokeWidth: w], range: NSRange(location: 0, length: a.length))
+            l.attributedText = a; n.addChild(l)
+        }
+        n.addChild(label(s, size, c))
+        return n
+    }
+
     static func label(_ s: String, _ size: Double, _ c: SKColor, width: Double? = nil, align: SKLabelHorizontalAlignmentMode = .center, weight: Int = 800) -> SKLabelNode {
         let l = SKLabelNode(fontNamed: name)
         let style = NSMutableParagraphStyle()
         style.alignment = align == .left ? .left : (align == .right ? .right : .center)
-        style.lineHeightMultiple = 1.35 // Language & text GDD: line height >= 1.35x
+        // Language & text GDD F1: the line height is 1.35 × the font size. (lineHeightMultiple multiplied the
+        // font's own ≈ 1.36 em line, giving 68 px lines at 37 and the EN banner overflowing its bar, iOS-R5-01.)
+        style.minimumLineHeight = 1.35 * size; style.maximumLineHeight = 1.35 * size
         let font = weight == 600 ? body(size) : heavy(size)
         l.attributedText = NSAttributedString(string: s, attributes: [.font: font, .foregroundColor: c, .paragraphStyle: style])
         l.numberOfLines = 0

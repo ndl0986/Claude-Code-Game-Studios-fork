@@ -12,6 +12,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		3CC262854D246A706728FA98 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A6F5FA37AD230077E57AFE7F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D15B9AC453575360E6725EF3;
+			remoteInfo = DaiDatAnhHung;
+		};
 		BA510923769B82EDC76A7AA3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A6F5FA37AD230077E57AFE7F /* Project object */;
@@ -22,17 +29,26 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1652ADCBA83E4FE58C0005B3 /* DaiDatAnhHungUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaiDatAnhHungUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		535EBCE13BF0BA11AC460A2A /* DaiDatAnhHung.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DaiDatAnhHung.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		65870F37DD6335D281D7F398 /* DaiDatAnhHungTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaiDatAnhHungTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B223FD7412F0D8B499B9B1C /* data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = data; path = ../content/data; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		AC81D6B6D2DEC85AE4171653 /* DaiDatAnhHungUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; path = DaiDatAnhHungUITests; sourceTree = "<group>"; };
 		8451645A97E4C6D90D327BFE /* DaiDatAnhHung */ = {isa = PBXFileSystemSynchronizedRootGroup; path = DaiDatAnhHung; sourceTree = "<group>"; };
 		5C06B189621E064F8EA62D86 /* DaiDatAnhHungTests */ = {isa = PBXFileSystemSynchronizedRootGroup; path = DaiDatAnhHungTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		BDB36B7CFBE0EB6C3E48D9F9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6EC1D7B481B39851B9845571 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -57,6 +73,7 @@
 				8451645A97E4C6D90D327BFE /* DaiDatAnhHung */,
 				5C06B189621E064F8EA62D86 /* DaiDatAnhHungTests */,
 				1B223FD7412F0D8B499B9B1C /* data */,
+				AC81D6B6D2DEC85AE4171653 /* DaiDatAnhHungUITests */,
 				EB0CF27F910E4E396E0CDB8D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -66,6 +83,7 @@
 			children = (
 				535EBCE13BF0BA11AC460A2A /* DaiDatAnhHung.app */,
 				65870F37DD6335D281D7F398 /* DaiDatAnhHungTests.xctest */,
+				1652ADCBA83E4FE58C0005B3 /* DaiDatAnhHungUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -119,6 +137,27 @@
 			productReference = 65870F37DD6335D281D7F398 /* DaiDatAnhHungTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		2AB9C5B2CB402BA75463B4AE /* DaiDatAnhHungUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ABAA58ECA5FABC0102934585;
+			buildPhases = (
+				98E415D95070D494C4ECB05A /* Sources */,
+				BDB36B7CFBE0EB6C3E48D9F9 /* Frameworks */,
+				C6FDA034EE92E1822EAC2817 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2AB9ADE972E1A154A2E2730B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AC81D6B6D2DEC85AE4171653 /* DaiDatAnhHungUITests */,
+			);
+			name = DaiDatAnhHungUITests;
+			productName = DaiDatAnhHungUITests;
+			productReference = 1652ADCBA83E4FE58C0005B3 /* DaiDatAnhHungUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -130,6 +169,9 @@
 				LastUpgradeCheck = 2710;
 				TargetAttributes = {
 					7E69340D638E710740E386C7 = {
+						TestTargetID = D15B9AC453575360E6725EF3;
+					};
+					2AB9C5B2CB402BA75463B4AE = {
 						TestTargetID = D15B9AC453575360E6725EF3;
 					};
 				};
@@ -154,11 +196,19 @@
 			targets = (
 				D15B9AC453575360E6725EF3 /* DaiDatAnhHung */,
 				7E69340D638E710740E386C7 /* DaiDatAnhHungTests */,
+				2AB9C5B2CB402BA75463B4AE /* DaiDatAnhHungUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		C6FDA034EE92E1822EAC2817 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C011F5B81D00A215FE6EEA84 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -218,6 +268,13 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		98E415D95070D494C4ECB05A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		79FCEBECF126806217B3AA21 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -235,6 +292,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2AB9ADE972E1A154A2E2730B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D15B9AC453575360E6725EF3 /* DaiDatAnhHung */;
+			targetProxy = 3CC262854D246A706728FA98 /* PBXContainerItemProxy */;
+		};
 		013EAE19425FC8FC3F23A73F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D15B9AC453575360E6725EF3 /* DaiDatAnhHung */;
@@ -243,6 +305,32 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		E2DFCF7333B80A4A24862AF3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = DaiDatAnhHung;
+			};
+			name = Debug;
+		};
+		C6E4A40D1AABC9622BF68473 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = DaiDatAnhHung;
+			};
+			name = Release;
+		};
 		43D414A56741CDB8330000C8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -356,6 +444,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		ABAA58ECA5FABC0102934585 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E2DFCF7333B80A4A24862AF3 /* Debug */,
+				C6E4A40D1AABC9622BF68473 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		27F9A7F3E1E512E3D54BF9CF = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
