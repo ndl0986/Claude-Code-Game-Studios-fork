@@ -57,7 +57,7 @@ class GameActivity : Activity() {
         view = GameView(this, game, app.audio, Renderer(font(800), font(600), BuildConfig.DEBUG, pictures, sky))
         setContentView(view)
         if (BuildConfig.DEBUG && game != null) intent?.getStringExtra("startScreen")?.let { target ->
-            game.debugJump(target, intent.getIntExtra("q", 1), intent.getIntExtra("beat", 1), intent.getStringExtra("stage"), intent.getIntExtra("stars", 2))
+            game.debugJump(target, intent.getIntExtra("q", 1), intent.getIntExtra("beat", 1), intent.getStringExtra("stage"), intent.getIntExtra("stars", 2), intent.getIntExtra("line", 1))
             view.frozen = intent.getBooleanExtra("freeze", false)
             intent.getStringExtra("lang")?.let { if (it != game.lang.code) game.forceLang(it) }
         }

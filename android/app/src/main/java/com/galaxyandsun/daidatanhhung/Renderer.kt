@@ -270,7 +270,9 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         val dlg = r.dialogue ?: return
         val line = dlg.lines[r.lineIndex.coerceIn(0, dlg.lines.size - 1)]
         d.rr(40f, 230f, 1200f, 330f, 36f, C.PANEL, C.GOLD, 6f)
-        if (r.lineIndex == 0) { d.textBox(r.currentBeat.title.get(g.lang), W / 2, 200f, 880f, 44f, C.GOLD, 1); badge(g, r.currentBeat.title, W / 2 + 380, 170f) }
+        if (r.lineIndex == 0) { // the title as the heading over line 1, on its own backing (readable on any sky)
+            d.rr(W / 2 - 460, 162f, 920f, 64f, 24f, C.PANEL, C.GOLD, 4f)
+            d.textBox(r.currentBeat.title.get(g.lang), W / 2, 194f, 880f, 44f, C.GOLD, 1); badge(g, r.currentBeat.title, W / 2 + 440, 162f) }
         val narrator = line.speaker == "narrator"
         val heroSide = line.speaker == "hero"
         if (!narrator) {
@@ -299,7 +301,9 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
     /** A dialogue portrait from assets.json; false when the id has no picture yet (debug placeholder). */
     private fun portrait(id: String, x: Float, y: Float, r: Float): Boolean {
         val b = pictures(id) ?: return false
-        dst.set(x - r, y - r, x + r, y + r); bmpPaint.alpha = 255; d.c.drawBitmap(b, null, dst, bmpPaint); return true
+        d.c.save(); d.path.reset(); d.path.addCircle(x, y, r + 4, android.graphics.Path.Direction.CW); d.c.clipPath(d.path) // round frame
+        dst.set(x - r - 4, y - r - 4, x + r + 4, y + r + 4); bmpPaint.alpha = 255; d.c.drawBitmap(b, null, dst, bmpPaint)
+        d.c.restore(); return true
     }
 
     /** A caption or beat card: header, one sentence, Next and Skip (D-07). */

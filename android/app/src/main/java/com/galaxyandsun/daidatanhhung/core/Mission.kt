@@ -636,6 +636,15 @@ class MissionRun(
         else partner?.let { it.state = EnemyState.WINDUP; it.t = 0.0; tut.windupSeen = true }
     }
 
+    /** Debug: show dialogue line [line1] (1-based); asks before it count as done; [hint] puts the ask hint up. */
+    fun debugDialogue(line1: Int, hint: Boolean) {
+        if (phase != Phase.DIALOGUE) return
+        val d = dialogue ?: return
+        lineIndex = (line1 - 1).coerceIn(0, d.lines.size - 1)
+        asksDone = (1..lineIndex).count { d.buttonOn(it) == "ask" }
+        stall = if (hint) tuning["hint_delay"] + 0.1 else 0.0
+    }
+
     /** Debug: walk into reach-the-flag's first encounter. */
     fun debugEncounter() {
         if (beatType != BeatType.REACH) return

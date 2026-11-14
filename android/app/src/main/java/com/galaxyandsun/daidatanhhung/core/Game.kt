@@ -234,12 +234,12 @@ class Game(
     }
 
     /** Debug builds: jump to a screen for screenshots (adb `--es startScreen`). */
-    fun debugJump(target: String, question: Int = 1, beat: Int = 1, stage: String? = null, starCount: Int = 2) {
+    fun debugJump(target: String, question: Int = 1, beat: Int = 1, stage: String? = null, starCount: Int = 2, line: Int = 1) {
         reset()
         when (target) {
             "intro" -> go(Screen.INTRO)
             "play" -> { go(Screen.PLAY); if (beat > 1 || stage != null) run.debugStartBeat(beat - 1, stage == "telegraph", stage == "caption", stage == "card")
-                when (stage) { "blocks", "special" -> run.debugTraining(stage); "meter" -> run.debugTraining("meter", 0.6); "encounter" -> run.debugEncounter(); "leader" -> run.debugLeaderWindup() } }
+                when (stage) { "blocks", "special" -> run.debugTraining(stage); "meter" -> run.debugTraining("meter", 0.6); "encounter" -> run.debugEncounter(); "leader" -> run.debugLeaderWindup(); "line", "askhint" -> run.debugDialogue(line, stage == "askhint"); "skip" -> { run.debugDialogue(line, false); skip() } } }
             "skipwarn" -> { go(Screen.INTRO); skip() }
             "caption" -> { go(Screen.PLAY); run.debugStartBeat(beat - 1, telegraph = false, caption = true) }
             "pause" -> { go(Screen.PLAY); pause() }
