@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "rule": "a wrong pick shows the retry state and keeps the question; the right pick shows `why`, then the next question; the quiz ends after the last right pick",
+  "rule": "a wrong pick greys that card and keeps the question; a repeat tap on a greyed card is ignored and does not count (D-11a); the right pick shows `why`, then the next question; the quiz ends after the last right pick",
   "cases": [
     {
       "name": "right first",
@@ -25,7 +25,7 @@
       ]
     },
     {
-      "name": "same wrong twice counts twice",
+      "name": "repeat tap on a greyed card is ignored",
       "correct_index": 1,
       "picks": [
         0,
@@ -34,7 +34,23 @@
       ],
       "expected": [
         "wrong",
+        "ignored",
+        "right"
+      ]
+    },
+    {
+      "name": "both wrong cards then right",
+      "correct_index": 0,
+      "picks": [
+        1,
+        2,
+        1,
+        0
+      ],
+      "expected": [
         "wrong",
+        "wrong",
+        "ignored",
         "right"
       ]
     }

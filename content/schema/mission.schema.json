@@ -198,7 +198,7 @@
           "then": {
             "properties": {
               "params": {
-                "$ref": "#/$defs/DistanceParams"
+                "$ref": "#/$defs/ReachParams"
               }
             }
           }
@@ -316,6 +316,67 @@
           "type": "integer",
           "minimum": 1,
           "maximum": 10
+        },
+        "blocks": {
+          "description": "Defend parts after the dummies (0 = none). Schema 1.1.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5,
+          "default": 0
+        },
+        "finish_special": {
+          "description": "Ends with one Special. Order: dummies -> blocks -> special. Schema 1.1.",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "Encounter": {
+      "description": "A fight met on the way, at a point along the level (schema 1.1). at_screen < length_screens is rule R13b.",
+      "type": "object",
+      "required": [
+        "at_screen",
+        "enemies",
+        "max_active",
+        "from_left"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "at_screen": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "enemies": {
+          "$ref": "#/$defs/FightParams/properties/enemies"
+        },
+        "max_active": {
+          "$ref": "#/$defs/FightParams/properties/max_active"
+        },
+        "from_left": {
+          "$ref": "#/$defs/FightParams/properties/from_left"
+        }
+      }
+    },
+    "ReachParams": {
+      "type": "object",
+      "required": [
+        "length_screens"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "length_screens": {
+          "description": "Level length in screen widths.",
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 10
+        },
+        "encounters": {
+          "description": "Sorted by at_screen, strictly ascending (rule R13b). Schema 1.1.",
+          "type": "array",
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Encounter"
+          }
         }
       }
     }

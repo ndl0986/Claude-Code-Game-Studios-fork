@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "world": {
     "width": 1280,
     "height": 720
@@ -181,7 +181,7 @@
       "unit": "s"
     },
     "quiz_count": {
-      "value": 4,
+      "value": 5,
       "min": 3,
       "max": 5,
       "unit": "count"
@@ -305,6 +305,30 @@
       "min": 70,
       "max": 800,
       "unit": "px"
+    },
+    "special_push": {
+      "value": 170,
+      "min": 40,
+      "max": 400,
+      "unit": "px"
+    },
+    "special_cooldown": {
+      "value": 6,
+      "min": 1,
+      "max": 20,
+      "unit": "s"
+    },
+    "advance_debounce": {
+      "value": 0.25,
+      "min": 0,
+      "max": 1,
+      "unit": "s"
+    },
+    "bump_stop": {
+      "value": 0.5,
+      "min": 0,
+      "max": 2,
+      "unit": "s"
     }
   }
 }

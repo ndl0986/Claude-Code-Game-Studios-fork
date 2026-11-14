@@ -12,7 +12,7 @@
       },
       "text": {
         "id": "x.t.1",
-        "vi": "C\u1eadu b\u00f3p n\u00e1t qu\u1ea3 cam.",
+        "vi": "Cậu bóp nát quả cam.",
         "en": "He crushed the orange.",
         "claims": [
           "C02"
@@ -30,7 +30,7 @@
       },
       "text": {
         "id": "x.t.1",
-        "vi": "Truy\u1ec7n k\u1ec3 r\u1eb1ng c\u1eadu b\u00f3p n\u00e1t qu\u1ea3 cam.",
+        "vi": "Truyện kể rằng cậu bóp nát quả cam.",
         "en": "The story says he crushed the orange.",
         "claims": [
           "C02"
@@ -76,7 +76,7 @@
       "rule": "R7",
       "text": {
         "id": "x.t.2",
-        "vi": "Tra\u0302\u0300n Quo\u0302\u0301c Toa\u0309n",
+        "vi": "Trần Quốc Toản",
         "en": "Tran Quoc Toan",
         "claims": [
           "C01"
@@ -122,6 +122,231 @@
       "app_supports": "1.3",
       "file_version": "1.4",
       "expected": "build_passes"
+    },
+    {
+      "name": "special on a fight beat",
+      "rule": "R13",
+      "beat": {
+        "type": "fight",
+        "buttons": [
+          "move",
+          "attack",
+          "special"
+        ],
+        "params": {
+          "enemies": [
+            "spear"
+          ],
+          "max_active": 1,
+          "from_left": []
+        }
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "fight without attack",
+      "rule": "R13",
+      "beat": {
+        "type": "fight",
+        "buttons": [
+          "move"
+        ],
+        "params": {
+          "enemies": [
+            "spear"
+          ],
+          "max_active": 1,
+          "from_left": []
+        }
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "fight without defend is fine",
+      "rule": "R13",
+      "beat": {
+        "type": "fight",
+        "buttons": [
+          "move",
+          "attack"
+        ],
+        "params": {
+          "enemies": [
+            "spear"
+          ],
+          "max_active": 1,
+          "from_left": []
+        }
+      },
+      "expected": "valid"
+    },
+    {
+      "name": "training with blocks needs defend",
+      "rule": "R13",
+      "beat": {
+        "type": "training",
+        "buttons": [
+          "move",
+          "attack"
+        ],
+        "params": {
+          "dummies": 3,
+          "blocks": 2
+        }
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "reach-the-flag with encounters needs attack",
+      "rule": "R13",
+      "beat": {
+        "type": "reach-the-flag",
+        "buttons": [
+          "move"
+        ],
+        "params": {
+          "length_screens": 3,
+          "encounters": [
+            {
+              "at_screen": 1,
+              "enemies": [
+                "spear"
+              ],
+              "max_active": 1,
+              "from_left": []
+            }
+          ]
+        }
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "special on reach-the-flag is allowed",
+      "rule": "R13",
+      "beat": {
+        "type": "reach-the-flag",
+        "buttons": [
+          "move",
+          "special"
+        ],
+        "params": {
+          "length_screens": 3
+        }
+      },
+      "expected": "valid"
+    },
+    {
+      "name": "encounters out of order",
+      "rule": "R13b",
+      "beat": {
+        "type": "reach-the-flag",
+        "buttons": [
+          "move",
+          "attack"
+        ],
+        "params": {
+          "length_screens": 4,
+          "encounters": [
+            {
+              "at_screen": 2,
+              "enemies": [
+                "spear"
+              ],
+              "max_active": 1,
+              "from_left": []
+            },
+            {
+              "at_screen": 1,
+              "enemies": [
+                "spear"
+              ],
+              "max_active": 1,
+              "from_left": []
+            }
+          ]
+        }
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "encounter at the flag",
+      "rule": "R13b",
+      "beat": {
+        "type": "reach-the-flag",
+        "buttons": [
+          "move",
+          "attack"
+        ],
+        "params": {
+          "length_screens": 3,
+          "encounters": [
+            {
+              "at_screen": 3,
+              "enemies": [
+                "spear"
+              ],
+              "max_active": 1,
+              "from_left": []
+            }
+          ]
+        }
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "attack can't reach the front enemy",
+      "rule": "R14",
+      "tuning": {
+        "attack_range": 120,
+        "enemy_reach": 150,
+        "stand_gap": 10
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "attack reaches the front enemy",
+      "rule": "R14",
+      "tuning": {
+        "attack_range": 175,
+        "enemy_reach": 150,
+        "stand_gap": 10
+      },
+      "expected": "valid"
+    },
+    {
+      "name": "short telegraph",
+      "rule": "R15",
+      "tuning": {
+        "telegraph": 0.6
+      },
+      "expected": "warn"
+    },
+    {
+      "name": "normal telegraph",
+      "rule": "R15",
+      "tuning": {
+        "telegraph": 1.1
+      },
+      "expected": "valid"
+    },
+    {
+      "name": "2 stars stricter than 3 stars",
+      "rule": "R16",
+      "thresholds": [
+        {
+          "stars": 3,
+          "max_retries": 2
+        },
+        {
+          "stars": 2,
+          "max_retries": 1
+        },
+        {
+          "stars": 1,
+          "max_retries": null
+        }
+      ],
+      "expected": "invalid"
     }
   ]
 }
