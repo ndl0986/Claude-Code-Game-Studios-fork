@@ -1,0 +1,162 @@
+{
+  "schema_version": "1.1",
+  "hero_id": "tran-quoc-toan",
+  "claims": [
+    {
+      "id": "C01",
+      "vi": "Trần Quốc Toản sống vào thời nhà Trần.",
+      "en": "Trần Quốc Toản lived in the time of the Trần dynasty.",
+      "label": "fact",
+      "sources": [
+        "S1",
+        "S3"
+      ],
+      "signoff": {
+        "status": "pending"
+      }
+    },
+    {
+      "id": "C02",
+      "vi": "Ông là người trong hoàng tộc nhà Trần, được phong tước Hoài Văn hầu.",
+      "en": "He belonged to the Trần royal family and held the title Hoài Văn hầu.",
+      "label": "fact",
+      "sources": [
+        "S3"
+      ],
+      "signoff": {
+        "status": "pending"
+      }
+    },
+    {
+      "id": "C03",
+      "vi": "Quân Mông–Nguyên chuẩn bị sang xâm lược Đại Việt.",
+      "en": "The Mông–Nguyên (Yuan) army was preparing to invade Đại Việt.",
+      "label": "fact",
+      "sources": [
+        "S1",
+        "S3"
+      ],
+      "signoff": {
+        "status": "pending"
+      }
+    },
+    {
+      "id": "C04",
+      "vi": "Vua Trần họp các vương hầu ở Bình Than để bàn việc đánh giặc.",
+      "en": "The Trần king gathered the princes and lords at Bình Than to plan the defence.",
+      "label": "fact",
+      "sources": [
+        "S3"
+      ],
+      "signoff": {
+        "status": "pending"
+      }
+    },
+    {
+      "id": "C05",
+      "vi": "Trần Quốc Toản còn nhỏ tuổi nên không được dự bàn.",
+      "en": "Trần Quốc Toản was too young, so he was not allowed to join the meeting.",
+      "label": "fact",
+      "sources": [
+        "S3"
+      ],
+      "signoff": {
+        "status": "pending"
+      }
+    },
+    {
+      "id": "C06",
+      "vi": "Vì quá tức giận, ông bóp nát quả cam vua ban lúc nào không biết.",
+      "en": "He was so angry that he crushed the orange the king had given him, without noticing.",
+      "label": "legend",
+      "sources": [
+        "S4",
+        "S2"
+      ],
+      "signoff": {
+        "status": "pending"
+      },
+      "relabel_condition": {
+        "to": "fact_as_recorded",
+        "when": "The S3 1282 (Nhâm Ngọ) passage is confirmed in the book, with edition and page (Luan, 2026-11-14)"
+      }
+    },
+    {
+      "id": "C07",
+      "vi": "Ông về nhà tập hợp người thân và gia nhân, luyện tập để đánh giặc.",
+      "en": "He went home, gathered his relatives and followers, and trained them to fight.",
+      "label": "fact",
+      "sources": [
+        "S3"
+      ],
+      "signoff": {
+        "status": "pending"
+      }
+    },
+    {
+      "id": "C08",
+      "vi": "Ông may lá cờ thêu sáu chữ vàng \"Phá cường địch, báo hoàng ân\".",
+      "en": "He made a banner with six golden words, \"Phá cường địch, báo hoàng ân\" (\"Defeat the strong enemy, repay the king's kindness\").",
+      "label": "legend",
+      "sources": [
+        "S4",
+        "S2"
+      ],
+      "signoff": {
+        "status": "pending"
+      },
+      "relabel_condition": {
+        "to": "fact_as_recorded",
+        "when": "The S3 1282 (Nhâm Ngọ) passage is confirmed in the book, with edition and page (Luan, 2026-11-14)"
+      }
+    },
+    {
+      "id": "C09",
+      "vi": "Đội quân của ông cùng quân nhà Trần đánh giặc Nguyên.",
+      "en": "His band fought the Nguyên invaders alongside the Trần army.",
+      "label": "fact",
+      "sources": [
+        "S1",
+        "S3"
+      ],
+      "signoff": {
+        "status": "pending"
+      }
+    },
+    {
+      "id": "C10",
+      "vi": "Trần Quốc Toản hy sinh khi còn rất trẻ, vì đất nước.",
+      "en": "Trần Quốc Toản gave his life for his country while he was still very young.",
+      "label": "fact",
+      "sources": [
+        "S3"
+      ],
+      "signoff": {
+        "status": "pending"
+      }
+    },
+    {
+      "id": "C11",
+      "vi": "Nhà Trần đánh thắng quân Mông–Nguyên.",
+      "en": "The Trần dynasty defeated the Mông–Nguyên army.",
+      "label": "fact",
+      "sources": [
+        "S1",
+        "S3"
+      ],
+      "signoff": {
+        "status": "pending"
+      }
+    },
+    {
+      "id": "C12",
+      "vi": "Bến sông đông thuyền, rơm tập đánh, giặc rơi vũ khí rồi bỏ chạy…",
+      "en": "A busy riverbank, straw training dummies, enemies dropping weapons and running away…",
+      "label": "invented",
+      "sources": [],
+      "signoff": {
+        "status": "pending"
+      }
+    }
+  ]
+}
