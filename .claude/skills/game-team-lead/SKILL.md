@@ -1,6 +1,6 @@
 ---
 name: game-team-lead
-description: Game team leader / orchestrator for the Vietnamese-heroes mobile game. Use when Luan says "lead the team", "start the team", "check the team", "/game-team-lead", or runs it under /loop. This session becomes the LEADER: it tracks work as GitHub Issues on the fork, hands each issue to an idle worker session (game-dev-001, game-dev-002, game-qc-android, game-qc-ios), routes plan peer reviews, drives labels and merges, and reports to Luan. The leader never implements anything itself.
+description: Game team leader / orchestrator for the Vietnamese-heroes mobile game. Use when Luan says "lead the team", "start the team", "check the team", "/game-team-lead", or runs it under /loop. This session becomes the LEADER: it tracks work as GitHub Issues on the fork, hands each issue to an idle worker session (game-dev-001, game-dev-002, game-qc-android, game-qc-ios, game-art-content), routes plan peer reviews, drives labels and merges, and reports to Luan. The leader never implements anything itself.
 ---
 
 # Game team lead
@@ -22,6 +22,11 @@ merges (with Luan's go) and reports**. All work happens in the worker sessions.
 | `game-dev-002` | Developer | Same. The two devs peer-review each other's plans and PRs |
 | `game-qc-android` | QC, Android | Tests each PR's build on an Android emulator or phone |
 | `game-qc-ios` | QC, iOS | Tests each PR's build on the iOS Simulator or an iPhone |
+| `game-art-content` | Art designer + content/history | Art direction (`/art-bible`, `/asset-spec`), each hero's mission story beats, history facts with sources; reviews every PR that shows a hero, event, date or story text |
+
+**History sign-off is Luan's.** `game-art-content` drafts and cites sources; a Claude session
+cannot verify history, so no hero, event, date or story text is final until Luan signs it off
+on the PR or issue (pillar "True to history"). Until then it stays marked ⟨placeholder⟩.
 
 Each worker runs in **its own Orca worktree** (isolated checkout, own branch). Find them
 with `ListAgents`; message them with `SendMessage`. If one is missing, tell Luan in one
@@ -47,8 +52,8 @@ restart it only on his go: `orca worktree create --name <session> --no-parent --
   an item in the project plan, or a task Luan names. Anything else is a proposal to Luan.
 - Labels (create once): `type:design`, `type:dev`, `type:qc`, `type:setup`,
   `status:ready`, `status:in-progress`, `status:plan-review`, `status:code-review`,
-  `status:qa-android`, `status:qa-ios`, `status:rework`, `status:blocked`, `status:done`,
-  `qa:android-pass`, `qa:ios-pass`, `owner:dev-001`, `owner:dev-002`.
+  `status:qa-android`, `status:qa-ios`, `status:content-review`, `status:rework`, `status:blocked`, `status:done`,
+  `qa:android-pass`, `qa:ios-pass`, `content:approved`, `owner:dev-001`, `owner:dev-002`, `owner:art-content`.
 - One `status:*` label at a time. Change it with `gh issue edit --add-label/--remove-label`
   and read it back.
 - Every issue body carries: goal, acceptance criteria, the spec file, the platforms to
@@ -106,6 +111,7 @@ Reply `APPROVE` or `REVISE` with findings.
 | code review APPROVE + CI green | `status:qa-android` **and** `status:qa-ios`: hand the PR to both QC sessions at once |
 | QC finds a bug | `status:rework`; relay to the PR's dev with the QC report |
 | QC passes | that QC's `qa:<platform>-pass` label |
+| PR shows a hero, event, date or story text | `game-art-content` reviews it against its sourced beats; Luan signs off history (`content:approved` label) before merge |
 | both passes present | report to Luan; on his go the leader merges (`gh pr merge --merge`, branch kept) |
 | merged | `status:done`, close the issue |
 | blocked (decision, missing tool, account) | `status:blocked` with a reason comment first |
@@ -138,6 +144,12 @@ A platform the issue doesn't target (a design doc, for example) skips that QC; s
   worktree, plan first and wait for PLAN APPROVED, follow the repo's CLAUDE.md and skills,
   open a PR into main, never merge, and report back to the leader. You also peer-review the
   other dev's plans and PRs when the leader asks (read-only)."
+- **Art + content:** "You are `game-art-content`, the art designer and content/history owner on
+  the game team. The leader sends you one task at a time. You own the art direction and each
+  hero's mission story beats, written in Vietnamese and English for primary-school children, with
+  every historical fact cited to a source. You cannot verify history yourself: mark facts
+  ⟨placeholder⟩ until Luan signs them off. You also review PRs that show heroes, events, dates or
+  story text. Plan first, wait for PLAN APPROVED, open a PR, never merge, report to the leader."
 - **QC (Android / iOS):** "You are `<name>`, the <platform> QC on the game team. The leader
   sends you PRs to test. Check out the PR, build or open it on the <platform> emulator /
   simulator (or a device), run every acceptance criterion, save screenshots to

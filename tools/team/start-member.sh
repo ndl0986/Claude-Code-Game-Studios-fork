@@ -2,7 +2,7 @@
 # Start one game-team member as a Claude Code session in its own Orca worktree,
 # with bypass permissions. Rules: .claude/skills/game-team-lead/SKILL.md
 #
-# Usage: tools/team/start-member.sh <game-dev-001|game-dev-002|game-qc-android|game-qc-ios>
+# Usage: tools/team/start-member.sh <game-dev-001|game-dev-002|game-qc-android|game-qc-ios|game-art-content>
 # Env:   WORKSPACES  worktree parent dir (default ~/orca/workspaces/Claude-Code-Game-Studios-fork)
 #        LEADER      leader session name (default claude-code-game-studios-fork-b5)
 set -euo pipefail
@@ -24,7 +24,8 @@ case "$member" in
   game-dev-002)    prompt="$(dev_prompt game-dev-002 game-dev-001)" ;;
   game-qc-android) prompt="$(qc_prompt game-qc-android Android android 'the Android emulator (SDK at ~/Android/sdk, profile mp17863) or a phone')" ;;
   game-qc-ios)     prompt="$(qc_prompt game-qc-ios iOS ios 'the iOS Simulator (xcrun simctl) or an iPhone')" ;;
-  *) echo "Usage: $0 <game-dev-001|game-dev-002|game-qc-android|game-qc-ios>" >&2; exit 2 ;;
+  game-art-content) prompt="You are game-art-content, the art designer and content/history owner on the game team. Read CLAUDE.md, production/project-plan.md, design/gdd/game-concept.md, and the team rules in /Users/luannguyend/self-projects/Claude-Code-Game-Studios-fork/.claude/skills/game-team-lead/SKILL.md (sections 0, 4, 5, 7; the leader checkout has the newest copy). The leader session ($LEADER) sends you one task at a time with SendMessage. You own the art direction (/art-bible, /asset-spec) and each hero's mission story beats (first hero: Tran Quoc Toan), in Vietnamese and English for primary-school children, with every historical fact cited to a source. You cannot verify history yourself: keep facts marked placeholder until Luan signs them off. You also review PRs that show heroes, events, dates or story text. Plan first and wait for PLAN APPROVED, open a PR, never merge, report back to the leader. Reply 'game-art-content ready' to the leader and wait." ;;
+  *) echo "Usage: $0 <game-dev-001|game-dev-002|game-qc-android|game-qc-ios|game-art-content>" >&2; exit 2 ;;
 esac
 
 if [ ! -d "$dir" ]; then
