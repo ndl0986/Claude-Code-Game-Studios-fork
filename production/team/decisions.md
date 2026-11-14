@@ -192,6 +192,13 @@ it) · **Decided** (Luan's call, with the date).
   10. Approve the portraits. King's headdress reference: **the Kết nối tri thức textbook
       illustration of a Trần king** (the image children know from school). ← **your pick**
       (that source, or name another)
+- **(11) Followers and the training partner (added 2026-11-15):** the slice now draws the
+  training partner as a **follower**, not a smaller copy of the hero: straw-beige tunic `#D8C9A3`,
+  muted-vermilion sash `#B9705C`, plain topknot, **no headband or tails** (those mark the hero).
+  The raised banner is plain vermilion `#D64A2E` with a thin gold `#E8A93B` border. Open point:
+  **how tall are followers in the final art?** The slice uses 0.62 × the hero; the ASSET-302 art
+  spec says ≈ 0.89 × (160 of 180 world px). *Recommended: 0.85–0.9 for final art (young
+  followers, clearly a little smaller than him), keeping 0.62 only for the placeholder.*
 - **How to answer:** "D-18 all as recommended", or list the numbers you change.
 - **Status:** Open. Blocks final art only; the slice runs on placeholders meanwhile.
 
