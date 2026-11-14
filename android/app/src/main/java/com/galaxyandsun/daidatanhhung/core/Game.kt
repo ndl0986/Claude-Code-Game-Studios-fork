@@ -114,6 +114,9 @@ class Game(
         return true
     }
 
+    /** Debug screenshots only: set the language without the title/pause rule. */
+    fun forceLang(code: String) { lang = Lang.of(code); store.setLang(lang.code) }
+
     fun toggleMute(): Boolean { muted = !muted; return true }
 
     /** A quiz card. Returns the pick's result; the platform plays chime / soft for it. */

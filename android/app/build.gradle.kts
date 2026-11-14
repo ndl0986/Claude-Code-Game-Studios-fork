@@ -29,7 +29,13 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    // Shared content (ADR-0001, TASK-005) is bundled from the repo root once its data folder is fixed.
+    buildFeatures { buildConfig = true }
+
+    // Shared content (ADR-0001): data/ ships in every build; the sample hero only in debug builds.
+    sourceSets {
+        getByName("main") { assets.srcDirs("../../content/data") }
+        getByName("debug") { assets.srcDirs("../../content/samples") }
+    }
 }
 
 kotlin {
