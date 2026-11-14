@@ -23,6 +23,7 @@ why line right of it, Tiếp 450 wide at x 812–1262), and each new question ta
 | 11 reach-the-flag EN, `-stage flagnear` | **Banner-beat goal flag (leader call, parity): pole 10 × 180 (top y 290, foot on the ground), cloth 92 × 60 at the pole top (y 295–355)**, fully below the bar (≥ 276), drawn under the bar's layer (before r8 it drew over the motto). The stuck arrow points at the pole + cloth from the side nearer the centre |
 | 12 quiz VI choosing, 13–14 quiz EN / VI right | The small layout at k 0.529: cards on Tiếp's row; after the right pick the right card in the left slot, the why line right of it, Tiếp 450 wide |
 | 15 title VI | The corner block 18 from the top/left (sound), the hero card and Start unchanged |
+| 16 training EN, slow motion ×0.1 (frozen build, from the UI case's attachment) | QC r5 N1: "Oof!" on the day village sky with the **ink** outline (SkyContrast picks ink on #A9D3EC/#CDE6EE; cream only on the dark camp band) |
 
 Input Rule 13b (every story box and dialogue line takes the rolling lock) is covered by GameCore
 `EveryBoxLockTests` (intro, beat card, caption, the 9-line Bình Than dialogue with its ask lines, a deliberate tap
@@ -39,7 +40,13 @@ at 0.6 s, two quick ask taps, the quiz lock only at small k) and by the UI cases
   the debug log kept only 24 entries and the press entries pushed the first dialogue lines out, and the hold was measured to the
   next log entry (a press) instead of the next box. Fixed (log 120, holds between place changes) and re-run on the frozen build.
   The ◀-as-the-card-appears case was exercised inside the lock (press log "locked": true) on its first launch.
-- **Frozen build re-runs** (the cases that draw the flag, the story placeholder, the lock): listed in the freeze report below.
+- **Frozen build c388736** (`production/qa/builds/TASK-006-ios-c388736/`, run with its own `ios-touch-tests.sh`, ONLY per case,
+  own Simulator): 6/6 passed: R8 dialogue mash (every line ≥ 1.5 s, 9 lines in order), R8 intro mash, R8 pause/sound inside the
+  lock, R8 placeholder / no sprites / no top stack, B7 attack mash (`-stage flag`, draws the flag), slow-motion hit (draws the
+  flag; adds shot 16). Shots 08, 10, 11 were re-shot on this build.
+- **Pre-flag build only** (the full suite above): the other 8 UI cases (R2-03, ◀→▶ slide, ▶ across a beat change, B1, 15b, title
+  card tap, skip warning → quiz → 3★ relaunch, ◀ as the training card appears) and the 4 app unit tests. The flag change is
+  render-only and none of these draws the flag.
 
 **Release check (this freeze's sources):** Release built three times into one derived-data path: A1, A2 (touch-and-rebuild
 control) and B (every `#if DEBUG` block removed from `GameScene.swift` and `DaiDatAnhHungApp.swift`). Each links, then stops at
