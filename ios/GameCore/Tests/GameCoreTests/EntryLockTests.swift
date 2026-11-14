@@ -6,8 +6,16 @@ import XCTest
 /// The press clock (uptime) is injected; the sim advances 1/60 s per step in step with it.
 final class EntryLockTests: XCTestCase {
     var now = 100.0
-    func game() throws -> Game {
+    /// The content with TASK-005q's screen_enter_lock_max (1.5) when the data doesn't carry it yet.
+    func contentWithCap() throws -> ContentSet {
         let c = try ContentSet.load(dataRoot: Repo.data)
+        guard c.tuning.values["screen_enter_lock_max"] == nil else { return c }
+        var values = c.tuning.values.mapValues(\.value); values["screen_enter_lock_max"] = 1.5
+        return ContentSet(index: c.index, strings: c.strings, sources: c.sources, markers: c.markers, rules: c.rules,
+                          tuning: Tuning(values: values, seed: c.tuning.seed), assets: c.assets, themes: c.themes, heroes: c.heroes)
+    }
+    func game() throws -> Game {
+        let c = try contentWithCap()
         let g = Game(content: c, hero: realHero(c), store: MemoryStore(), isDebug: true)
         g.uptime = { [unowned self] in self.now }
         return g
@@ -32,14 +40,24 @@ final class EntryLockTests: XCTestCase {
     }
 
     func test_the_lock_boundary_and_box_to_box() throws {
-        let g = try game()
-        g.debugStart(screen: "intro", q: nil, beat: nil, stage: nil, stars: nil)
-        step(g) // the intro context is entered on this step
-        let entered = try XCTUnwrap(g.enteredAt)
-        g.next(at: entered + 0.59); XCTAssertEqual(g.storyLine, 0, "+0.59 s is dropped")
-        g.next(at: entered + 0.61); XCTAssertEqual(g.storyLine, 1, "+0.61 s advances")
-        g.next(at: entered + 0.61 + 0.26); XCTAssertEqual(g.storyLine, 2, "box to box: only the 0.25 s debounce")
-        g.next(at: entered - 0.05); XCTAssertEqual(g.storyLine, 2, "a press stamped before the entry is dropped")
+        func intro() throws -> (Game, Double) {
+            let g = try game()
+            g.debugStart(screen: "intro", q: nil, beat: nil, stage: nil, stars: nil)
+            step(g) // the intro context is entered on this step
+            return (g, try XCTUnwrap(g.enteredAt))
+        }
+        var (g, e) = try intro()
+        g.next(at: e + 0.59); XCTAssertEqual(g.storyLine, 0, "+0.59 s is dropped")
+        g.next(at: e + 0.61); XCTAssertEqual(g.storyLine, 0, "rolling: +0.59 moved the end to +1.19, so +0.61 is dropped too (end +1.21)")
+        g.next(at: e + 1.20); XCTAssertEqual(g.storyLine, 0, "+1.20 is still inside (end +1.21); it would move the end to +1.80, capped at +1.5")
+        g.next(at: e + 1.49); XCTAssertEqual(g.storyLine, 0, "+1.49 is inside the capped end")
+        g.next(at: e + 1.50); XCTAssertEqual(g.storyLine, 1, "+1.50 s (the cap, screen_enter_lock_max) advances")
+        (g, e) = try intro()
+        g.next(at: e + 0.61); XCTAssertEqual(g.storyLine, 1, "a first press at +0.61 s advances")
+        g.next(at: e + 0.61 + 0.26); XCTAssertEqual(g.storyLine, 2, "box to box: only the 0.25 s debounce")
+        (g, e) = try intro()
+        g.next(at: e - 0.05); g.next(at: e + 0.61)
+        XCTAssertEqual(g.storyLine, 1, "a press stamped before the entry is dropped without extending the lock")
     }
 
     /// TASK-005q: the lock rolls. A 0.35 s mash keeps it closed until the cap (1.5 s from entry), then the next
