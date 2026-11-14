@@ -51,7 +51,9 @@ flags, `stall`/`idle`), plan reviews 1–2, and QC O2 (hints count from the capt
 
 3. **One teach hint at a time.** Priority: move, then attack, then defend, then special. A
    lower one waits until no higher one is showing. In the prototype, the defend hand shows only
-   while an enemy is winding up, so it never covers the attack hand.
+   while an enemy is winding up, so it never covers the attack hand. **In a training beat, teach
+   hints follow the step order** (dummies → blocks → flag): the flag hand shows only once the
+   finish step is current, never at training start (QC r2 B3).
 4. **Stuck hints** show after `hint_delay` (5 s) without progress:
 
 | Situation | "Progress" means | Hint |
