@@ -1,4 +1,5 @@
 import SpriteKit
+import GameCore
 
 /// The prototype's palette (art bible: warm primaries to touch and reward; red never reads as blood).
 enum C {
@@ -97,6 +98,22 @@ enum Font {
         for i in 0..<8 {
             let a = Double(i) * .pi / 4, back = label(s, size, outline, width: width)
             back.position = CGPoint(x: cos(a) * px, y: sin(a) * px); n.addChild(back)
+        }
+        let front = label(s, size, c, width: width); front.zPosition = 0.1; n.addChild(front)
+        return n
+    }
+
+    /// hud AC15 (r9): the double outline where SkyContrast picks cream: an ink ring ≥ 2 px outside a cream ring ≥ 3 px
+    /// (cream to 4 px, ink 4 → 6 px from the glyph; Android: ink stroke 12, cream stroke 8, then the fill), so the
+    /// pop reads over the dark sky (by the cream) and over a light mid layer (by the ink).
+    static func outlinedDouble(_ s: String, _ size: Double, _ c: SKColor, inner: SKColor, outer: SKColor, width: Double? = nil) -> SKNode {
+        let n = SKNode()
+        let px = SkyContrast.popRings(.cream).map(\.px) // [6, 4]: the ink ring, then the cream ring
+        for (ring, color, steps, z) in [(px[0], outer, 16, 0.0), (px[1], inner, 12, 0.05)] {
+            for i in 0..<steps {
+                let a = Double(i) * 2 * .pi / Double(steps), back = label(s, size, color, width: width)
+                back.position = CGPoint(x: cos(a) * ring, y: sin(a) * ring); back.zPosition = CGFloat(z); n.addChild(back)
+            }
         }
         let front = label(s, size, c, width: width); front.zPosition = 0.1; n.addChild(front)
         return n

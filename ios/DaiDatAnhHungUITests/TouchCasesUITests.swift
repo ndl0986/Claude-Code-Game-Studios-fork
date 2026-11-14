@@ -350,3 +350,45 @@ final class R8CasesUITests: UITestBase {
         check(["-startScreen", "play", "-beat", "4"], "training (play)", placeholder: nil, story: false)
     }
 }
+
+/// r9 cases: Mission flow Rule 7c (AC32), the training finish's banner moment, with real touches.
+final class R9CasesUITests: UITestBase {
+    /// The place log's time for the first entry with `prefix` after `t`.
+    func at(_ entries: [(String, Double)], _ prefix: String, after t: Double = 0) -> Double? {
+        entries.first { !$0.0.hasPrefix("fire:") && $0.0.hasPrefix(prefix) && $0.1 >= t }?.1
+    }
+
+    /// AC32: Cờ tapped, then the Cờ spot tapped every 0.2 s: the walk starts ≥ 1.5 s after the Cờ tap and no tap
+    /// carries into it.
+    func test_the_finish_hold_lasts_and_drops_taps() throws {
+        launch(["-startScreen", "play", "-beat", "4", "-stage", "finish"])
+        let flag = pad("special")
+        flag.tap()
+        let end = Date().addingTimeInterval(2.4)
+        while Date() < end { let t0 = Date(); flag.tap(); let left = 0.2 - Date().timeIntervalSince(t0); if left > 0 { Thread.sleep(forTimeInterval: left) } }
+        let s = state(), entries = log(s)
+        note("finish hold log", entries.map { String(format: "%@ @ %.3f", $0.0, $0.1) }.joined(separator: "\n"))
+        let hold = try XCTUnwrap(at(entries, "play|0|beatEnd|3|"), "the hold started")
+        let walk = try XCTUnwrap(at(entries, "play|0|walkTo|4|", after: hold), "the walk started")
+        XCTAssertGreaterThanOrEqual(walk - hold, 1.5 - 0.05, "the banner moment held finish_hold")
+        XCTAssertEqual(s["held"] as? [String], [], "nothing held into the walk")
+        shot("after the finish hold")
+    }
+
+    /// AC32: pause 0.3 s into the hold, then resume: the banner-up still lasts ≥ 0.8 s after the resume.
+    func test_a_resume_restarts_the_hold_to_rise_done() throws {
+        launch(["-startScreen", "play", "-beat", "4", "-stage", "finish"])
+        pad("special").tap()
+        Thread.sleep(forTimeInterval: 0.3)
+        try XCTUnwrap(button("pause")).tap()
+        _ = waitFor(3) { $0["screen"] as? String == "pause" }
+        shot("paused in the hold")
+        try XCTUnwrap(button("resume")).tap()
+        let s = waitFor(4) { $0["phase"] as? String == "walkTo" }
+        let entries = log(s), fires = s["fires"] as? [[String: Any]] ?? []
+        note("resume log", entries.map { String(format: "%@ @ %.3f", $0.0, $0.1) }.joined(separator: "\n"))
+        let resumed = try XCTUnwrap(fires.last { $0["id"] as? String == "resume" }?["t"] as? Double, "resume pressed")
+        let walk = try XCTUnwrap(at(entries, "play|0|walkTo|4|", after: resumed), "the walk started")
+        XCTAssertGreaterThanOrEqual(walk - resumed, 0.8 - 0.05, "≥ 0.8 s of banner-up after the resume")
+    }
+}

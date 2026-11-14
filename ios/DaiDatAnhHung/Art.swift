@@ -14,7 +14,17 @@ final class HeroNode: SKNode {
     /// (`specHeight`, HUD spec §3.3) with `reach`: the staff and swing arc keep that world length
     /// (attack_range for the hero), so a strike that lands looks like it lands. Render only.
     static let unitHeight = 261.0
-    init(scale s: Double = 1, reach: Double? = nil) {
+
+    /// The figure's palette (look sheet d18). The training partner wears the follower look so a child never sees two
+    /// heroes (r9 leader call, parity with Android): straw tunic, muted sash, plain topknot, no headband or tails.
+    struct Look {
+        var tunic, sash, skin: SKColor
+        var headband: Bool
+        static let hero = Look(tunic: C.red, sash: C.gold, skin: C.skin, headband: true)
+        static let follower = Look(tunic: SKColor(hex: 0xD8C9A3), sash: SKColor(hex: 0xB9705C), skin: SKColor(hex: 0xF1C9A0), headband: false)
+    }
+
+    init(scale s: Double = 1, reach: Double? = nil, look: Look = .hero) {
         scaleS = s
         // the shoulder is 18 units in front of the feet; the staff tip is 158 units from the shoulder
         let worldR = reach.map { $0 - 18 * s } ?? 150 * s
@@ -29,24 +39,26 @@ final class HeroNode: SKNode {
         addChild(body)
         body.addChild(shieldBack)
         body.addChild(legL); body.addChild(legR)
-        body.addChild(D.poly([(-34, -150), (34, -150), (42, -62), (0, -57), (-42, -62)], C.red))
-        body.addChild(D.rr(-38, -96, 76, 12, 6, C.gold))
-        body.addChild(D.poly([(-14, -150), (0, -126), (14, -150)], C.gold))
+        body.addChild(D.poly([(-34, -150), (34, -150), (42, -62), (0, -57), (-42, -62)], look.tunic))
+        body.addChild(D.rr(-38, -96, 76, 12, 6, look.sash))
+        body.addChild(D.poly([(-14, -150), (0, -126), (14, -150)], look.sash))
         arm.position = CGPoint(x: 18, y: 128)
         arm.addChild(D.rr(-6, -150, 12, 190, 6, C.wood))
         arm.addChild(D.rr(-8, -158, 16, 18, 6, C.gold))
         if reach != nil { arm.yScale = worldR / (158 * s) } // the staff keeps its world length; the hand stays body-sized
         body.addChild(arm)
-        let hand = D.circle(0, 0, 12, C.skin); hand.position = arm.position; body.addChild(hand)
+        let hand = D.circle(0, 0, 12, look.skin); hand.position = arm.position; body.addChild(hand)
         swoosh.strokeColor = SKColor(white: 1, alpha: 0.8); swoosh.lineWidth = 10; swoosh.lineCap = .round
         body.addChild(swoosh)
-        body.addChild(D.circle(0, -196, 44, C.skin))
+        body.addChild(D.circle(0, -196, 44, look.skin))
         let hair = CGMutablePath()
         hair.addArc(center: CGPoint(x: -2, y: 200), radius: 46, startAngle: 0, endAngle: .pi, clockwise: false)
         body.addChild(D.shape(hair, C.hair))
         body.addChild(D.circle(-14, -246, 15, C.hair))
-        body.addChild(D.rr(-46, -214, 92, 12, 6, C.red))
-        body.addChild(D.poly([(-44, -210), (-84, -192), (-78, -186), (-44, -200)], C.red))
+        if look.headband { // the hero's vermilion headband and its tails
+            body.addChild(D.rr(-46, -214, 92, 12, 6, C.red))
+            body.addChild(D.poly([(-44, -210), (-84, -192), (-78, -186), (-44, -200)], C.red))
+        }
         for (x, r) in [(14.0, 6.0), (32, 6)] { body.addChild(D.circle(x, -190, r, C.ink)); body.addChild(D.circle(x + 2, -192, 2, .white)) }
         let smile = CGMutablePath(); smile.addArc(center: CGPoint(x: 24, y: 176), radius: 9, startAngle: -0.2, endAngle: -.pi + 0.2, clockwise: true)
         let sm = D.shape(smile, nil, C.ink, 4); sm.lineCap = .round; body.addChild(sm)
@@ -60,14 +72,15 @@ final class HeroNode: SKNode {
     }
     required init?(coder: NSCoder) { fatalError() }
 
-    func update(face: Double, walk: Bool, defend: Bool, attack: Double?, hurt: Bool, t: Double) {
+    /// `staffUp`: the staff held upright (−0.05 rad), the slice's stand-in for the follower's raised fist (Rule 7c).
+    func update(face: Double, walk: Bool, defend: Bool, attack: Double?, hurt: Bool, t: Double, staffUp: Bool = false) {
         xScale = face * scaleS; yScale = scaleS
         let w = walk ? sin(t * 14) : 0
         body.position.y = walk ? abs(sin(t * 14)) * 4 : 0
         legL.position.x = w * 8; legR.position.x = -w * 8
         shieldBack.isHidden = defend; shieldFront.isHidden = !defend
         let swing = attack ?? -1
-        let ang = swing >= 0 ? -1.9 + swing * 2.6 : (defend ? 0.9 : -0.6)
+        let ang = swing >= 0 ? -1.9 + swing * 2.6 : (defend ? 0.9 : (staffUp ? -0.05 : -0.6))
         arm.zRotation = -ang
         if swing >= 0.2 && swing <= 0.85 {
             let p = CGMutablePath()

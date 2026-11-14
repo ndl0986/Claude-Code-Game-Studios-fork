@@ -22,4 +22,16 @@ final class PopOutlineTests: XCTestCase {
         XCTAssertEqual(SkyContrast.ratio("#FFF6E3", "#3B3F6B"), 9.266, accuracy: 0.005, "cream on the camp bottom")
         XCTAssertGreaterThanOrEqual(SkyContrast.ratio("#3A2A20", "#C6E2EE"), 3, "ink on the day sky reads")
     }
+
+    /// hud AC15: the double outline where cream wins (camp): cream ≥ 3 px inside, ink ≥ 2 px outside it.
+    func test_the_double_outline_on_cream_skies() throws {
+        let cream = SkyContrast.popRings(.cream)
+        XCTAssertEqual(cream.map(\.hex), [SkyContrast.ink, SkyContrast.cream], "ink outside, cream inside")
+        XCTAssertGreaterThanOrEqual(cream[1].px, 3, "the cream band")
+        XCTAssertGreaterThanOrEqual(cream[0].px - cream[1].px, 2, "the ink band outside it")
+        XCTAssertEqual(SkyContrast.popRings(.ink).map(\.hex), [SkyContrast.ink], "ink-only skies keep one ring")
+        // the camp's outermost edges: cream on the navy sky, ink on the mint mid layer, each ≥ 3:1
+        let c = try ContentSet.load(dataRoot: Repo.data), camp = try XCTUnwrap(c.themes?.themes["camp"])
+        XCTAssertGreaterThanOrEqual(min(SkyContrast.ratio(SkyContrast.cream, camp.skyBand.top), SkyContrast.ratio(SkyContrast.cream, camp.skyBand.bottom)), 3)
+    }
 }

@@ -28,4 +28,11 @@ public enum SkyContrast {
         let i = min(ratio(ink, skyTop), ratio(ink, skyBottom)), c = min(ratio(cream, skyTop), ratio(cream, skyBottom))
         return c > i ? .cream : .ink
     }
+
+    /// The pop's outline rings, outermost first, as (colour, distance from the glyph in px). Ink-only skies: one ink
+    /// ring at 3.5 px. Where cream wins (hud AC15, r9): ink out to 6 px around cream out to 4 px, so the cream band is
+    /// 4 px (≥ 3) and the ink band outside it 2 px (≥ 2): the cream reads on the dark sky, the ink on a light mid layer.
+    public static func popRings(_ o: Outline) -> [(hex: String, px: Double)] {
+        o == .cream ? [(ink, 6), (cream, 4)] : [(ink, 3.5)]
+    }
 }

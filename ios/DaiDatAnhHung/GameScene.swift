@@ -303,8 +303,13 @@ final class GameScene: SKScene {
             fx.addChild(n)
         }
         if let pt = p.partner {
-            let n = HeroNode(scale: 160 / HeroNode.unitHeight, reach: game.tuning["enemy_reach"] - game.tuning["stand_gap"]) // §3.3: partner ≤ 180
-            n.update(face: pt.face, walk: false, defend: false, attack: pt.state == .strike ? 0.6 : (pt.state == .windup ? 0.05 : nil), hurt: false, t: t)
+            // the follower look at 0.62 (r9 leader call, parity: never a second hero); in the finish hold (Rule 7c) it
+            // walks in with its staff upright and fades in over 0.2 s when it starts on screen
+            let n = HeroNode(scale: 0.62, reach: game.tuning["enemy_reach"] - game.tuning["stand_gap"], look: .follower)
+            let hold = p.finishHold
+            n.update(face: pt.face, walk: hold != nil && pt.moving, defend: false,
+                     attack: hold != nil ? nil : (pt.state == .strike ? 0.6 : (pt.state == .windup ? 0.05 : nil)), hurt: false, t: t, staffUp: hold != nil)
+            if let h = hold, h.fadeIn { n.alpha = min(1, p.endT / 0.2) }
             n.position = D.p(pt.x, ground); fx.addChild(n)
             if pt.state == .windup {
                 // the partner's "!" follows the same rule as an enemy's (hud §3.3, r8): above the head (160) or beside it
@@ -312,6 +317,7 @@ final class GameScene: SKScene {
                 let b = Art.bangBubble(side: pl.side); b.position = D.p(pl.x, pl.y); fx.addChild(b); placedHints["bang_partner"] = pl.rect
             }
         }
+        if p.finishHold != nil { fx.addChild(raisedBanner(p, ground: ground)) }
         if let fxX = p.flagX {
             // r8 leader call (parity with Android): on a banner beat the whole goal flag sits fully below the bar
             // (top ≥ bar bottom + 8 = 276), foot on the ground; under the bar's layer as well
@@ -341,7 +347,9 @@ final class GameScene: SKScene {
             // it), at head height, so they never sit on the head (iOS QC r4 N1) and stay under the goal plate and
             // the HUD row. Render only: the core's pop position (shared with Android, not in the trace) is unchanged.
             // hud §3.3 pop contrast: an outline ≥ 3 px, ink on light skies, cream on the camp's dark sky
-            let l = Font.outlined(game.ui(q.key), 40, color(q.color), outline: popOutline == .cream ? C.cream : C.ink)
+            let l = popOutline == .cream
+                ? Font.outlinedDouble(game.ui(q.key), 40, color(q.color), inner: C.cream, outer: SKColor(hex: 0x3A2A20)) // hud AC15
+                : Font.outlined(game.ui(q.key), 40, color(q.color), outline: C.ink)
             let sx = max(p.cam + 120, min(p.cam + 1280 - 120, q.x - p.hero.face * 150))
             l.position = D.p(sx, ground - 135); l.alpha = min(1, q.life * 2); fx.addChild(l)
         }
@@ -364,6 +372,30 @@ final class GameScene: SKScene {
 
     /// The banner-beat goal flag's cloth (r8): 92 × 60 at the pole top.
     static let flagCloth = (w: 92.0, h: 60.0)
+    /// The hero's raised banner at the training finish (Rule 7c slice placeholder for ASSET-108; Android's s = 110 flag):
+    /// on the hero's back side (125 behind on banner beats, 60 elsewhere), held at y = max(ground − 250, 276 + 88) on
+    /// banner beats so it never enters the bar, rising over 0.67 s from y + 40 with ease-out; cloth #D64A2E with a
+    /// ≈ 4 px gold #E8A93B border (look sheet d18), pole #6A4A2A.
+    private func raisedBanner(_ p: PlayState, ground: Double) -> SKNode {
+        let banner = p.beat < p.beats.count && p.beats[p.beat].usesBanner == true
+        let k = min(1, p.endT / PlayState.finishRise), s = 110.0
+        let x = p.hero.x - p.hero.face * (banner ? 125 : 60)
+        let y = (banner ? max(ground - 250, HintPlacement.clearY + 0.8 * s) : ground - 250) + 40 * (1 - k) * (1 - k)
+        let n = SKNode(); n.position = D.p(x, y)
+        n.addChild(D.rr(-0.5 * s, -0.7 * s, 8, 1.4 * s, 4, SKColor(hex: 0x6A4A2A)))
+        func pt(_ dx: Double, _ dy: Double) -> CGPoint { CGPoint(x: dx, y: -dy) } // y down → SpriteKit y up
+        let cloth = CGMutablePath()
+        cloth.move(to: pt(-0.45 * s, -0.68 * s))
+        cloth.addQuadCurve(to: pt(0.7 * s, -0.6 * s), control: pt(0.1 * s, -0.8 * s))
+        cloth.addLine(to: pt(0.7 * s, -0.05 * s))
+        cloth.addQuadCurve(to: pt(-0.45 * s, -0.1 * s), control: pt(0.1 * s, -0.2 * s))
+        cloth.closeSubpath()
+        n.addChild(D.shape(cloth, SKColor(hex: 0xD64A2E), SKColor(hex: 0xE8A93B), 4))
+        for (z, c) in n.children.enumerated() { c.zPosition = CGFloat(z) }
+        placedHints["raised_banner"] = Box(x - 0.5 * s, y - 0.8 * s, 1.2 * s, 1.5 * s)
+        return n
+    }
+
     /// The goal flag's height: 180 on a banner beat (pole top y 290, fully below the bar; r8), else the full 300.
     private var flagHeight: Double {
         let p = game.play
@@ -582,6 +614,8 @@ final class GameScene: SKScene {
         if ending, Pictures.files[game.hero.mission.ending.pictureId] != nil {
             let pic = Pictures.node(game.hero.mission.ending.pictureId, size: 480); pic.position = CGPoint(x: 400, y: -ph / 2); layer(pic, 1)
         } else {
+            // story-screens AC14: a missing ending still leaves the scene background only (no portrait), and says so
+            if ending { NSLog("[pictures] missing picture \(game.hero.mission.ending.pictureId): the ending shows its background only") }
             // full-bleed (×2.25): the picture's ground sits at y 175 of 320, just above the text panel on screen
             let gy = 175.0
             layer(Backdrop.skyNode(ending ? "river" : "village", width: 800, height: ph), -1)
@@ -735,7 +769,9 @@ final class GameScene: SKScene {
             add(pad, c.cx, c.cy)
             padNodes[a] = pad
         }
-        let hand = handHint(); hand.isHidden = true; uiZ += 1; hand.zPosition = uiZ + 500; ui.addChild(hand); handNode = hand
+        // the teach/stuck hand in a container: the container sits at the anchor and turns to point (Hints Rule 6)
+        let hand = SKNode(), inner = handHint(); inner.name = "inner"; hand.addChild(inner)
+        hand.isHidden = true; uiZ += 1; hand.zPosition = uiZ + 500; ui.addChild(hand); handNode = hand
         if p.goArrow {
             let a = D.poly([(-60, -22), (10, -22), (10, -50), (64, 0), (10, 50), (10, 22), (-60, 22)], C.gold, .white, 5)
             a.name = "go"; add(a, 1060, 300)
@@ -917,7 +953,17 @@ final class GameScene: SKScene {
             if let hand = handNode {
                 let target: Circle? = switch p.hand { case .right: layout.right; case .attack: layout.attack; case .defend: layout.defend; case .special, .holdSpecial: layout.special; case nil: nil }
                 hand.isHidden = target == nil
-                if let c = target { hand.position = D.p(c.cx, c.cy - 70 - sin(t * 6) * 12) }
+                if let c = target {
+                    // Hints Rule 6 (r9, AC12): above the pad when it fits (wholly at y ≥ 276 on a banner beat), else beside
+                    // it away from the screen edge, pointing at it; never over a visible pad (its square, slop excluded)
+                    let vis = p.visiblePads, all: [(PadAction, Circle)] = [(.left, layout.left), (.right, layout.right), (.defend, layout.defend), (.attack, layout.attack), (.special, layout.special)]
+                    let avoid = all.filter { vis.contains($0.0) }.map { Box($0.1.cx - $0.1.r, $0.1.cy - $0.1.r, 2 * $0.1.r, 2 * $0.1.r) }
+                    let h = HintPlacement.hand(pad: c, avoid: avoid, banner: bannerShown)
+                    hand.position = D.p(h.anchorX, h.anchorY)
+                    hand.zRotation = CGFloat(Double(h.pointing) * .pi / 2) // SpriteKit turns counter-clockwise: down → right
+                    hand.childNode(withName: "inner")?.position = CGPoint(x: 0, y: 70 + sin(t * 6) * 12)
+                    placedHints["hand"] = h.rect
+                }
             }
             if let go = ui.childNode(withName: "go") { go.position = D.p(1060 + sin(t * 6) * 10, 300) }
             if let ring = padNodes[.special]?.childNode(withName: "meter") as? SKShapeNode {
