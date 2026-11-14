@@ -11,22 +11,6 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
-### D-19 Accept ADR-0002: asset pipeline and memory budgets
-
-- **Flow:** asset specs (TASK-014) → ADR-0002 → final art export → both apps.
-- **Read:** `docs/architecture/adr-0002-asset-pipeline-and-budgets.md` on branch
-  `docs/ADR-0002-asset-budgets` (`e96acea`), peer-approved by both devs.
-- **Decides:** one 1.5× art set (drawn at 2×); no image above 2048×2048 (big sheets split);
-  background tiles 1440×1320, so they fill phones from the iPhone Duo's 1.45:1 to 20:9 Android;
-  images loaded per story step (the next step's set prefetched only if its theme differs);
-  memory ≤ 64 MB at any moment (24 MB always loaded + 40 MB per step); WebP or PNG;
-  ≤ 60 MB download, ≤ 15 MB per mission. **Minimum iOS 17**: excludes at most 7% of active
-  iPhones (Apple, June 2026); nothing in the slice needs it, so a lower minimum is your option.
-- **Measured:** a 2048² image = 16 MB in memory, a background tile 6–9 MB; decode times are fine.
-  **Not measurable yet:** frame rate (needs a real low-end Android phone and an iPhone); iOS memory
-  (the iPhone Duo after iOS QC).
-- **Status:** Open. Ready for your acceptance; the open measurements can follow.
-
 ### D-18 How Trần Quốc Toản and the invaders look (portrayal + palette), before final art
 
 - **Flow:** art bible → asset specs (TASK-014, 87 assets) → **Luan's look sign-off** → final art
@@ -250,6 +234,7 @@ it) · **Decided** (Luan's call, with the date).
 
 | Date | Decision |
 | --- | --- |
+| 2026-11-14 | **D-19: ADR-0002 accepted, minimum iOS 17 kept.** One 1.5× art set, ≤2048² images, 1440×1320 background tiles with a gradient sky band, per-step loading, ≤64 MB image memory at any moment, ≤60 MB download. Frame-rate and iOS-memory measurements follow on real devices. |
 | 2026-11-14 | **D-17:** Vietnamese text uses **no pronoun** where possible; when one is needed, address the child as **"em"** (as the textbooks do). The skip warning drops "bạn". |
 | 2026-11-14 | **D-08: B, the full structure** in the slice: walk (riverbank to Bình Than) → hold-meter (the orange) → training (dummies, blocks, raise the banner) → reach-the-flag with fight encounters. `mission-full.json` becomes the slice's mission. |
 | 2026-11-14 | **D-10: B, later.** No Special move in fights or encounters yet; the banner button appears only in the hold-meter and training beats (R13). Combat Special comes back as its own decision. |
