@@ -116,15 +116,14 @@ claim becomes **Established** only when Luan signs it off.
 
 - **Story moment:** his band joins the Trần army against the Nguyên invaders. Claims: C09,
   C11. Specific enemies and places: C12 invented.
-- **Play:**
-  - **attack** knocks enemies back; they drop their weapons and run home;
-  - **defend** blocks slow arrows, which bounce off the shield like sticks;
-  - **special** waves the banner, and the followers cheer and push forward.
-  The level is a few slow enemies, with drama in the wind, river and sky.
+- **Play:** `reach-the-flag` with two enemy encounters on the way (move, attack, defend).
+  **attack** knocks enemies back, and they drop their weapons and run home; **defend** blocks a
+  telegraphed strike. No special pad and no arrows (D-10: B, Luan 2026-11-14; combat GDD). Drama
+  comes from the wind, river and sky.
 - **Goal:** reach the Trần army's flag. Getting hit only knocks him back a step: no lives,
   no game over.
-- **Scene (VI):** "Đội quân nhỏ của Quốc Toản theo lá cờ sáu chữ vàng, cùng quân nhà Trần đánh giặc Nguyên."
-- **Scene (EN):** "Quốc Toản's small band followed the banner and fought the Nguyên invaders alongside the Trần army."
+- **Scene (VI):** "Đội quân nhỏ của Quốc Toản cùng quân nhà Trần đánh giặc Nguyên." (as in `mission.json` `tqt.f4.scene.1`)
+- **Scene (EN):** "Quốc Toản's small band fought the Nguyên invaders alongside the Trần army."
 
 ### Ending (no scene, D3)
 
@@ -185,7 +184,7 @@ strings in data, not code.
 | 1 Riverbank | move | move | none | reach the gate |
 | 2 Orange | special (hold) | hold special | none | hold meter full |
 | 3 Banner | attack, defend, special | attack, defend, special (tap) | straw dummies + a friendly sparring partner | banner raised, followers join |
-| 4 Battle | all | none | a few slow enemies + slow arrows | reach the Trần flag |
+| 4 Battle | move, attack, defend (no special, D-10) | none | two encounters of slow enemies | reach the Trần flag |
 
 Rules for every beat: no lives or game over, getting hit means a small knock-back, defeated
 enemies drop their weapons and run, and the banner's words are a text layer. Then show the
