@@ -105,7 +105,12 @@ stay top-centre in the free band right of the corner block.
 
 ## 7. Interaction Map
 
-Cards fire on release inside (P-01); Tiếp is debounced (B1); one tone per card press (the
+Cards fire on release inside (P-01); Tiếp is debounced (B1); **the quiz (entered from the ending), results
+and unlock take the screen-entry lock** (`screen_enter_lock` 0.6 s, Input Rule 13b; QC r6 B7):
+cards and Tiếp show at once but take no input during it, so a tap carried over from the ending
+never picks a card and a fast double tap on the last Tiếp never skips results. Question to
+question within the quiz keeps only the debounce, **except at 0.40 ≤ k < 0.48**, where Tiếp lies
+over the third card slot (§5.2) and each new question takes the lock too; one tone per card press (the
 right/wrong sound is its tone; O6 and the Android fix). Language switch through pause keeps the
 greyed cards and retries.
 
@@ -144,3 +149,4 @@ fill vs outline. No timers.
 6. **GIVEN** the lowest target Android phone, **WHEN** a card is tapped, **THEN** its feedback starts within 100 ms; layouts checked on the narrowest phone and a 20:9 phone.
 7. **GIVEN** a phone or emulator at k 0.40, **WHEN** each TQT question is captured in VI and EN (a) while choosing, (b) after a wrong pick and (c) 1 s after the right pick, with the right answer in each of the three slots, **THEN** (a)–(b) no Tiếp is on screen and the cards are 380 × 290 with the full picture and a 2-line label; (c) only the right card remains, in the left slot, with its tick; the why line and Tiếp don't overlap it or each other; nothing is above `corner_bottom` + 8 or below y 720.
 8. **GIVEN** k 0.40 and the right pick, **WHEN** frame-stepped, **THEN** the wrong cards are fully gone before Tiếp's first frame, and a tap where a wrong card was does nothing until Tiếp shows.
+9. **GIVEN** the ending's last Tiếp tapped twice 0.3 s apart, **WHEN** the quiz appears, **THEN** the second tap picks no card. **GIVEN** k 0.40, **WHEN** Tiếp is tapped twice 0.3 s apart on a question, **THEN** the second tap picks no card on the next question; **GIVEN** the reference phones, question to question has no lock (only the debounce).
