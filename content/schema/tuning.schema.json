@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://galaxyandsun.com/daidatanhhung/content/tuning.schema.json",
+  "title": "Gameplay tuning both apps read (from the TASK-003 prototype config.js). World units: px in a 1280x720 world; times in s.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "world",
+    "seed",
+    "values"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "$ref": "common.schema.json#/$defs/SchemaVersion"
+    },
+    "world": {
+      "type": "object",
+      "required": [
+        "width",
+        "height"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "width": {
+          "const": 1280
+        },
+        "height": {
+          "const": 720
+        }
+      }
+    },
+    "seed": {
+      "description": "Every gameplay random call is seeded from this.",
+      "type": "integer"
+    },
+    "values": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "value",
+          "min",
+          "max",
+          "unit"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "number"
+          },
+          "min": {
+            "type": "number"
+          },
+          "max": {
+            "type": "number"
+          },
+          "unit": {
+            "enum": [
+              "px",
+              "px/s",
+              "s",
+              "count",
+              "ratio",
+              "pt_dp"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

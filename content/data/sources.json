@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "sources": [
+    {
+      "id": "S1",
+      "citation": "Lịch sử và Địa lí, Kết nối tri thức với cuộc sống, NXB Giáo dục Việt Nam",
+      "kind": "textbook",
+      "location": "Grade 4 or 5, lesson on the Trần dynasty; page to confirm",
+      "status": "to_confirm"
+    },
+    {
+      "id": "S2",
+      "citation": "Tiếng Việt, Kết nối tri thức với cuộc sống, NXB Giáo dục Việt Nam",
+      "kind": "textbook",
+      "location": "Grade and page to confirm; reading not yet found in this series",
+      "status": "to_confirm"
+    },
+    {
+      "id": "S3",
+      "citation": "Đại Việt sử ký toàn thư, Bản kỷ, Kỷ nhà Trần, Trần Nhân Tông",
+      "kind": "chronicle",
+      "location": "Entries for 1282 (Nhâm Ngọ) and 1285 (Ất Dậu); translation edition to confirm",
+      "status": "to_confirm"
+    },
+    {
+      "id": "S4",
+      "citation": "Nguyễn Huy Tưởng, Lá cờ thêu sáu chữ vàng",
+      "kind": "literature",
+      "location": "Any edition, e.g. NXB Kim Đồng; to confirm",
+      "status": "to_confirm"
+    }
+  ]
+}

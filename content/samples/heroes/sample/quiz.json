@@ -1,0 +1,226 @@
+{
+  "schema_version": "1.0",
+  "hero_id": "sample",
+  "questions": [
+    {
+      "id": "sample.quiz.q1",
+      "prompt": {
+        "id": "sample.quiz.q1.prompt",
+        "vi": "⟨placeholder⟩ Câu hỏi 1?",
+        "en": "⟨placeholder⟩ Question 1?",
+        "claims": [
+          "C01"
+        ]
+      },
+      "choices": [
+        {
+          "text": {
+            "id": "sample.quiz.q1.c1",
+            "vi": "⟨placeholder⟩ Lựa chọn 1",
+            "en": "⟨placeholder⟩ Choice 1",
+            "claims": [
+              "C01"
+            ]
+          },
+          "picture_id": "pic.sample.q1.c1"
+        },
+        {
+          "text": {
+            "id": "sample.quiz.q1.c2",
+            "vi": "⟨placeholder⟩ Lựa chọn 2",
+            "en": "⟨placeholder⟩ Choice 2",
+            "claims": [
+              "C01"
+            ]
+          },
+          "picture_id": "pic.sample.q1.c2"
+        },
+        {
+          "text": {
+            "id": "sample.quiz.q1.c3",
+            "vi": "⟨placeholder⟩ Lựa chọn 3",
+            "en": "⟨placeholder⟩ Choice 3",
+            "claims": [
+              "C01"
+            ]
+          },
+          "picture_id": "pic.sample.q1.c3"
+        }
+      ],
+      "correct_index": 0,
+      "why": {
+        "id": "sample.quiz.q1.why",
+        "vi": "⟨placeholder⟩ Vì sao 1.",
+        "en": "⟨placeholder⟩ Why 1.",
+        "claims": [
+          "C01"
+        ]
+      }
+    },
+    {
+      "id": "sample.quiz.q2",
+      "prompt": {
+        "id": "sample.quiz.q2.prompt",
+        "vi": "⟨placeholder⟩ Câu hỏi 2?",
+        "en": "⟨placeholder⟩ Question 2?",
+        "claims": [
+          "C01"
+        ]
+      },
+      "choices": [
+        {
+          "text": {
+            "id": "sample.quiz.q2.c1",
+            "vi": "⟨placeholder⟩ Lựa chọn 1",
+            "en": "⟨placeholder⟩ Choice 1",
+            "claims": [
+              "C01"
+            ]
+          },
+          "picture_id": "pic.sample.q2.c1"
+        },
+        {
+          "text": {
+            "id": "sample.quiz.q2.c2",
+            "vi": "⟨placeholder⟩ Lựa chọn 2",
+            "en": "⟨placeholder⟩ Choice 2",
+            "claims": [
+              "C01"
+            ]
+          },
+          "picture_id": "pic.sample.q2.c2"
+        },
+        {
+          "text": {
+            "id": "sample.quiz.q2.c3",
+            "vi": "⟨placeholder⟩ Lựa chọn 3",
+            "en": "⟨placeholder⟩ Choice 3",
+            "claims": [
+              "C01"
+            ]
+          },
+          "picture_id": "pic.sample.q2.c3"
+        }
+      ],
+      "correct_index": 0,
+      "why": {
+        "id": "sample.quiz.q2.why",
+        "vi": "⟨placeholder⟩ Vì sao 2.",
+        "en": "⟨placeholder⟩ Why 2.",
+        "claims": [
+          "C01"
+        ]
+      }
+    },
+    {
+      "id": "sample.quiz.q3",
+      "prompt": {
+        "id": "sample.quiz.q3.prompt",
+        "vi": "⟨placeholder⟩ Câu hỏi 3?",
+        "en": "⟨placeholder⟩ Question 3?",
+        "claims": [
+          "C01"
+        ]
+      },
+      "choices": [
+        {
+          "text": {
+            "id": "sample.quiz.q3.c1",
+            "vi": "⟨placeholder⟩ Lựa chọn 1",
+            "en": "⟨placeholder⟩ Choice 1",
+            "claims": [
+              "C01"
+            ]
+          },
+          "picture_id": "pic.sample.q3.c1"
+        },
+        {
+          "text": {
+            "id": "sample.quiz.q3.c2",
+            "vi": "⟨placeholder⟩ Lựa chọn 2",
+            "en": "⟨placeholder⟩ Choice 2",
+            "claims": [
+              "C01"
+            ]
+          },
+          "picture_id": "pic.sample.q3.c2"
+        },
+        {
+          "text": {
+            "id": "sample.quiz.q3.c3",
+            "vi": "⟨placeholder⟩ Lựa chọn 3",
+            "en": "⟨placeholder⟩ Choice 3",
+            "claims": [
+              "C01"
+            ]
+          },
+          "picture_id": "pic.sample.q3.c3"
+        }
+      ],
+      "correct_index": 0,
+      "why": {
+        "id": "sample.quiz.q3.why",
+        "vi": "⟨placeholder⟩ Vì sao 3.",
+        "en": "⟨placeholder⟩ Why 3.",
+        "claims": [
+          "C01"
+        ]
+      }
+    },
+    {
+      "id": "sample.quiz.q4",
+      "prompt": {
+        "id": "sample.quiz.q4.prompt",
+        "vi": "⟨placeholder⟩ Câu hỏi 4?",
+        "en": "⟨placeholder⟩ Question 4?",
+        "claims": [
+          "C01"
+        ]
+      },
+      "choices": [
+        {
+          "text": {
+            "id": "sample.quiz.q4.c1",
+            "vi": "⟨placeholder⟩ Lựa chọn 1",
+            "en": "⟨placeholder⟩ Choice 1",
+            "claims": [
+              "C01"
+            ]
+          },
+          "picture_id": "pic.sample.q4.c1"
+        },
+        {
+          "text": {
+            "id": "sample.quiz.q4.c2",
+            "vi": "⟨placeholder⟩ Lựa chọn 2",
+            "en": "⟨placeholder⟩ Choice 2",
+            "claims": [
+              "C01"
+            ]
+          },
+          "picture_id": "pic.sample.q4.c2"
+        },
+        {
+          "text": {
+            "id": "sample.quiz.q4.c3",
+            "vi": "⟨placeholder⟩ Lựa chọn 3",
+            "en": "⟨placeholder⟩ Choice 3",
+            "claims": [
+              "C01"
+            ]
+          },
+          "picture_id": "pic.sample.q4.c3"
+        }
+      ],
+      "correct_index": 0,
+      "why": {
+        "id": "sample.quiz.q4.why",
+        "vi": "⟨placeholder⟩ Vì sao 4.",
+        "en": "⟨placeholder⟩ Why 4.",
+        "claims": [
+          "C01"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://galaxyandsun.com/daidatanhhung/content/strings.schema.json",
+  "title": "UI strings (menus, buttons, labels). The only text allowed without claims.",
+  "type": "object",
+  "required": ["schema_version", "strings"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "$ref": "common.schema.json#/$defs/SchemaVersion" },
+    "strings": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/UiText" } }
+  }
+}

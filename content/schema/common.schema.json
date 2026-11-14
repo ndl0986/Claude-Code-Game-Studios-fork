@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://galaxyandsun.com/daidatanhhung/content/common.schema.json",
+  "title": "Shared definitions (ADR-0001)",
+  "$defs": {
+    "SchemaVersion": {
+      "description": "MAJOR.MINOR. An app refuses a newer MAJOR at build time (ADR-0001 rule 12).",
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "Id": {
+      "description": "Stable dotted id, e.g. tqt.b2.scene.1, tqt.quiz.q3.why, ui.menu.play.",
+      "type": "string",
+      "pattern": "^[a-z0-9]+(\\.[a-z0-9_-]+)+$"
+    },
+    "HeroId": { "type": "string", "pattern": "^[a-z0-9_-]+$" },
+    "ClaimId": { "type": "string", "pattern": "^C[0-9]{2,3}$" },
+    "SourceId": { "type": "string", "pattern": "^S[0-9]+$" },
+    "Line": {
+      "description": "One player-facing line. NFC and the per-field EN budget are checked by the app tests, not here (rules R7, R8).",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "Text": {
+      "description": "A story, scene, ending or quiz line: VI + EN and at least one claim (invented C12 counts).",
+      "type": "object",
+      "required": ["id", "vi", "en", "claims"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "vi": { "$ref": "#/$defs/Line" },
+        "en": { "$ref": "#/$defs/Line" },
+        "claims": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/ClaimId" }
+        }
+      }
+    },
+    "UiText": {
+      "description": "A UI string (strings.json only): VI + EN, no claims.",
+      "type": "object",
+      "required": ["id", "vi", "en"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "vi": { "$ref": "#/$defs/Line" },
+        "en": { "$ref": "#/$defs/Line" }
+      }
+    },
+    "TextList": {
+      "description": "One sentence per box, shown in order.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/Text" }
+    }
+  }
+}

@@ -1,0 +1,196 @@
+{
+  "schema_version": "1.0",
+  "world": {
+    "width": 1280,
+    "height": 720
+  },
+  "seed": 1,
+  "values": {
+    "volume": {
+      "value": 0.5,
+      "min": 0,
+      "max": 1,
+      "unit": "ratio"
+    },
+    "hero_speed": {
+      "value": 330,
+      "min": 120,
+      "max": 600,
+      "unit": "px/s"
+    },
+    "attack_time": {
+      "value": 0.28,
+      "min": 0.12,
+      "max": 0.6,
+      "unit": "s"
+    },
+    "attack_cooldown": {
+      "value": 0.12,
+      "min": 0,
+      "max": 0.6,
+      "unit": "s"
+    },
+    "attack_range": {
+      "value": 175,
+      "min": 80,
+      "max": 300,
+      "unit": "px"
+    },
+    "knockback": {
+      "value": 170,
+      "min": 40,
+      "max": 400,
+      "unit": "px"
+    },
+    "hero_pushback": {
+      "value": 90,
+      "min": 0,
+      "max": 250,
+      "unit": "px"
+    },
+    "hurt_time": {
+      "value": 0.5,
+      "min": 0.1,
+      "max": 1.5,
+      "unit": "s"
+    },
+    "enemy_speed": {
+      "value": 140,
+      "min": 40,
+      "max": 300,
+      "unit": "px/s"
+    },
+    "enter_speed": {
+      "value": 320,
+      "min": 100,
+      "max": 700,
+      "unit": "px/s"
+    },
+    "enemy_reach": {
+      "value": 150,
+      "min": 80,
+      "max": 260,
+      "unit": "px"
+    },
+    "telegraph": {
+      "value": 1.1,
+      "min": 0.4,
+      "max": 2.5,
+      "unit": "s"
+    },
+    "strike_time": {
+      "value": 0.25,
+      "min": 0.1,
+      "max": 0.6,
+      "unit": "s"
+    },
+    "enemy_rest": {
+      "value": 1.6,
+      "min": 0.4,
+      "max": 4,
+      "unit": "s"
+    },
+    "spawn_gap": {
+      "value": 1.0,
+      "min": 0.2,
+      "max": 4,
+      "unit": "s"
+    },
+    "flee_speed": {
+      "value": 420,
+      "min": 150,
+      "max": 800,
+      "unit": "px/s"
+    },
+    "hp_spear": {
+      "value": 2,
+      "min": 1,
+      "max": 6,
+      "unit": "count"
+    },
+    "hp_shield": {
+      "value": 3,
+      "min": 1,
+      "max": 8,
+      "unit": "count"
+    },
+    "hp_leader": {
+      "value": 3,
+      "min": 1,
+      "max": 12,
+      "unit": "count"
+    },
+    "leader_speed_mul": {
+      "value": 0.75,
+      "min": 0.3,
+      "max": 1.5,
+      "unit": "ratio"
+    },
+    "stand_gap": {
+      "value": 10,
+      "min": 0,
+      "max": 60,
+      "unit": "px"
+    },
+    "queue_spacing": {
+      "value": 150,
+      "min": 60,
+      "max": 300,
+      "unit": "px"
+    },
+    "kb_decay": {
+      "value": 0.25,
+      "min": 0.05,
+      "max": 1,
+      "unit": "s"
+    },
+    "spawn_offset": {
+      "value": 80,
+      "min": 0,
+      "max": 300,
+      "unit": "px"
+    },
+    "lock_offset": {
+      "value": 500,
+      "min": 200,
+      "max": 900,
+      "unit": "px"
+    },
+    "leader_knock_mul": {
+      "value": 0.5,
+      "min": 0.1,
+      "max": 1,
+      "unit": "ratio"
+    },
+    "pad_min": {
+      "value": 72,
+      "min": 44,
+      "max": 120,
+      "unit": "pt_dp"
+    },
+    "hint_delay": {
+      "value": 5,
+      "min": 2,
+      "max": 15,
+      "unit": "s"
+    },
+    "end_pause": {
+      "value": 0.6,
+      "min": 0,
+      "max": 3,
+      "unit": "s"
+    },
+    "quiz_count": {
+      "value": 4,
+      "min": 3,
+      "max": 5,
+      "unit": "count"
+    },
+    "feedback_time": {
+      "value": 0.9,
+      "min": 0.3,
+      "max": 3,
+      "unit": "s"
+    }
+  }
+}
