@@ -193,7 +193,7 @@ ending still and two lines, and then the five-question quiz (retry until right, 
 
 ## 7. Content data (TASK-009, 2026-11-14)
 
-This doc is the source for `content/data/heroes/tran-quoc-toan/`. Every claim's `signoff` is
+This doc is the source for `content/data/heroes/tran-quoc-toan/` (and the draft in `content/drafts/heroes/tran-quoc-toan/`). Every claim's `signoff` is
 `pending` until Luan signs it off (D-03). Release builds refuse the mission (R12), and debug
 builds show `UNSIGNED Cxx` badges.
 
@@ -201,12 +201,14 @@ builds show `UNSIGNED Cxx` badges.
 |---|---|---|
 | `claims.json` | C01–C12 as in § 2. C06 and C08 carry the relabel condition (D6) | yes (with the hero) |
 | `mission.json` | **The slice version: 4 fight beats (P-02).** The non-fight story moments (Bình Than, the orange, training, the banner; C03–C08) are **told in the intro, not played**. The fights are the band's campaign (C09). Captions follow each fight (P-04) | yes |
-| `mission-full.json` | **The approved structure (§ 3, § 6):** walk → hold-meter (the orange) → training (dummies 3, blocks 3, finish_special) → reach-the-flag (2 encounters). It plays beats 1–3 instead of telling them. Switched on by D-08 | **no** |
+| `content/drafts/heroes/tran-quoc-toan/mission-full.json` (a draft, not bundled into the apps; schema tests still validate `drafts/`) | **The approved structure (§ 3, § 6):** walk → hold-meter (the orange) → training (dummies 3, blocks 3, finish_special) → reach-the-flag (2 encounters). It plays beats 1–3 instead of telling them. Switched on by D-08 | **no** |
 | `quiz.json` | Q1–Q5 as in § 4. Q3 and Q4 open with the legend marker. Each choice cites its question's claim | yes |
 
 **Honest note:** the slice tells beats 1–3 instead of playing them, which weakens pillar 1 (*Live
-the story*). `mission-full.json` plays them once D-08 allows it.
+the story*). `mission-full.json` plays them once D-08 allows it, and then it moves into `content/data/`.
 
 **Pictures:** the 16 picture ids (`pic.quiz_*`, `pic.scene_tqt_ending`) currently point to flat
 placeholder PNGs (shape and colour, art bible palette, no text) in `content/data/pictures/`. Real
 art replaces each file under the same id after `/asset-spec`.
+
+**No next hero yet:** `next_hero` is `null`. Results then shows `ui.results.more_heroes` ("Còn nhiều anh hùng nữa sắp đến / More heroes are coming") and returns to the title, with no unlock screen (leader's call, 2026-11-14).

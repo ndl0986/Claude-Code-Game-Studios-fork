@@ -87,6 +87,11 @@
       "en": "Well done!"
     },
     {
+      "id": "ui.results.more_heroes",
+      "vi": "Còn nhiều anh hùng nữa sắp đến",
+      "en": "More heroes are coming"
+    },
+    {
       "id": "ui.unlock.title",
       "vi": "Mở khoá anh hùng tiếp theo!",
       "en": "Next hero unlocked!"
