@@ -72,6 +72,8 @@ Start → (the progress card) → title → language and sound.
 | After completing | (D-27) Best stars and medal on the card. **Today, without D-27: no progress shows (QC G5, open).** |
 | Release build, no playable hero (claims pending) | Title, "Còn nhiều anh hùng nữa sắp đến / More heroes are coming" (`ui.results.more_heroes`); Start hidden |
 | **PENDING D-20:** first launch | A picture-only language picker (lotus = Tiếng Việt, book = English) before this screen |
+| Loading (audio preload not done) | Every button (Start, VI\|EN, sound) drawn **disabled** at 50% alpha; taps do nothing and play nothing. They enable together when the preload ends (Audio Rule 7; TASK-020 W19). Android's Start already does this |
+| Phone held in portrait (any screen) | A picture-only "turn the phone" screen: a phone outline rotating to landscape, no words needed; it clears as soon as the phone is landscape. The game is landscape only (concept, decided; TASK-020 A11). Android draws it today (`Renderer.rotate`) |
 
 ## 7. Interaction Map
 
@@ -116,6 +118,8 @@ The title and every label are VI/EN text layers within the `ui` and `button` bud
    **THEN** the card shows 2 filled and 1 outline star and an outline medal.
 5. **GIVEN** the lowest target Android phone, **WHEN** the app launches, **THEN** the title is interactive within 2 s (after the SFX preload, Audio Rule 7).
 6. **GIVEN** the narrowest supported phone and a 20:9 phone, **WHEN** captured in VI and EN, **THEN** no element overlaps and all text fits (R8c).
+7. **GIVEN** a fresh launch, **WHEN** the title shows before the audio preload ends, **THEN** every button is drawn disabled and a tap does nothing; when the preload ends they all enable.
+8. **GIVEN** the phone turned to portrait on any screen, **WHEN** captured, **THEN** the turn-the-phone picture shows and nothing else responds; turning back to landscape restores the same screen and state.
 
 ## 15. Open Questions
 

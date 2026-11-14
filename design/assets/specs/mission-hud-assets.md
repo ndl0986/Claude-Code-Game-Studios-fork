@@ -95,7 +95,7 @@ Also draws on `design/gdd/hints-and-onboarding.md` (Visual/Audio) for ASSET-033 
 | Replaces | new |
 | Texture Res | 1× and 2× per art bible §8 |
 
-**Visual Description:** The outer shape is a star-edged ring: a circle whose rim has 12 soft, rounded bumps like a drum's sun-star. It is filled star gold `#FFC531`. The icon is a small upright banner on a pole, drawn in cream with an ink outline, with a plain cloth and no marks. The star-edged rim **is** the single motif accent, so nothing else is added. A separate soft gold glow layer is shown by code only when the pad is available (hold-meter and training beats only).
+**Visual Description:** The outer shape is a star-edged ring: a circle whose rim has 12 soft, rounded bumps like a drum's sun-star. It is filled star gold `#FFC531`. The icon is a small upright banner on a pole, drawn in cream with an ink outline, with a plain cloth and no marks. **The icon is set per beat type** (Mission flow Rule 7c, TASK-020 W17): the banner on training's finish step, a clenched fist (ASSET-335) on hold-meter. The star-edged rim **is** the single motif accent, so nothing else is added. A separate soft gold glow layer is shown by code only when the pad is available (hold-meter and training beats only).
 
 **Art Bible Anchors:**
 - §3 / §4 Colour-blind safety: special is a star-edged ring with a banner icon, set apart from round attack

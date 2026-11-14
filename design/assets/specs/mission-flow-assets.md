@@ -840,3 +840,80 @@ Negative: text, letters, red, sharp corners, photorealistic.
 needed; this is a layout note for `/ux-design`.
 
 **Status:** Needed (layout only)
+
+## ASSET-333 — Skip-warning button icons (open book, skip arrow)
+
+| Field | Value |
+|-------|-------|
+| Category | UI |
+| Dimensions | 1× 48×48, 2× 96×96 each, drawn inside the ASSET-323 pills beside the label |
+| Format | PNG (sRGB, alpha) |
+| Naming | ui_icon_keep_reading.png, ui_icon_skip_anyway.png |
+| Replaces | new (TASK-020 W20) |
+| Texture Res | 1× and 2× per art bible §8 |
+
+**Visual Description:** Two simple icons that let a pre-reader tell the skip-warning buttons
+apart without the words (Language Rule 12). **Keep reading:** an open book, seen from the front,
+cream pages with two short ink lines per page (no letters). **Skip anyway:** a double chevron
+pointing right (»), plain ink. Both use the thick ink-brown outline and no colour that implies a
+warning. The book sits on the gold default button; the arrow on the smaller cream one.
+
+**Art Bible Anchors:**
+- §4 UI palette, no red; §7 icons back up text
+- Mission flow UI (skip warning), `design/ux/story-screens.md`
+
+**Generation Prompt:** Flat mobile game UI icons, modern kids' cartoon style, soft rounded shapes, flat colours, thick warm ink-brown outline (#3A2A20). Two separate icons on a transparent background: (1) a small open book seen from the front, cream pages (#FFF6E3) with two short plain ink lines on each page; (2) a chunky rounded double chevron pointing right, ink-brown. Centred, flat light. Negative: text, letters, numbers, red, warning sign, exclamation mark, watermark, photorealistic, anime, thin line icon, sharp corners.
+
+**Status:** Needed
+
+## ASSET-334 — Leave-the-story card ("Về bản đồ?")
+
+| Field | Value |
+|-------|-------|
+| Category | UI |
+| Dimensions | Reuses the ASSET-324 9-slice card (960×560 at 2×) with a different top picture; the top picture 1× 120×120, 2× 240×240 |
+| Format | PNG (sRGB, alpha) |
+| Naming | ui_card_leave_top.png (the card itself is `ui_card_skip_warning.png`) |
+| Replaces | new (TASK-020 W18) |
+| Texture Res | 1× and 2× per art bible §8 |
+
+**Visual Description:** The pause menu's "Về bản đồ" opens this card over the dimmed pause
+menu. The top picture is a small folded map with a dotted path running back to a house shape, so
+a pre-reader sees "going home". Below it: one line (`ui.pause.leave_confirm`, proposed string)
+and two buttons: "Chơi tiếp / Keep playing" (gold, big, right, the default, with the ▶ play icon)
+and "Về bản đồ / To the map" (cream, smaller, left, with a small map icon). No red, no warning
+sign.
+
+**Art Bible Anchors:**
+- §4 UI palette, no red; §7 hierarchy: the default action is the most prominent
+- Mission flow Rule 11, `design/ux/pause.md`
+
+**Generation Prompt:** Flat mobile game UI icon, modern kids' cartoon style, soft rounded shapes, flat colours with a soft gradient, thick warm ink-brown outline (#3A2A20). A small folded paper map in cream (#FFF6E3) with soft green and blue areas and a dotted ink path leading back to a tiny rounded house shape. Centred, transparent background, flat light. Negative: text, letters, numbers, red, warning sign, exclamation mark, compass rose with letters, watermark, photorealistic, anime, sharp corners.
+
+**Status:** Needed
+
+## ASSET-335 — Special pad icon: clenched fist (hold-meter)
+
+| Field | Value |
+|-------|-------|
+| Category | UI |
+| Dimensions | Icon layer inside ASSET-027, 1× 56×56, 2× 112×112 |
+| Format | PNG (sRGB, alpha) |
+| Naming | ui_pad_special_icon_fist.png (training keeps the banner icon) |
+| Replaces | new (TASK-020 W17, A3) |
+| Texture Res | 1× and 2× per art bible §8 |
+
+**Visual Description:** The special pad's icon is set per beat type (Mission flow Rule 7c). On a
+hold-meter beat it is a **small clenched fist** seen from the front, a child's hand, cream with an
+ink outline, so holding the pad reads as "squeeze hard" rather than "hold the flag" before the
+banner exists. The pad's star-edged rim and gold fill (ASSET-027) are unchanged. Whether the
+fist is right for the orange moment's tone (anger or determination, claim C06) is Luan's call
+(D-34); the icon is neutral, never an angry face.
+
+**Art Bible Anchors:**
+- §5 "never a scary face"; §7 one icon per pad
+- ASSET-027, `design/ux/hud.md`
+
+**Generation Prompt:** Flat mobile game UI icon, modern kids' cartoon style, soft rounded shapes, flat colours, thick warm ink-brown outline (#3A2A20). A small child's clenched fist seen from the front, warm cream skin tone, chunky rounded fingers. Centred, transparent background, flat light. Negative: text, letters, numbers, blood, injury, weapon, angry face, punching motion lines, watermark, photorealistic, anime, sharp corners, adult hand.
+
+**Status:** Needed

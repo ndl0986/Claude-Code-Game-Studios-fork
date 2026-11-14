@@ -18,7 +18,8 @@ except the current mission run (nothing is saved mid-mission).
 
 Entry: the pause button (any phase: play, story, dialogue, quiz), or automatically on background,
 focus loss or an audio interruption. Exit: "Chơi tiếp / Keep playing" → the same state; "Về bản đồ
-/ To the map" → the title (the run is discarded).
+/ To the map" → **the leave card** (Mission flow Rule 11, TASK-020 W18), whose "Về bản đồ" → the
+title (the run is discarded) and whose "Chơi tiếp" → back to this menu.
 
 ## 5. Layout Specification
 
@@ -40,7 +41,8 @@ focus loss or an audio interruption. Exit: "Chơi tiếp / Keep playing" → the
 | Keep playing | the biggest button (the default), release-inside | P-01 |
 | Sound | the toggle, saved | Audio Rule 14 |
 | VI \| EN | the language switch (one of only two places; the other is the title) | P-04; Language Rule 2 |
-| To the map | smaller, lower; returns to the title | Mission flow Rule 11 |
+| To the map | smaller, lower, with a map icon; opens the leave card | Mission flow Rule 11 |
+| Leave card | ASSET-324 card with the ASSET-334 top picture (a map with a path home); one line `ui.pause.leave_confirm` (proposed: "Về bản đồ? Câu chuyện sẽ bắt đầu lại. / Leave? The story will start again."); "Chơi tiếp / Keep playing" (gold, big, right, default, ▶ icon) and "Về bản đồ / To the map" (cream, small, left, map icon). No red | Mission flow Rule 11 |
 
 ## 6. States & Variants
 
@@ -50,6 +52,7 @@ focus loss or an audio interruption. Exit: "Chơi tiếp / Keep playing" → the
 | Language switched here | On resume, all text is in the new language; quiz state, `story_skipped` and ask taps are unchanged |
 | Resume during a windup | The enemy's telegraph **restarts from 0**, so the child gets the full warning (Combat edge case, AC19) |
 | Auto-pause (background, call) | Stays paused when the app returns, until "Chơi tiếp" |
+| Leave card open | Input is locked while it slides in (taps dropped, Input Rule 13); "Chơi tiếp" returns to the menu with nothing lost |
 
 ## 7. Interaction Map
 
@@ -69,3 +72,5 @@ Big, clearly separated buttons; text plus icons; no timers.
 4. **GIVEN** the app backgrounded mid-fight, **WHEN** it returns, **THEN** the pause menu shows and
    nothing has moved.
 5. **GIVEN** the lowest target Android phone, **WHEN** pause is tapped, **THEN** the menu shows within 150 ms; checked on the narrowest phone and a 20:9 phone.
+6. **GIVEN** the pause menu mid-mission, **WHEN** "Về bản đồ" is tapped, **THEN** the leave card shows and nothing is discarded; "Chơi tiếp" on it returns to the menu with the run intact; "Về bản đồ" on it shows the title.
+7. **GIVEN** any screen with pause, **WHEN** captured, **THEN** the pause button is top-left (Input Rule 3).

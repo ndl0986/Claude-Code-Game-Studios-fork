@@ -111,7 +111,7 @@ Combat is how a child takes part in the story's battle moments.
 
 **Camera and space**
 
-14. **Free scroll** (`walk`, `reach-the-flag` outside encounters, `training`): the camera
+14. **Free scroll** (`walk`, `reach-the-flag` outside encounters): the camera
     follows the hero, keeping it `camera_follow_offset` px from the left edge. It never scrolls back
     left. The hero can't walk off the left edge (`hero_edge_margin`).
 15. **Locked fight.** A `fight` beat, and each encounter in `reach-the-flag` (D-06), locks the
@@ -122,6 +122,25 @@ Combat is how a child takes part in the story's battle moments.
       stand_gap` away) is then always on screen, on either side. These bounds are derived, so
       there's no new tuning key.
     - Outside locked fights, the bounds are `hero_edge_margin` from the left edge only, as before.
+15b. **Capped camera in training** (TASK-020a; iOS QC r3, confirmed on Android by a bot test;
+    game-dev-android's review). From a `training` beat's `beat_play` start until `beat_end`
+    (through the dummies, blocks and finish steps), the camera keeps following right as in Rule
+    14, but **never goes past a cap**:
+    - `lockX = max(camera, xStart − hero_edge_margin)`, fixed at `beat_play` start; the camera
+      is `min(follow, lockX)` and still never moves left;
+    - the hero's right limit is `lockX + W − enemy_reach − hero_edge_margin`; the left limit
+      stays `camera + hero_edge_margin` (Rule 14);
+    - no jump and no snap: the camera only stops following, and the hero is only stopped, never
+      moved. No new tuning key.
+    - **Worked example (TQT, `tuning.json` defaults: W 1280, `hero_edge_margin` 70,
+      `enemy_reach` 150, `camera_follow_offset` 460):** lockX = xStart − 70. The camera reaches
+      it when the hero is at xStart + 390, then stops. The hero is limited to xStart … xStart +
+      990. The dummies at xStart + 300, 600, 900 are inside, and the partner stays on screen.
+    - **Data guard (R14b, Mission flow Rule 7c):** `dummies × dummy_spacing ≤ W − enemy_reach −
+      2 × hero_edge_margin` (990 today), so the last dummy is always inside the zone.
+    - Why: under free scroll a child holding ▶ walked past the dummies; the camera never scrolls
+      left, so after about 3 s of ▶ the first dummy was unreachable and after 5 s none were, and
+      training could never end (a softlock on both apps).
     - Why: before this rule, a child holding ▶ ended up at the right edge facing away, with a
       right-side enemy standing off-screen. The reach-the-flag beat couldn't be finished by
       touch (Android QC r2, G2: 280–410 s; measured unfinishable within 900 s).
@@ -135,8 +154,8 @@ Combat is how a child takes part in the story's battle moments.
       a tap plays a soft sound. There is no "not ready" text.
 
 **World layout** (`ground_y`, `hero_start_x`, `beat_start_x`, `beat_gap` in `tuning.json`)
-belongs to Mission flow (`design/gdd/mission-flow.md`, Core Rule 2 and F2). This system only
-reads it.
+belongs to Mission flow (`design/gdd/mission-flow.md`, Core Rule 2; beat positions are
+`beatX(i)`, Mission flow F5). This system only reads it.
 
 ### Frame order
 
@@ -153,10 +172,11 @@ same-frame edge cases below depend on it.
    nearest non-fleeing enemy** (Rule 2). A new swing first advances on the **next** step.
 5. Move the hero (× `attack_move_mul` while swinging; no move while defending). **While a swing
    is active, movement doesn't change facing** (Rule 2, 2b).
-6. Clamp the hero (**to the fight-zone bounds while locked**, Rule 15) and set the camera (locked
-   during a fight and a caption; otherwise
+6. Clamp the hero (**to the fight-zone bounds while locked**, Rules 15, 15b) and set the camera (locked
+   during a fight and a caption; capped in training, Rule 15b; otherwise
    `camera = max(camera, hero.x − camera_follow_offset)`).
-7. Start the beat once the hero passes `beat_start_x + i × beat_gap`.
+7. Start the beat once the hero passes `beatX(i)` (Mission flow F5: each beat's start adds the
+   previous beat's extent plus `beat_gap`, not `i × beat_gap`).
 8. In a fight: the spawn timer advances by dt (the stall timer is Hints' `progress_timer`; see
    below). Spawn at most one enemy if the
    queue isn't empty, active (non-fleeing) < `max_active` and the spawn timer ≤ 0. The timer
@@ -168,8 +188,9 @@ same-frame edge cases below depend on it.
    4. its state switch. Windup → strike resolves here, and block is checked only at this
       instant (F6).
 10. Remove enemies that fled past the locked screen ± `flee_remove_margin`.
-11. Fight end: when the queue and the enemy list are both empty, the end timer advances. At
-    `end_pause`, Mission flow shows the caption.
+11. Fight end: when the queue and the enemy list are both empty, Combat reports goal-met; the end
+    timer advances in this step, and Mission flow owns `end_pause` and what follows it (the
+    caption; Mission flow Rule 2, TASK-020 A5).
 12. Effects: particles, floating words, dropped weapons.
 
 Combat only **reports events** (hit, block, pushed, windup, flee). The no-progress timer, its
@@ -201,7 +222,7 @@ resets (on progress, caption or card close, and resume) and `hint_delay` belong 
 | Input & touch controls | press, hold and release of move, attack, defend, special | (none) | Input GDD (P-01: pads fire on press) |
 | Content data | `content/data/tuning.json` values; enemy kinds from `mission.schema.json` | (none) | Content contract |
 | Hints & onboarding | (none) | events: `hit`, `block`, `pushed`, `flee`, `windup_started`, hero moved. Hints computes "no progress" itself | Hints GDD |
-| Audio & voice-over | (none) | events for SFX: swing, hit drum, clang, bonk, flee | Audio GDD |
+| Audio & voice-over | (none) | events for SFX: swing, hit drum, clang, bonk, flee, enemy windup (`sfx_enemy_windup`), enemy strike (`sfx_enemy_strike`) (Audio Rule 5) | Audio GDD |
 
 ## Formulas
 
@@ -337,6 +358,9 @@ blocks, and defend pressed and released earlier in the windup does not. The habi
   enemy can miss.
 - **If a swing hits the last enemy and another is still queued**: the queued enemy spawns
   after `spawn_gap`. The fight ends only when the queue is empty and the screen is clear.
+- **If a child holds ▶ from the start of training**: the camera follows until its cap
+  (Rule 15b), then stops; the hero stops at xStart + 990 (TQT) with every dummy and the partner
+  still on screen and reachable by walking back left.
 - **If the hero is pushed into the locked-camera edge**: the position is clamped at
   `hero_edge_margin`, and the push stops there. No damage.
 - **If knock-back pushes an enemy off-screen** (not fleeing): it walks back from where it is.
@@ -357,7 +381,7 @@ blocks, and defend pressed and released earlier in the windup does not. The habi
 | Content data & claims | this depends on it | Hard | `tuning.json`; enemy kinds in `mission.schema.json` |
 | Mission flow & beat types | depends on this | Hard | Runs fights and encounters; goal-met events |
 | Hints & onboarding | depends on this | Soft | Combat events (hit, block, pushed, windup, flee, hero moved) |
-| Audio & voice-over | depends on this | Soft | SFX events |
+| Audio & voice-over | depends on this | Soft | SFX events, including windup and strike (Audio Rule 5) |
 
 Mission flow lists this system as a hard dependency (`design/gdd/mission-flow.md`, bidirectional).
 
@@ -476,7 +500,13 @@ Mission flow's screens.
     tap 2/s; alternate ▶ ½ s and tap; stand still and tap 2/s while an encounter holds the camera, walk ▶ otherwise), **WHEN** each is simulated in the
     core, **THEN** each finishes the beat in **≤ 60 s** (measured: Android 31–39 s, iOS 34–47 s).
 
-Logic criteria 1–11 and 15–23 need automated unit tests that follow the frame order. Feel
+24. **GIVEN** the Trần Quốc Toản training beat with `tuning.json` defaults, **WHEN** ▶ is held for
+    5 s from `beat_play` start, **THEN** the camera is never beyond xStart − 70 and never
+    moves more than one frame's follow step at a time (no jump), the hero's x never exceeds
+    xStart + 990 and never snaps, every dummy is still reachable, and a scripted run then
+    completes training (3 hits, 3 blocks, special).
+
+Logic criteria 1–11 and 15–24 need automated unit tests that follow the frame order. Feel
 criteria 12–14 need a QC recording or screenshot on each platform.
 
 ## Open Questions
