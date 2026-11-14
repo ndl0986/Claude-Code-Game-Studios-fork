@@ -190,3 +190,25 @@ strings in data, not code.
 Rules for every beat: no lives or game over, getting hit means a small knock-back, defeated
 enemies drop their weapons and run, and the banner's words are a text layer. Then show the
 ending still and two lines, and then the five-question quiz (retry until right, stars as in § 4).
+
+## 7. Content data (TASK-009, 2026-11-14)
+
+This doc is the source for `content/data/heroes/tran-quoc-toan/` (and the draft in `content/drafts/heroes/tran-quoc-toan/`). Every claim's `signoff` is
+`pending` until Luan signs it off (D-03). Release builds refuse the mission (R12), and debug
+builds show `UNSIGNED Cxx` badges.
+
+| File | What | Bundled? |
+|---|---|---|
+| `content/data/heroes/tran-quoc-toan/claims.json` | C01–C12 as in § 2. C06 and C08 carry the relabel condition (D6) | yes |
+| `content/data/heroes/tran-quoc-toan/mission.json` | **The slice mission (D-08: B, Luan 2026-11-14):** walk (riverbank) → hold-meter (the orange) → training (dummies 3, blocks 3, finish_special, banner) → reach-the-flag (2 encounters). No special pad on reach-the-flag (D-10: B) | yes |
+| `content/data/heroes/tran-quoc-toan/quiz.json` | Q1–Q5 as in § 4. Q3 and Q4 open with the legend marker. Each choice cites its question's claim | yes |
+| `content/drafts/heroes/tran-quoc-toan/mission-fights.json` | The earlier 4-fight version (P-02, now superseded). Kept as a draft only | no |
+
+Every story screen can be skipped with a kind warning. A run with a skipped screen earns no
+medal for this story (D-07; mission-flow GDD Core Rule 15).
+
+**Pictures:** the 16 picture ids (`pic.quiz_*`, `pic.scene_tqt_ending`) currently point to flat
+placeholder PNGs (shape and colour, art bible palette, no text) in `content/data/pictures/`. Real
+art replaces each file under the same id after `/asset-spec`.
+
+**No next hero yet:** `next_hero` is `null`. Results then shows `ui.results.more_heroes` ("Còn nhiều anh hùng nữa sắp đến / More heroes are coming") and returns to the title, with no unlock screen (leader's call, 2026-11-14).

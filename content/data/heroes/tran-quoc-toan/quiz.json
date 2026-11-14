@@ -1,0 +1,281 @@
+{
+  "schema_version": "1.1",
+  "hero_id": "tran-quoc-toan",
+  "questions": [
+    {
+      "id": "tqt.quiz.q1",
+      "prompt": {
+        "id": "tqt.quiz.q1.prompt",
+        "vi": "Trần Quốc Toản sống vào thời nhà nào?",
+        "en": "Which dynasty did Trần Quốc Toản live in?",
+        "claims": [
+          "C01"
+        ]
+      },
+      "choices": [
+        {
+          "text": {
+            "id": "tqt.quiz.q1.c1",
+            "vi": "Nhà Lý",
+            "en": "The Lý dynasty",
+            "claims": [
+              "C01"
+            ]
+          },
+          "picture_id": "pic.quiz_flag_ly"
+        },
+        {
+          "text": {
+            "id": "tqt.quiz.q1.c2",
+            "vi": "Nhà Trần",
+            "en": "The Trần dynasty",
+            "claims": [
+              "C01"
+            ]
+          },
+          "picture_id": "pic.quiz_flag_tran"
+        },
+        {
+          "text": {
+            "id": "tqt.quiz.q1.c3",
+            "vi": "Nhà Lê",
+            "en": "The Lê dynasty",
+            "claims": [
+              "C01"
+            ]
+          },
+          "picture_id": "pic.quiz_flag_le"
+        }
+      ],
+      "correct_index": 1,
+      "why": {
+        "id": "tqt.quiz.q1.why",
+        "vi": "Họ của ông là Trần, ông sống thời nhà Trần.",
+        "en": "He lived in the time of the Trần dynasty.",
+        "claims": [
+          "C01"
+        ]
+      }
+    },
+    {
+      "id": "tqt.quiz.q2",
+      "prompt": {
+        "id": "tqt.quiz.q2.prompt",
+        "vi": "Vì sao Quốc Toản không được vào bàn việc nước ở Bình Than?",
+        "en": "Why wasn't Quốc Toản allowed into the meeting at Bình Than?",
+        "claims": [
+          "C05"
+        ]
+      },
+      "choices": [
+        {
+          "text": {
+            "id": "tqt.quiz.q2.c1",
+            "vi": "Vì cậu còn nhỏ tuổi",
+            "en": "He was too young",
+            "claims": [
+              "C05"
+            ]
+          },
+          "picture_id": "pic.quiz_child"
+        },
+        {
+          "text": {
+            "id": "tqt.quiz.q2.c2",
+            "vi": "Vì cậu đến muộn",
+            "en": "He was late",
+            "claims": [
+              "C05"
+            ]
+          },
+          "picture_id": "pic.quiz_hourglass"
+        },
+        {
+          "text": {
+            "id": "tqt.quiz.q2.c3",
+            "vi": "Vì cậu bị ốm",
+            "en": "He was ill",
+            "claims": [
+              "C05"
+            ]
+          },
+          "picture_id": "pic.quiz_bed"
+        }
+      ],
+      "correct_index": 0,
+      "why": {
+        "id": "tqt.quiz.q2.why",
+        "vi": "Cậu còn nhỏ tuổi nên không được dự bàn.",
+        "en": "He was too young to join the meeting.",
+        "claims": [
+          "C05"
+        ]
+      }
+    },
+    {
+      "id": "tqt.quiz.q3",
+      "prompt": {
+        "id": "tqt.quiz.q3.prompt",
+        "vi": "Truyện kể rằng Quốc Toản đã bóp nát quả gì?",
+        "en": "The story says Quốc Toản crushed what fruit?",
+        "claims": [
+          "C06"
+        ]
+      },
+      "choices": [
+        {
+          "text": {
+            "id": "tqt.quiz.q3.c1",
+            "vi": "Quả chuối",
+            "en": "A banana",
+            "claims": [
+              "C06"
+            ]
+          },
+          "picture_id": "pic.quiz_fruit_banana"
+        },
+        {
+          "text": {
+            "id": "tqt.quiz.q3.c2",
+            "vi": "Quả dừa",
+            "en": "A coconut",
+            "claims": [
+              "C06"
+            ]
+          },
+          "picture_id": "pic.quiz_fruit_coconut"
+        },
+        {
+          "text": {
+            "id": "tqt.quiz.q3.c3",
+            "vi": "Quả cam",
+            "en": "An orange",
+            "claims": [
+              "C06"
+            ]
+          },
+          "picture_id": "pic.quiz_fruit_orange"
+        }
+      ],
+      "correct_index": 2,
+      "why": {
+        "id": "tqt.quiz.q3.why",
+        "vi": "Truyện kể rằng cậu bóp nát quả cam vua ban.",
+        "en": "The story says he crushed the orange from the king.",
+        "claims": [
+          "C06"
+        ]
+      }
+    },
+    {
+      "id": "tqt.quiz.q4",
+      "prompt": {
+        "id": "tqt.quiz.q4.prompt",
+        "vi": "Truyện kể rằng lá cờ của Quốc Toản thêu mấy chữ vàng?",
+        "en": "The story says Quốc Toản's banner had how many golden words?",
+        "claims": [
+          "C08"
+        ]
+      },
+      "choices": [
+        {
+          "text": {
+            "id": "tqt.quiz.q4.c1",
+            "vi": "Ba chữ",
+            "en": "Three",
+            "claims": [
+              "C08"
+            ]
+          },
+          "picture_id": "pic.quiz_count_3"
+        },
+        {
+          "text": {
+            "id": "tqt.quiz.q4.c2",
+            "vi": "Sáu chữ",
+            "en": "Six",
+            "claims": [
+              "C08"
+            ]
+          },
+          "picture_id": "pic.quiz_count_6"
+        },
+        {
+          "text": {
+            "id": "tqt.quiz.q4.c3",
+            "vi": "Mười chữ",
+            "en": "Ten",
+            "claims": [
+              "C08"
+            ]
+          },
+          "picture_id": "pic.quiz_count_10"
+        }
+      ],
+      "correct_index": 1,
+      "why": {
+        "id": "tqt.quiz.q4.why",
+        "vi": "Truyện kể rằng cờ thêu sáu chữ: Phá cường địch, báo hoàng ân.",
+        "en": "The story says it had six words: Phá cường địch, báo hoàng ân.",
+        "claims": [
+          "C08"
+        ]
+      }
+    },
+    {
+      "id": "tqt.quiz.q5",
+      "prompt": {
+        "id": "tqt.quiz.q5.prompt",
+        "vi": "Quốc Toản cùng quân nhà Trần đánh giặc nào?",
+        "en": "Which invaders did Quốc Toản fight with the Trần army?",
+        "claims": [
+          "C09"
+        ]
+      },
+      "choices": [
+        {
+          "text": {
+            "id": "tqt.quiz.q5.c1",
+            "vi": "Quân Mông–Nguyên",
+            "en": "The Mông–Nguyên army",
+            "claims": [
+              "C09"
+            ]
+          },
+          "picture_id": "pic.quiz_helmet_a"
+        },
+        {
+          "text": {
+            "id": "tqt.quiz.q5.c2",
+            "vi": "Quân Minh",
+            "en": "The Ming army",
+            "claims": [
+              "C09"
+            ]
+          },
+          "picture_id": "pic.quiz_helmet_b"
+        },
+        {
+          "text": {
+            "id": "tqt.quiz.q5.c3",
+            "vi": "Quân Thanh",
+            "en": "The Qing army",
+            "claims": [
+              "C09"
+            ]
+          },
+          "picture_id": "pic.quiz_helmet_c"
+        }
+      ],
+      "correct_index": 0,
+      "why": {
+        "id": "tqt.quiz.q5.why",
+        "vi": "Thời nhà Trần, quân ta đánh giặc Mông–Nguyên.",
+        "en": "In the Trần times, Đại Việt fought the Mông–Nguyên invaders.",
+        "claims": [
+          "C09"
+        ]
+      }
+    }
+  ]
+}
