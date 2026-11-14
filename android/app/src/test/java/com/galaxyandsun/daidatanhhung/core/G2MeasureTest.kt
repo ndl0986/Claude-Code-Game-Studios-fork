@@ -14,7 +14,7 @@ class G2MeasureTest {
     private val tuning = Tuning.from(content.tuning)
 
     private fun run() = MissionRun(content.heroes.getValue("tran-quoc-toan").mission, tuning, Mulberry32(tuning.seed), {})
-        .also { it.debugStartBeat(3, telegraph = false, caption = false) }
+        .also { r -> r.debugStartBeat(r.beats.indices.first { r.typeOf(it) == BeatType.REACH }, telegraph = false, caption = false) }
 
     private fun timeBeat(strategy: (MissionRun, Int) -> InputFrame): Double {
         val r = run(); var n = 0

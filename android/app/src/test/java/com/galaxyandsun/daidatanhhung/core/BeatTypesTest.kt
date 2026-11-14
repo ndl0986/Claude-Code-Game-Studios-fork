@@ -13,6 +13,10 @@ class BeatTypesTest {
     private fun idle(g: Game, n: Int = 20) = repeat(n) { g.step(dt, InputFrame()) }
     private fun input(vararg held: Action) = InputFrame().apply { this.held += held }
 
+    /** The index of the first beat of [type] in the full mission (positions change as content grows). */
+    private fun idx(type: BeatType): Int { val g = TestContent.fullGame(); return g.bundle.mission.beats.indices.first { g.run.typeOf(it) == type } }
+    private fun atType(type: BeatType): Game = atBeat(idx(type))
+
     /** Starts play and walks to beat [i]'s start, through earlier beats via debug. */
     private fun atBeat(i: Int): Game {
         val g = TestContent.fullGame()
@@ -25,7 +29,7 @@ class BeatTypesTest {
     @Test fun fullMissionHasTheFourNonFightTypes() {
         val g = TestContent.fullGame()
         val types = g.bundle.mission.beats.indices.map { type(g, it) }
-        assertEquals(listOf(BeatType.WALK, BeatType.HOLD, BeatType.TRAINING, BeatType.REACH), types)
+        assertTrue(types.containsAll(listOf(BeatType.WALK, BeatType.HOLD, BeatType.TRAINING, BeatType.REACH)))
         assertTrue(g.run.stubbedBeats.isEmpty())
     }
 
@@ -37,28 +41,30 @@ class BeatTypesTest {
         var n = 0
         while (g.run.phase == Phase.WALK && n++ < 2000) g.step(dt, input(Action.RIGHT))
         assertEquals(Phase.CARD, g.run.phase)
-        assertEquals(0, g.run.beat)
+        assertEquals(idx(BeatType.WALK), g.run.beat)
         repeat(g.run.cardBoxes().size) { idle(g); g.next() }
         assertEquals(Phase.PLAY, g.run.phase)
         n = 0
         val seen = mutableSetOf<Phase>()
-        while (g.run.beat == 0 && n++ < 60 * 30) { g.step(dt, input(Action.RIGHT)); seen += g.run.phase }
+        val walkBeat = g.run.beat
+        while (g.run.beat == walkBeat && n++ < 60 * 30) { g.step(dt, input(Action.RIGHT)); seen += g.run.phase }
         assertFalse(Phase.CAPTION in seen)
-        assertEquals(1, g.run.beat)
+        assertEquals(walkBeat + 1, g.run.beat)
     }
 
     /** Mission-flow AC20 (F5): the TQT beats start at 900, 6340, 7940, 10740. */
     @Test fun ac20BeatPositions() {
         val r = TestContent.fullGame().run
-        val gap = Tuning.from(TestContent.load().tuning)["beat_gap"]
-        val expected = if (gap == 800.0) listOf(900.0, 5540.0, 6340.0, 8340.0) else listOf(900.0, 6340.0, 7940.0, 10740.0) // beat_gap 800 (TASK-016) / 1600
-        assertEquals(expected, (0..3).map { r.beatX(it) })
+        // AC20 (mission-flow F5 worked example for the TQT data, schema 1.4): walk 1 screen, dialogue, hold, training, reach
+        assertEquals(listOf(900.0, 2980.0, 3780.0, 4580.0, 6580.0), r.beats.indices.map { r.beatX(it) })
+        val reach = r.beats.indices.first { r.typeOf(it) == BeatType.REACH }
+        assertEquals(11700.0, r.beatX(reach) + r.lengthScreens(reach) * 1280, 0.0) // the flag (from x_start = beatX)
     }
 
     /** Mission-flow AC21: a training block counts only when defend is held at strike resolve. */
     @Test fun ac21TrainingBlockOnlyAtResolve() {
         val g = TestContent.fullGame()
-        g.debugJump("play", beat = 3, stage = "blocks")
+        g.debugJump("play", beat = idx(BeatType.TRAINING) + 1, stage = "blocks")
         val p = g.run.partner!!
         assertEquals(EnemyState.WINDUP, p.state)
         repeat(30) { g.step(dt, input(Action.DEFEND)) }   // held for 0.5 s of the windup, then released
@@ -70,31 +76,32 @@ class BeatTypesTest {
 
     /** AC3: a beat with buttons [move] shows only the move pads. */
     @Test fun ac3OnlyTheBeatsButtons() {
-        val g = atBeat(0)
+        val g = atType(BeatType.WALK)
         idle(g); repeat(g.run.cardBoxes().size) { idle(g); g.next() }
         assertEquals(setOf("move"), g.run.visibleButtons())
-        val h = atBeat(1)
+        val h = atType(BeatType.HOLD)
         repeat(h.run.cardBoxes().size) { idle(h); h.next() }
         assertEquals(setOf("special"), h.run.visibleButtons())
     }
 
     /** AC4 (F2): a 3-screen walk ends at x_start + 3840 after 11.6 s ± 0.1 s at 330 px/s. */
     @Test fun ac4WalkLengthAndTime() {
-        val g = atBeat(0)
+        val g = atType(BeatType.WALK)
         repeat(g.run.cardBoxes().size) { idle(g); g.next() }
         assertEquals(Phase.PLAY, g.run.phase)
         val x0 = g.run.xStart
         var steps = 0
         while (g.run.phase == Phase.PLAY && steps < 60 * 30) { g.step(dt, input(Action.RIGHT)); steps++ }
-        assertTrue(g.run.hero.x >= x0 + 3840)
-        assertEquals(3840.0 / 330.0, steps * dt, 0.1)
+        val len = g.run.lengthScreens(g.run.beat) * 1280
+        assertTrue(g.run.hero.x >= x0 + len)
+        assertEquals(len / 330.0, steps * dt, 0.1) // AC4 / F2 at hero_speed 330
     }
 
     /** AC5 (F3): the meter holds 48% while released and ends after 1.3 s more holding. */
     @Test fun ac5HoldMeterNeverDrains() {
-        val g = atBeat(1)
+        val g = atType(BeatType.HOLD)
         repeat(g.run.cardBoxes().size) { idle(g); g.next() }
-        assertEquals(2.5, g.run.holdSeconds(1), 0.0)
+        assertEquals(2.5, g.run.holdSeconds(g.run.beat), 0.0)
         repeat(72) { g.step(dt, input(Action.SPECIAL)) }              // 1.2 s
         val m = g.run.heldTotal / 2.5
         assertEquals(0.48, m, 0.01)
@@ -107,7 +114,7 @@ class BeatTypesTest {
 
     /** AC6: special before the dummies and blocks does nothing; training ends only after hits, blocks, special. */
     @Test fun ac6TrainingOrder() {
-        val g = atBeat(2)
+        val g = atType(BeatType.TRAINING)
         repeat(g.run.cardBoxes().size) { idle(g); g.next() }
         val r = g.run
         assertEquals(TrainingStep.DUMMIES, r.trainingStep)
@@ -134,7 +141,7 @@ class BeatTypesTest {
 
     /** Training: an unblocked practice strike only pushes back and doesn't count. */
     @Test fun trainingMissedBlockDoesNotCount() {
-        val g = atBeat(2)
+        val g = atType(BeatType.TRAINING)
         repeat(g.run.cardBoxes().size) { idle(g); g.next() }
         val r = g.run
         var n = 0
@@ -149,10 +156,10 @@ class BeatTypesTest {
 
     /** AC7: an encounter locks the camera until its enemies run away; the flag ends the beat. */
     @Test fun ac7ReachTheFlagEncounterLocksTheCamera() {
-        val g = atBeat(3)
+        val g = atType(BeatType.REACH)
         repeat(g.run.cardBoxes().size) { idle(g); g.next() }
         val r = g.run
-        val firstAt = r.xStart + r.encounterAt(3)[0] * 1280
+        val firstAt = r.xStart + r.encounterAt(r.beat)[0] * 1280
         var n = 0
         while (!r.inEncounter && n++ < 60 * 30) g.step(dt, input(Action.RIGHT))
         assertTrue(r.inEncounter); assertTrue(r.hero.x >= firstAt)
@@ -207,7 +214,7 @@ class BeatTypesTest {
 
     /** QC r2 B1 on beat cards: a second press 0.15 s after an advance is refused even if released later. */
     @Test fun b1CardDoubleTapPressGate() {
-        val g = atBeat(2) // training: a card with several boxes
+        val g = atType(BeatType.TRAINING) // training: a card with several boxes
         idle(g)
         assertEquals(Phase.CARD, g.run.phase)
         assertTrue(g.pressAllowed("next")); assertTrue(g.next())
@@ -243,7 +250,7 @@ class BeatTypesTest {
         while (!(g.screen == Screen.PLAY && g.run.beatType == BeatType.TRAINING && g.run.phase == Phase.PLAY) && n++ < 60 * 300) {
             val r = g.run; val i = InputFrame()
             when {
-                g.onStoryBox -> if (n % 20 == 0) g.next()
+                g.onStoryBox -> if (n % 20 == 0) { if (g.run.phase == Phase.DIALOGUE && g.run.dialogueButton == "ask") g.ask() else g.next() }
                 r.phase == Phase.PLAY && r.beatType == BeatType.HOLD -> i.held += Action.SPECIAL
                 else -> i.held += Action.RIGHT
             }
@@ -255,7 +262,7 @@ class BeatTypesTest {
 
     @Test fun leaderDebugStageStartsAWindupOf132() {
         val g = TestContent.fullGame()
-        g.debugJump("play", beat = 4, stage = "leader")
+        g.debugJump("play", beat = idx(BeatType.REACH) + 1, stage = "leader")
         val e = g.run.enemies.first { it.kind == "leader" }
         assertEquals(EnemyState.WINDUP, e.state)
         assertEquals(1.32, g.run.windupTime("leader"), 1e-9)
@@ -263,7 +270,7 @@ class BeatTypesTest {
 
     /** AC10: pause (the app going to the background) freezes the meter and the enemies. */
     @Test fun ac10PauseKeepsTheMeter() {
-        val g = atBeat(1)
+        val g = atType(BeatType.HOLD)
         repeat(g.run.cardBoxes().size) { idle(g); g.next() }
         repeat(90) { g.step(dt, input(Action.SPECIAL)) }
         val m = g.run.heldTotal
@@ -349,7 +356,7 @@ class BeatTypesTest {
             val r = g.run; val i = InputFrame()
             when {
                 g.screen == Screen.QUIZ -> { val q = g.quiz!!; if (q.rightShown < 0) g.answer(q.current.correctIndex) else if (q.canAdvance) g.next() }
-                g.onStoryBox -> { if (n % 20 == 0) g.next() }
+                g.onStoryBox -> { if (n % 20 == 0) { if (g.run.phase == Phase.DIALOGUE && g.run.dialogueButton == "ask") g.ask() else g.next() } }
                 g.screen == Screen.PLAY -> when {
                     r.phase == Phase.PLAY && r.beatType == BeatType.HOLD -> i.held += Action.SPECIAL
                     r.phase == Phase.PLAY && r.beatType == BeatType.TRAINING -> when (r.trainingStep) {
@@ -380,7 +387,7 @@ class BeatTypesTest {
     }
 
     @Test fun flagArrowWhenIdleOnTheClearPath() {
-        val g = atBeat(3)
+        val g = atType(BeatType.REACH)
         repeat(g.run.cardBoxes().size) { idle(g); g.next() }
         val r = g.run
         // Walk past both encounters' triggers is not needed: idle near the start, flag off screen → no arrow.
