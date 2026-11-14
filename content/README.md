@@ -58,7 +58,7 @@ Mission schema **1.5** (TASK-005l, MINOR): an optional beat `cheer` (default `tr
   - Retries are wrong picks before the right one, counted as a **total across the whole quiz**: 0 earns 3★, 2 or fewer earns 2★, more earns 1★.
   - A wrong card is greyed; a repeat tap on it is ignored and doesn't count (D-11a), so a question has at most 2 retries and the quiz always ends.
   - Finishing always unlocks the next hero.
-- **Tuning** (`tuning.json`): the prototype's `config.js` values in snake_case. Each entry is `{value, min, max, unit}`, in a 1280×720 world. `pad_min`, `pad_gap` (the minimum gap between pads) and `drag_threshold` (tap vs drag on the map and timeline) are in **pt/dp**, not world px (Input GDD F1, Rule 16).
+- **Tuning** (`tuning.json`): the prototype's `config.js` values in snake_case. Each entry is `{value, min, max, unit}`, in a 1280×720 world. `pad_min`, `pad_gap` (the minimum gap between pads) and `drag_threshold` (tap vs drag on the map and timeline) are in **pt/dp**, not world px (Input GDD F1, Rule 16). `screen_enter_lock` (s): presses within this time of a story, card, dialogue, quiz or results **screen** being entered from another screen are dropped (Input Rule 13, QC r6 B7); box-to-box advances within a screen keep only `advance_debounce`.
   - It also holds the numbers the prototype hard-coded in `index.html` (TASK-005b), so neither app
     copies them by hand: `first_spawn_delay`, `hurt_recover`, `leader_telegraph_mul`,
     `enter_to_approach_dist`, `approach_min_time`, `windup_reach_extra`, `strike_reach_extra`,
