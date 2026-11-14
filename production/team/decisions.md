@@ -19,7 +19,7 @@ it) · **Decided** (Luan's call, with the date).
   prototype), so the quiz always ends; (b) `quiz_count` = 5, so each hero's content decides 3–5
   questions (random tapping earns ≥2★ 37% of the time with 3 questions, 8.6% with 5);
   (c) validation fails if `rules.json` t2 < t3.
-- **Status:** Done by the devs in data/TASK-005d (`f94f463`), awaiting merge. Raised by game-art-content.
+- **Status:** Done, merged in `3074d43` (data/TASK-005d). Raised by game-art-content.
 
 ### D-10 A "Special" (banner) move in combat
 
