@@ -11,6 +11,17 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-22 Let the phone's own backup keep the child's progress?
+
+- **Flow:** Save & progress GDD rule 11 → save-data ADR (D-04) → iOS/Android backup settings.
+- **What's saved:** only game flags (language, sound, which heroes are done or opened, best stars,
+  medals). No personal data, no network.
+- **Options:** A. **allow** the parent's normal iCloud / Google backup, so progress and medals survive
+  a new phone · B. **exclude** the save from backups, so nothing leaves the device even in the
+  parent's backup, but progress is lost on a new phone.
+- **Recommendation:** A (non-personal flags; losing a child's medals on a new phone feels unkind).
+- **Status:** Open (privacy: your call).
+
 ### D-20 A language choice screen on first launch?
 
 - **Flow:** concept ("first-launch choice + a toggle") → Language & text GDD rule 3 → new screen in
