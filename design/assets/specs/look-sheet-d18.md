@@ -73,7 +73,7 @@ are all proposals; approve them as a whole or change a row.
 **Quiz picture colours:**
 | Hex | Used for |
 |---|---|
-| `#D9A441` | Ochre flag (Q1) |
+| `#D9A441` · `#6FA8D6` · `#C98B6B` | Q1 flags: Trần ochre-gold · Lý sky blue · Lê clay (balanced so the right answer doesn't stand out; QC G4) |
 | `#5F8A8B` · `#8B7A66` | Helmet b teal-grey · helmet c taupe (Q5 distractors) |
 | `#F29A2E` | The orange: the **same** in the quiz picture and the beat-2 prop |
 | `#F5D04A` · `#8E9A4A` | Banana · coconut (muted olive, so no green competes with "correct") |

@@ -11,7 +11,7 @@
       "id": "pic.quiz_flag_tran",
       "kind": "picture",
       "file": "pictures/quiz_flag_tran.png",
-      "bytes": 806,
+      "bytes": 840,
       "width": 256,
       "height": 256
     },
@@ -19,7 +19,7 @@
       "id": "pic.quiz_flag_ly",
       "kind": "picture",
       "file": "pictures/quiz_flag_ly.png",
-      "bytes": 810,
+      "bytes": 922,
       "width": 256,
       "height": 256
     },
@@ -27,7 +27,7 @@
       "id": "pic.quiz_flag_le",
       "kind": "picture",
       "file": "pictures/quiz_flag_le.png",
-      "bytes": 810,
+      "bytes": 897,
       "width": 256,
       "height": 256
     },

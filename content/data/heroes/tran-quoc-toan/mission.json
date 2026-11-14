@@ -30,6 +30,30 @@
       "claims": [
         "C01"
       ]
+    },
+    {
+      "id": "tqt.intro.2",
+      "vi": "Năm ấy, quân Mông–Nguyên chuẩn bị sang xâm lược Đại Việt.",
+      "en": "That year, the Mông–Nguyên army was getting ready to invade Đại Việt.",
+      "claims": [
+        "C03"
+      ]
+    },
+    {
+      "id": "tqt.intro.3",
+      "vi": "Năm ấy, Trần Quốc Toản mới 15 tuổi.",
+      "en": "That year, Trần Quốc Toản was only 15 years old.",
+      "claims": [
+        "C13"
+      ]
+    },
+    {
+      "id": "tqt.intro.4",
+      "vi": "Vua Trần họp các vương hầu và trăm quan ở bến Bình Than để bàn việc đánh giặc.",
+      "en": "The Trần king called his lords and officials to Bình Than to plan the defence.",
+      "claims": [
+        "C04"
+      ]
     }
   ],
   "banner": {
@@ -50,8 +74,8 @@
       ],
       "title": {
         "id": "tqt.f1.title",
-        "vi": "Đến bến Bình Than",
-        "en": "To the Bình Than riverbank",
+        "vi": "Khi các vương hầu họp bàn ở Bình Than",
+        "en": "When the lords met at Bình Than",
         "claims": [
           "C04"
         ]
@@ -59,33 +83,25 @@
       "scene": [
         {
           "id": "tqt.f1.scene.1",
-          "vi": "Giặc Nguyên sắp sang xâm lược.",
-          "en": "The Nguyên army is coming.",
+          "vi": "Quốc Toản muốn xin vua cho cùng đi đánh giặc.",
+          "en": "Quốc Toản wants to ask the king to let him fight too.",
           "claims": [
-            "C03"
+            "C05"
           ]
         },
         {
           "id": "tqt.f1.scene.2",
-          "vi": "Vua họp các tướng ở bến Bình Than.",
-          "en": "The king is meeting his generals at Bình Than.",
+          "vi": "Cậu vội đến bến Bình Than, nơi vua đang họp.",
+          "en": "He hurries to Bình Than, where the king is holding the meeting.",
           "claims": [
             "C04"
-          ]
-        },
-        {
-          "id": "tqt.f1.scene.3",
-          "vi": "Quốc Toản muốn được góp sức!",
-          "en": "Quốc Toản wants to help!",
-          "claims": [
-            "C05"
           ]
         }
       ],
       "goal": {
         "id": "tqt.f1.goal",
-        "vi": "Đi đến bến Bình Than!",
-        "en": "Walk to Bình Than!",
+        "vi": "Đến chỗ vua họp ở Bình Than!",
+        "en": "Get to the king's meeting at Bình Than!",
         "claims": [
           "C12"
         ]
