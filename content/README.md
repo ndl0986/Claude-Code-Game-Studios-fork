@@ -96,6 +96,8 @@ them against `data/` and `samples/`. `fixtures/validity.json` has one case per r
 | R14 | `tuning.json`: `attack_range` ≥ `enemy_reach` − `stand_gap`, so the hero can reach the enemy in front of him (error). |
 | R15 | `tuning.json`: `telegraph` < 0.8 s is a **warning**, not an error. |
 | R16 | `rules.json`: each lower star's `max_retries` is ≥ the higher star's (2★ ≥ 3★); `null` means no limit. |
+| R17 | `hero.timeline_order` is unique across the heroes in `index.json` (an integer in gaps of 10; Hero progression GDD Rule 1). Samples are excluded. |
+| R18 | Each indexed hero's `next_hero` is the next hero **in `index.json`** by `timeline_order`, or null for the last one. Checked at build time; claim status is ignored (Hero progression GDD Rule 6). |
 
 ### Claim gate (R12)
 
