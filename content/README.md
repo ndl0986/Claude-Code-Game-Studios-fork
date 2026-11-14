@@ -2,7 +2,7 @@
 
 The missions, quiz, VI/EN text, claims, sources, tuning and asset map that **both** native
 apps read. It is written once and read by the iOS app (`ios/`) and the Android app (`android/`).
-It is fully offline: everything is bundled at build time, and there is no content server.
+The first apps to read it (TASK-006 iOS, TASK-007 Android) are a **native vertical slice** of one mission, not yet the production codebase; mission, combat, quiz and hint rules are formalised in the GDDs (TASK-008), and this schema follows them. It is fully offline: everything is bundled at build time, and there is no content server.
 
 ## Folders
 

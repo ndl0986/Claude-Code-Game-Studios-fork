@@ -130,7 +130,7 @@ NOT ASSESSED, and never pass.
 ### Key Interfaces
 - The content files and their JSON Schemas in `content/schema/` are the contract between the two apps and the content writer.
 - The fixture files in `content/fixtures/` are input plus expected output that both cores must reproduce exactly: `quiz-stars`, `quiz-scoring`, `claim-gate` and `validity`.
-- The two cores use the same names for states and tuning keys: the prototype's enemy states (enter, approach, telegraph, strike, rest, knocked back, flee) and the `tuning.json` keys. A shared fixture can then describe both.
+- The two cores use the same names for states and tuning keys: the prototype's enemy states `enter`, `approach`, `windup` (the `telegraph` time), `strike`, `rest`, `hurt` (knock-back) and `flee` and the `tuning.json` keys. A shared fixture can then describe both.
 
 ### Implementation Guidelines
 - **Must** read every gameplay value and every player-facing word from `content/data/`. **Must never** hard-code a tuning value or a player-facing string in Swift or Kotlin.
@@ -181,6 +181,8 @@ NOT ASSESSED, and never pass.
 - History text and the sign-off gate live in one place; neither app can ship unsigned text in a release build.
 - A hero is added as data plus art. Both apps pick it up without code changes.
 - The shared fixtures make the rules (stars, scoring, claim gate, validity) provably the same on both.
+
+- **TASK-006 and TASK-007 are a native vertical slice** of one mission, proving the game on real devices (Luan, 2026-11-14). They are not yet the production codebase: the full build follows epics and stories, and slice code is kept, refactored or rewritten as those decide. Mission, combat, quiz and hint rules are formalised in the GDDs (TASK-008); a rule the prototype left unclear is noted for TASK-008, not invented.
 
 ### Negative
 - Gameplay code is written and maintained twice, and every feature costs two implementations and two QC passes.
