@@ -667,6 +667,10 @@ public struct PlayState: Sendable {
         tut = Tutorial(moved: true, hit: true, blocked: true, windupSeen: true, enemySeen: true)
         hero.x = beatX(beat) + 10
         cam = hero.x - tuning["camera_follow_offset"]
+        if stage == "walkto" {
+            // debug (QC harness): walk_to, about 0.45 s of ▶ short of the beat, so its card appears mid-input
+            phase = .walkTo; hero.x = beatX(beat) - tuning["hero_speed"] * 0.45; cam = hero.x - tuning["camera_follow_offset"]; return
+        }
         if beats[beat].type == "dialogue" { phase = .dialogueLine; lineIndex = 0; asksDone = 0; if stage == "ask", let a = beats[beat].params.ask { lineIndex = a.atLine - 1 }; return }
         if stage == "card" && beats[beat].type != "fight" { phase = .beatCard; cardLine = 0; return }
         startPlay(beat)

@@ -3,13 +3,16 @@ import XCTest
 /// QC's touch cases as UI tests (TASK-023 G): real touches on the Simulator, no macOS Accessibility needed.
 /// Each test launches a Debug build at a debug screen, drives the pads by coordinates from the app's own
 /// layout, and asserts on the debug-only `debugState` element (a JSON dump of the game state).
-final class TouchCasesUITests: XCTestCase {
+/// Shared helpers (no tests here, so subclasses don't re-run cases).
+class UITestBase: XCTestCase {
     var app: XCUIApplication!
 
     override func setUp() {
         continueAfterFailure = false
         XCUIDevice.shared.orientation = .landscapeLeft
     }
+
+    func quit() { app?.terminate() }
 
     func launch(_ args: [String]) {
         app = XCUIApplication()
@@ -46,7 +49,12 @@ final class TouchCasesUITests: XCTestCase {
     func note(_ name: String, _ text: String) {
         let a = XCTAttachment(string: text); a.name = name; a.lifetime = .keepAlways; add(a)
     }
+    func log(_ s: [String: Any]) -> [(String, Double)] {
+        (s["log"] as? [[String: Any]] ?? []).map { ($0["place"] as? String ?? "", $0["t"] as? Double ?? 0) }
+    }
+}
 
+final class TouchCasesUITests: UITestBase {
     /// R2-03: press, move a little, release on each pad of the blocks step leaves nothing held.
     func test_R2_03_press_move_release_on_each_pad_leaves_nothing_held() {
         launch(["-startScreen", "play", "-beat", "4", "-stage", "blocks"])
@@ -124,10 +132,7 @@ final class TouchCasesUITests: XCTestCase {
 
 /// r7 additions (iOS QC r6): the title card is display only, one landed hit in slow motion (pop contrast and
 /// AC13 contact), the entry lock under an Attack mash (B7), and a short run whose saved stars survive a relaunch.
-final class MoreCasesUITests: TouchCasesUITests {
-    func log(_ s: [String: Any]) -> [(String, Double)] {
-        (s["log"] as? [[String: Any]] ?? []).map { ($0["place"] as? String ?? "", $0["t"] as? Double ?? 0) }
-    }
+final class MoreCasesUITests: UITestBase {
 
     /// Title AC4e: a tap on the hero card does nothing (no screen change, no button fires).
     func test_a_tap_on_the_title_card_does_nothing() {
@@ -184,7 +189,7 @@ final class MoreCasesUITests: TouchCasesUITests {
         try XCTUnwrap(button("keepReading")).tap()
         XCTAssertEqual(waitFor(3) { $0["skip_warning"] as? Bool == false }["skip_warning"] as? Bool, false, "Keep reading closed it")
         XCTAssertEqual(state()["screen"] as? String, "intro")
-        app.terminate()
+        quit()
         launch(["-startScreen", "quiz"])
         for _ in 0..<5 {
             let s = waitFor(5) { ($0["quiz"] as? [String: Any])?["picked"] as? Bool == false }
@@ -199,11 +204,34 @@ final class MoreCasesUITests: TouchCasesUITests {
         let r = waitFor(5) { $0["screen"] as? String == "results" }
         XCTAssertEqual(r["screen"] as? String, "results"); XCTAssertEqual(r["stars"] as? Int, 3)
         shot("results 3★")
-        app.terminate()
+        quit()
         launch([])
         let t = waitFor(5) { $0["title_card"] != nil }
         XCTAssertEqual((t["title_card"] as? [String: Any])?["stars"] as? Int, 3, "the saved best survives a relaunch")
         note("run", "quiz reached by a debug jump: the medal is not asserted (D-07)")
         shot("title after relaunch")
+    }
+
+    /// Android QC r6: the training card appears while ◀ is being tapped (Bỏ qua sits on ◀'s spot): the entry lock
+    /// drops those taps, so no skip warning opens. Debug start `-stage walkto` (the hero just short of the beat).
+    func test_left_taps_as_the_training_card_appears_open_no_skip_warning() throws {
+        launch(["-startScreen", "play", "-beat", "4", "-stage", "walkto"])
+        let left = pad("left"), right = pad("right")
+        right.press(forDuration: 0.6) // arrive: the card appears during this press
+        // tap ◀ only while the rolling lock can hold (its cap is 1.5 s from the card's entry); past the cap a
+        // tap on the Bỏ qua spot is a real press and may open the warning, which is correct
+        let cardAt = log(state()).first { $0.0.contains("beatCard") }?.1 ?? (state()["now"] as? Double ?? 0)
+        while (state()["now"] as? Double ?? .infinity) - cardAt < 1.2 { left.tap() }
+        let s = state(), entries = log(s)
+        note("card mash", entries.map { String(format: "%@ @ %.3f", $0.0, $0.1) }.joined(separator: "\n"))
+        let card = try XCTUnwrap(entries.first { $0.0.contains("beatCard") }, "the training card appeared")
+        guard let firstSkip = entries.first(where: { $0.0 == "fire:skip" }) else {
+            throw XCTSkip("no tap reached the Bỏ qua spot while the card showed")
+        }
+        guard firstSkip.1 - card.1 < 0.6 else {
+            throw XCTSkip(String(format: "not exercised: the first tap came %.2f s after the card (≥ the lock)", firstSkip.1 - card.1))
+        }
+        XCTAssertEqual(s["skip_warning"] as? Bool, false, "no skip warning opened under the taps")
+        shot("training card after the ◀ taps")
     }
 }

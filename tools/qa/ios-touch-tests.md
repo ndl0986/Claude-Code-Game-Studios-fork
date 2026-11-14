@@ -16,4 +16,10 @@ touches on QC's own Simulator, no macOS Accessibility, nothing compiled. Each ca
 | `test_an_attack_mash_through_the_beat_end_keeps_the_first_ending_box` | B7 / Input Rule 13: Attack mashed through reach-the-flag's end keeps ending box 1 ≥ 0.6 s (rolling lock, cap 1.5 s) | **uses the debug shortcut `-stage flag`** (hero at the flag, encounters counted cleared), reported in its note; the rolling cap itself is proven by `EntryLockTests` |
 | `test_skip_warning_keep_reading_then_stars_survive_a_relaunch` | Bỏ qua → warning → Keep reading; 5 right answers → 3★; a relaunch keeps 3★ on the title card | the quiz is reached by a debug jump, so **the medal is not asserted** (D-07 needs a fully read and played run) |
 
-Guards: each test times out after 120 s and the whole run after `TIMEOUT` (900 s default).
+| `test_left_taps_as_the_training_card_appears_open_no_skip_warning` | Android QC r6: ◀ tapped as the training card appears (Bỏ qua sits on ◀'s spot) opens no skip warning: the entry lock drops the taps | debug start `-stage walkto`; SKIPPED "not exercised" if the first tap lands after the lock |
+
+Cases live in two classes: `TouchCasesUITests` (the r6 five) and `MoreCasesUITests` (the r7 additions).
+
+Guards: each test times out after 420 s and the whole run after `TIMEOUT` (5400 s default). On this host (2026-11-15)
+XCTest spends ~300 s per case in teardown checking for crash reports after the app ends, so a full run takes
+about an hour although the case bodies take 6–10 s; the unchanged r6 harness shows the same wait.

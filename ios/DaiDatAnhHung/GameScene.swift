@@ -727,19 +727,23 @@ final class GameScene: SKScene {
                                ok ? SKColor(hex: 0x3FA34D) : wrong ? C.wrong : C.gold, ok || wrong ? 10 : 5))
             if ok {
                 card.addChild(D.poly([(cw - 64, 40), (cw - 52, 28), (cw - 42, 40), (cw - 22, 16), (cw - 10, 28), (cw - 42, 60)], SKColor(hex: 0x3FA34D), C.ink, 4))
-                // the "Đúng rồi!" bar on the right card, so it travels with it
-                let bar = SKNode(); bar.addChild(D.rr(0, 0, 170, 40, 20, SKColor(hex: 0x3FA34D)))
-                let l = Font.label(game.ui("ui.quiz.correct"), 26, .white); l.position = CGPoint(x: 85, y: -20); bar.addChild(l)
-                bar.position = CGPoint(x: 14, y: -14); card.addChild(bar)
             }
             let pic = Pictures.node(choice.pictureId, size: 110); pic.position = CGPoint(x: cw / 2, y: -105); pic.alpha = wrong ? 0.45 : 1; card.addChild(pic)
+            if ok {
+                // the "Đúng rồi!" pill on the right card, so it travels with it: centred on the card's top row (as
+                // Android draws it), added after the picture so it lies over it (dev pre-freeze r7: it was under the
+                // picture and cut off), deep-ink label on the saturated green (accessibility: never white, 3.2:1)
+                let bar = SKNode(); bar.addChild(D.rr(0, 0, 220, 40, 20, SKColor(hex: 0x3FA34D)))
+                let l = Font.label(game.ui("ui.quiz.correct"), 26, SKColor(hex: 0x1A120C)); l.position = CGPoint(x: 110, y: -20); bar.addChild(l)
+                bar.position = CGPoint(x: cw / 2 - 110, y: -8); card.addChild(bar)
+            }
             if wrong { // the "try again" mark: a circular arrow, never a red cross (TASK-004 art fix), ink-outlined
                 let p = CGMutablePath(); p.addArc(center: CGPoint(x: cw - 40, y: -40), radius: 18, startAngle: 0.3, endAngle: 5.6, clockwise: false)
                 let outline = D.shape(p, nil, C.ink, 12); outline.lineCap = .round; card.addChild(outline)
                 let arc = D.shape(p, nil, C.wrong, 6); arc.lineCap = .round; card.addChild(arc)
             }
             let l = Font.label(choice.text.text(game.lang), 37, C.ink, width: cw - 30); l.position = CGPoint(x: cw / 2, y: -236); card.addChild(l) // ink on every card state
-            for (z, child) in card.children.enumerated() { child.zPosition = CGFloat(z) } // shadow, fill, icons, picture, label in that order
+            for (z, child) in card.children.enumerated() { child.zPosition = CGFloat(z) } // shadow, fill, icons, picture, the right pill, label in that order
             let at = ok && picked && ql.small && !animate ? ql.rightCard(slot: slot) : b
             card.position = D.p(at.x, at.y); card.name = "\(j)"; card.userData = ["x": at.x]
             uiZ += 1; card.zPosition = uiZ
