@@ -323,7 +323,7 @@ class Game(
         when (target) {
             "intro" -> go(Screen.INTRO)
             "play" -> { go(Screen.PLAY); if (beat > 1 || stage != null) run.debugStartBeat(beat - 1, stage == "telegraph", stage == "caption", stage == "card")
-                when (stage) { "blocks", "special" -> run.debugTraining(stage); "teach" -> run.debugTeach(); "meter" -> run.debugTraining("meter", 0.6); "encounter" -> run.debugEncounter(); "flag" -> run.debugNearFlag(); "leader" -> run.debugLeaderWindup(); "line", "askhint" -> run.debugDialogue(line, stage == "askhint"); "skip" -> { run.debugDialogue(line, false); skip() } } }
+                when (stage) { "blocks", "special" -> run.debugTraining(stage); "finishleft" -> { run.debugTraining("special"); run.debugHeroScreen(100.0, -1) }; "finishright" -> { run.debugTraining("special"); run.debugHeroScreen(1045.0, 1) } "teach" -> run.debugTeach(); "meter" -> run.debugTraining("meter", 0.6); "encounter" -> run.debugEncounter(); "flag" -> run.debugNearFlag(); "leader" -> run.debugLeaderWindup(); "line", "askhint" -> run.debugDialogue(line, stage == "askhint"); "skip" -> { run.debugDialogue(line, false); skip() } } }
             "skipwarn" -> { go(Screen.INTRO); skip() }
             "caption" -> { go(Screen.PLAY); run.debugStartBeat(beat - 1, telegraph = false, caption = true) }
             "pause" -> { go(Screen.PLAY); pause() }

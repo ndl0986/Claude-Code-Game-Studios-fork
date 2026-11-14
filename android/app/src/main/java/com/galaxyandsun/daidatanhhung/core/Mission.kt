@@ -674,6 +674,8 @@ class MissionRun(
     val stallTarget: Enemy? get() = if (!stalled) null else enemies.filter { it.state != EnemyState.FLEE }.minByOrNull { abs(it.x - hero.x) }
 
     // ---- Debug jumps (screenshots; players never see them) ----
+    /** Debug (r11 evidence, AC33 case d): the hero at a screen x, facing a way, the camera unchanged. */
+    fun debugHeroScreen(screenX: Double, face: Int) { hero.x = cam + screenX; hero.face = face }
     fun debugStartBeat(i: Int, telegraph: Boolean, caption: Boolean, card: Boolean = false) {
         beat = i.coerceIn(0, beats.size - 1)
         tut.moved = true; tut.hit = true; tut.blocked = true; tut.windupSeen = true; tut.enemySeen = true
