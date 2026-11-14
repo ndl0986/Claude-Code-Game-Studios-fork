@@ -107,9 +107,10 @@ world px on every supported phone (Android clamps it with `min(720, ·)`).
 - Bỏ qua: release-inside → the warning or an immediate skip (above).
 - The debounce also applies across a screen change (Input edge case), so a double tap on the
   last caption box never skips the next screen's first line.
-- **Screen-entry lock (QC r6 B7, Input Rule 13b):** for `screen_enter_lock` (0.6 s) after a story
-  screen (intro, beat card, caption, ending) or the skip-warning card is entered from a different
-  screen or phase, Tiếp and Bỏ qua **show at once but take no input**; box-to-box advances within
+- **Screen-entry lock, rolling (QC r6 B7, Input Rule 13b):** after a story screen (intro, beat
+  card, caption, ending) or the skip-warning card is entered from a different screen or phase,
+  Tiếp and Bỏ qua **show at once but take no input** until the child has stopped pressing for
+  `screen_enter_lock` (0.6 s), at most `screen_enter_lock_max` (1.5 s) from entry; box-to-box advances within
   the screen keep only `advance_debounce`. Pause and sound are exempt;
   presses are dropped, not queued. An optional subtle fade-in over that time is allowed. A pointer
   already down (e.g. on the Attack pad's spot) never fires them. After the lock,
@@ -154,4 +155,4 @@ either app).*
 8. **GIVEN** a beat card, **WHEN** captured, **THEN** the title has no emblem on either side, and pause and sound sit top-left.
 9. **GIVEN** the Android (k 0.527) and iOS (k 0.517) reference phones and a k 0.40 phone or emulator, with pause and sound at `pad_min`, **WHEN** a beat card, an intro box, a caption and the ending are captured in VI and EN, **THEN** no pixel of the paper frame, the beat-card panel or a framed picture lies inside the pause/sound block (x ≤ `corner_right`, y ≤ `corner_bottom`); the panel's top is ≥ `corner_bottom` + 8 and its bottom ≤ Tiếp's top − 8.
 10. **GIVEN** any story screen on the reference phones and at k 0.40, **WHEN** captured, **THEN** "Bỏ qua" is ≥ `pad_min` tall (≥ 137 world px at k 0.527, ≥ 180 at k 0.40), its top and bottom match Tiếp's, and it stays left of Tiếp with ≥ `pad_gap` between them.
-11. **GIVEN** the TQT reach-the-flag beat ending while Attack is pressed every 0.35 s, **WHEN** the ending appears, **THEN** its first box stays on screen ≥ 0.6 s, no ending box is skipped, and the quiz starts only after each box was advanced once (Input AC17).
+11. **GIVEN** the TQT reach-the-flag beat ending while Attack is pressed every 0.35 s for 3 s, **WHEN** the ending appears, **THEN** its first box holds until 1.5 s (`screen_enter_lock_max`), then each press advances one box, none is skipped silently, and the quiz starts only after each box was advanced once (Input AC17).

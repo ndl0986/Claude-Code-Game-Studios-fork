@@ -106,7 +106,7 @@ stay top-centre in the free band right of the corner block.
 ## 7. Interaction Map
 
 Cards fire on release inside (P-01); Tiếp is debounced (B1); **the quiz (entered from the ending), results
-and unlock take the screen-entry lock** (`screen_enter_lock` 0.6 s, Input Rule 13b; QC r6 B7):
+and unlock take the screen-entry lock** (rolling: `screen_enter_lock` 0.6 s of no pressing, capped at `screen_enter_lock_max` 1.5 s; Input Rule 13b; QC r6 B7):
 cards and Tiếp show at once but take no input during it, so a tap carried over from the ending
 never picks a card and a fast double tap on the last Tiếp never skips results. Question to
 question within the quiz keeps only the debounce, **except at 0.40 ≤ k < 0.48**, where Tiếp lies
