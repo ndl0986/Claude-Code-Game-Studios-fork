@@ -250,7 +250,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         if (r.bannerRaised && r.beatType == BeatType.TRAINING)
             CueLayout.raisedBanner(ground.toDouble(), bannerBeat).let { f ->
                 val k = r.raiseProgress; val rise = (40 * (1 - k) * (1 - k)).toFloat() // Rule 7c slice: from y + 40, ease-out over 0.67 s
-                fig.icon("flag", (h.x - h.face * CueLayout.raisedBannerOffset(bannerBeat)).toFloat(), f.y.toFloat() + rise, f.size.toFloat()) } // bx; CueLayout.bannerSpan
+                fig.icon("herobanner", (h.x - h.face * CueLayout.raisedBannerOffset(bannerBeat)).toFloat(), f.y.toFloat() + rise, f.size.toFloat()) } // bx; CueLayout.bannerSpan; d18 vermilion + gold
         if (r.beatType == BeatType.HOLD && (r.phase == Phase.PLAY || r.phase == Phase.END)) holdMeter(h.x.toFloat() + h.face * 130f, ground - 200, r.heldTotal / r.holdSeconds(r.beat)) // beside the hero, clear of the goal bar
         for (p in r.parts) d.star(p.x.toFloat(), p.y.toFloat(), p.r.toFloat(), p.color.toInt(), C.GOLD_DARK, p.rot.toFloat())
         if (r.cheerT >= 0 && r.t - r.cheerT < 0.6) { val k = ((r.t - r.cheerT) / 0.6).toFloat() // the cheer's stars, drawn here (no RNG)

@@ -589,6 +589,9 @@ class MissionRun(
         // Mission flow Rule 2 / AC30: a beat with `cheer: false` ends on a neutral page turn, no cheer burst or pose.
         if (currentBeat.cheer) { sfx(Sfx.CHIME); cheerT = t } else sfx(Sfx.SOFT) // the burst is drawn by the app; the core RNG is used only by fights and dummies (iOS parity)
         lockX = null; partner = null; trainCap = null
+        // r12 (QC r11): the camera catches up in this same update, so the next beat's theme and the new view appear
+        // on the same frame (a cut), never one frame of the new sky at the old view
+        cam = maxOf(cam, hero.x - tuning["camera_follow_offset"])
         if (beatType == BeatType.TRAINING) dummies.clear() // Rule 7c (r11, QC r10): no straw dummies on the next beat's sky
         beat++
         phase = Phase.WALK

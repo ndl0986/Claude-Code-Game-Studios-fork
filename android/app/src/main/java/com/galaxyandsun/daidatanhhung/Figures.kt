@@ -21,6 +21,9 @@ class Figures(private val d: Draw) {
         const val HERO_S = 180f / 262f
         const val PARTNER_S = 0.62f
         const val DUMMY_S = 0.75f
+        /** Look sheet d18 (slice placeholders until D-18 is signed off). */
+        const val FOLLOWER_TUNIC = 0xFFD8C9A3.toInt(); const val FOLLOWER_SASH = 0xFFB9705C.toInt()
+        const val HERO_BANNER = 0xFFD64A2E.toInt(); const val HERO_GOLD = 0xFFE8A93B.toInt()
     }
     private fun enemyScale(kind: String) = when (kind) { "shield" -> 0.72f; else -> 0.64f } // spear/leader ≈ 260 tall, shield ≈ 232
 
@@ -29,7 +32,7 @@ class Figures(private val d: Draw) {
      * drawn at world length instead: the arc reaches [reach] world px from the shoulder (hud.md §3.3, AC13).
      */
     fun hero(x: Float, y: Float, face: Int, walk: Boolean, defend: Boolean, attack: Double?, t: Double, s: Float = 1f, tunic: Int = C.RED, reach: Float? = null,
-             staffUp: Boolean = false) {
+             staffUp: Boolean = false, follower: Boolean = false) {
         c.save(); c.translate(x, y); c.scale(face * s, s)
         d.ellipse(0f, 4f, 60f, 12f, C.a(0, 0.18))
         val w = if (walk) sin(t * 14).toFloat() else 0f
@@ -40,8 +43,10 @@ class Figures(private val d: Draw) {
         d.rr(-28 + w * 8, -10f, 28f, 12f, 6f, C.INK); d.rr(0 - w * 8, -10f, 28f, 12f, 6f, C.INK)
         d.path.reset(); d.path.moveTo(-34f, -150f); d.path.lineTo(34f, -150f); d.path.lineTo(42f, -62f)
         d.path.quadTo(0f, -52f, -42f, -62f); d.path.close(); c.drawPath(d.path, d.fill(tunic))
-        d.rr(-38f, -96f, 76f, 12f, 6f, C.GOLD)
-        d.poly(C.GOLD, -14f, -150f, 0f, -126f, 14f, -150f)
+        // look sheet d18 (slice placeholder): a follower wears a muted-vermilion sash, not the hero's gold
+        val trim = if (follower) FOLLOWER_SASH else C.GOLD
+        d.rr(-38f, -96f, 76f, 12f, 6f, trim)
+        d.poly(trim, -14f, -150f, 0f, -126f, 14f, -150f)
         val swing = attack ?: -1.0
         val ang = if (swing >= 0) -1.9 + swing * 2.6 else if (defend) 0.9 else if (staffUp) -0.05 else -0.6 // staffUp: Rule 7c slice
         val len = reach ?: 150f
@@ -53,10 +58,12 @@ class Figures(private val d: Draw) {
         d.circle(0f, -196f, 44f, C.SKIN)
         d.dome(-2f, -200f, 46f, C.HAIR)
         d.circle(-14f, -246f, 15f, C.HAIR)
-        d.rr(-46f, -214f, 92f, 12f, 6f, C.RED)
-        val flap = (sin(t * 9) * 6).toFloat()
-        d.path.reset(); d.path.moveTo(-44f, -210f); d.path.quadTo(-70f, -206 + flap, -84f, -192 + flap); d.path.lineTo(-78f, -186 + flap)
-        d.path.quadTo(-64f, -198f, -44f, -200f); d.path.close(); c.drawPath(d.path, d.fill(C.RED))
+        if (!follower) { // the vermilion headband and its two tails are the hero's signature; followers have none
+            d.rr(-46f, -214f, 92f, 12f, 6f, C.RED)
+            val flap = (sin(t * 9) * 6).toFloat()
+            d.path.reset(); d.path.moveTo(-44f, -210f); d.path.quadTo(-70f, -206 + flap, -84f, -192 + flap); d.path.lineTo(-78f, -186 + flap)
+            d.path.quadTo(-64f, -198f, -44f, -200f); d.path.close(); c.drawPath(d.path, d.fill(C.RED))
+        }
         d.circle(14f, -190f, 6f, C.INK); d.circle(32f, -190f, 6f, C.INK); d.circle(16f, -192f, 2f, C.WHITE); d.circle(34f, -192f, 2f, C.WHITE)
         val ink = d.stroke(C.INK, 4f)
         c.drawLine(8f, -204f, 20f, -202f, ink); c.drawLine(28f, -202f, 40f, -204f, ink)
@@ -172,8 +179,9 @@ class Figures(private val d: Draw) {
             d.ellipse(x, ground - 90, 58f + k.toFloat() * 8, 116f, C.a(C.GLOW, 0.3 + 0.25 * k))
         }
         val swing = when (p.state) { EnemyState.WINDUP -> 0.0; EnemyState.STRIKE -> 0.6; else -> null }
-        hero(x, ground, p.face, p.moving && p.staffUp, false, swing, t, PARTNER_S, tunic = C.INDIGO, reach = 140f - 18f * PARTNER_S, // the stick reaches 140 (hud.md)
-            staffUp = p.staffUp)
+        // look sheet d18 follower (r12, leader's call): straw-beige tunic, muted-vermilion sash, plain topknot, no headband
+        hero(x, ground, p.face, p.moving && p.staffUp, false, swing, t, PARTNER_S, tunic = FOLLOWER_TUNIC, reach = 140f - 18f * PARTNER_S, // the stick reaches 140 (hud.md)
+            staffUp = p.staffUp, follower = true)
     }
 
     fun dropped(w: Dropped, ground: Float) {
@@ -226,7 +234,7 @@ class Figures(private val d: Draw) {
     // ---- Icons: generic objects, no history claim (quiz pictures in debug, background props) ----
     fun icon(name: String, x: Float, y: Float, s: Float) {
         when (name) {
-            "flag" -> flag(x, y, s, C.RED); "flag2" -> flag(x, y, s, C.GOLD); "flag3" -> flag(x, y, s, 0xFF3F9A8A.toInt())
+            "flag" -> flag(x, y, s, C.RED); "herobanner" -> flag(x, y, s, HERO_BANNER, border = HERO_GOLD); "flag2" -> flag(x, y, s, C.GOLD); "flag3" -> flag(x, y, s, 0xFF3F9A8A.toInt())
             "child" -> {
                 d.rr(x - s * 0.2f, y + s * 0.05f, s * 0.16f, s * 0.45f, 6f, C.INDIGO); d.rr(x + s * 0.04f, y + s * 0.05f, s * 0.16f, s * 0.45f, 6f, C.INDIGO)
                 d.rr(x - s * 0.3f, y - s * 0.4f, s * 0.6f, s * 0.55f, 14f, C.RED)
@@ -283,11 +291,13 @@ class Figures(private val d: Draw) {
         }
     }
 
-    private fun flag(x: Float, y: Float, s: Float, col: Int) {
+    /** A flag on a pole; with [border], a ≈ 4 px band inside the cloth's edge (the cloth's box doesn't grow). */
+    private fun flag(x: Float, y: Float, s: Float, col: Int, border: Int? = null) {
         d.rr(x - s * 0.5f, y - s * 0.7f, 8f, s * 1.4f, 4f, 0xFF6A4A2A.toInt())
         d.path.reset(); d.path.moveTo(x - s * 0.45f, y - s * 0.68f); d.path.quadTo(x + s * 0.1f, y - s * 0.8f, x + s * 0.7f, y - s * 0.6f)
         d.path.lineTo(x + s * 0.7f, y - s * 0.05f); d.path.quadTo(x + s * 0.1f, y - s * 0.2f, x - s * 0.45f, y - s * 0.1f); d.path.close()
         c.drawPath(d.path, d.fill(col))
+        if (border != null) { c.save(); c.clipPath(d.path); c.drawPath(d.path, d.stroke(border, 8f)); c.restore() } // 8 stroke clipped = 4 px inside
     }
 
     /** Sky band colours per theme from content/data/themes.json (ADR-0002); set by the activity. */

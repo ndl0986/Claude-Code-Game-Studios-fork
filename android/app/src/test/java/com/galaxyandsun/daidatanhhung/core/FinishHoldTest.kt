@@ -137,4 +137,17 @@ class FinishHoldTest {
         var s = 0.0; while (g.run.phase == Phase.END && s < 5) { g.frame(); s += dt }
         assertEquals("end_pause", g.tuning["end_pause"], s, 2 * dt)
     }
+
+    /** r12 (QC r11): the camera catches up in the update that ends the training beat, together with the theme switch. */
+    @Test fun theCameraCutsToTheNextBeatInTheSameUpdate() {
+        val g = game()
+        val i = g.run.beats.indices.first { g.run.typeOf(it) == BeatType.TRAINING }
+        g.debugJump("play", beat = i + 1, stage = "finishright") // hero at screen x 1045, as QC's real flow: follow is ahead of cam
+        g.tapCo()
+        val camHold = g.run.cam
+        assertTrue("the follow point is ahead of the held camera", g.run.hero.x - g.tuning["camera_follow_offset"] > camHold)
+        while (g.run.phase == Phase.END) g.frame()
+        assertEquals("the walk_to that follows", Phase.WALK, g.run.phase)
+        assertEquals("cam already follows the hero on the beat++ frame", maxOf(0.0, g.run.hero.x - g.tuning["camera_follow_offset"]), g.run.cam, 1e-9)
+    }
 }
