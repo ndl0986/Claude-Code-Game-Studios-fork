@@ -11,6 +11,21 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-18 How Trần Quốc Toản and the invaders look (portrayal + palette), before final art
+
+- **Flow:** art bible → asset specs (TASK-014, 87 assets) → **Luan's look sign-off** → final art
+  replaces the placeholders 1:1 → both apps.
+- **Read:** `design/assets/specs/look-sheet-d18.md` (one page, 9 questions with recommendations).
+- **Hero:** (1) cream tunic with vermilion accents (recommended) or red tunic · (2) staff
+  (recommended) or short spear · (3) topknot + vermilion headband for a Trần youth? · (4) may one
+  follower be a girl?
+- **Enemies:** (5) rounded dome helmet + quilted coat-armour as a placeholder for Mông–Nguyên troops?
+  · (6) slate-violet or more grey? · (7) keep the leader's plain pennant?
+- **Props:** (8) Trần army flag = gold cloth, vermilion border, no symbols, as a stand-in?
+- **Palette:** (9) approve the colour additions (warning yellow for the telegraph, one skin tone
+  for everyone, enemy slate tones, quiz and material colours)?
+- **Status:** Open. Blocks final art only; the slice runs on placeholders meanwhile.
+
 ### D-17 How the game speaks to the child in Vietnamese ("bạn", "em", or no pronoun)
 
 - **Flow:** UI strings and story text → every screen. It sets the game's voice.
