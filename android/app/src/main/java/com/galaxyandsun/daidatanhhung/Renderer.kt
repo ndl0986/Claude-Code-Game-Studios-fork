@@ -150,8 +150,8 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
     private fun title(g: Game, ready: Boolean) {
         val t = g.t
         fig.background(0.0, "village", GROUND)
-        d.rr(150f, 60f, 980f, 210f, 40f, C.PANEL, C.GOLD, 6f)
-        d.drum(240f, 165f, 70f, C.a(C.GOLD, 0.8)); d.drum(1040f, 165f, 70f, C.a(C.GOLD, 0.8))
+        d.rr(180f, 60f, 920f, 210f, 40f, C.PANEL, C.GOLD, 6f) // clear of the sound button (x ≤ 155 at pad_min)
+        d.drum(262f, 165f, 70f, C.a(C.GOLD, 0.8)); d.drum(1018f, 165f, 70f, C.a(C.GOLD, 0.8))
         d.textBox(g.ui(UiIds.TITLE), W / 2, 140f, 740f, 68f, C.GOLD, 1)
         if (debug) d.text(g.ui(UiIds.SUBTITLE_DEBUG), W / 2, 220f, 36f, C.WHITE)
         fig.hero(260f, GROUND, 1, false, false, null, t, 0.8f)
@@ -195,13 +195,13 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         for (w in r.dropped) fig.dropped(w, ground)
         r.partner?.let { fig.partner(it, ground, t) }
         for (e in r.enemies) fig.enemy(e, ground, t)
-        if (!(h.hurt > 0 && (t * 20).toInt() % 2 == 1)) fig.hero(h.x.toFloat(), ground, h.face, h.walk, h.def, if (h.atk >= 0) h.atk else null, t)
+        if (!(h.hurt > 0 && (t * 20).toInt() % 2 == 1)) fig.hero(h.x.toFloat(), ground, h.face, h.walk, h.def, if (h.atk >= 0) h.atk else null, t,
+            Figures.HERO_S, reach = (g.tuning["attack_range"] - 18 * Figures.HERO_S).toFloat()) // body 180 tall, swing arc = attack_range (AC13)
         if (r.bannerRaised && r.beatType == BeatType.TRAINING) fig.icon("flag", h.x.toFloat() - h.face * 60f, ground - 250, 110f)
         if (r.beatType == BeatType.HOLD && (r.phase == Phase.PLAY || r.phase == Phase.END)) holdMeter(h.x.toFloat() + h.face * 130f, ground - 200, r.heldTotal / r.holdSeconds(r.beat)) // beside the hero, clear of the goal bar
         for (p in r.parts) d.star(p.x.toFloat(), p.y.toFloat(), p.r.toFloat(), p.color.toInt(), C.GOLD_DARK, p.rot.toFloat())
-        for (p in r.pops) { val old = d.alpha; d.alpha = min(1.0, p.life * 2); d.text(g.ui(p.textId), p.x.toFloat(), p.y.toFloat(), 40f, p.color.toInt()); d.alpha = old }
-        r.stallTargetX?.let { fig.arrowDown(it.toFloat(), ground - 330, t) }
-        if (r.flagArrow) fig.arrowDown(r.goalX.toFloat(), ground - 300, t)
+        r.stallTargetX?.let { fig.arrowDown(it.toFloat(), ground - 230, t) } // above the heads (≤ 180), below the top stack
+        if (r.flagArrow) fig.arrowDown(r.goalX.toFloat(), ground - 230, t)
         if (r.cheerT >= 0 && r.t - r.cheerT < 0.6) { val k = ((r.t - r.cheerT) / 0.6).toFloat() // the cheer's stars, drawn here (no RNG)
             for (i in 0 until 10) { val a = i * 0.628; d.star(h.x.toFloat() + cos(a).toFloat() * 160 * k, ground - 260 + sin(a).toFloat() * 120 * k, 14f, C.GLOW, C.GOLD_DARK, a.toFloat()) } }
         d.c.restore()
@@ -214,26 +214,34 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         // HUD: pause and sound always; beat medallions; the goal and the banner as text layers (never in art).
         corner(g)
         val n = r.beats.size
-        for (i in 0 until n) {
-            val x = W / 2 - (n - 1) * 45 + i * 90
+        val sx = stackX(g)
+        for (i in 0 until n) { // hud.md §3.3: the top stack is centred in the free band right of pause/sound
+            val x = sx - (n - 1) * 45 + i * 90
             val done = i < r.beat || (i == r.beat && (r.phase == Phase.CAPTION || r.phase == Phase.END))
             d.circle(x, 60f, 30f, if (done) C.GOLD else C.a(C.WHITE, 0.75), C.GOLD_DARK, 4f); d.drum(x, 60f, 22f, if (done) C.INK else C.a(C.INK, 0.35))
         }
         if (r.phase == Phase.PLAY || r.phase == Phase.END) { // the goal under the medallions; its badge clear of the "!" bubble
-            // goal: body text, box 1040 @ 37 px, 1 line (rules.json fit.goal)
-            // below the HUD row (pause/sound/medallions), as iOS: the 1040 box never meets the round buttons
-            d.rr(W / 2 - 530, 168f, 1060f, 58f, 22f, C.a(C.CREAM, 0.88))
-            beat.goal?.let { gl -> d.textBox(gl.get(g.lang), W / 2, 197f, 1040f, 37f, C.INK, 1); badge(g, gl, W / 2 + 430, 168f) }
+            // goal plate: 920 × 56 at 96–152, text box 880 @ 37 px, 1 line (rules.json fit.goal; hud.md §3.3), on every beat
+            d.rr(sx - 460, 96f, 920f, 56f, 22f, C.a(C.CREAM, 0.88))
+            beat.goal?.let { gl -> d.textBox(gl.get(g.lang), sx, 124f, 880f, 37f, C.INK, 1); badge(g, gl, sx + 380, 96f) }
             if (beat.usesBanner) g.bundle.mission.banner?.let { b ->
-                // fit.banner 880 @ 37, up to 2 lines (body class, Language Rule 6, TASK-020 W9). Its bottom stays at 554, just
-                // under the ground line; a second line grows it upward, never down into the pads.
-                val s = b.get(g.lang); val n = d.lineCount(s, 880f, 37f, 2); val hgt = 26f + n * 37f * 1.35f
-                d.rr(W / 2 - 450, 554f - hgt, 900f, hgt, 18f, C.a(C.RED, 0.9)); d.textBox(s, W / 2, 554f - hgt / 2, 880f, 37f, C.GOLD, 2); badge(g, b, W / 2 + 380, 554f - hgt)
+                // banner motto bar: 920 × 112 at 156–268, fixed for 1 or 2 lines (fit.banner 880 @ 37); never over a body
+                d.rr(sx - 460, 156f, 920f, 112f, 18f, C.a(C.RED, 0.92)); d.textBox(b.get(g.lang), sx, 212f, 880f, 37f, C.GOLD, 2); badge(g, b, sx + 380, 156f)
             }
+        }
+        // z-order (hud.md §3.3): bar → pops → hints and the telegraph "!" → HUD buttons
+        // Pops ("Ối!", "Đỡ được!") beside the fighter's head at head height, away from the other fighter; never above the head.
+        for (p in r.pops) {
+            val px = p.x.toFloat() - cam
+            val other = (r.enemies.map { it.x } + listOfNotNull(r.partner?.x)).minByOrNull { kotlin.math.abs(it - p.x) }
+            val side = if (other != null && other > p.x) -1 else 1
+            val rise = min(20f, (ground - 300f - p.y.toFloat()).coerceAtLeast(0f))
+            val old = d.alpha; d.alpha = min(1.0, p.life * 2)
+            d.text(g.ui(p.textId), (px + side * 120).coerceIn(90f, W - 90), ground - 150 - rise, 40f, p.color.toInt()); d.alpha = old
         }
         // The telegraph "!" is the key cue: draw it again above the goal and banner layers.
         for (e in r.enemies) if (e.state == com.galaxyandsun.daidatanhhung.core.EnemyState.WINDUP) {
-            val bx = e.x.toFloat() - cam; val by = ground - (if (e.kind == "leader") 280 else if (e.kind == "shield") 240 else 272) - 20
+            val bx = e.x.toFloat() - cam; val by = ground - 200
             d.circle(bx, by, 30f, C.GLOW, C.GOLD_DARK, 4f); d.rr(bx - 5, by - 18, 10f, 24f, 5f, C.INK); d.circle(bx, by + 14, 5.5f, C.INK)
         }
         val vis = r.visibleButtons()
@@ -357,8 +365,24 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
 
     /** Input Rule 3 (TASK-020 W7): pause and sound sit top-left on every screen that has them. */
     private fun corner(g: Game, pause: Boolean = true) {
-        if (pause) roundIcon("pause", 66f, 66f, 48f, { pauseGlyph(66f, 66f, 48f) }) { g.pause() }
-        roundIcon("mute", 176f, 66f, 48f, { speakerGlyph(176f, 66f, 48f, g.muted) }) { g.toggleMute() }
+        val (r, gap) = cornerSize(g)
+        val cy = 18f + r; val x1 = 18f + r; val x2 = x1 + 2 * r + gap
+        if (pause) roundIcon("pause", x1, cy, r, { pauseGlyph(x1, cy, r) }) { g.pause() }
+        val xs = if (pause) x2 else x1
+        roundIcon("mute", xs, cy, r, { speakerGlyph(xs, cy, r, g.muted) }) { g.toggleMute() }
+    }
+
+    /** Input Rule 4: pause/sound are ≥ pad_min across (137 world px on the Android reference phone), pad_gap apart. */
+    private fun cornerSize(g: Game): Pair<Float, Float> =
+        fit.padRadius(48f) to (g.tuning["pad_gap"] / g.tuning["pad_min"]).toFloat() * fit.padMinWorld
+
+    /**
+     * hud.md §3.3: the top stack's centre. 790 (the band x 330–1250) on the reference phones; on a phone with a smaller k
+     * the pad_min corner is wider, so the 920-wide stack starts 8 px right of it (centre at most 810, 10 px from the edge).
+     */
+    private fun stackX(g: Game): Float {
+        val (r, gap) = cornerSize(g)
+        return (18f + 4 * r + gap + 8f + 460f).coerceIn(790f, 810f)
     }
 
     private fun pause(g: Game) {
@@ -392,8 +416,8 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         // quiz-and-results.md: the counter top-centre, just left of the dots (pause and sound own the top-left)
         d.text("${g.ui(UiIds.QUESTION)} ${min(q.index + 1, n)}/$n", W / 2 - (n - 1) * 30 - 40, 50f, 28f, C.GOLD, Paint.Align.RIGHT)
         val cur = q.current
-        d.textBox(cur.prompt.get(g.lang), W / 2, 165f, 980f, 40f, C.WHITE, 2, semiBold = true); badge(g, cur.prompt, W / 2 + 420, 214f) // two lines 115–215: clear of pause/sound (≤ 114) and the cards (228) // fit.quiz_prompt 980 @ 40, weight 600
-        val cw = 390f; val ch = 330f; val gap = 20f; val x0 = (W - 3 * cw - 2 * gap) / 2; val y0 = 228f
+        d.textBox(cur.prompt.get(g.lang), W / 2, 213f, 980f, 40f, C.WHITE, 2, semiBold = true); badge(g, cur.prompt, W / 2 + 420, 262f) // two lines 163–263: below pause/sound at pad_min (≤ 155), above the cards (270) // fit.quiz_prompt 980 @ 40, weight 600
+        val cw = 390f; val ch = 290f; val gap = 20f; val x0 = (W - 3 * cw - 2 * gap) / 2; val y0 = 270f // cards 270–560, clear of the why bar (566)
         q.order.forEachIndexed { slot, j ->
             val a = cur.choices[j]
             var x = x0 + slot * (cw + gap)
@@ -403,7 +427,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             // quiz-and-results.md: right = #D9F2D0 fill, #3FA34D 10 px border, tick; wrong = #E6E1F0 fill, #9C8FB8 10 px
             // border, circular arrow; ink labels; icons carry a thick ink outline (colour-blind-safe signals)
             d.rr(x, y0, cw, ch, 30f, if (ok) 0xFFD9F2D0.toInt() else if (wrong) 0xFFE6E1F0.toInt() else C.CREAM, if (ok) C.RIGHT else if (wrong) C.TRY_AGAIN else C.GOLD, if (ok || wrong) 10f else 5f)
-            picture(a.pictureId, x + cw / 2, y0 + 120, 100f)
+            picture(a.pictureId, x + cw / 2, y0 + 100, 88f)
             if (wrong) {
                 val ax = x + cw - 44; val ay = y0 + 44
                 d.arc(ax, ay, 18f, -0.3f, 4.4f, C.INK, 14f); d.arc(ax, ay, 18f, -0.3f, 4.4f, C.TRY_AGAIN, 7f)
@@ -414,9 +438,9 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
                     val s0 = d.stroke(col, w); d.c.drawLine(x + cw - 64, y0 + 44, x + cw - 50, y0 + 60, s0); d.c.drawLine(x + cw - 50, y0 + 60, x + cw - 24, y0 + 28, s0)
                 }
             }
-            d.textBox(a.text.get(g.lang), x + cw / 2, y0 + 262, cw - 30, 37f, C.INK, 2) // fit.quiz_choice 360 @ 37
-            badge(g, a.text, x + cw / 2, y0 + 322)
-            if (ok) for (kk in 0 until 5) { val ang = t * 3 + kk * 1.26; d.star(x + cw / 2 + cos(ang).toFloat() * 150, y0 + 120 + sin(ang).toFloat() * 90, 16f, C.GLOW, C.GOLD_DARK, ang.toFloat()) }
+            d.textBox(a.text.get(g.lang), x + cw / 2, y0 + 232, cw - 30, 37f, C.INK, 2) // fit.quiz_choice 360 @ 37
+            badge(g, a.text, x + cw / 2, y0 + 282)
+            if (ok) for (kk in 0 until 5) { val ang = t * 3 + kk * 1.26; d.star(x + cw / 2 + cos(ang).toFloat() * 150, y0 + 100 + sin(ang).toFloat() * 80, 16f, C.GLOW, C.GOLD_DARK, ang.toFloat()) }
             next += Region("card$slot", x, y0, cw, ch, false, onTap = { g.answer(j) != com.galaxyandsun.daidatanhhung.core.PickResult.IGNORED })
         }
         if (q.rightShown >= 0) {

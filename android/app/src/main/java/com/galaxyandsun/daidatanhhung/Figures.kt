@@ -16,7 +16,19 @@ class Figures(private val d: Draw) {
     private val c get() = d.c
     private fun deg(r: Double) = Math.toDegrees(r).toFloat()
 
-    fun hero(x: Float, y: Float, face: Int, walk: Boolean, defend: Boolean, attack: Double?, t: Double, s: Float = 1f, tunic: Int = C.RED) {
+    /** Placeholder bodies at spec height (hud.md §3.3): the hero 262 → 180, partner ≤ 180, enemies and dummies ≤ 170. */
+    companion object {
+        const val HERO_S = 180f / 262f
+        const val PARTNER_S = 0.62f
+        const val DUMMY_S = 0.75f
+    }
+    private fun enemyScale(kind: String) = when (kind) { "shield" -> 0.72f; else -> 0.64f } // spear/leader ≈ 260 tall, shield ≈ 232
+
+    /**
+     * The hero figure (also the partner). [s] scales the body; with [reach] set (play), the staff and the swing arc are
+     * drawn at world length instead: the arc reaches [reach] world px from the shoulder (hud.md §3.3, AC13).
+     */
+    fun hero(x: Float, y: Float, face: Int, walk: Boolean, defend: Boolean, attack: Double?, t: Double, s: Float = 1f, tunic: Int = C.RED, reach: Float? = null) {
         c.save(); c.translate(x, y); c.scale(face * s, s)
         d.ellipse(0f, 4f, 60f, 12f, C.a(0, 0.18))
         val w = if (walk) sin(t * 14).toFloat() else 0f
@@ -31,10 +43,12 @@ class Figures(private val d: Draw) {
         d.poly(C.GOLD, -14f, -150f, 0f, -126f, 14f, -150f)
         val swing = attack ?: -1.0
         val ang = if (swing >= 0) -1.9 + swing * 2.6 else if (defend) 0.9 else -0.6
-        c.save(); c.translate(18f, -128f); c.rotate(deg(ang))
-        d.rr(-6f, -150f, 12f, 190f, 6f, 0xFF8A5A2B.toInt()); d.rr(-8f, -158f, 16f, 18f, 6f, C.GOLD); d.circle(0f, 0f, 12f, C.SKIN)
+        val len = reach ?: 150f
+        c.save(); c.translate(18f, -128f); if (reach != null) c.scale(1f / s, 1f / s) // the staff keeps its world length
+        c.rotate(deg(ang))
+        d.rr(-6f, -len, 12f, len + 40f, 6f, 0xFF8A5A2B.toInt()); d.rr(-8f, -len - 8f, 16f, 18f, 6f, C.GOLD); d.circle(0f, 0f, 12f * (if (reach != null) s else 1f), C.SKIN)
+        if (swing in 0.2..0.85) d.arc(0f, 0f, len, (-1.9 + 0.3 - ang).toFloat(), (-1.9 + swing * 2.6 - 0.3 - ang).toFloat(), C.a(C.WHITE, 0.8), 10f)
         c.restore()
-        if (swing in 0.2..0.85) d.arc(18f, -128f, 150f, (-1.9 + 0.3).toFloat(), (-1.9 + swing * 2.6 - 0.3).toFloat(), C.a(C.WHITE, 0.8), 10f)
         d.circle(0f, -196f, 44f, C.SKIN)
         d.dome(-2f, -200f, 46f, C.HAIR)
         d.circle(-14f, -246f, 15f, C.HAIR)
@@ -71,9 +85,10 @@ class Figures(private val d: Draw) {
         val k = e.kind; val x = e.x.toFloat()
         if (e.state == EnemyState.WINDUP) {
             val p = 0.5 + 0.5 * sin(t * 16)
-            d.ellipse(x, ground - 130, (if (k == "leader") 110f else 80f) + p.toFloat() * 10, 160f, C.a(C.GLOW, 0.3 + 0.25 * p))
+            d.ellipse(x, ground - 88, (if (k == "leader") 80f else 58f) + p.toFloat() * 8, 110f, C.a(C.GLOW, 0.3 + 0.25 * p))
         }
-        c.save(); c.translate(x, ground); c.scale(e.face.toFloat(), 1f)
+        val sb = enemyScale(k) // hud.md §3.3: bodies ≤ 170 world px; weapons keep world length (AC13)
+        c.save(); c.translate(x, ground); c.scale(e.face.toFloat() * sb, sb)
         if (e.state == EnemyState.HURT) c.rotate(deg(-0.12))
         d.ellipse(0f, 4f, if (k == "leader") 80f else if (k == "shield") 66f else 50f, 12f, C.a(0, 0.18))
         val walking = e.state == EnemyState.ENTER || e.state == EnemyState.FLEE || (e.state == EnemyState.APPROACH && e.moving)
@@ -88,10 +103,12 @@ class Figures(private val d: Draw) {
                 d.ellipse(0f, -112f, 58f, 56f, C.ENEMY)
                 d.circle(0f, -184f, 34f, C.SKIN); grumpy(10f, -182f, 34f, dizzy, t)
                 d.dome(0f, -192f, 38f, C.STEEL); d.rr(-40f, -196f, 14f, 34f, 6f, C.STEEL); d.rr(26f, -196f, 14f, 34f, 6f, C.STEEL)
-                if (weapon) {
-                    val push = if (e.state == EnemyState.STRIKE) 34f else if (e.state == EnemyState.WINDUP) -16f else 0f
-                    d.rr(34 + push, -168f, 46f, 120f, 10f, C.TEAL, 0xFF2B4F4F.toInt(), 5f)
-                    for (ry in listOf(-150f, -108f, -66f)) d.circle(57 + push, ry, 5f, 0xFFC8D3D3.toInt())
+                if (weapon) { // the shield's front edge reaches enemy_reach − stand_gap (140) on the strike
+                    val edge = if (e.state == EnemyState.STRIKE) 140f else if (e.state == EnemyState.WINDUP) 90f else 106f
+                    c.save(); c.scale(1f / sb, 1f / sb)
+                    d.rr(edge - 34f, -168f * sb, 34f, 120f * sb, 10f, C.TEAL, 0xFF2B4F4F.toInt(), 5f)
+                    for (ry in listOf(-150f, -108f, -66f)) d.circle(edge - 17f, ry * sb, 4f, 0xFFC8D3D3.toInt())
+                    c.restore()
                 } else { d.circle(-40f, -160f, 12f, C.SKIN); d.circle(44f, -164f, 12f, C.SKIN) }
                 c.restore()
             }
@@ -104,10 +121,10 @@ class Figures(private val d: Draw) {
                 d.dome(6f, -208f, 42f, C.STEEL); d.rr(-40f, -212f, 92f, 10f, 5f, C.STEEL)
                 d.path.reset(); d.path.moveTo(2f, -246f); d.path.quadTo(-18f, -260f, -40f, -252f); d.path.quadTo(-20f, -248f, -8f, -242f); d.path.close()
                 c.drawPath(d.path, d.fill(0xFFC0733A.toInt()))
-                if (weapon) {
-                    val sw = if (e.state == EnemyState.WINDUP) -1.2 else if (e.state == EnemyState.STRIKE) 0.6 else -0.4
-                    c.save(); c.translate(60f, -130f); c.rotate(deg(sw))
-                    d.rr(-7f, -16f, 14f, 100f, 7f, 0xFF7A5530.toInt()); d.ellipse(0f, 96f, 28f, 32f, 0xFFE9E1CF.toInt())
+                if (weapon) { // the club's head reaches 140 world px in front on the strike (pivot ≈ 39 + 101 forward)
+                    val sw = if (e.state == EnemyState.WINDUP) 2.4 else if (e.state == EnemyState.STRIKE) -1.14 else -0.4
+                    c.save(); c.translate(60f, -130f); c.scale(1f / sb, 1f / sb); c.rotate(deg(sw))
+                    d.rr(-6f, -10f, 12f, 96f, 6f, 0xFF7A5530.toInt()); d.ellipse(0f, 96f, 20f, 22f, 0xFFE9E1CF.toInt())
                     c.restore()
                 } else { d.circle(-80f, -170f, 14f, C.SKIN); d.circle(90f, -174f, 14f, C.SKIN) }
                 c.restore()
@@ -118,17 +135,19 @@ class Figures(private val d: Draw) {
                 d.rr(-26f, -176f, 52f, 104f, 18f, C.ENEMY); d.rr(-28f, -122f, 56f, 10f, 5f, C.STEEL)
                 d.circle(4f, -206f, 32f, C.SKIN); grumpy(14f, -206f, 32f, dizzy, t)
                 d.dome(4f, -214f, 36f, C.STEEL); d.rr(-36f, -218f, 80f, 10f, 5f, C.STEEL); d.circle(4f, -252f, 7f, C.STEEL)
-                if (weapon) {
-                    val reach = if (e.state == EnemyState.STRIKE) 40f else if (e.state == EnemyState.WINDUP) -30f else 0f
-                    d.rr(-40 + reach, -140f, 150f, 10f, 5f, 0xFF7A5530.toInt())
-                    d.circle(118 + reach, -135f, 17f, 0xFFE9E1CF.toInt(), 0xFFB8AB90.toInt(), 3f)
-                    d.ellipse(86 + reach, -150f, 14f, 9f, 0xFF9B8FC0.toInt(), -0.3f)
+                if (weapon) { // the spear tip reaches enemy_reach − stand_gap (140) on the strike
+                    val tip = if (e.state == EnemyState.STRIKE) 140f else if (e.state == EnemyState.WINDUP) 80f else 110f
+                    c.save(); c.scale(1f / sb, 1f / sb); val sy = -140f * sb
+                    d.rr(tip - 150f, sy - 4f, 138f, 8f, 4f, 0xFF7A5530.toInt())
+                    d.circle(tip - 12f, sy, 12f, 0xFFE9E1CF.toInt(), 0xFFB8AB90.toInt(), 3f)
+                    d.ellipse(tip - 36f, sy - 10f, 10f, 7f, 0xFF9B8FC0.toInt(), -0.3f)
+                    c.restore()
                 } else { d.circle(-30f, -190f, 10f, C.SKIN); d.circle(36f, -194f, 10f, C.SKIN) }
                 c.restore()
             }
         }
         c.restore()
-        val topY = ground - (if (k == "leader") 280 else if (k == "shield") 240 else 272)
+        val topY = ground - 180f // bodies are ≤ 170 tall (hud.md §3.3)
         if (dizzy) for (i in 0 until 3) { val a = t * 5 + i * 2.1; d.star(x + cos(a).toFloat() * 34, topY + 20 + sin(a).toFloat() * 10, 9f, C.GLOW, C.GOLD_DARK, a.toFloat()) }
         if (e.state == EnemyState.WINDUP) { // the telegraph: glow + a drawn "!" (a HUD glyph, not text in art)
             val by = topY - 20
@@ -138,7 +157,7 @@ class Figures(private val d: Draw) {
 
     /** A straw training dummy on a post: a hit makes it wobble and spring back (asset spec: never breaks). */
     fun dummy(x: Float, ground: Float, down: Boolean, t: Double) {
-        c.save(); c.translate(x, ground)
+        c.save(); c.translate(x, ground); c.scale(DUMMY_S, DUMMY_S) // ≤ 170 tall (a body, hud.md §3.3)
         if (down && t < 1.5) c.rotate((-22 * sin(t * 14) * kotlin.math.exp(-t * 3)).toFloat())
         val old = d.alpha; if (down && t >= 1.5) d.alpha = 0.6 // a done dummy stands, slightly faded
         d.rr(-6f, -150f, 12f, 150f, 6f, 0xFF8A5A2B.toInt())
@@ -153,11 +172,11 @@ class Figures(private val d: Draw) {
         val x = p.x.toFloat()
         if (p.state == EnemyState.WINDUP) {
             val k = 0.5 + 0.5 * sin(t * 16)
-            d.ellipse(x, ground - 130, 80f + k.toFloat() * 10, 160f, C.a(C.GLOW, 0.3 + 0.25 * k))
-            d.circle(x, ground - 292, 30f, C.GLOW, C.GOLD_DARK, 4f); d.rr(x - 5, ground - 310, 10f, 24f, 5f, C.INK); d.circle(x, ground - 278, 5.5f, C.INK)
+            d.ellipse(x, ground - 90, 58f + k.toFloat() * 8, 116f, C.a(C.GLOW, 0.3 + 0.25 * k))
+            d.circle(x, ground - 205, 30f, C.GLOW, C.GOLD_DARK, 4f); d.rr(x - 5, ground - 223, 10f, 24f, 5f, C.INK); d.circle(x, ground - 191, 5.5f, C.INK)
         }
         val swing = when (p.state) { EnemyState.WINDUP -> 0.0; EnemyState.STRIKE -> 0.6; else -> null }
-        hero(x, ground, p.face, false, false, swing, t, 0.92f, tunic = C.INDIGO)
+        hero(x, ground, p.face, false, false, swing, t, PARTNER_S, tunic = C.INDIGO, reach = 140f - 18f * PARTNER_S) // the stick reaches 140 (hud.md)
     }
 
     fun dropped(w: Dropped, ground: Float) {
