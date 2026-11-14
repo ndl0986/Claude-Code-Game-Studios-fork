@@ -95,8 +95,6 @@ class MissionRun(
     private val tuning: Tuning,
     private val rng: Mulberry32,
     private val sfx: (Sfx) -> Unit,
-    /** G2 proposal (game-art-content), off until agreed: fight-zone bounds + attack auto-face. Used to measure. */
-    private val g2: Boolean = false,
 ) {
     val ground get() = tuning["ground_y"]
     val hero = Hero(tuning["hero_start_x"])
@@ -402,14 +400,15 @@ class MissionRun(
         }
         if (canAct && !h.def && h.atk < 0 && h.cool <= 0 && Action.ATTACK in tapped) {
             h.atk = 0.0; h.hitDone = false
-            if (g2) enemies.filter { it.state != EnemyState.FLEE }.minByOrNull { abs(it.x - h.x) }?.let { n -> // G2 rule 2: auto-face
+            // G2 rule 2 (combat Rule 15): the swing auto-faces the nearest non-fleeing enemy (a tie keeps the facing)
+            enemies.filter { it.state != EnemyState.FLEE }.minByOrNull { abs(it.x - h.x) }?.let { n ->
                 val d = n.x - h.x; if (d != 0.0) h.face = d.sign.toInt() }
         }
         var mv = 0
         if (canAct && !h.def) { if (Action.LEFT in held) mv -= 1; if (Action.RIGHT in held) mv += 1 }
         h.walk = mv != 0
         if (mv != 0) {
-            if (!(g2 && h.atk >= 0)) h.face = mv // G2 rule 2b: the swing keeps the auto-faced direction
+            if (h.atk < 0) h.face = mv // G2 rule 2b: during a swing, moving doesn't change facing
             h.x += mv * tuning["hero_speed"] * dt * (if (h.atk >= 0) tuning["attack_move_mul"] else 1.0)
             if (mv > 0) tut.moved = true; idle = 0.0
         } else idle += dt
@@ -417,7 +416,7 @@ class MissionRun(
         val edge = tuning["hero_edge_margin"]
         val lock = lockX
         if (lock != null) {
-            val m = if (g2) edge + tuning["enemy_reach"] else edge // G2 rule 1: fight-zone bounds
+            val m = edge + tuning["enemy_reach"] // G2 rule 1: the fight zone keeps an enemy in front always on screen
             h.x = h.x.coerceIn(lock + m, lock + WORLD_W - m); cam = lock
         }
         else { h.x = maxOf(cam + edge, h.x); cam = maxOf(cam, h.x - tuning["camera_follow_offset"]) }
