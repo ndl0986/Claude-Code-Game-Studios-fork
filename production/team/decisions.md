@@ -11,6 +11,21 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-30 Accept ADR-0003: how the game saves progress
+
+- **Flow:** Save & progress GDD → ADR-0003 (`docs/architecture/adr-0003-save-format-and-storage.md`)
+  → both apps replace today's simple key store with one save file.
+- **What it says:** one small file `save.json` with the same shape on iOS and Android (language,
+  sound, and per hero: completed, story seen, best stars, medal). Each change is written at once and
+  safely (a crash or force-close can't half-write it); a damaged file keeps whatever it can; a save
+  from a newer app version is never overwritten; today's slice progress is imported once.
+- **Tied to D-22 (backup):** if you choose "allow", iOS needs nothing; Android needs a small
+  manifest change that backs up only `save.json`.
+- **Reviewed:** written by game-dev-ios, approved by game-dev-android (2026-11-14).
+- **Options:** A. **Accept** (both devs build it after QC r3) · B. change something first.
+- **Recommendation:** A.
+- **Status:** Open.
+
 ### D-29 Download size as heroes are added (revisit before hero 4)
 
 - **Flow:** ADR-0002 (≤ 60 MB download) + Audio GDD (music, sound, voice-over) → each timed content
