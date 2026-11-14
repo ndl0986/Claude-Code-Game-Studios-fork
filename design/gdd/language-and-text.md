@@ -67,8 +67,8 @@ on a screen (each UX spec), or voice-over (Audio & voice-over).
      and **quiz choices**.
    - **The banner is body, not label.** Its six words are history text the child reads, and quiz
      Q4 asks about them. Its `font_px` rises **28 → 37**. Measured with F1: "Phá cường địch, báo
-     hoàng ân" is 1 line and the EN line is 2 lines in the 880 box, within max 2. The banner prop
-     must hold 2 lines at 37 (data and art ticket). The motto's words don't change.
+     hoàng ân" is 1 line and the EN line is 2 lines in the 880 box, within max 2. The banner bar
+     in the sky band holds 2 lines at 37 at a fixed height (`design/ux/hud.md` §3.3). The motto's words don't change.
    - **Labels that sit under or beside an icon or picture** are never below
      `text_min_label` = **28 world px**. They cover pad labels, counters ("Câu 2/5"), place names
      and the map-stub line. The icon carries the meaning, so the label is a secondary cue.
@@ -265,4 +265,4 @@ Criteria 1–5 and 9 are logic and need unit tests or validation; 6–8 need QC 
 | D-21 | VI budgets (`vi_budget` = 1.6 × EN, R8b) + `max_lines` per field in `rules.json`; retype `ui.medal.missing` as `dialog` | game-dev-ios + game-dev-android, game-art-content | Before the UX specs |
 | — | `box_width`, `font_px` and `max_lines` per field type in `rules.json`, plus R8c in both apps' content tests (with D-21) | game-dev-android (data branch), game-dev-ios reviews | Before the UX specs |
 | — | `/ux-design` sets per-screen sizes at or above `text_min_body` 37 and `text_min_label` 28 world px | game-art-content + ux | UX pass |
-| — | R8d (size class per field) and `banner` 28 → 37 in `rules.json`, plus the banner prop holding 2 lines (TASK-020 W9) | game-dev-android (data), game-dev-ios reviews | Dev ticket, after r3 |
+| — | R8d (size class per field) and `banner` 28 → 37 in `rules.json`, plus the sky-band banner bar at a fixed 2-line height (TASK-020 W9, `design/ux/hud.md` §3.3) | game-dev-android (data), game-dev-ios reviews | Dev ticket, after r3 |

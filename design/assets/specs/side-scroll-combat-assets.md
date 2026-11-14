@@ -12,6 +12,14 @@
 - **Facing:** authored **facing left** (toward the hero, §3), and mirrored by the engine for `from_left` spawns. `flee` is authored facing **right** (running away from a hero on the left), and mirrored the same way.
 - **Look (⟨placeholder⟩: Mông–Nguyên armour to be sourced):** bean or pear bodies, wide at the bottom. A rounded **dome helmet** `#5F5A7A` with a small round knob, never conical. Padded coat-armour in slate-violet `#7A7395` with lighter panels `#9893AD` and quilted padding `#B8B0A0`. **Faces use the hero's style and skin tones** (`#F1C9A0` / `#DDA982`): dot eyes, a simple mouth, expressions from mildly grumpy to surprised. They are identified only by armour shape, colour and banner. Derived hexes (`#5F5A7A`, `#9893AD`, `#B8B0A0`) are proposals within the §4 `#7A7395` family.
 - **States → rows** (from the GDD states table): `walk` (enter + approach; enter plays at 320/140 = 2.3× rate), `windup`, `strike`, `rest`, `hurt`, `flee`. The art bible §5 list (`idle`, `attack`, `knockback`, `run_home`) maps to `rest`, `strike`, `hurt` and `flee`.
+- **Weapon reach is a world length, matched to the tuning** (TASK-020 W9 banner review): the
+  weapon tip in `strike` reaches **`enemy_reach − stand_gap` = 140 world px** (280 at 2×) in front
+  of the enemy's pivot, and the hero's swing arc reaches **`attack_range` = 175** (350 at 2×). If
+  a body is scaled to spec height, the weapon keeps this length, so a strike that lands never
+  looks like a miss. Final art is authored to it.
+- **Body height is a hard cap:** the enemy body (helmet included) ≤ 170 world px (340 at 2×),
+  feet on `ground_y`; placeholders follow it too (`design/ux/hud.md` §3.3). Only the weapon and
+  pennant may rise above it.
 - **Weapons are blunt and padded:** wrapped cloth balls or rounded ends, never a point or edge. They are held across the body or toward the hero, never toward the viewer.
 - **Glow, "!" and swirl** are separate VFX (ASSET-207, 208, 212) and are not drawn into frames.
 
