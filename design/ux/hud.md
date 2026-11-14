@@ -75,6 +75,22 @@ side), which fills the band exactly. The `goal` field's `box_width` drops **1040
 `rules.json` (data follow-up); every TQT goal still fits on 1 line at 880 (widest: EN "Get to
 the king's meeting at Bình Than!", 688 px).
 
+**The band depends on k** (game-dev-android's note). The pause/sound block grows as k falls
+(a smaller or inset phone), so x 330–1250 holds only for k ≥ ≈ 0.50. The general rule:
+- `corner_right` = the right edge of the sound button: the safe-rect left edge + margin
+  + 2 × `pad_min / k` + `pad_gap / k` (≈ 315 at k 0.527; ≈ 338 at k 0.488, a phone with a left
+  gesture inset).
+- **The stack starts at `max(330, corner_right + 8)`** and is 920 wide; its centre is
+  `start + 460`, **clamped to 790–810**, so its right edge never passes x 1270.
+- **k ≥ ≈ 0.48: full width.** Down to k ≈ 0.48 (`corner_right` ≈ 343) the 920-wide stack fits.
+- **≈ 0.32 ≤ k < 0.48: the plates narrow.** Below k ≈ 0.48 even that overflows, so the goal
+  plate and the banner bar narrow to `1270 − start` (text box = plate − 40), never below **760**
+  (text box 720). Font size and the bar's 112 height don't change. Every TQT goal still fits on
+  1 line and the banner on ≤ 2 lines at a 720 box (F1, measured), and R8c must also check `goal`
+  and `banner` at 720 (a data follow-up), so any new hero keeps narrow phones safe.
+- **k < ≈ 0.32: not supported.** The 760 floor would hit the corner, and no landscape phone we
+  target is that small. QC's narrowest supported phone must have k ≥ 0.32.
+
 **Vertical stack** (world px from the top of the 1280×720 world; drawn at `k_px`, Input F1):
 
 | Element | Top | Height | Bottom | Rule |
@@ -208,3 +224,4 @@ insets; iOS home indicator, notch or Dynamic Island. Rounded corners wait for TA
 11. **GIVEN** the Android reference phone (k 0.527 dp per world px) and the iOS reference phone (k 0.517), with pause and sound at `pad_min`, **WHEN** a training and a reach-the-flag beat are captured in VI and EN, **THEN** no pixel of the dots, the goal plate or the banner bar overlaps the pause or sound button.
 12. **GIVEN** a push, a block and a hit during an encounter at its closest, **WHEN** captured, **THEN** each pop sits beside the fighter's head at head height and no pop pixel overlaps the banner bar.
 13. **GIVEN** a hit and a strike that land at spec height, **WHEN** frame-stepped, **THEN** the hero's swing arc reaches 175 world px in front of him and the enemy's weapon tip 140, so contact is visible.
+14. **GIVEN** a phone or emulator with k = 0.46 (e.g. a left gesture inset), **WHEN** a training beat is captured in VI and EN, **THEN** the stack starts at `corner_right` + 8, the goal plate and the banner bar narrow to `1270 − start` (≥ 760), nothing overlaps pause or sound, and the EN banner is ≤ 2 lines with no text cut.
