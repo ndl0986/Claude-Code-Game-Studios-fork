@@ -29,6 +29,9 @@ A schema change needs both devs and game-art-content to agree. A breaking change
 
 ## Data model
 
+Schema **1.1** (D-06, a MINOR bump): optional training `blocks` / `finish_special` and reach-the-flag `encounters[]`. 1.0 files stay valid.
+
+
 - **Text** `{id, vi, en, claims[]}` is every story, scene, intro, ending, banner and quiz line.
   - `claims` holds at least one claim ID; invented (C12) counts.
   - Scene text is a list of Text, one sentence per box.
@@ -45,9 +48,10 @@ A schema change needs both devs and game-art-content to agree. A breaking change
   - `type` is one of fight, walk, hold-meter, training or reach-the-flag.
   - `buttons` is a subset of move, attack, defend and special.
   - `params` are per type. A fight's are `enemies[]`, `max_active` and `from_left[]`, as in the prototype.
-- **Quiz** has 3–5 questions. Each has `prompt`, an optional `picture_id`, 3 choices `{text, picture_id}`, `correct_index` and `why` (shown after the right answer).
+- **Quiz** has 3–5 questions; `tuning.json` `quiz_count` is 5, so the file's question count decides (D-11b). Each has `prompt`, an optional `picture_id`, 3 choices `{text, picture_id}`, `correct_index` and `why` (shown after the right answer).
 - **Stars** (`rules.json`):
   - Retries are wrong picks before the right one, counted as a **total across the whole quiz**: 0 earns 3★, 2 or fewer earns 2★, more earns 1★.
+  - A wrong card is greyed; a repeat tap on it is ignored and doesn't count (D-11a), so a question has at most 2 retries and the quiz always ends.
   - Finishing always unlocks the next hero.
 - **Tuning** (`tuning.json`): the prototype's `config.js` values in snake_case. Each entry is `{value, min, max, unit}`, in a 1280×720 world.
   - It also holds the numbers the prototype hard-coded in `index.html` (TASK-005b), so neither app
@@ -55,7 +59,8 @@ A schema change needs both devs and game-art-content to agree. A breaking change
     `enter_to_approach_dist`, `approach_min_time`, `windup_reach_extra`, `strike_reach_extra`,
     `block_knock`, `rest_speed_mul`, `attack_hit_at`, `attack_close_range`, `attack_move_mul`,
     `flee_remove_margin`, `hero_edge_margin`, `camera_follow_offset`, `ground_y`, `beat_start_x`,
-    `beat_gap`, `hero_start_x`.
+    `beat_gap`, `hero_start_x`. D-09 adds `special_push`, `special_cooldown`, `advance_debounce`
+    (story-box tap debounce) and `bump_stop` (walk-beat bump stop).
   - Fight rules that are logic, not numbers (prototype `updateEnemies`): only one enemy is in
     windup or strike at a time; only the nearest enemy on each side may start a windup; an enemy
     stands at `enemy_reach - stand_gap + rank * queue_spacing` from the hero (rank 0 = nearest).
@@ -83,6 +88,11 @@ them against `data/` and `samples/`. `fixtures/validity.json` has one case per r
 | R10 | Every `picture_id` and asset id resolves in `assets.json` and the file exists. |
 | R11 | An app refuses a `schema_version` with a newer MAJOR number at **build** time. A newer MINOR number is fine. |
 | R12 | **Claim gate:** see below. |
+| R13 | Buttons per beat type (schema 1.1, D-06). Minimum: walk {move}; hold-meter {special}; fight {move, attack}; training {move, attack} + defend if `blocks` > 0 + special if `finish_special`; reach-the-flag {move} + attack if `encounters` is non-empty. `special` is allowed only on hold-meter, training with `finish_special`, and reach-the-flag; never on walk or fight. Defend is optional on a fight (blocking is taught, never required). |
+| R13b | reach-the-flag `encounters` are sorted by `at_screen`, strictly ascending, each `0 < at_screen < length_screens`. |
+| R14 | `tuning.json`: `attack_range` ≥ `enemy_reach` − `stand_gap`, so the hero can reach the enemy in front of him (error). |
+| R15 | `tuning.json`: `telegraph` < 0.8 s is a **warning**, not an error. |
+| R16 | `rules.json`: each lower star's `max_retries` is ≥ the higher star's (2★ ≥ 3★); `null` means no limit. |
 
 ### Claim gate (R12)
 
@@ -93,7 +103,7 @@ them against `data/` and `samples/`. `fixtures/validity.json` has one case per r
 
 ## Shared fixtures
 
-`fixtures/quiz-stars.json`, `quiz-scoring.json`, `claim-gate.json` and `validity.json` are
+`fixtures/quiz-stars.json`, `quiz-scoring.json`, `quiz-shuffle.json` (P-05 card order), `rng.json` (mulberry32), `claim-gate.json` and `validity.json` are
 input plus expected output, and both apps' unit tests run every case. Feel (timing on screen,
 knock-back, button size and touch) is not a fixture; it is checked by per-platform QC.
 
