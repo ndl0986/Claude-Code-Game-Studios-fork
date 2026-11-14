@@ -191,6 +191,120 @@
       "min": 0.3,
       "max": 3,
       "unit": "s"
+    },
+    "first_spawn_delay": {
+      "value": 0.4,
+      "min": 0,
+      "max": 3,
+      "unit": "s"
+    },
+    "hurt_recover": {
+      "value": 0.35,
+      "min": 0.1,
+      "max": 1.5,
+      "unit": "s"
+    },
+    "leader_telegraph_mul": {
+      "value": 1.2,
+      "min": 0.5,
+      "max": 2,
+      "unit": "ratio"
+    },
+    "enter_to_approach_dist": {
+      "value": 260,
+      "min": 100,
+      "max": 600,
+      "unit": "px"
+    },
+    "approach_min_time": {
+      "value": 0.5,
+      "min": 0,
+      "max": 2,
+      "unit": "s"
+    },
+    "windup_reach_extra": {
+      "value": 20,
+      "min": 0,
+      "max": 80,
+      "unit": "px"
+    },
+    "strike_reach_extra": {
+      "value": 40,
+      "min": 0,
+      "max": 120,
+      "unit": "px"
+    },
+    "block_knock": {
+      "value": 70,
+      "min": 0,
+      "max": 200,
+      "unit": "px"
+    },
+    "rest_speed_mul": {
+      "value": 0.5,
+      "min": 0,
+      "max": 1,
+      "unit": "ratio"
+    },
+    "attack_hit_at": {
+      "value": 0.45,
+      "min": 0.1,
+      "max": 0.9,
+      "unit": "ratio"
+    },
+    "attack_close_range": {
+      "value": 50,
+      "min": 0,
+      "max": 120,
+      "unit": "px"
+    },
+    "attack_move_mul": {
+      "value": 0.4,
+      "min": 0,
+      "max": 1,
+      "unit": "ratio"
+    },
+    "flee_remove_margin": {
+      "value": 250,
+      "min": 50,
+      "max": 600,
+      "unit": "px"
+    },
+    "hero_edge_margin": {
+      "value": 70,
+      "min": 20,
+      "max": 200,
+      "unit": "px"
+    },
+    "camera_follow_offset": {
+      "value": 460,
+      "min": 200,
+      "max": 800,
+      "unit": "px"
+    },
+    "ground_y": {
+      "value": 470,
+      "min": 300,
+      "max": 600,
+      "unit": "px"
+    },
+    "beat_start_x": {
+      "value": 900,
+      "min": 300,
+      "max": 3000,
+      "unit": "px"
+    },
+    "beat_gap": {
+      "value": 1600,
+      "min": 800,
+      "max": 4000,
+      "unit": "px"
+    },
+    "hero_start_x": {
+      "value": 300,
+      "min": 70,
+      "max": 800,
+      "unit": "px"
     }
   }
 }
