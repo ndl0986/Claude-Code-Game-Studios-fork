@@ -8,7 +8,7 @@ final class G2Tests: XCTestCase {
     func run(_ strat: Int) throws -> Double {
         let c = try ContentSet.load(dataRoot: Repo.data)
         var p = PlayState(tuning: c.tuning, beats: realHero(c).mission.beats, seed: 1)
-        p.debugJump(beat: 3, stage: nil)
+        p.debugJump(beat: beatIndex(realHero(c), "reach-the-flag"), stage: nil)
         var steps = 0
         while p.phase == .beatPlay && steps < 60 * 900 {
             let tap: Set<PadAction> = steps % 30 == 0 ? [.attack] : []
@@ -31,7 +31,7 @@ final class G2Tests: XCTestCase {
     func test_rule1_hero_clamped_inside_the_lock_by_enemy_reach() throws {
         let c = try ContentSet.load(dataRoot: Repo.data)
         var p = PlayState(tuning: c.tuning, beats: realHero(c).mission.beats, seed: 1)
-        p.debugJump(beat: 3, stage: "encounter")
+        p.debugJump(beat: beatIndex(realHero(c), "reach-the-flag"), stage: "encounter")
         p.update(1.0 / 60, StepInput())
         XCTAssertTrue(p.locked)
         for _ in 0..<600 { p.update(1.0 / 60, StepInput(held: [.right])) }
@@ -41,7 +41,7 @@ final class G2Tests: XCTestCase {
     func test_rule2_and_2b_a_swing_faces_the_nearest_enemy_and_holding_right_keeps_it() throws {
         let c = try ContentSet.load(dataRoot: Repo.data)
         var p = PlayState(tuning: c.tuning, beats: realHero(c).mission.beats, seed: 1)
-        p.debugJump(beat: 3, stage: "encounter")
+        p.debugJump(beat: beatIndex(realHero(c), "reach-the-flag"), stage: "encounter")
         p.update(1.0 / 60, StepInput())
         p.enemies = [Enemy(id: 7, kind: .spear, x: p.hero.x - 120, face: 1, state: .rest, t: 0, hits: 0, kb: 0, moving: false)]
         p.update(1.0 / 60, StepInput(held: [.right], tapped: [.attack]))

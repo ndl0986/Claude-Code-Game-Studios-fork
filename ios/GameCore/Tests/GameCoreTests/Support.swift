@@ -162,5 +162,8 @@ func botRun(_ p: inout PlayState, maxSteps: Int = 60 * 900) -> Int {
     return step
 }
 
+/// The index of the first beat of `type` in a hero's mission (tests never hard-code beat positions).
+func beatIndex(_ h: HeroContent, _ type: String) -> Int { h.mission.beats.firstIndex { $0.type == type }! }
+
 /// The real hero in data/ (Trần Quốc Toản).
 func realHero(_ c: ContentSet) -> HeroContent { c.heroes.first { $0.mission.hero.id == "tran-quoc-toan" }! }
