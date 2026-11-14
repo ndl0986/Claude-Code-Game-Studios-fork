@@ -41,7 +41,7 @@ Dải Đất Anh Hùng is a small, story-first game, and its systems are few.
 | # | System Name | Category | Priority | Status | Design Doc | Depends On |
 |---|-------------|----------|----------|--------|------------|------------|
 | 1 | Content data & claims | Core | Vertical Slice | Approved (data contract) | `content/README.md` + `content/schema/` (no GDD) | none |
-| 2 | Language & text (VI/EN) | Core | Vertical Slice | In Review | `design/gdd/language-and-text.md` | 1, 4 |
+| 2 | Language & text (VI/EN) | Core | Vertical Slice | Approved | `design/gdd/language-and-text.md` | 1, 4 |
 | 3 | Input & touch controls (inferred) | Core | Vertical Slice | Not Started | — | none |
 | 4 | Save & progress (inferred) | Persistence | Vertical Slice | Approved | `design/gdd/save-and-progress.md` | none |
 | 5 | Side-scroll movement & combat | Gameplay | Vertical Slice | Approved | `design/gdd/side-scroll-combat.md` | 3, 1 |

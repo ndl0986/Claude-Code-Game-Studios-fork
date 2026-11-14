@@ -26,3 +26,6 @@ Awaiting confirmation.
 
 ## Peer re-review — 2026-11-14 — game-dev-android: items 2–3 APPROVE; F1 fix applied
 F1 reads advances from content/metrics/nunito-advances.json at the field weight (800/600), not hmtx (the variable font defaults to wght 200, and bold renders 8.6% wider). The goal bar and quiz why grow to 37.
+
+## Peer review — 2026-11-14 — game-dev-android: APPROVE @ 5a27942
+F1 advances table approved. Follow-up applied: Rule 8 lists dialogue_line 3 and dialogue_narrator 2 (schema 1.4). Status Approved.

@@ -16,3 +16,6 @@ Reviewed-Content-Hash: design/art/art-bible.md bb27853330b8c17eaa9e55b7c9a417a59
 Reviewed-Content-Hash: design/gdd/mission-flow.md da6943c65ea4b04912ad966160c289a7c3c271f9
 Reviewed-Content-Hash: design/gdd/side-scroll-combat.md 5a227af49c5dbd40ef6f3cc09ae7682b747a4216
 Reviewed-Content-Hash: design/gdd/quiz-and-stars.md 222777502ac1a4a3282b720980105608d5787a2b
+
+## Peer review — 2026-11-14 — game-dev-android: REVISE (2), fixes applied
+(a) Seamless m4a loops are not possible on Android's platform player: loops are authored with a ~0.5 s overlap tail and played with a two-player self-crossfade. (b) Rule 7 is native-first: audio starts and SFX preload at launch; a gesture is needed only where the platform requires one. Minor: Android SoundPool maxStreams 9 noted (Rule 13); F2 notes about 3 heroes fit ADR-0002's 60 MB cap, so revisit before hero 4. Android's quiz card double-tone bug was found by Rule 6 and is being fixed in the app. Awaiting confirmation.

@@ -1,6 +1,6 @@
 # Language & Text (VI/EN)
 
-> **Status**: In Review
+> **Status**: Approved (peer review: game-dev-android, 2026-11-14)
 > **Author**: game-art-content (Luan decides)
 > **Last Updated**: 2026-11-14
 > **Last Verified**: 2026-11-14
@@ -74,7 +74,7 @@ on a screen (each UX spec), or voice-over (Audio & voice-over).
      ("Màn hình chính" vs "Home").
    - Each field also has a **maximum line count** (Formula F1): button 1, ui 1, goal 1, beat
      title 1, hero name 1, place 1, quiz choice 2, story box (intro/scene/ending) 2, quiz prompt
-     2, quiz why 3, dialog 3, banner 2.
+     2, quiz why 3, dialog 3, banner 2, **dialogue_line 3, dialogue_narrator 2** (schema 1.4).
 9. **Text is never in pictures.** Every word, including the banner's six words, is a text layer
    drawn over the art (art bible; Luan's rule 2).
 10. **Writing rules** (`design/narrative/writing-guide.md`, enforced in review; R-rules where

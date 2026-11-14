@@ -54,7 +54,7 @@ slice ships with text only.
 4. **The voice is the reader.** Voice-over and text always win the mix. The score is never a
    history claim: trống đồng as colour does not mean the Trần army played it.
 
-**Music per state** (loops have a seamless loop point; time-based crossfades in the slice)
+**Music per state** (time-based crossfades in the slice). **Looping (all platforms):** m4a/AAC can't loop gaplessly on Android's platform player (encoder priming and padding), so each loop is **authored with a ~0.5 s overlap tail** (the end flows into the start) and the apps loop it with a **self-crossfade of two players** (0.5 s). Cue-to-cue crossfades use the same two players.
 
 | State (mission flow) | Mood (art bible §2) | Tempo | Instruments | Loop |
 |---|---|---|---|---|
@@ -107,9 +107,10 @@ ending **3.0 s** (never a hard cut); ending → quiz 2.0 s; quiz → results 0.3
    - Taps that do nothing are silent: inside `advance_debounce`, on a greyed card, during the
      shake.
 7. **Audio starts before the first sound (QC O8).**
-   - The audio engine is started on the title screen at the first gesture, **before** that
-     gesture's own sound plays.
-   - All SFX are preloaded before input is accepted.
+   - Audio is started and every SFX preloaded **before the first sound can play**. Native apps
+     do this **at launch**, with no gesture needed. A platform that needs a user gesture
+     (the browser prototype) does it at that gesture, before the gesture's own sound.
+   - Input that would play a sound isn't accepted until the preload is done.
    - Audio resumes after backgrounding or a route change before the next sound.
 8. **Anti-spam.**
    - The swing sound plays only when a swing starts, so at most one per 0.40 s (combat).
@@ -135,6 +136,8 @@ ending **3.0 s** (never a hard cut); ending → quiz 2.0 s; quiz → results 0.3
     a gentle limiter.
 13. **Voice limit (low-end Android):** 12 total: music 2, hold layer 1, voice 1, SFX 6, UI 2.
     When full, the lowest priority drops first (Voice > UI > prio-1 SFX > prio-2 > prio-3).
+    On Android, SFX, UI and the hold layer share one SoundPool (maxStreams 9, priorities mapped);
+    music and VO use separate players.
 14. **Sound setting:**
     - One toggle, on the HUD and in the pause menu, default **on**.
     - Muting fades the master in 0.2 s; un-muting resumes the music in place.
@@ -144,7 +147,7 @@ ending **3.0 s** (never a hard cut); ending → quiz 2.0 s; quiz → results 0.3
     - Music is m4a AAC-LC, 44.1 kHz stereo, 128 kbps, streamed.
     - SFX and UI are **wav PCM 16-bit mono**, preloaded, so there's no decode delay on a tap.
     - VO is m4a AAC-LC mono, 64 kbps.
-    - That's about 10 MB per hero with both languages.
+    - That's about 10 MB per hero with both languages (F2).
 16. **Interruptions:** a phone call, an alarm, Siri or losing audio focus → pause. Unplugging
     headphones → pause. Backgrounding → stop and pause (Mission flow).
 
@@ -230,7 +233,7 @@ The F2 (audio size per hero) formula is defined as:
 | lines | int | ~40 | content | Voiced lines per language |
 | sfx | float (MB) | ~0.9 | estimate (wav) | Effects |
 
-**Output Range:** about 8–10 MB per hero with both languages; the music is shared between heroes.
+**Output Range:** about 8–10 MB for the first hero. Music (~5.6 MB) and SFX (~0.9 MB) are shared, so each **further** hero adds about 3.2 MB of VO, plus up to 15 MB of art. **Against ADR-0002's 60 MB download cap that's about 3 heroes**, so revisit the cap (or on-demand packs) before hero 4.
 **Example:** 5.6 MB music + 2 × 1.6 MB VO + 0.9 MB SFX ≈ 9.7 MB.
 
 ## Edge Cases
