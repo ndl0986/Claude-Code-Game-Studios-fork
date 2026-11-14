@@ -682,6 +682,84 @@
         "desert"
       ],
       "expected": "invalid"
+    },
+    {
+      "name": "quiz_choice: The Mông–Nguyên army",
+      "rule": "R8c",
+      "field_type": "quiz_choice",
+      "text": "The Mông–Nguyên army",
+      "expected_lines": 2,
+      "expected": "valid"
+    },
+    {
+      "name": "quiz_choice: Quân Mông–Nguyên",
+      "rule": "R8c",
+      "field_type": "quiz_choice",
+      "text": "Quân Mông–Nguyên",
+      "expected_lines": 2,
+      "expected": "valid"
+    },
+    {
+      "name": "button: Keep reading",
+      "rule": "R8c",
+      "field_type": "button",
+      "text": "Keep reading",
+      "expected_lines": 1,
+      "expected": "valid"
+    },
+    {
+      "name": "goal: Đẩy lùi quân giặc!",
+      "rule": "R8c",
+      "field_type": "goal",
+      "text": "Đẩy lùi quân giặc!",
+      "expected_lines": 1,
+      "expected": "valid"
+    },
+    {
+      "name": "goal: Đi qua làng, gặp mọi người, rồi đến bến ",
+      "rule": "R8c",
+      "field_type": "goal",
+      "text": "Đi qua làng, gặp mọi người, rồi đến bến sông Bình Than để dự họp với vua nhé!",
+      "expected_lines": 2,
+      "expected": "invalid"
+    },
+    {
+      "name": "quiz_choice: Mông–Nguyên–Mông–Nguyên",
+      "rule": "R8c",
+      "field_type": "quiz_choice",
+      "text": "Mông–Nguyên–Mông–Nguyên",
+      "expected_lines": 1,
+      "expected": "invalid"
+    },
+    {
+      "name": "dialog: Nếu bỏ qua, sẽ chưa nhận được huy hiệu c",
+      "rule": "R8c",
+      "field_type": "dialog",
+      "text": "Nếu bỏ qua, sẽ chưa nhận được huy hiệu của câu chuyện này nhé.",
+      "expected_lines": 2,
+      "expected": "valid"
+    },
+    {
+      "name": "intro: Ặ Ỗ Ữ ẫ ợ ặ ỗ ữ Ẫ Ợ ệ ằ khoá khóa",
+      "rule": "R8c",
+      "field_type": "intro",
+      "text": "Ặ Ỗ Ữ ẫ ợ ặ ỗ ữ Ẫ Ợ ệ ằ khoá khóa",
+      "expected_lines": 1,
+      "expected": "valid"
+    },
+    {
+      "name": "VI button within 1.6x budget",
+      "rule": "R8b",
+      "field_type": "button",
+      "vi": "Màn hình chính",
+      "expected": "valid"
+    },
+    {
+      "name": "VI button over its budget",
+      "rule": "R8b",
+      "field_type": "button",
+      "vi": "Quay về màn hình chính",
+      "expected": "invalid"
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "quiz_stars": {
     "retries_counted": "total_across_quiz",
     "thresholds": [
@@ -35,6 +35,112 @@
       "quiz_choice": 32,
       "quiz_why": 120,
       "dialog": 60
+    },
+    "vi_budget": {
+      "ui": 38,
+      "button": 19,
+      "hero_name": 51,
+      "place": 64,
+      "beat_title": 64,
+      "goal": 96,
+      "scene": 120,
+      "intro": 120,
+      "ending": 120,
+      "banner": 96,
+      "quiz_prompt": 120,
+      "quiz_choice": 51,
+      "quiz_why": 120,
+      "dialog": 96
+    },
+    "fit": {
+      "allowance": 0.03,
+      "metrics": "content/metrics/nunito-advances.json",
+      "fields": {
+        "button": {
+          "box_width": 270,
+          "font_px": 34,
+          "max_lines": 1,
+          "weight": 800
+        },
+        "ui": {
+          "box_width": 700,
+          "font_px": 30,
+          "max_lines": 1,
+          "weight": 800
+        },
+        "dialog": {
+          "box_width": 780,
+          "font_px": 37,
+          "max_lines": 3,
+          "weight": 600
+        },
+        "hero_name": {
+          "box_width": 560,
+          "font_px": 44,
+          "max_lines": 1,
+          "weight": 800
+        },
+        "place": {
+          "box_width": 600,
+          "font_px": 30,
+          "max_lines": 1,
+          "weight": 800
+        },
+        "beat_title": {
+          "box_width": 880,
+          "font_px": 44,
+          "max_lines": 1,
+          "weight": 800
+        },
+        "goal": {
+          "box_width": 1040,
+          "font_px": 37,
+          "max_lines": 1,
+          "weight": 800
+        },
+        "scene": {
+          "box_width": 880,
+          "font_px": 38,
+          "max_lines": 2,
+          "weight": 600
+        },
+        "intro": {
+          "box_width": 1000,
+          "font_px": 38,
+          "max_lines": 2,
+          "weight": 600
+        },
+        "ending": {
+          "box_width": 1000,
+          "font_px": 38,
+          "max_lines": 2,
+          "weight": 600
+        },
+        "banner": {
+          "box_width": 880,
+          "font_px": 28,
+          "max_lines": 2,
+          "weight": 800
+        },
+        "quiz_prompt": {
+          "box_width": 980,
+          "font_px": 40,
+          "max_lines": 2,
+          "weight": 600
+        },
+        "quiz_choice": {
+          "box_width": 360,
+          "font_px": 37,
+          "max_lines": 2,
+          "weight": 800
+        },
+        "quiz_why": {
+          "box_width": 820,
+          "font_px": 37,
+          "max_lines": 3,
+          "weight": 600
+        }
+      }
     }
   }
 }
