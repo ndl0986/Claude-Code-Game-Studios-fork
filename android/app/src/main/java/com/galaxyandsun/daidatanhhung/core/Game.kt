@@ -131,8 +131,12 @@ class Game(
 
     /** Presses on these keys are dropped within `screen_enter_lock` of entering a context; pause, sound, VI|EN and the pause menu are exempt. */
     private fun lockedKey(key: String) = key in setOf("next", "ask", "skip", "tomap", "start", "keep", "skipok") || key.startsWith("card")
+    /** True while a debug jump sets up its stage (screenshots only): the jump's own actions skip the entry lock. */
+    private var debugSetup = false
+
     private fun inEnterLock(at: Double): Boolean {
         syncContext()
+        if (debugSetup) return false
         if (at >= lockUntil) return false
         // dropped: the window restarts from this press, but never past entry + screen_enter_lock_max
         lockUntil = max(lockUntil, min(at + tuning["screen_enter_lock"], enteredAt + tuning["screen_enter_lock_max"]))
@@ -307,6 +311,11 @@ class Game(
 
     /** Debug builds: jump to a screen for screenshots (adb `--es startScreen`). */
     fun debugJump(target: String, question: Int = 1, beat: Int = 1, stage: String? = null, starCount: Int = 2, line: Int = 1) {
+        debugSetup = true
+        try { debugJumpInner(target, question, beat, stage, starCount, line) } finally { debugSetup = false }
+    }
+
+    private fun debugJumpInner(target: String, question: Int, beat: Int, stage: String?, starCount: Int, line: Int) {
         reset()
         when (target) {
             "intro" -> go(Screen.INTRO)
