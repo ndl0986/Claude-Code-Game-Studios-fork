@@ -473,7 +473,7 @@ Mission flow's screens.
 22. **GIVEN** a training beat with dummies and the partner, **WHEN** attack is tapped, **THEN**
     auto-face ignores them (facing changes only from move input).
 23. **GIVEN** the Trần Quốc Toản reach-the-flag beat and the three scripted strategies (hold ▶ and
-    tap 2/s; alternate ▶ ½ s and tap; stand still and tap 2/s), **WHEN** each is simulated in the
+    tap 2/s; alternate ▶ ½ s and tap; stand still and tap 2/s while an encounter holds the camera, walk ▶ otherwise), **WHEN** each is simulated in the
     core, **THEN** each finishes the beat in **≤ 60 s** (measured: Android 31–39 s, iOS 34–47 s).
 
 Logic criteria 1–11 and 15–23 need automated unit tests that follow the frame order. Feel
