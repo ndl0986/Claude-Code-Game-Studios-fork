@@ -192,6 +192,12 @@
       "max": 3,
       "unit": "s"
     },
+    "finish_hold": {
+      "value": 1.5,
+      "min": 1.0,
+      "max": 3.0,
+      "unit": "s"
+    },
     "quiz_count": {
       "value": 5,
       "min": 3,
