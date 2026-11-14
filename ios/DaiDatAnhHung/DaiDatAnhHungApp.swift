@@ -69,7 +69,8 @@ enum Boot {
         Font.register(data.appendingPathComponent("fonts/nunito.ttf"))
         let samples = bundle.appendingPathComponent("samples/heroes/sample")
         // the debug sample hero loads only when asked (`-hero sample`), as on Android: debug and QC play the real progression
-        let askedSample = isDebug && UserDefaults.standard.string(forKey: "hero") == "sample"
+        // the unlock jump also loads it, so the screen has a second hero to name (iOS QC r4 N2)
+        let askedSample = isDebug && (UserDefaults.standard.string(forKey: "hero") == "sample" || UserDefaults.standard.string(forKey: "startScreen") == "unlock")
         let extra = askedSample && FileManager.default.fileExists(atPath: samples.path) ? [samples] : []
         do {
             let content = try ContentSet.load(dataRoot: data, extraHeroDirs: extra)

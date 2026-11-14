@@ -267,9 +267,11 @@ final class GameScene: SKScene {
             l.position = D.p(sx, ground - 135); l.alpha = min(1, q.life * 2); fx.addChild(l)
         }
         worldHints.removeAllChildren()
-        if let e = p.stallTarget { let a = arrowDown(); a.position = D.p(e.x, ground - 250 + sin(t * 8) * 10); worldHints.addChild(a) }
-        if let dx = p.stallDummyX { let a = arrowDown(); a.position = D.p(dx, ground - 190 + sin(t * 8) * 10); worldHints.addChild(a) }
-        if p.flagArrow, let fx = p.flagX { let a = arrowDown(); a.position = D.p(fx, ground - 360 + sin(t * 8) * 10); worldHints.addChild(a) }
+        // hint arrows (§3.3: drawn over the bar) sit just above their target's spec-height top: dummy 130 → clear of
+        // the bar; enemy 170 → its tail may cross the bar's bottom edge; the flag arrow points at the pole below the bar
+        if let e = p.stallTarget { let a = arrowDown(); a.position = D.p(e.x, ground - 205 + sin(t * 8) * 10); worldHints.addChild(a) }
+        if let dx = p.stallDummyX { let a = arrowDown(); a.position = D.p(dx, ground - 140 + sin(t * 8) * 10); worldHints.addChild(a) }
+        if p.flagArrow, let fx = p.flagX { let a = arrowDown(); a.position = D.p(fx, ground - 165 + sin(t * 8) * 10); worldHints.addChild(a) }
     }
 
     private func color(_ c: FxColor) -> SKColor {
@@ -664,7 +666,7 @@ final class GameScene: SKScene {
         add(Font.label(game.hero.mission.hero.name.text(game.lang), 44, .white, width: 560), 300, 455)
         add(Font.label("?", 110, C.goldDark), 980, 300)
         if let next = game.unlockedHero { add(Font.label(next.mission.hero.name.text(game.lang), 44, .white, width: 560), 980, 455) }
-        add(Font.label(game.ui("ui.unlock.title"), 52, C.gold, width: 1100), 640, 100)
+        add(Font.label(game.ui("ui.unlock.title"), 52, C.gold, width: 900), layout.topStackCentre, 100) // clear of pause/sound (W7)
         add(Font.label(game.ui("ui.unlock.map_stub"), 28, SKColor(white: 1, alpha: 0.7)), 640, 530)
         button(game.ui("ui.btn.to_map"), 640 - 170, 580, 340, 110, "toMap", pulse: true) // one button (UX unlock spec)
     }
