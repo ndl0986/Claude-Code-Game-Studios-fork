@@ -82,8 +82,11 @@ it always ends at the quiz and then the map.
 5. **New buttons are taught where they first appear.** The first beat in a mission that lists a
    button teaches it. Hints & onboarding owns *how*; this system tells Hints which buttons are
    new in the beat.
-6. **Banner.** A beat with `uses_banner: true` shows the mission's `banner` Text as a text layer
-   on the banner prop, in the current language. It is never part of the art (art bible §3, §7).
+6. **Banner.** A beat with `uses_banner: true` shows the mission's `banner` Text as a text layer,
+   in the current language, on a **vermilion bar in the sky band**, under the goal line and above
+   the fighters' heads, in every language (`design/ux/hud.md` §3.3; TASK-020 W9). The bar has a
+   fixed 2-line height and never overlaps a hero or enemy body. The words are never part of the
+   art (art bible §3, §7); the drawn banner prop is plain cloth.
 7. **Six beat types** (`type` in `mission.schema.json`; `dialogue` added by TASK-016, schema 1.4):
 
 | Type | Buttons (typical) | The child does | Goal met when | Params (content) |
@@ -459,7 +462,8 @@ Art-director lens (art bible §§2–7):
   "never a scary face").
 - **Training:** straw dummies wobble and spring back. They never break apart. The practice
   partner wears the hero's team colour, so the child never reads them as an enemy (§5).
-- **Banner:** the banner shape is plain cloth (§3), and the text layer sits on it.
+- **Banner:** the banner prop is plain cloth (§3); the motto's text layer is on the sky-band
+  bar (Rule 6, `design/ux/hud.md` §3.3).
 - **Beat end:** a cheer pose, plus a small star sparkle on the beat progress dots. With
   `cheer: false`, no cheer pose; the dots still fill quietly.
 - **Each beat shows its fact** (TASK-020 A8): a child who skips the story should still see the
