@@ -218,7 +218,7 @@ Hero progression already lists Map & timeline as a dependent (`design/gdd/hero-p
   - drum-ring motif on the frame only;
   - **no text in the art**: every name is a text layer.
 - **Pins and cards** reuse the hero portraits (ASSET-327 family) in drum-ring frames, the
-  padlock shape, and the stars and medal (ASSET-021–023, 036–037).
+  padlock shape, and the stars and medal (ASSET-022–023, 036–037).
 - **Region glow:** a soft warm wash, never flashing.
 - **Audio:** a soft tap on the pin, the unlock reveal and the star/medal settle sounds (Audio GDD).
 
