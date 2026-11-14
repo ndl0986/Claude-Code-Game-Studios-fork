@@ -28,6 +28,27 @@
       "kind": "literature",
       "location": "Any edition, e.g. NXB Kim Đồng; to confirm",
       "status": "to_confirm"
+    },
+    {
+      "id": "S5",
+      "citation": "Wikipedia, \"Trần Quốc Toản\" (English), citing Vietnamese encyclopedia sources for the birth year 1267",
+      "kind": "secondary",
+      "location": "https://en.wikipedia.org/wiki/Tr%E1%BA%A7n_Qu%E1%BB%91c_To%E1%BA%A3n (to confirm against the primary source it cites)",
+      "status": "to_confirm"
+    },
+    {
+      "id": "S6",
+      "citation": "Dân Việt, \"Bến Bình Than, nơi Trần Quốc Toản bóp nát quả cam…\", 2023-02-21",
+      "kind": "secondary",
+      "location": "https://danviet.vn/ben-binh-than-noi-tran-quoc-toan-bop-nat-qua-cam-nay-la-mien-que-nao-cua-tinh-bac-ninh-20230221132457635-d1076438.html",
+      "status": "to_confirm"
+    },
+    {
+      "id": "S7",
+      "citation": "Luật Minh Khuê, \"Kể về người anh hùng Trần Quốc Toản\" (a retelling: \"mới 15 tuổi\")",
+      "kind": "secondary",
+      "location": "https://luatminhkhue.vn/ke-ve-nguoi-anh-hung-tran-quoc-toan.aspx",
+      "status": "to_confirm"
     }
   ]
 }

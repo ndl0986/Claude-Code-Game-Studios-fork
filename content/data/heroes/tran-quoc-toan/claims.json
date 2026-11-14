@@ -46,7 +46,8 @@
       "en": "The Trần king gathered the princes, lords and officials at Bình Than to plan the defence (1282).",
       "label": "fact",
       "sources": [
-        "S3"
+        "S3",
+        "S6"
       ],
       "signoff": {
         "status": "pending"
@@ -164,7 +165,9 @@
       "en": "In the year of the Bình Than meeting (1282), Trần Quốc Toản was 15 (born 1267; 16 by the traditional count).",
       "label": "fact",
       "sources": [
-        "S3"
+        "S3",
+        "S5",
+        "S7"
       ],
       "signoff": {
         "status": "pending"

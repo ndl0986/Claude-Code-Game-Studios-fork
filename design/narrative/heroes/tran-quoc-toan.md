@@ -27,9 +27,9 @@
 | S2 | *Tiếng Việt*, Kết nối tri thức với cuộc sống, NXB Giáo dục Việt Nam | Grade and page ⟨to confirm⟩. **Not yet known whether this series has the reading.** The older curriculum's *Tiếng Việt 2* had "Bóp nát quả cam", adapted from S4 | Textbook reading |
 | S3 | *Đại Việt sử ký toàn thư*, Bản kỷ, Kỷ nhà Trần, reign of Trần Nhân Tông | Entries for the year Nhâm Ngọ (1282) and Ất Dậu (1285) ⟨to confirm⟩; translation edition ⟨to confirm, e.g. NXB Khoa học Xã hội⟩ | Court chronicle (15th century) |
 | S4 | Nguyễn Huy Tưởng, *Lá cờ thêu sáu chữ vàng* | Any edition, e.g. NXB Kim Đồng ⟨to confirm⟩ | Children's historical novel (literature) |
-| S5 | Wikipedia, "Trần Quốc Toản" (EN), citing Vietnamese encyclopedia sources for the birth year 1267 | https://en.wikipedia.org/wiki/Tr%E1%BA%A7n_Qu%E1%BB%91c_To%E1%BA%A3n · ⟨to confirm against the primary source it cites⟩ | Secondary (tertiary) |
-| S6 | Dân Việt, "Bến Bình Than, nơi Trần Quốc Toản bóp nát quả cam…" (2023-02-21) | https://danviet.vn/ben-binh-than-noi-tran-quoc-toan-bop-nat-qua-cam-nay-la-mien-que-nao-cua-tinh-bac-ninh-20230221132457635-d1076438.html · ⟨to confirm⟩ | Secondary (press) |
-| S7 | Luật Minh Khuê, "Kể về người anh hùng Trần Quốc Toản" (a retelling: "mới 15 tuổi") | https://luatminhkhue.vn/ke-ve-nguoi-anh-hung-tran-quoc-toan.aspx · ⟨to confirm⟩ | Secondary (retelling) |
+| S5 | Wikipedia, "Trần Quốc Toản" (EN), citing Vietnamese encyclopedia sources for the birth year 1267 | https://en.wikipedia.org/wiki/Tr%E1%BA%A7n_Qu%E1%BB%91c_To%E1%BA%A3n · ⟨to confirm against the primary source it cites⟩ | secondary (in `sources.json`, schema 1.3) |
+| S6 | Dân Việt, "Bến Bình Than, nơi Trần Quốc Toản bóp nát quả cam…" (2023-02-21) | https://danviet.vn/ben-binh-than-noi-tran-quoc-toan-bop-nat-qua-cam-nay-la-mien-que-nao-cua-tinh-bac-ninh-20230221132457635-d1076438.html · ⟨to confirm⟩ | secondary (in `sources.json`) |
+| S7 | Luật Minh Khuê, "Kể về người anh hùng Trần Quốc Toản" (a retelling: "mới 15 tuổi") | https://luatminhkhue.vn/ke-ve-nguoi-anh-hung-tran-quoc-toan.aspx · ⟨to confirm⟩ | secondary (in `sources.json`) |
 
 **Rule:** a claim is **fact** only if S1 or S3 states it. A detail that comes only from S4,
 or from the S2 reading adapted from S4, is **legend**. Anything the game adds for play is
@@ -54,7 +54,7 @@ Labels: **fact** · **interpretation** · **legend** (popular tradition, D2) · 
 | C10 | Trần Quốc Toản hy sinh khi còn rất trẻ, vì đất nước. | Trần Quốc Toản gave his life for his country while he was still very young. | fact (D3 wording) | S3 (1285) ⟨to confirm⟩ | ⟨placeholder⟩ |
 | C11 | Nhà Trần đánh thắng quân Mông–Nguyên. | The Trần dynasty defeated the Mông–Nguyên army. | fact | S1, S3 | ⟨placeholder⟩ |
 | C12 | Bến sông đông thuyền, rơm tập đánh, giặc rơi vũ khí rồi bỏ chạy… | A busy riverbank, straw training dummies, enemies dropping weapons and running away… | **invented** | none (game play) | ⟨placeholder⟩ |
-| C13 | Năm diễn ra hội nghị Bình Than (1282), Trần Quốc Toản mới 15 tuổi (sinh năm 1267; 16 tuổi theo tuổi mụ). | In the year of the Bình Than meeting (1282), Trần Quốc Toản was 15 (born 1267; 16 by the traditional count). | fact (derived: birth year 1267 + meeting in the 10th month of 1282). **Luan chooses 15 or 16 (tuổi mụ)** | S5, S7 (secondary, ⟨to confirm⟩); S3 for 1282 | ⟨placeholder⟩ |
+| C13 | Năm diễn ra hội nghị Bình Than (1282), Trần Quốc Toản mới 15 tuổi (sinh năm 1267; 16 tuổi theo tuổi mụ). | In the year of the Bình Than meeting (1282), Trần Quốc Toản was 15 (born 1267; 16 by the traditional count). | fact (derived: birth year 1267 + meeting in the 10th month of 1282). **Luan chooses 15 or 16 (tuổi mụ)** | S3, S5, S7 (data); S5/S7 secondary, ⟨to confirm⟩ | ⟨placeholder⟩ |
 
 > **C06 and C08: relabel condition (Luan, 2026-11-14).** Both stay **legend** for now.
 > They become **fact (as the chronicle records it)** only once the S3 passage for 1282 is
