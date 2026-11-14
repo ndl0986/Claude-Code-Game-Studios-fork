@@ -41,6 +41,17 @@ final class Rules005lTests: XCTestCase {
         XCTAssertTrue(ContentValidator.cheerOnFight(beat: "b", type: "fight", cheer: nil).isEmpty)
     }
 
+    /// TASK-005o ahead of the data: every TQT goal is 1 line and the banner ≤ 2 lines at the narrow 720 box.
+    func test_R8c_tqt_goals_and_banner_fit_the_narrow_720_box() throws {
+        let metrics = try Repo.json("metrics/nunito-advances.json") as! [String: Any]
+        let adv = ((metrics["weights"] as! [String: Any])["800"] as! [String: NSNumber]).mapValues(\.doubleValue)
+        let m = realHero(try Repo.contentSet()).mission
+        for t in m.beats.compactMap(\.goal) { for s in [t.vi, t.en] {
+            XCTAssertEqual(ContentValidator.wrapLines(s, advances: adv, fontPx: 37, box: 720, allowance: 0.03), 1, s)
+        } }
+        for s in [m.banner!.vi, m.banner!.en] { XCTAssertLessThanOrEqual(ContentValidator.wrapLines(s, advances: adv, fontPx: 37, box: 720, allowance: 0.03) ?? 99, 2, s) }
+    }
+
     /// R8c at the new banner size: EN 2 lines, VI 1 line (880 px, weight 800, 37 px).
     func test_R8c_the_tqt_banner_fits_at_37() throws {
         let metrics = try Repo.json("metrics/nunito-advances.json") as! [String: Any]

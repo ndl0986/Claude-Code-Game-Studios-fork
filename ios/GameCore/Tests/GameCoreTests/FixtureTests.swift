@@ -117,8 +117,12 @@ final class FixtureTests: XCTestCase {
                 let field = (fit["fields"] as! [String: [String: Any]])[c["field_type"] as! String]!
                 let metrics = try Repo.json("metrics/nunito-advances.json") as! [String: Any]
                 let adv = ((metrics["weights"] as! [String: Any])["\(field["weight"] as! Int)"] as! [String: NSNumber]).mapValues(\.doubleValue)
+                // TASK-005o: `"box": "narrow"` checks the field at its narrow_box_width (rules 1.3, HUD §3.3 small k)
+                let narrow = (c["box"] as? String) == "narrow"
+                if narrow && field["narrow_box_width"] == nil { XCTFail("\(name): box narrow but \(c["field_type"]!) has no narrow_box_width"); continue }
+                let box = (field[narrow ? "narrow_box_width" : "box_width"] as! NSNumber).doubleValue
                 let lines = ContentValidator.wrapLines(c["text"] as! String, advances: adv, fontPx: (field["font_px"] as! NSNumber).doubleValue,
-                                                       box: (field["box_width"] as! NSNumber).doubleValue, allowance: (fit["allowance"] as! NSNumber).doubleValue)
+                                                       box: box, allowance: (fit["allowance"] as! NSNumber).doubleValue)
                 if let el = c["expected_lines"] as? Int, lines != nil { XCTAssertEqual(lines, el, name) }
                 if lines == nil || lines! > (field["max_lines"] as! Int) { findings = [.init(rule: "R8c", message: "\(lines ?? -1) lines")] }
             case "R8d":

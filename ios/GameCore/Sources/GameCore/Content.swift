@@ -108,7 +108,9 @@ public struct RulesFile: Codable, Sendable {
             public let maxLines: Int
             public let weight: Int
             public let sizeClass: String?
-            enum CodingKeys: String, CodingKey { case boxWidth, fontPx, maxLines, weight, sizeClass = "class" }
+            /// Rules 1.3 (TASK-005o): the box on small-k phones (HUD §3.3), checked with the same max_lines.
+            public let narrowBoxWidth: Double?
+            enum CodingKeys: String, CodingKey { case boxWidth, fontPx, maxLines, weight, sizeClass = "class", narrowBoxWidth = "narrow_box_width" }
         }
         public struct Fit: Codable, Sendable { public let allowance: Double; public let fields: [String: FitField] }
         public let maxChars: Int
