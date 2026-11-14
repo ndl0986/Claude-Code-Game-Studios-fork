@@ -24,6 +24,26 @@ public struct StoryLayout: Equatable, Sendable {
     }
 
     public static let cardHeight = 235.0, storyHeight = 167.0
+
+    /// The placeholder still's screens: intro and caption (`story`), beat card (`card`). The ending keeps its own still.
+    public enum Placeholder: Sendable { case story, card }
+
+    /// story-screens §5.2 (r8): the hero's portrait in a drum ring, centred on x 640, its bottom ≥ 8 above the
+    /// "Phần n" label (box panel top − 38 … − 10, so panel top − 46), taken at the k 0.40 floor so it is the same
+    /// world box at every k: intro/caption 256 at y 45–301, beat card 208 at y 25–233. Nil: dropped.
+    public static func placeholder(_ kind: Placeholder) -> Box? {
+        let floor = StoryLayout(pad: PadLayout(view: (w: 512, h: 288), insets: (0, 0, 0, 0), padMin: 72, padGap: 12))
+        let top = floor.panel(box: 880, height: kind == .card ? cardHeight : storyHeight).y
+        return placeholder(bottom: top - 46, nominal: kind == .card ? 208 : 256)
+    }
+
+    /// The placeholder for a given bottom: as big as `nominal`, at most down to the top margin (18); below
+    /// 192 × 192 it is dropped and the background alone shows, rather than overlap the label or the panel.
+    public static func placeholder(bottom: Double, nominal: Double) -> Box? {
+        let size = min(nominal, bottom - 18)
+        guard size >= 192 else { return nil }
+        return Box(640 - size / 2, bottom - size, size, size)
+    }
     /// Dialogue (dialogue.md §5.2): the title row reserved on every line; speaker 286, narrator 235.
     public static let speakerHeight = 286.0, narratorHeight = 235.0, portraitSize = 256.0
 

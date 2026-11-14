@@ -107,6 +107,9 @@ public final class Game {
     public private(set) var enteredAt: Double?
     /// The rolling lock's end (press clock): each press dropped inside it restarts the window, up to the cap.
     var lockUntil: Double?
+    /// Quiz §5.2 / Input Rule 13b: on a small-k phone (QuizLayout.small) Tiếp lies over the third card slot, so
+    /// each new question takes the lock too; elsewhere the next question keeps only the debounce. Set by the app.
+    public var quizLocksPerQuestion = false
     public private(set) var pausedFrom: Screen = .play
 
     /// `hero` is the mission to play. In a release build a hero whose claims aren't all approved
@@ -168,14 +171,17 @@ public final class Game {
     /// the context it came from (pause and sound are exempt from the lock).
     func currentLockContext() -> String? {
         switch screen {
-        // every ending box is its own context (B7 follow-up): the hero's last lines can't flash past under a mash
-        case .ending: return "ending\(storyLine)"
-        case .intro, .quiz, .results, .unlock: return "\(screen)"
+        // Input Rule 13b (QC r7, r8): every story box and every dialogue line is its own context, so each takes the
+        // rolling lock as if entered; the plea, the king's words and "…đã hy sinh…" can't flash past under a mash
+        case .intro, .ending: return "\(screen)\(storyLine)"
+        // the quiz keeps only the debounce between questions, except on a small-k phone (quiz §5.2)
+        case .quiz: return quizLocksPerQuestion ? "quiz\(quiz?.index ?? 0)" : "quiz"
+        case .results, .unlock: return "\(screen)"
         case .play:
             switch play.phase {
-            case .beatCard: return "card\(play.beat)"
-            case .caption: return "caption\(play.beat)"
-            case .dialogueLine: return "dialogue\(play.beat)"
+            case .beatCard: return "card\(play.beat).\(play.cardLine)"
+            case .caption: return "caption\(play.beat).\(play.captionLine)"
+            case .dialogueLine: return "dialogue\(play.beat).\(play.lineIndex)" // an ask tap advances a line too
             default: return nil
             }
         case .pause: return lockContext
