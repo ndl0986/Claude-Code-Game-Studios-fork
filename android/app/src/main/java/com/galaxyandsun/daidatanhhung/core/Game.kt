@@ -106,6 +106,8 @@ class Game(
     }
 
     val medalEarned get() = store.flag("medal.$heroId")
+    /** The saved best stars (0 = none yet), for the title's hero card (D-27: A; title.md §5.5). */
+    val bestStars get() = store.stars(heroId).coerceIn(0, 3)
 
     fun ui(id: String) = content.ui(id, lang)
     /** A UI string, or null when the id isn't in strings.json yet (the label is then left off). */

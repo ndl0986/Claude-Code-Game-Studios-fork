@@ -60,6 +60,8 @@ class GameActivity : Activity() {
         if (BuildConfig.DEBUG && game != null) intent?.getStringExtra("startScreen")?.let { target ->
             game.debugJump(target, intent.getIntExtra("q", 1), intent.getIntExtra("beat", 1), intent.getStringExtra("stage"), intent.getIntExtra("stars", 2), intent.getIntExtra("line", 1))
             view.frozen = intent.getBooleanExtra("freeze", false)
+            view.padScale = intent.getFloatExtra("padScale", 1f)
+            view.slow = intent.getFloatExtra("slow", 1f)
             intent.getStringExtra("lang")?.let { if (it != game.lang.code) game.forceLang(it) }
         }
         view.setOnApplyWindowInsetsListener { v, insets -> view.setSafeInsets(safeInsets(insets)); v.onApplyWindowInsets(insets) }

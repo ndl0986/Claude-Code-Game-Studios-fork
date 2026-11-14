@@ -59,6 +59,10 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
     @Volatile private var safe = IntArray(4)
     /** Debug screenshots: draw but don't step (`--ez freeze true`), so a 1.1 s telegraph can be captured. */
     @Volatile var frozen = false
+    /** Debug only (`--ef padScale 1.1`): pad_min drawn as if the phone's k were smaller by this factor (narrow-phone layouts). */
+    @Volatile var padScale = 1f
+    /** Debug only (`--ef slow 0.1`): game time runs at this fraction, to capture 3-frame poses such as strike contact. */
+    @Volatile var slow = 1f
 
     init {
         holder.addCallback(this)
@@ -100,11 +104,11 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
         val dt = if (lastNanos < 0) 0.0 else ((frameTimeNanos - lastNanos) / 1e9).coerceIn(0.0, 0.25)
         lastNanos = frameTimeNanos
         val w = width.toFloat(); val h = height.toFloat()
-        renderer.layout(w, h, safe, resources.displayMetrics.density, game?.tuning?.get("pad_min")?.toFloat() ?: 72f)
+        renderer.layout(w, h, safe, resources.displayMetrics.density * padScale, game?.tuning?.get("pad_min")?.toFloat() ?: 72f)
         drainInput()
         val portrait = h > w
         if (game != null && !portrait && !frozen) {
-            acc += dt
+            acc += dt * slow
             while (acc >= STEP) {
                 input.held.clear(); input.held += padHolds.held(); input.held += keyHolds
                 game.step(STEP, input)

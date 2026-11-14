@@ -41,8 +41,11 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
     fun layout(w: Float, h: Float, safe: IntArray, density: Float, padMinDp: Float) {
         val f = ScreenFit.of(w, h, safe, density, padMinDp)
         k = f.k; ox = f.ox; oy = f.oy; fit = f
+        safeBottom = (h - safe[3] - oy) / k // world px; ≥ 720 when the world is width-limited
     }
     private var fit = ScreenFit(1f, 0f, 0f, 0f)
+    /** The safe rect's bottom in world px (title.md small-k rule). */
+    private var safeBottom = 720f
 
     /** The region under a screen point (topmost first), from the last frame drawn. */
     fun hit(sx: Float, sy: Float): Region? {
@@ -93,14 +96,19 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         next += Region(key, x, y, w, h, false, onTap = onTap)
     }
 
-    private fun langButton(g: Game) {
-        val x = 1100f; val y = 18f; val w = 160f; val h = 96f
+    /** title.md: the VI|EN chip, top-right, height ≥ pad_min, width 1.6 × height (ref ≈ x 1043–1262, y 18–155). */
+    private fun chipBox(): Pair<Float, Float> { val h = max(96f, fit.padMinWorld); return h * 1.6f to h }
+
+    private fun langButton(g: Game, enabled: Boolean = true) {
+        val (w, h) = chipBox(); val x = 1262f - w; val y = 18f
+        val old = d.alpha; if (!enabled) d.alpha = 0.5
         d.rr(x, y, w, h, 30f, C.a(C.WHITE, 0.9), C.GOLD, 4f)
-        val vi = g.lang.code == "vi"
-        d.text(g.ui(UiIds.LANG_VI), x + 44, y + h / 2, 32f, if (vi) C.RED else 0xFF9A8F86.toInt())
-        d.text("|", x + 80, y + h / 2, 30f, 0xFF9A8F86.toInt())
-        d.text(g.ui(UiIds.LANG_EN), x + 116, y + h / 2, 32f, if (!vi) C.RED else 0xFF9A8F86.toInt())
-        next += Region("lang", x, y, w, h, false, onTap = { g.toggleLang() })
+        val vi = g.lang.code == "vi"; val fs = 32f * h / 96f
+        d.text(g.ui(UiIds.LANG_VI), x + w * 0.27f, y + h / 2, fs, if (vi) C.RED else 0xFF9A8F86.toInt())
+        d.text("|", x + w / 2, y + h / 2, fs * 0.95f, 0xFF9A8F86.toInt())
+        d.text(g.ui(UiIds.LANG_EN), x + w * 0.73f, y + h / 2, fs, if (!vi) C.RED else 0xFF9A8F86.toInt())
+        d.alpha = old
+        next += Region("lang", x, y, w, h, false, onTap = { enabled && g.toggleLang() })
     }
 
     private fun roundIcon(key: String, x: Float, y: Float, r: Float, draw: () -> Unit, onTap: () -> Boolean) {
@@ -147,38 +155,62 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
     }
 
     // ---- Screens ----
+    /** title.md (D-27: A): the title row, the hero card, Start, the map stub and (debug) the test-build line. */
     private fun title(g: Game, ready: Boolean) {
         val t = g.t
         fig.background(0.0, "village", GROUND)
-        d.rr(180f, 60f, 920f, 210f, 40f, C.PANEL, C.GOLD, 6f) // clear of the sound button (x ≤ 155 at pad_min)
-        d.drum(262f, 165f, 70f, C.a(C.GOLD, 0.8)); d.drum(1018f, 165f, 70f, C.a(C.GOLD, 0.8))
-        d.textBox(g.ui(UiIds.TITLE), W / 2, 140f, 740f, 68f, C.GOLD, 1)
-        if (debug) d.text(g.ui(UiIds.SUBTITLE_DEBUG), W / 2, 220f, 36f, C.WHITE)
-        fig.hero(260f, GROUND, 1, false, false, null, t, 0.8f)
-        button("start", g.ui(UiIds.START), W / 2 - 190, 330f, 380f, 130f, t, pulse = true, size = 44f, enabled = ready) { ready && g.start() }
-        // title.md: the map-stub line, no controls legend (the first-use hands teach the controls in play)
-        d.rr(240f, 540f, 800f, 80f, 24f, C.a(C.CREAM, 0.92))
-        d.textBox(g.ui(UiIds.MAP_STUB), W / 2, 580f, 760f, 28f, C.INK, 1, semiBold = true) // label ≥ 28
-        corner(g, pause = false) // title.md: sound top-left, no pause
-        langButton(g)
+        // Title row x 260–1020 (its right edge ≤ the chip's left − 8), y 18–155: a 1-line 56 px heading, no emblems.
+        val rowR = min(1020f, 1262f - chipBox().first - 8f)
+        d.rr(260f, 34f, rowR - 260f, 106f, 30f, C.a(C.PANEL, 0.92), C.GOLD, 4f)
+        d.textBox(g.ui(UiIds.TITLE), (260f + rowR) / 2, 87f, rowR - 300f, 56f, C.GOLD, 1)
+        heroCard(g, 260f, 175f)
+        // Start: centred x 430–850, top 375, pad_min tall (button field, 34 px); the lines under it, or beside it when
+        // the column would run past the safe rect's bottom (small k), computed from the real safe_bottom.
+        val sh = max(110f, fit.padMinWorld)
+        button("start", g.ui(UiIds.START), 430f, 375f, 420f, sh, t, pulse = true, size = 34f, enabled = ready) { ready && g.start() }
+        val stacked = 375f + sh + 16f + 38f + (if (debug) 8f + 34f else 0f) <= safeBottom
+        val (lx, ly) = if (stacked) 640f to 375f + sh + 16f else 1060f to 375f
+        d.rr(lx - 190, ly, 380f, 38f, 14f, C.a(C.CREAM, 0.92))
+        d.textBox(g.ui(UiIds.MAP_STUB), lx, ly + 19, 360f, 28f, C.INK, 1, semiBold = true) // label 28
+        if (debug) { d.rr(lx - 190, ly + 46, 380f, 34f, 14f, C.a(C.PANEL, 0.85)); d.textBox(g.ui(UiIds.SUBTITLE_DEBUG), lx, ly + 63, 360f, 28f, C.WHITE, 1) }
+        corner(g, pause = false, enabled = ready) // sound top-left, no pause; disabled until the preload ends (W19)
+        langButton(g, enabled = ready)
+    }
+
+    /** title.md §5.5: portrait, name, best stars and medal; display only (no tap, no tone). */
+    private fun heroCard(g: Game, x: Float, y: Float) {
+        d.rr(x, y, 760f, 180f, 28f, 0xFFFFF6E3.toInt(), C.INK, 4f)
+        d.rr(x + 6, y + 6, 748f, 168f, 24f, null, C.a(C.GOLD_DARK, 0.7), 3f) // the drum-ring border (one motif)
+        val px = x + 20 + 70; val py = y + 90
+        d.circle(px, py, 76f, C.CREAM, C.GOLD_DARK, 6f); d.drum(px, py, 72f, C.a(C.GOLD_DARK, 0.25))
+        if (!portrait("pic.portrait_${g.heroId}_hero_determined", px, py, 66f)) {
+            d.c.save(); d.path.reset(); d.path.addCircle(px, py, 70f, android.graphics.Path.Direction.CW); d.c.clipPath(d.path)
+            fig.hero(px, py + 150f, 1, false, false, null, g.t, 0.75f); d.c.restore()
+        }
+        val name = g.bundle.mission.hero.name
+        d.textBox(name.get(g.lang), x + 180 + 280, y + 52, 560f, 44f, C.INK, 1); badge(g, name, x + 700, y + 10) // fit.hero_name 560 @ 44
+        val best = g.bestStars
+        for (i in 0 until 3) {
+            val sx = x + 210 + i * 62f; val sy = y + 124
+            if (i < best) d.star(sx, sy, 24f, C.GOLD, C.GOLD_DARK) else d.star(sx, sy, 24f, C.a(C.WHITE, 0.4), C.a(C.INK, 0.5))
+        }
+        medal(x + 210 + 3 * 62f + 28, y + 128, 28f, g.medalEarned)
     }
 
     private fun story(g: Game, intro: Boolean) {
         val t = g.t
-        d.c.drawColor(C.BG)
-        d.c.save(); d.path.reset(); d.path.addRoundRect(240f, 100f, 1040f, 440f, 30f, 30f, android.graphics.Path.Direction.CW); d.c.clipPath(d.path)
-        d.c.save(); d.c.translate(0f, -30f) // the picture ends at 440, so two text lines clear both it and Tiếp
-        d.c.save(); fig.background(if (intro) 0.0 else 5200.0, if (intro) "village" else "river", GROUND); d.c.restore()
-        if (!intro) d.rr(240f, 130f, 800f, 340f, 0f, C.a(0xFFFF965A.toInt(), 0.3))
-        fig.hero(if (intro) 560f else 640f, GROUND, 1, false, false, null, t, 0.9f)
-        d.c.restore()
-        d.c.restore()
-        d.rr(240f, 100f, 800f, 340f, 30f, null, C.GOLD, 8f)
+        // story-screens.md §5.2: the picture is full-bleed (no frame corner under pause/sound)
+        fig.background(if (intro) 0.0 else 5200.0, if (intro) "village" else "river", GROUND)
+        if (!intro) d.rr(0f, 0f, W, H, 0f, C.a(0xFFFF965A.toInt(), 0.3))
+        fig.hero(if (intro) 760f else 640f, GROUND, 1, false, false, null, t, Figures.HERO_S)
         val lines = if (intro) g.bundle.mission.intro else g.bundle.mission.ending.lines
         val line = lines[g.line.coerceIn(0, lines.size - 1)]
-        d.textBox(line.get(g.lang), W / 2, 505f, 1000f, 38f, C.WHITE, 2, semiBold = true) // centred at 505, clear of Tiếp (QC r3); fit.intro/ending 1000 @ 38, weight 600
-        badge(g, line, 1010f, 132f) // debug badge in the picture's corner, never over the text (QC r1)
-        button("next", g.ui(UiIds.NEXT), W / 2 - 150, 590f, 300f, 110f, t, pulse = true) { g.next() }
+        // the text panel: box 1000 + 2 × 32, H 167, bottom-anchored on Tiếp's top − 8 (fit.intro/ending 1000 @ 38, weight 600)
+        val bottom = rowTop() - 8f; val top = max(bottom - 167f, cornerClear(g))
+        d.rr(108f, top, 1064f, bottom - top, 30f, C.a(C.PANEL, 0.94), C.GOLD, 6f)
+        d.textBox(line.get(g.lang), W / 2, (top + bottom) / 2, 1000f, 38f, C.WHITE, 2, semiBold = true)
+        badge(g, line, 1010f, top)
+        nextButton(g, t)
         skipButton(g)
         corner(g)
         skipWarning(g)
@@ -195,7 +227,15 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         for (w in r.dropped) fig.dropped(w, ground)
         r.partner?.let { fig.partner(it, ground, t) }
         for (e in r.enemies) fig.enemy(e, ground, t)
-        if (!(h.hurt > 0 && (t * 20).toInt() % 2 == 1)) fig.hero(h.x.toFloat(), ground, h.face, h.walk, h.def, if (h.atk >= 0) h.atk else null, t,
+        // Combat AC13 (QC r5): the sim pushes the hero back in the strike's first step, so the drawing holds contact for
+        // 0.05 s (3 frames) and slides the push in behind the sim. Render-only: positions, timing and the trace are untouched.
+        val contact = 0.05
+        val hurtT = g.tuning["hurt_time"]
+        val striker = (r.enemies + listOfNotNull(r.partner)).firstOrNull { it.state == com.galaxyandsun.daidatanhhung.core.EnemyState.STRIKE && it.t < contact }
+        val heroX = if (striker != null && h.hurt > hurtT - contact - 1e-9)
+            h.x + kotlin.math.sign(striker.x - h.x) * g.tuning["hero_pushback"] * (1 - striker.t / contact) else h.x
+        val blinkOff = h.hurt > 0 && h.hurt < hurtT - contact && (t * 20).toInt() % 2 == 1 // no blink during contact
+        if (!blinkOff) fig.hero(heroX.toFloat(), ground, h.face, h.walk, h.def, if (h.atk >= 0) h.atk else null, t,
             Figures.HERO_S, reach = (g.tuning["attack_range"] - 18 * Figures.HERO_S).toFloat()) // body 180 tall, swing arc = attack_range (AC13)
         if (r.bannerRaised && r.beatType == BeatType.TRAINING) fig.icon("flag", h.x.toFloat() - h.face * 60f, ground - 250, 110f)
         if (r.beatType == BeatType.HOLD && (r.phase == Phase.PLAY || r.phase == Phase.END)) holdMeter(h.x.toFloat() + h.face * 130f, ground - 200, r.heldTotal / r.holdSeconds(r.beat)) // beside the hero, clear of the goal bar
@@ -214,7 +254,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         // HUD: pause and sound always; beat medallions; the goal and the banner as text layers (never in art).
         corner(g)
         val n = r.beats.size
-        val sx = stackX(g)
+        val st = stack(g); val sx = st.cx
         for (i in 0 until n) { // hud.md §3.3: the top stack is centred in the free band right of pause/sound
             val x = sx - (n - 1) * 45 + i * 90
             val done = i < r.beat || (i == r.beat && (r.phase == Phase.CAPTION || r.phase == Phase.END))
@@ -222,11 +262,12 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         }
         if (r.phase == Phase.PLAY || r.phase == Phase.END) { // the goal under the medallions; its badge clear of the "!" bubble
             // goal plate: 920 × 56 at 96–152, text box 880 @ 37 px, 1 line (rules.json fit.goal; hud.md §3.3), on every beat
-            d.rr(sx - 460, 96f, 920f, 56f, 22f, C.a(C.CREAM, 0.88))
-            beat.goal?.let { gl -> d.textBox(gl.get(g.lang), sx, 124f, 880f, 37f, C.INK, 1); badge(g, gl, sx + 380, 96f) }
+            d.rr(st.left, 96f, st.width, 56f, 22f, C.a(C.CREAM, 0.88))
+            beat.goal?.let { gl -> d.textBox(gl.get(g.lang), sx, 124f, st.box, 37f, C.INK, 1); badge(g, gl, st.left + st.width - 80, 96f) }
             if (beat.usesBanner) g.bundle.mission.banner?.let { b ->
                 // banner motto bar: 920 × 112 at 156–268, fixed for 1 or 2 lines (fit.banner 880 @ 37); never over a body
-                d.rr(sx - 460, 156f, 920f, 112f, 18f, C.a(C.RED, 0.92)); d.textBox(b.get(g.lang), sx, 212f, 880f, 37f, C.GOLD, 2); badge(g, b, sx + 380, 156f)
+                // the gold text carries an ink outline (QC r5: gold on vermilion alone is 2.6:1)
+                d.rr(st.left, 156f, st.width, 112f, 18f, C.a(C.RED, 0.92)); d.textBox(b.get(g.lang), sx, 212f, st.box, 37f, C.GOLD, 2, outline = OUTLINE_INK, outlineW = 7f); badge(g, b, st.left + st.width - 80, 156f)
             }
         }
         // z-order (hud.md §3.3): bar → pops → hints and the telegraph "!" → HUD buttons
@@ -237,7 +278,9 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             val side = if (other != null && other > p.x) -1 else 1
             val rise = min(20f, (ground - 300f - p.y.toFloat()).coerceAtLeast(0f))
             val old = d.alpha; d.alpha = min(1.0, p.life * 2)
-            d.text(g.ui(p.textId), (px + side * 120).coerceIn(90f, W - 90), ground - 150 - rise, 40f, p.color.toInt()); d.alpha = old
+            // QC r5 / spec follow-up: an outline under the colour, ink on light skies and cream on the dark camp sky
+            val ol = if (beat.theme == "camp") 0xFFFFF6E3.toInt() else OUTLINE_INK
+            d.textOutlined(g.ui(p.textId), (px + side * 120).coerceIn(90f, W - 90), ground - 150 - rise, 40f, p.color.toInt(), ol, 8f); d.alpha = old
         }
         // The telegraph "!" is the key cue: draw it again above the goal and banner layers.
         for (e in r.enemies) if (e.state == com.galaxyandsun.daidatanhhung.core.EnemyState.WINDUP) {
@@ -267,7 +310,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         } else if (r.phase == Phase.DIALOGUE) {
             dialogue(g, r, t)
         } else if (r.phase == Phase.CAPTION) {
-            storyPanel("${g.ui(UiIds.BEAT)} ${r.beat + 1}", beat.scene[r.captionLine.coerceIn(0, beat.scene.size - 1)], g, t)
+            storyPanel(null, beat.scene[r.captionLine.coerceIn(0, beat.scene.size - 1)], g, t) // a caption: no heading (H 167)
         } else {
             val boxes = r.cardBoxes()
             storyPanel(beat.title.get(g.lang), boxes[r.cardLine.coerceIn(0, boxes.size - 1)], g, t, badgeFor = beat.title)
@@ -283,31 +326,35 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
     private fun dialogue(g: Game, r: com.galaxyandsun.daidatanhhung.core.MissionRun, t: Double) {
         val dlg = r.dialogue ?: return
         val line = dlg.lines[r.lineIndex.coerceIn(0, dlg.lines.size - 1)]
-        d.rr(40f, 230f, 1200f, 330f, 36f, C.PANEL, C.GOLD, 6f)
-        if (r.lineIndex == 0) { // the title as the heading over line 1, on its own backing (readable on any sky)
-            d.rr(W / 2 - 460, 162f, 920f, 64f, 24f, C.PANEL, C.GOLD, 4f)
-            d.textBox(r.currentBeat.title.get(g.lang), W / 2, 194f, 880f, 44f, C.GOLD, 1); badge(g, r.currentBeat.title, W / 2 + 440, 162f) }
+        // dialogue.md + story-screens.md §5.2: one bottom-anchored panel holding the heading row (60 + 8, shown on line 1)
+        // and the line; it starts at corner_bottom + 8 at the latest. The portrait shrinks to the room left (max 240).
+        val bottom = rowTop() - 8f
+        val top = max(bottom - (32f + 68f + 240f + 32f), cornerClear(g))
+        d.rr(40f, top, 1200f, bottom - top, 36f, C.PANEL, C.GOLD, 6f)
+        if (r.lineIndex == 0) { d.textBox(r.currentBeat.title.get(g.lang), W / 2, top + 32 + 30, 880f, 44f, C.GOLD, 1); badge(g, r.currentBeat.title, W / 2 + 440, top) }
+        val areaTop = top + 32 + 68; val areaBottom = bottom - 32; val cy = (areaTop + areaBottom) / 2
+        val pr = ((areaBottom - areaTop) / 2).coerceIn(60f, 120f)
         val narrator = line.speaker == "narrator"
         val heroSide = line.speaker == "hero"
         if (!narrator) {
             val px = if (heroSide) 170f else 1110f
-            d.circle(px, 395f, 120f, C.a(C.CREAM, 0.95), C.GOLD, 6f)
+            d.circle(px, cy, pr, C.a(C.CREAM, 0.95), C.GOLD, 6f)
             val id = "pic.portrait_${g.heroId}_${line.speaker}" + (line.mood?.let { "_$it" } ?: "")
-            if (!portrait(id, px, 395f, 110f)) { // debug placeholder: a figure cropped in the medallion (no text in art)
-                d.c.save(); d.path.reset(); d.path.addCircle(px, 395f, 114f, android.graphics.Path.Direction.CW); d.c.clipPath(d.path)
-                fig.hero(px, 395f + 230f, if (heroSide) 1 else -1, false, false, null, t, 0.95f,
+            if (!portrait(id, px, cy, pr - 10)) { // debug placeholder: a figure cropped in the medallion (no text in art)
+                d.c.save(); d.path.reset(); d.path.addCircle(px, cy, pr - 6, android.graphics.Path.Direction.CW); d.c.clipPath(d.path)
+                fig.hero(px, cy + pr * 1.9f, if (heroSide) 1 else -1, false, false, null, t, 0.95f * pr / 120f,
                     tunic = when (line.speaker) { "hero" -> C.RED; "king" -> C.GOLD; else -> C.INDIGO })
                 d.c.restore()
             }
         }
         val (cx, box) = when { narrator -> W / 2 to 880f; heroSide -> (320f + 360f) to 720f; else -> (200f + 360f) to 720f }
-        d.textBox(line.text.get(g.lang), cx, 395f, box, 38f, C.WHITE, if (narrator) 2 else 3, semiBold = true)
-        badge(g, line.text, cx, 540f)
+        d.textBox(line.text.get(g.lang), cx, cy, box, 38f, C.WHITE, if (narrator) 2 else 3, semiBold = true)
+        badge(g, line.text, cx, bottom - 18)
         if (r.dialogueButton == "ask") {
             val ask = dlg.ask!!.button
-            button("ask", ask.get(g.lang), W / 2 - 170, 590f, 340f, 110f, t, pulse = true, fill = C.RED, shade = 0xFF9E2620.toInt(), size = 34f, labelColor = C.WHITE) { g.ask() } // white on #D9342B is 4.7:1 (QC r3)
-            if (r.askHint) fig.hand(W / 2, 600f, t)
-        } else button("next", g.ui(UiIds.NEXT), W / 2 - 150, 590f, 300f, 110f, t, pulse = true) { g.next() }
+            button("ask", ask.get(g.lang), 1262f - 340f, rowTop(), 340f, rowH(), t, pulse = true, fill = C.RED, shade = 0xFF9E2620.toInt(), size = 34f, labelColor = C.WHITE) { g.ask() } // white on #D9342B is 4.7:1 (QC r3)
+            if (r.askHint) fig.hand(1262f - 170f, rowTop() + 10f, t)
+        } else nextButton(g, t)
         skipButton(g)
     }
 
@@ -321,18 +368,34 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
     }
 
     /** A caption or beat card: header, one sentence, Next and Skip (D-07). */
-    private fun storyPanel(head: String, line: Text, g: Game, t: Double, badgeFor: Text? = null) {
-        d.rr(160f, 140f, 960f, 300f, 36f, C.PANEL, C.GOLD, 6f)
-        d.textBox(head, W / 2, 196f, 880f, 44f, C.GOLD, 1); badgeFor?.let { badge(g, it, W / 2 + 380, 160f) } // fit.beat_title 880 @ 44
-        d.textBox(line.get(g.lang), W / 2, 310f, 880f, 38f, C.WHITE, 2, semiBold = true); badge(g, line, W / 2, 415f) // fit.scene 880 @ 38, weight 600
-        button("next", g.ui(UiIds.NEXT), W / 2 - 150, 470f, 300f, 110f, t, pulse = true) { g.next() }
+    private fun storyPanel(head: String?, line: Text, g: Game, t: Double, badgeFor: Text? = null) {
+        // story-screens.md §5.2: box 880 + 2 × 32; H 235 with a title (beat card), 167 without (caption); bottom-anchored
+        val bottom = rowTop() - 8f; val hgt = if (head != null) 235f else 167f
+        val top = max(bottom - hgt, cornerClear(g))
+        d.rr(168f, top, 944f, bottom - top, 36f, C.PANEL, C.GOLD, 6f)
+        if (head != null) { d.textBox(head, W / 2, top + 32 + 30, 880f, 44f, C.GOLD, 1); badgeFor?.let { badge(g, it, W / 2 + 380, top) } } // fit.beat_title 880 @ 44
+        val bodyTop = if (head != null) top + 32 + 68 else top + 32
+        d.textBox(line.get(g.lang), W / 2, bodyTop + 51.5f, 880f, 38f, C.WHITE, 2, semiBold = true); badge(g, line, W / 2, bottom - 18) // fit.scene 880 @ 38, weight 600
+        nextButton(g, t)
         skipButton(g)
     }
+
+    // ---- story-screens.md §5.2 (QC r5): the bottom row and bottom-anchored panels, clear of the pause/sound corner ----
+    /** Bottom-row buttons are pad_min tall (Input Rule 4). */
+    private fun rowH() = max(110f, fit.padMinWorld)
+    /** The bottom row's top: its buttons sit on safe_bottom − 18. */
+    private fun rowTop() = min(720f, safeBottom) - 18f - rowH()
+    /** corner_bottom + 8: nothing on a story screen starts above it. */
+    private fun cornerClear(g: Game) = 18f + 2 * cornerSize(g).first + 8f
+
+    /** "Tiếp" on the right of the bottom row. */
+    private fun nextButton(g: Game, t: Double) = button("next", g.ui(UiIds.NEXT), 1262f - 300f, rowTop(), 300f, rowH(), t, pulse = true) { g.next() }
 
     private fun skipButton(g: Game) {
         if (!g.onStoryBox) return
         val label = g.uiOrNull(UiIds.SKIP) ?: return
-        button("skip", label, 960f, 610f, 300f, 84f, g.t, fill = C.a(C.CREAM, 0.85), shade = 0xFFC8B89A.toInt(), size = 34f) { g.skip() } // fit.button 270 @ 34
+        // "Bỏ qua" on the left of the bottom row, pad_min tall like Tiếp (fit.button 270 @ 34)
+        button("skip", label, 18f, rowTop(), 300f, rowH(), g.t, fill = C.a(C.CREAM, 0.85), shade = 0xFFC8B89A.toInt(), size = 34f) { g.skip() }
     }
 
     /** D-07: one kind warning per run; fires on release like every menu. */
@@ -343,8 +406,9 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         d.rr(200f, 150f, 880f, 420f, 36f, C.CREAM, C.GOLD, 6f)
         medal(W / 2, 250f, 56f, false)
         d.textBox(g.ui(UiIds.SKIP_WARNING), W / 2, 365f, 780f, 37f, C.INK, 3, semiBold = true) // fit.dialog 780 @ 37, 3 lines, weight 600
-        button("keep", g.ui(UiIds.KEEP_READING), 260f, 450f, 360f, 96f, g.t, pulse = true) { g.keepReading() }
-        button("skipok", g.ui(UiIds.SKIP_CONFIRM), 660f, 450f, 360f, 96f, g.t, fill = C.a(C.WHITE, 0.9), shade = 0xFFC8B89A.toInt()) { g.confirmSkip() }
+        val bh = rowH(); val by = min(450f, 570f - bh) // pad_min (Input Rule 4), inside the 150–570 card
+        button("keep", g.ui(UiIds.KEEP_READING), 260f, by, 360f, bh, g.t, pulse = true) { g.keepReading() }
+        button("skipok", g.ui(UiIds.SKIP_CONFIRM), 660f, by, 360f, bh, g.t, fill = C.a(C.WHITE, 0.9), shade = 0xFFC8B89A.toInt()) { g.confirmSkip() }
     }
 
     /** A drawn medal: a gold disc with the drum motif (earned) or an outline (not yet). */
@@ -364,25 +428,33 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
     private fun bannerGlyph(r: Float) { d.rr(-r * 0.32f, -r * 0.5f, 7f, r * 1.0f, 3f, 0xFF6A4A2A.toInt()); d.poly(C.RED, -r * 0.28f, -r * 0.5f, r * 0.42f, -r * 0.38f, r * 0.42f, r * 0.02f, -r * 0.28f, -r * 0.06f) }
 
     /** Input Rule 3 (TASK-020 W7): pause and sound sit top-left on every screen that has them. */
-    private fun corner(g: Game, pause: Boolean = true) {
+    private fun corner(g: Game, pause: Boolean = true, enabled: Boolean = true) {
         val (r, gap) = cornerSize(g)
         val cy = 18f + r; val x1 = 18f + r; val x2 = x1 + 2 * r + gap
-        if (pause) roundIcon("pause", x1, cy, r, { pauseGlyph(x1, cy, r) }) { g.pause() }
+        val old = d.alpha; if (!enabled) d.alpha = 0.5 // Audio Rule 7 / W19: drawn disabled until the preload ends
+        if (pause) roundIcon("pause", x1, cy, r, { pauseGlyph(x1, cy, r) }) { enabled && g.pause() }
         val xs = if (pause) x2 else x1
-        roundIcon("mute", xs, cy, r, { speakerGlyph(xs, cy, r, g.muted) }) { g.toggleMute() }
+        roundIcon("mute", xs, cy, r, { speakerGlyph(xs, cy, r, g.muted) }) { enabled && g.toggleMute() }
+        d.alpha = old
     }
 
     /** Input Rule 4: pause/sound are ≥ pad_min across (137 world px on the Android reference phone), pad_gap apart. */
     private fun cornerSize(g: Game): Pair<Float, Float> =
         fit.padRadius(48f) to (g.tuning["pad_gap"] / g.tuning["pad_min"]).toFloat() * fit.padMinWorld
 
+    /** The top stack's plates: left edge, width and text box (hud.md §3.3). */
+    private data class Stack(val left: Float, val width: Float, val box: Float) { val cx get() = left + width / 2 }
+
     /**
-     * hud.md §3.3: the top stack's centre. 790 (the band x 330–1250) on the reference phones; on a phone with a smaller k
-     * the pad_min corner is wider, so the 920-wide stack starts 8 px right of it (centre at most 810, 10 px from the edge).
+     * hud.md §3.3: the stack starts at max(330, corner right + 8); its plates are 920 wide (text box 880), or on a
+     * narrow phone (0.32 ≤ k < 0.48) 1270 − start wide (min 760) with the text box at rules.json narrow_box_width (720).
      */
-    private fun stackX(g: Game): Float {
+    private fun stack(g: Game): Stack {
         val (r, gap) = cornerSize(g)
-        return (18f + 4 * r + gap + 8f + 460f).coerceIn(790f, 810f)
+        val start = max(330f, 18f + 4 * r + gap + 8f)
+        val w = min(920f, 1270f - start).coerceAtLeast(760f)
+        val narrow = g.content.rules.textLimits.fit?.fields?.get("goal")?.narrowBoxWidth?.toFloat() ?: 720f
+        return Stack(start, w, if (w < 920f) narrow else 880f)
     }
 
     private fun pause(g: Game) {
@@ -390,8 +462,9 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         next = ArrayList()
         d.rr(0f, 0f, W, H, 0f, C.a(0xFF2A2440.toInt(), 0.7))
         d.text(g.ui(UiIds.PAUSED), W / 2, 200f, 64f, C.WHITE)
-        button("resume", g.ui(UiIds.RESUME), W / 2 - 200, 290f, 400f, 120f, g.t, pulse = true) { g.resume() }
-        button("home", g.ui(UiIds.HOME), W / 2 - 200, 450f, 400f, 110f, g.t, fill = C.CREAM, shade = 0xFFC8B89A.toInt()) { g.home() }
+        val bh = rowH() // pad_min (Input Rule 4)
+        button("resume", g.ui(UiIds.RESUME), W / 2 - 200, 260f, 400f, bh, g.t, pulse = true) { g.resume() }
+        button("home", g.ui(UiIds.HOME), W / 2 - 200, 260f + bh + 24f, 400f, bh, g.t, fill = C.CREAM, shade = 0xFFC8B89A.toInt()) { g.home() }
         langButton(g)
     }
 
@@ -427,7 +500,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             // quiz-and-results.md: right = #D9F2D0 fill, #3FA34D 10 px border, tick; wrong = #E6E1F0 fill, #9C8FB8 10 px
             // border, circular arrow; ink labels; icons carry a thick ink outline (colour-blind-safe signals)
             d.rr(x, y0, cw, ch, 30f, if (ok) 0xFFD9F2D0.toInt() else if (wrong) 0xFFE6E1F0.toInt() else C.CREAM, if (ok) C.RIGHT else if (wrong) C.TRY_AGAIN else C.GOLD, if (ok || wrong) 10f else 5f)
-            picture(a.pictureId, x + cw / 2, y0 + 100, 88f)
+            picture(a.pictureId, x + cw / 2, y0 + 112, 80f) // below the "Đúng rồi!" pill's row
             if (wrong) {
                 val ax = x + cw - 44; val ay = y0 + 44
                 d.arc(ax, ay, 18f, -0.3f, 4.4f, C.INK, 14f); d.arc(ax, ay, 18f, -0.3f, 4.4f, C.TRY_AGAIN, 7f)
@@ -447,8 +520,11 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             // the why line: fit.quiz_why 820 @ 37, up to 3 lines; "Đúng rồi!" sits above Next
             d.rr(30f, 566f, 860f, 150f, 24f, C.a(C.RIGHT, 0.92))
             d.textBox(cur.why.get(g.lang), 460f, 641f, 820f, 37f, C.WHITE, 3, semiBold = true); badge(g, cur.why, 460f, 566f)
-            d.textBox(g.ui(UiIds.CORRECT), 1080f, 590f, 330f, 30f, C.GLOW, 1)
-            if (q.canAdvance) button("next", g.ui(UiIds.NEXT), 930f, 626f, 300f, 88f, t, pulse = true) { g.next() }
+            // Tiếp at pad_min on the bottom row's right (Input Rule 4); "Đúng rồi!" rides on the right card's top edge
+            q.order.indexOf(q.rightShown).takeIf { it >= 0 }?.let { slot -> val rx = x0 + slot * (cw + gap) + cw / 2 // inside the right card's top
+                d.rr(rx - 110, y0 + 8, 220f, 40f, 20f, C.RIGHT); d.textBox(g.ui(UiIds.CORRECT), rx, y0 + 28, 200f, 30f, C.WHITE, 1) }
+            // never over the cards (which end at 560); at k < ≈ 0.48 the quiz needs the spec's small-k layout (flagged)
+            if (q.canAdvance) button("next", g.ui(UiIds.NEXT), 1262f - 330f, max(rowTop(), y0 + ch + 6f), 330f, rowH(), t, pulse = true) { g.next() }
         } else if (q.shakeT > 0 || q.wrongPicked.isNotEmpty()) d.text(g.ui(UiIds.RETRY), W / 2, 640f, 36f, 0xFFE6E0F5.toInt())
         corner(g)
     }
@@ -469,7 +545,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         val medalLine = if (g.medalThisRun) UiIds.MEDAL_EARNED else if (!g.medalEarned) UiIds.MEDAL_MISSING else null
         medalLine?.let { d.textBox(g.ui(it), W / 2, 440f, 780f, 37f, C.a(C.WHITE, 0.9), 3, semiBold = true) } // fit.dialog 780 @ 37, weight 600
         if (g.newlyOpen == null) d.textBox(g.ui(UiIds.MORE_HEROES), W / 2, 525f, 700f, 30f, C.a(C.WHITE, 0.8), 1)
-        button("next", g.ui(UiIds.NEXT), W / 2 - 150, 580f, 300f, 110f, t, pulse = true) { g.next() }
+        button("next", g.ui(UiIds.NEXT), W / 2 - 150, rowTop(), 300f, rowH(), t, pulse = true) { g.next() } // pad_min (Input Rule 4)
         corner(g)
     }
 
@@ -495,7 +571,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         d.text(g.ui(UiIds.UNLOCKED), W / 2, 100f, 52f, C.GOLD)
         d.text(g.ui(UiIds.MAP_STUB), W / 2, 530f, 28f, C.a(C.WHITE, 0.6), semiBold = true)
         // unlock.md: one button, no "Play again" (replaying starts from the title); slice: "the map" is the title screen
-        button("tomap", g.ui(UiIds.TO_MAP), W / 2 - 170, 580f, 340f, 110f, t, pulse = true) { g.home() }
+        button("tomap", g.ui(UiIds.TO_MAP), W / 2 - 170, rowTop(), 340f, rowH(), t, pulse = true) { g.home() } // pad_min
     }
 
     private fun rotate(canvas: Canvas, g: Game) {
@@ -511,5 +587,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         const val W = 1280f
         const val H = 720f
         const val GROUND = 470f
+        /** hud.md §3.3 (QC r5): the outline ink for pops on light skies and the banner text. */
+        const val OUTLINE_INK = 0xFF3A2A20.toInt()
     }
 }

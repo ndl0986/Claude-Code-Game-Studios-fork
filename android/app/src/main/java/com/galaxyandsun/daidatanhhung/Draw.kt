@@ -95,19 +95,43 @@ class Draw(val bold: Typeface, val semi: Typeface) {
         c.drawText(s, x, y - (fm.ascent + fm.descent) / 2, textP)
     }
 
-    /** Wrapped text centred on (x, y), at most [maxLines] lines (Android's own shaping: full diacritics). */
-    fun textBox(s: String, x: Float, y: Float, maxW: Float, size: Float, color: Int, maxLines: Int = 2, semiBold: Boolean = false) {
+    /** [text] with a stroke [outline] of [width] world px drawn under the fill (contrast on busy backgrounds). */
+    fun textOutlined(s: String, x: Float, y: Float, size: Float, color: Int, outline: Int, width: Float, semiBold: Boolean = false) {
+        textP.typeface = if (semiBold) semi else bold; textP.textSize = size; textP.textAlign = Paint.Align.CENTER
+        val fm = textP.fontMetrics; val by = y - (fm.ascent + fm.descent) / 2
+        textP.style = Paint.Style.STROKE; textP.strokeWidth = width; textP.strokeJoin = Paint.Join.ROUND
+        textP.color = outline; textP.alpha = (Color.alphaOf(outline) * alpha).toInt(); c.drawText(s, x, by, textP)
+        textP.style = Paint.Style.FILL; textP.color = color; textP.alpha = (Color.alphaOf(color) * alpha).toInt(); c.drawText(s, x, by, textP)
+    }
+
+    /** Wrapped text centred on (x, y), at most [maxLines] lines (Android's own shaping: full diacritics); optional [outline]. */
+    fun textBox(s: String, x: Float, y: Float, maxW: Float, size: Float, color: Int, maxLines: Int = 2, semiBold: Boolean = false, outline: Int? = null, outlineW: Float = 0f) {
+        if (outline != null) {
+            textP.typeface = if (semiBold) semi else bold; textP.textSize = size; textP.textAlign = Paint.Align.LEFT
+            textP.style = Paint.Style.STROKE; textP.strokeWidth = outlineW; textP.strokeJoin = Paint.Join.ROUND
+            textP.color = outline; textP.alpha = (Color.alphaOf(outline) * alpha).toInt()
+            val l = StaticLayout.Builder.obtain(s, 0, s.length, textP, maxW.toInt()).setAlignment(Layout.Alignment.ALIGN_CENTER)
+                .setMaxLines(maxLines).setEllipsize(TextUtils.TruncateAt.END).setLineSpacing(0f, pitchMult()).setIncludePad(false).build()
+            c.save(); c.translate(x - maxW / 2, y - l.height / 2f); l.draw(c); c.restore()
+            textP.style = Paint.Style.FILL
+        }
         textP.typeface = if (semiBold) semi else bold; textP.textSize = size; textP.color = color; textP.textAlign = Paint.Align.LEFT
         textP.alpha = (Color.alphaOf(color) * alpha).toInt()
         val l = StaticLayout.Builder.obtain(s, 0, s.length, textP, maxW.toInt()).setAlignment(Layout.Alignment.ALIGN_CENTER)
-            .setMaxLines(maxLines).setEllipsize(TextUtils.TruncateAt.END).setLineSpacing(0f, LINE_HEIGHT).build()
+            .setMaxLines(maxLines).setEllipsize(TextUtils.TruncateAt.END).setLineSpacing(0f, pitchMult()).setIncludePad(false).build()
         c.save(); c.translate(x - maxW / 2, y - l.height / 2f); l.draw(c); c.restore()
     }
+
+    /**
+     * Language Rule 7: the line pitch is LINE_HEIGHT × the font size (the specs' and R8c's 1.35 em). StaticLayout's spacing
+     * multiplies the font's own line height (≈ 1.37 em for Nunito), so scale it down to hit 1.35 em exactly (QC r6).
+     */
+    private fun pitchMult(): Float { val fm = textP.fontMetrics; return LINE_HEIGHT * textP.textSize / (fm.descent - fm.ascent) }
 
     /** How many lines [textBox] would use for [s] (up to [maxLines]). */
     fun lineCount(s: String, maxW: Float, size: Float, maxLines: Int, semiBold: Boolean = false): Int {
         textP.typeface = if (semiBold) semi else bold; textP.textSize = size
-        return StaticLayout.Builder.obtain(s, 0, s.length, textP, maxW.toInt()).setMaxLines(maxLines).setLineSpacing(0f, LINE_HEIGHT).build().lineCount
+        return StaticLayout.Builder.obtain(s, 0, s.length, textP, maxW.toInt()).setMaxLines(maxLines).setLineSpacing(0f, pitchMult()).setIncludePad(false).build().lineCount
     }
 
     fun measure(s: String, size: Float): Float { textP.typeface = bold; textP.textSize = size; return textP.measureText(s) }
