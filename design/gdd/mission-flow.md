@@ -80,7 +80,7 @@ it always ends at the quiz and then the map.
 | `hold-meter` | special | Holds the special pad; a meter fills **only while held** and does **not drain** on release | The meter is full: `hold_seconds` of total holding | `hold_seconds` |
 | `training` | move, attack, defend, special | (a) hits `dummies` straw dummies; (b) blocks `blocks` padded practice strikes from a friendly partner; (c) taps special once to finish (e.g. raise the banner) | All three parts done, in that order | `dummies`; `blocks`, `finish_special` (schema 1.1, D-06) |
 | `fight` | move, attack, defend | Fights a group of enemies as the combat GDD defines | Every enemy in `enemies` has run away | `enemies`, `max_active`, `from_left` |
-| `reach-the-flag` | move, attack, defend, special | Moves right to a flag; optional enemy groups on the way lock the camera until they run away | The hero touches the flag | `length_screens`; optional `encounters[]` (schema 1.1, D-06) |
+| `reach-the-flag` | move, attack, defend | Moves right to a flag; optional enemy groups on the way lock the camera until they run away | The hero touches the flag | `length_screens`; optional `encounters[]` (schema 1.1, D-06) |
 
 7b. **Minimum buttons per type (validation R13, schema 1.1 / D-06).** A beat's `buttons` must
     include at least:
@@ -91,18 +91,22 @@ it always ends at the quiz and then the map.
       (combat GDD);
     - `reach-the-flag`: {move}, + attack if it has any encounter.
 
-    `special` is allowed only on hold-meter, training with `finish_special`, and reach-the-flag.
-8. **Special in combat beats.** Special in `reach-the-flag` (the banner wave) makes followers
-   cheer and gives a short push, as the combat GDD defines. It is never required to finish the
-   beat.
-9. **Stand-in rule for the vertical slice.** Proposed P-02 stays: an app that does not implement
-   a type yet plays it as a `fight` with the beat's text and logs a warning. That is debug only.
-   A release build fails validation if any beat uses a type the app does not implement.
+    `special` is allowed only on hold-meter and training with `finish_special` (D-10: B, Luan
+    2026-11-14). R13 in `content/README.md` must match: no special on reach-the-flag.
+8. **No special in combat beats** (D-10: B, Luan 2026-11-14). Fights and reach-the-flag
+   encounters use move, attack and defend only. The banner pad appears only in hold-meter and
+   training. A banner wave in combat may come later (combat GDD Rule 16).
+9. **All five types are built for the slice** (D-08: B, Luan 2026-11-14; P-02 is superseded).
+   While an app is still building a type, a debug build may play it as a `fight` with the beat's
+   text and log a warning. A release build fails validation if any beat uses a type the app does
+   not implement.
 10. **Ending.** The `ending.lines` show one per box over `ending.picture_id`, a still picture
     with no animation of injury or death (art bible §2 "calm ending"). There is no gameplay.
     "Tiếp / Next" goes to the quiz.
 11. **Pause.** Pause works in every phase. It freezes play timers, enemy states and the hold
-    meter. The menu offers: keep playing, sound, VI|EN, and back to the map (the title screen in
+    meter. **Pause releases every held pad** (move, defend, special). On resume nothing is held
+    until the child presses again. Combat restarts a current windup's telegraph from 0 on resume
+    (combat GDD, edge cases), so the child always gets the full warning. The menu offers: keep playing, sound, VI|EN, and back to the map (the title screen in
     the slice). Leaving discards mission progress (see Edge Cases).
 12. **Language switch.** VI|EN is switched on the title screen or in the pause menu, which can
     be opened at any moment. On resume, all on-screen Text is in the new language. **Voice-over
@@ -146,7 +150,7 @@ own pace.
 | Content data & claims | `mission.json` (hero, intro, banner, beats, ending), claim status | gate result request | Content (schema `content/schema/mission.schema.json`) |
 | Side-scroll movement & combat | goal-met event for fight, reach-the-flag, walk and training; hero position | beat type, params, button set, camera lock zones | Combat GDD |
 | Input & touch controls | pad press/hold/release events | visible pad set per beat | Input GDD |
-| Hints & onboarding | (none) | "new buttons in this beat", "beat started", "no progress for `hint_delay` s" (`tuning.json`, 5 s) | Hints GDD |
+| Hints & onboarding | (none) | "new buttons in this beat", "beat started", card or caption closed, progress events (hero moved, meter rose, training step done). Hints owns the no-progress timer and `hint_delay` | Hints GDD |
 | Language & text | current language, language-changed event | Text ids to render | Language GDD |
 | Audio & voice-over | (none) | line id to voice, state changes for music | Audio GDD |
 | Quiz & stars | quiz finished + stars | "start quiz for hero X" | Quiz GDD |
@@ -163,7 +167,7 @@ The F1 (mission length estimate) formula is defined as:
 |----------|------|-------|--------|-------------|
 | T_intro, T_card_i, T_ending | float (s) | 5–40 | calculated: boxes × T_box | Story time; T_box ≈ voice length of a box |
 | T_box | float (s) | 3–8 | estimate only, not a runtime value (re-measure when voice-over exists) | One sentence of ≤120 chars read aloud or read by the child |
-| T_play_i | float (s) | 10–90 | calculated per type (F2–F4; fight from combat GDD) | Play time of beat i |
+| T_play_i | float (s) | 10–90 | calculated per type (F2–F4; a fight or encounter set per combat F3: a 20–60 s child target, ≤ 60 s for an adult not blocking, combat AC14) | Play time of beat i |
 | end_pause | float (s) | 0–3 | `tuning.json` `end_pause` (0.6) | Pause after a beat |
 
 **Output Range:** target 3–5 minutes before the quiz, so a mission plus its quiz fits a
@@ -186,7 +190,7 @@ The walk beat **starts** at `x_start` = the hero's x when play begins (at the be
 | hero_speed | float (px/s) | 120–600 | data file (`tuning.json` `hero_speed`, 330) | Hero walk speed |
 
 **Output Range:** 2–4 screens takes 7.8–15.5 s at 330 px/s, which is short enough for a
-6-year-old to stay engaged. A bump stop adds at most `bump_stop` (proposed key, 0.5 s) each.
+6-year-old to stay engaged. A bump stop adds at most `bump_stop` (`tuning.json`, 0.5 s) each.
 **Example:** 3 × 1280 / 330 = 11.6 s.
 
 The F3 (hold meter) formula is defined as:
@@ -213,7 +217,7 @@ The F4 (training time estimate) formula is defined as:
 | Variable | Type | Range | Source | Description |
 |----------|------|-------|--------|-------------|
 | dummies | int | 1–10 (schema); use 3 | data file (beat params) | Straw dummies to hit |
-| blocks | int | 1–5 (proposed); use 3 | data file (beat params, D-06) | Practice strikes to block |
+| blocks | int | 0–5 (schema 1.1); use 3 | data file (beat params, D-06) | Practice strikes to block |
 | attack_time, attack_cooldown | float (s) | see tuning | `tuning.json` (0.28, 0.12) | One swing and its gap |
 | walk_gap | float (s) | 1–3 | estimate only, not a runtime value | Walking to the next dummy |
 | telegraph, strike_time, enemy_rest | float (s) | see tuning | `tuning.json` (1.1, 0.25, 1.6) | The partner's practice strike cycle |
@@ -305,7 +309,7 @@ sparkle.
 ## Game Feel
 
 - **Story boxes:** the tap advances on release with a 0.1–0.15 s soft page slide. A double tap
-  never skips two boxes, so taps within `advance_debounce` (proposed key, 0.25 s) of an advance
+  never skips two boxes, so taps within `advance_debounce` (`tuning.json`, 0.25 s) of an advance
   are ignored. The page slide is a feel constant, not data.
 - **Hold-meter:** the meter rises smoothly with no steps. A light pulse (and haptic, where
   available) fires at 25/50/75/100%. These are feel constants, not data.
@@ -337,10 +341,10 @@ sparkle.
 | Content data contract | `content/README.md`, `content/schema/mission.schema.json`, `content/data/tuning.json`, `content/data/rules.json` | Beat fields, params, text limits, claim gate R12 |
 | Art bible | `design/art/art-bible.md` §§2–7 | Moods per state, banner text layer, no injury |
 | Hero content | `design/narrative/heroes/tran-quoc-toan.md` §3, §6 | The approved 4-beat structure for Trần Quốc Toản |
-| Side-scroll movement & combat | `design/gdd/side-scroll-combat.md` (next GDD) | Fight rules, encounter time, special in combat |
+| Side-scroll movement & combat | `design/gdd/side-scroll-combat.md` | Fight rules, encounter time; no special in combat (D-10) |
 | Quiz & stars | `design/gdd/quiz-and-stars.md` (planned) | Quiz start and finish |
 | Hints & onboarding | `design/gdd/hints-and-onboarding.md` (planned) | Teaching new buttons, the no-progress hint |
-| Decisions | `production/team/decisions.md` P-01, P-02, D-06, D-07 | Press/release, stand-in types, schema params, story skip |
+| Decisions | `production/team/decisions.md` P-01, D-06, D-07, D-08, D-10 (P-02 superseded) | Press/release, schema params, story skip, slice beat set, no special in combat |
 | Prototype evidence | `203d73e` `prototypes/tqt-mission/config.js`; QC r3 (Android) | Tuning values, `end_pause`, one tone per press |
 
 **Trần Quốc Toản's approved structure maps to types like this** (hero doc §6):
@@ -398,8 +402,8 @@ sparkle.
 
 | # | Question | Owner | By |
 |---|---|---|---|
-| D-06 | Schema 1.1 agreed (both devs and game-art-content, 2026-11-14): training `blocks` (0–5), `finish_special`; reach-the-flag `encounters[]`; R13. Waiting on the data branch TASK-005d | game-dev-android (game-dev-ios reviews) | With D-08 |
+| D-06 | Done: schema 1.1 merged (TASK-005d, 3074d43) | — | Closed |
 | D-07 | Story skip: on the first play every box is tapped through; on a replay, offer a "Bỏ qua / Skip story" button? | Luan | Before the vertical-slice playtest |
-| D-08 | The vertical slice beat set: keep the 4 fights from TASK-003 (P-02), or build the approved 4-beat structure (walk, hold-meter, training, reach-the-flag)? | Luan | Before TASK-006/007 content freeze |
+| D-08 | **Decided (Luan, 2026-11-14): B**, the full structure (walk, hold-meter, training, reach-the-flag) in the slice | — | Closed |
 | — | T_box: measure real voice-over length per box once the first VO is recorded, then re-check F1 | audio-director / game-art-content | First VO recording |
-| — | New tuning keys for the D-09 batch: `advance_debounce` 0.25 s (story-tap debounce), `bump_stop` 0.5 s (walk bump). Feel constants that are not data: page slide 0.1–0.15 s, meter pulse points. Estimates that are not runtime values: T_box, walk_gap, T_special | game-dev-ios + game-dev-android | With D-09 |
+| — | Done (D-09): `advance_debounce` 0.25 s and `bump_stop` 0.5 s are in `tuning.json`. Feel constants that are not data: page slide 0.1–0.15 s, meter pulse points. Estimates that are not runtime values: T_box, walk_gap, T_special | — | Closed |

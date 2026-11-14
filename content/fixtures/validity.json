@@ -221,7 +221,7 @@
       "expected": "invalid"
     },
     {
-      "name": "special on reach-the-flag is allowed",
+      "name": "special on reach-the-flag is not allowed (D-10 B)",
       "rule": "R13",
       "beat": {
         "type": "reach-the-flag",
@@ -233,7 +233,7 @@
           "length_screens": 3
         }
       },
-      "expected": "valid"
+      "expected": "invalid"
     },
     {
       "name": "encounters out of order",

@@ -33,7 +33,8 @@
       "banner": 60,
       "quiz_prompt": 90,
       "quiz_choice": 32,
-      "quiz_why": 120
+      "quiz_why": 120,
+      "dialog": 60
     }
   }
 }
