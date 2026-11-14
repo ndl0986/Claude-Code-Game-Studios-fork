@@ -190,3 +190,23 @@ strings in data, not code.
 Rules for every beat: no lives or game over, getting hit means a small knock-back, defeated
 enemies drop their weapons and run, and the banner's words are a text layer. Then show the
 ending still and two lines, and then the five-question quiz (retry until right, stars as in § 4).
+
+## 7. Content data (TASK-009, 2026-11-14)
+
+This doc is the source for `content/data/heroes/tran-quoc-toan/`. Every claim's `signoff` is
+`pending` until Luan signs it off (D-03). Release builds refuse the mission (R12), and debug
+builds show `UNSIGNED Cxx` badges.
+
+| File | What | In `index.json`? |
+|---|---|---|
+| `claims.json` | C01–C12 as in § 2. C06 and C08 carry the relabel condition (D6) | yes (with the hero) |
+| `mission.json` | **The slice version: 4 fight beats (P-02).** The non-fight story moments (Bình Than, the orange, training, the banner; C03–C08) are **told in the intro, not played**. The fights are the band's campaign (C09). Captions follow each fight (P-04) | yes |
+| `mission-full.json` | **The approved structure (§ 3, § 6):** walk → hold-meter (the orange) → training (dummies 3, blocks 3, finish_special) → reach-the-flag (2 encounters). It plays beats 1–3 instead of telling them. Switched on by D-08 | **no** |
+| `quiz.json` | Q1–Q5 as in § 4. Q3 and Q4 open with the legend marker. Each choice cites its question's claim | yes |
+
+**Honest note:** the slice tells beats 1–3 instead of playing them, which weakens pillar 1 (*Live
+the story*). `mission-full.json` plays them once D-08 allows it.
+
+**Pictures:** the 16 picture ids (`pic.quiz_*`, `pic.scene_tqt_ending`) currently point to flat
+placeholder PNGs (shape and colour, art bible palette, no text) in `content/data/pictures/`. Real
+art replaces each file under the same id after `/asset-spec`.
