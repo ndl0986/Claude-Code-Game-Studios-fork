@@ -340,8 +340,7 @@ Vietnamese legends as told to children, school history lessons, national celebra
 
 ### Open Questions
 - **Which heroes and events, in what order?** First hero decided: **Trần Quốc Toản** (Luan, 2026-11-14). More heroes are added over time, placed in historical order.
-- **Who is the named history reviewer?** Not named yet. Luan plans a new team member (art designer who also owns content, history and real stories); needed before Trần Quốc Toản's mission content is written.
-- **Who is the named history reviewer?** Needed before any content is final.
+- ~~Who is the named history reviewer?~~ **Decided (Luan, 2026-11-14): Luan signs off history.** game-art-content drafts each hero's content with cited sources; nothing is final until Luan signs it off.
 - **Monetization**: paid, free, school/government funded? (Luan decides; no ads to kids by default.)
 - ~~How storybook content arrives after release~~ **Decided (Luan, 2026-11-14): timed app updates**, no content download.
 - **Portrait or landscape?** Answer with the first prototype on a real phone.
