@@ -11,20 +11,6 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
-### D-24 Beat 1 (Bình Than): who met, and Quốc Toản's age
-
-- **Flow:** Luan's correction (2026-11-14) → game-art-content rewrites beat 1 (TASK-011c) → Luan signs
-  off the wording (part of D-03).
-- **Correction:** the current card ("Đến bến Bình Than" / "Giặc Nguyên sắp sang xâm lược.") reads as
-  if Quốc Toản went to Bình Than and met the enemy. New order: the year he is X years old, the Nguyên
-  army prepares to invade, a meeting is held at bến Bình Than, then he goes there.
-- **Question 1:** who met at Bình Than? Luan wrote "các bô lão". The claim register (C04, textbook /
-  Toàn thư) says **the king met the vương hầu (princes and generals) at Bình Than, 1282**; the elders'
-  meeting (bô lão) is **Diên Hồng, 1284**. Draft uses "vua họp các vương hầu" unless Luan says otherwise.
-- **Question 2:** his age "X": no confirmed source yet (tradition ~15–16). It stays a pending claim
-  until the source is confirmed.
-- **Status:** Open.
-
 ### D-23 Voice-over and sound choices (not needed until voice recording)
 
 - **Flow:** Audio & voice-over GDD (`a2fd734`) → voice recording → the iOS audio setting.
@@ -288,6 +274,8 @@ it) · **Decided** (Luan's call, with the date).
 
 | Date | Decision |
 | --- | --- |
+| 2026-11-14 | **D-25 (design direction):** shorten the movement, especially the walk to Bình Than; add an exchange scene where Quốc Toản asks to join the meeting and is refused, then crushes the orange, to show his spirit and character. game-art-content proposes the scene and script (TASK-016); Luan approves before the build. |
+| 2026-11-14 | **D-24 (beat 1, Bình Than):** age **15** (born 1267); line approved: "Vua Trần họp các vương hầu và trăm quan ở bến Bình Than để bàn việc đánh giặc." (Toàn thư); card title "Khi các vương hầu họp bàn ở Bình Than" (one line; "hội nghị" dropped to fit). Wording approved by Luan; in the data C04 and C13 stay `pending` until a Toàn thư page and a source for 1267 are checked (rule R5). |
 | 2026-11-14 | **D-19: ADR-0002 accepted, minimum iOS 17 kept.** One 1.5× art set, ≤2048² images, 1440×1320 background tiles with a gradient sky band, per-step loading, ≤64 MB image memory at any moment, ≤60 MB download. Frame-rate and iOS-memory measurements follow on real devices. |
 | 2026-11-14 | **D-17:** Vietnamese text uses **no pronoun** where possible; when one is needed, address the child as **"em"** (as the textbooks do). The skip warning drops "bạn". |
 | 2026-11-14 | **D-08: B, the full structure** in the slice: walk (riverbank to Bình Than) → hold-meter (the orange) → training (dummies, blocks, raise the banner) → reach-the-flag with fight encounters. `mission-full.json` becomes the slice's mission. |
