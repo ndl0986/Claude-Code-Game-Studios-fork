@@ -7,9 +7,9 @@
       "en": "Land of Heroes"
     },
     {
-      "id": "ui.app.subtitle",
-      "vi": "Trần Quốc Toản · bản thử",
-      "en": "Trần Quốc Toản · slice"
+      "id": "ui.debug.subtitle",
+      "vi": "Bản chơi thử",
+      "en": "Test build"
     },
     {
       "id": "ui.btn.start",
@@ -33,8 +33,8 @@
     },
     {
       "id": "ui.btn.home",
-      "vi": "Về màn đầu",
-      "en": "Title screen"
+      "vi": "Màn hình chính",
+      "en": "Home"
     },
     {
       "id": "ui.btn.to_map",
@@ -83,7 +83,7 @@
     },
     {
       "id": "ui.results.done",
-      "vi": "Hoàn thành!",
+      "vi": "Giỏi lắm!",
       "en": "Well done!"
     },
     {
@@ -93,8 +93,8 @@
     },
     {
       "id": "ui.unlock.map_stub",
-      "vi": "(Bản đồ sẽ làm sau)",
-      "en": "(The map comes later)"
+      "vi": "(Bản đồ sắp ra mắt)",
+      "en": "(Map coming soon)"
     },
     {
       "id": "ui.play.oof",
@@ -108,8 +108,8 @@
     },
     {
       "id": "ui.play.beat",
-      "vi": "Cảnh",
-      "en": "Beat"
+      "vi": "Phần",
+      "en": "Part"
     },
     {
       "id": "ui.rotate.turn",
