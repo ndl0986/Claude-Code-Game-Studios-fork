@@ -132,4 +132,38 @@ object CueLayout {
             b.top >= FLOOR && b.left >= EDGE && b.right <= SCREEN_W - EDGE && pads.none { overlaps(b, it) }
         }
     }
+
+    // ---- Mission flow Rule 7c (r11, QC r10 B8): where the partner stands in the finish hold ----
+    const val FIGURE_HALF = 32.0      // hero and partner bodies, ± from x
+    const val FINISH_GAP = 110.0      // partner's x from the hero's on the front side
+    const val CLEAR = 8.0             // ≥ 8 px between partner, cloth, hero and the screen edge
+    /** The raised banner's box in x: icon centre bx, pole at bx − 0.5 s, cloth to bx + 0.7 s (s 110; not mirrored). */
+    fun bannerSpan(heroX: Double, face: Int, banner: Boolean): Pair<Double, Double> {
+        val bx = heroX - face * raisedBannerOffset(banner)
+        return (bx - 0.5 * 110.0) to (bx + 0.7 * 110.0)
+    }
+
+    /**
+     * The finish partner: where it starts (1.2 × enemy_reach outward from its spot), where it stands, its facing, and
+     * whether it fades in (alpha 0 → 1 over the first 0.2 s) because the start point is on screen.
+     */
+    data class FinishPartner(val spawn: Double, val stand: Double, val face: Int, val fadeIn: Boolean)
+    const val FADE_IN = 0.2
+
+    /**
+     * On the hero's front side (opposite the banner), [FINISH_GAP] from him, when its body fits on screen with ≥ 8 px
+     * margin; otherwise beyond the banner, ≥ 8 px clear of the cloth. It faces the banner. World px; [cam] = screen left.
+     */
+    fun finishPartner(heroX: Double, face: Int, cam: Double, banner: Boolean, enemyReach: Double): FinishPartner {
+        val (cl, cr) = bannerSpan(heroX, face, banner)
+        val lo = cam + CLEAR + FIGURE_HALF; val hi = cam + SCREEN_W - CLEAR - FIGURE_HALF
+        val front = heroX + face * FINISH_GAP
+        val stand = if (front in lo..hi) front
+            else if (face > 0) cl - CLEAR - FIGURE_HALF // banner on the left: stand left of the cloth
+            else cr + CLEAR + FIGURE_HALF               // banner on the right: stand right of the cloth
+        val outward = if (stand > heroX) 1 else -1 // away from the hero
+        val spawn = stand + outward * 1.2 * enemyReach // constant distance and speed (Rule 7c amend)
+        val bannerMid = (cl + cr) / 2
+        return FinishPartner(spawn, stand, if (bannerMid > stand) 1 else -1, spawn in cam..cam + SCREEN_W)
+    }
 }

@@ -49,12 +49,13 @@ class FinishHoldTest {
     @Test fun thePartnerReentersBesideTheHeroFacingHimBeforeTheHoldEnds() {
         val g = game().trainingAtSpecial(); g.tapCo()
         val p0 = g.run.partner; assertNotNull("the partner re-enters at the hold start", p0)
-        val start = abs(p0!!.x - g.run.hero.x)
-        assertEquals("from 1.2 × enemy_reach", 1.2 * g.tuning["enemy_reach"], start, 1.0)
+        val fp = CueLayout.finishPartner(g.run.hero.x, g.run.hero.face, g.run.cam, true, g.tuning["enemy_reach"])
+        assertEquals("starts 1.2 × enemy_reach outward from its spot", fp.spawn, p0!!.x, 1e-9)
         repeat(Math.round(g.run.raiseTime / dt).toInt() + 1) { g.frame() }
         val p = g.run.partner!!
-        assertEquals("beside the hero", MissionRun.FINISH_PARTNER_GAP, abs(p.x - g.run.hero.x), 0.5)
-        assertEquals("facing the hero and his banner", if (g.run.hero.x > p.x) 1 else -1, p.face)
+        assertEquals("stands at its spot", fp.stand, p.x, 1e-9)
+        val (cl, cr) = CueLayout.bannerSpan(g.run.hero.x, g.run.hero.face, true)
+        assertEquals("facing the banner", if ((cl + cr) / 2 > p.x) 1 else -1, p.face)
         assertTrue("staff upright (slice fist)", p.staffUp)
         assertTrue("the hold is still on", g.run.finishHolding)
     }
@@ -79,17 +80,49 @@ class FinishHoldTest {
         assertTrue("banner-up ≥ 0.8 s after the resume: $up", up >= 0.8)
     }
 
-    /** Leader r10: pausing again and again can't keep the hold going; the restart happens once per hold. */
-    @Test fun repeatedPauseResumeCannotLoopTheHold() {
+    /** r11 (leader): every resume restarts the hold; after N pauses the banner is up ≥ 0.8 s after the last resume, and it ends. */
+    @Test fun everyResumeRestartsTheHoldAndItStillEnds() {
         val g = game().trainingAtSpecial(); g.tapCo()
-        var s = 0.0
-        while (g.run.phase == Phase.END && s < 20) {
-            repeat(30) { g.frame(); s += dt } // 0.5 s of play
-            if (g.run.phase != Phase.END) break
-            assertTrue(g.pause()); g.frame(); assertTrue(g.resume())
+        repeat(5) {
+            repeat(30) { g.frame() } // 0.5 s of play, under the 0.83 s left after a restart
+            assertEquals("still holding before pause ${it + 1}", Phase.END, g.run.phase)
+            assertTrue(g.pause()); repeat(10) { g.frame() }; assertTrue(g.resume())
         }
+        var up = 0.0; val s = g.untilWalk { if (g.run.raiseProgress >= 1.0) up += dt }
+        assertTrue("≥ 0.8 s banner-up after the last resume: $up", up >= 0.8)
         assertEquals("the hold ended", Phase.WALK, g.run.phase)
-        assertTrue("within one restart: $s s of play", s <= g.tuning["finish_hold"] + (g.tuning["finish_hold"] - g.run.raiseTime) + 0.6)
+        assertTrue("…without stalling: $s", s < g.tuning["finish_hold"])
+    }
+
+    /** r11 (QC r10 B8): partner, cloth and hero boxes stay ≥ 8 apart and on screen, near either edge, both facings. */
+    @Test fun thePartnerNeverOverlapsTheBannerOrTheHero() {
+        val cam = 4000.0
+        for (screenX in listOf(60.0, 200.0, 640.0, 1000.0, 1045.0, 1090.0, 1220.0)) for (face in listOf(1, -1)) {
+            val h = cam + screenX
+            val reach = TestContent.load().tuning.values.getValue("enemy_reach").value
+            val fp = CueLayout.finishPartner(h, face, cam, true, reach)
+            val (cl, cr) = CueLayout.bannerSpan(h, face, true)
+            val pl = fp.stand - CueLayout.FIGURE_HALF; val pr = fp.stand + CueLayout.FIGURE_HALF
+            val hl = h - CueLayout.FIGURE_HALF; val hr = h + CueLayout.FIGURE_HALF
+            val tag = "hero at screen x $screenX, face $face: partner ${fp.stand - cam}"
+            assertTrue("$tag clear of the cloth ($cl…$cr)", pr <= cl - 8 + 1e-9 || pl >= cr + 8 - 1e-9)
+            assertTrue("$tag clear of the hero", pr <= hl - 8 + 1e-9 || pl >= hr + 8 - 1e-9)
+            if (screenX in 200.0..1090.0) assertTrue("$tag on screen with 8 px margin", pl >= cam + 8 - 1e-9 && pr <= cam + 1272 + 1e-9)
+            val side = if (fp.stand > h) 1 else -1
+            assertEquals("$tag starts 1.2 × enemy_reach outward", fp.stand + side * 1.2 * reach, fp.spawn, 1e-9)
+            assertEquals("$tag fades in only when it starts on screen", fp.spawn in cam..cam + 1280, fp.fadeIn)
+            assertEquals("$tag faces the banner", if ((cl + cr) / 2 > fp.stand) 1 else -1, fp.face)
+        }
+        // QC's case: hero near Cờ on the right, facing right → the partner stands in front (right), not behind the cloth
+        val fp = CueLayout.finishPartner(cam + 1045, 1, cam, true, 100.0)
+        assertEquals("front side", cam + 1045 + 110, fp.stand, 1e-9)
+    }
+
+    @Test fun trainingDummiesAreGoneWhenTheBeatEnds() {
+        val g = game().trainingAtSpecial(); g.tapCo()
+        assertTrue("dummies stand through the hold", g.run.dummies.isNotEmpty())
+        g.untilWalk()
+        assertTrue("no dummies on the next beat", g.run.dummies.isEmpty())
     }
 
     @Test fun everyOtherBeatStillEndsAfterEndPause() {
