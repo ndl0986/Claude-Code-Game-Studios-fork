@@ -45,9 +45,13 @@ each hero's mission.
 
 ## Elevator Pitch
 
-> It's a light-action story game for Vietnamese primary-school children where you
-> **play each national hero's famous moment** on a map of Vietnam, then answer a short
-> quiz to earn that hero's card, lighting up the map one region at a time.
+> It's a 2D side-scrolling action story game for Vietnamese primary-school children
+> where you **play each national hero's famous story** with simple attack and defend
+> moves, then answer a short quiz to unlock the next hero on the map and the timeline.
+
+> **No cards (Luan, 2026-11-14):** "the game is no card game, it will be 2D game with
+> some simple action for attach, defense,...". Hero cards and the card album are
+> removed; the quiz unlocks the next hero, and missions are side-scrolling.
 
 ---
 
@@ -55,7 +59,7 @@ each hero's mission.
 
 | Aspect | Detail |
 | ---- | ---- |
-| **Genre** | Educational story game: light action missions + collection, with a quiz layer |
+| **Genre** | Educational 2D side-scrolling action story game, with a quiz layer |
 | **Platform** | Mobile: Android + iOS phones, touch-first (tablets later) |
 | **Target Audience** | Vietnamese primary-school children, about 6–10 (see Target Player Profile) |
 | **Player Count** | Single-player |
@@ -83,9 +87,9 @@ country with the heroes who protected it.
 
 ## Unique Hook
 
-It's like a **sticker album of heroes on a map of Vietnam**, *and also* every sticker
-is earned by **playing that hero's real famous moment** and then **telling the story
-back in a quiz**. Between the main missions, **storybook mini-games arrive on real
+It's like a **kids' 2D side-scrolling action game**, *and also* every level **is a
+real Vietnamese hero's famous story**, and the next hero on the map and timeline only
+opens once the child **tells the story back in a quiz**. Between the main missions, **storybook mini-games arrive on real
 Vietnamese days and celebrations** ⟨placeholder: Giỗ Tổ Hùng Vương, 30/4, 2/9⟩, so the
 game follows the national calendar the child lives in.
 
@@ -98,8 +102,8 @@ game follows the national calendar the child lives in.
 | Aesthetic | Priority | How We Deliver It |
 | ---- | ---- | ---- |
 | **Narrative** | 1 | Each mission is one hero's famous story, told with picture, voice and play (story-first) |
-| **Discovery** | 2 | New regions light up; quiz answers unlock "Did you know?" fact pages; storybooks arrive on celebration days |
-| **Challenge** | 3 | Light, forgiving tap/swipe action beats; 1–3 stars for replay mastery |
+| **Discovery** | 2 | Passing the quiz unlocks the next hero on the timeline; their place on the map lights up; storybooks arrive on celebration days |
+| **Challenge** | 3 | Simple, forgiving attack/defend action; 1–3 stars for replay mastery |
 | **Submission** | 4 | Calm pace, no timers that block play, soft failure, instant retry |
 | **Fantasy** | 5 | "I helped the hero"; child-sized role in the legend |
 | **Sensation** | 6 | Bright cartoon art, drums and voice, big clear feedback |
@@ -110,14 +114,16 @@ game follows the national calendar the child lives in.
 - Children replay a mission to get a missing star, re-living the story each time.
 - Children tell parents or classmates the hero's story they just played.
 - Children open the game on celebration days to find the new storybook.
-- Children look at the map to see which region and hero comes next.
+- Children look at the map and timeline to see which hero comes next.
 
 ### Core Mechanics
-1. **Story-first light-action missions**: 3–4 action beats per hero, each a beat of the
-   real story, built from a small shared set of touch actions (tap, swipe, drag, hold).
-2. **Story quiz**: 3–5 picture-supported questions after each mission; correct answers
-   upgrade the hero card and unlock fact pages.
-3. **Map of Vietnam + hero cards**: regions unlock hero missions; cards collect stars and facts.
+1. **Story-first 2D side-scrolling missions**: the hero moves left to right through
+   3–4 beats of the real story, using a few big on-screen buttons: move, attack,
+   defend (a special move is optional). Enemies are few and forgiving.
+2. **Story quiz**: 3–5 picture-supported questions after each mission; passing it
+   gives 1–3 stars and **unlocks the next hero**.
+3. **Map of Vietnam + historical timeline**: heroes appear in the order they lived;
+   each finished hero lights up their place on the map and the timeline.
 4. **Storybook mini-games** (later content): illustrated pages, each a short touch
    mini-game, released day by day or on Vietnamese celebrations.
 5. **Bilingual presentation**: VI default, EN switchable at any time, voice + text.
@@ -136,7 +142,7 @@ game follows the national calendar the child lives in.
 
 ### Player Type Appeal (Bartle Taxonomy)
 
-- [x] **Achievers** — How: stars, filling the map, completing the card album
+- [x] **Achievers** — How: stars, unlocking every hero, filling the map and timeline
 - [x] **Explorers** — How: discovering each story, fact pages, new storybooks on celebration days
 - [ ] **Socializers** — Not served in-game (child safety); sharing happens offline with family
 - [ ] **Killers/Competitors** — Not served: no leaderboards or PvP
@@ -150,8 +156,8 @@ want trustworthy history, no ads or data collection, and a conversation starter.
   with voice prompts and a hand icon, no reading required to start.
 - **Difficulty scaling**: later heroes add a little speed or more targets; stars, not
   progress, reward the extra challenge.
-- **Feedback clarity**: big animation, sound and voice on every beat; stars and card
-  upgrades at the end.
+- **Feedback clarity**: big animation, sound and voice on every beat; stars and the next
+  hero unlocking at the end.
 - **Recovery from failure**: a missed beat slows down and replays instantly; no lives,
   no game-over screen, no shaming. Quiz mistakes show the right answer with the story picture.
 
@@ -160,15 +166,17 @@ want trustworthy history, no ads or data collection, and a conversation starter.
 ## Core Loop
 
 ### Moment-to-Moment (30 seconds)
-The child performs one simple touch action that *is* a story beat (row, dodge, tap to
-raise, swipe to throw ⟨placeholder examples⟩). It is satisfying through big feedback
-(voice line, drum hit, bright animation), forgiving timing (slow speed, wide targets,
-no instant fail) and a small story payoff after each beat.
+The child runs the hero left to right and presses big buttons to **attack** and
+**defend** against a few slow, readable enemies, inside a beat of the real story. It is
+satisfying through big feedback (voice line, drum hit, knock-back, bright animation),
+forgiving timing (slow enemies, wide hit windows, defend that always works if held, no
+instant fail) and a small story payoff after each beat. No blood or gore: enemies are
+knocked back or run away.
 
 ### Short-Term (5 minutes)
-One mission: short story scene (picture + voice) → 3–4 action beats in story order →
-story ending → 3–5 question quiz → hero card upgrade + 1–3 stars. "One more" comes from
-the next region lighting up and a card with an empty star slot.
+One mission: short story scene (picture + voice) → 3–4 side-scrolling story beats in order →
+story ending → 3–5 question quiz → 1–3 stars + **next hero unlocked**. "One more"
+comes from the next hero appearing on the map and timeline, and a missing star.
 
 ### Session-Level (5–15 minutes)
 One or two missions, or one storybook mini-game. Every session ends back on the map, a
@@ -176,15 +184,16 @@ natural stopping point with no cliffhanger timer. Sessions are deliberately shor
 the template's 30–120 minutes because the players are primary-school children.
 
 ### Long-Term Progression
-The map of Vietnam fills region by region; hero cards gain stars and fact pages. The
+The map of Vietnam and the historical timeline light up hero by hero, in the order
+the heroes lived; each hero keeps their best stars. The
 main game is "done" when every main hero's mission is played; the storybook calendar
 continues after that.
 
 ### Retention Hooks
-- **Curiosity**: the next dark region on the map; the next celebration's storybook.
-- **Investment**: the card album and the lit-up map (saved locally on the device).
+- **Curiosity**: the next locked hero on the timeline; the next celebration's storybook.
+- **Investment**: the lit-up map and timeline (saved locally on the device).
 - **Social**: none in-game; children share stories with family and class offline.
-- **Mastery**: the missing third star on a hero card.
+- **Mastery**: the missing third star on a hero's mission.
 
 ---
 
@@ -210,7 +219,7 @@ forgiving timing, no failure shame.
 finishes**; mastery lives in stars, not in blocked progress.
 
 ### Pillar 4: Học mà vui (Learn by playing)
-Learning is part of the reward: the quiz upgrades cards, facts unlock as treasures.
+Learning is part of the reward: passing the quiz unlocks the next hero.
 
 *Design test*: debating a separate lesson screen vs. folding the fact into play or
 reward, **fold it in**.
@@ -246,7 +255,7 @@ clothing and objects are unmistakably Vietnamese.*
    comic-silly. *Design test*: if a pose or expression would make a teacher or the history
    reviewer uncomfortable, redraw it.
 2. **Motifs as accents, not noise.** Bronze-drum patterns, lotus, bamboo, áo dài and
-   period clothing appear on frames, cards and backgrounds. *Design test*: if a screen is
+   period clothing appear on frames, menus and backgrounds. *Design test*: if a screen is
    hard to read at a glance on a phone, remove motif detail first.
 3. **Readable at phone size.** Big silhouettes, high contrast for touch targets, text never
    painted into art (it must switch between VI and EN). *Design test*: every interactive
@@ -263,8 +272,8 @@ blues for the map and backgrounds; battles use dramatic sky and water colour, no
 | Reference | What We Take From It | What We Do Differently | Why It Matters |
 | ---- | ---- | ---- | ---- |
 | Interactive picture books (genre) | Page-by-page story with touch play | Each page is a story beat mini-game, released on celebrations | Proven format for young readers (not researched) |
-| Sticker / card albums (genre) | Collection and completion drive | Cards are earned by playing and remembering a true story | Gives a reason to replay and return |
-| Map-progression mobile games (genre) | A visible map that fills up | The map is Vietnam, and each region is a real hero | Turns progress into geography and history |
+| Kids' 2D side-scrolling action games (genre) | Simple run, attack and defend controls | Every level is a true hero's story, with a quiz gate | Familiar controls for young players |
+| Map-progression mobile games (genre) | A visible map that fills up | The map is Vietnam and the timeline is history; each lit place is a real hero | Turns progress into geography and history |
 
 Luan did not name reference games (Phase 1 questions skipped). **Non-game inspirations**:
 Vietnamese legends as told to children, school history lessons, national celebrations.
@@ -295,7 +304,7 @@ Vietnamese legends as told to children, school history lessons, national celebra
 | **Art Pipeline Complexity** | Medium (custom 2D; likely AI-assisted, needs an art bible for consistency) |
 | **Audio Needs** | Moderate: voice-over in two languages per mission, music, SFX |
 | **Networking** | None. The game stays fully offline; storybook content ships in **timed app updates** (Luan, 2026-11-14), so no content server or download |
-| **Content Volume** | MVP: 1 hero mission (~5 min), 1 map region, 1 quiz. First release: 2 heroes + 1 storybook. Full vision: many heroes ⟨placeholder count⟩ + a calendar of storybooks |
+| **Content Volume** | MVP: 1 hero mission (~5 min), 1 lit place on the map and timeline, 1 quiz. First release: 2 heroes + 1 storybook. Full vision: many heroes ⟨placeholder count⟩ + a calendar of storybooks |
 | **Procedural Systems** | None |
 
 ---
@@ -303,7 +312,7 @@ Vietnamese legends as told to children, school history lessons, national celebra
 ## Risks and Open Questions
 
 ### Design Risks
-- Story-first light action may be hard to make fun for every story; some famous moments
+- Story-first attack/defend action may be hard to fit every story; some famous moments
   don't map naturally to a touch action.
 - Children may skip story scenes and quizzes; the learning must sit inside the reward.
 - Battle stories must feel heroic without violence; balance is set with the reviewer.
@@ -346,22 +355,22 @@ Vietnamese legends as told to children, school history lessons, national celebra
 light touch action, and afterwards can answer simple questions about that story.
 
 **Required for MVP**:
-1. One story-first hero mission, **Trần Quốc Toản**, with 3–4 light-action beats (see First Hero)
-2. The quiz (3–5 questions) that upgrades the hero card and gives 1–3 stars
-3. One lit-up region on the map of Vietnam and one hero card
+1. One story-first hero mission, **Trần Quốc Toản**, with 3–4 side-scrolling attack/defend beats (see First Hero)
+2. The quiz (3–5 questions) that gives 1–3 stars and unlocks the next hero slot
+3. The map of Vietnam and timeline with Trần Quốc Toản lit up
 4. Vietnamese default with a working English switch, full diacritic fonts
 5. Runs offline on one Android phone and one iPhone
 
 **Explicitly NOT in MVP** (defer to later):
 - Storybook mini-games and the celebration calendar
-- More than one hero; the full map and card album
+- More than one hero; the full map and timeline
 - Accounts, analytics or monetization (and no content download at any tier: storybooks ship in app updates)
 
 ### Scope Tiers (if budget/time shrinks)
 
 | Tier | Content | Features | Timeline *(estimates, solo + AI)* |
 | ---- | ---- | ---- | ---- |
-| **MVP** | 1 hero, 1 region | Mission, quiz, card, stars, VI/EN | ~3–5 weeks |
+| **MVP** | 1 hero | Side-scrolling mission, quiz, stars, map/timeline, VI/EN | ~3–5 weeks |
 | **Vertical Slice** | 1 hero polished on real phones | MVP + final art and voice | ~6–8 weeks |
 | **First Release** | 2 heroes + 1 storybook | Store-ready for kids' categories | ~2–3 months |
 | **Full Vision** | Many heroes ⟨placeholder⟩, full map, storybook calendar | All features, polished | 12–24 months |
@@ -374,7 +383,7 @@ If time runs out: ship the MVP hero alone, polished, and add heroes and storyboo
 
 - [x] Luan approves this concept (design and content decision), 2026-11-14
 - [ ] `/setup-engine`: choose and pin the engine for Android + iOS (later task)
-- [ ] `/prototype [core mechanic]`: validate the story-first light-action mission (later task)
+- [ ] `/prototype [core mechanic]`: validate the story-first side-scrolling attack/defend mission (later task)
 - [ ] Collect the team's hero list, sources and reviewer; replace every ⟨placeholder⟩
 - [ ] `/art-bible`: modern kids' cartoon with Vietnamese motifs
 - [ ] `/design-review design/gdd/game-concept.md`
