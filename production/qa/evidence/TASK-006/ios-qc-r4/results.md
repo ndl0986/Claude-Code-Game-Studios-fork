@@ -1,4 +1,6 @@
-# TASK-006 iOS QC, round 4 (part 1: non-touch; touch blocked)
+# TASK-006 iOS QC, round 4: CLOSED
+
+**Closed (leader, 2026-11-14): non-touch PASS; touch NOT ASSESSED (macOS Accessibility blocked).** The touch cases (R2-03, B1 with measured timing, hold across a beat change, regression run) move to r5.
 
 - **Build:** frozen `feat/TASK-006-ios-native` @ `0602974`. Fingerprint run from the game-dev-001 root:
   `c7f62c3ee1962fe6fadb2892ecaa971a8dc40385429232e74ff76c6b88fe7659` (**matches**); my scratch copy matches it file by file.
@@ -10,7 +12,7 @@
 - **Blocker:** macOS Accessibility reads blocked again (Orca); my posted events don't land; Device Hub can't be re-mapped
   without AX or Screen Recording. Touch cases wait for Luan's toggle.
 
-**Overall so far: NOT ASSESSED (touch blocked).** Every non-touch check passes; 2 notes.
+**Overall: non-touch PASS; touch NOT ASSESSED (macOS Accessibility).** Every non-touch check passes; 2 notes.
 
 | # | Check | Steps | Expected | Actual | Result | File |
 |---|---|---|---|---|---|---|
