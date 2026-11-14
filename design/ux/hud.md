@@ -120,9 +120,25 @@ the king's meeting at Bình Than!", 688 px).
 - **Only weapons, the pennant and the banner pole may pass behind the bar** (a raised staff, a
   spear tip, the training-finish banner pole). Bodies, heads and faces never do.
 - **Z-order** (bottom to top): play layers (background, fighters, props) → **banner bar** →
-  pops → hints, the telegraph "!" bubble and the hurt swirl (ASSET-212) → HUD buttons. The "!"
-  sits above an enemy's head and can reach the bar's band, so it draws over the bar and always
-  stays visible (Combat V/A).
+  pops → hints, the telegraph "!" bubble and the hurt swirl (ASSET-212) → HUD buttons.
+- **Nothing straddles the bar** (QC r6, for r8). On a banner beat, the "!" bubble (ASSET-208)
+  and the stuck arrow (ASSET-034) are each **fully below the bar**: every pixel at y ≥ bar
+  bottom + 8 (≈ 276).
+  - **"!" bubble:** it sits above the helmet when it fits there entirely below the bar. With an
+    enemy at spec height (top ≈ 300) it doesn't, so on banner beats it sits **beside the head**,
+    at head height, on the side away from the hero, with its tail pointing sideways at the
+    helmet. If that side is within 8 px of the screen edge, it uses the hero's side (the hero's
+    pops show only after the strike resolves, when the "!" is gone). On beats without the bar,
+    it stays above the helmet as before.
+  - **Stuck arrow:** it bounces above its target when its whole shape plus the bounce fits below
+    the bar (target top ≥ bar bottom + 8 + 64 + 12 ≈ 352). Otherwise it is **rotated 90° and
+    points at the target from the side** away from the hero, at the target's mid-height. If that
+    side is within 8 px of the screen edge, it points from the hero's side (inward) instead, as the
+    "!" does. *(A flag or dummy with no hero beside it uses the side nearer the screen centre.)*
+  - **Arrow colour:** star gold `#FFC531` with an **ink `#3A2A20` outline ≥ 3 px**, never red
+    (ASSET-034; red is the banner's and the hero's). Gold vs ink 8.67:1; the ink edge reads
+    ≥ 3.18:1 even against vermilion, and ≥ 7.9:1 against every light sky band. *Today both apps
+    draw a red arrow: a dev ticket (r8).*
 - **Pops** ("Ối!", "Đỡ được!", hit pops) sit **beside the fighter's head, at head height**, on
   the side away from the other fighter, never above the head. With bodies at spec height, the
   highest head is at y ≈ 290, so a pop never reaches the bar's band (≤ 268). Both apps follow
@@ -174,7 +190,7 @@ iOS's home-indicator inset (QC r3 O5: pad bottoms clear of the gesture zone).
 | training | **per step** (Mission flow Rule 7c): dummies ◀ ▶ + attack; blocks + defend; finish + special (banner icon). *Today both apps show all four from the start; a dev ticket (TASK-020 W12)* | Checklist icons; hints in step order (B3); **camera capped** at `xStart − hero_edge_margin` until `beat_end` (Combat Rule 15b) |
 | fight / encounter | ◀ ▶, attack, defend | Telegraph |
 | reach-the-flag (no encounter) | ◀ ▶ (attack, defend if listed) | Flag goal |
-| story, dialogue screens | **none** | Pause and sound, top-left (Input Rule 3). A pad held when the screen opened gives no input and is not released (Input Rule 14) |
+| story, dialogue screens | **none** | Pause and sound, top-left (Input Rule 3), **and nothing else of the HUD**: no beat dots, goal line or banner bar (story screens are not play; `story-screens.md` §5.2). A pad held when the screen opened gives no input and is not released (Input Rule 14) |
 | paused | none (the pause menu) | All pads released (Input Rule 11) |
 
 ## 6. Information Hierarchy
@@ -245,3 +261,4 @@ insets; iOS home indicator, notch or Dynamic Island. Rounded corners wait for TA
 14. **GIVEN** a phone or emulator with k = 0.40 (the floor; e.g. a small phone with a left gesture inset), **WHEN** a training beat is captured in VI and EN, **THEN** the stack starts at `corner_right` + 8, the goal plate and the banner bar narrow to `1270 − start` (≥ 760), nothing overlaps pause or sound, and the EN banner is ≤ 2 lines with no text cut.
 15. **GIVEN** each theme (village, bamboo, river, camp), **WHEN** "Ối!/Oof!", "Đỡ được!/Blocked!" and a hit pop are captured over the sky band and over the mid layer (e.g. the mint mountains), **THEN** each pop has an outline (ink on light skies, cream on the camp) and measures ≥ 3:1 fill-to-outline and outline-to-background.
 16. **GIVEN** the banner bar in VI and EN, **WHEN** captured, **THEN** the gold text has an ink outline ≥ 2 px and the measured contrast is ≥ 3:1 at the text edge (target 3.18:1 outline-to-vermilion, 8.67:1 gold-to-outline).
+17. **GIVEN** a training beat and a reach-the-flag encounter (banner beats), **WHEN** an enemy winds up and, separately, the stuck arrow shows over a dummy, an enemy and the flag, **THEN** no pixel of the "!" bubble or the arrow is in the bar's band or straddles its edge (all at y ≥ bar bottom + 8); the "!" sits beside the head, away from the hero (or on the hero's side at a screen edge); the arrow is gold with an ink outline, never red.
