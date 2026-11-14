@@ -81,10 +81,17 @@ low-end Android phones and primary-school children's hand-me-down devices. Witho
 3. **Atlases by what is on screen together, loaded per beat:** hero; enemies (all three kinds); one
    props atlas per theme (village, bamboo, river, camp); UI and icons; quiz pictures per hero.
    Backgrounds are standalone images (tiles).
-   - **Resident** for the whole mission: hero, enemies, UI/HUD.
+   - **Resident** for the whole mission: hero, enemies, UI/HUD and the font.
    - **Per beat:** that beat's theme background tiles and props. The next beat's set is prefetched
      during `walk_to` and the beat card, and the previous beat's set is released once the new beat plays.
    - **Quiz pictures** load when the quiz starts; play art is released then.
+   - Decoding happens **off the render thread** on both apps.
+   - **iOS:** `SKTexture.preload` / `SKTextureAtlas.preload` for the prefetch; textures are released by
+     dropping every reference once the beat ends.
+   - **Android:** decode with `Bitmap.Config.HARDWARE` (GPU memory only, one copy); `recycle()` after
+     the last frame that draws the bitmap. The app ships as an AAB with all art in the base module (no
+     Play Asset Delivery, offline per ADR-0001). WebP/PNG are stored uncompressed in the package, so
+     asset bytes ≈ download bytes.
    Why per beat: TQT's mission uses 3 themes, and their backgrounds alone are about 53 MB decoded
    (2 tiles × 3 themes × 8.9 MB), so loading the whole mission at start cannot fit 64 MB.
 4. **Formats:** lossless **WebP** for sprites with alpha; lossy WebP (quality ≈ 85) for opaque
@@ -209,8 +216,9 @@ To be filled before acceptance (the leader logs this ADR as D-19):
   atlas: WebP lossless 33 / 67 ms, WebP q85 28 / 35 ms, PNG 21 / 29 ms; tile: WebP lossless 13 / 19 ms, q85 6 / 11 ms, PNG 14 / 16 ms.
   File sizes on synthetic art (ratios only): atlas 981 KB lossless WebP / 318 KB q85 / 791 KB PNG; tile 173 / 36 / 160 KB.
 - [ ] Android frame time: **NOT ASSESSED**. The AVD renders through SwiftShader (a software GPU), so its p50 33 ms / p95 50 ms is not a valid number. It needs a real low-end phone.
-- [ ] iOS (game-dev-ios): the same on the iPhone Duo Simulator (Instruments: allocations, frame time), after iOS QC round 1 frees the device; a real iPhone when available.
-- [ ] At every beat of the TQT mission, resident + current + next-beat textures add up to ≤ 64 MB decoded (a spreadsheet from the asset manifest at 1.5×).
+- [ ] iOS memory (game-dev-ios): decoded texture memory for a 2048² atlas and a 1440×1620 tile, WebP and PNG, with Instruments on the iPhone Duo Simulator after iOS QC round 1 frees the device. Memory numbers are valid on the Simulator.
+- [ ] iOS frame time: **needs a real iPhone**. Simulator frame times run on the host Mac's GPU and CPU and aren't device numbers, so the Simulator can't close this box.
+- [ ] At every beat of the TQT mission, resident + current + next-beat textures add up to ≤ 64 MB decoded (a spreadsheet from the asset manifest at 1.5×, using each atlas's real fill, not 2048² each).
 
 ## Related
 - ADR-0001 (depends on). TASK-013 (full-screen backdrop uses the background tiling rule). TASK-014 asset specs.
