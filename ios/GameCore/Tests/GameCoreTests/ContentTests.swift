@@ -56,7 +56,7 @@ final class ContentTests: XCTestCase {
     }
 
     func test_sample_is_pending_so_the_gate_hides_it_in_release_and_badges_it_in_debug() throws {
-        let hero = try Repo.contentSet().heroes[0]
+        let hero = Repo.sampleHero(try Repo.contentSet())
         let r = ClaimGate.evaluate(hero)
         XCTAssertEqual(r.releaseBuild, .fail)
         XCTAssertEqual(r.runtimeRelease, .hideAndLog)

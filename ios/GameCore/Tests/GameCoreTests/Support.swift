@@ -4,7 +4,9 @@ import XCTest
 
 /// Paths into the repo's shared content/ folder, read in place by the tests.
 enum Repo {
-    static let content = URL(fileURLWithPath: #filePath)
+    /// `CONTENT_ROOT` points the suite at another content/ tree (e.g. a content branch under review).
+    static let content = ProcessInfo.processInfo.environment["CONTENT_ROOT"].map { URL(fileURLWithPath: $0) }
+        ?? URL(fileURLWithPath: #filePath)
         .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
         .deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("content")
     static let data = content.appendingPathComponent("data")
@@ -17,6 +19,8 @@ enum Repo {
         return f["cases"] as! [[String: Any]]
     }
     static func contentSet() throws -> ContentSet { try ContentSet.load(dataRoot: data, extraHeroDirs: [sample]) }
+    /// The debug sample hero (real heroes from data/index.json come first).
+    static func sampleHero(_ c: ContentSet) -> HeroContent { c.heroes.first { $0.mission.hero.id == "sample" }! }
 }
 
 /// A small JSON Schema 2020-12 validator for the subset content/schema uses (ADR-0001: schema

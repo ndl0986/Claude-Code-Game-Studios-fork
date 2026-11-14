@@ -74,6 +74,9 @@ final class FixtureTests: XCTestCase {
             }
             switch rule {
             case "R4": findings = ContentValidator.legendMarker(text(c["text"]), labels: labels(), markers: markers)
+            case "R4b":
+                let scope = (c["scope_sentences"] as! [Any]).map { text($0) }
+                findings = ContentValidator.legendLabel(text(c["text"]), scope: scope, labels: labels(), markers: markers)
             case "R5":
                 let d = c["claim"] as! [String: Any]
                 let data = try JSONSerialization.data(withJSONObject: d.merging(["vi": "x", "en": "x"]) { a, _ in a })

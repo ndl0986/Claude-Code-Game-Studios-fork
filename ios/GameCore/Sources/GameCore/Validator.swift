@@ -35,10 +35,21 @@ public struct ContentValidator {
             let claims = Dictionary(hero.claims.claims.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
             let texts = hero.mission.allTexts + hero.quiz.allTexts
             checkIds(texts)
+            let labels = claims.mapValues(\.label)
             for t in texts {
                 out += Self.nfc([t.vi, t.en], id: t.id)
                 for c in t.claims where claims[c] == nil { out.append(.init(rule: "R2", message: "\(t.id) cites unknown claim \(c)")) }
-                out += Self.legendMarker(t, labels: claims.mapValues(\.label), markers: content.markers)
+            }
+            // R4 on sentence fields; R4b on label fields (D-12)
+            let m = hero.mission
+            let missionSentences = m.intro + m.beats.flatMap(\.scene) + m.ending.lines
+            for t in missionSentences { out += Self.legendMarker(t, labels: labels, markers: content.markers) }
+            var missionLabels = [m.hero.name, m.hero.place] + m.beats.flatMap { [$0.title, $0.goal] }
+            if let b = m.banner { missionLabels.append(b) }
+            for t in missionLabels { out += Self.legendLabel(t, scope: missionSentences, labels: labels, markers: content.markers) }
+            for q in hero.quiz.questions {
+                for t in [q.prompt, q.why] { out += Self.legendMarker(t, labels: labels, markers: content.markers) }
+                for c in q.choices { out += Self.legendLabel(c.text, scope: [q.prompt, q.why], labels: labels, markers: content.markers) }
             }
             for c in hero.claims.claims {
                 out += Self.sourceGate(c, sources: sources.mapValues(\.status))
@@ -65,6 +76,20 @@ public struct ContentValidator {
         let okVi = markers.legend.vi.contains { t.vi.contains($0) }
         let okEn = markers.legend.en.contains { t.en.contains($0) }
         return okVi && okEn ? [] : [.init(rule: "R4", message: "\(t.id) cites a legend claim without a legend marker")]
+    }
+
+    /// R4b (D-12): a LABEL field (hero name, place, banner, beat title, goal, quiz choice) is exempt
+    /// from R4 when, for each legend claim it cites, a sentence in its scope cites that claim and is
+    /// marked in VI and in EN (the R4 test). Scope: the mission's sentences, or the choice's own
+    /// question's prompt and why.
+    public static func legendLabel(_ t: Text, scope: [Text], labels: [String: Claim.Label], markers: MarkersFile) -> [Finding] {
+        for c in t.claims where labels[c] == .legend {
+            let covered = scope.contains { s in
+                s.claims.contains(c) && legendMarker(s, labels: labels, markers: markers).isEmpty
+            }
+            if !covered { return [.init(rule: "R4b", message: "\(t.id) labels legend claim \(c) with no marked sentence citing it")] }
+        }
+        return []
     }
 
     /// R5: a fact or fact_as_recorded claim can't be approved while a source is to_confirm; R5b: only invented may have no sources.

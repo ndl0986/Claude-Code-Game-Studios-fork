@@ -7,7 +7,7 @@ final class PlayTests: XCTestCase {
     var content: ContentSet!
     override func setUpWithError() throws { content = try Repo.contentSet() }
     var tuning: Tuning { content.tuning }
-    var beats: [Beat] { content.heroes[0].mission.beats }
+    var beats: [Beat] { Repo.sampleHero(content).mission.beats }
 
     func fresh() -> PlayState { PlayState(tuning: tuning, beats: beats, seed: tuning.seed) }
 
