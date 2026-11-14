@@ -27,6 +27,21 @@ public struct TouchPads: Sendable {
 
     public mutating func up(_ id: Int) { holds[id] = nil; ignored.remove(id) }
 
+    public enum Phase: Sendable { case began, moved, ended }
+
+    /// One touch callback as the platform delivers it, plus the ids of every touch still live in that
+    /// event (`event.allTouches` minus ended/cancelled). The map is reconciled against `live` on every
+    /// callback, so an end that arrives under a different touch id, or never arrives, can't leave a pad
+    /// held (iOS-R2-03 / R3).
+    public mutating func apply(_ phase: Phase, id: Int, action: PadAction?, live: Set<Int>) {
+        switch phase {
+        case .began: down(id, action)
+        case .moved: moved(id, action)
+        case .ended: up(id)
+        }
+        reconcile(live: live)
+    }
+
     /// Releases every hold whose touch is no longer live (iOS-R2-03: an end event that never
     /// arrived for a moved touch must not leave a pad held).
     public mutating func reconcile(live: Set<Int>) { holds = holds.filter { live.contains($0.key) }; ignored = ignored.filter { live.contains($0) } }

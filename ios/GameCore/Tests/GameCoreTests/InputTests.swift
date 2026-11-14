@@ -93,3 +93,29 @@ final class SecondPointerTests: XCTestCase {
         XCTAssertTrue(t.take().held.contains(.defend), "after it lifts, a new press works")
     }
 }
+
+/// iOS QC r3 (R2-03 still reproducing): QC's exact sequence, including an up that arrives under a
+/// different touch id (Device Hub mouse drags), must leave nothing held.
+final class R3StuckSequenceTests: XCTestCase {
+    func test_qc_sequence_left_slide_to_right_up_as_other_id_then_right_small_moves_up() {
+        var t = TouchPads()
+        t.apply(.began, id: 1, action: .left, live: [1])
+        t.apply(.moved, id: 1, action: .left, live: [1])
+        t.apply(.moved, id: 1, action: .right, live: [1])     // slides onto ▶
+        XCTAssertEqual(t.take().held, [.right])
+        t.apply(.ended, id: 2, action: nil, live: [])         // the up arrives as another touch
+        XCTAssertTrue(t.take().held.isEmpty, "▶ must not stay held")
+        t.apply(.began, id: 3, action: .right, live: [3])
+        t.apply(.moved, id: 3, action: .right, live: [3])
+        t.apply(.moved, id: 3, action: .right, live: [3])
+        t.apply(.ended, id: 3, action: nil, live: [])
+        XCTAssertTrue(t.take().held.isEmpty)
+    }
+
+    func test_an_up_that_never_arrives_is_dropped_at_the_next_callback() {
+        var t = TouchPads()
+        t.apply(.began, id: 1, action: .special, live: [1])
+        t.apply(.began, id: 4, action: .attack, live: [4])    // touch 1 is no longer in allTouches
+        XCTAssertEqual(t.take().held, [.attack])
+    }
+}

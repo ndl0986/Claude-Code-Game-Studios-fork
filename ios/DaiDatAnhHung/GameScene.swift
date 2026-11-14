@@ -121,22 +121,32 @@ final class GameScene: SKScene {
     private func tid(_ t: UITouch) -> Int { ObjectIdentifier(t).hashValue }
     private var padsLive: Bool { game.screen == .play && !game.skipWarning && !game.play.visiblePads.isEmpty }
 
+    /// The ids of every touch still live in this event (iOS-R2-03/R3: the map is reconciled against it on
+    /// every callback, so an up delivered under another UITouch, or lost, can't leave a pad held).
+    private func live(_ event: UIEvent?, ending: Set<UITouch> = []) -> Set<Int> {
+        Set((event?.allTouches ?? []).filter { $0.phase != .ended && $0.phase != .cancelled && !ending.contains($0) }.map(tid))
+    }
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let lv = live(event)
         for t in touches {
             let p = ydown(t)
-            if padsLive, let a = layout.action(at: p.x, p.y, visible: game.play.visiblePads) { pads.down(tid(t), a); padTouches[tid(t)] = t; continue } // pads fire on touch-down
+            if padsLive, let a = layout.action(at: p.x, p.y, visible: game.play.visiblePads) { pads.apply(.began, id: tid(t), action: a, live: lv); padTouches[tid(t)] = t; continue } // pads fire on touch-down
             if let b = buttons.last(where: { $0.rect.contains(p) }) { menuTouches[tid(t)] = b.id }
         }
+        pads.reconcile(live: lv)
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { let p = ydown(t); pads.moved(tid(t), layout.action(at: p.x, p.y, visible: game.play.visiblePads)) }
+        let lv = live(event)
+        for t in touches { let p = ydown(t); pads.apply(.moved, id: tid(t), action: layout.action(at: p.x, p.y, visible: game.play.visiblePads), live: lv) }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         var fired = false // two fingers: the first release in a frame wins (P-05)
+        let lv = live(event, ending: touches)
         for t in touches {
-            pads.up(tid(t)); padTouches[tid(t)] = nil
+            pads.apply(.ended, id: tid(t), action: nil, live: lv); padTouches[tid(t)] = nil
             guard let id = menuTouches.removeValue(forKey: tid(t)) else { continue }
             let p = ydown(t)
             if !fired, buttons.contains(where: { $0.id == id && $0.rect.contains(p) }) { fire(id); fired = true } // menus fire on touch-up inside
@@ -144,7 +154,8 @@ final class GameScene: SKScene {
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { pads.up(tid(t)); padTouches[tid(t)] = nil; menuTouches[tid(t)] = nil }
+        let lv = live(event, ending: touches)
+        for t in touches { pads.apply(.ended, id: tid(t), action: nil, live: lv); padTouches[tid(t)] = nil; menuTouches[tid(t)] = nil }
     }
 
     private func fire(_ id: String) {
@@ -240,7 +251,7 @@ final class GameScene: SKScene {
         }
         for q in p.pops {
             // keep pops below the HUD row (pause, sound, beat dots): Ối! never covers the pause button
-            let l = Font.label(game.ui(q.key), 40, color(q.color)); l.position = D.p(q.x, max(q.y, 200)); l.alpha = min(1, q.life * 2); fx.addChild(l)
+            let l = Font.label(game.ui(q.key), 40, color(q.color)); l.position = D.p(q.x, max(q.y, 235)); l.alpha = min(1, q.life * 2); fx.addChild(l)
         }
         worldHints.removeAllChildren()
         if let e = p.stallTarget { let a = arrowDown(); a.position = D.p(e.x, ground - 330 + sin(t * 8) * 10); worldHints.addChild(a) }
@@ -386,27 +397,30 @@ final class GameScene: SKScene {
 
     private func storyPicture(ending: Bool) {
         let crop = SKCropNode()
-        crop.maskNode = D.rr(0, 0, 800, 360, 30, .white)
+        let ph = 320.0
+        crop.maskNode = D.rr(0, 0, 800, ph, 30, .white)
         let inner = SKNode()
+        // SKView ignores sibling order: every layer gets an explicit z, sky at the back (iOS-R3-06)
+        func layer(_ n: SKNode, _ z: CGFloat) { n.zPosition = z; inner.addChild(n) }
         if ending, Pictures.files[game.hero.mission.ending.pictureId] != nil {
-            let pic = Pictures.node(game.hero.mission.ending.pictureId, size: 500); pic.position = CGPoint(x: 400, y: -180); inner.addChild(pic)
+            let pic = Pictures.node(game.hero.mission.ending.pictureId, size: 480); pic.position = CGPoint(x: 400, y: -ph / 2); layer(pic, 1)
         } else {
-            inner.addChild(Backdrop.skyNode(ending ? "river" : "village", width: 800, height: 360))
-            let b = Backdrop.world(theme: ending ? "river" : "village", from: -240, to: 1100, ground: 360); b.position = CGPoint(x: -240, y: 0); inner.addChild(b)
-            if ending { inner.addChild(D.rr(0, 0, 800, 360, 0, SKColor(red: 1, green: 0.59, blue: 0.35, alpha: 0.3))) }
-            let h = HeroNode(scale: 0.9); h.update(face: 1, walk: false, defend: false, attack: nil, hurt: false, t: 0); h.position = CGPoint(x: ending ? 400 : 320, y: -340); inner.addChild(h)
+            layer(Backdrop.skyNode(ending ? "river" : "village", width: 800, height: ph), -1)
+            let b = Backdrop.world(theme: ending ? "river" : "village", from: -240, to: 1100, ground: ph); b.position = CGPoint(x: -240, y: 0); layer(b, 1)
+            if ending { layer(D.rr(0, 0, 800, ph, 0, SKColor(red: 1, green: 0.59, blue: 0.35, alpha: 0.3)), 2) }
+            let h = HeroNode(scale: 0.9); h.update(face: 1, walk: false, defend: false, attack: nil, hurt: false, t: 0); h.position = CGPoint(x: ending ? 400 : 320, y: -(ph - 20)); layer(h, 3)
         }
         crop.addChild(inner)
         add(crop, 240, 110)
-        add(D.rr(0, 0, 800, 360, 30, nil, C.gold, 8), 240, 110)
+        add(D.rr(0, 0, 800, ph, 30, nil, C.gold, 8), 240, 110)
     }
 
     private func buildStory(_ lines: [Text], ending: Bool) {
         backgroundColor = C.night
         storyPicture(ending: ending)
         let line = lines[min(game.storyLine, lines.count - 1)]
-        textBox(line, 640, 530, 1000, 38, .white)
-        button(game.ui("ui.btn.next"), 640 - 150, 590, 300, 110, "next", pulse: true)
+        textBox(line, 640, 500, 1000, 38, .white) // 2 lines fit between the picture (ends y 430) and Tiếp (iOS-R3-03)
+        button(game.ui("ui.btn.next"), 640 - 150, 595, 300, 100, "next", pulse: true)
     }
 
     private func padIcon(_ kind: String, _ r: Double) -> SKNode {
@@ -445,7 +459,6 @@ final class GameScene: SKScene {
         if p.phase == .beatCard {
             let texts = p.cardTexts
             add(D.rr(-480, -150, 960, 300, 36, C.panel, C.gold, 6), 640, 290)
-            for x in [230.0, 1050] { add(D.drum(44, SKColor(hex: 0xf2b632, alpha: 0.8)), x, 210) }
             // "Phần N" small, then the beat title as a heading: 44 in the 880 beat_title box (R8c)
             add(Font.label("\(game.ui("ui.play.beat")) \(p.beat + 1)", 28, C.gold), 640, 168)
             add(Font.label(p.beats[p.beat].title.text(game.lang), 44, C.gold, width: 880), 640, 212)
@@ -459,14 +472,18 @@ final class GameScene: SKScene {
         if p.phase == .caption {
             let beat = p.beats[p.beat]
             add(D.rr(-480, -150, 960, 300, 36, C.panel, C.gold, 6), 640, 290)
-            for x in [230.0, 1050] { add(D.drum(44, SKColor(hex: 0xf2b632, alpha: 0.8)), x, 210) }
             add(Font.label("\(game.ui("ui.play.beat")) \(p.beat + 1)", 30, C.gold), 640, 190)
             if !beat.scene.isEmpty { textBox(beat.scene[min(p.captionLine, beat.scene.count - 1)], 640, 285, 880, 38, .white) }
             button(game.ui("ui.btn.next"), 640 - 150, 470, 300, 110, "next", pulse: true)
             return
         }
         if p.phase == .beatPlay || p.phase == .beatEnd, p.beat < p.beats.count, let goal = p.beats[p.beat].goal {
-            add(Font.label(goal.text(game.lang), 37, C.ink, width: 1040), 640, 168) // below the HUD row, R8c goal box
+            // a cream plate behind the goal: readable on every sky (camp's navy, iOS-R3-05) and drawn above
+            // the world, so the "!" bubble and pops never cover it (iOS-R3-04)
+            let l = Font.label(goal.text(game.lang), 37, C.ink, width: 1040)
+            let w = min(1080, l.frame.width + 40), h = l.frame.height + 16
+            add(D.rr(-w / 2, -h / 2, w, h, h / 2, SKColor(hex: 0xfff6e3, alpha: 0.9)), 640, 168)
+            add(l, 640, 168)
         }
         for (a, c, kind, label) in [(PadAction.left, layout.left, "left", nil), (.right, layout.right, "right", nil),
                                     (.defend, layout.defend, "defend", "ui.pad.defend"), (.attack, layout.attack, "attack", "ui.pad.attack"),
@@ -500,7 +517,7 @@ final class GameScene: SKScene {
         guard !lines.isEmpty else { return }
         let line = lines[min(p.lineIndex, lines.count - 1)]
         add(D.rr(-600, -170, 1200, 340, 36, C.panel, C.gold, 6), 640, 470)
-        if p.lineIndex == 0 { add(Font.label(p.beats[p.beat].title.text(game.lang), 44, C.gold, width: 880), 640, 250) }
+        if p.lineIndex == 0 { add(Font.label(p.beats[p.beat].title.text(game.lang), 44, C.gold, width: 880), 640, 170) } // above the hero (iOS-R3-04)
         switch line.speaker {
         case "narrator":
             textBox(line.text, 640, 455, 880, 38, .white)
@@ -540,8 +557,8 @@ final class GameScene: SKScene {
         }
         add(Font.label("\(game.ui("ui.quiz.question")) \(q.index + 1)/\(n)", 28, C.gold, align: .left), layout.pause.cx + layout.pause.r + 24, layout.pause.cy)
         roundIcon(layout.pause, "pause", pauseIcon(layout.pause.r))
-        textBox(cur.prompt, 640, 175, 980, 40, .white)
-        let cw = 390.0, ch = 320.0, gap = 20.0, x0 = (1280 - 3 * cw - 2 * gap) / 2, y0 = 230.0
+        textBox(cur.prompt, 640, 172, 980, 40, .white)
+        let cw = 390.0, ch = 300.0, gap = 20.0, x0 = (1280 - 3 * cw - 2 * gap) / 2, y0 = 245.0 // the prompt keeps 120–230 (iOS-R3-02)
         for slot in 0..<3 {
             let j = q.order[slot], choice = cur.choices[j]
             let wrong = q.wrong.contains(j), ok = q.okIndex == j
@@ -553,13 +570,14 @@ final class GameScene: SKScene {
             card.addChild(D.rr(0, 0, cw, ch, 30, ok ? SKColor(hex: 0xD9F2D0) : wrong ? SKColor(hex: 0xE6E1F0) : C.cream,
                                ok ? SKColor(hex: 0x3FA34D) : wrong ? C.wrong : C.gold, ok || wrong ? 10 : 5))
             if ok { card.addChild(D.poly([(cw - 64, 40), (cw - 52, 28), (cw - 42, 40), (cw - 22, 16), (cw - 10, 28), (cw - 42, 60)], SKColor(hex: 0x3FA34D), C.ink, 4)) }
-            let pic = Pictures.node(choice.pictureId, size: 110); pic.position = CGPoint(x: cw / 2, y: -115); pic.alpha = wrong ? 0.45 : 1; card.addChild(pic)
+            let pic = Pictures.node(choice.pictureId, size: 110); pic.position = CGPoint(x: cw / 2, y: -105); pic.alpha = wrong ? 0.45 : 1; card.addChild(pic)
             if wrong { // the "try again" mark: a circular arrow, never a red cross (TASK-004 art fix), ink-outlined
                 let p = CGMutablePath(); p.addArc(center: CGPoint(x: cw - 40, y: -40), radius: 18, startAngle: 0.3, endAngle: 5.6, clockwise: false)
                 let outline = D.shape(p, nil, C.ink, 12); outline.lineCap = .round; card.addChild(outline)
                 let arc = D.shape(p, nil, C.wrong, 6); arc.lineCap = .round; card.addChild(arc)
             }
-            let l = Font.label(choice.text.text(game.lang), 37, C.ink, width: cw - 30) // ink on every card state; l.position = CGPoint(x: cw / 2, y: -258); card.addChild(l)
+            let l = Font.label(choice.text.text(game.lang), 37, C.ink, width: cw - 30); l.position = CGPoint(x: cw / 2, y: -242); card.addChild(l) // ink on every card state
+            for (z, child) in card.children.enumerated() { child.zPosition = CGFloat(z) } // shadow, fill, icons, picture, label in that order
             card.position = D.p(x0 + Double(slot) * (cw + gap), y0); card.name = "\(j)"
             uiZ += 1; card.zPosition = uiZ
             ui.addChild(card); cardNodes.append(card)
