@@ -1,0 +1,19 @@
+r7-06-smallk-tap-where-wrong-cards-were: script='down 0 231 470; wait 0.06; up 0; wait 0.6; down 0 642 470; wait 0.06; up 0' kernel: down0@0.000, up0@0.061, down0@0.666, up0@0.720
+load at B7 case 1: 60.15 147.85 122.62
+load at B7 case 1b: 17.62 108.13 109.94
+r7-11-B7-mash-stop-then-tap-after-0p65: script='down 0 1150 590; wait 0.05; up 0; wait 0.30; down 0 1150 590; wait 0.05; up 0; wait 0.30; down 0 1150 590; wait 0.05; up 0; wait 0.65; down 0 1150 590; wait 0.05; up 0' kernel: down0@0.000, up0@0.050, down0@0.350, up0@0.400, down0@0.700, up0@0.750, down0@1.400, up0@1.450
+r7-12-B7-mash-stop-then-tap-after-0p45-control: script='down 0 1150 590; wait 0.05; up 0; wait 0.30; down 0 1150 590; wait 0.05; up 0; wait 0.30; down 0 1150 590; wait 0.05; up 0; wait 0.45; down 0 1150 590; wait 0.05; up 0' kernel: down0@0.000, up0@0.050, down0@0.350, up0@0.400, down0@0.700, up0@0.750, down0@1.200, up0@1.251
+load at full run R (B7 case 2): 14.06 97.23 105.90
+load at B7 case 3: 8.32 9.79 29.78
+r7-13-B7-quiz-entry-card-at-0p3-dropped: script='down 0 1112 628; wait 0.05; up 0; wait 0.30; down 0 1050 470; wait 0.05; up 0' kernel: down0@0.000, up0@0.050, down0@0.350, up0@0.400
+r7-14-B7-quiz-card-after-lock-accepted: script='down 0 1050 470; wait 0.05; up 0' kernel: down0@0.000, up0@0.050
+r7-15-B7-results-entry-next-at-0p35-dropped: script='down 0 1097 640; wait 0.05; up 0; wait 0.30; down 0 640 640; wait 0.05; up 0' kernel: down0@0.000, up0@0.050, down0@0.350, up0@0.400
+r7-16-B7-results-next-after-lock: script='down 0 640 640; wait 0.05; up 0' kernel: down0@0.000, up0@0.049
+r7-17-B7-pause-inside-quiz-entry-lock: script='down 0 1112 628; wait 0.05; up 0; wait 0.25; down 0 86 86; wait 0.05; up 0' kernel: down0@0.000, up0@0.050, down0@0.300, up0@0.350
+load at B7 case 4: 37.84 15.65 29.11
+load at regression: 64.89 72.65 53.54
+r7-40-B1-intro-box1-dbl: script='down 0 1112 628; wait 0.04; up 0; wait 0.10; down 0 1112 628; wait 0.04; up 0' kernel: down0@0.000, up0@0.040, down0@0.140, up0@0.180
+r7-41-B1-card-f1-dbl: script='down 0 1112 628; wait 0.04; up 0; wait 0.10; down 0 1112 628; wait 0.04; up 0' kernel: down0@0.000, up0@0.040, down0@0.141, up0@0.181
+r7-42-B1-ask-dbl-line2: script='down 0 1092 628; wait 0.04; up 0; wait 0.10; down 0 1092 628; wait 0.04; up 0' kernel: down0@0.000, up0@0.040, down0@0.140, up0@0.180
+r7-43-B4-tap-during-shake: script='down 0 231 420; wait 0.05; up 0; wait 0.2; down 0 642 420; wait 0.05; up 0' kernel: down0@0.000, up0@0.049, down0@0.250, up0@0.300
+r7-47-15b-hold-right-5s: script='down 0 330 610; wait 5.0; up 0' kernel: down0@0.000, up0@5.000
