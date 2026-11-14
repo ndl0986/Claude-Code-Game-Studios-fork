@@ -54,7 +54,7 @@ Schema **1.1** (D-06, a MINOR bump): optional training `blocks` / `finish_specia
   - Retries are wrong picks before the right one, counted as a **total across the whole quiz**: 0 earns 3★, 2 or fewer earns 2★, more earns 1★.
   - A wrong card is greyed; a repeat tap on it is ignored and doesn't count (D-11a), so a question has at most 2 retries and the quiz always ends.
   - Finishing always unlocks the next hero.
-- **Tuning** (`tuning.json`): the prototype's `config.js` values in snake_case. Each entry is `{value, min, max, unit}`, in a 1280×720 world.
+- **Tuning** (`tuning.json`): the prototype's `config.js` values in snake_case. Each entry is `{value, min, max, unit}`, in a 1280×720 world. `pad_min`, `pad_gap` (the minimum gap between pads) and `drag_threshold` (tap vs drag on the map and timeline) are in **pt/dp**, not world px (Input GDD F1, Rule 16).
   - It also holds the numbers the prototype hard-coded in `index.html` (TASK-005b), so neither app
     copies them by hand: `first_spawn_delay`, `hurt_recover`, `leader_telegraph_mul`,
     `enter_to_approach_dist`, `approach_min_time`, `windup_reach_extra`, `strike_reach_extra`,
