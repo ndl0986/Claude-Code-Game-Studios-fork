@@ -32,6 +32,10 @@ A schema change needs both devs and game-art-content to agree. A breaking change
 
 Schema **1.1** (D-06, a MINOR bump): optional training `blocks` / `finish_special` and reach-the-flag `encounters[]`. 1.0 files stay valid.
 
+Mission schema **1.5** (TASK-005l, MINOR): an optional beat `cheer` (default `true`). With `false`, beat_end has no cheer pose and no `sfx_beat_end_cheer`; `sfx_ui_next` (the page turn) plays once, and the progress dots still fill (Mission flow Rule 2, TASK-020 W21). It's ignored on fight beats, which end on their caption (R21 warns). Which beats set it is a content decision. 1.4 files stay valid.
+
+`rules.json` schema **1.2** (TASK-005l, MINOR): `text_limits.min_px` {heading 44, body 37, button 34, label 28} and a `class` on every `fit.fields` entry (Language & text Rule 6): **heading** = hero_name, beat_title; **body** = dialog, goal, scene, intro, ending, banner, quiz_prompt, quiz_choice, quiz_why, dialogue_line, dialogue_narrator; **button** = button; **label** = ui, place. The banner is body text, so its `font_px` is 37 (was 28): VI fits 1 line and EN 2 lines in its 880 box.
+
 
 - **Text** `{id, vi, en, claims[]}` is every story, scene, intro, ending, banner and quiz line.
   - `claims` holds at least one claim ID; invented (C12) counts.
@@ -91,6 +95,7 @@ them against `data/` and `samples/`. `fixtures/validity.json` has one case per r
 | R8 | No vi or en line is over 120 characters (schema), and EN fits `rules.json` `text_limits.en_budget` for its field type. For `strings.json` the type is the entry's optional `field` (button, ui, dialog; D-21) if set, else it comes from the id: `ui.btn.*`, `ui.pad.*`, `ui.lang.*` and `*_confirm` / `*_keep_reading` are `button`; ids ending in `_warning` are `dialog` (60, TASK-005e); every other `ui.*` id is `ui`. |
 | R8b | (D-21) VI fits `rules.json` `text_limits.vi_budget` for its field type (= floor(1.6 × en_budget), capped at 120). |
 | R8c | (D-21, Language & text GDD F1) Each VI and EN line fits its field's box: advances from `content/metrics/nunito-advances.json` at the field's `weight` × `font_px` / 1000, greedy word wrap at spaces into `box_width / (1 + allowance)`, at most `max_lines`; one word wider than the box fails. Values in `text_limits.fit.fields` (world px at 1×). |
+| R8d | (rules 1.2, Language & text Rule 6) Every `text_limits.fit.fields` entry has a `class` that `text_limits.min_px` names, and its `font_px` ≥ `min_px[class]`. A missing or unknown class fails. Skipped on a `rules.json` without `min_px` (1.1). |
 | R9 | Text ids are unique across the bundle. |
 | R10 | Every `picture_id` and asset id resolves in `assets.json` and the file exists. |
 | R11 | An app refuses a `schema_version` with a newer MAJOR number at **build** time. A newer MINOR number is fine. |
@@ -99,6 +104,7 @@ them against `data/` and `samples/`. `fixtures/validity.json` has one case per r
 | R13b | reach-the-flag `encounters` are sorted by `at_screen`, strictly ascending, each `0 < at_screen < length_screens`. |
 | R13d | (schema 1.4) A `dialogue` beat has `buttons: []`; if it has `ask`, `at_line + taps ≤ lines`. The button is the ask button while `at_line ≤ L < at_line + taps` (L = the 1-based line showing); each ask tap shows line L + 1. |
 | R14 | `tuning.json`: `attack_range` ≥ `enemy_reach` − `stand_gap`, so the hero can reach the enemy in front of him (error). |
+| R14b | (Combat Rule 15b) For each `training` beat, `dummies × dummy_spacing ≤ world.width − enemy_reach − 2 × hero_edge_margin` (990 with today's tuning), so the last dummy lies inside the capped training zone (error). The limit is computed from `tuning.json`, never stored. A beat without `dummies` passes. |
 | R15 | `tuning.json`: `telegraph` < 0.8 s is a **warning**, not an error. |
 | R16 | `rules.json`: each lower star's `max_retries` is ≥ the higher star's (2★ ≥ 3★); `null` means no limit. |
 | R17 | `hero.timeline_order` is unique across the heroes in `index.json` (an integer in gaps of 10; Hero progression GDD Rule 1). Samples are excluded. |
@@ -106,6 +112,7 @@ them against `data/` and `samples/`. `fixtures/validity.json` has one case per r
 | R19a | (ADR-0002, error) A picture's `width` / `height` in `assets.json` match its PNG/WebP header. |
 | R19b | (ADR-0002, **warning** until the budgets are measured) A picture is ≤ 2048 on both sides; per kind, `pic.quiz_*` ≤ 512×512 and `pic.scene_*` ≤ 1440×1320 per tile file. |
 | R20 | Every theme a bundled beat uses has a `sky_band` in `themes.json`; a theme outside the mission enum (village, bamboo, river, camp) is invalid. |
+| R21 | (schema 1.5) `cheer: false` on a `fight` beat is a **warning**: fights end on their caption and never cheer, so the field is ignored at run time. |
 
 ### Claim gate (R12)
 
