@@ -53,6 +53,8 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
     private val keyHolds = HashSet<Action>()
     private val pressedButton = HashMap<Int, String>()
     @Volatile private var safe = IntArray(4)
+    /** Debug screenshots: draw but don't step (`--ez freeze true`), so a 1.1 s telegraph can be captured. */
+    @Volatile var frozen = false
 
     init {
         holder.addCallback(this)
@@ -94,7 +96,7 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
         renderer.layout(w, h, safe, resources.displayMetrics.density, game?.tuning?.get("pad_min")?.toFloat() ?: 72f)
         drainInput()
         val portrait = h > w
-        if (game != null && !portrait) {
+        if (game != null && !portrait && !frozen) {
             acc += dt
             while (acc >= STEP) {
                 input.held.clear(); input.held += padHolds.values; input.held += keyHolds

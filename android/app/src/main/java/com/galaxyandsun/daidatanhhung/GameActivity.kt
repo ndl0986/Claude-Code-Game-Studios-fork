@@ -44,10 +44,15 @@ class GameActivity : Activity() {
         val font = { w: Int -> Typeface.Builder(assets, "fonts/nunito.ttf").setFontVariationSettings("'wght' $w").build() }
         val game = heroId?.let { Game(content, it, PrefsStore(this)) { s -> app.audio.play(s) } }
         app.audio.volume = (content.tuning.values["volume"]?.value ?: 0.5).toFloat()
-        view = GameView(this, game, app.audio, Renderer(font(800), font(600), BuildConfig.DEBUG))
+        // Pictures from assets.json (png/webp under content/data), decoded once on first use.
+        val files = content.assets.assets.filter { it.kind == "picture" }.associate { it.id to it.file }
+        val cache = HashMap<String, android.graphics.Bitmap?>()
+        val pictures = { id: String -> cache.getOrPut(id) { files[id]?.let { f -> try { assets.open(f).use { android.graphics.BitmapFactory.decodeStream(it) } } catch (e: Exception) { null } } } }
+        view = GameView(this, game, app.audio, Renderer(font(800), font(600), BuildConfig.DEBUG, pictures))
         setContentView(view)
         if (BuildConfig.DEBUG && game != null) intent?.getStringExtra("startScreen")?.let { target ->
             game.debugJump(target, intent.getIntExtra("q", 1), intent.getIntExtra("beat", 1), intent.getStringExtra("stage"), intent.getIntExtra("stars", 2))
+            view.frozen = intent.getBooleanExtra("freeze", false)
             intent.getStringExtra("lang")?.let { if (it != game.lang.code) game.forceLang(it) }
         }
         view.setOnApplyWindowInsetsListener { v, insets -> view.setSafeInsets(safeInsets(insets)); v.onApplyWindowInsets(insets) }

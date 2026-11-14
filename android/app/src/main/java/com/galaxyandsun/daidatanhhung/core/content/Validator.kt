@@ -20,6 +20,25 @@ object Validator {
         return out
     }
 
+    /** Sentence fields carry legend markers themselves (R4); label fields may lean on a marked sentence (R4b). */
+    val SENTENCE_FIELDS = setOf("intro", "scene", "ending", "quiz_prompt", "quiz_why")
+
+    /** R4's test: a legend marker in VI and in EN. */
+    fun marked(t: Text, markers: MarkersFile) = markers.legend.vi.any { t.vi.contains(it) } && markers.legend.en.any { t.en.contains(it) }
+
+    /**
+     * R4b (D-12): a label citing a legend claim is fine when, for each such claim, a marked sentence
+     * in its scope cites the same claim.
+     */
+    fun legendLabel(label: Text, labels: Map<String, String>, markers: MarkersFile, scope: List<Text>): List<String> =
+        label.claims.filter { labels[it] == "legend" }
+            .filterNot { c -> scope.any { s -> c in s.claims && marked(s, markers) } }
+            .map { "R4b ${label.id}: legend claim $it has no marked sentence in scope" }
+
+    /** R4 or R4b for one Text of [field] type. */
+    fun legend(field: String, t: Text, labels: Map<String, String>, markers: MarkersFile, scope: List<Text>): List<String> =
+        if (field in SENTENCE_FIELDS) legendMarker(t, labels, markers) else legendLabel(t, labels, markers, scope)
+
     /** R5: a fact / fact_as_recorded claim can't be approved while a source is to_confirm; R5b: only invented may have no sources. */
     fun claimSources(claim: Claim, sourceStatus: Map<String, String>): List<String> {
         val out = mutableListOf<String>()
@@ -151,11 +170,14 @@ object Validator {
                 out += nfc(claim.id, claim.vi, claim.en)
                 claim.sources.filterNot { it in sourceStatus }.forEach { out += "R2 ${claim.id}: unknown source $it" }
             }
+            val m = hero.mission
+            val missionSentences = m.intro + m.beats.flatMap { it.scene } + m.ending.lines
+            val choiceScope = hero.quiz.questions.flatMap { q -> q.choices.map { it.text.id to listOf(q.prompt, q.why) } }.toMap()
             for ((type, t) in texts(hero)) {
                 allIds += t.id
                 out += nfc(t.id, t.vi, t.en)
                 out += enBudget(t.id, type, t.en, t.vi, c.rules.textLimits)
-                out += legendMarker(t, labels, c.markers)
+                out += legend(type, t, labels, c.markers, choiceScope[t.id] ?: missionSentences)
                 t.claims.filterNot { it in claims }.forEach { out += "R2 ${t.id}: unknown claim $it" }
             }
             out += quizInvented(quizTexts(hero).flatMap { it.claims }.distinct(), labels)

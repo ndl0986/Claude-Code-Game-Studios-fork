@@ -27,7 +27,7 @@ class Region(
  * Draws every screen of the slice into the 1280×720 world, letterboxed inside the safe rect
  * (system bars, cutout and gesture zones), and records the touch regions it drew.
  */
-class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean) {
+class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, private val pictures: (String) -> android.graphics.Bitmap? = { null }) {
     private val d = Draw(bold, semi)
     private val fig = Figures(d)
     private var regions = ArrayList<Region>()
@@ -215,8 +215,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean) {
             d.rr(W / 2 - 300, 98f, 600f, 44f, 18f, C.a(C.CREAM, 0.85))
             d.textBox(beat.goal.get(g.lang), W / 2, 120f, 580f, 24f, C.INK, 1); badge(g, beat.goal, W / 2 + 390, 120f)
             if (beat.usesBanner) g.bundle.mission.banner?.let { b ->
-                d.rr(250f, 98f, 0f, 0f, 0f, null)
-                d.rr(W - 430, 150f, 410f, 44f, 18f, C.a(C.RED, 0.9)); d.textBox(b.get(g.lang), W - 225, 172f, 390f, 22f, C.GOLD, 1); badge(g, b, W - 225, 210f)
+                d.rr(W / 2 - 450, 150f, 900f, 44f, 18f, C.a(C.RED, 0.9)); d.textBox(b.get(g.lang), W / 2, 172f, 880f, 24f, C.GOLD, 1); badge(g, b, W / 2 + 540, 172f)
             }
         }
         if (r.phase != Phase.CAPTION) {
@@ -251,7 +250,15 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean) {
     }
 
     /** Quiz pictures: real ids come from assets.json; debug sample ids "pic.icon.X" draw icon X. */
-    private fun picture(id: String, x: Float, y: Float, s: Float) = fig.icon(id.removePrefix("pic.icon."), x, y, s)
+    private val dst = android.graphics.RectF()
+    private val bmpPaint = Paint(Paint.FILTER_BITMAP_FLAG or Paint.ANTI_ALIAS_FLAG)
+    private fun picture(id: String, x: Float, y: Float, s: Float) {
+        val b = pictures(id)
+        if (b == null) { fig.icon(id.removePrefix("pic.icon."), x, y, s); return }
+        val box = s * 1.9f; val sc = min(box / b.width, box / b.height)
+        dst.set(x - b.width * sc / 2, y - b.height * sc / 2, x + b.width * sc / 2, y + b.height * sc / 2)
+        bmpPaint.alpha = (d.alpha * 255).toInt(); d.c.drawBitmap(b, null, dst, bmpPaint)
+    }
 
     private fun quiz(g: Game) {
         val q = g.quiz ?: return
@@ -262,8 +269,8 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean) {
         for (i in 0 until n) d.circle(W / 2 - (n - 1) * 30 + i * 60, 50f, 16f, if (i < q.index || (i == q.index && q.rightShown >= 0)) C.GOLD else C.a(C.WHITE, 0.3), C.GOLD_DARK, 3f)
         d.text("${g.ui(UiIds.QUESTION)} ${min(q.index + 1, n)}/$n", 120f, 50f, 28f, C.GOLD, Paint.Align.LEFT)
         val cur = q.current
-        d.textBox(cur.prompt.get(g.lang), W / 2, 150f, 980f, 42f, C.WHITE, 2); badge(g, cur.prompt, W / 2, 205f)
-        val cw = 360f; val ch = 380f; val gap = 40f; val x0 = (W - 3 * cw - 2 * gap) / 2; val y0 = 240f
+        d.textBox(cur.prompt.get(g.lang), W / 2, 140f, 980f, 40f, C.WHITE, 2); badge(g, cur.prompt, W / 2, 222f)
+        val cw = 360f; val ch = 370f; val gap = 40f; val x0 = (W - 3 * cw - 2 * gap) / 2; val y0 = 248f
         q.order.forEachIndexed { slot, j ->
             val a = cur.choices[j]
             var x = x0 + slot * (cw + gap)

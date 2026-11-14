@@ -5,6 +5,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
+import com.galaxyandsun.daidatanhhung.core.content.ContentLoader
 
 /** The bundled content itself: it parses strictly and passes R2, R4–R11. */
 class ContentTest {
@@ -18,6 +19,25 @@ class ContentTest {
     @Test fun realHeroesResolveEveryPicture() {
         val real = content.copy(heroes = content.heroes.filterKeys { it in content.index.heroes })
         assertEquals(emptyList<String>(), Validator.validate(real, checkPictures = true))
+    }
+
+    /** content/drafts/ is never bundled, but its missions must stay valid against the same rules. */
+    @Test fun draftMissionsAreValid() {
+        val drafts = File(TestContent.root, "drafts/heroes")
+        val files = drafts.walkTopDown().filter { it.isFile && it.name.startsWith("mission") && it.extension == "json" }.toList()
+        for (f in files) {
+            val heroId = f.parentFile.name
+            val mission = ContentLoader.JSON.decodeFromString<com.galaxyandsun.daidatanhhung.core.content.MissionFile>(f.readText())
+            val base = content.heroes[heroId] ?: continue
+            val c = content.copy(heroes = mapOf(heroId to base.copy(mission = mission)))
+            val problems = Validator.validate(c, checkPictures = true).filterNot { it.startsWith("R9") } // ids repeat the bundled mission's
+            println("draft ${f.path}: ${problems.size} problems")
+            assertEquals(f.path, emptyList<String>(), problems)
+        }
+    }
+
+    @Test fun debugBuildPlaysTheRealHeroFirst() {
+        assertEquals("tran-quoc-toan", content.heroes.keys.first())
     }
 
     @Test fun everyTuningKeyTheAppReadsExists() {

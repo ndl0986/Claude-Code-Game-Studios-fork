@@ -79,6 +79,8 @@ class FixtureTest {
             fun text() = ContentLoader.JSON.decodeFromJsonElement<Text>(c["text"]!!)
             val problems: List<String> = when (rule) {
                 "R4" -> Validator.legendMarker(text(), labels(), content.markers)
+                "R4b" -> Validator.legend(c["field"]!!.jsonPrimitive.content, text(), labels(), content.markers,
+                    c["scope_sentences"]!!.jsonArray.map { ContentLoader.JSON.decodeFromJsonElement<Text>(it) })
                 "R5" -> {
                     val cl = c["claim"]!!.jsonObject
                     val claim = Claim(cl["id"]!!.jsonPrimitive.content, "x", "x", cl["label"]!!.jsonPrimitive.content,
