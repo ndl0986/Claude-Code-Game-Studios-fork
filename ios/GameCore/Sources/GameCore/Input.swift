@@ -104,9 +104,14 @@ public struct PadLayout: Equatable, Sendable {
         lang = (x: r - lw, y: max(18, tp), w: lw, h: lh)
     }
 
-    /// HUD spec §3.3: the top stack (dots, goal plate, banner bar; 920 wide) starts at
-    /// max(330, the pause/sound block's right edge + 8), its centre clamped to 790–810.
-    public var topStackCentre: Double { min(810, max(790, max(330, mute.cx + mute.r + 8) + 460)) }
+    /// HUD spec §3.3: the top stack (dots, goal plate, banner bar) starts at max(330, the pause/sound
+    /// block's right edge + 8). It is 920 wide with its centre clamped to 790–810 while that fits; on a
+    /// small-k phone the plates narrow to 1270 − start (never below 760; text box = plate − 40).
+    public var topStackStart: Double { max(330, mute.cx + mute.r + 8) }
+    public var topStackWidth: Double { max(760, min(920, 1270 - topStackStart)) }
+    public var topStackCentre: Double {
+        topStackWidth < 920 ? 1270 - topStackWidth / 2 : min(810, max(790, topStackStart + 460))
+    }
 
     /// The pad under a point (scene units, y down), with the prototype's 15% slop.
     public func action(at x: Double, _ y: Double, visible: Set<PadAction> = Set(PadAction.allCases)) -> PadAction? {

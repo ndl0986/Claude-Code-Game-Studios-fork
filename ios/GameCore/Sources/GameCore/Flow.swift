@@ -116,6 +116,17 @@ public final class Game {
     }
 
     public var isPlayable: Bool { isDebug || gate.runtimeRelease == .show }
+
+    /// The title's hero card (D-27 A, title.md §5.5): the current hero (the last open one in timeline_order),
+    /// its saved best stars and medal. Display only; nil when no hero is playable (a release build with
+    /// unsigned claims shows no card and no Start).
+    public struct HeroCard: Sendable { public let hero: HeroContent; public let stars: Int; public let medal: Bool }
+    public var titleCard: HeroCard? {
+        guard isPlayable else { return nil }
+        let id = progression.openHeroes(progress).last ?? heroId
+        guard let h = content.heroes.first(where: { $0.mission.hero.id == id }) else { return nil }
+        return HeroCard(hero: h, stars: progress.stars[id] ?? 0, medal: progress.medal.contains(id))
+    }
     public var tuning: Tuning { content.tuning }
     public var heroId: String { hero.mission.hero.id }
     public func ui(_ id: String) -> String { content.ui(id, lang) }

@@ -65,6 +65,25 @@ final class FlowTests: XCTestCase {
         XCTAssertNotEqual(g.unlockedHero?.mission.hero.id, g.heroId)
     }
 
+    /// title.md AC4–4c (D-27): the card shows the saved best and the medal, never lowered or lost.
+    func test_title_card_shows_the_saved_best_stars_and_medal() throws {
+        let store = MemoryStore()
+        let c = try ContentSet.load(dataRoot: Repo.data) // data only: with the sample loaded, finishing TQT opens it
+        func card() -> Game.HeroCard? { Game(content: c, hero: realHero(c), store: store, isDebug: true).titleCard }
+        XCTAssertEqual(card()?.hero.mission.hero.id, "tran-quoc-toan")
+        XCTAssertEqual(card()?.stars, 0, "fresh: 3 outline stars"); XCTAssertEqual(card()?.medal, false)
+        var p = Progress.load(store, heroIds: ["tran-quoc-toan"])
+        p.recordQuiz(hero: "tran-quoc-toan", stars: 2, medalEarned: false, store: store)
+        XCTAssertEqual(card()?.stars, 2); XCTAssertEqual(card()?.medal, false)
+        p.recordQuiz(hero: "tran-quoc-toan", stars: 3, medalEarned: true, store: store)
+        p.recordQuiz(hero: "tran-quoc-toan", stars: 1, medalEarned: false, store: store)
+        XCTAssertEqual(card()?.stars, 3, "a lower replay keeps the best"); XCTAssertEqual(card()?.medal, true, "never lost")
+        XCTAssertNil(Game(content: c, hero: realHero(c), store: store, isDebug: false).titleCard, "release, unsigned claims: no card")
+        // with a next hero loaded, finishing opens it and the card moves to it (the current hero, Hero progression F1)
+        let all = try Repo.contentSet()
+        XCTAssertEqual(Game(content: all, hero: realHero(all), store: store, isDebug: true).titleCard?.hero.mission.hero.id, "sample")
+    }
+
     func test_story_next_is_debounced() throws {
         let g = try game()
         g.start(); wait(g, 0.3)

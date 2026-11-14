@@ -312,9 +312,10 @@ final class GameScene: SKScene {
         let l = layout.lang
         let n = SKNode()
         n.addChild(D.rr(0, 0, l.w, l.h, 30, SKColor(white: 1, alpha: 0.9), C.gold, 4))
-        let vi = Font.label("VI", 32, game.lang == .vi ? C.red : SKColor(hex: 0x9a8f86)); vi.position = CGPoint(x: 44, y: -l.h / 2)
-        let bar = Font.label("|", 30, SKColor(hex: 0x9a8f86)); bar.position = CGPoint(x: 80, y: -l.h / 2)
-        let en = Font.label("EN", 32, game.lang == .en ? C.red : SKColor(hex: 0x9a8f86)); en.position = CGPoint(x: 116, y: -l.h / 2)
+        // the chip is ≥ pad_min (title.md §5.2), so the labels sit by proportion, not at fixed offsets
+        let vi = Font.label("VI", 32, game.lang == .vi ? C.red : SKColor(hex: 0x9a8f86)); vi.position = CGPoint(x: l.w * 0.28, y: -l.h / 2)
+        let bar = Font.label("|", 30, SKColor(hex: 0x9a8f86)); bar.position = CGPoint(x: l.w * 0.5, y: -l.h / 2)
+        let en = Font.label("EN", 32, game.lang == .en ? C.red : SKColor(hex: 0x9a8f86)); en.position = CGPoint(x: l.w * 0.72, y: -l.h / 2)
         [vi, bar, en].forEach(n.addChild)
         add(n, l.x, l.y)
         buttons.append(Button(rect: CGRect(x: l.x, y: l.y, width: l.w, height: l.h), id: "lang"))
@@ -402,20 +403,46 @@ final class GameScene: SKScene {
         backgroundColor = Backdrop.sky("village")
         add(Backdrop.skyNode("village", width: 1280, height: game.tuning["ground_y"]), 0, 0)
         let b = Backdrop.world(theme: "village", from: -100, to: 1400, ground: game.tuning["ground_y"]); b.position = CGPoint(x: 0, y: 720); uiZ += 1; b.zPosition = uiZ; ui.addChild(b)
-        add(D.rr(-490, -105, 980, 210, 40, C.panel, C.gold, 6), 640, 165)
-        for x in [240.0, 1040] { add(D.drum(70, SKColor(hex: 0xf2b632, alpha: 0.8)), x, 165) }
-        // the title fits between the two drum emblems in every language (iOS-R2-01)
-        let title = Font.label(game.ui("ui.app.title"), 76, C.gold)
-        if title.frame.width > 600 { title.setScale(600 / title.frame.width) }
-        add(title, 640, 140)
-        if game.isDebug { add(Font.label(game.ui("ui.debug.subtitle"), 36, .white), 640, 220) }
+        // title.md §5.2 (D-27, D-27b): every box from GameCore's TitleLayout; no drum emblems, no standing hero
+        let tl = TitleLayout(pad: layout, debug: game.isDebug)
+        let row = tl.titleRow
+        add(D.rr(0, 0, row.w, row.h, 36, C.panel, C.gold, 5), row.x, row.y) // the panel stays inside the row
+        let title = Font.label(game.ui("ui.app.title"), 56, C.gold) // 1-line heading, 56/800
+        if title.frame.width > row.w - 40 { title.setScale((row.w - 40) / title.frame.width) }
+        add(title, row.midX, row.midY)
         topLeftButtons(pause: false)
-        let h = HeroNode(scale: 0.8); h.update(face: 1, walk: false, defend: false, attack: nil, hurt: false, t: 0); add(h, 260, game.tuning["ground_y"])
-        if game.isPlayable { button(game.ui("ui.btn.start"), 640 - 190, 330, 380, 130, "start", pulse: true, size: 44) }
-        // the slice title shows the map-stub line (UX title spec); the controls are taught in play by the hints
-        add(D.rr(-420, -40, 840, 80, 24, SKColor(hex: 0xfff6e3, alpha: 0.92)), 640, 600)
-        add(Font.label(game.ui("ui.unlock.map_stub"), 28, C.ink, width: 800), 640, 600)
+        if let card = game.titleCard { heroCard(card, tl.card) }
+        if game.isPlayable { button(game.ui("ui.btn.start"), tl.start.x, tl.start.y, tl.start.w, tl.start.h, "start", pulse: true, size: 34) }
+        // the map-stub line and (debug only) the test-build line, under Start or beside it on a small-k phone
+        for (b, key) in [(tl.mapStub, "ui.unlock.map_stub")] + (tl.debugLine.map { [($0, "ui.debug.subtitle")] } ?? []) {
+            add(D.rr(0, 0, b.w, b.h, b.h / 2, SKColor(hex: 0xfff6e3, alpha: 0.92)), b.x, b.y)
+            add(Font.label(game.ui(key), 28, C.ink, width: b.w - 20), b.midX, b.midY)
+        }
         langButton()
+    }
+
+    /// The hero card (D-27 A, title.md §5.5): a cream plate with a drum-ring border, the portrait in a round
+    /// drum-ring frame, the name, the saved best stars (filled vs outline) and the medal (gold vs outline).
+    /// Display only: no button, no tone, no motion.
+    private func heroCard(_ c: Game.HeroCard, _ b: Box) {
+        add(D.rr(0, 0, b.w, b.h, 30, SKColor(hex: 0xfff6e3), C.ink, 3), b.x, b.y)
+        add(D.rr(6, 6, b.w - 12, b.h - 12, 26, nil, C.goldDark, 3), b.x, b.y) // the thin drum-ring border
+        let id = c.hero.mission.hero.id, px = b.x + 20 + 70, py = b.midY
+        let crop = SKCropNode(); crop.maskNode = D.circle(0, 0, 70, .white)
+        let pic = Pictures.node("pic.portrait_\(id)_hero_determined", size: 140 / 1.6); crop.addChild(pic)
+        add(crop, px, py)
+        add(D.circle(0, 0, 74, nil, C.goldDark, 8), px, py); add(D.circle(0, 0, 79, nil, C.ink, 3), px, py)
+        let nx = b.x + 20 + 140 + 20 // the name box: 560 wide, 44 heading, 1 line
+        let name = Font.label(c.hero.mission.hero.name.text(game.lang), 44, C.ink, width: 560, align: .left)
+        add(name, nx, b.y + 60)
+        for i in 0..<3 { // best stars at 48: filled up to the saved best, outline for the rest
+            let got = i < c.stars
+            add(D.star(24, got ? C.gold : SKColor(hex: 0xfff6e3), got ? C.goldDark : SKColor(hex: 0xb8a37a)), nx + 24 + Double(i) * 60, b.y + 125)
+        }
+        let medal = SKNode() // 56 px, right of the stars: gold if ever earned, else outline
+        medal.addChild(D.circle(0, 0, 28, c.medal ? C.gold : SKColor(hex: 0xfff6e3), c.medal ? C.goldDark : SKColor(hex: 0xb8a37a), 4))
+        medal.addChild(D.drum(19, c.medal ? C.goldDark : SKColor(hex: 0xb8a37a)))
+        add(medal, nx + 3 * 60 + 40, b.y + 125)
     }
 
     private func storyPicture(ending: Bool) {
@@ -504,18 +531,20 @@ final class GameScene: SKScene {
         if p.phase == .beatPlay || p.phase == .beatEnd, p.beat < p.beats.count, let goal = p.beats[p.beat].goal {
             // HUD spec §3.3: the goal plate, 920 × 56 with an 880 box (rules fit.goal), top at dots bottom + 4 (96),
             // centred on x 790, at the same place on every beat (AC10); cream for every sky (iOS-R3-05)
-            add(D.rr(-460, -28, 920, 56, 28, SKColor(hex: 0xfff6e3, alpha: 0.9)), sx, 124)
-            add(Font.label(goal.text(game.lang), 37, C.ink, width: 880), sx, 124)
+            let pw = layout.topStackWidth // 920, narrower on a small-k phone (§3.3); text box = plate − 40
+            add(D.rr(-pw / 2, -28, pw, 56, 28, SKColor(hex: 0xfff6e3, alpha: 0.9)), sx, 124)
+            add(Font.label(goal.text(game.lang), 37, C.ink, width: pw - 40), sx, 124)
         }
         if p.phase == .beatPlay || p.phase == .beatEnd, p.beat < p.beats.count, p.beats[p.beat].usesBanner == true, let b = game.hero.mission.banner {
             // Mission flow Rule 6 / HUD spec §3.3 (W9): the motto on a vermilion bar in the sky band, 920 × 112 fixed
             // (2 lines of 37 at 1.35 + padding) in every language, top 156, centred on x 790; gold text 880 @ 37/800.
             // Its own layer: above the fighters, under pops, the "!" and hints, and the HUD buttons.
             let bar = SKNode(); bar.position = D.p(sx, 212)
-            bar.addChild(D.rr(-460, -56, 920, 112, 18, SKColor(hex: 0xD64A2E), C.ink, 4))
-            let l = Font.label(b.text(game.lang), 37, SKColor(hex: 0xFFC531), width: 880); l.zPosition = 1; bar.addChild(l)
+            let bw = layout.topStackWidth
+            bar.addChild(D.rr(-bw / 2, -56, bw, 112, 18, SKColor(hex: 0xD64A2E), C.ink, 4))
+            let l = Font.label(b.text(game.lang), 37, SKColor(hex: 0xFFC531), width: bw - 40); l.zPosition = 1; bar.addChild(l)
             bannerLayer.addChild(bar)
-            badge(b, sx + 400, 156)
+            badge(b, sx + bw / 2 - 60, 156)
         }
         for (a, c, kind, label) in [(PadAction.left, layout.left, "left", nil), (.right, layout.right, "right", nil),
                                     (.defend, layout.defend, "defend", "ui.pad.defend"), (.attack, layout.attack, "attack", "ui.pad.attack"),

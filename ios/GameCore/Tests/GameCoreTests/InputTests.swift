@@ -48,14 +48,30 @@ final class InputTests: XCTestCase {
         XCTAssertEqual(l.topStackCentre, 790)
     }
 
-    /// The leader's r5 rule: a big corner (small k, a full-width view with a left inset) moves the stack right,
-    /// its left edge at the corner + 8, with the centre clamped at 810.
-    func test_a_wide_corner_pushes_the_top_stack_right_up_to_810() {
-        let k = 0.49, l = PadLayout(view: (w: 1280 * k, h: 720 * k), insets: (0, 59, 21, 0), padMin: 72, padGap: 12)
+    /// HUD spec §3.3: a wide corner (small k, a left inset) moves the stack right: start = corner + 8. While
+    /// 920 fits, the centre is clamped to 790–810; past that the plates narrow to 1270 − start, never over the corner.
+    func test_a_wide_corner_moves_the_top_stack_right_and_never_over_the_corner() {
+        // a 59 pt left inset down to k 0.46; no side inset below (at k 0.32 the corner alone reaches ≈ 495, so the
+        // 760 floor leaves ≈ 7 px: the spec's supported floor assumes no left inset there)
+        for (k, inset) in [(0.52, 59.0), (0.50, 59), (0.49, 59), (0.46, 59), (0.40, 0), (0.36, 0), (0.32, 0)] {
+            let l = PadLayout(view: (w: 1280 * k, h: 720 * k), insets: (0, inset, 21, 0), padMin: 72, padGap: 12)
+            let left = l.topStackCentre - l.topStackWidth / 2, right = l.topStackCentre + l.topStackWidth / 2
+            XCTAssertGreaterThanOrEqual(left, l.mute.cx + l.mute.r + 8 - 1e-9, "k \(k): clear of sound")
+            XCTAssertLessThanOrEqual(right, 1270 + 1e-9, "k \(k)")
+            XCTAssertGreaterThanOrEqual(l.topStackWidth, 760)
+            if l.topStackWidth == 920 { XCTAssertTrue((790...810).contains(l.topStackCentre), "k \(k)") }
+        }
+    }
+
+    /// HUD spec AC14: at k 0.46 (a left inset) the stack starts at corner + 8 and the plates narrow to
+    /// 1270 − start (≥ 760), clear of pause and sound.
+    func test_AC14_the_top_stack_narrows_at_k_046() {
+        let k = 0.46, l = PadLayout(view: (w: 1280 * k, h: 720 * k), insets: (0, 59, 21, 0), padMin: 72, padGap: 12)
         let corner = l.mute.cx + l.mute.r
-        XCTAssertGreaterThan(corner + 8, 330)
-        XCTAssertEqual(l.topStackCentre, min(810, corner + 8 + 460), accuracy: 1e-9)
-        XCTAssertLessThanOrEqual(l.topStackCentre, 810)
+        XCTAssertEqual(l.topStackStart, corner + 8, accuracy: 1e-9)
+        XCTAssertLessThan(l.topStackWidth, 920); XCTAssertGreaterThanOrEqual(l.topStackWidth, 760)
+        XCTAssertEqual(l.topStackCentre - l.topStackWidth / 2, l.topStackStart, accuracy: 1e-9, "left edge at start")
+        XCTAssertEqual(l.topStackCentre + l.topStackWidth / 2, 1270, accuracy: 1e-9, "right edge at 1270")
     }
 
     func test_hit_test_finds_the_pad_with_slop() {
