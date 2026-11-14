@@ -106,7 +106,7 @@ centre is never covered.
 | Knob | Value | Source |
 |---|---|---|
 | `pad_min` | 72 pt | `tuning.json` |
-| `pad_gap` | 12 pt | `tuning.json` (data follow-up). *NOT YET READ: iOS spaces pads 10 world units today; comes with TASK-019/013. Android ⟨to confirm⟩* |
+| `pad_gap` | 12 pt | `tuning.json` (data follow-up). *NOT YET READ: iOS, Android (iOS spaces pads 10 world units; Android uses fixed offsets with no gap; the key arrives with TASK-005k)* |
 | `hint_delay` | 5 s | `tuning.json` |
 
 There are no player-adjustable HUD settings in the slice (HUD repositioning is out of scope,
@@ -114,8 +114,8 @@ accessibility requirements).
 
 ## 8. Feedback & Notification Systems
 
-- Every pad: a 4% squash in the next frame. *NOT YET BUILT on either app: iOS changes colour only
-  today; Android ⟨to confirm⟩* (accessibility gaps).
+- Every pad: a 4% squash in the next frame. *NOT YET BUILT: iOS, Android (iOS changes colour only;
+  Android only shows 50% alpha on disabled buttons and wrong cards)* (accessibility gaps).
 - Play pads: no tap tone; their actions make the sounds (O6).
 - Pops: "Ối!" (pushed) and "Đỡ được!" (blocked) as VI/EN text layers.
 

@@ -24,4 +24,5 @@ pulses ≤ 3 Hz; reveals ≤ 3 s.
 (Audio Rules 3, 6).
 
 **Audio cues named in these specs** (the skip-warning bell, fanfares, star plucks, voice lines):
-*NOT YET BUILT on both apps; placeholder tones only.*
+*NOT YET BUILT on both apps; placeholder tones only* (Android: 7 synthesised tones in one
+SoundPool; no sound files yet).

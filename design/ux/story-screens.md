@@ -87,10 +87,10 @@ Text ids per box; `story_skipped` (in memory); whether the medal is already earn
 
 ## 10. Transitions & Animations
 
-A 0.1–0.15 s page slide per box (Mission flow Game Feel). *NOT YET BUILT: iOS; Android ⟨to confirm⟩.* The warning card slides in with a
+A 0.1–0.15 s page slide per box (Mission flow Game Feel). *NOT YET BUILT: iOS, Android (boxes swap instantly).* The warning card slides in with a
 soft bell (Audio `sfx_skip_warning_open`; the bell is not built yet, see the patterns file). Last beat →
-ending: a 3 s music crossfade, never a hard cut. *NOT YET BUILT: there's no music yet on iOS; Android
-⟨to confirm⟩.*
+ending: a 3 s music crossfade, never a hard cut. *NOT YET BUILT: iOS, Android (no music yet on
+either app).*
 
 ## 11–13. Input, Accessibility, Localization
 

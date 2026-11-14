@@ -147,7 +147,8 @@ slice.
 
 **Known gaps today (NOT YET BUILT, tracked):**
 - **Voice-over:** not recorded yet, so "no reading needed" is a later target (Audio GDD, D-23).
-- **Pressed-state squash on Android pads:** not built yet (Input Rule 15).
+- **Pressed-state squash:** not built on iOS or Android (Input Rule 15). iOS changes colour only;
+  Android shows 50% alpha on disabled buttons and wrong cards only.
 - **Rounded-corner safe insets:** wait for TASK-013 (Input Rule 2).
 
 ## Audit History
