@@ -10,9 +10,9 @@ an issue once Issues are on. The leader owns this file.
 | TASK-002 | `/setup-engine godot`: pin Godot 4 for the game (SHELVED 2026-11-14: Luan chose native per platform) | setup | game-dev-ios | done (awaiting merge; Luan's installs pending) | `setup/TASK-002-engine-godot` @ `dda2ca7` | 2026-11-14 |
 | TASK-003 | `/prototype --path html`: one side-scrolling Trần Quốc Toản mission (placeholder beats) + quiz | dev | game-dev-android | CLOSED as design reference (Luan stopped browser testing 2026-11-14; Android r3 partial, iOS not run) | `proto/TASK-003-mission-prototype` @ `203d73e` | 2026-11-14 |
 | TASK-004 | `/art-bible` draft + Trần Quốc Toản mission beats and quiz, sourced | design | game-art-content | art + structure signed off; claims C01–C11 pending | `design/TASK-004-art-bible-tqt-beats` @ `4d7aca2` | 2026-11-14 |
-| TASK-005 | ADR: native per platform (Swift iOS, Kotlin Android); shared content as data in content/; project.yaml engine block | design | game-dev-ios | plan | `docs/TASK-005-adr-native` | 2026-11-14 |
-| TASK-006 | iOS setup: Swift + SpriteKit (SwiftUI shell), ios/, XCTest, Simulator proof | setup | game-dev-ios | after TASK-005 plan | — | 2026-11-14 |
-| TASK-007 | Android setup: Kotlin, android/, 2D approach for Luan to pick, JUnit, emulator proof | setup | game-dev-android | plan | `setup/TASK-007-android-kotlin` | 2026-11-14 |
+| TASK-005 | ADR: native per platform (Swift iOS, Kotlin Android); shared content as data in content/; project.yaml engine block | design | game-dev-ios | writing (plan approved with both reviews' fixes) | `docs/TASK-005-adr-native` | 2026-11-14 |
+| TASK-006 | Full first mission, native iOS: Swift + SpriteKit (SwiftUI shell), ios/, XCTest; spec = prototype 203d73e | dev | game-dev-ios | after TASK-005 | `feat/TASK-006-ios-native` | 2026-11-14 |
+| TASK-007 | Full first mission, native Android: Kotlin + Android SDK (SurfaceView/Canvas, SoundPool), android/, JUnit; spec = prototype 203d73e | dev | game-dev-android | plan | `setup/TASK-007-android-kotlin` | 2026-11-14 |
 | TASK-003b | Mission beat types from TASK-004: Special button, walk / hold-meter / training / reach-the-flag beats, arrows; BEAT_TYPES dispatch table first; art fixes: wrong-answer #9C8FB8 + circular-arrow icon, tangerine attack icon (not a pickaxe), vermilion only as a tunic accent; quiz to 5 questions once claims are signed | dev | unassigned | CANCELLED (browser); beat types and art fixes move to native tasks | — | 2026-11-14 |
 
 ## Team changes
@@ -104,3 +104,7 @@ merged. Missions, quiz and VI/EN text are shared as data (TASK-005). The browser
 the design reference.
 
 **Decided (Luan, 2026-11-14):** stop all browser testing. TASK-003 closed as the design reference at `203d73e`; TASK-003b cancelled. QC moves to the native apps (TASK-006 iOS, TASK-007 Android).
+
+**Decided (Luan, 2026-11-14):** skip the cross-platform version; TASK-006/007 rebuild the full first
+mission natively on each platform, then QC tests the native builds. Android draws with pure Android
+(Kotlin + Android SDK: SurfaceView/Canvas game loop, SoundPool), no game framework.
