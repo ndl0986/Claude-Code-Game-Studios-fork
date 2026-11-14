@@ -53,7 +53,8 @@ class GameActivity : Activity() {
         val files = content.assets.assets.filter { it.kind == "picture" }.associate { it.id to it.file }
         val cache = HashMap<String, android.graphics.Bitmap?>()
         val pictures = { id: String -> cache.getOrPut(id) { files[id]?.let { f -> try { assets.open(f).use { android.graphics.BitmapFactory.decodeStream(it) } } catch (e: Exception) { null } } } }
-        view = GameView(this, game, app.audio, Renderer(font(800), font(600), BuildConfig.DEBUG, pictures))
+        val sky = content.themes?.themes?.mapValues { (_, th) -> android.graphics.Color.parseColor(th.skyBand.top) to android.graphics.Color.parseColor(th.skyBand.bottom) } ?: emptyMap()
+        view = GameView(this, game, app.audio, Renderer(font(800), font(600), BuildConfig.DEBUG, pictures, sky))
         setContentView(view)
         if (BuildConfig.DEBUG && game != null) intent?.getStringExtra("startScreen")?.let { target ->
             game.debugJump(target, intent.getIntExtra("q", 1), intent.getIntExtra("beat", 1), intent.getStringExtra("stage"), intent.getIntExtra("stars", 2))

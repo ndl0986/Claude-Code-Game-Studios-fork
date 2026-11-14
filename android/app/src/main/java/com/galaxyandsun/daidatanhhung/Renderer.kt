@@ -29,9 +29,10 @@ class Region(
  * Draws every screen of the slice into the 1280×720 world, letterboxed inside the safe rect
  * (system bars, cutout and gesture zones), and records the touch regions it drew.
  */
-class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, private val pictures: (String) -> android.graphics.Bitmap? = { null }) {
+class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, private val pictures: (String) -> android.graphics.Bitmap? = { null },
+               skyBands: Map<String, Pair<Int, Int>> = emptyMap()) {
     private val d = Draw(bold, semi)
-    private val fig = Figures(d)
+    private val fig = Figures(d).also { it.skyBands = skyBands }
     private var regions = ArrayList<Region>()
     private var next = ArrayList<Region>()
     @Volatile private var k = 1f; @Volatile private var ox = 0f; @Volatile private var oy = 0f
