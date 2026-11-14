@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "themes": {
+    "village": {
+      "sky_band": {
+        "top": "#FFD59A",
+        "bottom": "#CFEEF2"
+      }
+    },
+    "bamboo": {
+      "sky_band": {
+        "top": "#FFD59A",
+        "bottom": "#CFEEF2"
+      }
+    },
+    "river": {
+      "sky_band": {
+        "top": "#FFD59A",
+        "bottom": "#CFEEF2"
+      }
+    },
+    "camp": {
+      "sky_band": {
+        "top": "#3B3F6B",
+        "bottom": "#3B3F6B"
+      }
+    }
+  }
+}

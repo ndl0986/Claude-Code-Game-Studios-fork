@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.2",
   "assets": [
     {
       "id": "font.nunito",
@@ -11,97 +11,129 @@
       "id": "pic.quiz_flag_tran",
       "kind": "picture",
       "file": "pictures/quiz_flag_tran.png",
-      "bytes": 806
+      "bytes": 806,
+      "width": 256,
+      "height": 256
     },
     {
       "id": "pic.quiz_flag_ly",
       "kind": "picture",
       "file": "pictures/quiz_flag_ly.png",
-      "bytes": 810
+      "bytes": 810,
+      "width": 256,
+      "height": 256
     },
     {
       "id": "pic.quiz_flag_le",
       "kind": "picture",
       "file": "pictures/quiz_flag_le.png",
-      "bytes": 810
+      "bytes": 810,
+      "width": 256,
+      "height": 256
     },
     {
       "id": "pic.quiz_child",
       "kind": "picture",
       "file": "pictures/quiz_child.png",
-      "bytes": 919
+      "bytes": 919,
+      "width": 256,
+      "height": 256
     },
     {
       "id": "pic.quiz_hourglass",
       "kind": "picture",
       "file": "pictures/quiz_hourglass.png",
-      "bytes": 979
+      "bytes": 979,
+      "width": 256,
+      "height": 256
     },
     {
       "id": "pic.quiz_bed",
       "kind": "picture",
       "file": "pictures/quiz_bed.png",
-      "bytes": 814
+      "bytes": 814,
+      "width": 256,
+      "height": 256
     },
     {
       "id": "pic.quiz_fruit_orange",
       "kind": "picture",
       "file": "pictures/quiz_fruit_orange.png",
-      "bytes": 951
+      "bytes": 951,
+      "width": 256,
+      "height": 256
     },
     {
       "id": "pic.quiz_fruit_banana",
       "kind": "picture",
       "file": "pictures/quiz_fruit_banana.png",
-      "bytes": 967
+      "bytes": 967,
+      "width": 256,
+      "height": 256
     },
     {
       "id": "pic.quiz_fruit_coconut",
       "kind": "picture",
       "file": "pictures/quiz_fruit_coconut.png",
-      "bytes": 1032
+      "bytes": 1032,
+      "width": 256,
+      "height": 256
     },
     {
       "id": "pic.quiz_count_3",
       "kind": "picture",
       "file": "pictures/quiz_count_3.png",
-      "bytes": 964
+      "bytes": 964,
+      "width": 256,
+      "height": 256
     },
     {
       "id": "pic.quiz_count_6",
       "kind": "picture",
       "file": "pictures/quiz_count_6.png",
-      "bytes": 1020
+      "bytes": 1020,
+      "width": 256,
+      "height": 256
     },
     {
       "id": "pic.quiz_count_10",
       "kind": "picture",
       "file": "pictures/quiz_count_10.png",
-      "bytes": 1028
+      "bytes": 1028,
+      "width": 256,
+      "height": 256
     },
     {
       "id": "pic.quiz_helmet_a",
       "kind": "picture",
       "file": "pictures/quiz_helmet_a.png",
-      "bytes": 805
+      "bytes": 805,
+      "width": 256,
+      "height": 256
     },
     {
       "id": "pic.quiz_helmet_b",
       "kind": "picture",
       "file": "pictures/quiz_helmet_b.png",
-      "bytes": 861
+      "bytes": 861,
+      "width": 256,
+      "height": 256
     },
     {
       "id": "pic.quiz_helmet_c",
       "kind": "picture",
       "file": "pictures/quiz_helmet_c.png",
-      "bytes": 844
+      "bytes": 844,
+      "width": 256,
+      "height": 256
     },
     {
       "id": "pic.scene_tqt_ending",
       "kind": "picture",
       "file": "pictures/scene_tqt_ending.png",
-      "bytes": 1873
+      "bytes": 1873,
+      "width": 640,
+      "height": 360
     }
   ]
 }
