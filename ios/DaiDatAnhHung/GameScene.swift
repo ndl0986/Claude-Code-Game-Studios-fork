@@ -547,16 +547,17 @@ final class GameScene: SKScene {
             let wrong = q.wrong.contains(j), ok = q.okIndex == j
             let card = SKNode()
             card.addChild(D.rr(0, 8, cw, ch, 30, SKColor(white: 0, alpha: 0.3)))
-            // right: green #3FA34D with a tick (UX quiz spec); wrong: lavender #9C8FB8 with a circular arrow
-            card.addChild(D.rr(0, 0, cw, ch, 30, ok ? SKColor(hex: 0x3FA34D) : wrong ? SKColor(hex: 0xd9d4cf) : C.cream,
-                               ok ? .white : wrong ? C.wrong : C.gold, ok ? 8 : 5))
-            if ok { card.addChild(D.poly([(cw - 64, 40), (cw - 52, 28), (cw - 42, 40), (cw - 22, 16), (cw - 10, 28), (cw - 42, 60)], .white)) }
+            // right: pale green #D9F2D0, a #3FA34D border (10) and a green tick, ink label (contrast; matches
+            // Android and the UX quiz spec); wrong: lavender #9C8FB8 border with a circular arrow
+            card.addChild(D.rr(0, 0, cw, ch, 30, ok ? SKColor(hex: 0xD9F2D0) : wrong ? SKColor(hex: 0xd9d4cf) : C.cream,
+                               ok ? SKColor(hex: 0x3FA34D) : wrong ? C.wrong : C.gold, ok ? 10 : 5))
+            if ok { card.addChild(D.poly([(cw - 64, 40), (cw - 52, 28), (cw - 42, 40), (cw - 22, 16), (cw - 10, 28), (cw - 42, 60)], SKColor(hex: 0x3FA34D))) }
             let pic = Pictures.node(choice.pictureId, size: 110); pic.position = CGPoint(x: cw / 2, y: -115); pic.alpha = wrong ? 0.45 : 1; card.addChild(pic)
             if wrong { // the "try again" mark: a circular arrow, never a red cross (TASK-004 art fix)
                 let p = CGMutablePath(); p.addArc(center: CGPoint(x: cw - 40, y: -40), radius: 18, startAngle: 0.3, endAngle: 5.6, clockwise: false)
                 card.addChild(D.shape(p, nil, C.wrong, 6))
             }
-            let l = Font.label(choice.text.text(game.lang), 37, ok ? .white : wrong ? SKColor(hex: 0x8a8078) : C.ink, width: cw - 30); l.position = CGPoint(x: cw / 2, y: -258); card.addChild(l)
+            let l = Font.label(choice.text.text(game.lang), 37, wrong ? SKColor(hex: 0x8a8078) : C.ink, width: cw - 30); l.position = CGPoint(x: cw / 2, y: -258); card.addChild(l)
             card.position = D.p(x0 + Double(slot) * (cw + gap), y0); card.name = "\(j)"
             uiZ += 1; card.zPosition = uiZ
             ui.addChild(card); cardNodes.append(card)
