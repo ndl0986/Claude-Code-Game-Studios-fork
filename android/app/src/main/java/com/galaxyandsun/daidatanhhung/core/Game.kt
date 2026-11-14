@@ -68,7 +68,7 @@ class Game(
     /** D-07: the kind skip warning is showing. */
     var skipWarning = false; private set
     private var warnedThisRun = false
-    /** True when this run's quiz earned the medal (shown on results). */
+    /** True when this run newly earned the medal (results show `ui.medal.earned` only then). */
     var medalThisRun = false; private set
     /** The hero that opened at quiz finish, shown on the unlock screen (null: no unlock screen). */
     var newlyOpen: String? = null; private set
@@ -157,7 +157,7 @@ class Game(
         }
     }
 
-    fun pause(): Boolean = (screen == Screen.PLAY || screen == Screen.QUIZ).also { if (it) { pausedFrom = screen; screen = Screen.PAUSE } }
+    fun pause(): Boolean = (screen == Screen.PLAY || screen == Screen.QUIZ).also { if (it) { pausedFrom = screen; screen = Screen.PAUSE; skipWarning = false } }
 
     /** Resuming resets the 5 s hint timers (Hints GDD; the prototype froze them). */
     fun resume(): Boolean = (screen == Screen.PAUSE).also { if (it) { screen = pausedFrom; if (screen == Screen.PLAY) run.onResume() } }
@@ -203,8 +203,10 @@ class Game(
         val before = Progression.openHeroes(content, store)
         if (stars > store.stars(heroId)) store.setStars(heroId, stars)
         store.setFlag("completed.$heroId")
-        medalThisRun = !skipped
-        if (medalThisRun) store.setFlag("medal.$heroId")
+        // `ui.medal.earned` shows only in the run that newly earns the medal (progression GDD rule 10).
+        val hadMedal = medalEarned
+        if (!skipped) store.setFlag("medal.$heroId")
+        medalThisRun = !skipped && !hadMedal
         val after = Progression.openHeroes(content, store)
         newlyOpen = (after - before).firstOrNull()
         Progression.markSeen(content, store)
@@ -225,7 +227,7 @@ class Game(
             "ending" -> go(Screen.ENDING)
             "quiz" -> { startQuiz(); repeat((question - 1).coerceAtLeast(0)) { skipQuestion() }; if (stage == "wrong") quiz?.let { answer((it.current.correctIndex + 1) % it.current.choices.size) }
                 if (stage == "right") quiz?.let { answer(it.current.correctIndex); it.update(tuning["feedback_time"]) } }
-            "results" -> { stars = starCount; medalThisRun = stage != "nomedal"; go(Screen.RESULTS) }
+            "results" -> { stars = starCount; medalThisRun = stage == "newmedal"; if (stage != "nomedal") store.setFlag("medal.$heroId"); go(Screen.RESULTS) }
             "unlock" -> { stars = starCount; newlyOpen = bundle.mission.nextHero ?: heroId; go(Screen.UNLOCK) }
             else -> go(Screen.TITLE)
         }

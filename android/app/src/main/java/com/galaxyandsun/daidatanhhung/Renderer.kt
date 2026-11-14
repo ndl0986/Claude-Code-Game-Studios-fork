@@ -202,6 +202,9 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         for (p in r.parts) d.star(p.x.toFloat(), p.y.toFloat(), p.r.toFloat(), p.color.toInt(), C.GOLD_DARK, p.rot.toFloat())
         for (p in r.pops) { val old = d.alpha; d.alpha = min(1.0, p.life * 2); d.text(g.ui(p.textId), p.x.toFloat(), p.y.toFloat(), 40f, p.color.toInt()); d.alpha = old }
         r.stallTargetX?.let { fig.arrowDown(it.toFloat(), ground - 330, t) }
+        if (r.flagArrow) fig.arrowDown(r.goalX.toFloat(), ground - 300, t)
+        if (r.cheerT >= 0 && r.t - r.cheerT < 0.6) { val k = ((r.t - r.cheerT) / 0.6).toFloat() // the cheer's stars, drawn here (no RNG)
+            for (i in 0 until 10) { val a = i * 0.628; d.star(h.x.toFloat() + cos(a).toFloat() * 160 * k, ground - 260 + sin(a).toFloat() * 120 * k, 14f, C.GLOW, C.GOLD_DARK, a.toFloat()) } }
         d.c.restore()
         if (r.phase == Phase.WALK && r.beat > 0) {
             val p = (sin(t * 6) * 10).toFloat()

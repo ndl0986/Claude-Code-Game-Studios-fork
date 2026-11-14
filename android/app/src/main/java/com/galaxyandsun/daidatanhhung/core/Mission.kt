@@ -459,17 +459,15 @@ class MissionRun(
                 trainingStep == TrainingStep.DONE
             }
             BeatType.REACH -> {
-                if (inEncounter) {
-                    if (groupStep(dt)) { inEncounter = false; lockX = null; encounterNext++; stall = 0.0 }
-                } else {
-                    updateEnemies(dt)
-                    val at = encounterAt(beat)
-                    val trigger = if (encounterNext < at.size) xStart + at[encounterNext] * WORLD_W else Double.MAX_VALUE
-                    if (hero.x >= trigger) { // parity note (a): lockX = trigger x − lock_offset
-                        inEncounter = true
-                        startGroup(trigger - tuning["lock_offset"], encounters(beat)[encounterNext].second)
-                    }
+                val at = encounterAt(beat)
+                val trigger = if (encounterNext < at.size) xStart + at[encounterNext] * WORLD_W else Double.MAX_VALUE
+                if (!inEncounter && hero.x >= trigger) { // parity note (a): lockX = trigger x − lock_offset; fights this same frame
+                    inEncounter = true
+                    startGroup(trigger - tuning["lock_offset"], encounters(beat)[encounterNext].second)
                 }
+                if (inEncounter) {
+                    if (groupStep(dt)) { inEncounter = false; lockX = null; encounterNext++; stall = 0.0; idle = 0.0 }
+                } else updateEnemies(dt)
                 !inEncounter && hero.x >= goalX
             }
         }
@@ -479,12 +477,15 @@ class MissionRun(
     /** beat_end: a fight goes to its caption; any other beat cheers and goes on (no caption). */
     private fun endBeat() {
         if (beatType == BeatType.FIGHT) { phase = Phase.CAPTION; captionLine = 0; return }
-        sfx(Sfx.CHIME); burst(hero.x, ground - 260, 10, Palette.GLOW)
+        sfx(Sfx.CHIME); cheerT = t // drawn by the app; the core RNG is used only by fights and dummies (iOS parity)
         lockX = null; partner = null
         beat++
         phase = Phase.WALK
         missionDone = beat >= beats.size
     }
+
+    /** Mission time of the last non-fight beat's cheer (the renderer draws a star burst from it). */
+    var cheerT = -1.0; private set
 
     /** True once the last beat has ended (the game goes to the ending). */
     var missionDone = false; private set
@@ -544,6 +545,10 @@ class MissionRun(
         phase == Phase.PLAY && beatType == BeatType.HOLD && (!tut.holdPast25 || stall > tuning["hint_delay"]) -> HandHint.SPECIAL_HOLD
         else -> HandHint.NONE
     }
+    /** Hints GDD: on reach-the-flag's clear path, an arrow over the flag when it's on screen and the child idles. */
+    val flagArrow: Boolean get() = phase == Phase.PLAY && beatType == BeatType.REACH && !inEncounter &&
+        idle > tuning["hint_delay"] && goalX - cam < WORLD_W
+
     /** The stall arrow: the nearest enemy in a fight, the next dummy in training. */
     val stallTargetX: Double? get() = if (!stalled) null else when {
         beatType == BeatType.TRAINING && trainingStep == TrainingStep.DUMMIES -> dummies.firstOrNull { !it.down }?.x

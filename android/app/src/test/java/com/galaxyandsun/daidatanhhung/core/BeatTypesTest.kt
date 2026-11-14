@@ -261,6 +261,11 @@ class BeatTypesTest {
         finishQuiz(g)
         assertTrue(g.medalThisRun); assertTrue(store.flag("medal.tran-quoc-toan"))
         assertTrue(store.flag("completed.tran-quoc-toan"))
+        // A later full-read replay keeps the gold medal but doesn't announce it again.
+        val g1 = TestContent.fullGame(store)
+        g1.debugJump("ending"); repeat(g1.bundle.mission.ending.lines.size) { idle(g1); g1.next() }
+        finishQuiz(g1)
+        assertFalse(g1.medalThisRun); assertTrue(g1.medalEarned)
         // A later run that skips earns no medal this run, but the saved medal stays.
         val g2 = TestContent.fullGame(store)
         g2.debugJump("ending"); g2.skip() // medal already earned: no warning
@@ -307,5 +312,21 @@ class BeatTypesTest {
         assertEquals(Screen.RESULTS, g.screen)
         assertEquals(3, g.stars)
         assertTrue(g.medalThisRun)
+    }
+
+    @Test fun pauseClosesAnOpenSkipWarning() {
+        val g = TestContent.fullGame()
+        g.debugJump("play", beat = 1, stage = "card"); idle(g)
+        assertTrue(g.skip()); assertTrue(g.skipWarning)
+        assertTrue(g.pause()); assertFalse(g.skipWarning)
+    }
+
+    @Test fun flagArrowWhenIdleOnTheClearPath() {
+        val g = atBeat(3)
+        repeat(g.run.cardBoxes().size) { idle(g); g.next() }
+        val r = g.run
+        // Walk past both encounters' triggers is not needed: idle near the start, flag off screen → no arrow.
+        repeat(60 * 6) { g.step(dt, InputFrame()) }
+        assertFalse(r.flagArrow)
     }
 }

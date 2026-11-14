@@ -75,7 +75,7 @@ adb shell am start -n com.galaxyandsun.daidatanhhung/.GameActivity \
   star count for results and unlock.
 - `stage`: for play, `start`, `card` (a non-fight beat's card), `telegraph` (fight), `meter`
   (hold-meter at 60%), `blocks` / `special` (training steps) or `encounter` (reach-the-flag). For
-  quiz, `wrong` or `right`. For results, `nomedal`.
+  quiz, `wrong` or `right`. For results, `nomedal` or `newmedal` (the run that first earns it).
 - `--es hero sample` loads the test-only sample hero. `--es missionFile <file>` plays a draft
   mission from `content/drafts/heroes/<id>/`.
 - `--ez freeze true` draws without stepping, to capture a 1.1 s telegraph.
