@@ -274,6 +274,7 @@ it) · **Decided** (Luan's call, with the date).
 
 | Date | Decision |
 | --- | --- |
+| 2026-11-14 | **TASK-016 plan approved:** walk to Bình Than 3 → 1 screen, gaps between steps halved; a new exchange scene (the "Xin vào!" button tapped twice, the guard refuses, the king comes out and gives the orange) before the orange beat. **The king (Trần Nhân Tông) is shown symbolically:** royal headdress, beard, thick brows, dignified (period headdress a placeholder until sourced). Script still to be approved. |
 | 2026-11-14 | **D-25 (design direction):** shorten the movement, especially the walk to Bình Than; add an exchange scene where Quốc Toản asks to join the meeting and is refused, then crushes the orange, to show his spirit and character. game-art-content proposes the scene and script (TASK-016); Luan approves before the build. |
 | 2026-11-14 | **D-24 (beat 1, Bình Than):** age **15** (born 1267); line approved: "Vua Trần họp các vương hầu và trăm quan ở bến Bình Than để bàn việc đánh giặc." (Toàn thư); card title "Khi các vương hầu họp bàn ở Bình Than" (one line; "hội nghị" dropped to fit). Wording approved by Luan; in the data C04 and C13 stay `pending` until a Toàn thư page and a source for 1267 are checked (rule R5). |
 | 2026-11-14 | **D-19: ADR-0002 accepted, minimum iOS 17 kept.** One 1.5× art set, ≤2048² images, 1440×1320 background tiles with a gradient sky band, per-step loading, ≤64 MB image memory at any moment, ≤60 MB download. Frame-rate and iOS-memory measurements follow on real devices. |
