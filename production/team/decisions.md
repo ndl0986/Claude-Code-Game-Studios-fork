@@ -11,6 +11,28 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-10 A "Special" (banner) move in combat
+
+- **Flow:** combat GDD (`design/gdd/side-scroll-combat.md`, rule 16) → a 4th button, the banner
+  ("Cờ / Banner") → both apps. It ties combat to the six-word banner story (C08).
+- **What it does (proposed):** a tap raises the banner and pushes nearby enemies back
+  (`special_push` 170 px), then a 6 s cooldown. No damage, no violence.
+- **Steps it affects:** a 4th thumb pad on screen (crowding on small phones), a new hint step,
+  new art and sound, two tuning keys.
+- **Options:** A. add it in the slice (with D-08 C or B) · B. add it later, with the training beat
+  (D-08 B) · C. no Special in combat; the banner stays a story/training moment only.
+- **Recommendation:** B. Keep the slice to three pads; bring the banner move in with the training
+  beat that teaches it.
+- **Status:** Open. Raised by game-art-content (TASK-008).
+
+### D-09 Two new tuning keys and two content checks (for the devs)
+
+- **Flow:** combat GDD → `content/data/tuning.json` (game-dev-android edits) → both apps.
+- **What:** 14 of the GDD's proposed keys already exist (TASK-005b); the GDD switches to those
+  names. New: `special_push` 170 px, `special_cooldown` 6 s; checks: fail if
+  `attack_range < enemy_reach − stand_gap`, warn if `telegraph < 0.8 s`.
+- **Status:** Open (the two devs + game-art-content agree; Luan only if they disagree).
+
 ### D-08 Vertical-slice beat set for Trần Quốc Toản
 
 - **Flow:** TASK-008 mission-flow GDD defines 5 beat types → content `mission.json` → TASK-006/007
