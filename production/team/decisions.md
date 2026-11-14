@@ -58,6 +58,7 @@ it) · **Decided** (Luan's call, with the date).
 - **Team fix either way:** the pad shows a fist/orange icon on this beat, and the goal is reworded
   ("Nắm chặt quả cam!").
 - **Recommendation:** A, worded so it stays true to C06 ("he was so upset he didn't notice").
+- **Related small call (TASK-020 W21):** should the Bình Than dialogue beat end without the cheer pose and cheer sound (a quiet page turn instead)? The team recommends **yes**: a solemn meeting isn't a victory. Answer with D-34.
 - **Status:** Open.
 
 ### D-35 Concept wording on ads and purchases (TASK-020 A13)
