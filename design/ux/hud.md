@@ -117,8 +117,17 @@ the king's meeting at Bình Than!", 688 px).
   `side-scroll-combat-assets.md`): the enemy's weapon tip reaches `enemy_reach − stand_gap` =
   **140** world px in front of it, and the hero's swing arc reaches `attack_range` = **175**, so
   a strike that lands looks like it lands. Only bodies shrink to spec height.
-- **Only weapons, the pennant and the banner pole may pass behind the bar** (a raised staff, a
-  spear tip, the training-finish banner pole). Bodies, heads and faces never do.
+- **Only weapons and the pennant may pass behind the bar** (a raised staff, a spear tip).
+  Bodies, heads and faces never do, and neither do the goal flag or the hero's banner (below).
+- **Flags and banners sit wholly below the bar** (r8d, leader's call). On banner beats, every
+  pixel of each, pole top and cloth included, is at **y ≥ bar bottom + 8 (276 world px)**, as the
+  "!" bubble and the stuck arrow are:
+  - **Goal flag** (ASSET-303, reach-the-flag): box **y 290–470**, 180 tall, pole top 290, foot
+    on `ground_y` 470, on both apps. Off banner beats it keeps its normal size.
+  - **The banner the hero raises at the end of training** (ASSET-305): on banner beats it is
+    **held lower, beside the hero**, at its usual size (**110** tall), with its top ≥ 276. It
+    is never lifted overhead into the bar.
+  - Render-only: the flag's x, the reach trigger and the training finish don't change.
 - **Z-order** (bottom to top): play layers (background, fighters, props) → **banner bar** →
   pops → hints, the telegraph "!" bubble and the hurt swirl (ASSET-212) → HUD buttons.
 - **Nothing straddles the bar** (QC r6, for r8). On a banner beat, the "!" bubble (ASSET-208)
@@ -262,3 +271,4 @@ insets; iOS home indicator, notch or Dynamic Island. Rounded corners wait for TA
 15. **GIVEN** each theme (village, bamboo, river, camp), **WHEN** "Ối!/Oof!", "Đỡ được!/Blocked!" and a hit pop are captured over the sky band and over the mid layer (e.g. the mint mountains), **THEN** each pop has an outline (ink on light skies, cream on the camp) and measures ≥ 3:1 fill-to-outline and outline-to-background.
 16. **GIVEN** the banner bar in VI and EN, **WHEN** captured, **THEN** the gold text has an ink outline ≥ 2 px and the measured contrast is ≥ 3:1 at the text edge (target 3.18:1 outline-to-vermilion, 8.67:1 gold-to-outline).
 17. **GIVEN** a training beat and a reach-the-flag encounter (banner beats), **WHEN** an enemy winds up and, separately, the stuck arrow shows over a dummy, an enemy and the flag, **THEN** no pixel of the "!" bubble or the arrow is in the bar's band or straddles its edge (all at y ≥ bar bottom + 8); the "!" sits beside the head, away from the hero (or on the hero's side at a screen edge); the arrow is gold with an ink outline, never red.
+18. **GIVEN** each reach-the-flag beat (banner beat) in VI and EN, on the iOS QC phone (k 0.517), an Android AVD (k 0.488) and at k 0.40, **WHEN** the flag is on screen (walking up to it, the stuck arrow pointing at it, and the frame the reach triggers), **THEN** every pixel of the flag (pole top and cloth) is at y ≥ 276 (bar bottom + 8) and its box is y 290–470 (foot on `ground_y` 470). **GIVEN** a training beat, **WHEN** the hero raises the banner at the finish and the frames are stepped through, **THEN** the banner is held beside the hero, 110 tall, and every pixel of it is at y ≥ 276 in every frame. **GIVEN** a beat without the bar, **WHEN** the flag shows, **THEN** it keeps its normal size.
