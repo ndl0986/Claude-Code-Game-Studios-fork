@@ -379,11 +379,10 @@ Criteria 1–9, 13–15 and 17–21 are logic (unit tests on the input layer); 1
     **GIVEN** a single press at 0.2 s, **WHEN** the next press comes at 0.79 s, **THEN** it is dropped,
     and **WHEN** it comes at 0.80 s instead, **THEN** it is accepted (the rolling window,
     `lock_end` = 0.2 + 0.6).
-21. **GIVEN** the AC17 trace continued (Attack every 0.35 s until 3.5 s), **WHEN** ending box 2 appears
-    at 1.75 s, **THEN** the presses at 2.10, 2.45, 2.80, 3.15 and 3.50 s are dropped and box 2 holds
-    until 3.25 s (1.75 + `screen_enter_lock_max`), i.e. ≥ 1.5 s; the next press after 3.25 s starts the
-    quiz. **GIVEN** the mash stops after 2.10 s, **THEN** box 2 holds until 2.70 s (the 0.6 s quiet
-    window) and the next tap advances.
+21. **GIVEN** the ending (2 boxes) and Next pressed every 0.35 s from its entry, **WHEN** the presses run
+    on, **THEN** presses at +0.35 … +1.40 are dropped and +1.75 shows box 2; presses at +2.10 … +3.15
+    are dropped and +3.50 starts the quiz. Each box is on screen ≥ `screen_enter_lock_max` (1.5 s), and
+    every dropped press is dropped, not queued.
 
 ## Open Questions
 
