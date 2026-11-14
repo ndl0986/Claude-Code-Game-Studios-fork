@@ -16,7 +16,7 @@
 | **Modal card** | Skip warning, pause menu | Dims the screen it came from; the default action is the biggest, right or top; no red | Mission flow Rule 15; pause.md |
 | **Hint hand / pulse / arrow** | Teaching and stuck help | Wordless, ≤ 3 Hz, never takes touches | Hints GDD |
 | **Tap vs drag** | Map, timeline column | A move over 10 pt is a drag and never activates | Input Rule 16 |
-| **Clear-all** | Pause, background, focus loss, cancel | Every pad released, every press cancelled | Input Rule 11 |
+| **Clear-all** | Pointer cancel, focus loss, pause, background, audio route change or interruption, **only** | Every pad released, every press cancelled. A screen or beat change does **not** clear held pads; it only cancels a pressed **menu** button | Input Rule 11; Input edge cases |
 
 **Animation standards:** a press squash of 4% in the next frame; a page slide of 0.1–0.15 s;
 pulses ≤ 3 Hz; reveals ≤ 3 s.
