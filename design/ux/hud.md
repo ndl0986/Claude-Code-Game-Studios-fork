@@ -77,7 +77,7 @@ iOS's home-indicator inset (QC r3 O5: pad bottoms clear of the gesture zone).
 | `walk_to` | ◀ ▶ only | Dots, goal hidden |
 | walk beat | ◀ ▶ | Goal |
 | hold-meter | special, fist icon (with ring) | Goal; the hold hand on first view |
-| training | **per step** (Mission flow Rule 7c): dummies ◀ ▶ + attack; blocks + defend; finish + special (banner icon). *Today both apps show all four from the start; a dev ticket (TASK-020 W12)* | Checklist icons; hints in step order (B3); **camera locked** over the training area until `beat_end` (Combat Rule 15b) |
+| training | **per step** (Mission flow Rule 7c): dummies ◀ ▶ + attack; blocks + defend; finish + special (banner icon). *Today both apps show all four from the start; a dev ticket (TASK-020 W12)* | Checklist icons; hints in step order (B3); **camera capped** at `xStart − hero_edge_margin` until `beat_end` (Combat Rule 15b) |
 | fight / encounter | ◀ ▶, attack, defend | Telegraph |
 | reach-the-flag (no encounter) | ◀ ▶ (attack, defend if listed) | Flag goal |
 | story, dialogue screens | **none** | Pause and sound, top-left (Input Rule 3). A pad held when the screen opened gives no input and is not released (Input Rule 14) |

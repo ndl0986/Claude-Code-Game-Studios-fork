@@ -125,9 +125,13 @@ it always ends at the quiz and then the map.
       - finish (if `finish_special`): move, attack, defend and special.
       A pad appears at the start of the step that first uses it, and its teach hint follows
       (Hints Rule 3). `buttons` must still list every pad used (R13).
-    - **Training locks the camera** (Combat Rule 15b): from `beat_play` start to `beat_end` the
-      camera holds over the training area and the hero stays inside the fight-zone bounds, so a
-      child holding ▶ can't walk past the dummies and softlock the beat.
+    - **Training caps the camera** (Combat Rule 15b): from `beat_play` start to `beat_end` the
+      camera follows right only up to `xStart − hero_edge_margin`, and the hero is held inside the
+      zone, so a child holding ▶ can't walk past the dummies and softlock the beat.
+    - **Validation R14b** (proposed contract rule, a dev ticket): on a training beat,
+      `dummies × dummy_spacing ≤ W − enemy_reach − 2 × hero_edge_margin` (990 with today's
+      tuning), so the last dummy lies inside the zone. It's a rule, not a schema cap, because
+      `dummy_spacing` is tunable. TQT: 3 × 300 = 900 passes.
     - **Who reports the goal:** Mission flow owns training's step logic and emits its goal-met
       event. Combat runs the dummies and the partner and reports hits and blocks (TASK-020 A5).
     - **The special pad's icon is set per beat type** (TASK-020 W17, A3): hold-meter shows a
@@ -622,6 +626,9 @@ the Bình Than exchange):
     happened while the dialogue showed.
 30. **GIVEN** a non-fight beat with `cheer: false`, **WHEN** it ends, **THEN** no cheer pose or
     `sfx_beat_end_cheer` plays, the page-turn sound plays, and the progress dot fills.
+31. **GIVEN** a training beat with dummies 4 and `dummy_spacing` 300 (1200 > 990), **WHEN**
+    content is validated, **THEN** it fails R14b; **GIVEN** the TQT training (3 × 300 = 900),
+    **THEN** it passes.
 
 ## Open Questions
 

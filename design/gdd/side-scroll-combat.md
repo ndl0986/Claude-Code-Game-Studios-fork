@@ -122,16 +122,22 @@ Combat is how a child takes part in the story's battle moments.
       stand_gap` away) is then always on screen, on either side. These bounds are derived, so
       there's no new tuning key.
     - Outside locked fights, the bounds are `hero_edge_margin` from the left edge only, as before.
-15b. **Locked training** (TASK-020a; iOS QC r3, confirmed on Android by a bot test). At a
-    `training` beat's `beat_play` start, the camera locks over the training area like a fight
-    zone, and stays locked through the dummies, blocks and finish steps until `beat_end`:
-    - `extent = (dummies + 1) × dummy_spacing` (Mission flow F5);
-      `lockX = max(camera, xStart + extent / 2 − W / 2)`, so the camera never moves left;
-    - the hero is clamped to the same fight-zone bounds as Rule 15:
-      [`lockX + enemy_reach + hero_edge_margin`, `lockX + W − enemy_reach − hero_edge_margin`].
-    - **Worked example (TQT, dummies 3, `dummy_spacing` 300, W 1280):** extent 1200, lockX =
-      xStart − 40, bounds xStart + 180 … xStart + 1020. The dummies at xStart + 300, 600, 900 and
-      the partner are all on screen.
+15b. **Capped camera in training** (TASK-020a; iOS QC r3, confirmed on Android by a bot test;
+    game-dev-android's review). From a `training` beat's `beat_play` start until `beat_end`
+    (through the dummies, blocks and finish steps), the camera keeps following right as in Rule
+    14, but **never goes past a cap**:
+    - `lockX = max(camera, xStart − hero_edge_margin)`, fixed at `beat_play` start; the camera
+      is `min(follow, lockX)` and still never moves left;
+    - the hero's right limit is `lockX + W − enemy_reach − hero_edge_margin`; the left limit
+      stays `camera + hero_edge_margin` (Rule 14);
+    - no jump and no snap: the camera only stops following, and the hero is only stopped, never
+      moved. No new tuning key.
+    - **Worked example (TQT, `tuning.json` defaults: W 1280, `hero_edge_margin` 70,
+      `enemy_reach` 150, `camera_follow_offset` 460):** lockX = xStart − 70. The camera reaches
+      it when the hero is at xStart + 390, then stops. The hero is limited to xStart … xStart +
+      990. The dummies at xStart + 300, 600, 900 are inside, and the partner stays on screen.
+    - **Data guard (R14b, Mission flow Rule 7c):** `dummies × dummy_spacing ≤ W − enemy_reach −
+      2 × hero_edge_margin` (990 today), so the last dummy is always inside the zone.
     - Why: under free scroll a child holding ▶ walked past the dummies; the camera never scrolls
       left, so after about 3 s of ▶ the first dummy was unreachable and after 5 s none were, and
       training could never end (a softlock on both apps).
@@ -167,7 +173,7 @@ same-frame edge cases below depend on it.
 5. Move the hero (× `attack_move_mul` while swinging; no move while defending). **While a swing
    is active, movement doesn't change facing** (Rule 2, 2b).
 6. Clamp the hero (**to the fight-zone bounds while locked**, Rules 15, 15b) and set the camera (locked
-   during a fight, a training beat and a caption; otherwise
+   during a fight and a caption; capped in training, Rule 15b; otherwise
    `camera = max(camera, hero.x − camera_follow_offset)`).
 7. Start the beat once the hero passes `beatX(i)` (Mission flow F5: each beat's start adds the
    previous beat's extent plus `beat_gap`, not `i × beat_gap`).
@@ -352,9 +358,9 @@ blocks, and defend pressed and released earlier in the windup does not. The habi
   enemy can miss.
 - **If a swing hits the last enemy and another is still queued**: the queued enemy spawns
   after `spawn_gap`. The fight ends only when the queue is empty and the screen is clear.
-- **If a child holds ▶ from the start of training**: the camera is locked (Rule 15b), so the
-  hero stops at xStart + 1020 (TQT) with every dummy and the partner still on screen and
-  reachable by walking back left.
+- **If a child holds ▶ from the start of training**: the camera follows until its cap
+  (Rule 15b), then stops; the hero stops at xStart + 990 (TQT) with every dummy and the partner
+  still on screen and reachable by walking back left.
 - **If the hero is pushed into the locked-camera edge**: the position is clamped at
   `hero_edge_margin`, and the push stops there. No damage.
 - **If knock-back pushes an enemy off-screen** (not fleeing): it walks back from where it is.
@@ -495,8 +501,9 @@ Mission flow's screens.
     core, **THEN** each finishes the beat in **≤ 60 s** (measured: Android 31–39 s, iOS 34–47 s).
 
 24. **GIVEN** the Trần Quốc Toản training beat with `tuning.json` defaults, **WHEN** ▶ is held for
-    5 s from `beat_play` start, **THEN** the camera is at lockX = xStart − 40 and hasn't moved, the
-    hero's x never exceeds xStart + 1020, every dummy is still reachable, and a scripted run then
+    5 s from `beat_play` start, **THEN** the camera is never beyond xStart − 70 and never
+    moves more than one frame's follow step at a time (no jump), the hero's x never exceeds
+    xStart + 990 and never snaps, every dummy is still reachable, and a scripted run then
     completes training (3 hits, 3 blocks, special).
 
 Logic criteria 1–11 and 15–24 need automated unit tests that follow the frame order. Feel
