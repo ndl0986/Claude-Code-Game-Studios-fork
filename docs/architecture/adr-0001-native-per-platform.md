@@ -1,7 +1,7 @@
 # ADR-0001: Native per platform: Swift for iOS, Kotlin for Android; Godot shelved
 
 ## Status
-Proposed
+Accepted (Luan, 2026-11-14)
 
 ## Date
 2026-11-14
@@ -40,7 +40,7 @@ shelved.
 |-------|-------|
 | **Depends On** | None |
 | **Enables** | Save-data ADR (stars and unlocks on the device); the content pipeline / pictures registry ADR; a later shared-logic ADR (e.g. Kotlin Multiplatform) if it is ever needed |
-| **Blocks** | TASK-006 (iOS first mission), TASK-007 (Android first mission). Per `docs/CLAUDE.md`, stories citing this ADR stay blocked until Luan accepts it. |
+| **Blocks** | TASK-006 (iOS first mission), TASK-007 (Android first mission). Accepted by Luan on 2026-11-14, so stories citing it are not blocked by it. |
 | **Ordering Note** | Supersedes the Godot pin from TASK-002 (`setup/TASK-002-engine-godot`, kept and not merged). |
 
 ## Context
