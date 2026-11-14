@@ -29,7 +29,7 @@ r10 (partner placement, AC32–34), r11 (ending pole, AC7/AC10 at rest, slice lo
 ### Resume steps
 
 1. Start the sessions (`tools/team/start-*.sh`), `ListAgents`, tell each member "resume".
-2. game-qc-ios: re-run iOS r8 QC from the start on E9F515E9. DiagnosticReports was cleared
+2. game-qc-ios: re-run iOS r8 QC on E9F515E9 (full UI suite again — the xcresult was lost; manual checks already done are in qa/TASK-006-ios-r8 @ eab7678 results.md). DiagnosticReports was cleared
    2026-11-15 (122 reports) to fix the ~300 s XCTest teardown — check per-case durations; if it is
    still slow, restart the Mac between QC rounds.
 3. After iOS r8 reports: game-dev-ios compiles r9, screen pass, full suite, Release byte check,
@@ -53,7 +53,7 @@ r10 (partner placement, AC32–34), r11 (ending pole, AC7/AC10 at rest, slice lo
 | repo root (leader) | docs/vn-history-game-plan | (this commit) |
 | game-dev-001 | feat/TASK-006-ios-native | 70f2cd1 (r9 app side wip, not compiled) |
 | game-dev-002 | setup/TASK-007-android-kotlin | e24855a (r12, carries trace 1.3) |
-| game-qc-ios | qa/TASK-006-ios-r8 | PENDING (r8 QC incomplete) |
+| game-qc-ios | qa/TASK-006-ios-r8 | eab7678 (r8 QC INCOMPLETE: 10/14 UI cases passed, manual story/hint checks PASS on the 17e; not done: B1, R2-03, ◀→▶ slide, ▶ across a beat, 18 Pro quiz, day-sky pop, real-run medal, 0.6 s tap) |
 | game-qc-android | qa/TASK-007-android-r11 | 4321a86 |
 | game-art-content | design/r11-ending-pole-ac7 (merged) | be1d08d |
 | (backup) | setup/TASK-002-engine-godot-local | 82c016e (old Godot setup, diverged; origin/setup/TASK-002-engine-godot left as is) |
