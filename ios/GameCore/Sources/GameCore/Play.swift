@@ -154,8 +154,8 @@ public struct PlayState: Sendable {
         }
     }
 
-    /// The beat card's boxes: title, the scene lines, then the goal.
-    public var cardTexts: [Text] { guard let b = currentBeat else { return [] }; return [b.title] + b.scene + [b.goal] }
+    /// The beat card's boxes: the scene lines, then the goal (the title is the card's header; parity with Android).
+    public var cardTexts: [Text] { guard let b = currentBeat else { return [] }; return b.scene + [b.goal] }
     /// The hold meter, 0…1 (F3).
     public var meter: Double { guard let h = currentBeat?.params.holdSeconds, h > 0 else { return 0 }; return min(1, heldTotal / h) }
     /// The flag of a reach-the-flag beat.
@@ -211,8 +211,8 @@ public struct PlayState: Sendable {
     /// The friendly practice partner stands in front of the hero, facing him (parity item 4).
     mutating func spawnPartner() {
         let x = hero.x + hero.face * (tuning["enemy_reach"] - tuning["stand_gap"])
-        partner = Enemy(id: -1, kind: .spear, x: x, face: -hero.face, state: .approach)
-        partner!.moving = false
+        // starts resting so its first windup comes approach_min_time later (parity with Android)
+        partner = Enemy(id: -1, kind: .spear, x: x, face: -hero.face, state: .rest, t: tuning["enemy_rest"] - tuning["approach_min_time"], hits: 0, kb: 0, moving: false)
     }
 
     mutating func spawn(_ q: (kind: FightParams.Kind, left: Bool)) {
@@ -314,7 +314,7 @@ public struct PlayState: Sendable {
                 if !locked, let enc = b.params.encounters, encounterIndex < enc.count,
                    hero.x >= xStart + enc[encounterIndex].atScreen * 1280 {
                     let e = enc[encounterIndex]
-                    lock(at: hero.x, e.enemies, e.maxActive, e.fromLeft)
+                    lock(at: xStart + e.atScreen * 1280, e.enemies, e.maxActive, e.fromLeft) // trigger x − lock_offset exactly
                 }
                 if locked {
                     fightStep(dt)
@@ -365,12 +365,14 @@ public struct PlayState: Sendable {
             guard var p = partner else { spawnPartner(); return }
             p.t += dt
             if p.kb != 0 { let m = p.kb * min(1, dt / tuning["kb_decay"]); p.x += m; p.kb -= m; if abs(p.kb) < 2 { p.kb = 0 } }
+            let pside = Self.sign(p.x - hero.x) == 0 ? 1 : Self.sign(p.x - hero.x)
+            p.face = -pside
             switch p.state {
-            case .approach, .enter:
-                if p.t > tuning["approach_min_time"] {
+            case .rest:
+                if p.t >= tuning["enemy_rest"] {
                     // it steps back in front of the hero at each windup start
-                    p.x = hero.x + hero.face * (tuning["enemy_reach"] - tuning["stand_gap"])
-                    p.face = -hero.face; p.state = .windup; p.t = 0; tut.windupSeen = true
+                    p.x = hero.x + pside * (tuning["enemy_reach"] - tuning["stand_gap"])
+                    p.state = .windup; p.t = 0; tut.windupSeen = true
                 }
             case .windup:
                 if p.t >= tuning["telegraph"] { // no leader multiplier
@@ -391,8 +393,7 @@ public struct PlayState: Sendable {
                     }
                 }
             case .strike: if p.t >= tuning["strike_time"] { p.state = .rest; p.t = 0 }
-            case .rest: if p.t >= tuning["enemy_rest"] { p.state = .approach; p.t = tuning["approach_min_time"] }
-            default: break
+            default: p.state = .rest; p.t = 0
             }
             partner = p
             if blocksDone >= (currentBeat?.params.blocks ?? 0) { advanceTraining() }
@@ -568,6 +569,8 @@ public struct PlayState: Sendable {
         guard stalled, locked else { return nil }
         return enemies.filter { $0.state != .flee }.min { abs($0.x - hero.x) < abs($1.x - hero.x) }
     }
+    /// Training stuck on the dummies: an arrow over the next one (parity with Android).
+    public var stallDummyX: Double? { stalled && trainingStage == .dummies ? dummies.first { !$0.hit }?.x : nil }
     public var flagArrow: Bool { flagX != nil && !locked && idle > tuning["hint_delay"] && (flagX! - cam) < 1280 }
     public enum HandHint: Sendable { case right, attack, defend, special, holdSpecial }
     /// One teach hand at a time: move > attack > defend > special (hold hand until the meter passes 25%).
@@ -577,7 +580,7 @@ public struct PlayState: Sendable {
         if tut.enemySeen && !tut.hit && phase == .beatPlay && (locked || trainingStage == .dummies) { return .attack }
         let windup = enemies.contains { $0.state == .windup } || partner?.state == .windup
         if tut.windupSeen && !tut.blocked && windup { return .defend }
-        if phase == .beatPlay, currentBeat?.type == "hold-meter", meter <= 0.25 { return .holdSpecial }
+        if phase == .beatPlay, currentBeat?.type == "hold-meter", meter <= 0.25 || stalled { return .holdSpecial } // and again when stuck
         if phase == .beatPlay, trainingStage == .special, !specialUsed { return .special }
         return nil
     }

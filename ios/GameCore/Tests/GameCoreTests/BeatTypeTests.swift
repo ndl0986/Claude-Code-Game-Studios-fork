@@ -22,7 +22,7 @@ final class BeatTypeTests: XCTestCase {
         while p.phase == .walkTo { p.update(dt, StepInput(held: [.right])) }
         XCTAssertEqual(p.phase, .beatCard)
         XCTAssertEqual(p.visiblePads, [], "story boxes: no pads")
-        XCTAssertEqual(p.cardTexts.count, 2 + hero.mission.beats[0].scene.count, "title, scene lines, goal")
+        XCTAssertEqual(p.cardTexts.count, 1 + hero.mission.beats[0].scene.count, "scene lines, then the goal (title is the header)")
         for _ in p.cardTexts { p.cardNext() }
         XCTAssertEqual(p.phase, .beatPlay)
         XCTAssertEqual(p.visiblePads, [.left, .right], "exactly the beat's buttons (AC3)")
@@ -201,5 +201,26 @@ final class SkipAndProgressTests: XCTestCase {
         XCTAssertTrue(pr.isOpen("sample", q), "seen open never re-locks")
         let hidden = Progression(heroes: c.heroes) { $0.mission.hero.id != "tran-quoc-toan" }
         XCTAssertTrue(hidden.isOpen("sample", Progress()), "unplayable heroes are skipped")
+    }
+}
+
+/// Parity with Android (delta review of 00f402d).
+final class ParityTests: XCTestCase {
+    let dt = 1.0 / 60
+    func test_partner_first_windup_after_approach_min_time_and_encounter_lock_at_exact_trigger() throws {
+        let c = try ContentSet.load(dataRoot: Repo.data)
+        let hero = realHero(c)
+        var p = PlayState(tuning: c.tuning, beats: hero.mission.beats, seed: 1)
+        p.debugJump(beat: 2, stage: "blocks")
+        XCTAssertEqual(p.partner?.state, .rest)
+        var steps = 0
+        while p.partner?.state != .windup { p.update(dt, StepInput()); steps += 1 }
+        XCTAssertEqual(Double(steps) * dt, c.tuning["approach_min_time"], accuracy: dt)
+
+        var r = PlayState(tuning: c.tuning, beats: hero.mission.beats, seed: 1)
+        r.debugJump(beat: 3, stage: nil)
+        let trigger = r.xStart + hero.mission.beats[3].params.encounters![0].atScreen * 1280
+        while !r.locked { r.update(dt, StepInput(held: [.right])) }
+        XCTAssertEqual(r.lockX, trigger - c.tuning["lock_offset"])
     }
 }

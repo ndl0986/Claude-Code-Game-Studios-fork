@@ -83,14 +83,19 @@ enum Font {
            let n = descs.first.flatMap({ CTFontDescriptorCopyAttribute($0, kCTFontNameAttribute) as? String }) { name = n }
     }
 
+    /// Nunito at weight 800 (the prototype's): set the variable font's 'wght' axis directly.
+    static func heavy(_ size: Double) -> UIFont {
+        guard let base = UIFont(name: name, size: size) else { return .systemFont(ofSize: size, weight: .heavy) }
+        let wght = 0x7767_6874 // 'wght'
+        let desc = base.fontDescriptor.addingAttributes([UIFontDescriptor.AttributeName(rawValue: kCTFontVariationAttribute as String): [wght: 800]])
+        return UIFont(descriptor: desc, size: size)
+    }
+
     static func label(_ s: String, _ size: Double, _ c: SKColor, width: Double? = nil, align: SKLabelHorizontalAlignmentMode = .center) -> SKLabelNode {
         let l = SKLabelNode(fontNamed: name)
         let style = NSMutableParagraphStyle()
         style.alignment = align == .left ? .left : (align == .right ? .right : .center)
-        let font = UIFont(name: name, size: size).map { f -> UIFont in
-            // the variable font's heavy instance, like the prototype's weight 800
-            UIFont(descriptor: f.fontDescriptor.addingAttributes([.traits: [UIFontDescriptor.TraitKey.weight: UIFont.Weight.heavy]]), size: size)
-        } ?? .systemFont(ofSize: size, weight: .heavy)
+        let font = heavy(size)
         l.attributedText = NSAttributedString(string: s, attributes: [.font: font, .foregroundColor: c, .paragraphStyle: style])
         l.numberOfLines = 0
         if let w = width { l.preferredMaxLayoutWidth = w; l.lineBreakMode = .byWordWrapping }

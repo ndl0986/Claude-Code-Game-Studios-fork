@@ -213,10 +213,12 @@ final class GameScene: SKScene {
             let s = D.star(q.r, color(q.color), C.goldDark); s.position = D.p(q.x, q.y); s.zRotation = -q.rot; fx.addChild(s)
         }
         for q in p.pops {
-            let l = Font.label(game.ui(q.key), 40, color(q.color)); l.position = D.p(q.x, q.y); l.alpha = min(1, q.life * 2); fx.addChild(l)
+            // keep pops below the HUD row (pause, sound, beat dots): Ối! never covers the pause button
+            let l = Font.label(game.ui(q.key), 40, color(q.color)); l.position = D.p(q.x, max(q.y, 200)); l.alpha = min(1, q.life * 2); fx.addChild(l)
         }
         worldHints.removeAllChildren()
         if let e = p.stallTarget { let a = arrowDown(); a.position = D.p(e.x, ground - 330 + sin(t * 8) * 10); worldHints.addChild(a) }
+        if let dx = p.stallDummyX { let a = arrowDown(); a.position = D.p(dx, ground - 260 + sin(t * 8) * 10); worldHints.addChild(a) }
         if p.flagArrow, let fx = p.flagX { let a = arrowDown(); a.position = D.p(fx, ground - 360 + sin(t * 8) * 10); worldHints.addChild(a) }
     }
 
@@ -408,7 +410,7 @@ final class GameScene: SKScene {
             let texts = p.cardTexts
             add(D.rr(-480, -150, 960, 300, 36, C.panel, C.gold, 6), 640, 290)
             for x in [230.0, 1050] { add(D.drum(44, SKColor(hex: 0xf2b632, alpha: 0.8)), x, 210) }
-            add(Font.label("\(game.ui("ui.play.beat")) \(p.beat + 1)", 30, C.gold), 640, 190)
+            add(Font.label("\(game.ui("ui.play.beat")) \(p.beat + 1) · \(p.beats[p.beat].title.text(game.lang))", 30, C.gold, width: 760), 640, 190)
             textBox(texts[min(p.cardLine, texts.count - 1)], 640, 285, 760, 40, .white)
             button(game.ui("ui.btn.next"), 640 - 150, 470, 300, 110, "next", pulse: true)
             return

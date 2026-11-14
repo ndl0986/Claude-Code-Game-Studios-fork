@@ -275,6 +275,7 @@ public final class Game {
     // MARK: debug screen jumps (same names as Android: -startScreen quiz -q 2 -stage wrong|right)
 
     public func debugStart(screen name: String, q: Int?, beat: Int?, stage: String?, stars s: Int?) {
+        if name == "skipwarn" { debugStart(screen: "intro", q: q, beat: beat, stage: "skipwarning", stars: s); return } // Android's name
         guard isDebug, let target = Screen(rawValue: name) ?? (name == "caption" ? .play : nil) else { return }
         reset()
         switch target {
