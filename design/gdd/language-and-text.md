@@ -49,9 +49,21 @@ on a screen (each UX spec), or voice-over (Audio & voice-over).
 5. **One font.** Nunito (SIL OFL 1.1, `content/data/fonts/nunito.ttf`, licence beside it), two
    weights (regular, bold). It must render every Vietnamese character, including stacked marks
    (Ặ Ỗ Ữ ẫ ợ ệ ằ) and both tone-mark placements (khoá/khóa), with no clipped diacritics.
-6. **Sizes** (art bible §7, three sizes): title, body and button. Body is never smaller than
-   `text_min_pt` (proposed 18 pt equivalent on a 5.5″ phone ⟨confirm in UX⟩). Text **never
-   shrinks to fit**: a line that doesn't fit is a content error caught by validation (Rule 8).
+6. **Sizes** (art bible §7, three sizes: title, body, button), in **world px at the fitted
+   scale** (k ≈ 1.28 on a 20:9 phone):
+   - **Body text** is never below `text_min_body` = **37 world px** (about 18 dp). It covers story
+     boxes, goal, dialog, quiz prompt, quiz why and **quiz choices**.
+   - **Labels that sit under or beside an icon or picture** are never below
+     `text_min_label` = **28 world px**. They cover pad labels, counters ("Câu 2/5") and the
+     map-stub line. The icon carries the meaning, so the label is a secondary cue.
+   - Today's sizes that must rise: quiz choices 32 → 37, pad labels 24 → 28, map-stub 26 → 28
+     (the quiz counter at 28 is fine). `/ux-design` sets the exact size per screen, at or above
+     these minimums.
+   - Text **never shrinks to fit**: a line that doesn't fit is a content error caught by
+     validation (R8c, F1).
+   - **Run-time safety net (leader's call):** if a line still overflows at run time, the app
+     may cut it with an ellipsis "…" rather than draw outside its box. Validation must catch it
+     first, so an ellipsis in a shipped build is a **bug**.
 7. **Line height.** At least 1.35 × the font size, so stacked Vietnamese marks never touch the
    line above.
 8. **Length limits, both languages.**
@@ -101,21 +113,26 @@ on a screen (each UX spec), or voice-over (Audio & voice-over).
 
 The F1 (line fit) formula is defined as:
 
-`lines = ceil(text_width / box_width)`, where `text_width ≈ chars × glyph_w × font_px`; a field passes if `lines ≤ max_lines(field)` in **both** languages.
+`lines = greedy_wrap(text, box_width / (1 + kern), font_px)`, where each word's width is the **sum of Nunito's real advance widths** (from the TTF's `cmap` and `hmtx`, scaled by `font_px / unitsPerEm`). Words go on the current line while they fit; otherwise they start a new line. A field **passes** if `lines ≤ max_lines(field)` in **both** VI and EN. An overflow **fails validation (R8c)**.
+
+This is the check both apps' content tests run. It's deterministic: the same font file and the same numbers give the same result on both platforms.
 
 **Variables:**
 | Variable | Type | Range | Source | Description |
 |----------|------|-------|--------|-------------|
-| chars | int | 1–120 | content | Characters in the line (NFC) |
-| glyph_w | float (em) | ≈ 0.52–0.58 | constant (Nunito average advance; measure) | Average glyph width |
-| font_px | float | per size | UX spec / art bible §7 | Font size in pixels at the target scale |
-| box_width | float (px) | per field | UX spec | Text box width |
-| max_lines | int | 1–3 | data (Rule 8 table, proposed in `rules.json`) | Allowed lines |
+| text | string | 1–120 chars | content (NFC) | The line, in each language |
+| advance(g) | int (font units) | from the TTF | data file (`content/data/fonts/nunito.ttf`, `hmtx`) | Real width of each glyph |
+| font_px | float (world px at 1×) | ≥ `text_min_*` | data file (`rules.json`, per field type; proposed) | Font size |
+| box_width | float (world px at 1×) | per field type | data file (`rules.json`, per field type; proposed) | Text box width |
+| kern | float | 0.03 | constant | Allowance for kerning and shaping differences |
+| max_lines | int | 1–3 | data file (`rules.json`, per field type; proposed, Rule 8 table) | Allowed lines |
 
-**Output Range:** an integer ≥ 1. Budgets in `rules.json` are set so that a budget-length line
-fits `max_lines` at the body size. F1 is the check the UX spec uses to size boxes.
-**Example:** a story box 1600 px wide at 1.5× with body 40 px: 0.55 × 40 = 22 px per glyph, so
-about 72 characters per line. A 120-character line takes 2 lines, within story box max 2.
+**Output Range:** an integer ≥ 1 per language. Words longer than a whole line (none exist in
+VI or EN game text) would also fail.
+**Example:** a story box with `box_width` 1000 world px and body 37 px. Nunito's average advance
+is ≈ 0.55 em, so about 20 px per glyph and, after the 3% allowance, about 48 characters per
+line. A 90-character VI line wraps to 2 lines, within story-box max 2. A 120-character line could
+need 3 and would fail R8c, so the writer shortens it.
 
 The F2 (VI budget) formula is defined as:
 
@@ -144,8 +161,10 @@ that would fail today is `ui.medal.missing` (VI 39). It is a sentence, so it sho
   first-launch picker (D-20), if accepted, is where a child picks English.
 - **If a glyph is missing from the font**: a debug build shows a visible tofu box and a test
   fails. A shared fixture string covers every Vietnamese letter with every tone mark (Rule 5).
-- **If text would overflow at a very small screen**: the UX spec sets the minimum supported
-  width. Layouts are tested on the narrowest supported phone (QC).
+- **If text would overflow at run time** (an unforeseen font or screen): it is cut with "…" as a
+  safety net (Rule 6). That is a bug to fix in content or layout, never a shipped behaviour.
+- **If a screen is narrower than designed**: the world is fitted by scale k, so world-px boxes
+  keep their line breaks. Layouts are tested on the narrowest supported phone (QC).
 
 ## Dependencies
 
@@ -198,7 +217,9 @@ Criteria 1–5 and 9 are logic and need unit tests or validation; 6–8 need QC 
    the new language.
 4. **GIVEN** content with a Text whose `en` is empty, **WHEN** validated, **THEN** validation fails.
 5. **GIVEN** an EN line over its field budget, **WHEN** validated, **THEN** validation fails (R8).
-   **GIVEN** D-21, the same holds for VI over `vi_budget`.
+   **GIVEN** D-21, the same holds for VI over `vi_budget`. **GIVEN** a line that wraps to more
+   than its field's `max_lines` with Nunito's real advances (F1), **THEN** validation fails (R8c),
+   with the same result on both apps.
 6. **GIVEN** the diacritic fixture string ("Ặ Ỗ Ữ ẫ ợ ệ ằ khoá khóa"), **WHEN** rendered at
    body size on both platforms, **THEN** no mark is clipped or overlaps the line above (screenshot).
 7. **GIVEN** every slice screen, **WHEN** captured in VI and EN on the narrowest supported phone,
@@ -213,4 +234,5 @@ Criteria 1–5 and 9 are logic and need unit tests or validation; 6–8 need QC 
 |---|---|---|---|
 | D-20 | First-launch language picker (Rule 3): add it, or keep "VI by default, switch on the title and pause"? | Luan | Before first release |
 | D-21 | VI budgets (`vi_budget` = 1.6 × EN, R8b) + `max_lines` per field in `rules.json`; retype `ui.medal.missing` as `dialog` | game-dev-ios + game-dev-android, game-art-content | Before the UX specs |
-| — | `text_min_pt`: confirm 18 pt equivalent on a 5.5″ phone in the `/ux-design` pass | game-art-content + ux | UX pass |
+| — | `box_width`, `font_px` and `max_lines` per field type in `rules.json`, plus R8c in both apps' content tests (with D-21) | game-dev-android (data branch), game-dev-ios reviews | Before the UX specs |
+| — | `/ux-design` sets per-screen sizes at or above `text_min_body` 37 and `text_min_label` 28 world px | game-art-content + ux | UX pass |

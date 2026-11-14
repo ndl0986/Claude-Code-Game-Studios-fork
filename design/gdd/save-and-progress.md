@@ -1,6 +1,6 @@
 # Save & Progress
 
-> **Status**: In Review
+> **Status**: Approved (peer review: game-dev-ios, 2026-11-14)
 > **Author**: game-art-content (Luan decides)
 > **Last Updated**: 2026-11-14
 > **Last Verified**: 2026-11-14
@@ -34,7 +34,7 @@ was played on.
 |---|---|---|---|
 | `save_version` | int | every write | Format version, for migration (Rule 8) |
 | `lang` | `vi` \| `en` | on a language switch (and the first-launch pick, if D-20) | Current language |
-| `sound` | bool | on the sound toggle | Sound on or off (Audio GDD) |
+| `sound` | bool | on the sound toggle | Sound on or off (Audio GDD). New for both apps; persisted once the D-04 ADR lands. Defaults: `lang = vi`, `sound = true` |
 | `completed.<hero_id>` | bool | quiz finish | Quiz finished at least once |
 | `seen_open.<hero_id>` | bool | title load, and quiz finish | Hero was open at least once |
 | `stars.<hero_id>` | int 1–3 | quiz finish | Best stars (F1) |
@@ -57,7 +57,8 @@ was played on.
 8. **Versioning.** `save_version` starts at 1. A newer app reading an older version migrates
    forward (the ADR defines the steps). An older app that finds a **newer** version starts fresh
    **in memory** and does **not** overwrite the file. This only happens if a child installs an
-   older build.
+   older build. **Read-only means no writes at all**, including `lang` and `sound`. Settings
+   changed in that session live in memory only.
 9. **Damaged or missing data.** If the save is missing, unreadable or fails validation (a wrong
    type, stars outside 1–3), start fresh: `lang = vi`, `sound = true`, no progress. Keep any
    individually valid key (e.g. a good `lang`) where the storage allows reading keys one by one.
@@ -72,7 +73,8 @@ was played on.
     - Platform device backups (iCloud or Google backup of app data) are the parent's own
       backups. Whether to opt out is a question for the ADR (D-22).
 12. **Reset.** There's no in-game reset in the slice. Deleting the app clears everything. A
-    parent-area reset (Settings & parent area, Full Vision) would clear every key except `lang`.
+    parent-area reset (Settings & parent area, Full Vision) would clear every key except `lang`
+   and `sound`.
 
 ### States and Transitions
 

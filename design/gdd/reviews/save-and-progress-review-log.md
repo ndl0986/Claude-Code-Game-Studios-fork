@@ -15,3 +15,6 @@ Reviewed-Content-Hash: .claude/skills/design-review/SKILL.md 4dcc8b81162613c7571
 Reviewed-Content-Hash: design/gdd/hero-progression.md cb983d72da0ea198fd637003df3b6453937f34c2
 Reviewed-Content-Hash: design/gdd/mission-flow.md a6fc3e25358511360b90999874e86d1ad5cc96fd
 Reviewed-Content-Hash: design/gdd/language-and-text.md e486c535697a6bdd4339145fbe67ce6bddb639a8
+
+## Peer review — 2026-11-14 — game-dev-ios: APPROVE, with clarifications applied
+Read-only mode writes nothing (settings stay in memory); reset keeps lang and sound; sound is new for both apps (defaults lang vi, sound true). Durability (AC9, Rule 7) is the ADR's job.

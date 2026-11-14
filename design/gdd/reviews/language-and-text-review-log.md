@@ -17,3 +17,9 @@ Reviewed-Content-Hash: design/gdd/game-concept.md 2ee5801590b66b9404c289645f337b
 Reviewed-Content-Hash: design/gdd/mission-flow.md a6fc3e25358511360b90999874e86d1ad5cc96fd
 Reviewed-Content-Hash: design/narrative/writing-guide.md b46f07dbc5222f8c1013e41a599a6a959a44a5ca
 Reviewed-Content-Hash: content/data/rules.json f00841c558d539129bcb20973e610bd7e98dbdf1
+
+## Peer review — 2026-11-14 — game-dev-android: REVISE, fixes applied
+- F1 is now testable: greedy wrap with Nunito's real advances (cmap/hmtx), 3% kerning allowance, box_width/font_px/max_lines per field in rules.json (proposed), and overflow fails R8c on both apps (AC5).
+- Sizes in world px at the fitted scale: body ≥ 37 (including quiz choices), labels next to icons ≥ 28 (pad labels, counters, map stub); the current sizes to raise are listed.
+- Run-time ellipsis allowed only as a safety net; in a shipped build it is a bug.
+Awaiting confirmation.
