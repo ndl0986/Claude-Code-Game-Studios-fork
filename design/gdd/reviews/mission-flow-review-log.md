@@ -41,3 +41,6 @@ Core Rule 15 (skip on every story screen, a one-time kind warning per run, "Skip
 
 ## Update — 2026-11-14 — devs' parity review additions
 F5 beat positions (with the beat extent per type); the warning returns after "Keep reading" and only "Skip anyway" stops it (leader's call); pads by phase; end_pause for every type; Rule 7c training partner, dummies and hold-meter cap; the F4 walk_gap estimate from dummy_spacing; AC20–21.
+
+## Update — 2026-11-14 — TASK-016: dialogue beat type
+Rule 7 (six types), 7b (dialogue: no buttons), new 7d (order, speakers and portraits, ask button, skip/medal, R4c requested, language, hints), the dialogue_line state, F5 extent, new F6 dialogue time, AC23–25. Needs dev peer review together with the schema request.
