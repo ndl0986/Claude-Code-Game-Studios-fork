@@ -389,6 +389,7 @@ stays within F1's 3–5 min.
 | Audio & voice-over | depends on this | Soft | Line ids to voice; music state |
 | Quiz & stars | depends on this (it is started by this) | Hard (for the loop) | "start quiz", "quiz finished + stars" |
 | Hero progression & unlock | depends on this | Hard | "mission completed", `next_hero` |
+| Map & timeline | both ways | Hard (Alpha) | "The map" is the home screen it returns to; the map starts missions (`design/gdd/map-and-timeline.md`) |
 | Save & progress | indirect, through Quiz & stars | — | Nothing saved mid-mission |
 
 The combat, quiz, hints, language, audio, input and progression GDDs must each list Mission

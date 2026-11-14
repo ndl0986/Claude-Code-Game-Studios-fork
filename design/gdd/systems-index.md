@@ -48,9 +48,9 @@ Dải Đất Anh Hùng is a small, story-first game, and its systems are few.
 | 6 | Mission flow & beat types | Narrative | Vertical Slice | Approved | `design/gdd/mission-flow.md` | 5, 1, 2, 3 |
 | 7 | Quiz & stars | Gameplay | Vertical Slice | Approved | `design/gdd/quiz-and-stars.md` | 1, 2, 4 |
 | 8 | Hints & onboarding | Meta | Vertical Slice | Approved | `design/gdd/hints-and-onboarding.md` | 6, 5, 3, 10, 1 |
-| 9 | Hero progression & unlock | Progression | Vertical Slice (unlock screen) / Alpha (full) | In Review | `design/gdd/hero-progression.md` | 7, 4, 1 |
+| 9 | Hero progression & unlock | Progression | Vertical Slice (unlock screen) / Alpha (full) | Approved | `design/gdd/hero-progression.md` | 7, 4, 1 |
 | 10 | Audio & voice-over | Audio | Vertical Slice | Approved | `design/gdd/audio-and-voice-over.md` | 1, 2, 4 |
-| 11 | Map & timeline | UI | Alpha (stub in VS) | Not Started (open: QC G5) | — | 9, 1 |
+| 11 | Map & timeline | UI | Alpha (stub in VS) | Approved | `design/gdd/map-and-timeline.md` | 9, 1, 4, 2 |
 | 12 | Settings & parent area (inferred: sources and credits page) | UI | Full Vision (first release) | Not Started | — | 2, 1 |
 | 13 | Storybook mini-games & content calendar | Gameplay | Full Vision | Not Started | — | 2, 4, 1 |
 
@@ -193,11 +193,11 @@ the GDD.
 | Metric | Count |
 |--------|-------|
 | Total systems identified | 13 |
-| Design docs started | 8 |
-| Design docs reviewed | 4 (lean self-reviews; peer reviews in progress) |
-| Design docs approved | 5 (Content data & claims via TASK-005; Mission flow; Combat; Quiz & stars; Hints & onboarding) |
+| Design docs started | 9 |
+| Design docs reviewed | 9 (lean self-review plus a dev peer review each; Map & timeline in peer review) |
+| Design docs approved | 9 (Content data & claims via TASK-005; Mission flow; Combat; Quiz & stars; Hints & onboarding; Hero progression; Language & text; Save & progress; Audio & voice-over) |
 | MVP systems designed | n/a (folded into the Vertical Slice) |
-| Vertical Slice systems designed | 5/10 (all 5 approved) |
+| Vertical Slice systems designed | 9/10 (all approved; Input & touch controls not started) |
 
 ---
 
