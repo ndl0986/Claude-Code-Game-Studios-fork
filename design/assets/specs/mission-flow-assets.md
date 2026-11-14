@@ -677,7 +677,11 @@ lightning, fire, explosion, red, harsh flash, photorealistic, anime.
 round face, topknot, vermilion headband with its two tails, cream tunic ⟨placeholder⟩, facing
 **right** (he stands on the left of the dialogue). Neutral is calm and attentive. Pleading has
 raised brows, hands together at the chest, and an earnest open mouth. Determined has set brows,
-a firm mouth and a chin up: brave, never angry at anyone. Same proportions and palette as the
+a firm mouth and a chin up: brave, never angry at anyone. **Determined means eyes fully open,
+brows down and in, mouth set**; never half-closed or narrowed eyes, which read as sleepy
+(Android QC r3, on the placeholder). **Use on the title hero card (D-27):** the slice card uses
+`…_hero_determined`; the neutral `…_hero` replaces it on the card when final art lands
+(`design/ux/title.md` §5.5). Same proportions and palette as the
 sprite sheet, so the child sees one character.
 
 **Art Bible Anchors:**

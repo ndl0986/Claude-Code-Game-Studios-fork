@@ -35,32 +35,37 @@ Root. Title → mission (intro) → … → results → (unlock) → title.
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│ [🔊]                                                  [VI | EN]  │
-│                                                                  │
-│                  DẢI ĐẤT ANH HÙNG  (ui.app.title)                │
+│ [🔊]           Dải Đất Anh Hùng  (title row, y 18–155)  [VI | EN] │
 │                                                                  │
 │      ┌────────────── hero card (D-27) ──────────────┐            │
-│      │ (portrait)  Trần Quốc Toản                     │            │
+│      │ (portrait)  Trần Quốc Toản                     │  y 175–355 │
 │      │  in frame   ★ ★ ☆    🏅(gold / outline)        │            │
 │      └──────────────────────────────────────────────┘            │
-│                                                                  │
-│                      [   Bắt đầu / Start   ]                     │
-│                 (Bản đồ sắp ra mắt / Map coming soon)            │
+│                      [   Bắt đầu / Start   ]          y 375–512  │
+│                 (Bản đồ sắp ra mắt / Map coming soon) y 528–566  │
+│                 (debug builds only: Bản chơi thử / Test build)   │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
 ### 5.2 Layout Zones and 5.3 Component Inventory
 
-| Component | Size / field | Source |
-|---|---|---|
-| Title | heading; text layer, never in art | `ui.app.title` |
-| Start button | ≥ 72 pt, release-inside | `ui.btn.start`; P-01 |
-| VI \| EN chip | ≥ 72 pt; the active language bold plus underline | Language Rules 2, 4; ASSET-031 |
-| Sound | ≥ 72 pt | Audio Rule 14 |
-| Map stub line | label ≥ 28 px | `ui.unlock.map_stub` |
+Boxes are world px in the 1280×720 world, drawn at `k_px` (Input F1). "Ref" numbers are the
+Android reference phone (k 0.527, `pad_min` = 137 world px); every box below is also checked on
+the iOS reference (k 0.517). Supported k ≥ 0.32 (`design/ux/hud.md` §3.3).
+
+| Component | Box (world px) | Size / field | Source |
+|---|---|---|---|
+| Sound | top-left of the safe rect; ref ≈ x 18–155, y 18–155 | ≥ `pad_min` | Audio Rule 14; Input Rule 3 |
+| VI \| EN chip | top-right of the safe rect; height ≥ `pad_min`, width ≤ 1.6 × height; ref ≈ x 1043–1262, y 18–155, so its left edge clears the title row (x 1020) by ≥ 8 | the active language bold plus underline | Language Rules 2, 4; ASSET-031 |
+| **Title row** | **x 260–1020, y 18–155**; if the chip's left edge comes nearer than 1028 (k < ≈ 0.48), the row's right edge is the chip's left − 8 | `ui.app.title` as a **1-line heading, 56 px, weight 800**, centred in the row. Widest: VI "Dải Đất Anh Hùng" ≈ 485 px at 56 (EN ≈ 405), so it fits the row down to a 600-wide row (k ≈ 0.29). A panel behind it, if any, stays inside the row. **No drum emblems** beside the title (matching the beat-card title, `story-screens.md`); the drum-ring motif lives on the card's portrait frame only (Luan's rule 4: one motif) | `ui.app.title`; leader's call (D-27 review) |
+| Hero card | x 260–1020, y 175–355 | §5.5 | D-27 |
+| **Start button** | centred, **x 430–850, top y 375**, height `pad_min / k` (ref 375–512) | ≥ `pad_min`; release-inside; `ui.btn.start` in the `button` field (34 px) | P-01 |
+| **Map stub line** | centred, top = Start bottom + 16 (ref y 528–566) | label, 28 px | `ui.unlock.map_stub` |
 | ~~Controls legend~~ | **Removed.** The slice title shows the map-stub line, not a controls legend; the first-use hint hands teach the controls in play (Hints GDD; leader's call) | — |
 | **Hero card (D-27: A)** | See §5.5. The hero's portrait, name, best stars (filled vs outline) and medal (gold vs outline), **reusing the results-screen pieces** (ASSET-022/023 stars, ASSET-036/037 medal). Display only in the slice: it is not a button | D-27; Hero progression Rule 10; QC G5 |
-| Debug only | `ui.debug.*` subtitle "Bản chơi thử / Test build" | TASK-005c |
+| Debug only | centred, top = map stub bottom + 8 (ref y 574–608); **debug builds only**, never in release | `ui.debug.subtitle` "Bản chơi thử / Test build", label 28 px | TASK-005c; leader's call |
+| ~~Decorative standing hero~~ | **Removed** (D-27 review). The full-body hero beside the title (≈ 209 tall at x ≈ 260, y 261–470) overlaps the card; the card's portrait carries the hero now | — | leader's call |
+| ~~Title panel 980 × 210 with drum emblems~~ | **Removed.** What's built today (a panel at y 60–270 with the title at y 140 and the debug subtitle at y 220) collides with the card; the title row above replaces it | — | leader's call |
 
 ### 5.4 Information Hierarchy
 
@@ -75,7 +80,7 @@ Positions are world px in the 1280×720 world, drawn at `k_px` (Input F1); the c
 |---|---|
 | Place | Centred on x = 640, **x 260–1020, y 175–355** (760 × 180: 20 + portrait 140 + 20 + name box 560 + 20). It sits below the title row (y 18–155, between the sound button top-left and the VI\|EN chip top-right) and above Start, so it never touches the sound button, the chip or Start. It stays clear of the corner blocks at every supported k (k ≥ 0.32, `design/ux/hud.md` §3.3): the sound block is ≈ x 18–155, y 18–155 at k 0.527 and grows to ≈ 18–243 at k 0.32, which still ends left of x 260 |
 | Plate | Cream panel `#FFF6E3`, a thin bronze-drum ring border (the story frame motif, one motif only), rounded corners, ink outline |
-| Portrait | The hero's neutral portrait (`pic.portrait_<hero_id>_hero`, ASSET-327) at 140 × 140 in a **round drum-ring frame**, the same frame as the map's open pin (Map Rule 3), left side of the card, 20 from the edge |
+| Portrait | **Slice: the hero's determined portrait** (`pic.portrait_<hero_id>_hero_determined`, ASSET-327; it exists in `assets.json`, so R10 stays green and no new asset is needed). A neutral portrait (`…_hero`) replaces it with final art. 140 × 140 in a **round drum-ring frame**, the same frame as the map's open pin (Map Rule 3), left side of the card, 20 from the edge |
 | Name | The hero's `name` Text, `hero_name` field (box 560, 44 px heading, 1 line), right of the portrait, top row |
 | Best stars | Three stars at 48 px under the name, filled (ASSET-022) up to the saved best (`stars.<hero_id>`), outline (ASSET-023) for the rest. No "best" label: on the title, the stars are always the best |
 | Medal | 56 px right of the stars: gold (ASSET-036) if `medal.<hero_id>`, else outline (ASSET-037). No text line (the results screen carries `ui.medal.*`) |
@@ -153,8 +158,10 @@ The title and every label are VI/EN text layers within the `ui` and `button` bud
 4c. **GIVEN** a best of 3★ with the medal, **WHEN** the hero is replayed for 1★ and the title shows
    again, **THEN** the card still shows 3 filled stars and the gold medal.
 4d. **GIVEN** the Android reference phone (k 0.527) and the iOS reference phone (k 0.517), with sound and
-   the chip at `pad_min`, **WHEN** the title is captured in VI and EN, **THEN** the card (y 175–355) overlaps
-   neither the sound button, the chip, the title text nor Start, and the name fits on 1 line.
+   the chip at `pad_min`, **WHEN** the title is captured in VI and EN in a release and a debug build, **THEN**
+   the title row is inside x 260–1020, y 18–155 on 1 line; the card is at y 175–355; Start's top is at y 375
+   and it is ≥ `pad_min`; the map stub starts 16 below Start; no two of sound, chip, title row, card, Start,
+   map stub and (debug) subtitle overlap; and no drum emblem or standing hero shows.
 4e. **GIVEN** the card, **WHEN** it is tapped, **THEN** nothing happens and no tone plays.
 5. **GIVEN** the lowest target Android phone, **WHEN** the app launches, **THEN** the title is interactive within 2 s (after the SFX preload, Audio Rule 7).
 6. **GIVEN** the narrowest supported phone and a 20:9 phone, **WHEN** captured in VI and EN, **THEN** no element overlaps and all text fits (R8c).
