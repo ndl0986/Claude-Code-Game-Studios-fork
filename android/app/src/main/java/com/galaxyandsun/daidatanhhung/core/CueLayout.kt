@@ -71,4 +71,23 @@ object CueLayout {
         val y = max(t.midY, FLOOR + B_R)
         return side(t, heroX, y, t.halfW + B_TAIL + B_R, ::bubbleBox)
     }
+
+    // ---- Props on banner beats (r9, leader's call (a); hud.md §3.3) ----
+    // Figures.flag(x, y, s): the pole spans y − 0.7 s … y + 0.7 s and the cloth peaks at y − 0.8 s, so its box is
+    // y − 0.8 s … y + 0.7 s (1.5 s tall).
+    const val FLAG_TOP_K = 0.8; const val FLAG_FOOT_K = 0.7
+    const val GOAL_FLAG = 150.0; const val GOAL_FLAG_BANNER = 120.0
+
+    /** A flag icon's centre y and size. */
+    data class Prop(val y: Double, val size: Double) { val top get() = y - FLAG_TOP_K * size; val foot get() = y + FLAG_FOOT_K * size }
+
+    /** The goal flag, its foot on the ground; on a banner beat 120 so the whole flag sits at y ≥ 276 (below the bar). */
+    fun goalFlag(ground: Double, banner: Boolean): Prop {
+        val s = if (banner) GOAL_FLAG_BANNER else GOAL_FLAG
+        return Prop(ground - FLAG_FOOT_K * s, s)
+    }
+
+    /** The banner the hero raises in training (110, held beside him): on a banner beat it stays below the bar too. */
+    fun raisedBanner(ground: Double, banner: Boolean): Prop =
+        if (!banner) Prop(ground - 250, 110.0) else Prop(max(ground - 250, FLOOR + FLAG_TOP_K * 110.0), 110.0)
 }

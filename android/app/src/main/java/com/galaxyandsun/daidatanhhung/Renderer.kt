@@ -230,7 +230,9 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         val storyPhase = r.phase == Phase.CARD || r.phase == Phase.CAPTION || r.phase == Phase.DIALOGUE
         if (storyPhase) { storyScreen(g, r); return }
         d.c.save(); d.c.translate(-cam, 0f)
-        if (r.beatType == BeatType.REACH && (r.phase == Phase.PLAY || r.phase == Phase.END)) fig.icon("flag", r.goalX.toFloat(), ground - 120, 150f)
+        val bannerBeat = beat.usesBanner
+        if (r.beatType == BeatType.REACH && (r.phase == Phase.PLAY || r.phase == Phase.END)) // r9 (a): wholly below the bar on banner beats
+            CueLayout.goalFlag(ground.toDouble(), bannerBeat).let { f -> fig.icon("flag", r.goalX.toFloat(), f.y.toFloat(), f.size.toFloat()) }
         for (dm in r.dummies) fig.dummy(dm.x.toFloat(), ground, dm.down, dm.t)
         for (w in r.dropped) fig.dropped(w, ground)
         r.partner?.let { fig.partner(it, ground, t) }
@@ -245,7 +247,8 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         val blinkOff = h.hurt > 0 && h.hurt < hurtT - contact && (t * 20).toInt() % 2 == 1 // no blink during contact
         if (!blinkOff) fig.hero(heroX.toFloat(), ground, h.face, h.walk, h.def, if (h.atk >= 0) h.atk else null, t,
             Figures.HERO_S, reach = (g.tuning["attack_range"] - 18 * Figures.HERO_S).toFloat()) // body 180 tall, swing arc = attack_range (AC13)
-        if (r.bannerRaised && r.beatType == BeatType.TRAINING) fig.icon("flag", h.x.toFloat() - h.face * 60f, ground - 250, 110f)
+        if (r.bannerRaised && r.beatType == BeatType.TRAINING)
+            CueLayout.raisedBanner(ground.toDouble(), bannerBeat).let { f -> fig.icon("flag", h.x.toFloat() - h.face * 60f, f.y.toFloat(), f.size.toFloat()) }
         if (r.beatType == BeatType.HOLD && (r.phase == Phase.PLAY || r.phase == Phase.END)) holdMeter(h.x.toFloat() + h.face * 130f, ground - 200, r.heldTotal / r.holdSeconds(r.beat)) // beside the hero, clear of the goal bar
         for (p in r.parts) d.star(p.x.toFloat(), p.y.toFloat(), p.r.toFloat(), p.color.toInt(), C.GOLD_DARK, p.rot.toFloat())
         if (r.cheerT >= 0 && r.t - r.cheerT < 0.6) { val k = ((r.t - r.cheerT) / 0.6).toFloat() // the cheer's stars, drawn here (no RNG)
@@ -333,7 +336,8 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         CueLayout.Target(x.toDouble(), ground - 170.0, ground - 140.0, when (kind) { "leader" -> 95.0; "shield" -> 55.0; else -> 40.0 })
     private fun partnerTarget(x: Float, ground: Float) = CueLayout.Target(x.toDouble(), ground - 162.0, ground - 121.0, 30.0) // PARTNER_S 0.62
     private fun dummyTarget(x: Float, ground: Float) = CueLayout.Target(x.toDouble(), ground - 151.0, ground - 80.0, 30.0) // DUMMY_S 0.75
-    private fun flagTarget(x: Float, ground: Float) = CueLayout.Target(x + 15.0, ground - 240.0, ground - 120.0, 90.0) // icon 150 at ground − 120
+    private fun flagTarget(x: Float, ground: Float, banner: Boolean) = CueLayout.goalFlag(ground.toDouble(), banner).let { f ->
+        CueLayout.Target(x + 0.1 * f.size, f.top, (f.top + f.foot) / 2, 0.6 * f.size) } // pole at x − 0.5 s, cloth to x + 0.7 s
 
     /**
      * hud.md §3.3 z-order: the stuck arrow and the telegraph "!" over the bar and pops. On a banner beat neither touches
@@ -348,7 +352,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             else -> enemyTarget(r.stallTargetX!!.toFloat() - cam, ground, r.stallTarget?.kind ?: "spear")
         }
         arrowAt?.let { val c = CueLayout.arrow(it, heroX, banner); fig.arrow(c.x.toFloat(), c.y.toFloat(), c.dir, t) }
-        if (r.flagArrow) { val c = CueLayout.arrow(flagTarget(r.goalX.toFloat() - cam, ground), heroX, banner); fig.arrow(c.x.toFloat(), c.y.toFloat(), c.dir, t) }
+        if (r.flagArrow) { val c = CueLayout.arrow(flagTarget(r.goalX.toFloat() - cam, ground, r.currentBeat.usesBanner), heroX, banner); fig.arrow(c.x.toFloat(), c.y.toFloat(), c.dir, t) }
         for (e in r.enemies) if (e.state == com.galaxyandsun.daidatanhhung.core.EnemyState.WINDUP) {
             val c = CueLayout.bubble(enemyTarget(e.x.toFloat() - cam, ground, e.kind), heroX, banner); fig.bubble(c.x.toFloat(), c.y.toFloat(), c.dir)
         }

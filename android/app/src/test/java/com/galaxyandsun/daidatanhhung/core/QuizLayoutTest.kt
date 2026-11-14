@@ -16,13 +16,18 @@ class QuizLayoutTest {
             assertEquals("k $k", small, at(k).small)
     }
 
-    /** Leader r8 (corner_bottom = 18 + P stays): mp17863 at k 0.527 also takes the small layout, and it fits. */
-    @Test fun at0527TheSmallLayoutFitsAndTiepClearsTheRightCard() {
-        val b = at(0.527)
+    /**
+     * Leader r8 (corner_bottom = 18 + P stays): just below the switch (k 0.527, a geometry check; both Android devices
+     * are k ≈ 0.488 per QC r8) the small layout still fits and Tiếp clears the right card.
+     */
+    @Test fun justBelowTheSwitchTheSmallLayoutFitsAndTiepClearsTheRightCard() {
+        for (k in listOf(0.488, 0.527)) {
+        val b = at(k)
         assertTrue(b.small)
         assertTrue("every box ≤ 720", maxOf(b.cardsBottom, b.whyBottom, b.rowBottom) <= 720)
         assertTrue("Tiếp (x ${b.tiepLeft}) clear of the right card in the left slot (to ${b.rightCardRight})", b.tiepLeft >= b.rightCardRight + 8)
         assertTrue("the why line ends above Tiếp's row", b.whyBottom <= b.rowTop)
+        }
     }
 
     @Test fun everyBoxEndsOnScreenAndTiepNeverTouchesTheCards() {

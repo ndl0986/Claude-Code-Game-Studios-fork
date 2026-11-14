@@ -16,7 +16,7 @@ class CueLayoutTest {
     private fun enemy(x: Double) = Target(x, g - 170, g - 140, 40.0)
     private fun partner(x: Double) = Target(x, g - 162, g - 121, 30.0)
     private fun dummy(x: Double) = Target(x, g - 151, g - 80, 30.0)
-    private fun flag(x: Double) = Target(x + 15, g - 240, g - 120, 90.0)
+    private fun flag(x: Double) = CueLayout.goalFlag(g, banner = true).let { f -> Target(x + 0.1 * f.size, f.top, (f.top + f.foot) / 2, 0.6 * f.size) }
     private fun StoryLayout.Box.clearOfTheBar() = top >= CueLayout.FLOOR - 1e-9
     private fun StoryLayout.Box.onScreen() = left >= CueLayout.EDGE - 1e-9 && right <= CueLayout.SCREEN_W - CueLayout.EDGE + 1e-9
     /** The cue is fully beside the target's body, on the side [s] (+1 right). */
@@ -63,5 +63,18 @@ class CueLayoutTest {
     @Test fun withNoHeroBesideItTheArrowUsesTheSideNearerTheCentre() {
         assertEquals("target left of centre → arrow on its right, tip left", Dir.LEFT, CueLayout.arrow(dummy(300.0), null, true).dir)
         assertEquals(Dir.RIGHT, CueLayout.arrow(dummy(1000.0), null, true).dir)
+    }
+
+    /** r9 (a): on banner beats the whole goal flag (pole top and cloth) is below the bar, foot on the ground; k-independent world px. */
+    @Test fun theGoalFlagSitsWhollyBelowTheBarOnBannerBeats() {
+        for (k in listOf(0.40, 0.488)) { // the bar and the ground are fixed world px, so the flag's box is the same at every k
+            val f = CueLayout.goalFlag(g, banner = true)
+            assertEquals("k $k: size", 120.0, f.size, 1e-9)
+            assertTrue("k $k: top ${f.top} ≥ 276", f.top >= CueLayout.FLOOR - 1e-9)
+            assertEquals("k $k: foot on the ground", g, f.foot, 1e-9)
+        }
+        assertEquals("off banner beats the flag keeps 150", 150.0, CueLayout.goalFlag(g, banner = false).size, 1e-9)
+        val b = CueLayout.raisedBanner(g, banner = true)
+        assertTrue("the raised training banner stays below the bar too: ${b.top}", b.top >= CueLayout.FLOOR - 1e-9)
     }
 }
