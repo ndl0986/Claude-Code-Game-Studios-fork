@@ -85,12 +85,16 @@ enum Font {
 
     static func heavy(_ size: Double) -> UIFont { UIFont(name: name, size: size) ?? .systemFont(ofSize: size, weight: .heavy) }
 
-    static func label(_ s: String, _ size: Double, _ c: SKColor, width: Double? = nil, align: SKLabelHorizontalAlignmentMode = .center) -> SKLabelNode {
+    /// Body reading text (intro, scene, ending, quiz prompt, why, dialog) is weight 600: Nunito-SemiBold
+    /// (Language & text GDD F1). Buttons, titles, goal and choices stay 800.
+    static func body(_ size: Double) -> UIFont { UIFont(name: "Nunito-SemiBold", size: size) ?? .systemFont(ofSize: size, weight: .semibold) }
+
+    static func label(_ s: String, _ size: Double, _ c: SKColor, width: Double? = nil, align: SKLabelHorizontalAlignmentMode = .center, weight: Int = 800) -> SKLabelNode {
         let l = SKLabelNode(fontNamed: name)
         let style = NSMutableParagraphStyle()
         style.alignment = align == .left ? .left : (align == .right ? .right : .center)
         style.lineHeightMultiple = 1.35 // Language & text GDD: line height >= 1.35x
-        let font = heavy(size)
+        let font = weight == 600 ? body(size) : heavy(size)
         l.attributedText = NSAttributedString(string: s, attributes: [.font: font, .foregroundColor: c, .paragraphStyle: style])
         l.numberOfLines = 0
         if let w = width { l.preferredMaxLayoutWidth = w; l.lineBreakMode = .byWordWrapping }

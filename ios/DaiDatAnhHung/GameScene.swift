@@ -294,7 +294,7 @@ final class GameScene: SKScene {
 
     /// A text box for a Text line; in a debug build a pending claim adds an `UNSIGNED Cxx` badge.
     private func textBox(_ t: Text, _ x: Double, _ y: Double, _ w: Double, _ size: Double, _ c: SKColor) {
-        add(Font.label(t.text(game.lang), size, c, width: w), x, y)
+        add(Font.label(t.text(game.lang), size, c, width: w, weight: 600), x, y) // body reading text: weight 600
         badge(t, 640, 16) // debug only, a strip at the top edge: never over the text (Android QC r1)
     }
     /// Debug only: pending claims of the Texts on screen, shown once in a strip at the top edge (iOS-R1-03).
@@ -323,7 +323,7 @@ final class GameScene: SKScene {
         add(D.rr(0, 0, 1280, 720, 0, SKColor(red: 42 / 255, green: 36 / 255, blue: 64 / 255, alpha: 0.75)), 0, 0)
         add(D.rr(-420, -170, 840, 340, 36, C.cream, C.gold, 6), 640, 330)
         add(D.drum(50, SKColor(hex: 0xc98a12, alpha: 0.5)), 640, 210)
-        add(Font.label(game.ui("ui.story.skip_warning"), 37, C.ink, width: 780), 640, 300)
+        add(Font.label(game.ui("ui.story.skip_warning"), 37, C.ink, width: 780, weight: 600), 640, 300)
         button(game.ui("ui.story.keep_reading"), 250 + 70, 400, 300, 100, "keepReading", pulse: true)
         button(game.ui("ui.story.skip_confirm"), 660, 400, 300, 100, "skipAnyway", fill: C.cream)
     }
@@ -429,7 +429,10 @@ final class GameScene: SKScene {
             add(D.rr(-480, -150, 960, 300, 36, C.panel, C.gold, 6), 640, 290)
             for x in [230.0, 1050] { add(D.drum(44, SKColor(hex: 0xf2b632, alpha: 0.8)), x, 210) }
             add(Font.label("\(game.ui("ui.play.beat")) \(p.beat + 1) · \(p.beats[p.beat].title.text(game.lang))", 30, C.gold, width: 760), 640, 190)
-            textBox(texts[min(p.cardLine, texts.count - 1)], 640, 285, 880, 38, .white)
+            let box = texts[min(p.cardLine, texts.count - 1)]
+            if p.cardLine >= texts.count - 1 { // the goal box: weight 800 like the goal line
+                add(Font.label(box.text(game.lang), 38, .white, width: 880), 640, 285); badge(box, 0, 0)
+            } else { textBox(box, 640, 285, 880, 38, .white) }
             button(game.ui("ui.btn.next"), 640 - 150, 470, 300, 110, "next", pulse: true)
             return
         }
@@ -514,7 +517,7 @@ final class GameScene: SKScene {
             // the why strip below the cards (they end at y 550): 3 lines at 37 with 1.35 line height
             add(D.rr(-620, -80, 1240, 160, 24, C.panel), 640, 635)
             add(Font.label(game.ui("ui.quiz.correct"), 30, C.glow, width: 180), 130, 635)
-            add(Font.label(cur.why.text(game.lang), 37, .white, width: 820), 640, 635)
+            add(Font.label(cur.why.text(game.lang), 37, .white, width: 820, weight: 600), 640, 635)
             button(game.ui("ui.btn.next"), 1060, 593, 190, 84, "next", pulse: true)
             badge(cur.why, 0, 0)
         } else if !q.wrong.isEmpty {
