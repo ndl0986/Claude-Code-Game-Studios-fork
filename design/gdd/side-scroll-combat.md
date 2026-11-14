@@ -395,6 +395,13 @@ Art-director lens (art bible §§3–5):
 - **Block:** a white spark between the shield and the weapon, "Đỡ được! / Blocked!" as a text
   pop (a text layer), and a clang.
 - **Pushed:** the hero flashes and "Ối! / Oof!" pops. No pain face: surprise only (§5).
+- **Strike contact (QC r5, render-only):** on a strike that lands (unblocked), the enemy's padded
+  tip is shown **touching the hero's chest for ≥ 2 frames (≈ 33 ms)** before the hero's pushed
+  pose and flash begin, so the child sees what pushed him. This is a drawing rule: the strike
+  still resolves at the same step and the knock-back (F4) is unchanged. If a dev finds the
+  knock-back moves the hero visibly apart within those 2 frames, that is a **trace item** to
+  raise, not a silent sim change. A blocked strike shows the tip touching the shield for the same
+  2 frames before the clang spark.
 - **Run away:** the weapon drops and stays on the ground fading, and the enemy runs with
   flailing arms and a dizzy swirl. There is no lying-down pose for anyone (§5).
 - **Leader:** wider, not taller, than the hero (§3; QC rework at TASK-003).

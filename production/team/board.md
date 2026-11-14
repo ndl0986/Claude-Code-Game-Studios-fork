@@ -162,3 +162,11 @@ test-setup, smoke-check), those checks report NOT ASSESSED by design (ADR-0001).
 **iOS QC r5 (2026-11-14):** frozen 1a8c443 (96 tests), app fingerprint 02fb413a… (from game-dev-001 root). Replaces r4 (r4: non-touch PASS, touch NOT ASSESSED). Touch still blocked on Accessibility toggle.
 **Merged (2026-11-14):** D-27 title card spec + hud §3.3 k-band (df22e4a). r6 both apps: title card/row/Start, chip at pad_min, plates narrowing for 0.32 ≤ k < 0.48, TASK-005o data.
 **iOS touch QC path (2026-11-14):** Device Hub + Accessibility keeps re-blocking. Plan: XCUITest UI-test target (no macOS permission; frozen .xctestrun run by QC via test-without-building on E9F515E9), debug-only `debugState` element; added to iOS r6. Multi-finger cases stay unit tests.
+**Android QC r5 PASS with findings (2026-11-14):** f02c0d6, evidence qa/TASK-007-android-r5 @ b6c2e50. 15b, W12, W7, banner AC9–12 PASS; findings B6 (sound button over story frame corner), AC13 strike contact not visible, pop contrast 1.95:1 on camp, banner gold-on-red 2.6:1. iOS r5 part 1 FAIL R5-01 (EN banner overflow). Both → r6 + small spec follow-up.
+
+## Release checklist items (collected; becomes /release-checklist input)
+- Claims C01–C16 signed off (D-03); release gate R12 must pass.
+- Map content appraisal (thẩm định) by Cục Đo đạc, Bản đồ và Thông tin địa lý — confirm whether it applies (D-28b).
+- Minimum supported landscape height ≈ 288 dp after insets (k 0.40; ≥ 512 dp wide); QC's narrowest phone ≥ k 0.40.
+- Android targetSdk 35 → 36 before any Play upload.
+- D-22 platform backup decision before a Kids-category submission (Android manifest change if "allow").

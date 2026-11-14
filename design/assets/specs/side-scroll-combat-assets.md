@@ -17,6 +17,10 @@
   of the enemy's pivot, and the hero's swing arc reaches **`attack_range` = 175** (350 at 2×). If
   a body is scaled to spec height, the weapon keeps this length, so a strike that lands never
   looks like a miss. Final art is authored to it.
+- **Contact frame:** `strike` frame 02 (the jab peak) is the **contact pose**, with the padded tip
+  at the hero's chest height (≈ 100 world px above `ground_y`, 200 at 2×) and 140 world px in front
+  of the pivot. The engine holds it ≥ 2 frames (≈ 33 ms) on a landed or blocked strike before the
+  hero's pushed pose (Combat V/A, render-only).
 - **Body height is a hard cap:** the enemy body (helmet included) ≤ 170 world px (340 at 2×),
   feet on `ground_y`; placeholders follow it too (`design/ux/hud.md` §3.3). Only the weapon and
   pennant may rise above it.

@@ -51,7 +51,7 @@ Root. Title → mission (intro) → … → results → (unlock) → title.
 
 Boxes are world px in the 1280×720 world, drawn at `k_px` (Input F1). "Ref" numbers are the
 Android reference phone (k 0.527, `pad_min` = 137 world px); every box below is also checked on
-the iOS reference (k 0.517). Supported k ≥ 0.32 (`design/ux/hud.md` §3.3).
+the iOS reference (k 0.517). Supported k ≥ 0.40, the shared floor (`design/ux/hud.md` §3.3).
 
 | Component | Box (world px) | Size / field | Source |
 |---|---|---|---|
@@ -78,12 +78,16 @@ debug line) can run past the safe rect's bottom (`safe_bottom`, world px).
   375 + 72/k + 16 + 38 (+ 8 + 34 in debug). A release build switches below k ≈ 0.33, a debug
   build below k ≈ 0.41. The apps compute it from the real `safe_bottom`, never from these
   numbers.
-- **Worked numbers at k 0.32 (the supported floor, the same as the HUD):** Start 375–600
+- **At the floor, k 0.40** (Start 375–555, 180 tall): a release build stays stacked (the stub
+  ends at 609, inside 646); a debug build with a large bottom inset switches (the debug line
+  would end at 651 > 646), so it moves beside Start: stub y 375–413, debug line y 421–455.
+- **Below the floor, kept as a guard.** The rule is written to hold down to k 0.32 in case a
+  device reports a smaller k. **Worked numbers at k 0.32 (below the floor, untested):** Start 375–600
   (225 tall). Stacked, the stub would be 616–654 (8 past 646) and the debug line 662–696 (50
   past), which breaks AC6. Moved: stub x 870–1250, y 375–413; debug line y 421–455. Both are
   clear of the card (which ends at y 355), the chip (top-right, above y 375) and Start (which
   ends at x 850).
-- **Supported floor stays k ≥ 0.32** (`design/ux/hud.md` §3.3).
+- **Supported floor: k ≥ 0.40** (`design/ux/hud.md` §3.3).
 | ~~Decorative standing hero~~ | **Removed** (D-27 review). The full-body hero beside the title (≈ 209 tall at x ≈ 260, y 261–470) overlaps the card; the card's portrait carries the hero now | — | leader's call |
 | ~~Title panel 980 × 210 with drum emblems~~ | **Removed.** What's built today (a panel at y 60–270 with the title at y 140 and the debug subtitle at y 220) collides with the card; the title row above replaces it | — | leader's call |
 
@@ -98,7 +102,7 @@ Positions are world px in the 1280×720 world, drawn at `k_px` (Input F1); the c
 
 | Part | Spec |
 |---|---|
-| Place | Centred on x = 640, **x 260–1020, y 175–355** (760 × 180: 20 + portrait 140 + 20 + name box 560 + 20). It sits below the title row (y 18–155, between the sound button top-left and the VI\|EN chip top-right) and above Start, so it never touches the sound button, the chip or Start. It stays clear of the corner blocks at every supported k (k ≥ 0.32, `design/ux/hud.md` §3.3): the sound block is ≈ x 18–155, y 18–155 at k 0.527 and grows to ≈ 18–243 at k 0.32, which still ends left of x 260 |
+| Place | Centred on x = 640, **x 260–1020, y 175–355** (760 × 180: 20 + portrait 140 + 20 + name box 560 + 20). It sits below the title row (y 18–155, between the sound button top-left and the VI\|EN chip top-right) and above Start, so it never touches the sound button, the chip or Start. It stays clear of the corner blocks at every supported k (k ≥ 0.40, `design/ux/hud.md` §3.3): the sound block is ≈ x 18–155, y 18–155 at k 0.527 and grows to ≈ 18–198 at k 0.40 (≈ 243 even at 0.32), which still ends left of x 260 |
 | Plate | Cream panel `#FFF6E3`, a thin bronze-drum ring border (the story frame motif, one motif only), rounded corners, ink outline |
 | Portrait | **Slice: the hero's determined portrait** (`pic.portrait_<hero_id>_hero_determined`, ASSET-327; it exists in `assets.json`, so R10 stays green and no new asset is needed). A neutral portrait (`…_hero`) replaces it with final art. 140 × 140 in a **round drum-ring frame**, the same frame as the map's open pin (Map Rule 3), left side of the card, 20 from the edge |
 | Name | The hero's `name` Text, `hero_name` field (box 560, 44 px heading, 1 line), right of the portrait, top row |
@@ -183,9 +187,10 @@ The title and every label are VI/EN text layers within the `ui` and `button` bud
    and it is ≥ `pad_min`; the map stub starts 16 below Start; no two of sound, chip, title row, card, Start,
    map stub and (debug) subtitle overlap; and no drum emblem or standing hero shows.
 4e. **GIVEN** the card, **WHEN** it is tapped, **THEN** nothing happens and no tone plays.
-4f. **GIVEN** a phone or emulator at k 0.32 (Start 225 tall), **WHEN** the title is captured in a release
-   and a debug build, VI and EN, **THEN** Start is at x 430–850, y 375–600; the map stub (and the debug
-   line, debug only) sit at x 870–1250 starting at y 375; nothing passes the safe bottom; and nothing
+4f. **GIVEN** a phone or emulator at k 0.40 with `safe_bottom` ≈ 646 (Start 180 tall), **WHEN** the title is
+   captured in a release and a debug build, VI and EN, **THEN** Start is at x 430–850, y 375–555; in the
+   release build the map stub stays stacked under Start (y 571–609); in the debug build the map stub and
+   the debug line sit at x 870–1250 starting at y 375; nothing passes the safe bottom; and nothing
    overlaps the card, the chip or Start. **GIVEN** the reference phones, **THEN** the lines stay stacked
    under Start (no switch).
 5. **GIVEN** the lowest target Android phone, **WHEN** the app launches, **THEN** the title is interactive within 2 s (after the SFX preload, Audio Rule 7).
