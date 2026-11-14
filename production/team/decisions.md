@@ -11,6 +11,39 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-13 Does combat need a mastery reason to block?
+
+- **Flow:** combat GDD → slice playtest → hero 2+ difficulty.
+- **Finding (/review-all-gdds G1):** defend never pays off: blocking stops you moving and attacking
+  and makes the fight longer, while an unblocked hit only costs one step back. The "!" warning and
+  the defend hint teach a skill with no reward.
+- **Options:** A. accept combat as participation (stars from the quiz are the only mastery, pillar 3)
+  · B. give blocking a small reward (a blocked enemy is stunned and the next hit counts double, or a
+  block fills the banner meter) · C. decide after the slice playtest.
+- **Recommendation:** C, then B if children ignore defend.
+- **Status:** Open.
+
+### D-14 What stars measure, and what they're for
+
+- **Finding (G2, G3):** the concept says stars reward combat challenge and replay mastery, but stars
+  come only from quiz retries; "later heroes add speed" collides with the 0.8 s telegraph floor; stars
+  have no payoff beyond the map.
+- **Options:** A. stars measure story recall only (fix the concept; later heroes scale by enemy count
+  and hits, never reaction time) · B. stars also reflect combat. Either way: give each star a visible
+  payoff (a "Did you know?" fact page per star, or a map decoration).
+- **Recommendation:** A + a fact page per star. Note: Luan's new **medal** (D-07) already rewards
+  playing the full story, so stars = quiz recall, medal = full story fits A well.
+- **Status:** Open.
+
+### D-15 Quiz card order repeats on every replay
+
+- **Finding (S1):** the card shuffle seed is fixed per question, so a replay shows the same positions
+  and a child can earn 3★ by memorising positions.
+- **Options:** A. accept · B. reseed per run (seed + run_count + question_index); both apps stay
+  identical for the same run_count, and the fixture still tests the algorithm.
+- **Recommendation:** B (small change: devs + Quiz GDD rule 3).
+- **Status:** Open.
+
 ### D-12 Legend markers on short labels (R4b, for the devs + art)
 
 - **Flow:** content validation → both apps' tests.
@@ -30,21 +63,7 @@ it) · **Decided** (Luan's call, with the date).
   (c) validation fails if `rules.json` t2 < t3.
 - **Status:** Done, merged in `3074d43` (data/TASK-005d). Raised by game-art-content.
 
-### D-10 A "Special" (banner) move in combat
-
-- **Flow:** combat GDD (`design/gdd/side-scroll-combat.md`, rule 16) → a 4th button, the banner
-  ("Cờ / Banner") → both apps. It ties combat to the six-word banner story (C08).
-- **What it does (proposed):** a tap raises the banner and pushes nearby enemies back
-  (`special_push` 170 px), then a 6 s cooldown. No damage, no violence.
-- **Steps it affects:** a 4th thumb pad on screen (crowding on small phones), a new hint step,
-  new art and sound, two tuning keys.
-- **Options:** A. add it in the slice (with D-08 C or B) · B. add it later, with the training beat
-  (D-08 B) · C. no Special in combat; the banner stays a story/training moment only.
-- **Recommendation:** B. Keep the slice to three pads; bring the banner move in with the training
-  beat that teaches it.
-- **Status:** Open. Raised by game-art-content (TASK-008).
-
-### D-09 Two new tuning keys and two content checks (for the devs): AGREED by both devs + art-content (schema 1.1, data/TASK-005d)
+### D-09 Two new tuning keys and two content checks (for the devs): DONE (schema 1.1, merged 3074d43)
 
 - **Flow:** combat GDD → `content/data/tuning.json` (game-dev-android edits) → both apps.
 - **What:** 14 of the GDD's proposed keys already exist (TASK-005b); the GDD switches to those
@@ -52,38 +71,7 @@ it) · **Decided** (Luan's call, with the date).
   `attack_range < enemy_reach − stand_gap`, warn if `telegraph < 0.8 s`.
 - **Status:** Open (the two devs + game-art-content agree; Luan only if they disagree).
 
-### D-08 Vertical-slice beat set for Trần Quốc Toản
-
-- **Flow:** TASK-008 mission-flow GDD defines 5 beat types → content `mission.json` → TASK-006/007
-  native slice → playtest on real phones.
-- **Steps it affects:** which beat types the iOS and Android slices must build now, and which
-  `mission.json` the slice bundles.
-- **Options:**
-  - A. **Keep 4 fight beats** (the TASK-003 prototype, P-02). Least new code; the story is told
-    only by captions, so the orange and the banner are not played.
-  - B. **The approved structure:** walk (riverbank) → hold-meter (orange) → training (banner) →
-    reach-the-flag with encounters (battle). It tests *Live the story* properly, but means 3 more
-    beat types in both apps.
-  - C. **A + one new type:** fights, but beat 2 is a hold-meter (the orange). It tests the
-    riskiest idea, a non-combat story beat, for the cost of one type.
-- **Recommendation:** C for the slice, then B before Alpha. The slice should prove that a
-  non-fight story moment is fun, which A cannot show.
-- **Status:** Open. Raised by game-art-content (TASK-008, `design/gdd/mission-flow.md`).
-
-### D-07 Skipping story boxes on a replay
-
-- **Flow:** mission → intro / beat cards / ending (story boxes, one sentence each, tap "Tiếp").
-- **Steps it affects:** the story screen UI; replays for a missing star.
-- **Options:**
-  - A. **No skip ever:** the child taps through every box (each tap advances one box).
-  - B. **Skip on replay only:** after a hero's mission has been finished once, a "Bỏ qua / Skip
-    story" button appears on story screens.
-  - C. Skip always.
-- **Recommendation:** B. A first play keeps the story, which is pillar 1. A replay for stars
-  shouldn't make a child sit through it again, and the quiz still checks what they remember.
-- **Status:** Open. Raised by game-art-content (TASK-008).
-
-### D-06 Content schema: params for training and reach-the-flag: AGREED (option A, schema 1.1) by both devs + art-content
+### D-06 Content schema: params for training and reach-the-flag: DONE (schema 1.1, merged 3074d43)
 
 - **Flow:** mission-flow GDD → `content/schema/mission.schema.json` (schema change needs both devs
   + game-art-content) → `mission.json`.
@@ -193,7 +181,7 @@ it) · **Decided** (Luan's call, with the date).
   fire on press (so play feels immediate).
 - **Status:** Proposed (both apps). TASK-008's hints/input GDD will formalise it.
 
-### P-02 Stubbed beat types play as fights in the slice
+### P-02 Stubbed beat types play as fights in the slice (SUPERSEDED by D-08 B, 2026-11-14)
 
 - **Flow:** content beat types (walk, hold-meter, training, reach-the-flag) → the app's beat engine.
 - **What the team applied:** the slice implements `fight`; other types play as fights until their
@@ -212,6 +200,9 @@ it) · **Decided** (Luan's call, with the date).
 
 | Date | Decision |
 | --- | --- |
+| 2026-11-14 | **D-08: B, the full structure** in the slice: walk (riverbank to Bình Than) → hold-meter (the orange) → training (dummies, blocks, raise the banner) → reach-the-flag with fight encounters. `mission-full.json` becomes the slice's mission. |
+| 2026-11-14 | **D-10: B, later.** No Special move in fights or encounters yet; the banner button appears only in the hold-meter and training beats (R13). Combat Special comes back as its own decision. |
+| 2026-11-14 | **D-07 (Luan's own option):** story boxes can be skipped, but the game warns that skipping means the mission isn't fully completed, so the child doesn't earn **that mission's medal**. A medal per mission rewards playing the full story; quiz stars stay separate. |
 | 2026-11-14 | Native per platform: iOS Swift + SpriteKit (game-dev-ios), Android Kotlin + Android SDK only (game-dev-android); Godot shelved. Luan accepts the risk of two codebases (ADR-0001). |
 | 2026-11-14 | Android draws with a SurfaceView/Canvas loop and SoundPool; kotlinx.serialization is the one dependency. |
 | 2026-11-14 | Android targetSdk 35 for now; raise to 36 before any Play upload (pre-release item). |
