@@ -50,7 +50,7 @@ Dải Đất Anh Hùng is a small, story-first game, and its systems are few.
 | 8 | Hints & onboarding | Meta | Vertical Slice | Approved | `design/gdd/hints-and-onboarding.md` | 6, 5, 3, 10, 1 |
 | 9 | Hero progression & unlock | Progression | Vertical Slice (unlock screen) / Alpha (full) | In Review | `design/gdd/hero-progression.md` | 7, 4, 1 |
 | 10 | Audio & voice-over | Audio | Vertical Slice | In Review | `design/gdd/audio-and-voice-over.md` | 1, 2, 4 |
-| 11 | Map & timeline | UI | Alpha (stub in VS) | Not Started | — | 9, 1 |
+| 11 | Map & timeline | UI | Alpha (stub in VS) | Not Started (open: QC G5) | — | 9, 1 |
 | 12 | Settings & parent area (inferred: sources and credits page) | UI | Full Vision (first release) | Not Started | — | 2, 1 |
 | 13 | Storybook mini-games & content calendar | Gameplay | Full Vision | Not Started | — | 2, 4, 1 |
 
@@ -161,6 +161,13 @@ and the TASK-003 QC findings on `qa/TASK-003-android` and `qa/TASK-003-ios`. Eac
 in a GDD cites its source, or is marked ⟨tuning⟩.
 
 ---
+
+**Open item for Map & timeline (#11), from QC (G5, 2026-11-14):** the slice's title screen,
+which stands in for the map, shows **no progress**: no stars, medal or completed state for the
+hero. A child who finished the mission sees the same screen as before. The Map & timeline GDD
+must show each hero's state, best stars and medal (Hero progression Rule 10 and UI). Until then,
+the slice title could show the hero's stars and medal as a minimal stub; that's a decision with
+the GDD.
 
 ## Circular Dependencies
 
