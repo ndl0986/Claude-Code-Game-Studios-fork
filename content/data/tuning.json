@@ -168,6 +168,18 @@
       "max": 120,
       "unit": "pt_dp"
     },
+    "pad_gap": {
+      "value": 12,
+      "min": 8,
+      "max": 24,
+      "unit": "pt_dp"
+    },
+    "drag_threshold": {
+      "value": 10,
+      "min": 6,
+      "max": 20,
+      "unit": "pt_dp"
+    },
     "hint_delay": {
       "value": 5,
       "min": 2,

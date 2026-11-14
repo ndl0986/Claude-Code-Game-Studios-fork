@@ -12,7 +12,7 @@
 
 Dải Đất Anh Hùng is a small, story-first game, and its systems are few.
 
-- **The core loop:** one hero's famous story is played as 4 side-scrolling beats
+- **The core loop:** one hero's famous story is played as 3–5 side-scrolling beats
   (*Live the story*), then a short quiz gives stars and unlocks the next hero, in historical
   order (*Learn by playing*).
 - **What the game needs:** almost everything serves that loop. It needs:
@@ -42,15 +42,15 @@ Dải Đất Anh Hùng is a small, story-first game, and its systems are few.
 |---|-------------|----------|----------|--------|------------|------------|
 | 1 | Content data & claims | Core | Vertical Slice | Approved (data contract) | `content/README.md` + `content/schema/` (no GDD) | none |
 | 2 | Language & text (VI/EN) | Core | Vertical Slice | Approved | `design/gdd/language-and-text.md` | 1, 4 |
-| 3 | Input & touch controls (inferred) | Core | Vertical Slice | Not Started | — | none |
+| 3 | Input & touch controls (inferred) | Core | Vertical Slice | Approved | `design/gdd/input-and-touch.md` | 1 |
 | 4 | Save & progress (inferred) | Persistence | Vertical Slice | Approved | `design/gdd/save-and-progress.md` | none |
 | 5 | Side-scroll movement & combat | Gameplay | Vertical Slice | Approved | `design/gdd/side-scroll-combat.md` | 3, 1 |
 | 6 | Mission flow & beat types | Narrative | Vertical Slice | Approved | `design/gdd/mission-flow.md` | 5, 1, 2, 3 |
-| 7 | Quiz & stars | Gameplay | Vertical Slice | Approved | `design/gdd/quiz-and-stars.md` | 1, 2, 4 |
-| 8 | Hints & onboarding | Meta | Vertical Slice | Approved | `design/gdd/hints-and-onboarding.md` | 6, 5, 3, 10, 1 |
-| 9 | Hero progression & unlock | Progression | Vertical Slice (unlock screen) / Alpha (full) | Approved | `design/gdd/hero-progression.md` | 7, 4, 1 |
+| 7 | Quiz & stars | Gameplay | Vertical Slice | Approved | `design/gdd/quiz-and-stars.md` | 1, 2, 3, 4 |
+| 8 | Hints & onboarding | Meta | Vertical Slice | Approved | `design/gdd/hints-and-onboarding.md` | 6, 5, 3, 10, 1, 11 (soft, map first view) |
+| 9 | Hero progression & unlock | Progression | Vertical Slice (unlock screen) / Alpha (full) | Approved | `design/gdd/hero-progression.md` | 7, 6, 4, 2, 1 |
 | 10 | Audio & voice-over | Audio | Vertical Slice | Approved | `design/gdd/audio-and-voice-over.md` | 1, 2, 4 |
-| 11 | Map & timeline | UI | Alpha (stub in VS) | Approved | `design/gdd/map-and-timeline.md` | 9, 1, 4, 2 |
+| 11 | Map & timeline | UI | Alpha (stub in VS) | Approved | `design/gdd/map-and-timeline.md` | 9, 6, 3, 1, 4, 2 |
 | 12 | Settings & parent area (inferred: sources and credits page) | UI | Full Vision (first release) | Not Started | — | 2, 1 |
 | 13 | Storybook mini-games & content calendar | Gameplay | Full Vision | Not Started | — | 2, 4, 1 |
 
@@ -64,9 +64,9 @@ Every system above must meet them.
 - **4:** local only, offline, no child data.
 - **5:** camera and parallax, attack/defend, telegraph, knock-back and running away, enemy
   states `enter, approach, windup, strike, rest, hurt, flee`; no lives or game over.
-- **6:** intro → beats → ending → quiz; walk, hold-meter, training, fight, reach-the-flag.
+- **6:** intro → beats → ending → quiz; walk, dialogue, hold-meter, training, fight, reach-the-flag.
 - **7:** 3–5 questions, retry until right, stars counted over the whole quiz.
-- **8:** one new button per beat, hand icon, voice prompt, slow-down after a miss.
+- **8:** one new button per beat, hand icon, voice prompt (post-slice), stuck hint after `hint_delay`.
 - **9:** historical order; finishing the quiz unlocks the next hero.
 - **10:** voice-over per line ID, SFX feedback per press, music.
 - **11:** regions, hero places, historical order.
@@ -119,9 +119,9 @@ No economy, no social and no analytics, by pillar (*An toàn cho trẻ / Safe fo
 
 ### Feature Layer (depends on core)
 
-1. Hero progression & unlock: depends on Quiz & stars, Save, Content data.
-2. Hints & onboarding: depends on Mission flow, Combat, Input, Audio, Content data.
-3. Map & timeline: depends on Hero progression, Content data.
+1. Hero progression & unlock: depends on Quiz & stars and Mission flow (the one completion report), Save, Language, Content data.
+2. Hints & onboarding: depends on Mission flow, Combat, Input, Audio, Content data, and Map (soft: the first-view hand).
+3. Map & timeline: depends on Hero progression, Mission flow, Input, Save, Language, Content data.
 4. Storybook mini-games & content calendar: depends on Language, Save, Content data.
 
 ### Presentation Layer (depends on features)
@@ -193,11 +193,11 @@ the GDD.
 | Metric | Count |
 |--------|-------|
 | Total systems identified | 13 |
-| Design docs started | 9 |
-| Design docs reviewed | 9 (lean self-review plus a dev peer review each; Map & timeline in peer review) |
-| Design docs approved | 9 (Content data & claims via TASK-005; Mission flow; Combat; Quiz & stars; Hints & onboarding; Hero progression; Language & text; Save & progress; Audio & voice-over) |
+| Design docs started | 10 |
+| Design docs reviewed | 10 GDDs (lean self-review plus a dev peer review each) |
+| Design docs approved | 10 GDDs, plus the Content data & claims contract (TASK-005); Mission flow; Combat; Quiz & stars; Hints & onboarding; Hero progression; Language & text; Save & progress; Audio & voice-over; Map & timeline; Input & touch controls) |
 | MVP systems designed | n/a (folded into the Vertical Slice) |
-| Vertical Slice systems designed | 9/10 (all approved; Input & touch controls not started) |
+| Vertical Slice systems designed | 10/10 (all approved) |
 
 ---
 

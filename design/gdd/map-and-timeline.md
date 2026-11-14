@@ -44,7 +44,9 @@ timeline).
      east;
    - **the timeline is a vertical column on the right**, world px **x 740–1240, y 140–700** (the
      leader's call after the iOS review: a bottom strip left only ~460 px of height for the map);
-   - pause, sound and the VI|EN chip are top-right, above the column (y 20–120).
+   - pause and sound are **top-left**, as on every screen (Input Rule 3, TASK-020 W7), over the
+     map box's top-left corner, which is outside Vietnam's outline and holds no pin; the VI|EN
+     chip is **top-right**, above the column (y 20–120).
 2. **The map shows modern Vietnam** (D-28).
    - The outline is traced from an **authoritative source** (an official administrative map;
      Luan names it).
@@ -60,7 +62,7 @@ timeline).
 | State | Pin shape | Colour | Shows | Tap |
 |---|---|---|---|---|
 | hidden (not playable) | none | — | nothing | — |
-| locked | silhouette with a **padlock** shape | muted | the place name only | soft wobble, plus a hint arrow pointing to the open pin |
+| locked | silhouette with a **padlock** shape | muted | the place name only | soft wobble, plus an arrow pointing to the open pin (tap feedback owned by this system, not a Hints hint) |
 | open | the hero's portrait in a **round** drum-ring frame | full colour, gentle pulse | name and place | starts the mission (`gate_check`) |
 | completed | the portrait in a **gold** drum-ring frame | full colour | name, place, **best stars** (filled vs outline) and the **medal** (gold vs outline) | starts the mission (a replay) |
 
@@ -95,8 +97,8 @@ timeline).
    - All of this runs under 3 s, with no flashing faster than 3 Hz.
 8. **First launch.**
    - If D-20 is accepted, the language picker comes first, then the map.
-   - The first time the map shows, the hint hand points at the only open pin (Hints GDD), until
-     it is tapped.
+   - The first time the map shows, the hint hand points at the only open pin (Hints Rule 4,
+     "map: first view" row), until it is tapped.
 9. **Text.**
    - Hero names, places and eras are VI/EN text layers (Language & text), never in the map art.
    - Labels use the `place` and `hero_name` field types (R8c).
@@ -120,7 +122,8 @@ mission, ≤ 3 s, then `idle`) → `starting` (pin tapped, Mission flow `gate_ch
 | Content data & claims | `hero.map`, `hero.era`, `hero.name`, `hero.place`, `timeline_order`, portraits | (none) | Content contract |
 | Mission flow & beat types | "returned from results" | "start mission X" (→ `gate_check`) | Mission flow GDD |
 | Language & text | current language | (none) | Language GDD |
-| Hints & onboarding | (none) | "first map view", the open pin's position | Hints GDD |
+| Hints & onboarding | (none) | "first map view", the open pin's position, pin tapped | Hints GDD |
+| Input & touch controls | taps and drags (Input Rule 16) | (none) | Input GDD |
 | Audio & voice-over | (none) | pin tap, unlock reveal, star and medal settle | Audio GDD |
 
 ## Formulas
@@ -143,23 +146,24 @@ map art fitted inside it keeping its aspect) → pin at (40 + 0.42 × 660, 20 + 
 
 The F2 (pin size, clusters and labels) formula is defined as:
 
-`pin_world = pad_min / k`, where k is the fitted points per world px on the device. Pins whose centres are closer than `pin_world` merge into **one cluster pin** at their average position, built by this **exact procedure**, so both apps build identical clusters (pairwise closeness isn't transitive): walk the pins in `timeline_order`; a pin joins the **first** existing cluster that has **any** member within `pin_world` of it, otherwise it starts a new cluster; each cluster's position is the average of its members. A shared fixture (pins, k → clusters) can pin this down for both apps. Each cluster pin shows a count badge (an icon); tapping it opens the **multi-hero picker**. Labels of the remaining pins shift by `label_offset` when they overlap, and if they still overlap, the lower-priority label hides (priority: open > completed > locked).
+`pin_world = pad_min / k`, where k is the pt/dp per world px defined once in Input F1. Pins whose centres are closer than `pin_world` merge into **one cluster pin** at their average position, built by this **exact procedure**, so both apps build identical clusters (pairwise closeness isn't transitive): walk the pins in `timeline_order`; a pin joins the **first** existing cluster that has **any** member within `pin_world` of it, otherwise it starts a new cluster; each cluster's position is the average of its members. A shared fixture (pins, k → clusters) can pin this down for both apps. Each cluster pin shows a count badge (an icon); tapping it opens the **multi-hero picker**. Labels of the remaining pins shift by `label_offset` when they overlap, and if they still overlap, the lower-priority label hides (priority: open > completed > locked).
 
 **Variables:**
 | Variable | Type | Range | Source | Description |
 |----------|------|-------|--------|-------------|
 | pad_min | float (pt/dp) | 44–120 | data file (`tuning.json` `pad_min`, 72) | Minimum touch target |
-| k | float (pt per world px) | device | calculated (fit scale) | Converts touch size to world px (≈ 0.68 on a phone where 72 pt ≈ 106 world px) |
-| pin_world | float (world px) | ≈ 100–110 | calculated | Pin touch target in world px |
+| k | float (pt/dp per world px) | device | calculated (Input F1) | Converts touch size to world px (0.527 on the Android reference phone, 0.517 on the iOS one) |
+| pin_world | float (world px) | ≈ 135–140 on the reference phones | calculated | Pin touch target in world px |
 | label_offset | float (world px) | 40–80 | constant ⟨UX⟩ | How far a label moves |
 
 **Output Range:** pins mark real places and never move on their own. Only clustering merges
 them, and only labels shift or hide. Both apps compute clusters from the same numbers, so they
 match. Northern places that sit close together (e.g. Thăng Long, Bình Than, Bạch Đằng, Chi Lăng)
 will often cluster.
-**Example:** with `pad_min` 72 and k ≈ 0.68, `pin_world` ≈ 106. Two pins 80 world px apart
-merge into a cluster showing "2". A pin 130 px away stays separate, and its label shifts down
-60 px if it overlaps.
+**Example:** on the Android reference phone, `pad_min` 72 and k 0.527 give `pin_world` ≈ 137.
+Two pins 80 world px apart merge into a cluster showing "2". A pin 160 px away stays separate,
+and its label shifts down 60 px if it overlaps. A pin 130 px away would merge here, so the
+cluster fixture names k for each case.
 
 The F3 (region glow) formula is defined as:
 
@@ -205,7 +209,8 @@ The F3 (region glow) formula is defined as:
 | Content data & claims | this depends on it | Hard | `hero.map`, `hero.era`, names, portraits, `timeline_order` |
 | Language & text | this depends on it | Hard | Labels |
 | Mission flow & beat types | both ways | Hard | Start mission; return from results ("the map") |
-| Hints & onboarding | depends on this | Soft | First-view hand on the open pin |
+| Hints & onboarding | depends on this | Soft | First-view hand on the open pin (Hints Rule 4 map row) |
+| Input & touch controls | this depends on it | Hard | Tap vs drag (`drag_threshold`), pin size (`pad_min`, Input F1) |
 | Audio & voice-over | depends on this | Soft | Map sounds |
 
 Hero progression already lists Map & timeline as a dependent (`design/gdd/hero-progression.md`).
@@ -218,7 +223,7 @@ Hero progression already lists Map & timeline as a dependent (`design/gdd/hero-p
   - drum-ring motif on the frame only;
   - **no text in the art**: every name is a text layer.
 - **Pins and cards** reuse the hero portraits (ASSET-327 family) in drum-ring frames, the
-  padlock shape, and the stars and medal (ASSET-021–023, 036–037).
+  padlock shape, and the stars and medal (ASSET-022–023, 036–037).
 - **Region glow:** a soft warm wash, never flashing.
 - **Audio:** a soft tap on the pin, the unlock reveal and the star/medal settle sounds (Audio GDD).
 
@@ -265,7 +270,7 @@ Criteria 1–6 are logic (unit tests on map state); 7–10 need QC screenshots.
    **THEN** the reveal and the highlight move finish within 3 s, with no flashing over 3 Hz.
 10. **GIVEN** the greyscale and colour-blind simulations, **WHEN** captured, **THEN** locked, open
     and completed are still distinguishable by shape.
-11. **GIVEN** two pins whose centres are 80 world px apart and `pin_world` ≈ 106, **WHEN** the map
+11. **GIVEN** two pins whose centres are 80 world px apart and k 0.527 (`pin_world` ≈ 137), **WHEN** the map
     renders, **THEN** one cluster pin shows with a count of 2, and tapping it opens the picker with
     both heroes.
 12. **GIVEN** the timeline column, **WHEN** a touch moves 15 pt before lifting, **THEN** the

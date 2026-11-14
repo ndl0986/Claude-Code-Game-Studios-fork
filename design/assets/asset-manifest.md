@@ -8,7 +8,7 @@
 
 | Total | Needed | In Progress | Done | Approved |
 |-------|--------|-------------|------|----------|
-| 93 | 93 | 0 | 0 | 0 |
+| 96 | 96 | 0 | 0 | 0 |
 
 ## Assets by Context
 
@@ -128,3 +128,6 @@
 | ASSET-330 | Dialogue boxes (speaker and narrator) | UI | Needed | design/assets/specs/mission-flow-assets.md |
 | ASSET-331 | Ask button ("Xin vào! / Let me in!") | UI | Needed | design/assets/specs/mission-flow-assets.md |
 | ASSET-332 | Meeting-gate scene background (dialogue) | Environment | Needed | design/assets/specs/mission-flow-assets.md |
+| ASSET-333 | Skip-warning button icons (open book, skip arrow) | UI | Needed | design/assets/specs/mission-flow-assets.md |
+| ASSET-334 | Leave-the-story card top picture | UI | Needed | design/assets/specs/mission-flow-assets.md |
+| ASSET-335 | Special pad icon: clenched fist (hold-meter) | UI | Needed | design/assets/specs/mission-flow-assets.md |
