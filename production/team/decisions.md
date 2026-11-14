@@ -99,11 +99,24 @@ it) · **Decided** (Luan's call, with the date).
 
 ### D-28b Which official map to trace for today's Vietnam (incl. Hoàng Sa, Trường Sa)
 
-- **Flow:** D-28 A (decided) → game-art-content traces the outline → map art → your sign-off.
-- **Need:** one authoritative source to trace, e.g. a national administrative map published by the
-  Vietnamese state survey/mapping authority, or the map in the current school geography textbook.
-- **Recommendation:** game-art-content proposes 2–3 candidate sources with what each shows; you pick.
-- **Status:** Open (not urgent: map art is Alpha).
+- **Flow:** D-28 A (decided) → game-art-content traces the national outline, coast and both
+  archipelagos (no province borders needed) → map art → your sign-off.
+- **Candidates (researched by game-art-content, 2026-11-14; please verify):**
+  - **A. "Bản đồ Cộng hòa Xã hội Chủ nghĩa Việt Nam" (2025, 34 provinces)**, NXB Tài nguyên – Môi
+    trường và Bản đồ Việt Nam (state map publisher), 1:2,300,000, print + free electronic copy.
+    *Recommended.* To check on the actual sheet: how Hoàng Sa and Trường Sa are drawn (inset or in place).
+  - **B. The online administrative map of Cục Đo đạc, Bản đồ và Thông tin địa lý Việt Nam** (same
+    authority, digital, easiest to trace). Reuse terms to check.
+  - **C. The school map** (SGK Lịch sử và Địa lí lớp 4, or the Atlat Địa lí Việt Nam): what children
+    know, but current editions may predate the 2025 changes.
+  - Not acceptable: foreign open data (Natural Earth, GADM): they don't show the archipelagos as Vietnamese.
+- **Recommendation:** trace from A (using B's digital copy if its terms allow), cross-check with A's
+  print; use C only as a "looks like the map a child knows" check.
+- **Release item to confirm:** maps showing national territory published in Vietnam may need content
+  appraisal (thẩm định) by Cục Đo đạc, Bản đồ và Thông tin địa lý. Possibly applies to the app's map;
+  goes on the release checklist.
+- **Sources:** mae.gov.vn (new map publications); VietnamPlus, Vietnam Law Magazine, Lao Động (34-province map).
+- **Status:** Open (not urgent: map art is Alpha). Answer "D-28b: A" or another letter.
 
 ### D-23 Voice-over and sound choices (not needed until voice recording)
 
