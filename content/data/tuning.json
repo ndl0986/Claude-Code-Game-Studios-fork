@@ -295,7 +295,7 @@
       "unit": "px"
     },
     "beat_gap": {
-      "value": 1600,
+      "value": 800,
       "min": 800,
       "max": 4000,
       "unit": "px"

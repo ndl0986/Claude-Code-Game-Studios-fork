@@ -34,7 +34,9 @@
       "quiz_prompt": 90,
       "quiz_choice": 32,
       "quiz_why": 120,
-      "dialog": 60
+      "dialog": 60,
+      "dialogue_line": 120,
+      "dialogue_narrator": 120
     },
     "vi_budget": {
       "ui": 38,
@@ -50,7 +52,9 @@
       "quiz_prompt": 120,
       "quiz_choice": 51,
       "quiz_why": 120,
-      "dialog": 96
+      "dialog": 96,
+      "dialogue_line": 120,
+      "dialogue_narrator": 120
     },
     "fit": {
       "allowance": 0.03,
@@ -138,6 +142,18 @@
           "box_width": 820,
           "font_px": 37,
           "max_lines": 3,
+          "weight": 600
+        },
+        "dialogue_line": {
+          "box_width": 720,
+          "font_px": 38,
+          "max_lines": 3,
+          "weight": 600
+        },
+        "dialogue_narrator": {
+          "box_width": 880,
+          "font_px": 38,
+          "max_lines": 2,
           "weight": 600
         }
       }
