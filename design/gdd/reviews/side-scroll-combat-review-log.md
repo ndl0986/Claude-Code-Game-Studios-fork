@@ -16,3 +16,6 @@ Reviewed-Content-Hash: .claude/skills/design-review/SKILL.md 4dcc8b81162613c7571
 Reviewed-Content-Hash: design/gdd/game-concept.md 2ee5801590b66b9404c289645f337bc459690eba
 Reviewed-Content-Hash: design/gdd/mission-flow.md b6c14cba5586266e8f09bff0403fbcb64ce0446a
 Reviewed-Content-Hash: design/art/art-bible.md 851eadc6ddd3c5341d202cf8cbde728d12884163
+
+## Note — 2026-11-14 — rename only (no design change)
+Tuning keys renamed to the names already in content/data/tuning.json (TASK-005b, 012114c), and variable ranges aligned to that file. D-09 reduced to special_push, special_cooldown and the two validation rules. The hashes above are from before this rename; the peer review covers the renamed file.

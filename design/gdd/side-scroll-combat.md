@@ -43,12 +43,12 @@ Combat is how a child takes part in the story's battle moments.
 1. **Move.** Holding ◀ or ▶ moves the hero at `hero_speed`. Releasing stops at once, with no
    sliding. The hero faces the last direction moved.
 2. **Attack.** Tapping attack starts a swing lasting `attack_time`.
-   - The hit is checked once, at `attack_hit_point` (45%) of the swing.
+   - The hit is checked once, at `attack_hit_at` (45%) of the swing.
    - A new swing can start after `attack_cooldown`.
    - Moving during a swing is slowed to `attack_move_mul` (40%) of `hero_speed`.
    - Pads fire on press (P-01).
 3. **Hit test.** A swing hits **every** non-fleeing enemy that is either in front of the hero
-   within `attack_range`, or closer than `close_hit_range` on either side (F5). One swing can
+   within `attack_range`, or closer than `attack_close_range` on either side (F5). One swing can
    hit two enemies.
 4. **Defend.** While defend is held, the hero raises the shield. The hero can't move or attack
    while defending: one action at a time, readable for a child.
@@ -79,32 +79,32 @@ Combat is how a child takes part in the story's battle moments.
    - The others wait `queue_spacing` further back each.
 9. **One strike at a time.** An enemy may start a windup only when all of these hold:
    - it is the nearest on its side;
-   - it is within `enemy_reach + reach_margin`;
-   - it has been approaching for at least `approach_delay`;
+   - it is within `enemy_reach + windup_reach_extra`;
+   - it has been approaching for at least `approach_min_time`;
    - **no other enemy anywhere is in windup or strike**.
 10. **Telegraph.** In windup, the enemy glows and shows a "!" for `telegraph` seconds (× 1.2 for
     the leader). At the end it strikes.
-    - The strike lands if the hero is within `enemy_reach + strike_margin`.
+    - The strike lands if the hero is within `enemy_reach + strike_reach_extra`.
     - If defend is held at that instant, the strike is **blocked**: the enemy is knocked back
-      by `block_knockback`, and the game shows "Đỡ được! / Blocked!" with a clang.
+      by `block_knock`, and the game shows "Đỡ được! / Blocked!" with a clang.
     - Otherwise the hero is pushed (rule 5).
 11. **Getting hit.** A hit enemy is knocked back by its knock-back distance, played out over
-    `kb_decay` (F4), and goes to `hurt` for `enemy_hurt_time` (0.35 s, P-03). **Hitting an
+    `kb_decay` (F4), and goes to `hurt` for `hurt_recover` (0.35 s, P-03). **Hitting an
     enemy in windup cancels its strike.**
 12. **Running away.** When an enemy's hits reach its kind's count, it drops its weapon (the
     weapon stays on the ground and fades) and runs away from the hero at `flee_speed`. It is
-    removed once `flee_despawn` px past the screen edge. It never comes back.
+    removed once `flee_remove_margin` px past the screen edge. It never comes back.
 13. **Fight end.** A fight's goal is met when its queue is empty and no enemy is on screen,
     fleeing ones included. Mission flow then runs `end_pause`.
 
 **Camera and space**
 
 14. **Free scroll** (`walk`, `reach-the-flag` outside encounters, `training`): the camera
-    follows the hero, keeping it `camera_lead` px from the left edge. It never scrolls back
-    left. The hero can't walk off the left edge (`bounds_margin`).
+    follows the hero, keeping it `camera_follow_offset` px from the left edge. It never scrolls back
+    left. The hero can't walk off the left edge (`hero_edge_margin`).
 15. **Locked fight.** A `fight` beat, and each encounter in `reach-the-flag` (D-06), locks the
     camera with the hero at `lock_offset` px from the left edge. The hero is kept within
-    `bounds_margin` of both screen edges until the fight ends.
+    `hero_edge_margin` of both screen edges until the fight ends.
 16. **Special in combat** (reach-the-flag only; proposed, not in the prototype):
     - Tapping special waves the banner: followers cheer, and every non-fleeing enemy on screen
       is pushed back by `special_push`.
@@ -117,13 +117,13 @@ Combat is how a child takes part in the story's battle moments.
 
 | State | Does | Leaves to | When |
 |---|---|---|---|
-| `enter` | Walks in from off-screen at `enter_speed` | `approach` | Within `approach_switch_dist` (260 px) of its stand point |
+| `enter` | Walks in from off-screen at `enter_speed` | `approach` | Within `enter_to_approach_dist` (260 px) of its stand point |
 | `approach` | Walks to its queue stand point at `enemy_speed`; it uses `enter_speed` while still farther than 260 px | `windup` / `hurt` / `flee` | Rule 9 / hit / last hit |
 | `windup` | Glows and shows "!" for the telegraph time | `strike` / `hurt` / `flee` | Telegraph elapsed / hit (strike cancelled) / last hit |
 | `strike` | The strike resolves on entry (block or push), then lasts `strike_time` | `rest` / `hurt` / `flee` | Elapsed / hit / last hit |
-| `rest` | Drifts to its stand point at `rest_drift_mul` × speed | `approach` (with `approach_delay` already counted) / `hurt` / `flee` | `enemy_rest` elapsed / hit / last hit |
-| `hurt` | Knocked back, leans, dizzy | `approach` / `flee` | `enemy_hurt_time` elapsed / last hit |
-| `flee` | Runs away, weapon dropped | removed | `flee_despawn` px past the screen edge |
+| `rest` | Drifts to its stand point at `rest_speed_mul` × speed | `approach` (with `approach_min_time` already counted) / `hurt` / `flee` | `enemy_rest` elapsed / hit / last hit |
+| `hurt` | Knocked back, leans, dizzy | `approach` / `flee` | `hurt_recover` elapsed / last hit |
+| `flee` | Runs away, weapon dropped | removed | `flee_remove_margin` px past the screen edge |
 
 **Hero:** `idle` ⇄ `walk` · `attack` (it can walk slowly) · `defend` (no move or attack) ·
 `pushed` (a flash overlay on any state, with no loss of control).
@@ -144,13 +144,13 @@ The F1 (enemy strike cycle) formula is defined as:
 
 `T_cycle = telegraph × m_kind + strike_time + enemy_rest`
 
-`approach_delay` applies only to an enemy's first approach (and after `hurt`). After `rest`, the prototype counts it as already passed, so it is not part of the repeating cycle.
+`approach_min_time` applies only to an enemy's first approach (and after `hurt`). After `rest`, the prototype counts it as already passed, so it is not part of the repeating cycle.
 
 **Variables:**
 | Variable | Type | Range | Source | Description |
 |----------|------|-------|--------|-------------|
 | telegraph | float (s) | 0.4–2.5 | data file (`telegraph`, 1.1) | Warning time before a strike |
-| m_kind | float | 1 (spear, shield) / 1.2 (leader) | data file (proposed `leader_telegraph_mul`) | Leader telegraphs longer |
+| m_kind | float | 1 (spear, shield) / 1.2 (leader) | data file (`leader_telegraph_mul`, 0.5–2) | Leader telegraphs longer |
 | strike_time | float (s) | 0.1–0.6 | data file (0.25) | The strike itself |
 | enemy_rest | float (s) | 0.4–4 | data file (1.6) | Pause after a strike |
 
@@ -210,14 +210,14 @@ harmless.
 
 The F5 (attack hit test) formula is defined as:
 
-`hits(e) = e.state ≠ flee ∧ ((sign(dx) = face ∧ |dx| ≤ attack_range) ∨ |dx| < close_hit_range)`, where `dx = e.x − hero.x`, checked once at `attack_hit_point × attack_time` after the press.
+`hits(e) = e.state ≠ flee ∧ ((sign(dx) = face ∧ |dx| ≤ attack_range) ∨ |dx| < attack_close_range)`, where `dx = e.x − hero.x`, checked once at `attack_hit_at × attack_time` after the press.
 
 **Variables:**
 | Variable | Type | Range | Source | Description |
 |----------|------|-------|--------|-------------|
 | attack_range | float (px) | 80–300 | data file (175) | Reach in front |
-| close_hit_range | float (px) | 0–100 | data file (proposed, 50) | Hits even behind, when overlapping |
-| attack_hit_point | float | 0.2–0.8 | data file (proposed, 0.45) | When in the swing the hit lands |
+| attack_close_range | float (px) | 0–120 | data file (50) | Hits even behind, when overlapping |
+| attack_hit_at | float | 0.1–0.9 | data file (0.45) | When in the swing the hit lands |
 
 **Output Range:** boolean per enemy. The hit lands 0.126 s after the press (0.45 × 0.28).
 `attack_range` (175) must stay ≥ `enemy_reach − stand_gap` (140), or a front enemy at its stand
@@ -227,15 +227,15 @@ point can't be hit. That is a coupling, so both rows say so in `tuning.json`.
 
 The F6 (block) formula is defined as:
 
-`blocked = defend_held(at strike start) ∧ |dx| ≤ enemy_reach + strike_margin`; if not blocked and in range, the hero is pushed by `hero_pushback`.
+`blocked = defend_held(at strike start) ∧ |dx| ≤ enemy_reach + strike_reach_extra`; if not blocked and in range, the hero is pushed by `hero_pushback`.
 
 **Variables:**
 | Variable | Type | Range | Source | Description |
 |----------|------|-------|--------|-------------|
 | enemy_reach | float (px) | 80–260 | data file (150) | Strike distance |
-| strike_margin | float (px) | 0–80 | data file (proposed, 40) | Grace past reach |
+| strike_reach_extra | float (px) | 0–120 | data file (40) | Grace past reach |
 | hero_pushback | float (px) | 0–250 | data file (90) | Push on an unblocked hit |
-| block_knockback | float (px) | 0–150 | data file (proposed, 70) | Push on the enemy when blocked |
+| block_knock | float (px) | 0–200 | data file (70) | Push on the enemy when blocked |
 
 **Output Range:** boolean. There is no timing window: holding defend at any time during the
 telegraph blocks. That is deliberate for ages 6–10.
@@ -263,7 +263,7 @@ telegraph blocks. That is deliberate for ages 6–10.
 - **If a swing hits the last enemy and another is still queued**: the queued enemy spawns
   after `spawn_gap`. The fight ends only when the queue is empty and the screen is clear.
 - **If the hero is pushed into the locked-camera edge**: the position is clamped at
-  `bounds_margin`, and the push stops there. No damage.
+  `hero_edge_margin`, and the push stops there. No damage.
 - **If knock-back pushes an enemy off-screen** (not fleeing): it walks back from where it is.
   It is not removed.
 - **If two enemies overlap the hero** (close range): one swing hits both (F5).
@@ -363,7 +363,7 @@ screenshot on each platform.
 8. **GIVEN** a spear hit, **WHEN** the knock-back plays out, **THEN** the enemy ends 170 ± 2 px
    from where it was hit (85 ± 2 px for a leader) (F4).
 9. **GIVEN** a fight whose queue is empty, **WHEN** the last enemy is still fleeing on screen,
-   **THEN** the goal is not met until it is `flee_despawn` past the edge.
+   **THEN** the goal is not met until it is `flee_remove_margin` past the edge.
 10. **GIVEN** defend held, **WHEN** move or attack is pressed, **THEN** the hero neither moves
     nor swings.
 11. **GIVEN** `tuning.json` with `attack_range` 130 and `enemy_reach − stand_gap` 140, **WHEN**
@@ -381,6 +381,6 @@ screenshot on each platform.
 
 | # | Question | Owner | By |
 |---|---|---|---|
-| D-09 | Promote the prototype's hidden literals to `tuning.json`: `enemy_hurt_time` 0.35 (P-03), `approach_switch_dist` 260, `reach_margin` 20, `strike_margin` 40, `approach_delay` 0.5, `leader_telegraph_mul` 1.2, `block_knockback` 70, `rest_drift_mul` 0.5, `attack_hit_point` 0.45, `close_hit_range` 50, `attack_move_mul` 0.4, `flee_despawn` 250, `bounds_margin` 70, `camera_lead` 460; plus the proposed `special_push` 170, `special_cooldown` 6 s | game-dev-ios + game-dev-android | Before the slice's combat story is closed |
+| D-09 | Two new `tuning.json` keys for special in combat (rule 16): `special_push` 170 px, `special_cooldown` 6 s. Two validation rules: fail if `attack_range` < `enemy_reach − stand_gap`; warn if `telegraph` < 0.8 s. All other combat values already exist in `tuning.json` (TASK-005b, 012114c) under the names this GDD uses | game-dev-ios + game-dev-android | Before the slice's combat story is closed |
 | — | Hit-stop: add a short freeze (e.g. 0.05 s) if playtests find hits weak? | Luan, after the vertical-slice playtest | Playtest |
 | — | Special in combat (rule 16) is new design, not prototyped. Confirm it in the slice, or drop it until TASK-003b | Luan | With D-08 |
