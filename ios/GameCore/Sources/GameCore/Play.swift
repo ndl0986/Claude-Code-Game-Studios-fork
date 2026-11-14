@@ -86,6 +86,8 @@ public struct PlayState: Sendable {
     /// Fight beats and reach-the-flag encounters lock the camera at lockX.
     public private(set) var locked = false
     public private(set) var lockX = 0.0
+    /// Combat Rule 15b: a training beat's camera cap (beat_play start until the next beat), else nil.
+    public private(set) var trainCap: Double?
     public internal(set) var queue: [(kind: FightParams.Kind, left: Bool)] = []
     public internal(set) var spawnT = 0.0
     var maxActive = 1
@@ -185,6 +187,7 @@ public struct PlayState: Sendable {
         case "training":
             dummies = (0..<(b.params.dummies ?? 0)).map { Dummy(x: xStart + Double($0 + 1) * dummySpacing) }
             blocksDone = 0; partner = nil
+            trainCap = max(cam, xStart - tuning["hero_edge_margin"]) // Rule 15b: fixed here; the camera stops following at it
             trainingStage = dummies.isEmpty ? nextTrainingStage(after: .dummies) : .dummies
             if trainingStage == .blocks { spawnPartner() }
             tut.enemySeen = tut.enemySeen || !dummies.isEmpty
@@ -244,7 +247,7 @@ public struct PlayState: Sendable {
 
     /// Story boxes, beat_end's cheer, then the next beat (or the end of the mission).
     mutating func nextBeat() {
-        locked = false; partner = nil; dummies = []
+        locked = false; partner = nil; dummies = []; trainCap = nil
         idle = 0; stall = 0
         beat += 1
         phase = .walkTo // after the last beat too: beat = count, phase walk_to (agreed with Android in the shared trace)
@@ -297,7 +300,12 @@ public struct PlayState: Sendable {
             let inner = tuning["enemy_reach"] + edge
             hero.x = max(lockX + inner, min(lockX + 1280 - inner, hero.x)); cam = lockX
         } else {
-            hero.x = max(cam + edge, hero.x); cam = max(cam, hero.x - tuning["camera_follow_offset"])
+            // Rule 15b in training: the hero is stopped (never moved) at cap + W − enemy_reach − edge, and the
+            // camera follows right but never past the cap and never left. Same order as Android (trace parity).
+            if let tc = trainCap { hero.x = min(hero.x, tc + 1280 - tuning["enemy_reach"] - edge) }
+            hero.x = max(cam + edge, hero.x)
+            let follow = hero.x - tuning["camera_follow_offset"]
+            cam = max(cam, trainCap.map { min(follow, $0) } ?? follow)
         }
         // 7. walk_to → beat
         if phase == .walkTo && beat < beats.count && hero.x >= beatX(beat) {
