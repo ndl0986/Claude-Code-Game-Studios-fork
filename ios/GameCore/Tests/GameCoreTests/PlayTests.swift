@@ -131,7 +131,7 @@ final class PlayTests: XCTestCase {
         p.update(dt, StepInput(tapped: [.attack]))
         run(&p, steps: 12)
         XCTAssertEqual(p.enemies[0].state, .flee)
-        XCTAssertEqual(p.phase, .fight)
+        XCTAssertEqual(p.phase, .beatPlay)
         run(&p, steps: 600)
         XCTAssertEqual(p.phase, .caption)
     }
@@ -198,10 +198,7 @@ final class PlayTests: XCTestCase {
 
     func test_combat_AC14_the_whole_sample_mission_can_be_cleared_with_no_fail_state() {
         var p = fresh()
-        var step = 0
-        while !p.finished && step < 60 * 600 {
-            p.update(dt, botInput(p, step: step)); step += 1
-        }
+        let step = botRun(&p)
         XCTAssertTrue(p.finished, "no fail state: combat AC14")
         XCTAssertLessThan(Double(step) * dt, 4 * 120, "each fight within 2 minutes")
     }

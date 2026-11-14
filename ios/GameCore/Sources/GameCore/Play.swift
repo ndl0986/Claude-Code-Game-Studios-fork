@@ -1,7 +1,7 @@
 import Foundation
 
 /// Thumb-pad actions held or tapped this step.
-public enum PadAction: String, Sendable, CaseIterable { case left, right, attack, defend }
+public enum PadAction: String, Sendable, CaseIterable { case left, right, attack, defend, special }
 
 /// What the player did this fixed step: pads held, pads tapped (pressed this step), and a confirm tap.
 public struct StepInput: Sendable {
@@ -19,7 +19,7 @@ public enum FxColor: Sendable { case glow, white, indigo, red }
 /// Sounds and moments the app reacts to.
 public enum PlayEvent: Equatable, Sendable {
     case swoosh, drum, clang, bonk
-    case beatStarted(Int), caption(Int), flee(FightParams.Kind), standIn(beat: Int, type: String)
+    case beatStarted(Int), caption(Int), flee(FightParams.Kind), standIn(beat: Int, type: String), cheer
 }
 
 /// One enemy (state names and timings from the prototype, 203d73e).
@@ -56,10 +56,16 @@ public struct Dropped: Sendable { public let x: Double; public let kind: FightPa
 /// First-use flags for the hand hints.
 public struct Tutorial: Sendable { public var moved = false, hit = false, blocked = false, windupSeen = false, enemySeen = false }
 
-/// The mission's play screen: walk → fight → caption, beat after beat. A line-by-line port of the
-/// prototype's updatePlay / updateEnemies / heroAttack, in the agreed frame order.
+/// A training dummy (mission-flow: wobbles and springs back, never breaks).
+public struct Dummy: Sendable { public let x: Double; public var hit = false; public var wobble = 0.0 }
+
+/// The mission's play screen (mission-flow GDD, combat GDD, hints GDD): walk_to → beat_card
+/// (non-fight) → beat_play → beat_end → caption (fight), beat after beat. The fight logic is a
+/// line-by-line port of the prototype's updatePlay / updateEnemies / heroAttack, in the agreed
+/// frame order; walk, hold-meter, training and reach-the-flag follow F2–F5 and the parity rules.
 public struct PlayState: Sendable {
-    public enum Phase: Sendable { case walk, fight, caption }
+    public enum Phase: String, Sendable { case walkTo = "walk_to", beatCard = "beat_card", beatPlay = "beat_play", beatEnd = "beat_end", caption }
+    public enum TrainingStage: String, Sendable { case dummies, blocks, special, done }
 
     public let tuning: Tuning
     public let beats: [Beat]
@@ -69,10 +75,13 @@ public struct PlayState: Sendable {
     public var hero: Hero
     public private(set) var cam = 0.0
     public private(set) var beat = 0
-    public private(set) var phase: Phase = .walk
+    public private(set) var phase: Phase = .walkTo
+    /// Fight beats and reach-the-flag encounters lock the camera at lockX.
+    public private(set) var locked = false
     public private(set) var lockX = 0.0
     public internal(set) var queue: [(kind: FightParams.Kind, left: Bool)] = []
     public internal(set) var spawnT = 0.0
+    var maxActive = 1
     public private(set) var endT = 0.0
     public var enemies: [Enemy] = []
     public private(set) var dropped: [Dropped] = []
@@ -82,11 +91,25 @@ public struct PlayState: Sendable {
     public private(set) var stall = 0.0
     public private(set) var idle = 0.0
     public var tut = Tutorial()
-    /// Which line of the current beat's caption shows (one sentence per box).
+    /// Beat card boxes (title, scene lines, goal) and caption boxes (scene lines).
+    public private(set) var cardLine = 0
     public private(set) var captionLine = 0
-    /// True once the last caption closed: the flow moves to the ending.
+    /// x_start: the hero's x when beat_play starts (F2, parity item 4).
+    public private(set) var xStart = 0.0
+    // hold-meter
+    public private(set) var heldTotal = 0.0
+    // training
+    public private(set) var trainingStage: TrainingStage = .done
+    public private(set) var dummies: [Dummy] = []
+    public private(set) var blocksDone = 0
+    public var partner: Enemy?
+    // reach-the-flag
+    public private(set) var encounterIndex = 0
+    /// True once the last beat's end (or caption) closes: the flow moves to the ending.
     public private(set) var finished = false
     public private(set) var events: [PlayEvent] = []
+    /// Special was tapped or held at least once this run (teach hint).
+    public var specialUsed = false
 
     public init(tuning: Tuning, beats: [Beat], seed: Int) {
         self.tuning = tuning; self.beats = beats
@@ -95,32 +118,101 @@ public struct PlayState: Sendable {
     }
 
     var ground: Double { tuning["ground_y"] }
-    public func beatX(_ i: Int) -> Double { tuning["beat_start_x"] + Double(i) * tuning["beat_gap"] }
+    public var currentBeat: Beat? { beat < beats.count ? beats[beat] : nil }
+
+    /// F5: beatX(0) = beat_start_x; beatX(i+1) = beatX(i) + extent(i) + beat_gap.
+    public func beatX(_ i: Int) -> Double {
+        var x = tuning["beat_start_x"]
+        for j in 0..<min(i, beats.count) { x += extent(beats[j]) + tuning["beat_gap"] }
+        if i > beats.count { x += Double(i - beats.count) * tuning["beat_gap"] }
+        return x
+    }
+    func extent(_ b: Beat) -> Double {
+        switch b.type {
+        case "walk", "reach-the-flag": (b.params.lengthScreens ?? 0) * 1280
+        case "training": Double((b.params.dummies ?? 0) + 1) * dummySpacing
+        default: 0
+        }
+    }
+    var dummySpacing: Double { tuning.values["dummy_spacing"]?.value ?? 300 }
     func hp(_ k: FightParams.Kind) -> Int {
         switch k { case .spear: Int(tuning["hp_spear"]); case .shield: Int(tuning["hp_shield"]); case .leader: Int(tuning["hp_leader"]) }
     }
     func speed(_ k: FightParams.Kind) -> Double { tuning["enemy_speed"] * (k == .leader ? tuning["leader_speed_mul"] : 1) }
 
-    /// The fight params for beat `i`; a beat type the slice doesn't build plays as a one-spear fight (P-02, debug stand-in).
-    func fightParams(_ i: Int) -> FightParams {
-        beats[i].fight ?? FightParams(enemies: [.spear], maxActive: 1, fromLeft: [])
+    /// The pads shown now (parity item 3): walk_to = move only; beat_play / beat_end = the beat's buttons; story boxes = none.
+    public var visiblePads: Set<PadAction> {
+        switch phase {
+        case .walkTo: return [.left, .right]
+        case .beatCard, .caption: return []
+        case .beatPlay, .beatEnd:
+            var out: Set<PadAction> = []
+            for b in currentBeat?.buttons ?? [] {
+                switch b { case "move": out.formUnion([.left, .right]); case "attack": out.insert(.attack); case "defend": out.insert(.defend); case "special": out.insert(.special); default: break }
+            }
+            return out
+        }
     }
 
-    /// Drains the events raised since the last call.
+    /// The beat card's boxes: title, the scene lines, then the goal.
+    public var cardTexts: [Text] { guard let b = currentBeat else { return [] }; return [b.title] + b.scene + [b.goal] }
+    /// The hold meter, 0…1 (F3).
+    public var meter: Double { guard let h = currentBeat?.params.holdSeconds, h > 0 else { return 0 }; return min(1, heldTotal / h) }
+    /// The flag of a reach-the-flag beat.
+    public var flagX: Double? { guard phase == .beatPlay || phase == .beatEnd, currentBeat?.type == "reach-the-flag" else { return nil }; return xStart + (currentBeat?.params.lengthScreens ?? 0) * 1280 }
+
     public mutating func takeEvents() -> [PlayEvent] { defer { events = [] }; return events }
 
     // MARK: beats
 
-    public mutating func startBeat(_ i: Int) {
-        if beats[i].fight == nil {
-            NSLog("[play] beat \(i + 1): type '\(beats[i].type)' is not built yet; playing it as a fight (P-02)")
-            events.append(.standIn(beat: i + 1, type: beats[i].type))
+    /// beat_play starts: x_start is the hero's x now.
+    public mutating func startPlay(_ i: Int) {
+        let b = beats[i]
+        phase = .beatPlay; xStart = hero.x; stall = 0; endT = 0
+        switch b.type {
+        case "fight":
+            let p = b.fight ?? FightParams(enemies: [.spear], maxActive: 1, fromLeft: [])
+            lock(at: beatX(i), p.enemies, p.maxActive, p.fromLeft)
+        case "hold-meter": heldTotal = 0
+        case "training":
+            dummies = (0..<(b.params.dummies ?? 0)).map { Dummy(x: xStart + Double($0 + 1) * dummySpacing) }
+            blocksDone = 0; partner = nil
+            trainingStage = dummies.isEmpty ? nextTrainingStage(after: .dummies) : .dummies
+            if trainingStage == .blocks { spawnPartner() }
+            tut.enemySeen = tut.enemySeen || !dummies.isEmpty
+        case "reach-the-flag": encounterIndex = 0
+        default: break
         }
-        let p = fightParams(i)
-        phase = .fight; lockX = beatX(i) - tuning["lock_offset"]; cam = lockX
-        queue = p.enemies.enumerated().map { (kind: $0.element, left: p.fromLeft.contains($0.offset)) }
-        spawnT = tuning["first_spawn_delay"]; stall = 0; endT = 0
         events.append(.beatStarted(i + 1))
+    }
+
+    mutating func lock(at x: Double, _ kinds: [FightParams.Kind], _ max: Int, _ fromLeft: [Int]) {
+        locked = true; lockX = x - tuning["lock_offset"]; cam = lockX
+        queue = kinds.enumerated().map { (kind: $0.element, left: fromLeft.contains($0.offset)) }
+        maxActive = max
+        spawnT = tuning["first_spawn_delay"]; stall = 0; endT = 0
+    }
+
+    func nextTrainingStage(after s: TrainingStage) -> TrainingStage {
+        let p = currentBeat?.params
+        switch s {
+        case .dummies: return (p?.blocks ?? 0) > 0 ? .blocks : (p?.finishSpecial == true ? .special : .done)
+        case .blocks: return p?.finishSpecial == true ? .special : .done
+        default: return .done
+        }
+    }
+
+    mutating func advanceTraining() {
+        trainingStage = nextTrainingStage(after: trainingStage)
+        stall = 0
+        if trainingStage == .blocks { spawnPartner() } else { partner = nil }
+    }
+
+    /// The friendly practice partner stands in front of the hero, facing him (parity item 4).
+    mutating func spawnPartner() {
+        let x = hero.x + hero.face * (tuning["enemy_reach"] - tuning["stand_gap"])
+        partner = Enemy(id: -1, kind: .spear, x: x, face: -hero.face, state: .approach)
+        partner!.moving = false
     }
 
     mutating func spawn(_ q: (kind: FightParams.Kind, left: Bool)) {
@@ -142,10 +234,22 @@ public struct PlayState: Sendable {
         }
     }
 
+    /// Story boxes, beat_end's cheer, then the next beat (or the end of the mission).
+    mutating func nextBeat() {
+        locked = false; partner = nil; dummies = []
+        idle = 0; stall = 0
+        beat += 1
+        if beat >= beats.count { finished = true; return }
+        phase = .walkTo
+    }
+
     // MARK: the fixed step (dt = 1/60)
 
-    public mutating func update(_ dt: Double, _ input: StepInput) {
-        let fight = phase == .fight, canAct = phase != .caption
+    public mutating func update(_ dt: Double, _ rawInput: StepInput) {
+        // only the pads shown can act (hidden, not greyed)
+        let vis = visiblePads
+        let input = StepInput(held: rawInput.held.intersection(vis), tapped: rawInput.tapped.intersection(vis), confirm: rawInput.confirm)
+        let canAct = phase == .walkTo || phase == .beatPlay || phase == .beatEnd
         t += dt
         // 1–2. defend, timers
         hero.def = canAct && input.held.contains(.defend)
@@ -175,25 +279,59 @@ public struct PlayState: Sendable {
         } else { idle += dt }
         // 6. camera and bounds
         let edge = tuning["hero_edge_margin"]
-        if fight || phase == .caption {
+        if locked {
             hero.x = max(lockX + edge, min(lockX + 1280 - edge, hero.x)); cam = lockX
         } else {
             hero.x = max(cam + edge, hero.x); cam = max(cam, hero.x - tuning["camera_follow_offset"])
         }
-        // 7. walk → beat start
-        if phase == .walk && beat < beats.count && hero.x >= beatX(beat) { startBeat(beat) }
-        // 8–11. spawn, enemies, fight end
-        if phase == .fight {
-            stall += dt
-            spawnT -= dt
-            let active = enemies.filter { $0.state != .flee }.count
-            if !queue.isEmpty && active < fightParams(beat).maxActive && spawnT <= 0 {
-                spawn(queue.removeFirst()); spawnT = tuning["spawn_gap"]
+        // 7. walk_to → beat
+        if phase == .walkTo && beat < beats.count && hero.x >= beatX(beat) {
+            if beats[beat].type == "fight" { startPlay(beat) } else { phase = .beatCard; cardLine = 0; hero.walk = false }
+        }
+        // 8–11. the beat
+        if phase == .beatPlay, let b = currentBeat {
+            switch b.type {
+            case "fight":
+                fightStep(dt)
+                if queue.isEmpty && enemies.isEmpty { phase = .beatEnd; endT = 0 }
+            case "walk":
+                if hero.x >= xStart + (b.params.lengthScreens ?? 0) * 1280 { phase = .beatEnd; endT = 0 }
+                updateEnemies(dt)
+            case "hold-meter":
+                stall += dt
+                if input.held.contains(.special) {
+                    specialUsed = true
+                    let before = heldTotal
+                    heldTotal = min(b.params.holdSeconds ?? 0, heldTotal + dt)
+                    if heldTotal > before { stall = 0 }
+                }
+                if heldTotal >= (b.params.holdSeconds ?? 0) { phase = .beatEnd; endT = 0 }
+            case "training":
+                stall += dt
+                trainingStep(dt, input)
+                if trainingStage == .done { phase = .beatEnd; endT = 0 }
+            case "reach-the-flag":
+                if !locked, let enc = b.params.encounters, encounterIndex < enc.count,
+                   hero.x >= xStart + enc[encounterIndex].atScreen * 1280 {
+                    let e = enc[encounterIndex]
+                    lock(at: hero.x, e.enemies, e.maxActive, e.fromLeft)
+                }
+                if locked {
+                    fightStep(dt)
+                    if queue.isEmpty && enemies.isEmpty { locked = false; encounterIndex += 1; idle = 0 }
+                } else {
+                    updateEnemies(dt)
+                    if let f = flagX, hero.x >= f { phase = .beatEnd; endT = 0 }
+                }
+            default: // P-02 stand-in: a type the app doesn't build ends at once (validation fails it in release)
+                events.append(.standIn(beat: beat + 1, type: b.type)); phase = .beatEnd; endT = 0
             }
+        } else if phase == .beatEnd, let b = currentBeat {
             updateEnemies(dt)
-            if queue.isEmpty && enemies.isEmpty {
-                endT += dt
-                if endT >= tuning["end_pause"] { phase = .caption; captionLine = 0; events.append(.caption(beat + 1)) }
+            endT += dt
+            if endT >= tuning["end_pause"] {
+                if b.type == "fight" { phase = .caption; captionLine = 0; events.append(.caption(beat + 1)) }
+                else { events.append(.cheer); nextBeat() }
             }
         } else { updateEnemies(dt) }
         if phase == .caption && input.confirm { captionNext() }
@@ -207,20 +345,93 @@ public struct PlayState: Sendable {
         pops.removeAll { $0.life <= 0 }
         for i in dropped.indices { dropped[i].life -= dt * 0.25 }
         dropped.removeAll { $0.life <= 0 }
+        for i in dummies.indices { dummies[i].wobble = max(0, dummies[i].wobble - dt * 2) }
     }
 
-    /// Resume from pause restarts the stuck-hint timers (Hints GDD rule 5).
-    public mutating func resetHintTimers() { stall = 0; idle = 0 }
+    /// Steps 8–10 of a locked fight: stall, spawn, enemies.
+    mutating func fightStep(_ dt: Double) {
+        stall += dt
+        spawnT -= dt
+        let active = enemies.filter { $0.state != .flee }.count
+        if !queue.isEmpty && active < maxActive && spawnT <= 0 { spawn(queue.removeFirst()); spawnT = tuning["spawn_gap"] }
+        updateEnemies(dt)
+    }
 
-    /// "Next" on the caption: the next sentence box, or the next beat (walk), or the ending.
+    mutating func trainingStep(_ dt: Double, _ input: StepInput) {
+        switch trainingStage {
+        case .dummies:
+            if dummies.allSatisfy(\.hit) { advanceTraining() }
+        case .blocks:
+            guard var p = partner else { spawnPartner(); return }
+            p.t += dt
+            if p.kb != 0 { let m = p.kb * min(1, dt / tuning["kb_decay"]); p.x += m; p.kb -= m; if abs(p.kb) < 2 { p.kb = 0 } }
+            switch p.state {
+            case .approach, .enter:
+                if p.t > tuning["approach_min_time"] {
+                    // it steps back in front of the hero at each windup start
+                    p.x = hero.x + hero.face * (tuning["enemy_reach"] - tuning["stand_gap"])
+                    p.face = -hero.face; p.state = .windup; p.t = 0; tut.windupSeen = true
+                }
+            case .windup:
+                if p.t >= tuning["telegraph"] { // no leader multiplier
+                    p.state = .strike; p.t = 0
+                    let side = Self.sign(p.x - hero.x) == 0 ? 1 : Self.sign(p.x - hero.x)
+                    if abs(p.x - hero.x) <= tuning["enemy_reach"] + tuning["strike_reach_extra"] {
+                        if hero.def { // AC21: a block counts only if defend is held at strike resolve
+                            blocksDone += 1; stall = 0; tut.blocked = true
+                            p.kb = side * tuning["block_knock"]
+                            events.append(.clang)
+                            burst((p.x + hero.x) / 2, ground - 140, 6, .white)
+                            pop("ui.play.blocked", hero.x, ground - 300, .indigo)
+                        } else {
+                            hero.x -= side * tuning["hero_pushback"]; hero.hurt = tuning["hurt_time"]
+                            events.append(.bonk)
+                            pop("ui.play.oof", hero.x, ground - 300, .red)
+                        }
+                    }
+                }
+            case .strike: if p.t >= tuning["strike_time"] { p.state = .rest; p.t = 0 }
+            case .rest: if p.t >= tuning["enemy_rest"] { p.state = .approach; p.t = tuning["approach_min_time"] }
+            default: break
+            }
+            partner = p
+            if blocksDone >= (currentBeat?.params.blocks ?? 0) { advanceTraining() }
+        case .special:
+            if input.tapped.contains(.special) { specialUsed = true; advanceTraining() }
+        case .done: break
+        }
+    }
+
+    /// "Next" on a beat card: the next box, then beat_play.
+    public mutating func cardNext() {
+        guard phase == .beatCard else { return }
+        if cardLine + 1 < cardTexts.count { cardLine += 1; return }
+        idle = 0; stall = 0
+        startPlay(beat)
+    }
+
+    /// "Next" on the caption: the next sentence box, then the next beat (or the ending).
     public mutating func captionNext() {
         guard phase == .caption else { return }
         let lines = max(1, beats[beat].scene.count)
         if captionLine + 1 < lines { captionLine += 1; return }
-        idle = 0; stall = 0 // the 5 s hints count from the caption closing (QC O2)
-        beat += 1
-        if beat >= beats.count { finished = true; return }
-        phase = .walk
+        nextBeat()
+    }
+
+    /// D-07 "Skip anyway": ends only the current story section (a beat card or a caption).
+    public mutating func skipSection() {
+        switch phase {
+        case .beatCard: idle = 0; stall = 0; startPlay(beat)
+        case .caption: nextBeat()
+        default: break
+        }
+    }
+
+    /// Resume from pause: the stuck-hint timers restart, and any windup restarts from 0 (AC19).
+    public mutating func resetHintTimers() {
+        stall = 0; idle = 0
+        for i in enemies.indices where enemies[i].state == .windup { enemies[i].t = 0 }
+        if partner?.state == .windup { partner!.t = 0 }
     }
 
     mutating func updateEnemies(_ dt: Double) {
@@ -292,14 +503,18 @@ public struct PlayState: Sendable {
         enemies.removeAll { $0.state == .flee && ($0.x < lockX - m || $0.x > lockX + 1280 + m) }
     }
 
-    /// The swing's hit check (F5). Returns whether anything was hit.
+    /// The swing's hit check (F5), on enemies and, in training, on the dummies.
     mutating func heroAttack() -> Bool {
         events.append(.swoosh)
         var any = false
         let h = hero
+        func inReach(_ x: Double) -> Bool {
+            let dx = x - h.x
+            return (Self.sign(dx) == h.face && abs(dx) <= tuning["attack_range"]) || abs(dx) < tuning["attack_close_range"]
+        }
         for i in enemies.indices where enemies[i].state != .flee {
             let dx = enemies[i].x - h.x
-            guard (Self.sign(dx) == h.face && abs(dx) <= tuning["attack_range"]) || abs(dx) < tuning["attack_close_range"] else { continue }
+            guard inReach(enemies[i].x) else { continue }
             any = true
             enemies[i].hits += 1
             let knock = tuning["knockback"] * (enemies[i].kind == .leader ? tuning["leader_knock_mul"] : 1)
@@ -314,49 +529,77 @@ public struct PlayState: Sendable {
                 events.append(.flee(enemies[i].kind))
             } else { enemies[i].state = .hurt; enemies[i].t = 0 }
         }
+        if trainingStage == .dummies && phase == .beatPlay {
+            for i in dummies.indices where !dummies[i].hit && inReach(dummies[i].x) {
+                dummies[i].hit = true; dummies[i].wobble = 1; any = true
+                burst(dummies[i].x, ground - 160, 8, .glow); events.append(.drum)
+                stall = 0; tut.hit = true
+            }
+        }
         return any
     }
 
     /// Math.sign for a non-zero value (0 maps to 0).
     static func sign(_ v: Double) -> Double { v > 0 ? 1 : (v < 0 ? -1 : 0) }
 
-    // MARK: hints (derived, P-04 item 6)
+    // MARK: hints (hints GDD; derived)
 
-    /// No hit for `hint_delay` while fighting: pulse attack and point at the nearest enemy.
-    public var stalled: Bool { phase == .fight && stall > tuning["hint_delay"] }
-    /// Pulse ▶ before the first move, and after `hint_delay` idle while walking.
-    public var rightPulse: Bool { (!tut.moved && beat == 0) || (phase == .walk && idle > tuning["hint_delay"]) }
-    /// The nearest non-fleeing enemy while stalled (the arrow hint).
+    var isFightingNow: Bool { phase == .beatPlay && locked }
+    /// No progress for `hint_delay` (strictly >) in a fight, encounter, hold-meter or training.
+    public var stalled: Bool {
+        guard phase == .beatPlay, let b = currentBeat else { return false }
+        let active = locked || b.type == "hold-meter" || b.type == "training"
+        return active && stall > tuning["hint_delay"]
+    }
+    /// The pad the stuck hint pulses.
+    public var stuckPad: PadAction? {
+        guard stalled, let b = currentBeat else { return nil }
+        if locked { return .attack }
+        if b.type == "hold-meter" { return .special }
+        switch trainingStage { case .dummies: return .attack; case .blocks: return .defend; case .special: return .special; case .done: return nil }
+    }
+    var walking: Bool {
+        phase == .walkTo || (phase == .beatPlay && !locked && (currentBeat?.type == "walk" || currentBeat?.type == "reach-the-flag"))
+    }
+    /// Pulse ▶ before the first move, and after `hint_delay` idle while walking (any movement resets).
+    public var rightPulse: Bool { (!tut.moved && beat == 0 && phase == .walkTo) || (walking && idle > tuning["hint_delay"]) }
+    /// The arrow target: the nearest enemy in a stalled fight, or the flag when stuck on a clear path.
     public var stallTarget: Enemy? {
-        guard stalled else { return nil }
+        guard stalled, locked else { return nil }
         return enemies.filter { $0.state != .flee }.min { abs($0.x - hero.x) < abs($1.x - hero.x) }
     }
-    public enum HandHint: Sendable { case right, attack, defend }
-    /// The first-use hand: ▶, then attack, then defend during a windup.
+    public var flagArrow: Bool { flagX != nil && !locked && idle > tuning["hint_delay"] && (flagX! - cam) < 1280 }
+    public enum HandHint: Sendable { case right, attack, defend, special, holdSpecial }
+    /// One teach hand at a time: move > attack > defend > special (hold hand until the meter passes 25%).
     public var hand: HandHint? {
-        guard phase != .caption else { return nil }
-        if !tut.moved && beat == 0 && phase == .walk { return .right }
-        if tut.enemySeen && !tut.hit { return .attack }
-        if tut.windupSeen && !tut.blocked && enemies.contains(where: { $0.state == .windup }) { return .defend }
+        guard phase == .walkTo || phase == .beatPlay else { return nil }
+        if !tut.moved && beat == 0 && phase == .walkTo { return .right }
+        if tut.enemySeen && !tut.hit && phase == .beatPlay && (locked || trainingStage == .dummies) { return .attack }
+        let windup = enemies.contains { $0.state == .windup } || partner?.state == .windup
+        if tut.windupSeen && !tut.blocked && windup { return .defend }
+        if phase == .beatPlay, currentBeat?.type == "hold-meter", meter <= 0.25 { return .holdSpecial }
+        if phase == .beatPlay, trainingStage == .special, !specialUsed { return .special }
         return nil
     }
-    /// The "go on" arrow after a caption.
-    public var goArrow: Bool { phase == .walk && beat > 0 }
+    /// The "go on" arrow after a caption or a beat's end.
+    public var goArrow: Bool { phase == .walkTo && beat > 0 }
 
     // MARK: debug screen jumps (players never see them)
 
-    /// Starts at beat `i`'s fight with the hints already learned.
+    /// Starts at beat `i` (`stage`: telegraph, caption, card) with the hints already learned.
     public mutating func debugJump(beat i: Int, stage: String?) {
         beat = max(0, min(beats.count - 1, i))
         tut = Tutorial(moved: true, hit: true, blocked: true, windupSeen: true, enemySeen: true)
         hero.x = beatX(beat) + 10
-        startBeat(beat)
-        if stage == "telegraph" {
+        cam = hero.x - tuning["camera_follow_offset"]
+        if stage == "card" && beats[beat].type != "fight" { phase = .beatCard; cardLine = 0; return }
+        startPlay(beat)
+        if stage == "telegraph" && locked {
             tut.blocked = false
-            let k = queue.removeFirst().kind
+            let k = queue.isEmpty ? FightParams.Kind.spear : queue.removeFirst().kind
             enemies.append(Enemy(id: 99, kind: k, x: hero.x + tuning["enemy_reach"], face: -1, state: .windup, t: 0, hits: 0, kb: 0, moving: false))
             spawnT = 99
-        } else if stage == "caption" {
+        } else if stage == "caption" && beats[beat].type == "fight" {
             queue = []; phase = .caption; captionLine = 0
         }
     }

@@ -24,7 +24,7 @@ final class FlowTests: XCTestCase {
         var steps = 0
         while g.screen == .play && steps < 60 * 600 {
             let p = g.play
-            if p.phase == .caption { wait(g, 0.3); g.next() } else { g.step(1.0 / 60, botInput(p, step: steps)) }
+            if p.phase == .caption || p.phase == .beatCard { wait(g, 0.3); g.next() } else { g.step(1.0 / 60, botInput(p, step: steps)) }
             steps += 1
         }
         XCTAssertEqual(g.screen, .ending)
@@ -33,17 +33,17 @@ final class FlowTests: XCTestCase {
         while g.screen == .quiz {
             let q = g.quiz!
             let slot = q.order.firstIndex(of: q.current.correctIndex)!
-            wait(g, 0.6); g.answer(slot); wait(g, 0.3); g.next()
+            wait(g, 0.6); g.answer(slot); wait(g, 1.0); g.next()
         }
         XCTAssertEqual(g.screen, .results)
         XCTAssertEqual(g.stars, 3)
-        g.next(); XCTAssertEqual(g.screen, .unlock)
-        g.next(); XCTAssertEqual(g.screen, .title)
+        XCTAssertTrue(g.medalEarned && g.medalNew, "no skips: the medal")
+        XCTAssertNil(g.unlockedHero, "the sample is the last hero: no unlock screen")
+        g.next(); XCTAssertEqual(g.screen, .title, "more heroes are coming → title")
     }
 
     func test_story_next_is_debounced() throws {
         let g = try game()
-        g.debugStart(screen: "quiz", q: 1, beat: nil, stage: nil, stars: nil, wrong: nil)
         g.start(); wait(g, 0.3)
         let line = g.storyLine
         g.next(); g.next() // the second tap is within advance_debounce
@@ -53,11 +53,14 @@ final class FlowTests: XCTestCase {
     func test_quiz_saves_best_stars_never_lowered_and_unlocks_next_hero() throws {
         let store = MemoryStore()
         var p = Progress()
-        p.recordQuiz(hero: "sample", stars: 3, nextHero: "sample2", store: store)
-        p.recordQuiz(hero: "sample", stars: 1, nextHero: "sample2", store: store)
+        p.recordQuiz(hero: "sample", stars: 3, medalEarned: true, store: store)
+        p.recordQuiz(hero: "sample", stars: 1, medalEarned: false, store: store)
         XCTAssertEqual(store.values["stars.sample"] as? Int, 3)
-        XCTAssertEqual(store.values["unlocked"] as? [String], ["sample2"])
-        XCTAssertEqual(Progress.load(store, heroIds: ["sample"]).stars["sample"], 3)
+        XCTAssertEqual(store.values["completed.sample"] as? Bool, true)
+        XCTAssertEqual(store.values["medal.sample"] as? Bool, true, "never cleared")
+        XCTAssertNil(store.values["unlocked"], "D-16: no unlocked list")
+        let back = Progress.load(store, heroIds: ["sample"])
+        XCTAssertEqual(back.stars["sample"], 3); XCTAssertTrue(back.medal.contains("sample"))
     }
 
     func test_language_is_remembered_on_the_device() throws {
@@ -65,12 +68,14 @@ final class FlowTests: XCTestCase {
         let g = try game(store: store)
         g.toggleLang()
         XCTAssertEqual(store.values["lang"] as? String, "en")
+        g.start(); g.toggleLang()
+        XCTAssertEqual(g.lang, .en, "VI|EN only on title and pause")
         XCTAssertEqual(try game(store: store).lang, .en)
     }
 
     func test_P05_wrong_card_shakes_and_ignores_taps_then_why_then_next() throws {
         let g = try game()
-        g.debugStart(screen: "quiz", q: 1, beat: nil, stage: nil, stars: nil, wrong: nil)
+        g.debugStart(screen: "quiz", q: 1, beat: nil, stage: nil, stars: nil)
         let q = g.quiz!
         let right = q.order.firstIndex(of: q.current.correctIndex)!
         let wrong = (0..<3).first { $0 != right }!
@@ -80,6 +85,8 @@ final class FlowTests: XCTestCase {
         wait(g, 0.55)
         g.answer(right)
         XCTAssertNotNil(g.quiz!.okIndex)
+        g.next()
+        XCTAssertEqual(g.quiz!.index, 0, "Next waits feedback_time after the right card")
         wait(g, 3)
         XCTAssertEqual(g.quiz!.index, 0, "no auto-advance: Next after why")
         g.next()
@@ -95,7 +102,7 @@ final class FlowTests: XCTestCase {
 
     func test_pause_from_play_and_quiz_freezes_and_resume_returns() throws {
         let g = try game()
-        g.debugStart(screen: "play", q: nil, beat: 1, stage: "telegraph", stars: nil, wrong: nil)
+        g.debugStart(screen: "play", q: nil, beat: 1, stage: "telegraph", stars: nil)
         g.pause(); XCTAssertEqual(g.screen, .pause)
         let t = g.play.t
         wait(g, 1)
