@@ -64,6 +64,26 @@ the iOS reference (k 0.517). Supported k ≥ 0.32 (`design/ux/hud.md` §3.3).
 | ~~Controls legend~~ | **Removed.** The slice title shows the map-stub line, not a controls legend; the first-use hint hands teach the controls in play (Hints GDD; leader's call) | — |
 | **Hero card (D-27: A)** | See §5.5. The hero's portrait, name, best stars (filled vs outline) and medal (gold vs outline), **reusing the results-screen pieces** (ASSET-022/023 stars, ASSET-036/037 medal). Display only in the slice: it is not a button | D-27; Hero progression Rule 10; QC G5 |
 | Debug only | centred, top = map stub bottom + 8 (ref y 574–608); **debug builds only**, never in release | `ui.debug.subtitle` "Bản chơi thử / Test build", label 28 px | TASK-005c; leader's call |
+
+**Small-k fallback: the lines under Start move beside it.** Start's height is `pad_min / k`, so
+on a small-k phone the column under the card (Start, the map stub, and in debug builds the
+debug line) can run past the safe rect's bottom (`safe_bottom`, world px).
+- **Rule:** if the column's last line would end below `safe_bottom` (the map stub in a release
+  build, the debug line in a debug build), **the map stub and the debug line move to the right
+  of Start: x 870–1250, top-aligned with Start** (stub top = Start top = 375; debug line top =
+  stub bottom + 8). Start doesn't move: x 430–850, top 375, ≥ `pad_min`. Both lines stay
+  centred in their 380-wide box, 28 px labels (each fits on 1 line: VI "(Bản đồ sắp ra mắt)"
+  is the widest).
+- **Where it switches** (with `safe_bottom` ≈ 646 as in the worked case): column end =
+  375 + 72/k + 16 + 38 (+ 8 + 34 in debug). A release build switches below k ≈ 0.33, a debug
+  build below k ≈ 0.41. The apps compute it from the real `safe_bottom`, never from these
+  numbers.
+- **Worked numbers at k 0.32 (the supported floor, the same as the HUD):** Start 375–600
+  (225 tall). Stacked, the stub would be 616–654 (8 past 646) and the debug line 662–696 (50
+  past), which breaks AC6. Moved: stub x 870–1250, y 375–413; debug line y 421–455. Both are
+  clear of the card (which ends at y 355), the chip (top-right, above y 375) and Start (which
+  ends at x 850).
+- **Supported floor stays k ≥ 0.32** (`design/ux/hud.md` §3.3).
 | ~~Decorative standing hero~~ | **Removed** (D-27 review). The full-body hero beside the title (≈ 209 tall at x ≈ 260, y 261–470) overlaps the card; the card's portrait carries the hero now | — | leader's call |
 | ~~Title panel 980 × 210 with drum emblems~~ | **Removed.** What's built today (a panel at y 60–270 with the title at y 140 and the debug subtitle at y 220) collides with the card; the title row above replaces it | — | leader's call |
 
@@ -163,6 +183,11 @@ The title and every label are VI/EN text layers within the `ui` and `button` bud
    and it is ≥ `pad_min`; the map stub starts 16 below Start; no two of sound, chip, title row, card, Start,
    map stub and (debug) subtitle overlap; and no drum emblem or standing hero shows.
 4e. **GIVEN** the card, **WHEN** it is tapped, **THEN** nothing happens and no tone plays.
+4f. **GIVEN** a phone or emulator at k 0.32 (Start 225 tall), **WHEN** the title is captured in a release
+   and a debug build, VI and EN, **THEN** Start is at x 430–850, y 375–600; the map stub (and the debug
+   line, debug only) sit at x 870–1250 starting at y 375; nothing passes the safe bottom; and nothing
+   overlaps the card, the chip or Start. **GIVEN** the reference phones, **THEN** the lines stay stacked
+   under Start (no switch).
 5. **GIVEN** the lowest target Android phone, **WHEN** the app launches, **THEN** the title is interactive within 2 s (after the SFX preload, Audio Rule 7).
 6. **GIVEN** the narrowest supported phone and a 20:9 phone, **WHEN** captured in VI and EN, **THEN** no element overlaps and all text fits (R8c).
 7. **GIVEN** a fresh launch, **WHEN** the title shows before the audio preload ends, **THEN** every button is drawn disabled and a tap does nothing; when the preload ends they all enable.
