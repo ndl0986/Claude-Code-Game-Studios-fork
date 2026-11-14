@@ -8,8 +8,11 @@
 > list, sources and the named history reviewer come from the team's history
 > material, which has not arrived yet (see `production/project-plan.md`, "Material
 > we need from the team"). Nothing here is a verified historical claim.
+>
+> **Exception (Luan, 2026-11-14): the first hero is Trần Quốc Toản.** His story beats
+> are not written yet; the content and history owner writes and signs them off.
 
-> **Luan's idea, in his words:** "a mobile game about Vietnamese historical figures,
+> **Luan's idea, in Luan's words:** "a mobile game about Vietnamese historical figures,
 > the player targeting is starting from primary school level in Vietnam, they are able
 > to learn about all heroes in the historical by playing the missions which are based
 > on their main or famous stories". Concept pick: "mix 2 and 1, while 2 is the main
@@ -18,6 +21,25 @@
 > EN and VI, default is VN but always can turn to EN". Experience: Story & Discovery,
 > Challenge & Mastery, Relaxation & Flow, "also need some quizz for kids to learn about
 > the VN historical".
+
+---
+
+## First Hero: Trần Quốc Toản
+
+**Decided by Luan (2026-11-14):** "since we are able to add more and more heros and the
+timeline will be adjust to match with real-time life of the hero, can just start with
+Trần Quốc Toản". Heroes are added one at a time, each in its place on the historical
+timeline; the MVP starts with this one hero.
+
+**Hero order:** heroes are placed in **historical order** (the order they lived) on a
+timeline; the map shows where each story happened (Luan, 2026-11-14).
+
+**Mission beats:** not drafted here. Luan asked to leave Trần Quốc Toản's story beats
+to the content and history owner (see below), who writes them from verified sources.
+
+**Content and history owner:** none yet. Luan plans to add a **new team member, an art
+designer who also covers the content, history and real stories**, and who signs off
+each hero's mission.
 
 ---
 
@@ -308,7 +330,8 @@ Vietnamese legends as told to children, school history lessons, national celebra
 - `PR-SCOPE skipped — Lean mode`: scope not reviewed by the producer.
 
 ### Open Questions
-- **Which heroes and events, in what order?** Placeholder until the team's history material arrives.
+- **Which heroes and events, in what order?** First hero decided: **Trần Quốc Toản** (Luan, 2026-11-14). More heroes are added over time, placed in historical order.
+- **Who is the named history reviewer?** Not named yet. Luan plans a new team member (art designer who also owns content, history and real stories); needed before Trần Quốc Toản's mission content is written.
 - **Who is the named history reviewer?** Needed before any content is final.
 - **Monetization**: paid, free, school/government funded? (Luan decides; no ads to kids by default.)
 - ~~How storybook content arrives after release~~ **Decided (Luan, 2026-11-14): timed app updates**, no content download.
@@ -323,7 +346,7 @@ Vietnamese legends as told to children, school history lessons, national celebra
 light touch action, and afterwards can answer simple questions about that story.
 
 **Required for MVP**:
-1. One story-first hero mission ⟨placeholder hero⟩ with 3–4 light-action beats
+1. One story-first hero mission, **Trần Quốc Toản**, with 3–4 light-action beats (see First Hero)
 2. The quiz (3–5 questions) that upgrades the hero card and gives 1–3 stars
 3. One lit-up region on the map of Vietnam and one hero card
 4. Vietnamese default with a working English switch, full diacritic fonts
