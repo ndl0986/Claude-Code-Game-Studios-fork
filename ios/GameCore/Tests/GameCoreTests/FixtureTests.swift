@@ -107,6 +107,20 @@ final class FixtureTests: XCTestCase {
                 findings = ContentValidator.declaredSize(id: "x", declared: (d["width"]!, d["height"]!), actual: (a["width"]!, a["height"]!))
             case "R19b": findings = ContentValidator.pictureLimits(id: c["id"] as! String, width: c["width"] as! Int, height: c["height"] as! Int)
             case "R20": findings = ContentValidator.themesCovered(themes: c["themes"] as! [String], beatThemes: c["beat_themes"] as! [String])
+            case "R8b":
+                let budget = (try Repo.json("data/rules.json") as! [String: Any])["text_limits"].flatMap { ($0 as! [String: Any])["vi_budget"] as? [String: Int] }
+                let max = budget?[c["field_type"] as! String] ?? 120
+                if (c["vi"] as! String).count > max { findings = [.init(rule: "R8b", message: "over \(max)")] }
+            case "R8c":
+                let rules = try Repo.json("data/rules.json") as! [String: Any]
+                let fit = (rules["text_limits"] as! [String: Any])["fit"] as! [String: Any]
+                let field = (fit["fields"] as! [String: [String: Any]])[c["field_type"] as! String]!
+                let metrics = try Repo.json("metrics/nunito-advances.json") as! [String: Any]
+                let adv = ((metrics["weights"] as! [String: Any])["\(field["weight"] as! Int)"] as! [String: NSNumber]).mapValues(\.doubleValue)
+                let lines = ContentValidator.wrapLines(c["text"] as! String, advances: adv, fontPx: (field["font_px"] as! NSNumber).doubleValue,
+                                                       box: (field["box_width"] as! NSNumber).doubleValue, allowance: (fit["allowance"] as! NSNumber).doubleValue)
+                if let el = c["expected_lines"] as? Int, lines != nil { XCTAssertEqual(lines, el, name) }
+                if lines == nil || lines! > (field["max_lines"] as! Int) { findings = [.init(rule: "R8c", message: "\(lines ?? -1) lines")] }
             case "R16":
                 let th = (c["thresholds"] as! [[String: Any]]).map { RulesFile.StarThreshold(stars: $0["stars"] as! Int, maxRetries: $0["max_retries"] as? Int) }
                 findings = ContentValidator.starOrder(th)

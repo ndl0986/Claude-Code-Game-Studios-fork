@@ -323,7 +323,7 @@ final class GameScene: SKScene {
         add(D.rr(0, 0, 1280, 720, 0, SKColor(red: 42 / 255, green: 36 / 255, blue: 64 / 255, alpha: 0.75)), 0, 0)
         add(D.rr(-420, -170, 840, 340, 36, C.cream, C.gold, 6), 640, 330)
         add(D.drum(50, SKColor(hex: 0xc98a12, alpha: 0.5)), 640, 210)
-        add(Font.label(game.ui("ui.story.skip_warning"), 37, C.ink, width: 720), 640, 300)
+        add(Font.label(game.ui("ui.story.skip_warning"), 37, C.ink, width: 780), 640, 300)
         button(game.ui("ui.story.keep_reading"), 250 + 70, 400, 300, 100, "keepReading", pulse: true)
         button(game.ui("ui.story.skip_confirm"), 660, 400, 300, 100, "skipAnyway", fill: C.cream)
     }
@@ -429,7 +429,7 @@ final class GameScene: SKScene {
             add(D.rr(-480, -150, 960, 300, 36, C.panel, C.gold, 6), 640, 290)
             for x in [230.0, 1050] { add(D.drum(44, SKColor(hex: 0xf2b632, alpha: 0.8)), x, 210) }
             add(Font.label("\(game.ui("ui.play.beat")) \(p.beat + 1) · \(p.beats[p.beat].title.text(game.lang))", 30, C.gold, width: 760), 640, 190)
-            textBox(texts[min(p.cardLine, texts.count - 1)], 640, 285, 760, 40, .white)
+            textBox(texts[min(p.cardLine, texts.count - 1)], 640, 285, 880, 38, .white)
             button(game.ui("ui.btn.next"), 640 - 150, 470, 300, 110, "next", pulse: true)
             return
         }
@@ -438,13 +438,13 @@ final class GameScene: SKScene {
             add(D.rr(-480, -150, 960, 300, 36, C.panel, C.gold, 6), 640, 290)
             for x in [230.0, 1050] { add(D.drum(44, SKColor(hex: 0xf2b632, alpha: 0.8)), x, 210) }
             add(Font.label("\(game.ui("ui.play.beat")) \(p.beat + 1)", 30, C.gold), 640, 190)
-            if !beat.scene.isEmpty { textBox(beat.scene[min(p.captionLine, beat.scene.count - 1)], 640, 285, 760, 40, .white) }
+            if !beat.scene.isEmpty { textBox(beat.scene[min(p.captionLine, beat.scene.count - 1)], 640, 285, 880, 38, .white) }
             button(game.ui("ui.btn.next"), 640 - 150, 470, 300, 110, "next", pulse: true)
             return
         }
         if p.phase == .beatPlay || p.phase == .beatEnd, p.beat < p.beats.count {
             let goal = p.beats[p.beat].goal
-            add(Font.label(goal.text(game.lang), 37, C.ink, width: 760), 640, 125)
+            add(Font.label(goal.text(game.lang), 37, C.ink, width: 1040), 640, 168) // below the HUD row, R8c goal box
         }
         for (a, c, kind, label) in [(PadAction.left, layout.left, "left", nil), (.right, layout.right, "right", nil),
                                     (.defend, layout.defend, "defend", "ui.pad.defend"), (.attack, layout.attack, "attack", "ui.pad.attack"),
@@ -489,8 +489,8 @@ final class GameScene: SKScene {
         }
         add(Font.label("\(game.ui("ui.quiz.question")) \(q.index + 1)/\(n)", 28, C.gold, align: .left), layout.pause.cx + layout.pause.r + 24, layout.pause.cy)
         roundIcon(layout.pause, "pause", pauseIcon(layout.pause.r))
-        textBox(cur.prompt, 640, 175, 900, 40, .white)
-        let cw = 360.0, ch = 320.0, gap = 40.0, x0 = (1280 - 3 * cw - 2 * gap) / 2, y0 = 230.0
+        textBox(cur.prompt, 640, 175, 980, 40, .white)
+        let cw = 390.0, ch = 320.0, gap = 20.0, x0 = (1280 - 3 * cw - 2 * gap) / 2, y0 = 230.0
         for slot in 0..<3 {
             let j = q.order[slot], choice = cur.choices[j]
             let wrong = q.wrong.contains(j), ok = q.okIndex == j
@@ -503,7 +503,7 @@ final class GameScene: SKScene {
                 let p = CGMutablePath(); p.addArc(center: CGPoint(x: cw - 40, y: -40), radius: 18, startAngle: 0.3, endAngle: 5.6, clockwise: false)
                 card.addChild(D.shape(p, nil, C.wrong, 6))
             }
-            let l = Font.label(choice.text.text(game.lang), 37, wrong ? SKColor(hex: 0x8a8078) : C.ink, width: cw - 40); l.position = CGPoint(x: cw / 2, y: -258); card.addChild(l)
+            let l = Font.label(choice.text.text(game.lang), 37, wrong ? SKColor(hex: 0x8a8078) : C.ink, width: cw - 30); l.position = CGPoint(x: cw / 2, y: -258); card.addChild(l)
             card.position = D.p(x0 + Double(slot) * (cw + gap), y0); card.name = "\(j)"
             uiZ += 1; card.zPosition = uiZ
             ui.addChild(card); cardNodes.append(card)
@@ -513,8 +513,8 @@ final class GameScene: SKScene {
             // the why strip sits below the cards (cards end at y 580)
             // the why strip below the cards (they end at y 550): 3 lines at 37 with 1.35 line height
             add(D.rr(-620, -80, 1240, 160, 24, C.panel), 640, 635)
-            add(Font.label(game.ui("ui.quiz.correct"), 30, C.glow, width: 200), 145, 635)
-            add(Font.label(cur.why.text(game.lang), 37, .white, width: 780), 650, 635)
+            add(Font.label(game.ui("ui.quiz.correct"), 30, C.glow, width: 180), 130, 635)
+            add(Font.label(cur.why.text(game.lang), 37, .white, width: 820), 640, 635)
             button(game.ui("ui.btn.next"), 1060, 593, 190, 84, "next", pulse: true)
             badge(cur.why, 0, 0)
         } else if !q.wrong.isEmpty {
@@ -591,9 +591,9 @@ final class GameScene: SKScene {
             }
         }
         if game.screen == .quiz, let q = game.quiz {
-            let x0 = (1280 - 3 * 360.0 - 2 * 40) / 2
+            let x0 = (1280 - 3 * 390.0 - 2 * 20) / 2
             for (slot, card) in cardNodes.enumerated() {
-                var x = x0 + Double(slot) * 400
+                var x = x0 + Double(slot) * 410
                 if let s = q.shakeIndex, Int(card.name ?? "") == s, q.shakeTime > 0 { x += sin(q.shakeTime * 60) * 14 * q.shakeTime * 2 }
                 card.position.x = x
             }

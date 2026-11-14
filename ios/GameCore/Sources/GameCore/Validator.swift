@@ -203,6 +203,24 @@ public struct ContentValidator {
         return out
     }
 
+    /// R8c wrap fit (Language & text GDD F1): greedy wrap at spaces into box / (1 + allowance), using
+    /// per-code-point advances (per 1000 em) at the field's weight. Returns the line count, or nil when
+    /// a single word is wider than the box.
+    public static func wrapLines(_ text: String, advances: [String: Double], fontPx: Double, box: Double, allowance: Double) -> Int? {
+        let limit = box / (1 + allowance)
+        func width(_ w: Substring) -> Double {
+            w.unicodeScalars.reduce(0) { $0 + (advances[String(format: "%04X", $1.value)] ?? 0) } * fontPx / 1000
+        }
+        let space = (advances["0020"] ?? 0) * fontPx / 1000
+        var lines = 1, cur = 0.0
+        for word in text.precomposedStringWithCanonicalMapping.split(separator: " ", omittingEmptySubsequences: true) {
+            let w = width(word)
+            if w > limit { return nil }
+            if cur == 0 { cur = w } else if cur + space + w <= limit { cur += space + w } else { lines += 1; cur = w }
+        }
+        return lines
+    }
+
     /// R19a (error): the declared size matches the file header.
     public static func declaredSize(id: String, declared: (Int, Int), actual: (Int, Int)) -> [Finding] {
         declared == actual ? [] : [.init(rule: "R19a", message: "\(id) declares \(declared.0)×\(declared.1), file is \(actual.0)×\(actual.1)")]
