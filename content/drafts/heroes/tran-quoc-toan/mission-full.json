@@ -197,8 +197,7 @@
       "buttons": [
         "move",
         "attack",
-        "defend",
-        "special"
+        "defend"
       ],
       "uses_banner": true,
       "title": {
