@@ -215,7 +215,8 @@ Art-director lens (art bible §2 "quiz", §4, §7):
 - **Wrong:** soft lavender-grey `#9C8FB8` with a circular-arrow icon, and a gentle wobble. Never
   red, no buzzer, no "X" (§4, Luan's approved rule).
 - **Right:** rice-green `#3FA34D`, a tick icon, a little star burst, and a chime.
-- **Pictures:** every choice has a picture with no text inside it (R10). The pictures needed for
+- **Pictures:** every choice has a picture with no text inside it (the Assets rule "No text inside pictures" in
+  `content/README.md`; R10 checks that the picture exists). The pictures needed for
   Trần Quốc Toản are listed in `design/narrative/heroes/tran-quoc-toan.md` §4.
 - **Stars on results:** the gold stars pop in one by one. Unearned stars are outlines (§4
   colour-blind backup: fill vs. outline).
