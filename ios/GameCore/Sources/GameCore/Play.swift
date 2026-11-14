@@ -605,6 +605,11 @@ public struct PlayState: Sendable {
         cam = hero.x - tuning["camera_follow_offset"]
         if stage == "card" && beats[beat].type != "fight" { phase = .beatCard; cardLine = 0; return }
         startPlay(beat)
+        // the telegraph jump also works on a reach-the-flag encounter (iOS-R1 note: TQT has no fight beat)
+        if stage == "telegraph", !locked, let e = beats[beat].params.encounters?.first {
+            hero.x = xStart + e.atScreen * 1280
+            lock(at: hero.x, e.enemies, e.maxActive, e.fromLeft)
+        }
         if stage == "telegraph" && locked {
             tut.blocked = false
             let k = queue.isEmpty ? FightParams.Kind.spear : queue.removeFirst().kind

@@ -73,23 +73,17 @@ enum D {
 
 /// Text in the bundled Nunito, multi-line, centred by default.
 enum Font {
-    static var name = "Nunito"
+    /// The weight-800 named instance of the bundled variable Nunito (the prototype's weight). The
+    /// file's first descriptor is ExtraLight (its default axis), so never pick descriptors by order (iOS-R1-02).
+    static let name = "Nunito-ExtraBold"
 
-    /// Registers data/fonts/nunito.ttf and remembers its PostScript name.
+    /// Registers data/fonts/nunito.ttf; its named instances (Nunito-Regular … Nunito-Black) become available.
     static func register(_ url: URL) {
         var err: Unmanaged<CFError>?
         CTFontManagerRegisterFontsForURL(url as CFURL, .process, &err)
-        if let descs = CTFontManagerCreateFontDescriptorsFromURL(url as CFURL) as? [CTFontDescriptor],
-           let n = descs.first.flatMap({ CTFontDescriptorCopyAttribute($0, kCTFontNameAttribute) as? String }) { name = n }
     }
 
-    /// Nunito at weight 800 (the prototype's): set the variable font's 'wght' axis directly.
-    static func heavy(_ size: Double) -> UIFont {
-        guard let base = UIFont(name: name, size: size) else { return .systemFont(ofSize: size, weight: .heavy) }
-        let wght = 0x7767_6874 // 'wght'
-        let desc = base.fontDescriptor.addingAttributes([UIFontDescriptor.AttributeName(rawValue: kCTFontVariationAttribute as String): [wght: 800]])
-        return UIFont(descriptor: desc, size: size)
-    }
+    static func heavy(_ size: Double) -> UIFont { UIFont(name: name, size: size) ?? .systemFont(ofSize: size, weight: .heavy) }
 
     static func label(_ s: String, _ size: Double, _ c: SKColor, width: Double? = nil, align: SKLabelHorizontalAlignmentMode = .center) -> SKLabelNode {
         let l = SKLabelNode(fontNamed: name)

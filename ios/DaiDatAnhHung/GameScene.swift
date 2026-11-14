@@ -241,7 +241,10 @@ final class GameScene: SKScene {
 
     // MARK: UI (rebuilt when the screen, language or state key changes)
 
-    private func add(_ n: SKNode, _ x: Double, _ y: Double) { n.position = D.p(x, y); ui.addChild(n) }
+    /// SpriteView runs with ignoresSiblingOrder, so siblings draw by zPosition only: every UI node gets
+    /// a z one above the last, so later nodes (dialogs) always draw over earlier ones (iOS-R1-01).
+    private var uiZ: CGFloat = 0
+    private func add(_ n: SKNode, _ x: Double, _ y: Double) { n.position = D.p(x, y); uiZ += 1; n.zPosition = uiZ; ui.addChild(n) }
 
     private func button(_ label: String, _ x: Double, _ y: Double, _ w: Double, _ h: Double, _ id: String, pulse: Bool = false, fill: SKColor = C.gold, size: Double = 34) {
         let n = SKNode()
@@ -288,15 +291,19 @@ final class GameScene: SKScene {
         add(Font.label(t.text(game.lang), size, c, width: w), x, y)
         badge(t, 640, 16) // debug only, a strip at the top edge: never over the text (Android QC r1)
     }
+    /// Debug only: pending claims of the Texts on screen, shown once in a strip at the top edge (iOS-R1-03).
+    private var unsignedIds: [String] = []
     private func badge(_ t: Text, _ x: Double, _ y: Double) {
         guard game.isDebug else { return }
-        let ids = ClaimGate.unsigned(t, in: game.hero)
-        guard !ids.isEmpty else { return }
+        for id in ClaimGate.unsigned(t, in: game.hero) where !unsignedIds.contains(id) { unsignedIds.append(id) }
+    }
+    private func badgeStrip() {
+        guard game.isDebug, !unsignedIds.isEmpty else { return }
         let n = SKNode()
-        let l = Font.label("UNSIGNED " + ids.joined(separator: " "), 18, .white)
-        n.addChild(D.rr(-l.frame.width / 2 - 10, -14, l.frame.width + 20, 28, 10, SKColor(hex: 0xb4541e)))
+        let l = Font.label("UNSIGNED " + unsignedIds.sorted().joined(separator: " "), 16, .white)
+        n.addChild(D.rr(-l.frame.width / 2 - 10, -12, l.frame.width + 20, 24, 10, SKColor(hex: 0xb4541e)))
         n.addChild(l)
-        add(n, x, y)
+        add(n, 640, 14)
     }
 
     /// D-07: the Skip button on story screens, and the kind warning over everything.
@@ -316,7 +323,7 @@ final class GameScene: SKScene {
     }
 
     private func buildUI() {
-        ui.removeAllChildren(); buttons = []; padNodes = [:]; handNode = nil; cardNodes = []
+        ui.removeAllChildren(); buttons = []; padNodes = [:]; handNode = nil; cardNodes = []; uiZ = 0; unsignedIds = []
         switch game.screen {
         case .title: buildTitle()
         case .intro: buildStory(game.hero.mission.intro, ending: false)
@@ -328,6 +335,7 @@ final class GameScene: SKScene {
         case .unlock: buildUnlock()
         }
         skipButton()
+        badgeStrip()
         skipWarningOverlay()
     }
 
@@ -444,7 +452,7 @@ final class GameScene: SKScene {
             add(pad, c.cx, c.cy)
             padNodes[a] = pad
         }
-        let hand = handHint(); hand.isHidden = true; ui.addChild(hand); handNode = hand
+        let hand = handHint(); hand.isHidden = true; uiZ += 1; hand.zPosition = uiZ + 500; ui.addChild(hand); handNode = hand
         if p.goArrow {
             let a = D.poly([(-60, -22), (10, -22), (10, -50), (64, 0), (10, 50), (10, 22), (-60, 22)], C.gold, .white, 5)
             a.name = "go"; add(a, 1060, 300)
@@ -472,7 +480,7 @@ final class GameScene: SKScene {
         add(Font.label("\(game.ui("ui.quiz.question")) \(q.index + 1)/\(n)", 28, C.gold, align: .left), layout.pause.cx + layout.pause.r + 24, layout.pause.cy)
         roundIcon(layout.pause, "pause", pauseIcon(layout.pause.r))
         textBox(cur.prompt, 640, 175, 900, 40, .white)
-        let cw = 360.0, ch = 380.0, gap = 40.0, x0 = (1280 - 3 * cw - 2 * gap) / 2, y0 = 250.0
+        let cw = 360.0, ch = 340.0, gap = 40.0, x0 = (1280 - 3 * cw - 2 * gap) / 2, y0 = 240.0
         for slot in 0..<3 {
             let j = q.order[slot], choice = cur.choices[j]
             let wrong = q.wrong.contains(j), ok = q.okIndex == j
@@ -480,24 +488,26 @@ final class GameScene: SKScene {
             card.addChild(D.rr(0, 8, cw, ch, 30, SKColor(white: 0, alpha: 0.3)))
             card.addChild(D.rr(0, 0, cw, ch, 30, ok ? SKColor(hex: 0xc9f0b0) : wrong ? SKColor(hex: 0xd9d4cf) : C.cream,
                                ok ? C.leafDark : wrong ? C.wrong : C.gold, ok ? 10 : 5))
-            let pic = Pictures.node(choice.pictureId, size: 110); pic.position = CGPoint(x: cw / 2, y: -140); pic.alpha = wrong ? 0.45 : 1; card.addChild(pic)
+            let pic = Pictures.node(choice.pictureId, size: 110); pic.position = CGPoint(x: cw / 2, y: -125); pic.alpha = wrong ? 0.45 : 1; card.addChild(pic)
             if wrong { // the "try again" mark: a circular arrow, never a red cross (TASK-004 art fix)
                 let p = CGMutablePath(); p.addArc(center: CGPoint(x: cw - 40, y: -40), radius: 18, startAngle: 0.3, endAngle: 5.6, clockwise: false)
                 card.addChild(D.shape(p, nil, C.wrong, 6))
             }
-            let l = Font.label(choice.text.text(game.lang), 32, wrong ? SKColor(hex: 0x8a8078) : C.ink, width: cw - 40); l.position = CGPoint(x: cw / 2, y: -300); card.addChild(l)
+            let l = Font.label(choice.text.text(game.lang), 32, wrong ? SKColor(hex: 0x8a8078) : C.ink, width: cw - 40); l.position = CGPoint(x: cw / 2, y: -275); card.addChild(l)
             card.position = D.p(x0 + Double(slot) * (cw + gap), y0); card.name = "\(j)"
+            uiZ += 1; card.zPosition = uiZ
             ui.addChild(card); cardNodes.append(card)
             if q.okIndex == nil && !wrong { buttons.append(Button(rect: CGRect(x: x0 + Double(slot) * (cw + gap), y: y0, width: cw, height: ch), id: "card\(slot)")) }
         }
         if q.okIndex != nil {
-            add(D.rr(-560, -50, 1120, 100, 24, C.panel), 640, 670)
-            add(Font.label(game.ui("ui.quiz.correct"), 30, C.glow), 260, 670)
-            add(Font.label(cur.why.text(game.lang), 26, .white, width: 600), 640, 670)
-            button(game.ui("ui.btn.next"), 1280 - 300, 625, 220, 90, "next", pulse: true)
-            badge(cur.why, 640, 610)
+            // the why strip sits below the cards (cards end at y 580)
+            add(D.rr(-560, -45, 1120, 90, 24, C.panel), 640, 640)
+            add(Font.label(game.ui("ui.quiz.correct"), 30, C.glow), 260, 640)
+            add(Font.label(cur.why.text(game.lang), 26, .white, width: 600), 640, 640)
+            button(game.ui("ui.btn.next"), 1280 - 300, 598, 220, 84, "next", pulse: true)
+            badge(cur.why, 0, 0)
         } else if !q.wrong.isEmpty {
-            add(Font.label(game.ui("ui.quiz.retry"), 36, SKColor(hex: 0xffd0c8)), 640, 680)
+            add(Font.label(game.ui("ui.quiz.retry"), 36, SKColor(hex: 0xffd0c8)), 640, 640)
         }
     }
 
