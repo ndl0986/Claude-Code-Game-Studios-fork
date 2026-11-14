@@ -51,6 +51,8 @@ data class Beat(
     @SerialName("uses_banner") val usesBanner: Boolean = false,
     val params: JsonObject,
     val theme: String,
+    /** Schema 1.5 (TASK-020 W21): false = no cheer at beat_end, a page-turn instead. Default true. */
+    val cheer: Boolean = true,
 )
 
 @Serializable
@@ -136,6 +138,8 @@ data class TextLimits(
     @SerialName("vi_budget") val viBudget: Map<String, Int>? = null,
     /** R8c (D-21): box and font per field type for the line-fit check. */
     val fit: TextFit? = null,
+    /** R8d (rules 1.2, Language Rule 6): the minimum font_px per size class; null on rules 1.1. */
+    @SerialName("min_px") val minPx: Map<String, Int>? = null,
 )
 
 @Serializable
@@ -144,6 +148,8 @@ data class FitField(
     @SerialName("font_px") val fontPx: Int,
     @SerialName("max_lines") val maxLines: Int,
     val weight: Int,
+    /** R8d (rules 1.2): the field's size class (heading, body, button, label); null on rules 1.1. */
+    @SerialName("class") val sizeClass: String? = null,
 )
 
 @Serializable

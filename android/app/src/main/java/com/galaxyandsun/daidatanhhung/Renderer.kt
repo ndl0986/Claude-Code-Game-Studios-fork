@@ -224,8 +224,10 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             d.rr(W / 2 - 530, 168f, 1060f, 58f, 22f, C.a(C.CREAM, 0.88))
             beat.goal?.let { gl -> d.textBox(gl.get(g.lang), W / 2, 197f, 1040f, 37f, C.INK, 1); badge(g, gl, W / 2 + 430, 168f) }
             if (beat.usesBanner) g.bundle.mission.banner?.let { b ->
-                // just above the ground line, below the fighters' heads (fit.banner 880 @ 28, 2 lines)
-                d.rr(W / 2 - 450, 478f, 900f, 76f, 18f, C.a(C.RED, 0.9)); d.textBox(b.get(g.lang), W / 2, 516f, 880f, 28f, C.GOLD, 2); badge(g, b, W / 2 + 380, 478f)
+                // fit.banner 880 @ 37, up to 2 lines (body class, Language Rule 6, TASK-020 W9). Its bottom stays at 554, just
+                // under the ground line; a second line grows it upward, never down into the pads.
+                val s = b.get(g.lang); val n = d.lineCount(s, 880f, 37f, 2); val hgt = 26f + n * 37f * 1.35f
+                d.rr(W / 2 - 450, 554f - hgt, 900f, hgt, 18f, C.a(C.RED, 0.9)); d.textBox(s, W / 2, 554f - hgt / 2, 880f, 37f, C.GOLD, 2); badge(g, b, W / 2 + 380, 554f - hgt)
             }
         }
         // The telegraph "!" is the key cue: draw it again above the goal and banner layers.

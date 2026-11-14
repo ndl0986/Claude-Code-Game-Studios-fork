@@ -138,9 +138,10 @@ object Validator {
             else sizeMatches(a.id, a.width to a.height, bytes(a.file)?.let(::imageSize))
         }
 
-    /** Warnings that never fail a build (R15, R19b). */
+    /** Warnings that never fail a build (R15, R19b, R21). */
     fun warnings(c: Content): List<String> =
         telegraphWarnings(c.tuning.values.mapValues { it.value.value }) +
+            c.heroes.values.flatMap { h -> h.mission.beats.flatMap { cheerOnFight(it.id, it.type, it.cheer) } } +
             c.assets.assets.filter { it.kind == "picture" && it.width != null && it.height != null }.flatMap { sizeLimits(it.id, it.width!!, it.height!!) }
 
     /** R8b (D-21): VI fits `vi_budget` for its field type (skipped on rules.json without vi_budget). */
@@ -223,6 +224,37 @@ object Validator {
             if (t.claims.filter { labels[it] == "legend" }.all { it in cover }) emptyList() else legendMarker(t, labels, markers)
         }
     }
+
+    /**
+     * R8d (rules 1.2, Language Rule 6): every fit field has a known size class, and its font_px is at
+     * least that class's minimum. Skipped on a rules.json without `min_px` (1.1).
+     */
+    fun sizeClasses(fields: Map<String, FitField>, minPx: Map<String, Int>?): List<String> {
+        if (minPx == null) return emptyList()
+        return fields.flatMap { (name, f) ->
+            val cls = f.sizeClass
+            when {
+                cls == null -> listOf("R8d $name: no size class")
+                cls !in minPx -> listOf("R8d $name: unknown size class $cls")
+                f.fontPx < minPx.getValue(cls) -> listOf("R8d $name: font_px ${f.fontPx} < $cls minimum ${minPx.getValue(cls)}")
+                else -> emptyList()
+            }
+        }
+    }
+
+    /**
+     * R14b (Combat Rule 15b): a training beat's last dummy lies inside the capped training zone:
+     * dummies × dummy_spacing ≤ W − enemy_reach − 2 × hero_edge_margin (error).
+     */
+    fun trainingFits(id: String, dummies: Int, worldWidth: Int, v: Map<String, Double>): List<String> {
+        val room = worldWidth - (v["enemy_reach"] ?: 0.0) - 2 * (v["hero_edge_margin"] ?: 0.0)
+        val need = dummies * (v["dummy_spacing"] ?: 0.0)
+        return if (need > room) listOf("R14b $id: $dummies dummies × ${v["dummy_spacing"]} = $need > training zone $room") else emptyList()
+    }
+
+    /** R21 (schema 1.5): `cheer: false` on a fight beat is ignored at run time (fights end on their caption); a warning. */
+    fun cheerOnFight(id: String, type: String, cheer: Boolean): List<String> =
+        if (type == "fight" && !cheer) listOf("R21 $id: cheer false on a fight beat is ignored") else emptyList()
 
     /** R14: the attack reaches the enemy standing in front (error). */
     fun attackReaches(v: Map<String, Double>): List<String> {
@@ -327,7 +359,11 @@ object Validator {
         for (hero in c.heroes.values) for (b in hero.mission.beats) out += beatButtons(b)
         // R17/R18 over the indexed heroes only (samples are excluded).
         out += timeline(c.heroes.filterKeys { it in c.index.heroes }.values.map { Triple(it.mission.hero.id, it.mission.hero.timelineOrder, it.mission.nextHero) })
-        out += attackReaches(c.tuning.values.mapValues { it.value.value })
+        val tv = c.tuning.values.mapValues { it.value.value }
+        out += attackReaches(tv)
+        for (hero in c.heroes.values) for (b in hero.mission.beats) if (b.type == "training")
+            out += trainingFits(b.id, (b.params["dummies"] as? kotlinx.serialization.json.JsonPrimitive)?.content?.toIntOrNull() ?: 0, c.tuning.world.width, tv)
+        c.rules.textLimits.fit?.let { out += sizeClasses(it.fields, c.rules.textLimits.minPx) }
         out += starThresholds(c.rules.quizStars.thresholds)
         c.themes?.let { th -> out += themesCovered(th.themes.keys, c.heroes.values.flatMap { h -> h.mission.beats.map { it.theme } }) }
         out += duplicateIds(allIds)

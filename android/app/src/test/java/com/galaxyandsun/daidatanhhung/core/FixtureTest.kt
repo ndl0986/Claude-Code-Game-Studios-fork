@@ -119,12 +119,16 @@ class FixtureTest {
                         ContentLoader.JSON.decodeFromJsonElement<Text>(tj()), a["taps"]!!.jsonPrimitive.int, a["at_line"]!!.jsonPrimitive.int))
                     assertEquals(c["expected_buttons"]!!.jsonArray.map { it.jsonPrimitive.content }, (1..c["lines"]!!.jsonPrimitive.int).map { d.buttonOn(it) })
                     emptyList() }
+                "R8d" -> Validator.sizeClasses(mapOf("case" to com.galaxyandsun.daidatanhhung.core.content.FitField(0, c["font_px"]!!.jsonPrimitive.int, 1, 600,
+                    c["class"]!!.jsonPrimitive.let { if (it is kotlinx.serialization.json.JsonNull) null else it.content })), content.rules.textLimits.minPx ?: error("R8d case needs rules.json min_px"))
+                "R14b" -> Validator.trainingFits("case", c["dummies"]!!.jsonPrimitive.int, c["world_width"]!!.jsonPrimitive.int, c["tuning"]!!.jsonObject.mapValues { it.value.jsonPrimitive.content.toDouble() })
+                "R21" -> c["beat"]!!.jsonObject.let { b -> Validator.cheerOnFight("case", b["type"]!!.jsonPrimitive.content, b["cheer"]?.jsonPrimitive?.content?.toBoolean() ?: true) }
                 "R14" -> Validator.attackReaches(c["tuning"]!!.jsonObject.mapValues { it.value.jsonPrimitive.content.toDouble() })
                 "R15" -> Validator.telegraphWarnings(c["tuning"]!!.jsonObject.mapValues { it.value.jsonPrimitive.content.toDouble() })
                 "R16" -> Validator.starThresholds(ContentLoader.JSON.decodeFromJsonElement<List<com.galaxyandsun.daidatanhhung.core.content.Threshold>>(c["thresholds"]!!))
                 else -> { println("validity.json: rule $rule not checked by this app yet"); continue }
             }
-            val got = when (rule) { "R11" -> if (problems.isEmpty()) "build_passes" else "build_fails"; "R15", "R19b" -> if (problems.isEmpty()) "valid" else "warn"; else -> if (problems.isEmpty()) "valid" else "invalid" }
+            val got = when (rule) { "R11" -> if (problems.isEmpty()) "build_passes" else "build_fails"; "R15", "R19b", "R21" -> if (problems.isEmpty()) "valid" else "warn"; else -> if (problems.isEmpty()) "valid" else "invalid" }
             assertEquals("${c["name"]} ($rule): $problems", expected, got)
             ran++
         }

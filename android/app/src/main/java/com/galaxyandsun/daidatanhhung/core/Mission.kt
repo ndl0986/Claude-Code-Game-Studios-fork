@@ -548,7 +548,8 @@ class MissionRun(
     /** beat_end: a fight goes to its caption; any other beat cheers and goes on (no caption). */
     private fun endBeat() {
         if (beatType == BeatType.FIGHT) { phase = Phase.CAPTION; captionLine = 0; return }
-        sfx(Sfx.CHIME); cheerT = t // drawn by the app; the core RNG is used only by fights and dummies (iOS parity)
+        // Mission flow Rule 2 / AC30: a beat with `cheer: false` ends on a neutral page turn, no cheer burst or pose.
+        if (currentBeat.cheer) { sfx(Sfx.CHIME); cheerT = t } else sfx(Sfx.SOFT) // the burst is drawn by the app; the core RNG is used only by fights and dummies (iOS parity)
         lockX = null; partner = null; trainCap = null
         beat++
         phase = Phase.WALK

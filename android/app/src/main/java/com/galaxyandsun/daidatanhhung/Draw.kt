@@ -104,6 +104,12 @@ class Draw(val bold: Typeface, val semi: Typeface) {
         c.save(); c.translate(x - maxW / 2, y - l.height / 2f); l.draw(c); c.restore()
     }
 
+    /** How many lines [textBox] would use for [s] (up to [maxLines]). */
+    fun lineCount(s: String, maxW: Float, size: Float, maxLines: Int, semiBold: Boolean = false): Int {
+        textP.typeface = if (semiBold) semi else bold; textP.textSize = size
+        return StaticLayout.Builder.obtain(s, 0, s.length, textP, maxW.toInt()).setMaxLines(maxLines).setLineSpacing(0f, LINE_HEIGHT).build().lineCount
+    }
+
     fun measure(s: String, size: Float): Float { textP.typeface = bold; textP.textSize = size; return textP.measureText(s) }
 
     object Color { fun alphaOf(c: Int) = (c ushr 24) and 0xFF }

@@ -92,4 +92,19 @@ class TrainingCapTest {
         r.debugTraining("blocks"); assertEquals(setOf("move", "attack", "defend"), r.visibleButtons())
         r.debugTraining("special"); assertEquals(setOf("move", "attack", "defend", "special"), r.visibleButtons())
     }
+
+    /** Mission flow Rule 2 / AC30, Audio AC13 (schema 1.5): `cheer: false` ends the beat on a page turn, no cheer. */
+    @Test fun aBeatWithCheerFalseEndsOnAPageTurn() {
+        for (cheer in listOf(true, false)) {
+            val m0 = content.heroes.getValue("tran-quoc-toan").mission
+            val m = m0.copy(beats = m0.beats.mapIndexed { i, b -> if (i == 0) b.copy(cheer = cheer) else b })
+            val sfx = mutableListOf<Sfx>()
+            val r = MissionRun(m, tuning, Mulberry32(tuning.seed)) { sfx += it }
+            r.debugStartBeat(0, telegraph = false, caption = false)
+            var n = 0
+            while (r.beat == 0 && n++ < 60 * 60) r.frame(setOf(Action.RIGHT))
+            assertEquals("cheer=$cheer", if (cheer) Sfx.CHIME else Sfx.SOFT, sfx.last())
+            assertEquals("cheer=$cheer: the burst time", cheer, r.cheerT >= 0)
+        }
+    }
 }
