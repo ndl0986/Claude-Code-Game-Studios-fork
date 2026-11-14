@@ -25,7 +25,7 @@ an issue once Issues are on. The leader owns this file.
 | TASK-016 | Bình Than scene (D-25): shorter walk + asking-to-join dialogue + orange; script, dialogue beat, schema 1.4, data, portrait specs | design | game-art-content | MERGED (GDD `d113f7d`, schema `c6004a8`, data `23699c4`); apps building the dialogue beat | `design/TASK-016-binhthan-scene` | 2026-11-14 |
 | TASK-017 | G2 fight-zone, auto-face, swing facing (reach-the-flag fix) | design | game-art-content | MERGED (`b9f8544`) | `design/TASK-017-fight-zone` | 2026-11-14 |
 | TASK-018 | Map & timeline GDD (modern map incl. Hoàng Sa, Trường Sa; hero pins; timeline; QC G5) | design | game-art-content | MERGED (`5218e2f`); map art waits for D-28 | `design/TASK-018-map` | 2026-11-14 |
-| TASK-019 | Input & touch controls GDD (safe rect + gesture insets, per-pointer touch model, clear-all, debounce, dropped input; QC B1/B4/O5 as ACs) + B3 line in Hints GDD | design | game-art-content (+ android review) | written @ 2ba810d (identity rule 5b, AC13/14, tuning keys), lean review APPROVED; peer review by game-dev-android | `design/TASK-019-input` | 2026-11-14 |
+| TASK-019 | Input & touch controls GDD (safe rect + gesture insets, per-pointer touch model, clear-all, debounce, dropped input; QC B1/B4/O5 as ACs) + B3 line in Hints GDD | design | game-art-content (+ android review) | written @ 2ba810d (identity rule 5b, AC13/14, tuning keys), lean review APPROVED; android REVISE (4 points: tie-break until lift, keep pad until up, flag at press, mandatory insets) → art-content fixing |  `design/TASK-019-input` | 2026-11-14 |
 | TASK-013 | Full-screen layout on both apps: backdrop + HUD to the screen edges, gameplay stays 1280×720 (fixes the 20:9 letterbox) | dev | both devs | after the slice's first QC pass | — | 2026-11-14 |
 | TASK-005b | Tuning parity keys (19) in content/data/tuning.json | data | game-dev-android | MERGED (`012114c`) | `data/TASK-005b-tuning-parity` | 2026-11-14 |
 | TASK-005c | 24 UI strings VI/EN in content/data/strings.json | data | game-dev-android (+ art-content review) | MERGED (`a2109fe`) | `data/TASK-005c-ui-strings` | 2026-11-14 |
@@ -137,3 +137,6 @@ of one mission (not yet the production codebase). In parallel TASK-008 runs `/ma
 GDDs. Then `/gate-check`, and the full build goes through `/create-epics`, `/create-stories` and
 `/sprint-plan`. Where the template has no native-engine support (setup-engine, engine specialists,
 test-setup, smoke-check), those checks report NOT ASSESSED by design (ADR-0001).
+
+**After Android QC r3 (dev-android):** first-owner tie-break in PadHolds; 4% press squash; noisy/route clear; pad_gap (TASK-005k); rounded-corner insets (TASK-013); merge b661802 so TraceTest runs.
+**iOS QC r3 (2026-11-14):** frozen 9b0470a (72 tests), app fingerprint 544279664aaa…; game-qc-ios on iPhone 18 Pro. dev-ios next: trace replay, TASK-019 touch-rule check.
