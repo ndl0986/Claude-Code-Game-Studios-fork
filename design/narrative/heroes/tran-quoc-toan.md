@@ -55,6 +55,9 @@ Labels: **fact** · **interpretation** · **legend** (popular tradition, D2) · 
 | C11 | Nhà Trần đánh thắng quân Mông–Nguyên. | The Trần dynasty defeated the Mông–Nguyên army. | fact | S1, S3 | ⟨placeholder⟩ |
 | C12 | Bến sông đông thuyền, rơm tập đánh, giặc rơi vũ khí rồi bỏ chạy… | A busy riverbank, straw training dummies, enemies dropping weapons and running away… | **invented** | none (game play) | ⟨placeholder⟩ |
 | C13 | Năm diễn ra hội nghị Bình Than (1282), Trần Quốc Toản mới 15 tuổi (sinh năm 1267; 16 tuổi theo tuổi mụ). | In the year of the Bình Than meeting (1282), Trần Quốc Toản was 15 (born 1267; 16 by the traditional count). | fact (derived: birth year 1267 + meeting in the 10th month of 1282). **Luan chooses 15 or 16 (tuổi mụ)** | S3, S5, S7 (data); S5/S7 secondary, ⟨to confirm⟩ | ⟨placeholder⟩ |
+| C14 | Truyện kể rằng Quốc Toản đến bến Bình Than, xin được gặp vua để xin đánh giặc; lính canh không cho vào vì cậu còn nhỏ. | The story says Quốc Toản came to Bình Than and asked to see the king to ask to fight; the guards would not let him in because he was young. | **legend** | S4, S2 ⟨to confirm⟩; S6 | ⟨placeholder⟩ |
+| C15 | Truyện kể rằng vua khen Quốc Toản còn trẻ mà đã biết lo việc nước, và ban cho cậu một quả cam. | The story says the king praised Quốc Toản for caring for the country while so young, and gave him an orange. | **legend**; becomes fact (as the chronicle records it) if the S3 1282 passage records the king giving the orange | S4, S2 ⟨to confirm⟩; S3 1282 ⟨to confirm⟩ | ⟨placeholder⟩ |
+| C16 | Trong truyện, Quốc Toản nói: "Xin Quan gia cho đánh! Cho giặc mượn đường là mất nước!" (in the game: "Xin nhà vua cho đánh!", Luan 2026-11-14) | In the story, Quốc Toản says: "Let us fight, Your Majesty! Letting the enemy pass means losing our country!" | **legend** (words from the literary telling; not quoted from the chronicle) | S4, S2 ⟨to confirm⟩ | ⟨placeholder⟩ |
 
 > **C06 and C08: relabel condition (Luan, 2026-11-14).** Both stay **legend** for now.
 > They become **fact (as the chronicle records it)** only once the S3 passage for 1282 is
@@ -100,6 +103,56 @@ year (C13) → the king's meeting at Bình Than (C04). Then beat 1 says why he g
   meeting **the vương hầu and trăm quan** at Bình Than. The **bô lão** met at **Diên Hồng** (1284),
   a different event that some books and exercises confuse with Bình Than.
 
+### Beat 1b: Xin gặp vua / Asking to see the king (TASK-016, plan approved by Luan 2026-11-14)
+
+**Script status: APPROVED by Luan (2026-11-14)**, with two changes he made: the king calls Quốc
+Toản **"cháu"** (a young prince of the royal family), and **"nhà vua"** replaces "Quan gia"
+(simpler for children; the literary telling's "Quan gia" is adapted). EN is unchanged. The
+claims stay pending (history sign-off is per claim).
+
+- **Story moment:** at the closed meeting gate, Quốc Toản asks to see the king to ask to fight.
+  The guards kindly refuse because he is young. The noise brings the king out. Quốc Toản pleads,
+  and the king praises him, gives him an orange and sends him home. Claims: C14, C16, C15
+  (**legend**), C05, C04, C12 for the second refusal.
+- **Play (new `dialogue` beat type):**
+  - illustrated lines with a speaker portrait (Quốc Toản, a guard, the king) or narrator text;
+    one sentence per box; tap "Tiếp";
+  - **one action:** a big "Xin vào! / Let me in!" button the child taps **twice**. Each tap is
+    Quốc Toản asking; the 2nd tap brings the king out;
+  - no pads. The orange beat that follows is the playable emotional peak.
+- **R4c (requested):** the opening narrator line carries the legend marker, and it covers the
+  spoken lines of this beat.
+- **Portrayal:**
+  - The guards are kind and firm, never rough.
+  - **The king (Trần Nhân Tông) is a symbolic image, not a likeness** (Luan): a Trần-era royal
+    headdress ("vương miện", period form ⟨placeholder⟩, never a European crown), a beard and
+    thick brows for dignity, warm eyes.
+
+| # | Speaker | VI | EN | Claims |
+|---|---|---|---|---|
+| 1 | Narrator | Truyện kể rằng Quốc Toản đến bến Bình Than, xin được gặp vua. | The story says Quốc Toản came to Bình Than and asked to see the king. | C14 |
+| 2 | Guard | Cậu còn nhỏ quá, chưa được vào họp đâu. | You are too young to join the meeting. | C05, C14 |
+| — | *(child taps "Xin vào! / Let me in!")* | | | |
+| 3 | Quốc Toản | Xin cho tôi gặp nhà vua! | Please let me see the King! | C14 |
+| 4 | Guard | Không được đâu, vua đang bàn việc nước. | You can't. The king is planning for the country. | C04, C12 |
+| — | *(child taps "Xin vào!" again)* | | | |
+| 5 | Narrator | Nghe ồn ào, vua bước ra. | Hearing the noise, the king came out. | C14 |
+| 6 | Quốc Toản | Xin nhà vua cho đánh! | Let us fight, Your Majesty! | C16 |
+| 7 | Quốc Toản | Cho giặc mượn đường là mất nước! | Letting the enemy pass means losing our country! | C16 |
+| 8 | King | Cháu còn trẻ mà đã biết lo cho đất nước, ta khen cháu. | You are young, yet you already care for our country. I praise you. | C15 |
+| 9 | Narrator | Vua ban cho Quốc Toản một quả cam, rồi bảo cậu về. | The king gave Quốc Toản an orange and told him to go home. | C15 |
+
+**Data (schema 1.4):** `ask` {at_line 2, taps 2, button "Xin vào! / Let me in!" (C14)}. So: line 1
+→ Tiếp; line 2 (the guard refuses) → "Xin vào!" shows line 3 (Quốc Toản asks); line 3 → "Xin vào!"
+shows line 4 (the guard refuses again); then Tiếp, and the noise brings the king out (line 5).
+
+**Checks done:**
+- Every line fits its `dialogue_line` box (R8c at 38 px, weight 600): speaker lines in 720,
+  narrator lines in 880, VI and EN, ≤ 2 lines. No wording change was needed.
+- One sentence per box: the famous plea is split into lines 6 and 7.
+- D-17: no line addresses the child player. "Cậu", "cháu" and "ta" are characters speaking
+  to each other.
+
 ### Beat 2: Quả cam / The orange
 
 - **Story moment:** he is told he is too young to join. Holding the king's orange, he
@@ -108,8 +161,7 @@ year (C13) → the king's meeting at Bình Than (C04). Then beat 1 says why he g
   show his feeling growing. The orange is squeezed (juice, no mess on him), then he turns
   and runs home determined. Bad feelings are shown, never shamed.
 - **Goal:** hold until the meter fills.
-- **Scene (VI):** "Quốc Toản còn nhỏ nên không được vào bàn việc nước. Truyện kể rằng cậu tức quá, bóp nát quả cam lúc nào không biết."
-- **Scene (EN):** "Quốc Toản was too young to join the meeting. The story says he was so upset that he crushed an orange without even noticing."
+- **Scene, after TASK-016:** only "Truyện kể rằng cậu tức quá, bóp nát quả cam lúc nào không biết." / "The story says he was so upset that he crushed an orange without even noticing." (C06). The "too young" line moves into beat 1b, which now tells it.
 
 ### Beat 3: Lá cờ sáu chữ vàng / The banner of six golden words
 
