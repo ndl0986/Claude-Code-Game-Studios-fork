@@ -154,10 +154,12 @@ object Validator {
     fun lineFit(id: String, fieldType: String, vi: String, en: String, limits: TextLimits, fit: LineFit?): List<String> {
         val f = limits.fit ?: return emptyList(); val lf = fit ?: return emptyList()
         val field = f.fields[fieldType] ?: return listOf("R8c $id: no fit entry for $fieldType")
-        return listOf("vi" to vi, "en" to en).mapNotNull { (lang, s) ->
-            val r = lf.lines(s, field, f.allowance)
-            if (r.fails) "R8c $id: $lang takes ${r.lines} line(s) of ${field.boxWidth}px at ${field.fontPx}px (max ${field.maxLines})" else null
-        }
+        // Rules 1.3: a field with narrow_box_width must also fit max_lines at that width (narrow phones, hud.md §3.3).
+        val boxes = listOfNotNull(field, field.narrowBoxWidth?.let { field.copy(boxWidth = it) })
+        return boxes.flatMap { b -> listOf("vi" to vi, "en" to en).mapNotNull { (lang, s) ->
+            val r = lf.lines(s, b, f.allowance)
+            if (r.fails) "R8c $id: $lang takes ${r.lines} line(s) of ${b.boxWidth}px at ${b.fontPx}px (max ${b.maxLines})" else null
+        } }
     }
 
     /** R8c over the whole bundle (UI strings and every story Text). */

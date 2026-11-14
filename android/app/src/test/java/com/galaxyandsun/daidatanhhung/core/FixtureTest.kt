@@ -105,7 +105,10 @@ class FixtureTest {
                 "R8b" -> Validator.viBudget("case", c["field_type"]!!.jsonPrimitive.content, c["vi"]!!.jsonPrimitive.content, content.rules.textLimits)
                 "R8c" -> { val fit = content.rules.textLimits.fit!!
                     val table = ContentLoader.JSON.decodeFromString<com.galaxyandsun.daidatanhhung.core.content.AdvanceTable>(java.io.File(TestContent.root.parentFile, fit.metrics).readText())
-                    val r = com.galaxyandsun.daidatanhhung.core.content.LineFit(table).lines(c["text"]!!.jsonPrimitive.content, fit.fields.getValue(c["field_type"]!!.jsonPrimitive.content), fit.allowance)
+                    val field = fit.fields.getValue(c["field_type"]!!.jsonPrimitive.content)
+                    // TASK-005o: "box": "narrow" measures at the field's narrow_box_width (a missing one fails the case)
+                    val box = if (c["box"]?.jsonPrimitive?.content == "narrow") field.copy(boxWidth = field.narrowBoxWidth ?: error("${c["name"]}: no narrow_box_width on ${c["field_type"]}")) else field
+                    val r = com.galaxyandsun.daidatanhhung.core.content.LineFit(table).lines(c["text"]!!.jsonPrimitive.content, box, fit.allowance)
                     assertEquals("${c["name"]} lines", c["expected_lines"]!!.jsonPrimitive.int, r.lines)
                     if (r.fails) listOf("R8c") else emptyList() }
                 "R19a" -> { val d = c["declared"]!!.jsonObject; val a = c["actual"]!!.jsonObject

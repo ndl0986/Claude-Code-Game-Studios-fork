@@ -150,6 +150,8 @@ data class FitField(
     val weight: Int,
     /** R8d (rules 1.2): the field's size class (heading, body, button, label); null on rules 1.1. */
     @SerialName("class") val sizeClass: String? = null,
+    /** Rules 1.3 (TASK-005o): the box on narrow phones (hud.md §3.3, 0.32 ≤ k < 0.48); R8c also checks it. */
+    @SerialName("narrow_box_width") val narrowBoxWidth: Int? = null,
 )
 
 @Serializable
