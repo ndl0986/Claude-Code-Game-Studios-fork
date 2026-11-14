@@ -33,11 +33,9 @@ class EnterLockTest {
         while (g.screen == Screen.PLAY) { assertTrue(g.tap("next") { next() }); g.frames(0.35) }
         assertEquals(Screen.ENDING, g.screen)
         val entered = now - 0.35
-        var t = 0.35
-        while (t < 0.6 - 1e-9) { assertFalse("mash at +$t s", g.tap("next") { next() }); assertEquals(0, g.line); g.frames(0.35); t += 0.35 }
-        assertTrue("the first press after the lock advances", g.tap("next") { next() })
-        assertTrue("it moved on (the sample ending may have one box)", g.screen != Screen.ENDING || g.line == 1)
-        assertTrue(now - entered >= 0.6)
+        // the rolling lock (TASK-005q): a continuous 0.35 s mash keeps restarting the window until the cap
+        while (g.screen == Screen.ENDING && g.line == 0 && !g.tap("next") { next() }) g.frames(0.35)
+        assertTrue("the first ending box held ≥ the cap: ${now - entered}", now - entered >= g.tuning["screen_enter_lock_max"] - 1e-9)
     }
 
     @Test fun walkingIntoTheDialogueLocksItsFirstLine() {
@@ -47,8 +45,12 @@ class EnterLockTest {
         var n = 0
         while (g.run.phase != Phase.DIALOGUE && n++ < 600) g.frames(dt) { InputFrame().apply { held += Action.RIGHT } }
         assertEquals(Phase.DIALOGUE, g.run.phase)
-        g.frames(0.59); assertFalse("+0.59 s", g.tap("next") { next() }); assertEquals(0, g.run.lineIndex)
-        g.frames(0.02); assertTrue("+0.61 s", g.tap("next") { next() }); assertEquals(1, g.run.lineIndex)
+        g.frames(0.65); assertTrue("one press at +0.65 s (none before it)", g.tap("next") { next() }); assertEquals(1, g.run.lineIndex)
+    }
+
+    @Test fun aPressInsideTheLockIsDropped() {
+        val g = tqt(); g.debugJump("intro"); g.frames(0.55)
+        assertFalse("+0.55 s", g.tap("next") { next() }); assertEquals(0, g.line)
     }
 
     @Test fun boxToBoxWithinAContextKeepsOnlyTheDebounce() {
@@ -69,5 +71,37 @@ class EnterLockTest {
         val before = now - 0.2 // a finger already down when the intro was entered (1.0 s ago in this test's clock)
         g.debugJump("ending") // a fresh context entered now
         assertFalse(g.pressAllowed("next", before))
+    }
+
+    // ---- The rolling lock (TASK-005q): each dropped press restarts the window, capped at screen_enter_lock_max ----
+
+    /** Mash Next every [every] s for [secs] s from now; returns the times (since entry) at which a press advanced. */
+    private fun Game.mash(entered: Double, every: Double, secs: Double, stopAt: Double = 1e9): List<Double> {
+        val out = mutableListOf<Double>(); var t = 0.0
+        while (t < secs) { if (t <= stopAt + 1e-9 && tap("next") { next() }) out += now - entered; frames(every); t += every }
+        return out
+    }
+
+    @Test fun aContinuousMashHoldsTheEndingBoxUntilTheCapThenEachBoxAgain() {
+        val g = tqt(); g.debugJump("ending"); val entered = now
+        g.frames(0.35)
+        val adv = g.mash(entered, 0.35, 3.3)
+        val cap = g.tuning["screen_enter_lock_max"]; println("B7 timeline: advances at $adv (s after ending entry)")
+        assertTrue("box 1 holds ≥ the ${cap} s cap: first advance at ${adv.firstOrNull()}", adv.isNotEmpty() && adv[0] >= cap - 1e-9)
+        assertTrue("box 2 (the hero's last line) also holds ≥ $cap s: $adv", adv.size < 2 || adv[1] - adv[0] >= cap - 1e-9)
+    }
+
+    @Test fun aMashThatStopsLetsTheNextTapThroughALockAfterTheLastDroppedPress() {
+        val g = tqt(); g.debugJump("ending"); val entered = now
+        g.frames(0.4); assertFalse(g.tap("next") { next() })   // +0.4 dropped → window to 1.0
+        g.frames(0.4); assertFalse(g.tap("next") { next() })   // +0.8 dropped → window to 1.4
+        g.frames(0.59); assertFalse("+1.39 still inside", g.tap("next") { next() }) // dropped → window to min(1.99, 1.5)
+        g.frames(0.15); assertTrue("past the 1.5 s cap", g.tap("next") { next() })
+        assertTrue(now - entered < 1.6)
+    }
+
+    @Test fun pauseStaysTappableInsideTheRollingWindow() {
+        val g = tqt(); g.debugJump("ending")
+        repeat(3) { g.frames(0.35); assertFalse(g.tap("next") { next() }); assertTrue(g.pressAllowed("pause", now)) }
     }
 }

@@ -1,5 +1,8 @@
 package com.galaxyandsun.daidatanhhung.core
 
+import kotlin.math.max
+import kotlin.math.min
+
 import com.galaxyandsun.daidatanhhung.core.content.Content
 import com.galaxyandsun.daidatanhhung.core.content.HeroBundle
 import com.galaxyandsun.daidatanhhung.core.content.Lang
@@ -102,6 +105,8 @@ class Game(
     private var ctx = ""
     /** When the current context was entered, on the press clock (uptime): the time the new screen first shows. */
     var enteredAt = -1e9; private set
+    /** The rolling lock's end: each dropped press restarts screen_enter_lock, capped at screen_enter_lock_max from entry (TASK-005q). */
+    private var lockUntil = -1e9
     /** Set by the renderer: at 0.40 ≤ k < 0.48 each new quiz question also locks (Tiếp lies over card slot 3 there). */
     var lockEachQuestion = false
 
@@ -110,6 +115,7 @@ class Game(
             Screen.PLAY -> when (run.phase) { Phase.CARD -> "card${run.beat}"; Phase.CAPTION -> "caption${run.beat}"; Phase.DIALOGUE -> "dialogue${run.beat}"; else -> "play" }
             Screen.PAUSE -> return ctx // pausing doesn't change the context, and the pause menu is exempt
             Screen.QUIZ -> if (lockEachQuestion) "quiz${quiz?.index}" else "quiz"
+            Screen.ENDING -> "ENDING$line" // every ending box takes the lock: the hero's last lines never flash past under a mash
             else -> screen.name
         }
         return if (skipWarning) "$base/warn" else base
@@ -120,12 +126,18 @@ class Game(
         val c = context(); if (c == ctx) return
         val returning = ctx == "$c/warn"
         ctx = c
-        if (c != "play" && !returning) enteredAt = now?.invoke() ?: clock
+        if (c != "play" && !returning) { enteredAt = now?.invoke() ?: clock; lockUntil = enteredAt + tuning["screen_enter_lock"] }
     }
 
     /** Presses on these keys are dropped within `screen_enter_lock` of entering a context; pause, sound, VI|EN and the pause menu are exempt. */
     private fun lockedKey(key: String) = key in setOf("next", "ask", "skip", "tomap", "start", "keep", "skipok") || key.startsWith("card")
-    private fun inEnterLock(at: Double): Boolean { syncContext(); return at - enteredAt < tuning["screen_enter_lock"] }
+    private fun inEnterLock(at: Double): Boolean {
+        syncContext()
+        if (at >= lockUntil) return false
+        // dropped: the window restarts from this press, but never past entry + screen_enter_lock_max
+        lockUntil = max(lockUntil, min(at + tuning["screen_enter_lock"], enteredAt + tuning["screen_enter_lock_max"]))
+        return true
+    }
 
     init { reset(); Progression.markSeen(content, store) } // the title loading counts as "seen open"
 
