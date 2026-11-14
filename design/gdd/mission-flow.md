@@ -365,7 +365,8 @@ Art-director lens (art bible §§2–7):
   - each story box plays its voice line, by Text id (Audio GDD, planned `vo`);
   - music changes per state: story (soft), walk or training (light), fight or flag (drums),
     ending (quiet), as art bible §2 sets the mood;
-  - each pad press gives one tone (QC O6).
+  - menu buttons give exactly one tone per press; play pads give no tap tone, only their action
+    sounds (QC O6; Audio & voice-over GDD Rule 6).
 
 📌 **Asset Spec**: after this GDD is approved, run `/asset-spec system:mission-flow` for the
 story frame, the meter ring, the dummies, the practice partner, the flag and the beat-end
