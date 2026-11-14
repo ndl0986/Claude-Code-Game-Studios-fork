@@ -12,6 +12,7 @@
 - **Props** use the hero's scale (hero 360 px tall at 2×), a bottom-centre pivot and the feet line at `ground_y`.
 - **Backgrounds** (theme ids `river`, `village`, `camp` from `mission.json`): layers are authored at 3840×2160 (or wider) and exported at 2× (as authored) and 1× (half). The ground top edge sits at **y = 1410 at 2× / 705 at 1×** (`ground_y` 470 of 720). Edge hierarchy per §3: **far sky and far layers have no outlines, mid has soft thin outlines, and play has the bold `#4A3428` top edge.** Every set is a **stand-in, not a depiction of a real place**. All architecture and boats are ⟨placeholder⟩.
 - **Foreground** layers stay below y = 1500 at 2× (under the feet line), at 60–80% opacity, and never cover the hero or an enemy (§6).
+- **Story-panel safe zone** (QC r6; `design/ux/story-screens.md` §5.2): the same backgrounds show behind story panels with no sprites. Any landmark the story names (the meeting gate, the flag, the canopy) keeps its key part **above y 270 world px** (540 at 2×, 405 at 1.5×) so a beat-card panel never hides it; the band below holds ground and mid-layer only.
 
 ## ASSET-301 — Straw training dummy
 
