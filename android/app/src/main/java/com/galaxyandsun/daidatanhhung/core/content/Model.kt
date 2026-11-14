@@ -155,7 +155,7 @@ data class TuningFile(
 )
 
 @Serializable
-data class Asset(val id: String, val kind: String, val file: String, val bytes: Long)
+data class Asset(val id: String, val kind: String, val file: String, val bytes: Long, val width: Int? = null, val height: Int? = null)
 
 @Serializable
 data class AssetsFile(@SerialName("schema_version") val schemaVersion: String, val assets: List<Asset>)

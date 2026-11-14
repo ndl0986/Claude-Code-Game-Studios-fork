@@ -27,7 +27,7 @@ data class Content(
  * Reads content through [read] (a path relative to content/data, e.g. "tuning.json"), so the
  * same code reads Android assets in the app and plain files in JVM unit tests.
  */
-class ContentLoader(private val read: (String) -> String?) {
+class ContentLoader(private val read: (String) -> String?, private val strict: Boolean = false) {
     fun load(extraHeroes: List<String> = emptyList()): Content {
         val index: IndexFile = decode("index.json")
         val heroIds = (index.heroes + extraHeroes).distinct()
@@ -49,15 +49,21 @@ class ContentLoader(private val read: (String) -> String?) {
     private inline fun <reified T> decode(path: String): T {
         val text = read(path) ?: throw ContentException("missing content file $path")
         return try {
-            JSON.decodeFromString<T>(text)
+            (if (strict) JSON else LENIENT).decodeFromString<T>(text)
         } catch (e: Exception) {
             throw ContentException("$path: ${e.message}", e)
         }
     }
 
     companion object {
-        /** Strict: unknown keys are errors (a typo must not be ignored). */
+        /** Strict: unknown keys are errors. The content tests decode with this, so a typo fails a test. */
         val JSON = Json { ignoreUnknownKeys = false; explicitNulls = false }
+
+        /**
+         * Run time: unknown keys are ignored, so a newer MINOR schema (a new optional field) never stops
+         * a shipped app from reading its bundle (R11: only a newer MAJOR is refused, at build time).
+         */
+        val LENIENT = Json { ignoreUnknownKeys = true; explicitNulls = false }
 
         /** A fight beat's params; other beat types play as a fight until D-08 decides them. */
         fun fightParams(beat: Beat): FightParams? =

@@ -15,7 +15,8 @@ object TestContent {
     private fun read(path: String): String? =
         listOf(File(root, "data/$path"), File(root, "samples/$path")).firstOrNull { it.isFile }?.readText()
 
-    fun load(): Content = ContentLoader(::read).load(extraHeroes = listOf("sample"))
+    /** Strict decoding in tests: an unknown key in content fails here, never silently at run time. */
+    fun load(): Content = ContentLoader(::read, strict = true).load(extraHeroes = listOf("sample"))
 
     fun fixture(name: String): JsonObject = Json.parseToJsonElement(File(root, "fixtures/$name").readText()).jsonObject
 
