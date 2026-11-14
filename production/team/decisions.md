@@ -19,7 +19,7 @@ it) · **Decided** (Luan's call, with the date).
   prototype), so the quiz always ends; (b) `quiz_count` = 5, so each hero's content decides 3–5
   questions (random tapping earns ≥2★ 37% of the time with 3 questions, 8.6% with 5);
   (c) validation fails if `rules.json` t2 < t3.
-- **Status:** Open (devs, in data/TASK-005d). Raised by game-art-content.
+- **Status:** Done by the devs in data/TASK-005d (`f94f463`), awaiting merge. Raised by game-art-content.
 
 ### D-10 A "Special" (banner) move in combat
 
@@ -150,6 +150,16 @@ it) · **Decided** (Luan's call, with the date).
 ---
 
 ## Proposed (applied by the team; Luan can overturn)
+
+### P-05 Quiz in the slice follows the Quiz & stars GDD
+
+- **Flow:** quiz question → answer → feedback → next question.
+- **What the team applied (both apps):** after the right answer and its "why" line, the child taps
+  **Tiếp / Next** (no automatic advance, so there's time to read or hear it); a wrong answer shakes
+  for 0.5 s and ignores taps meanwhile; the quiz screen has a **pause** button (the only place to
+  switch VI|EN during the quiz); answer cards are shuffled per question with a seeded order shared
+  by both apps (a fixture tests it). The browser prototype auto-advanced and didn't shuffle.
+- **Status:** Proposed.
 
 ### P-04 Both apps behave identically: parity rules (TASK-006/007)
 
