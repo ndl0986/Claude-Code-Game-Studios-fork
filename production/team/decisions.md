@@ -111,6 +111,27 @@ it) · **Decided** (Luan's call, with the date).
 - **Props:** (8) Trần army flag = gold cloth, vermilion border, no symbols, as a stand-in?
 - **Palette:** (9) approve the colour additions (warning yellow for the telegraph, one skin tone
   for everyone, enemy slate tones, quiz and material colours)?
+- **(10) Bình Than portraits:** Quốc Toản ×3 expressions, a kind guard in the hero's colours, the king
+  shown symbolically (beard, thick brows, warm eyes, gold robe; headdress ⟨placeholder⟩, never a
+  European crown).
+- **Recommended answers (game-art-content, 2026-11-14), to approve in one pass:**
+  1. Cream tunic; vermilion only on headband and sash (art bible §4: red is an accent).
+  2. Staff with padded ends (blunt; an improvised weapon fits a 15-year-old; spears stay enemy props).
+  3. Topknot + vermilion headband as a ⟨placeholder⟩ until checked against Kim Đồng "Tranh truyện
+     lịch sử" (ref 2); the two headband tails are his silhouette at phone size.
+  4. **Yes**, one girl among 2–3 unnamed followers ("gia nhân và người thân" doesn't exclude girls);
+     labelled invented (C12). ← **your pick**
+  5. Yes: dome helmet + quilted coat-armour as a ⟨placeholder⟩, to check against a Yuan-armour
+     source before final art. No nón lá, no facial caricature.
+  6. Slate-violet, **about 10% greyer** (keeps it apart from the hero and from the quiz lavender).
+     ← **your pick** (greyer / as is)
+  7. Keep the leader's plain pennant (no symbols or text).
+  8. Yes: gold flag with a vermilion border, no symbols (matches the Trần flag in quiz Q1).
+  9. Approve all palette rows as listed (the materials rows only need a glance).
+  10. Approve the portraits. King's headdress reference: **the Kết nối tri thức textbook
+      illustration of a Trần king** (the image children know from school). ← **your pick**
+      (that source, or name another)
+- **How to answer:** "D-18 all as recommended", or list the numbers you change.
 - **Status:** Open. Blocks final art only; the slice runs on placeholders meanwhile.
 
 ### D-16 Saved progress keys: work out unlocks instead of storing them
