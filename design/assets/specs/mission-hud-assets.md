@@ -239,14 +239,14 @@ Also draws on `design/gdd/hints-and-onboarding.md` (Visual/Audio) for ASSET-033 
 | Replaces | new |
 | Texture Res | 1× and 2× per art bible §8 |
 
-**Visual Description:** A friendly, chunky cartoon child's hand with a short cream `#FFF6E3` sleeve cuff, its index finger pointing down-left toward a pad. It has a warm skin tone `#E9B98E` (proposal) and a thick ink outline. **Point:** the fingertip is round and relaxed. **Press:** the same hand with the fingertip slightly squashed flat and a small soft cream press-ring under the tip, used for hold hints. The 1 s bob is animated in code. The fingertip pivot is at the bottom-left of the canvas.
+**Visual Description:** A friendly, chunky cartoon child's hand with a short cream `#FFF6E3` sleeve cuff, its index finger pointing down-left toward a pad. It has a warm skin tone `#F1C9A0` (proposal) and a thick ink outline. **Point:** the fingertip is round and relaxed. **Press:** the same hand with the fingertip slightly squashed flat and a small soft cream press-ring under the tip, used for hold hints. The 1 s bob is animated in code. The fingertip pivot is at the bottom-left of the canvas.
 
 **Art Bible Anchors:**
 - Hints GDD Visual/Audio: a cartoon hand in the rounded style, ink-brown outline; a hold hint presses and stays
 - §3: soft rounded forms
 - §1 P2 / Hints UI: drawn above the HUD, never inside another pad's area
 
-**Generation Prompt:** Flat mobile game UI tutorial icon, modern kids' cartoon style, soft rounded shapes, flat colours with soft gradients, thick warm ink-brown outline (#3A2A20). A single chunky friendly cartoon child's hand with a short cream (#FFF6E3) sleeve cuff, warm skin tone (#E9B98E), index finger extended and pointing down-left, other fingers curled softly, rounded fingertip. Second version: the same hand pressing down, fingertip slightly squashed, with a small soft cream ring under it. Transparent background, flat even light. Negative: text, letters, numbers, watermark, blood, gore, scary faces, photorealistic, anime, white glove, claws, long nails, adult hand, veins, thin line icon.
+**Generation Prompt:** Flat mobile game UI tutorial icon, modern kids' cartoon style, soft rounded shapes, flat colours with soft gradients, thick warm ink-brown outline (#3A2A20). A single chunky friendly cartoon child's hand with a short cream (#FFF6E3) sleeve cuff, warm skin tone (#F1C9A0), index finger extended and pointing down-left, other fingers curled softly, rounded fingertip. Second version: the same hand pressing down, fingertip slightly squashed, with a small soft cream ring under it. Transparent background, flat even light. Negative: text, letters, numbers, watermark, blood, gore, scary faces, photorealistic, anime, white glove, claws, long nails, adult hand, veins, thin line icon.
 
 **Status:** Needed
 

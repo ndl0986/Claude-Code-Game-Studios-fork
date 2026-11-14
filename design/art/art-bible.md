@@ -237,11 +237,13 @@ can do it*.
 | Neutral NPCs (villagers, guards) | Soft, everyday shapes with no weapon raised | Natural earth tones | Idle and friendly; the Bình Than guards raise a hand, not a weapon |
 
 **Animation set per hero** (side view, facing right; mirrored for left):
-`idle`, `run`, `attack` (one swing, about 0.3 s wind-up), `defend` (shield or guard pose,
-held), `special` (banner wave or hold pose), `hit` (a small knock-back hop and a blink,
-**no injury shown**), `cheer` (end of beat). Enemies get `idle`, `walk`, `windup`,
-`attack`, `knockback` (stumble, spin, drop the weapon), and `run_home` (leaves the screen
-waving its arms). **There is no defeated or lying-down pose for anyone.**
+`idle`, `run`, `attack` (one staff swing of 0.28 s; the hit lands at 45%, so wind-up and
+follow-through are short — combat GDD `attack_time`, `attack_hit_at`), `defend` (shield or guard
+pose, held), `special` (hold pose for hold-meter; banner raise for training), `hit` (a small
+knock-back hop and a blink, **no injury shown**), `cheer` (end of beat). Enemies face **left**
+and use the combat GDD's state names: `walk` (enter/approach), `windup`, `strike`, `rest`, `hurt`
+(stumble, helmet wobble), and `flee` (drops the weapon, leaves the screen waving its arms).
+**There is no defeated or lying-down pose for anyone.**
 
 **Expression and pose:** exaggerated, squash-and-stretch poses that read in silhouette.
 Faces show determination, surprise and joy. Anger (beat 2, the orange) is shown with
