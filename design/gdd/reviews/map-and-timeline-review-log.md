@@ -16,3 +16,6 @@ Reviewed-Content-Hash: .claude/skills/design-review/SKILL.md 4dcc8b81162613c7571
 Reviewed-Content-Hash: design/gdd/hero-progression.md c5b7dbf80b1d18f35f60ee4c713549e10d03b160
 Reviewed-Content-Hash: design/gdd/mission-flow.md 85cb878b47b2d79fbdd7fe9d8718b2461d8045c4
 Reviewed-Content-Hash: design/gdd/game-concept.md 2ee5801590b66b9404c289645f337bc459690eba
+
+## Peer review — 2026-11-14 — game-dev-ios: REVISE (minor), fixes applied
+Layout: map box x 40–700, y 20–700; timeline as a vertical column on the right (x 740–1240, y 140–700; the leader's call). Pins closer than pin_world (= pad_min / k) merge into a cluster pin that opens the multi-hero picker (F2, AC11). Region is data (hero.map.region). A drag past ~10 pt never taps (AC12). Schema 1.5 agreed: hero.map {x, y, region} plus an optional hero.era; the modern location uses place. Awaiting confirmation.
