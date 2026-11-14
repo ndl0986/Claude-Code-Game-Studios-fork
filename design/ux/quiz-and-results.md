@@ -34,6 +34,44 @@ the title. Pause is available (P-05).
 └──────────────────────────────────────────────────────────────────┘
 ```
 
+### 5.2 Small-k quiz layout (0.40 ≤ k < 0.48)
+
+**The reference layout stays as it is** for k ≥ 0.48 (cards ≈ y 270–560, the why line under
+them, Tiếp on the bottom row). Below k ≈ 0.48 the tall corner block (pause/sound at `pad_min`)
+and the tall Tiếp row leave only ≈ 197 px for the cards, which need a picture plus a 2-line label
+(≈ 100 + 103). Of the three options, this spec takes **(c), Tiếp over spent cards, with two
+guards for young children**: Tiếp never appears while a child can still choose, and the right
+card is never covered. Card pictures and 2-line labels keep their reference size (options a and
+b would shrink the picture or cut Luan's text to one line).
+
+**While choosing** (`question_open`, `wrong_feedback`): **Tiếp isn't on screen** (as at every
+k, it appears only after the right pick plus `feedback_time`). So the cards may use the Tiếp
+row's height, and they keep the reference card size.
+
+**After the right pick** (`right_feedback` → `why_shown`), in this order, all within
+`feedback_time` (0.9 s) and before Tiếp appears:
+1. The wrong cards (greyed or never picked) **fade out over 0.2 s** and are removed. They're
+   inert already (Quiz Rule 5), and they're gone before Tiếp shows, so Tiếp never sits on a card
+   that looks choosable.
+2. The right card keeps its tick, green border and "Đúng rồi!" bar, and **glides to the left slot
+   over 0.3 s** if it isn't there already (no flash, no bounce over 3 Hz).
+3. The why line appears to the right of it, and Tiếp appears bottom-right after `feedback_time`.
+   Both sit where the wrong cards were, never over the right card.
+
+**Worked numbers at k 0.40** (world px; `pad_min` 180; corner block x 18–408, y 18–198;
+`safe_bottom` 720):
+
+| Element | Box |
+|---|---|
+| Prompt (980 box, ≤ 2 lines, 40 px) | x 150–1130, y 206–322 (starts at `corner_bottom` + 8) |
+| Cards while choosing (reference size, 380 × 290) | y 330–620; slots x 40–420, 450–830, 860–1240 |
+| Right card after the pick | left slot x 40–420, y 330–620 |
+| Why line (box 750, ≤ 3 lines, 37 px; every TQT why fits 2 lines even at 600, F1) | x 450–1240, y 330–465 |
+| Tiếp (`pad_min` tall, the ASSET-323 2.5:1 pill) | x 812–1262, y 522–702 |
+
+The right card is ≥ 30 px clear of the why line and ≥ 390 px clear of Tiếp. Counter and dots
+stay top-centre in the free band right of the corner block.
+
 ### 5.1b Results wireframe
 
 ```
@@ -62,7 +100,7 @@ the title. Pause is available (P-05).
 | `question_open` | Cards active |
 | `wrong_feedback` (0.5 s shake) | **All card taps dropped, not queued** (B4) |
 | Greyed card | Can't be picked again; a tap does nothing and isn't a retry (D-11) |
-| `why_shown` | Tiếp appears after 0.9 s |
+| `why_shown` | Tiếp appears after 0.9 s. **At 0.40 ≤ k < 0.48:** the wrong cards have faded out and the right card sits in the left slot first (§5.2) |
 | Results: no next hero | `ui.results.more_heroes`, then the title |
 
 ## 7. Interaction Map
@@ -104,3 +142,5 @@ fill vs outline. No timers.
 5. **GIVEN** a replay scoring lower than the best, **WHEN** results show, **THEN** this run's stars
    and "best" with the higher value; the saved stars stay.
 6. **GIVEN** the lowest target Android phone, **WHEN** a card is tapped, **THEN** its feedback starts within 100 ms; layouts checked on the narrowest phone and a 20:9 phone.
+7. **GIVEN** a phone or emulator at k 0.40, **WHEN** each TQT question is captured in VI and EN (a) while choosing, (b) after a wrong pick and (c) 1 s after the right pick, with the right answer in each of the three slots, **THEN** (a)–(b) no Tiếp is on screen and the cards are 380 × 290 with the full picture and a 2-line label; (c) only the right card remains, in the left slot, with its tick; the why line and Tiếp don't overlap it or each other; nothing is above `corner_bottom` + 8 or below y 720.
+8. **GIVEN** k 0.40 and the right pick, **WHEN** frame-stepped, **THEN** the wrong cards are fully gone before Tiếp's first frame, and a tap where a wrong card was does nothing until Tiếp shows.
