@@ -428,11 +428,13 @@ final class GameScene: SKScene {
             let texts = p.cardTexts
             add(D.rr(-480, -150, 960, 300, 36, C.panel, C.gold, 6), 640, 290)
             for x in [230.0, 1050] { add(D.drum(44, SKColor(hex: 0xf2b632, alpha: 0.8)), x, 210) }
-            add(Font.label("\(game.ui("ui.play.beat")) \(p.beat + 1) · \(p.beats[p.beat].title.text(game.lang))", 30, C.gold, width: 760), 640, 190)
+            // "Phần N" small, then the beat title as a heading: 44 in the 880 beat_title box (R8c)
+            add(Font.label("\(game.ui("ui.play.beat")) \(p.beat + 1)", 28, C.gold), 640, 168)
+            add(Font.label(p.beats[p.beat].title.text(game.lang), 44, C.gold, width: 880), 640, 212)
             let box = texts[min(p.cardLine, texts.count - 1)]
             if p.cardLine >= texts.count - 1 { // the goal box: weight 800 like the goal line
-                add(Font.label(box.text(game.lang), 38, .white, width: 880), 640, 285); badge(box, 0, 0)
-            } else { textBox(box, 640, 285, 880, 38, .white) }
+                add(Font.label(box.text(game.lang), 38, .white, width: 880), 640, 300); badge(box, 0, 0)
+            } else { textBox(box, 640, 300, 880, 38, .white) }
             button(game.ui("ui.btn.next"), 640 - 150, 470, 300, 110, "next", pulse: true)
             return
         }
@@ -555,9 +557,9 @@ final class GameScene: SKScene {
             add(D.drum(104, SKColor(hex: 0xc98a12, alpha: 0.5)), x, 300)
         }
         let h = HeroNode(scale: 0.6); h.update(face: 1, walk: false, defend: false, attack: nil, hurt: false, t: 0); add(h, 300, 380)
-        add(Font.label(game.hero.mission.hero.name.text(game.lang), 30, .white), 300, 450)
+        add(Font.label(game.hero.mission.hero.name.text(game.lang), 44, .white, width: 560), 300, 455)
         add(Font.label("?", 110, C.goldDark), 980, 300)
-        if let next = game.unlockedHero { add(Font.label(next.mission.hero.name.text(game.lang), 30, .white), 980, 450) }
+        if let next = game.unlockedHero { add(Font.label(next.mission.hero.name.text(game.lang), 44, .white, width: 560), 980, 455) }
         add(Font.label(game.ui("ui.unlock.title"), 52, C.gold, width: 1100), 640, 100)
         add(Font.label(game.ui("ui.unlock.map_stub"), 28, SKColor(white: 1, alpha: 0.7)), 640, 530)
         button(game.ui("ui.btn.replay"), 260, 580, 340, 110, "replay", fill: C.cream)
