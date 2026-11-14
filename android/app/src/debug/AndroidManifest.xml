@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <!-- Debug only: ADR-0002 measurement (decode memory, frame time with a 2048² atlas). -->
+        <activity android:name=".AtlasBenchActivity" android:exported="true" android:screenOrientation="sensorLandscape" />
+    </application>
+</manifest>
