@@ -549,7 +549,8 @@ Negative: text, letters, watermark, blood, gore, injury, weapons pointed at view
 `#3A2A20` and a small right-pointing arrow icon at its right end, so it reads as "go on" without
 words. "Bỏ qua" is a smaller, quieter pill in panel cream `#FFF6E3` with a thin ink outline and a
 double-chevron icon, so the child's eye goes to "Tiếp" first (mission-flow UI: Skip smaller and
-bottom-left, Tiếp bottom-right). The pressed states squash 4% and darken 8%. Labels are text layers.
+bottom-left, Tiếp bottom-right). **"Smaller" means narrower and quieter, not shorter:** both pills
+are drawn ≥ `pad_min` tall on the same row (Input Rule 4; `design/ux/story-screens.md` §5.2). The pressed states squash 4% and darken 8%. Labels are text layers.
 
 **Art Bible Anchors:**
 - §7 UI: rounded pills, thick outlines, icons with a distinct shape; no text in art

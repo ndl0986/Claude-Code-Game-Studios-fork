@@ -50,7 +50,8 @@ gently told that skipping costs this story's medal.
 
 QC r5 (both apps): the top-left pause/sound block, at `pad_min`, covered the top-left corner of
 the story picture's frame and of the beat-card panel. Boxes are world px in the 1280×720 world
-fitted to the safe rect (Input F1), so `safe_bottom` = 720 on the reference phones.
+fitted inside the safe rect (Input Rule 1; both apps, iOS from r6), so **`safe_bottom` = 720** in
+world px on every supported phone (Android clamps it with `min(720, ·)`).
 
 - **Corner block** (pause + sound, Input Rule 3): x 18 … `corner_right`, y 18 … `corner_bottom`,
   with `corner_bottom` = 18 + `pad_min / k` (155 at the Android reference, k 0.527) and
@@ -58,8 +59,10 @@ fitted to the safe rect (Input F1), so `safe_bottom` = 720 on the reference phon
 - **The story picture is full-bleed** (P-06: the step's background fills the screen behind
   everything), so it has no frame corner to collide with. An app that draws the picture inside
   a frame starts that frame at **y ≥ `corner_bottom` + 8** (ref ≥ 163), never under the block.
-- **Bottom row:** "Tiếp" (right) and "Bỏ qua" (left) sit on `safe_bottom` − 18; Tiếp is
-  `pad_min / k` tall (ref y 565–702).
+- **Bottom row:** "Tiếp" (right) and "Bỏ qua" (left) sit on `safe_bottom` − 18 and are **both
+  ≥ `pad_min` tall** (Input Rule 4), on the same row (ref y 565–702). "Bỏ qua" is smaller only
+  in **width** and weight (a cream pill, ASSET-323), never in height: at the reference it is
+  137 tall, not the 84 Android drew in r5.
 - **The paper frame (ASSET-035), the text panel of intro, caption and ending, and the
   beat-card panel** are centred on x 640, width = text box + 2 × 32 (box 880 → x 168–1112; box
   1000 → x 108–1172), and sit **bottom-anchored above the button row**:
@@ -68,10 +71,9 @@ fitted to the safe rect (Input F1), so `safe_bottom` = 720 on the reference phon
     card, **167** for intro, caption and ending;
   - **top ≥ `corner_bottom` + 8 is required.** At the reference: beat card y 322–557, other boxes
     y 390–557, all clear of the block (which ends at y 155).
-- **Fit condition:** `2 × pad_min / k + 52 + H ≤ safe_bottom`. For a beat card (H 235) that holds
-  down to k ≈ 0.33 with `safe_bottom` 720, and k ≈ 0.40 with a large bottom inset
-  (`safe_bottom` ≈ 646). This sets the **shared supported floor, k ≥ 0.40**, for every screen (`hud.md` §3.3,
-  `title.md`). The text box can't narrow to buy room: at 720 wide, 6 TQT story lines overflow
+- **Fit condition:** `2 × pad_min / k + 52 + H ≤ 720`. For a beat card (H 235) it holds down to
+  k ≈ 0.33; at the **shared supported floor, k ≥ 0.40** (`hud.md` §3.3, `title.md`), it is 647 ≤
+  720, with 73 px to spare (the dialogue panel, H 286: 698 ≤ 720, `dialogue.md` §5.2). The text box can't narrow to buy room: at 720 wide, 6 TQT story lines overflow
   2 lines (F1, measured), so the panel never slides beside the block.
 - **Dialogue screens** follow the same rule: the portrait and the box start below
   `corner_bottom` + 8 (`dialogue.md`).
@@ -84,7 +86,7 @@ fitted to the safe rect (Input F1), so `safe_bottom` = 720 on the reference phon
 | Beat-card title | `beat_title` heading, 44 px, 1 line, centred at the top of the paper frame. **No emblems or ornaments beside it**: the frame's drum-ring border (ASSET-035) is the only motif (Luan's rule 4: one motif). An app that draws emblems either side of the title is off-spec | 005h |
 | Goal (the beat card's last box) | `goal` field | Mission flow Rule 2 |
 | Tiếp | gold pill, ≥ 72 pt (ASSET-323), release-inside, **0.25 s press-time debounce** | Input Rules 8, 12 (B1) |
-| Bỏ qua | cream pill, smaller, bottom-left, away from Tiếp (ASSET-323) | Mission flow UI |
+| Bỏ qua | cream pill, bottom-left, away from Tiếp (ASSET-323); **≥ `pad_min` tall, on Tiếp's row**; smaller than Tiếp in width and visual weight only | Mission flow UI; Input Rule 4 |
 | Skip warning card | ASSET-324: cream card, outline medal at the top, one line (`ui.story.skip_warning`, dialog field), "Đọc tiếp" (gold, big, right, default, **open-book icon**) and "Vẫn bỏ qua" (cream, small, left, **skip-arrow icon**) (ASSET-333; TASK-020 W20). The icons let a pre-reader tell the buttons apart; the line is voiced once VO exists (Audio Rule 17). No red, no warning sign | Mission flow Rule 15 |
 | Legend marker | Sentences citing a legend start "Truyện kể rằng… / The story says…" | R4, R4b |
 
@@ -144,3 +146,4 @@ either app).*
 7. **GIVEN** the skip warning, **WHEN** captured in VI and EN, **THEN** "Đọc tiếp" shows the open-book icon and "Vẫn bỏ qua" the skip-arrow icon.
 8. **GIVEN** a beat card, **WHEN** captured, **THEN** the title has no emblem on either side, and pause and sound sit top-left.
 9. **GIVEN** the Android (k 0.527) and iOS (k 0.517) reference phones and a k 0.40 phone or emulator, with pause and sound at `pad_min`, **WHEN** a beat card, an intro box, a caption and the ending are captured in VI and EN, **THEN** no pixel of the paper frame, the beat-card panel or a framed picture lies inside the pause/sound block (x ≤ `corner_right`, y ≤ `corner_bottom`); the panel's top is ≥ `corner_bottom` + 8 and its bottom ≤ Tiếp's top − 8.
+10. **GIVEN** any story screen on the reference phones and at k 0.40, **WHEN** captured, **THEN** "Bỏ qua" is ≥ `pad_min` tall (≥ 137 world px at k 0.527, ≥ 180 at k 0.40), its top and bottom match Tiếp's, and it stays left of Tiếp with ≥ `pad_gap` between them.

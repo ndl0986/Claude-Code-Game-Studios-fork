@@ -23,18 +23,38 @@ Entry: `walk_to[i]` reaches a dialogue beat (no beat card, no caption). Exit: th
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│ [⏸]            Xin gặp vua  (title heading over line 1)          │
-│   (background: the meeting gate, ASSET-312, dimmed 30%)          │
-│ ┌────────┐ ┌──────────── speaker box 720 ────────────┐            │
-│ │portrait│ │ "Xin cho tôi gặp nhà vua!" (≤ 3 lines)   │ ◀ tail     │
-│ │  hero  │ └──────────────────────────────────────────┘            │
-│ └────────┘                                                        │
+│ [⏸][🔊]   (background: the meeting gate, ASSET-312, dimmed 30%)  │
+│                                                                  │
+│ ┌────────┐ ┌──── dialogue panel (bottom-anchored) ────┐           │
+│ │portrait│ │ Xin gặp vua   (title row, line 1 only)    │           │
+│ │  hero  │ │ "Xin cho tôi gặp nhà vua!" (≤ 3 lines)    │ ◀ tail    │
+│ └────────┘ └───────────────────────────────────────────┘           │
 │  [Bỏ qua]                                [ Xin vào! ] or [ Tiếp ▶ ]│
 └──────────────────────────────────────────────────────────────────┘
 ```
 
 Narrator lines: a centred box 880 wide, with no portrait and no tail (ASSET-330 narrator
 variant).
+
+### 5.2 Boxes (QC r5 follow-up)
+
+The beat's `title` (Mission flow 7d) is **inside the top of the dialogue panel**, never floating
+above it, so nothing on a dialogue screen sits above `corner_bottom` + 8 (the pause/sound block,
+`story-screens.md` §5.2). World px, fitted to the safe rect (Input Rule 1, so `safe_bottom` = 720).
+- **Panel:** the speaker box (720 text box) or the narrator box (880), plus 32 padding all round,
+  plus a **title row (60 + 8)** at its top. The title row is **reserved on every line** of the
+  beat, so the panel never changes height between lines; the title text shows on line 1 only, as
+  Mission flow 7d says. Height: speaker lines 32 + 68 + 154 (3 × 38 px lines at 1.35) + 32 =
+  **286**; narrator lines 32 + 68 + 103 + 32 = **235**.
+- **Bottom-anchored like the beat card:** panel bottom = Tiếp's top − 8.
+- **Portrait:** 256 world px tall (the 384 px asset at 1.5×), bottom-aligned with the panel, on
+  the speaker's side (hero left, others right), 16 from the panel.
+- **Worked numbers:** at the reference (k 0.527): Tiếp 565–702; panel 271–557; portrait
+  301–557; `corner_bottom` + 8 = 163, clear. **At the floor (k 0.40):** pad 180, Tiếp 522–702;
+  panel 228–514; portrait 258–514; `corner_bottom` + 8 = 206, clear by 22.
+- **Fit condition:** `2 × pad_min / k + 52 + 286 ≤ safe_bottom`, i.e. 698 ≤ 720 at k 0.40. An
+  app whose world isn't fitted to the safe rect (so `safe_bottom` < 720 in world px) breaks it:
+  that's a fit bug, not a reason to move the title out of the panel.
 
 ### 5.3 Component Inventory
 
@@ -78,4 +98,5 @@ D-17: lines between characters may use "cậu", "cháu" or "ta"; nothing address
    the text fits its box (720 or 880).
 4. **GIVEN** Skip then "Vẫn bỏ qua" in this scene, **WHEN** the quiz finishes, **THEN** no medal.
 5. **GIVEN** no tap on the ask button for `hint_delay`, **WHEN** waiting, **THEN** the hint hand points at it.
+6. **GIVEN** the reference phones and a k 0.40 phone or emulator, **WHEN** lines 1, 2 (ask button) and a narrator line of the Bình Than dialogue are captured in VI and EN, **THEN** the title "Xin gặp vua" is inside the top of the panel on line 1; the panel's height is the same on every speaker line; the panel's bottom is Tiếp's top − 8; and no pixel of the panel, the title or a portrait is above `corner_bottom` + 8 (y 163 at k 0.527, 206 at k 0.40).
 6. **GIVEN** the lowest target Android phone, **WHEN** a line advances, **THEN** the next line and portrait show within 150 ms; checked on the narrowest phone and a 20:9 phone.
