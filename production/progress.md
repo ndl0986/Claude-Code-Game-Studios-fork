@@ -4,7 +4,7 @@ Where the project stands, so work can resume from the repo. Newest entry first.
 
 ## 2026-11-14 (afternoon) — Team running, prototype in QC
 
-**Status:** Concept stage. Concept approved; Godot 4.7.2 pinned; art bible and first hero's content drafted; the browser prototype of the first mission is in QC. Paused for an Orca restart (macOS Screen Recording grant for iOS QC).
+**Status:** Concept stage. Concept approved; Godot 4.7.2 pinned; art bible and first hero's content drafted; the browser prototype of the first mission is in QC. Orca Screen Recording granted live (adding Orca.app itself fixed it); no restart was needed.
 
 **Main doc:** [Dải Đất Anh Hùng — Development Roadmap](https://claude.ai/artifact/E2dscdjUpVJLj63i4et2uz). Live task board: `production/team/board.md` (GitHub Issues are off). Team rules: `.claude/skills/game-team-lead/SKILL.md`.
 
@@ -31,7 +31,7 @@ Where the project stands, so work can resume from the repo. Newest entry first.
 
 ### Waiting on Luan
 
-1. Orca Screen Recording: add `/Applications/Orca.app` (the helper `Orca Computer Use` is already on, but macOS checks the parent), Quit & Reopen.
+1. (Done) Orca Screen Recording: both Orca and Orca Computer Use are on; `orca computer permissions` shows both granted.
 2. Go to merge TASK-002 and TASK-004 into `docs/vn-history-game-plan`.
 3. Next task for game-art-content (`/asset-spec` for the mission, or hero #2).
 4. Sign off claims C01–C11 in `design/narrative/heroes/tran-quoc-toan.md` and confirm textbook pages.
