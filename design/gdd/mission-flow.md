@@ -84,7 +84,7 @@ it always ends at the quiz and then the map.
 | `dialogue` | none (no pads) | Reads an illustrated exchange: one line per box with the speaker's portrait (hero, guard, king…) or narrator text, tapping "Tiếp". On lines `at_line` … `at_line + taps − 1` a big ask button (e.g. "Xin vào! / Let me in!") replaces "Tiếp"; each ask tap shows the next line (Rule 7d) | The last line is advanced | `lines[]` of {`speaker`, `mood`?, `text`}; optional `ask` {`button` (a story **Text** with claims), `taps` 1–3, `at_line`}, with `at_line + taps ≤ lines` |
 | `training` | move, attack, defend, special | (a) hits `dummies` straw dummies; (b) blocks `blocks` padded practice strikes from a friendly partner; (c) taps special once to finish (e.g. raise the banner) | All three parts done, in that order | `dummies`; `blocks`, `finish_special` (schema 1.1, D-06) |
 | `fight` | move, attack, defend | Fights a group of enemies as the combat GDD defines | Every enemy in `enemies` has run away | `enemies`, `max_active`, `from_left` |
-| `reach-the-flag` | move, attack, defend | Moves right to a flag; optional enemy groups on the way lock the camera until they run away | The hero touches the flag | `length_screens`; optional `encounters[]` (schema 1.1, D-06) |
+| `reach-the-flag` | move, attack, defend | Moves right to a flag; optional enemy groups on the way lock the camera until they run away. In an encounter the hero stays inside the fight-zone bounds and auto-faces the nearest enemy on attack (combat Rules 2 and 15, G2), so holding ▶ can't pin him off-screen | The hero touches the flag | `length_screens`; optional `encounters[]` (schema 1.1, D-06) |
 
 7b. **Minimum buttons per type (validation R13, schema 1.1 / D-06).** A beat's `buttons` must
     include at least:
@@ -537,6 +537,8 @@ sparkle.
 21. **GIVEN** a training beat with blocks 3, **WHEN** the child presses and releases defend during
     the partner's windup and isn't holding it when the strike resolves, **THEN** that block does
     not count.
+22. **GIVEN** the Trần Quốc Toản reach-the-flag beat, **WHEN** each of combat AC23's three scripted
+    touch strategies is simulated, **THEN** the beat finishes in **≤ 60 s** (combat Rules 2, 2b, 15).
 23. **GIVEN** a `dialogue` beat with `ask` {at_line 2, taps 2} and 9 lines, **WHEN** it plays,
     **THEN** line 1 shows "Tiếp"; lines 2 and 3 show the ask button, and each ask tap shows the next
     line; lines 4–9 show "Tiếp"; two ask taps within `advance_debounce` advance only once; and no
