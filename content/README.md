@@ -98,6 +98,9 @@ them against `data/` and `samples/`. `fixtures/validity.json` has one case per r
 | R16 | `rules.json`: each lower star's `max_retries` is ≥ the higher star's (2★ ≥ 3★); `null` means no limit. |
 | R17 | `hero.timeline_order` is unique across the heroes in `index.json` (an integer in gaps of 10; Hero progression GDD Rule 1). Samples are excluded. |
 | R18 | Each indexed hero's `next_hero` is the next hero **in `index.json`** by `timeline_order`, or null for the last one. Checked at build time; claim status is ignored (Hero progression GDD Rule 6). |
+| R19a | (ADR-0002, error) A picture's `width` / `height` in `assets.json` match its PNG/WebP header. |
+| R19b | (ADR-0002, **warning** until the budgets are measured) A picture is ≤ 2048 on both sides; per kind, `pic.quiz_*` ≤ 512×512 and `pic.scene_*` ≤ 1440×1320 per tile file. |
+| R20 | Every theme a bundled beat uses has a `sky_band` in `themes.json`; a theme outside the mission enum (village, bamboo, river, camp) is invalid. |
 
 ### Claim gate (R12)
 
@@ -119,7 +122,8 @@ knock-back, button size and touch) is not a fixture; it is checked by per-platfo
 - Backgrounds ship as 1440×1320 tiles at 1.5×. Above them, the sky band is a code-drawn **gradient** whose colours come from `themes.json` `sky_band {top, bottom}` per theme (planned). Far-sky tiles fade their top ~10% into the band; key sky elements stay below ~15% from the top.
 - Lossless WebP for sprites, lossy WebP (q ≈ 85) for backgrounds; PNG still allowed.
 - Atlases by what is on screen together; a mission's art loads at its start and is released at its end; ≤ 64 MB decoded per mission.
-- Planned after acceptance: `width` / `height` in `assets.json` (schema 1.2), `themes.json` (sky band colours), and rule R19 (size check).
+- `assets.json` is schema **1.2**: pictures carry `width` / `height` (R19a, R19b). Apps decode content leniently at run time (unknown keys ignored), so a 1.1 app still reads a 1.2 file; the content tests stay strict.
+- `themes.json`: `sky_band {top, bottom}` per theme (R20). The colours are **placeholders** from the prototype (top #FFD59A, bottom #CFEEF2; camp #3B3F6B) until game-art-content sets them.
 
 ## Planned (later phases)
 
