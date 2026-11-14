@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://galaxyandsun.com/daidatanhhung/content/markers.schema.json",
+  "title": "Authored markers (rule R4). A Text citing a legend claim must contain one legend marker in each language.",
+  "type": "object",
+  "required": ["schema_version", "legend", "fact_as_recorded"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "$ref": "common.schema.json#/$defs/SchemaVersion" },
+    "legend": { "$ref": "#/$defs/MarkerSet", "description": "Required on Text citing a legend claim." },
+    "fact_as_recorded": { "$ref": "#/$defs/MarkerSet", "description": "Optional on Text citing a fact_as_recorded claim." }
+  },
+  "$defs": {
+    "MarkerSet": {
+      "type": "object",
+      "required": ["vi", "en"],
+      "additionalProperties": false,
+      "properties": {
+        "vi": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "en": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+      }
+    }
+  }
+}

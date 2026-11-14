@@ -1,23 +1,26 @@
 # Team board
 
+Open decisions for Luan: `production/team/decisions.md`.
+
 Fallback tracker until GitHub Issues are enabled on `ndl0986/Claude-Code-Game-Studios-fork`
 and `gh` has write access (`.claude/skills/game-team-lead/SKILL.md` § 1). Each task moves to
 an issue once Issues are on. The leader owns this file.
 
 | ID | Task | Type | Owner | Status | Branch | Updated |
 |---|---|---|---|---|---|---|
-| TASK-001 | `/brainstorm`: game concept for the Vietnamese-heroes mobile game | design | game-dev-001 | done (merged `b41d157`) | `design/TASK-001-game-concept` @ `6dcf8ba` | 2026-11-14 |
-| TASK-002 | `/setup-engine godot`: pin Godot 4 for the game (SHELVED 2026-11-14: Luan chose native per platform) | setup | game-dev-001 | done (awaiting merge; Luan's installs pending) | `setup/TASK-002-engine-godot` @ `dda2ca7` | 2026-11-14 |
-| TASK-003 | `/prototype --path html`: one side-scrolling Trần Quốc Toản mission (placeholder beats) + quiz | dev | game-dev-002 | Android r3 partial (B4 PASS 18/18; O6 fixed in 203d73e); Android r3 finishing + iOS QC running on 203d73e (iPhone Duo) | `proto/TASK-003-mission-prototype` @ `203d73e` | 2026-11-14 |
-| TASK-004 | `/art-bible` draft + Trần Quốc Toản mission beats and quiz, sourced | design | game-art-content | art + structure signed off; claims C01–C11 pending | `design/TASK-004-art-bible-tqt-beats` @ `4d7aca2` | 2026-11-14 |
-| TASK-005 | ADR: native per platform (Swift iOS, Kotlin Android); shared content as data in content/; project.yaml engine block | design | game-dev-001 | plan | `docs/TASK-005-adr-native` | 2026-11-14 |
-| TASK-006 | iOS setup: Swift + SpriteKit (SwiftUI shell), ios/, XCTest, Simulator proof | setup | game-dev-001 | after TASK-005 plan | — | 2026-11-14 |
-| TASK-007 | Android setup: Kotlin, android/, 2D approach for Luan to pick, JUnit, emulator proof | setup | game-dev-002 | plan | `setup/TASK-007-android-kotlin` | 2026-11-14 |
-| TASK-003b | Mission beat types from TASK-004: Special button, walk / hold-meter / training / reach-the-flag beats, arrows; BEAT_TYPES dispatch table first; art fixes: wrong-answer #9C8FB8 + circular-arrow icon, tangerine attack icon (not a pickaxe), vermilion only as a tunic accent; quiz to 5 questions once claims are signed | dev | unassigned | ready (structure approved); starts after TASK-003 | — | 2026-11-14 |
+| TASK-001 | `/brainstorm`: game concept for the Vietnamese-heroes mobile game | design | game-dev-ios | done (merged `b41d157`) | `design/TASK-001-game-concept` @ `6dcf8ba` | 2026-11-14 |
+| TASK-002 | `/setup-engine godot`: pin Godot 4 for the game (SHELVED 2026-11-14: Luan chose native per platform) | setup | game-dev-ios | done (awaiting merge; Luan's installs pending) | `setup/TASK-002-engine-godot` @ `dda2ca7` | 2026-11-14 |
+| TASK-003 | `/prototype --path html`: one side-scrolling Trần Quốc Toản mission (placeholder beats) + quiz | dev | game-dev-android | CLOSED as design reference (Luan stopped browser testing 2026-11-14; Android r3 partial, iOS not run) | `proto/TASK-003-mission-prototype` @ `203d73e` | 2026-11-14 |
+| TASK-004 | `/art-bible` draft + Trần Quốc Toản mission beats and quiz, sourced | design | game-art-content | MERGED (`2f6e661`); claims C01–C11 pending (decisions D-03) | `design/TASK-004-art-bible-tqt-beats` @ `4d7aca2` | 2026-11-14 |
+| TASK-005 | ADR: native per platform (Swift iOS, Kotlin Android); shared content as data in content/; project.yaml engine block | design | game-dev-ios | MERGED (`908e2e9`); ADR-0001 Accepted | `docs/TASK-005-adr-native` | 2026-11-14 |
+| TASK-006 | Native vertical slice (iOS): Swift + SpriteKit (SwiftUI shell), ios/, XCTest; spec = prototype 203d73e | dev | game-dev-ios | plan in peer review (game-dev-android) | `feat/TASK-006-ios-native` | 2026-11-14 |
+| TASK-007 | Native vertical slice (Android): Kotlin + Android SDK (SurfaceView/Canvas, SoundPool), android/, JUnit; spec = prototype 203d73e | dev | game-dev-android | building (plan approved) | `setup/TASK-007-android-kotlin` | 2026-11-14 |
+| TASK-008 | `/map-systems` + key system GDDs (mission flow/beats, combat, quiz/stars, hints first) | design | game-art-content | index done (`76bfce5`); mission-flow GDD next | `design/TASK-008-systems` | 2026-11-14 |
+| TASK-003b | Mission beat types from TASK-004: Special button, walk / hold-meter / training / reach-the-flag beats, arrows; BEAT_TYPES dispatch table first; art fixes: wrong-answer #9C8FB8 + circular-arrow icon, tangerine attack icon (not a pickaxe), vermilion only as a tunic accent; quiz to 5 questions once claims are signed | dev | unassigned | CANCELLED (browser); beat types and art fixes move to native tasks | — | 2026-11-14 |
 
 ## Team changes
 
-**Platform owners (Luan, 2026-11-14):** game-dev-001 = iOS, game-dev-002 = Android. Shared game code goes to whichever dev is free.
+**Platform owners (Luan, 2026-11-14):** game-dev-ios = iOS, game-dev-android = Android. Shared game code goes to whichever dev is free.
 
 | Item | Status | Blocks |
 |---|---|---|
@@ -71,7 +74,7 @@ prototype confirms it. Art references: game-art-content proposes 3–5, Luan pic
 
 - **Goal:** pin Godot 4 (Luan's go, 2026-11-14) with `/setup-engine godot`: `project.yaml` engine block, `docs/engine-reference/`, the engine table rows.
 - **Acceptance:** engine and version pinned in `project.yaml`; engine reference written; what must be installed (Godot, export templates, Android build tools/NDK, Java 21) listed for Luan as install steps. **The dev installs nothing**: installs are Luan's.
-- **QC:** none (config). Peer review of the plan by game-dev-002.
+- **QC:** none (config). Peer review of the plan by game-dev-android.
 
 ## TASK-003: Mission prototype (browser)
 
@@ -99,6 +102,20 @@ structure is approved for TASK-003b. Still pending: claims C01–C11 and the sou
 until Luan installs Godot and a headless import runs.
 
 **Decided (Luan, 2026-11-14):** build the real game native per platform: iOS in Swift + SpriteKit
-(game-dev-001), Android in Kotlin (game-dev-002). Godot is shelved; the TASK-002 branch is kept, not
+(game-dev-ios), Android in Kotlin (game-dev-android). Godot is shelved; the TASK-002 branch is kept, not
 merged. Missions, quiz and VI/EN text are shared as data (TASK-005). The browser prototype stays as
 the design reference.
+
+**Decided (Luan, 2026-11-14):** stop all browser testing. TASK-003 closed as the design reference at `203d73e`; TASK-003b cancelled. QC moves to the native apps (TASK-006 iOS, TASK-007 Android).
+
+**Decided (Luan, 2026-11-14):** skip the cross-platform version; TASK-006/007 rebuild the full first
+mission natively on each platform, then QC tests the native builds. Android draws with pure Android
+(Kotlin + Android SDK: SurfaceView/Canvas game loop, SoundPool), no game framework.
+
+**Decided (Luan, 2026-11-14):** Android compileSdk/targetSdk 35 for now; **pre-release item:** raise to 36 (Play requires it for new apps and updates since 2026-08-31) and install `platforms;android-36` + `build-tools;36.0.0` before any Play upload. kotlinx.serialization approved as the Android app's one dependency. Emulator mp17863 is owned by game-qc-android (start/stop/wipe); devs only install, launch, log and screenshot. It was stopped from outside 3 times on 2026-11-14 (not by the game team): watch for another team's cleanup.
+
+**Decided (Luan, 2026-11-14): follow the studio pipeline.** TASK-006/007 are a **native vertical slice**
+of one mission (not yet the production codebase). In parallel TASK-008 runs `/map-systems` + the key
+GDDs. Then `/gate-check`, and the full build goes through `/create-epics`, `/create-stories` and
+`/sprint-plan`. Where the template has no native-engine support (setup-engine, engine specialists,
+test-setup, smoke-check), those checks report NOT ASSESSED by design (ADR-0001).

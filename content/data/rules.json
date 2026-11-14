@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "quiz_stars": {
+    "retries_counted": "total_across_quiz",
+    "thresholds": [
+      {
+        "stars": 3,
+        "max_retries": 0
+      },
+      {
+        "stars": 2,
+        "max_retries": 2
+      },
+      {
+        "stars": 1,
+        "max_retries": null
+      }
+    ],
+    "finishing_unlocks_next_hero": true
+  },
+  "text_limits": {
+    "max_chars": 120,
+    "en_budget": {
+      "ui": 24,
+      "button": 12,
+      "hero_name": 32,
+      "place": 40,
+      "beat_title": 40,
+      "goal": 60,
+      "scene": 120,
+      "intro": 120,
+      "ending": 120,
+      "banner": 60,
+      "quiz_prompt": 90,
+      "quiz_choice": 32,
+      "quiz_why": 120
+    }
+  }
+}

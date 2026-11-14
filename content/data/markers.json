@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "legend": {
+    "vi": [
+      "Truyện kể rằng",
+      "Người ta kể rằng"
+    ],
+    "en": [
+      "The story says",
+      "People say"
+    ]
+  },
+  "fact_as_recorded": {
+    "vi": [
+      "Sử chép rằng"
+    ],
+    "en": [
+      "The chronicle says"
+    ]
+  }
+}
