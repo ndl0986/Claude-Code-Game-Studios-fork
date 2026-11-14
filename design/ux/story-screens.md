@@ -99,7 +99,8 @@ world px on every supported phone (Android clamps it with `min(720, ·)`).
   (y ≈ 290–470) sits right where the panel goes, so the panel would cut him at the chest (QC saw
   it at the neck with the taller placeholder). Characters on story screens come from stills and
   portraits only, composed for the safe zone below.
-- **Never only background on a story screen** (iOS r3 R3-06, "intro pictures empty"). Until a
+- **Never only background on a story screen** (iOS r3 R3-06, "intro pictures empty"), with **one
+  named exception: the ending's failure path** (r8d, leader's call; see the fallback below). Until a
   screen has its real still (per-box pictures, content schema 1.2), it shows a **placeholder
   still**: the hero's portrait (`pic.portrait_<hero_id>_hero_determined`, ASSET-327; a beat may
   name its own portrait later) in a round drum-ring frame, on the scene background, **centred on
@@ -114,7 +115,23 @@ world px on every supported phone (Android clamps it with `min(720, ·)`).
     overlap the label or panel;
   - it never enters the pause/sound block: centred, its left edge (512 or 536) stays right of
     `corner_right` + 8 (≈ 416 at k 0.40); with the top stack hidden, nothing else is above it;
-  - the **ending** keeps its own still (ASSET-016), so it gets no placeholder.
+  - the **ending** shows its own still, `pic.scene_tqt_ending` (ASSET-016, the mission's
+    `ending.picture_id`), full-bleed behind the panel. **A placeholder of it already ships** in
+    `content/data/pictures/scene_tqt_ending.png` (640 × 360, flat shapes, no figure; redrawn in
+    r8d so the banner cloth and the sun sit above y 170 of 360 = world 340). An app draws that
+    file, scaled to the 1280 × 720 world; "Needed" in the manifest means the real art, not that
+    the ending has no picture;
+  - **fallback for a missing still** (r8d): if a story screen's `picture_id` is absent or its file
+    fails to load, the **intro, beat cards and captions** show the placeholder portrait at their
+    own size and position (above) and log it in debug builds. **The ending is the exception:** it
+    is the calm, respectful screen, and a hero face there (determined or cheerful) is the wrong
+    tone, so a failed ending still shows **the scene background only**, logged in debug. This is
+    a failure path, not a design state;
+  - **so it never happens in practice, it is checked at build time:** content rules R2/R10
+    (`content/README.md`) already require every `picture_id` to resolve in `assets.json` with its
+    file present, and **each app's test suite asserts that every `assets.json` picture file is in
+    the app bundle** (iOS bundle resources, Android assets) and decodes, so a missing ending
+    still fails the build, not the child's screen.
   The placeholder is replaced 1:1 by the real still when it exists (same safe zone).
 - **Picture safe zone:** in any picture shown behind a story panel (a background set on a story
   screen, the ending still, future per-box pictures), **faces, figures and the key subject sit
@@ -122,6 +139,15 @@ world px on every supported phone (Android clamps it with `min(720, ·)`).
   ending (panel top 347), and above **y 270** for pictures behind a beat card (panel top 279; at
   the reference the tops are 390 and 322). Below that line goes only ground, water, grass or
   background, which the panel may cover. Asset specs carry the rule in their own pixel sizes.
+- **Crop margin (r8d):** the apps scale a full-bleed still differently. Android fits it to the
+  1280 × 720 world (a 640 × 360 still at exactly × 2). iOS **cover-crops** it to the whole screen:
+  on the 19.5:9 QC phone a 16:9 still is drawn ≈ 972 world px tall, so ≈ 126 world px (≈ 13% of
+  its height, png y 0–47 of 360) is cut at the top and the same at the bottom, and the sides run
+  past the world's edges. So the subject must sit inside **both**: below the top **13%** of the
+  picture's height and above the panel line (for a 640 × 360 still: **png y ≈ 47–170**, i.e.
+  world ≈ 0–333 on iOS after the crop and ≤ 340 on Android), and clear of the outer **5%** of its
+  width on each side. The TQT ending placeholder passes: pole top at png y 60, banner cloth
+  66–128, sun 64–144, all at x 200–510 (of 640).
 - **Framed pictures:** an app that draws the picture inside a frame starts that frame at
   **y ≥ `corner_bottom` + 8** (ref ≥ 163), never under the block.
 - **Bottom row:** "Tiếp" (right) and "Bỏ qua" (left) sit on `safe_bottom` − 18 and are **both
@@ -222,5 +248,6 @@ either app).*
 9. **GIVEN** the Android (k 0.527) and iOS (k 0.517) reference phones and a k 0.40 phone or emulator, with pause and sound at `pad_min`, **WHEN** a beat card, an intro box, a caption and the ending are captured in VI and EN, **THEN** no pixel of the paper frame, the beat-card panel or a framed picture lies inside the pause/sound block (x ≤ `corner_right`, y ≤ `corner_bottom`); the panel's top is ≥ `corner_bottom` + 8 and its bottom ≤ Tiếp's top − 8.
 10. **GIVEN** any story screen on the reference phones and at k 0.40, **WHEN** captured, **THEN** "Bỏ qua" is ≥ `pad_min` tall (≥ 137 world px at k 0.527, ≥ 180 at k 0.40), its top and bottom match Tiếp's, and it stays left of Tiếp with ≥ `pad_gap` between them.
 11. **GIVEN** any story screen (intro, a beat card, a caption, the ending) and a press every 0.35 s that keeps going, **WHEN** it plays, **THEN** every box holds ≥ 1.5 s (`screen_enter_lock_max`) or until the presses pause for 0.6 s, none is skipped silently, and the next screen starts only after each box was advanced once (Input AC17, AC21).
-12. **GIVEN** the intro, a beat card, a caption and the ending at the reference phones and at k 0.40, **WHEN** captured, **THEN** no hero, enemy, partner, dummy or flag sprite, fx, pop or hint is drawn; **no story screen shows only background**: no beat dots, goal plate or banner bar show (only the pause/sound corner); the intro and captions show the placeholder portrait still (256, bottom ≤ 301), beat cards show it at 208 with bottom ≤ 233, centred, clear of the pause/sound block and ≥ 8 px above the "Phần n / Part n" label, and the ending shows ASSET-016 with the banner cloth and the warm light above the panel's top.
+12. **GIVEN** the intro, a beat card, a caption and the ending at the reference phones and at k 0.40, **WHEN** captured, **THEN** no hero, enemy, partner, dummy or flag sprite, fx, pop or hint is drawn; **no story screen shows only background**: no beat dots, goal plate or banner bar show (only the pause/sound corner); the intro and captions show the placeholder portrait still (256, bottom ≤ 301), beat cards show it at 208 with bottom ≤ 233, centred, clear of the pause/sound block and ≥ 8 px above the "Phần n / Part n" label, and the ending shows `pic.scene_tqt_ending` (ASSET-016, the placeholder until the real art) with the banner cloth and the warm light above the panel's top.
 13. **GIVEN** each TQT beat card and caption in VI and EN, at the reference phones and at k 0.40, **WHEN** captured, **THEN** the label reads "Phần n" / "Part n" with n the beat's 1-based mission index (the same as its beat dot), 28 px, gold `#FFC531` with an ink outline ≥ 2 px, its box at panel top − 38 … − 10 (241–269 over a card, 309–337 over a caption at k 0.40); the intro, the ending, dialogue and the quiz show no label; and on the river, village and camp backgrounds the label's edge is visible in greyscale.
+14. **GIVEN** each app's test suite, **WHEN** it runs, **THEN** it fails if any `picture_id` in the TQT mission (intro, beats, ending) or any `assets.json` picture file is missing from the app bundle or fails to decode. **GIVEN** a debug build with the ending still's file removed, **WHEN** the ending shows, **THEN** only the scene background shows behind the panel (no portrait) and a missing-picture log line is written; **GIVEN** the same with a caption's picture removed, **THEN** the placeholder portrait shows.
