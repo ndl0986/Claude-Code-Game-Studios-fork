@@ -76,14 +76,20 @@ low-end Android phones and primary-school children's hand-me-down devices. Witho
    apps follow the Android floor so they ship the same files. Anything bigger is split:
    - **Sprite sheets:** split by animation set (e.g. the partner: idle/walk, windup/strike, cheer)
      into ≤ 2048² atlases. At 1.5× a 512² 2× cell becomes 384², so 25 frames fit in 2048² (5 × 5).
-   - **Backgrounds:** 3840×2160 at 2× becomes 2880×1620 at 1.5×, split into **two tiles** of
-     1440×1620 (or layer-by-layer parallax strips ≤ 2048 wide).
+   - **Backgrounds:** shipped at **2880 × 1320** at 1.5×, as **two tiles of 1440×1320** (or
+     layer-by-layer parallax strips ≤ 2048 wide). Why 1320 tall: the 1.5× world is 1920×1080, but a
+     taller screen shows more world height once the backdrop fills the screen (TASK-013). The iPhone
+     Duo cover display (≈1.45:1) shows 1280 / 1.45 ≈ 880 world units of height, which is 1320 px at 1.5×.
+     That covers every phone at 1.45:1 or wider. The specs' 3840×2160 authoring (1620 at 1.5×)
+     overscans for tablets; that extra height is cropped at export until a tablet set exists. Above the
+     tile, the sky continues as a colour band drawn in code, never a taller texture.
 3. **Atlases by what is on screen together, loaded per beat:** hero; enemies (all three kinds); one
    props atlas per theme (village, bamboo, river, camp); UI and icons; quiz pictures per hero.
    Backgrounds are standalone images (tiles).
    - **Resident** for the whole mission: hero, enemies, UI/HUD and the font.
    - **Per beat:** that beat's theme background tiles and props. The next beat's set is prefetched
-     during `walk_to` and the beat card, and the previous beat's set is released once the new beat plays.
+     during `walk_to` and the beat card **only when its theme differs** (consecutive beats with the same
+     theme share one set), and the previous beat's set is released once the new beat plays.
    - **Quiz pictures** load when the quiz starts; play art is released then.
    - Decoding happens **off the render thread** on both apps.
    - **iOS:** `SKTexture.preload` / `SKTextureAtlas.preload` for the prefetch; textures are released by
@@ -92,8 +98,9 @@ low-end Android phones and primary-school children's hand-me-down devices. Witho
      the last frame that draws the bitmap. The app ships as an AAB with all art in the base module (no
      Play Asset Delivery, offline per ADR-0001). WebP/PNG are stored uncompressed in the package, so
      asset bytes ≈ download bytes.
-   Why per beat: TQT's mission uses 3 themes, and their backgrounds alone are about 53 MB decoded
-   (2 tiles × 3 themes × 8.9 MB), so loading the whole mission at start cannot fit 64 MB.
+   Why per beat: TQT's mission uses 3 themes; at the specs' full 1620 height their backgrounds alone
+   would be about 53 MB decoded (2 tiles × 3 themes × 8.9 MB), so loading the whole mission at start
+   cannot fit 64 MB. At 1320 a tile is 1440 × 1320 × 4 B = 7.6 MB, so one theme is 15.2 MB.
 4. **Formats:** lossless **WebP** for sprites with alpha; lossy WebP (quality ≈ 85) for opaque
    backgrounds; **PNG stays allowed** (`assets.json` already accepts png|webp). Both apps decode WebP
    (Android natively, iOS through ImageIO). Audio stays m4a/AAC or wav (ADR-0001); voice-over budgets
@@ -106,8 +113,8 @@ low-end Android phones and primary-school children's hand-me-down devices. Witho
    |---|---|
    | Largest texture / atlas | 2048 × 2048 |
    | Decoded textures alive **at any moment**, prefetch included | ≤ 64 MB |
-   | of which resident (hero, enemies, UI) | ≤ 32 MB (two 2048² atlases' worth) |
-   | of which current + next beat (backgrounds + props) | ≤ 32 MB |
+   | of which resident (hero, enemies, UI, font) | ≤ 24 MB (real atlas fill; the hero and enemy atlases can't both be full 2048² sheets) |
+   | of which current + next beat (backgrounds + props) | ≤ 40 MB (two themes' tiles 30.4 MB + props ≤ 9.6 MB) |
    | One mission's art + data, compressed | ≤ 15 MB |
    | App download (font + art + 2 languages of voice, later) | ≤ 60 MB |
 6. **Minimum iOS version: iOS 17.** That's the project's current deployment target (TASK-006). It's
