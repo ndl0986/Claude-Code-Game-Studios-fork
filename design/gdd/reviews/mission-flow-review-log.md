@@ -44,3 +44,6 @@ F5 beat positions (with the beat extent per type); the warning returns after "Ke
 
 ## Update — 2026-11-14 — TASK-016: dialogue beat type
 Rule 7 (six types), 7b (dialogue: no buttons), new 7d (order, speakers and portraits, ask button, skip/medal, R4c requested, language, hints), the dialogue_line state, F5 extent, new F6 dialogue time, AC23–25. Needs dev peer review together with the schema request.
+
+## Peer review — 2026-11-14 — game-dev-android: REVISE (2), plus game-dev-ios schema details, applied
+Ask timing (at_line ≤ L < at_line + taps; each tap shows L+1; debounce; at_line + taps ≤ lines), AC23 rewritten; F5 example and AC20 recomputed (900, 2980, 3780, 4580, 6580); ask.button is a story Text (C14), not a UiText; field type dialogue_line (720 speaker, 880 narrator; all 9 Bình Than lines fit); hero is a reserved speaker id.

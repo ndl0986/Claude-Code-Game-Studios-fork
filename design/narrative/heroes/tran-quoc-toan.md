@@ -142,6 +142,10 @@ claims stay pending (history sign-off is per claim).
 | 8 | King | Cháu còn trẻ mà đã biết lo cho đất nước, ta khen cháu. | You are young, yet you already care for our country. I praise you. | C15 |
 | 9 | Narrator | Vua ban cho Quốc Toản một quả cam, rồi bảo cậu về. | The king gave Quốc Toản an orange and told him to go home. | C15 |
 
+**Data (schema 1.4):** `ask` {at_line 2, taps 2, button "Xin vào! / Let me in!" (C14)}. So: line 1
+→ Tiếp; line 2 (the guard refuses) → "Xin vào!" shows line 3 (Quốc Toản asks); line 3 → "Xin vào!"
+shows line 4 (the guard refuses again); then Tiếp, and the noise brings the king out (line 5).
+
 **Checks done:**
 - Every line fits the scene box (R8c at 38 px, weight 600) in VI and EN, ≤ 2 lines.
 - One sentence per box: the famous plea is split into lines 6 and 7.
