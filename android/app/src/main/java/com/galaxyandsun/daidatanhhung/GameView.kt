@@ -38,6 +38,7 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
     private data class Up(val id: Int, val x: Float, val y: Float) : Ev
     private data object CancelAll : Ev
     private data class Key(val code: Int, val down: Boolean) : Ev
+    private data object AutoPause : Ev
 
     private val events = ConcurrentLinkedQueue<Ev>()
     private val thread = HandlerThread("render").apply { start() }
@@ -66,7 +67,8 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
     fun releaseAll() { events += CancelAll }
 
     fun onHostResume() { hostResumed = true; startLoop() }
-    fun onHostPause() { hostResumed = false; stopLoop() }
+    /** AC10: going to the background pauses the game; it stays paused on return. */
+    fun onHostPause() { events += CancelAll; events += AutoPause; hostResumed = false; stopLoop() }
 
     override fun surfaceCreated(h: SurfaceHolder) { surfaceOk = true; startLoop() }
     override fun surfaceChanged(h: SurfaceHolder, format: Int, w: Int, hgt: Int) {}
@@ -116,6 +118,7 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
     private fun drainInput() {
         val g = game
         var firedThisFrame = false
+        if (g?.screen == Screen.PAUSE || g?.skipWarning == true) { padHolds.clear(); keyHolds.clear() } // S2: pause releases every pad
         while (true) {
             val e = events.poll() ?: break
             when (e) {
@@ -142,6 +145,7 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
                 }
                 CancelAll -> { padHolds.clear(); pressedButton.clear(); keyHolds.clear() }
                 is Key -> if (g != null) key(g, e.code, e.down)
+                AutoPause -> g?.pause()
             }
         }
     }
@@ -152,9 +156,10 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
             KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_A -> Action.LEFT
             KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_D -> Action.RIGHT
             KeyEvent.KEYCODE_K, KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> Action.DEFEND
+            KeyEvent.KEYCODE_S -> Action.SPECIAL
             else -> null
         }
-        if (hold != null) { if (down) keyHolds += hold else keyHolds -= hold; return }
+        if (hold != null) { if (down) { keyHolds += hold; if (hold == Action.SPECIAL) input.tapped += hold } else keyHolds -= hold; return }
         if (!down) return
         val fired = when (code) {
             KeyEvent.KEYCODE_J, KeyEvent.KEYCODE_SPACE -> { if (g.screen == Screen.PLAY) { input.tapped += Action.ATTACK; false } else confirm(g) }

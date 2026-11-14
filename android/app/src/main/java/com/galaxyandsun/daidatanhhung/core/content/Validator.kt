@@ -67,6 +67,14 @@ object Validator {
         return out
     }
 
+    /** R8 budget type of a strings.json id (content/README.md R8, TASK-005e). */
+    fun uiFieldType(id: String): String = when {
+        id.startsWith("ui.btn.") || id.startsWith("ui.pad.") || id.startsWith("ui.lang.") ||
+            id.endsWith("_confirm") || id.endsWith("_keep_reading") || id.endsWith(".keep_reading") -> "button"
+        id.endsWith("_warning") -> "dialog"
+        else -> "ui"
+    }
+
     /** R9: Text ids are unique. */
     fun duplicateIds(ids: List<String>): List<String> =
         ids.groupingBy { it }.eachCount().filter { it.value > 1 }.keys.map { "R9 duplicate id $it" }
@@ -92,7 +100,7 @@ object Validator {
             "fight" -> need += listOf("move", "attack")
             "training" -> { need += listOf("move", "attack"); if ((int("blocks") ?: 0.0) > 0) need += "defend"
                 if (bool("finish_special")) { need += "special"; specialOk = true } }
-            "reach-the-flag" -> { need += "move"; if (encounters.isNotEmpty()) need += "attack"; specialOk = true }
+            "reach-the-flag" -> { need += "move"; if (encounters.isNotEmpty()) need += "attack" } // D-10 B: no special
         }
         val out = mutableListOf<String>()
         (need - b).forEach { out += "R13 ${beat.id}: ${beat.type} needs $it" }
@@ -160,7 +168,7 @@ object Validator {
         val allIds = mutableListOf<String>()
         for (s in c.strings.strings) {
             out += nfc(s.id, s.vi, s.en); allIds += s.id
-            out += enBudget(s.id, if (s.id.startsWith("ui.btn.") || s.id.startsWith("ui.pad.") || s.id.startsWith("ui.lang.")) "button" else "ui", s.en, s.vi, c.rules.textLimits)
+            out += enBudget(s.id, uiFieldType(s.id), s.en, s.vi, c.rules.textLimits)
         }
         for ((heroId, hero) in c.heroes) {
             val claims = hero.claims.claims.associateBy { it.id }

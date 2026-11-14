@@ -16,7 +16,7 @@ class Figures(private val d: Draw) {
     private val c get() = d.c
     private fun deg(r: Double) = Math.toDegrees(r).toFloat()
 
-    fun hero(x: Float, y: Float, face: Int, walk: Boolean, defend: Boolean, attack: Double?, t: Double, s: Float = 1f) {
+    fun hero(x: Float, y: Float, face: Int, walk: Boolean, defend: Boolean, attack: Double?, t: Double, s: Float = 1f, tunic: Int = C.RED) {
         c.save(); c.translate(x, y); c.scale(face * s, s)
         d.ellipse(0f, 4f, 60f, 12f, C.a(0, 0.18))
         val w = if (walk) sin(t * 14).toFloat() else 0f
@@ -26,7 +26,7 @@ class Figures(private val d: Draw) {
         d.rr(-24 + w * 8, -70f, 20f, 68f, 8f, C.INDIGO); d.rr(4 - w * 8, -70f, 20f, 68f, 8f, C.INDIGO)
         d.rr(-28 + w * 8, -10f, 28f, 12f, 6f, C.INK); d.rr(0 - w * 8, -10f, 28f, 12f, 6f, C.INK)
         d.path.reset(); d.path.moveTo(-34f, -150f); d.path.lineTo(34f, -150f); d.path.lineTo(42f, -62f)
-        d.path.quadTo(0f, -52f, -42f, -62f); d.path.close(); c.drawPath(d.path, d.fill(C.RED))
+        d.path.quadTo(0f, -52f, -42f, -62f); d.path.close(); c.drawPath(d.path, d.fill(tunic))
         d.rr(-38f, -96f, 76f, 12f, 6f, C.GOLD)
         d.poly(C.GOLD, -14f, -150f, 0f, -126f, 14f, -150f)
         val swing = attack ?: -1.0
@@ -134,6 +134,28 @@ class Figures(private val d: Draw) {
             val by = topY - 20
             d.circle(x, by, 30f, C.GLOW, C.GOLD_DARK, 4f); d.rr(x - 5, by - 18, 10f, 24f, 5f, C.INK); d.circle(x, by + 14, 5.5f, C.INK)
         }
+    }
+
+    /** A straw training dummy on a post; knocked over (rotated) once hit. */
+    fun dummy(x: Float, ground: Float, down: Boolean, t: Double) {
+        c.save(); c.translate(x, ground)
+        if (down) c.rotate(-80f * minOf(1f, (t * 4).toFloat()))
+        d.rr(-6f, -150f, 12f, 150f, 6f, 0xFF8A5A2B.toInt())
+        d.ellipse(0f, -110f, 34f, 46f, 0xFFE3C46B.toInt()); d.circle(0f, -175f, 26f, 0xFFE3C46B.toInt(), 0xFFB8963A.toInt(), 3f)
+        d.rr(-40f, -128f, 80f, 10f, 5f, 0xFFB8963A.toInt())
+        c.restore()
+    }
+
+    /** Training's friendly partner: the hero's figure in an indigo practice tunic with a padded stick. */
+    fun partner(p: Enemy, ground: Float, t: Double) {
+        val x = p.x.toFloat()
+        if (p.state == EnemyState.WINDUP) {
+            val k = 0.5 + 0.5 * sin(t * 16)
+            d.ellipse(x, ground - 130, 80f + k.toFloat() * 10, 160f, C.a(C.GLOW, 0.3 + 0.25 * k))
+            d.circle(x, ground - 292, 30f, C.GLOW, C.GOLD_DARK, 4f); d.rr(x - 5, ground - 310, 10f, 24f, 5f, C.INK); d.circle(x, ground - 278, 5.5f, C.INK)
+        }
+        val swing = when (p.state) { EnemyState.WINDUP -> 0.0; EnemyState.STRIKE -> 0.6; else -> null }
+        hero(x, ground, p.face, false, false, swing, t, 0.92f, tunic = C.INDIGO)
     }
 
     fun dropped(w: Dropped, ground: Float) {

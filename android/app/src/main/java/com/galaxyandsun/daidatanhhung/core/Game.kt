@@ -12,29 +12,30 @@ enum class Screen(val id: String) {
 }
 
 /**
- * What the game keeps on the device, and nothing else (parity item 3): `lang`, the best
- * `stars.<hero_id>` (never lowered by a worse replay) and the `unlocked` hero ids.
+ * What the game keeps on the device, and nothing else (P-04 / D-16 / D-07): `lang`, the best
+ * `stars.<hero_id>` (never lowered), `completed.<hero_id>`, `seen_open.<hero_id>` (never re-locks)
+ * and `medal.<hero_id>` (never cleared).
  */
 interface Store {
     fun lang(): String?
     fun setLang(code: String)
     fun stars(heroId: String): Int
     fun setStars(heroId: String, stars: Int)
-    fun unlocked(): Set<String>
-    fun unlock(heroId: String)
+    fun flag(key: String): Boolean
+    fun setFlag(key: String)
 }
 
 /** A store in memory, for tests and for when device storage fails. */
 class MemoryStore : Store {
     var langCode: String? = null
     val starMap = mutableMapOf<String, Int>()
-    val unlockedSet = mutableSetOf<String>()
+    val flags = mutableSetOf<String>()
     override fun lang() = langCode
     override fun setLang(code: String) { langCode = code }
     override fun stars(heroId: String) = starMap[heroId] ?: 0
     override fun setStars(heroId: String, stars: Int) { starMap[heroId] = stars }
-    override fun unlocked() = unlockedSet
-    override fun unlock(heroId: String) { unlockedSet += heroId }
+    override fun flag(key: String) = key in flags
+    override fun setFlag(key: String) { flags += key }
 }
 
 /**
@@ -62,21 +63,39 @@ class Game(
     var quiz: QuizSession? = null; private set
     var stars = 0; private set
     var retries = 0; private set
+    /** D-07: this run skipped a story section, so it earns no medal. */
+    var skipped = false; private set
+    /** D-07: the kind skip warning is showing. */
+    var skipWarning = false; private set
+    private var warnedThisRun = false
+    /** True when this run's quiz earned the medal (shown on results). */
+    var medalThisRun = false; private set
+    /** The hero that opened at quiz finish, shown on the unlock screen (null: no unlock screen). */
+    var newlyOpen: String? = null; private set
+    /** Seconds since start (story-box debounce, AC9). */
+    private var clock = 0.0
+    private var lastAdvance = -1e9
 
     init { reset() }
 
     private fun reset() {
         run = MissionRun(bundle.mission, tuning, Mulberry32(tuning.seed), sfx)
         quiz = null; line = 0; t = 0.0
+        skipped = false; skipWarning = false; warnedThisRun = false; medalThisRun = false; newlyOpen = null
     }
 
+    val medalEarned get() = store.flag("medal.$heroId")
+
     fun ui(id: String) = content.ui(id, lang)
+    /** A UI string, or null when the id isn't in strings.json yet (the label is then left off). */
+    fun uiOrNull(id: String): String? = content.ui(id, lang).takeIf { it != id }
 
     /** One fixed step (1/60 s). Paused and title screens only animate. */
     fun step(dt: Double, input: InputFrame) {
-        t += dt
+        t += dt; clock += dt
+        if (skipWarning) { input.clearTaps(); return }
         when (screen) {
-            Screen.PLAY -> run.update(dt, input)
+            Screen.PLAY -> { run.update(dt, input); if (run.missionDone) { line = 0; go(Screen.ENDING) } }
             Screen.QUIZ -> quiz?.update(dt)
             else -> Unit
         }
@@ -86,24 +105,63 @@ class Game(
     // ---- Menu actions (fired on touch-up inside, by the platform layer) ----
     fun start(): Boolean = (screen == Screen.TITLE).also { if (it) { reset(); go(Screen.INTRO) } }
 
-    /** Next on intro, a caption or the ending: one sentence per box, then on. */
-    fun next(): Boolean = when (screen) {
+    /** True on a story box: intro, beat card, caption or ending (D-07 skip shows there). */
+    val onStoryBox get() = !skipWarning && (screen == Screen.INTRO || screen == Screen.ENDING ||
+        (screen == Screen.PLAY && (run.phase == Phase.CARD || run.phase == Phase.CAPTION)))
+
+    /** Next on intro, a beat card, a caption or the ending: one sentence per box, then on. */
+    fun next(): Boolean {
+        if (skipWarning) return false
+        if (onStoryBox) {
+            if (clock - lastAdvance < tuning["advance_debounce"]) return false // AC9: one box per 0.25 s
+            lastAdvance = clock
+        }
+        return advance()
+    }
+
+    private fun advance(): Boolean = when (screen) {
         Screen.INTRO -> { if (line < bundle.mission.intro.size - 1) line++ else go(Screen.PLAY); true }
         Screen.ENDING -> { if (line < bundle.mission.ending.lines.size - 1) line++ else startQuiz(); true }
-        Screen.PLAY -> if (run.phase == Phase.CAPTION) { if (run.captionNext()) { line = 0; go(Screen.ENDING) }; true } else false
+        Screen.PLAY -> when (run.phase) {
+            Phase.CARD -> run.cardNext()
+            Phase.CAPTION -> { if (run.captionNext()) { line = 0; go(Screen.ENDING) }; true }
+            else -> false
+        }
         Screen.QUIZ -> quiz?.let { q -> if (!q.canAdvance) false else { if (q.advance()) finishQuiz(); true } } ?: false
         // next_hero null (the last hero shipped): no unlock screen, back to the title.
-        Screen.RESULTS -> { if (bundle.mission.nextHero == null) { reset(); go(Screen.TITLE) } else go(Screen.UNLOCK); true }
+        // The unlock screen only when a hero newly opened (D-16); else back to the title.
+        Screen.RESULTS -> { if (newlyOpen == null) { reset(); go(Screen.TITLE) } else go(Screen.UNLOCK); true }
         else -> false
     }
 
     /** The screen under the pause menu (play or quiz, P-05). */
     var pausedFrom = Screen.PLAY; private set
 
+    // ---- D-07: skip a story section, with one kind warning per run (none once the medal is earned) ----
+    fun skip(): Boolean {
+        if (!onStoryBox) return false
+        if (warnedThisRun || medalEarned) { doSkip(); return true }
+        skipWarning = true; warnedThisRun = true
+        return true
+    }
+    fun confirmSkip(): Boolean = skipWarning.also { if (it) { skipWarning = false; doSkip() } }
+    fun keepReading(): Boolean = skipWarning.also { if (it) skipWarning = false }
+
+    /** Skip ends only the current section (intro, card, caption or ending), never play. */
+    private fun doSkip() {
+        skipped = true
+        when (screen) {
+            Screen.INTRO -> go(Screen.PLAY)
+            Screen.ENDING -> startQuiz()
+            Screen.PLAY -> { run.skipSection(); if (run.missionDone) { line = 0; go(Screen.ENDING) } }
+            else -> Unit
+        }
+    }
+
     fun pause(): Boolean = (screen == Screen.PLAY || screen == Screen.QUIZ).also { if (it) { pausedFrom = screen; screen = Screen.PAUSE } }
 
     /** Resuming resets the 5 s hint timers (Hints GDD; the prototype froze them). */
-    fun resume(): Boolean = (screen == Screen.PAUSE).also { if (it) { screen = pausedFrom; if (screen == Screen.PLAY) run.resetHintTimers() } }
+    fun resume(): Boolean = (screen == Screen.PAUSE).also { if (it) { screen = pausedFrom; if (screen == Screen.PLAY) run.onResume() } }
     fun home(): Boolean = (screen == Screen.PAUSE || screen == Screen.UNLOCK).also { if (it) { reset(); go(Screen.TITLE) } }
     fun replay(): Boolean = (screen == Screen.UNLOCK).also { if (it) { reset(); go(Screen.INTRO) } }
 
@@ -142,9 +200,14 @@ class Game(
         val q = quiz ?: return
         retries = q.retries
         stars = StarRule.stars(content.rules.quizStars, retries)
+        // Saved at quiz finish, before results, so a kill can't lose it (D-16).
+        val before = Progression.openHeroes(content, store)
         if (stars > store.stars(heroId)) store.setStars(heroId, stars)
-        val next = bundle.mission.nextHero
-        if (next != null && content.rules.quizStars.finishingUnlocksNextHero) store.unlock(next)
+        store.setFlag("completed.$heroId")
+        medalThisRun = !skipped
+        if (medalThisRun) store.setFlag("medal.$heroId")
+        val after = Progression.openHeroes(content, store)
+        newlyOpen = (after - before).firstOrNull()?.also { store.setFlag("seen_open.$it") }
         sfx(Sfx.CHIME)
         go(Screen.RESULTS)
     }
@@ -154,14 +217,15 @@ class Game(
         reset()
         when (target) {
             "intro" -> go(Screen.INTRO)
-            "play" -> { go(Screen.PLAY); if (beat > 1 || stage != null) run.debugStartBeat(beat - 1, stage == "telegraph", stage == "caption") }
+            "play" -> { go(Screen.PLAY); if (beat > 1 || stage != null) run.debugStartBeat(beat - 1, stage == "telegraph", stage == "caption", stage == "card") }
+            "skipwarn" -> { go(Screen.INTRO); skip() }
             "caption" -> { go(Screen.PLAY); run.debugStartBeat(beat - 1, telegraph = false, caption = true) }
             "pause" -> { go(Screen.PLAY); pause() }
             "ending" -> go(Screen.ENDING)
             "quiz" -> { startQuiz(); repeat((question - 1).coerceAtLeast(0)) { skipQuestion() }; if (stage == "wrong") quiz?.let { answer((it.current.correctIndex + 1) % it.current.choices.size) }
                 if (stage == "right") quiz?.let { answer(it.current.correctIndex); it.update(tuning["feedback_time"]) } }
-            "results" -> { stars = starCount; go(Screen.RESULTS) }
-            "unlock" -> { stars = starCount; go(Screen.UNLOCK) }
+            "results" -> { stars = starCount; medalThisRun = stage != "nomedal"; go(Screen.RESULTS) }
+            "unlock" -> { stars = starCount; newlyOpen = bundle.mission.nextHero ?: heroId; go(Screen.UNLOCK) }
             else -> go(Screen.TITLE)
         }
     }

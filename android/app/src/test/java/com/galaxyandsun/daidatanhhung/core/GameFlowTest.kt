@@ -27,7 +27,7 @@ class GameFlowTest {
     @Test fun introThenPlay() {
         val g = TestContent.game()
         g.start()
-        repeat(g.bundle.mission.intro.size) { g.next() }
+        repeat(g.bundle.mission.intro.size) { repeat(20) { g.step(dt, InputFrame()) }; g.next() }
         assertEquals(Screen.PLAY, g.screen)
     }
 
@@ -35,7 +35,7 @@ class GameFlowTest {
         val store = MemoryStore()
         val g = TestContent.game(store)
         g.debugJump("ending")
-        repeat(g.bundle.mission.ending.lines.size) { g.next() }
+        repeat(g.bundle.mission.ending.lines.size) { repeat(20) { g.step(dt, InputFrame()) }; g.next() }
         assertEquals(Screen.QUIZ, g.screen)
         val q = g.quiz!!
         assertEquals(4, q.questions.size)
@@ -55,9 +55,9 @@ class GameFlowTest {
         assertEquals(3, g.retries)
         assertEquals(1, g.stars)
         assertEquals(1, store.stars("sample"))
-        assertTrue("sample2" in store.unlocked())
-        g.next(); assertEquals(Screen.UNLOCK, g.screen)
-        g.home(); assertEquals(Screen.TITLE, g.screen)
+        assertTrue(store.flag("completed.sample")) // saved at quiz finish, before results (D-16)
+        // sample2 is not a bundled hero, so nothing newly opens: results goes to the title.
+        g.next(); assertEquals(Screen.TITLE, g.screen)
     }
 
     @Test fun bestStarsAreNeverLowered() {
@@ -98,11 +98,11 @@ class GameFlowTest {
 
     @Test fun fullMissionPlaysToTheEnding() {
         val g = TestContent.game()
-        g.start(); repeat(g.bundle.mission.intro.size) { g.next() }
+        g.start(); repeat(g.bundle.mission.intro.size) { repeat(20) { g.step(dt, InputFrame()) }; g.next() }
         var n = 0
         while (g.screen == Screen.PLAY && n++ < 60 * 600) {
             val i = InputFrame()
-            if (g.run.phase == Phase.CAPTION) { g.next(); continue }
+            if (g.run.phase == Phase.CAPTION || g.run.phase == Phase.CARD) { repeat(20) { g.step(dt, InputFrame()) }; g.next(); continue }
             if (g.run.phase == Phase.WALK) i.held += Action.RIGHT
             // Face the nearest enemy (a child turns toward it), then swing.
             val near = g.run.enemies.filter { it.state != EnemyState.FLEE }.minByOrNull { kotlin.math.abs(it.x - g.run.hero.x) }
@@ -111,6 +111,6 @@ class GameFlowTest {
             g.step(dt, i)
         }
         assertEquals(Screen.ENDING, g.screen)
-        assertEquals(4, g.run.beat)
+        assertEquals(g.bundle.mission.beats.size, g.run.beat)
     }
 }

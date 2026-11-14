@@ -21,4 +21,20 @@ object TestContent {
 
     fun game(store: Store = MemoryStore(), sfx: MutableList<Sfx> = mutableListOf()): Game =
         Game(load(), "sample", store) { sfx += it }
+
+    /**
+     * The full 4-type Trần Quốc Toản mission (D-08 B): data/ once TASK-011 lands, else the draft
+     * content/drafts/heroes/tran-quoc-toan/mission-full.json.
+     */
+    fun fullContent(): Content {
+        val c = load()
+        val hero = c.heroes.getValue("tran-quoc-toan")
+        if (hero.mission.beats.any { it.type != "fight" }) return c
+        val draft = File(root, "drafts/heroes/tran-quoc-toan/mission-full.json")
+        val m = ContentLoader.JSON.decodeFromString<com.galaxyandsun.daidatanhhung.core.content.MissionFile>(draft.readText())
+        return c.copy(heroes = c.heroes + ("tran-quoc-toan" to hero.copy(mission = m)))
+    }
+
+    fun fullGame(store: Store = MemoryStore(), sfx: MutableList<Sfx> = mutableListOf()): Game =
+        Game(fullContent(), "tran-quoc-toan", store) { sfx += it }
 }

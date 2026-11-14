@@ -4,6 +4,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Typeface
 import com.galaxyandsun.daidatanhhung.core.Action
+import com.galaxyandsun.daidatanhhung.core.BeatType
 import com.galaxyandsun.daidatanhhung.core.ClaimGate
 import com.galaxyandsun.daidatanhhung.core.Game
 import com.galaxyandsun.daidatanhhung.core.HandHint
@@ -181,20 +182,27 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         d.textBox(line.get(g.lang), W / 2, 530f, 1000f, 38f, C.WHITE, 2)
         badge(g, line, W / 2, 492f)
         button("next", g.ui(UiIds.NEXT), W / 2 - 150, 590f, 300f, 110f, t, pulse = true) { g.next() }
+        skipButton(g)
+        skipWarning(g)
     }
 
     private fun play(g: Game) {
         val r = g.run; val h = r.hero; val t = r.t; val cam = r.cam.toFloat()
-        val beat = r.beats[min(r.beat, r.beats.size - 1)]
+        val beat = r.currentBeat
         val ground = r.ground.toFloat()
         fig.background(r.cam, beat.theme, ground)
         d.c.save(); d.c.translate(-cam, 0f)
+        if (r.beatType == BeatType.REACH && (r.phase == Phase.PLAY || r.phase == Phase.END)) fig.icon("flag", r.goalX.toFloat(), ground - 120, 150f)
+        for (dm in r.dummies) fig.dummy(dm.x.toFloat(), ground, dm.down, dm.t)
         for (w in r.dropped) fig.dropped(w, ground)
+        r.partner?.let { fig.partner(it, ground, t) }
         for (e in r.enemies) fig.enemy(e, ground, t)
         if (!(h.hurt > 0 && (t * 20).toInt() % 2 == 1)) fig.hero(h.x.toFloat(), ground, h.face, h.walk, h.def, if (h.atk >= 0) h.atk else null, t)
+        if (r.bannerRaised && r.beatType == BeatType.TRAINING) fig.icon("flag", h.x.toFloat() - h.face * 60f, ground - 250, 110f)
+        if (r.beatType == BeatType.HOLD && r.phase != Phase.CARD) holdMeter(h.x.toFloat(), ground - 330, r.heldTotal / r.holdSeconds(r.beat))
         for (p in r.parts) d.star(p.x.toFloat(), p.y.toFloat(), p.r.toFloat(), p.color.toInt(), C.GOLD_DARK, p.rot.toFloat())
         for (p in r.pops) { val old = d.alpha; d.alpha = min(1.0, p.life * 2); d.text(g.ui(p.textId), p.x.toFloat(), p.y.toFloat(), 40f, p.color.toInt()); d.alpha = old }
-        r.stallTarget?.let { fig.arrowDown(it.x.toFloat(), ground - 330, t) }
+        r.stallTargetX?.let { fig.arrowDown(it.toFloat(), ground - 330, t) }
         d.c.restore()
         if (r.phase == Phase.WALK && r.beat > 0) {
             val p = (sin(t * 6) * 10).toFloat()
@@ -202,42 +210,92 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             d.poly(C.GOLD, -60f, -22f, 10f, -22f, 10f, -50f, 64f, 0f, 10f, 50f, 10f, 22f, -60f, 22f); d.c.drawPath(d.path, d.stroke(C.WHITE, 5f))
             d.c.restore(); d.text(g.ui(UiIds.GO), 1060f, 380f, 32f, C.INK)
         }
-        // HUD: pause, mute, beat medallions; the goal and the banner as text layers (never in art).
+        // HUD: pause and sound always; beat medallions; the goal and the banner as text layers (never in art).
         roundIcon("pause", 66f, 66f, 48f, { pauseGlyph(66f, 66f, 48f) }) { g.pause() }
         roundIcon("mute", 176f, 66f, 48f, { speakerGlyph(176f, 66f, 48f, g.muted) }) { g.toggleMute() }
         val n = r.beats.size
         for (i in 0 until n) {
             val x = W / 2 - (n - 1) * 45 + i * 90
-            val done = i < r.beat || (i == r.beat && r.phase == Phase.CAPTION)
+            val done = i < r.beat || (i == r.beat && (r.phase == Phase.CAPTION || r.phase == Phase.END))
             d.circle(x, 60f, 30f, if (done) C.GOLD else C.a(C.WHITE, 0.75), C.GOLD_DARK, 4f); d.drum(x, 60f, 22f, if (done) C.INK else C.a(C.INK, 0.35))
         }
-        if (r.phase == Phase.FIGHT) { // the goal under the medallions; its badge sits at its right end, clear of the "!" bubble
+        if (r.phase == Phase.PLAY || r.phase == Phase.END) { // the goal under the medallions; its badge clear of the "!" bubble
             d.rr(W / 2 - 300, 98f, 600f, 44f, 18f, C.a(C.CREAM, 0.85))
             d.textBox(beat.goal.get(g.lang), W / 2, 120f, 580f, 24f, C.INK, 1); badge(g, beat.goal, W / 2 + 390, 120f)
             if (beat.usesBanner) g.bundle.mission.banner?.let { b ->
                 d.rr(W / 2 - 450, 150f, 900f, 44f, 18f, C.a(C.RED, 0.9)); d.textBox(b.get(g.lang), W / 2, 172f, 880f, 24f, C.GOLD, 1); badge(g, b, W / 2 + 540, 172f)
             }
         }
-        if (r.phase != Phase.CAPTION) {
-            pad("left", 140f, 610f, 80f, Action.LEFT, false, false, null, t) { rr -> arrowGlyph(rr, -1) }
-            pad("right", 330f, 610f, 80f, Action.RIGHT, false, r.pulseRight, null, t) { rr -> arrowGlyph(rr, 1) }
-            pad("defend", 950f, 625f, 80f, Action.DEFEND, h.def, false, g.ui(UiIds.DEFEND), t) { rr -> shieldGlyph(rr) }
-            pad("attack", 1150f, 590f, 92f, Action.ATTACK, h.atk >= 0, r.pulseAttack, g.ui(UiIds.ATTACK), t) { rr -> staffGlyph(rr) }
+        val vis = r.visibleButtons()
+        if (r.phase != Phase.CAPTION && r.phase != Phase.CARD) {
+            // Only the beat's own pads are drawn (mission-flow rule 4): hidden, not greyed.
+            if ("move" in vis) {
+                pad("left", 140f, 610f, 80f, Action.LEFT, false, false, null, t) { rr -> arrowGlyph(rr, -1) }
+                pad("right", 330f, 610f, 80f, Action.RIGHT, false, r.pulseRight, null, t) { rr -> arrowGlyph(rr, 1) }
+            }
+            if ("defend" in vis) pad("defend", 950f, 625f, 80f, Action.DEFEND, h.def, r.pulseDefend, g.ui(UiIds.DEFEND), t) { rr -> shieldGlyph(rr) }
+            if ("attack" in vis) pad("attack", 1150f, 590f, 92f, Action.ATTACK, h.atk >= 0, r.pulseAttack, g.ui(UiIds.ATTACK), t) { rr -> staffGlyph(rr) }
+            val special = if (r.beatType == BeatType.HOLD) Pair(1150f, 590f) else Pair(1150f, 400f) // alone, it takes attack's place
+            if ("special" in vis) pad("special", special.first, special.second, 80f, Action.SPECIAL, false, r.pulseSpecial, g.uiOrNull(UiIds.SPECIAL), t) { rr -> bannerGlyph(rr) }
             when (r.hand) {
                 HandHint.MOVE -> fig.hand(330f, 540f, t)
                 HandHint.ATTACK -> fig.hand(1150f, 510f, t)
                 HandHint.DEFEND -> fig.hand(950f, 555f, t)
+                HandHint.SPECIAL_TAP, HandHint.SPECIAL_HOLD -> fig.hand(special.first, special.second - 70, if (r.hand == HandHint.SPECIAL_HOLD) 0.0 else t)
                 HandHint.NONE -> Unit
             }
+        } else if (r.phase == Phase.CAPTION) {
+            storyPanel("${g.ui(UiIds.BEAT)} ${r.beat + 1}", beat.scene[r.captionLine.coerceIn(0, beat.scene.size - 1)], g, t)
         } else {
-            d.rr(160f, 140f, 960f, 300f, 36f, C.PANEL, C.GOLD, 6f)
-            d.drum(230f, 210f, 44f, C.a(C.GOLD, 0.8)); d.drum(1050f, 210f, 44f, C.a(C.GOLD, 0.8))
-            d.text("${g.ui(UiIds.BEAT)} ${r.beat + 1}", W / 2, 190f, 30f, C.GOLD)
-            val line = beat.scene[r.captionLine.coerceIn(0, beat.scene.size - 1)]
-            d.textBox(line.get(g.lang), W / 2, 285f, 760f, 40f, C.WHITE, 2); badge(g, line, W / 2, 410f)
-            button("next", g.ui(UiIds.NEXT), W / 2 - 150, 470f, 300f, 110f, t, pulse = true) { g.next() }
+            val boxes = r.cardBoxes()
+            storyPanel(beat.title.get(g.lang), boxes[r.cardLine.coerceIn(0, boxes.size - 1)], g, t, badgeFor = beat.title)
         }
+        skipWarning(g)
     }
+
+    /** A caption or beat card: header, one sentence, Next and Skip (D-07). */
+    private fun storyPanel(head: String, line: Text, g: Game, t: Double, badgeFor: Text? = null) {
+        d.rr(160f, 140f, 960f, 300f, 36f, C.PANEL, C.GOLD, 6f)
+        d.drum(230f, 210f, 44f, C.a(C.GOLD, 0.8)); d.drum(1050f, 210f, 44f, C.a(C.GOLD, 0.8))
+        d.textBox(head, W / 2, 190f, 700f, 30f, C.GOLD, 1); badgeFor?.let { badge(g, it, W / 2, 222f) }
+        d.textBox(line.get(g.lang), W / 2, 295f, 760f, 40f, C.WHITE, 2); badge(g, line, W / 2, 410f)
+        button("next", g.ui(UiIds.NEXT), W / 2 - 150, 470f, 300f, 110f, t, pulse = true) { g.next() }
+        skipButton(g)
+    }
+
+    private fun skipButton(g: Game) {
+        if (!g.onStoryBox) return
+        val label = g.uiOrNull(UiIds.SKIP) ?: return
+        button("skip", label, 1040f, 610f, 210f, 84f, g.t, fill = C.a(C.CREAM, 0.85), shade = 0xFFC8B89A.toInt(), size = 28f) { g.skip() }
+    }
+
+    /** D-07: one kind warning per run; fires on release like every menu. */
+    private fun skipWarning(g: Game) {
+        if (!g.skipWarning) return
+        next = ArrayList()
+        d.rr(0f, 0f, W, H, 0f, C.a(0xFF2A2440.toInt(), 0.75))
+        d.rr(200f, 150f, 880f, 420f, 36f, C.CREAM, C.GOLD, 6f)
+        medal(W / 2, 250f, 56f, false)
+        d.textBox(g.ui(UiIds.SKIP_WARNING), W / 2, 365f, 780f, 34f, C.INK, 3)
+        button("keep", g.ui(UiIds.KEEP_READING), 260f, 450f, 360f, 96f, g.t, pulse = true) { g.keepReading() }
+        button("skipok", g.ui(UiIds.SKIP_CONFIRM), 660f, 450f, 360f, 96f, g.t, fill = C.a(C.WHITE, 0.9), shade = 0xFFC8B89A.toInt()) { g.confirmSkip() }
+    }
+
+    /** A drawn medal: a gold disc with the drum motif (earned) or an outline (not yet). */
+    private fun medal(x: Float, y: Float, r: Float, earned: Boolean) {
+        if (earned) { d.poly(C.RED, x - r * 0.5f, y - r * 1.6f, x - r * 0.1f, y - r * 1.6f, x + r * 0.15f, y - r * 0.7f, x - r * 0.25f, y - r * 0.7f)
+            d.poly(C.RED, x + r * 0.5f, y - r * 1.6f, x + r * 0.1f, y - r * 1.6f, x - r * 0.15f, y - r * 0.7f, x + r * 0.25f, y - r * 0.7f)
+            d.circle(x, y, r, C.GOLD, C.GOLD_DARK, 5f); d.drum(x, y, r * 0.8f, C.GOLD_DARK) }
+        else { d.circle(x, y, r, null, C.a(C.INK, 0.5), 5f); d.drum(x, y, r * 0.8f, C.a(C.INK, 0.25)) }
+    }
+
+    private fun holdMeter(x: Float, y: Float, frac: Double) {
+        d.circle(x, y, 48f, C.a(C.WHITE, 0.85), C.GOLD, 4f)
+        d.arc(x, y, 40f, (-Math.PI / 2).toFloat(), (-Math.PI / 2 + 2 * Math.PI * frac).toFloat(), C.GLOW, 12f)
+        fig.icon("orange", x, y, 46f * (1f - 0.35f * frac.toFloat()))
+    }
+
+    private fun bannerGlyph(r: Float) { d.rr(-r * 0.32f, -r * 0.5f, 7f, r * 1.0f, 3f, 0xFF6A4A2A.toInt()); d.poly(C.RED, -r * 0.28f, -r * 0.5f, r * 0.42f, -r * 0.38f, r * 0.42f, r * 0.02f, -r * 0.28f, -r * 0.06f) }
 
     private fun pause(g: Game) {
         if (g.pausedFrom == Screen.QUIZ) quiz(g) else play(g)
@@ -307,7 +365,9 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             val r = (if (i == 1) 90f else 75f) * (if (got) 0.6f + 0.4f * appear else 1f)
             if (got && appear > 0) d.star(x, y, r, C.GOLD, C.WHITE) else { d.star(x, y, r, C.a(C.WHITE, 0.08), C.a(C.WHITE, 0.55)) }
         }
-        if (g.bundle.mission.nextHero == null) d.text(g.ui(UiIds.MORE_HEROES), W / 2, 450f, 30f, C.a(C.WHITE, 0.8), semiBold = true)
+        medal(1080f, 300f, 60f, g.medalThisRun || g.medalEarned)
+        d.textBox(g.ui(if (g.medalThisRun || g.medalEarned) UiIds.MEDAL_EARNED else UiIds.MEDAL_MISSING), 1080f, 400f, 300f, 22f, C.a(C.WHITE, 0.85), 2)
+        if (g.newlyOpen == null) d.text(g.ui(UiIds.MORE_HEROES), W / 2, 450f, 30f, C.a(C.WHITE, 0.8), semiBold = true)
         button("next", g.ui(UiIds.NEXT), W / 2 - 150, 520f, 300f, 110f, t, pulse = true) { g.next() }
     }
 

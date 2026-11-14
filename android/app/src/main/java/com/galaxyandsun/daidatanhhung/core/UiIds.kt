@@ -29,6 +29,15 @@ object UiIds {
     const val TURN = "ui.rotate.turn"
     const val LANG_VI = "ui.lang.vi"
     const val LANG_EN = "ui.lang.en"
+    const val SPECIAL = "ui.pad.special"            // later string (art): shown without a label until it lands
+    const val SKIP = "ui.story.skip"
+    const val SKIP_WARNING = "ui.story.skip_warning"
+    const val SKIP_CONFIRM = "ui.story.skip_confirm"
+    const val KEEP_READING = "ui.story.keep_reading"
+    const val MEDAL_EARNED = "ui.medal.earned"
+    const val MEDAL_MISSING = "ui.medal.missing"
+    /** D-07 strings, from TASK-011: checked by the content test once they are on the base. */
+    val D07 = listOf(SKIP, SKIP_WARNING, SKIP_CONFIRM, KEEP_READING, MEDAL_EARNED, MEDAL_MISSING)
     val ALL = listOf(TITLE, SUBTITLE_DEBUG, START, NEXT, GO, RESUME, HOME, TO_MAP, REPLAY, MOVE, ATTACK, DEFEND,
         PAUSED, RETRY, CORRECT, QUESTION, DONE, MORE_HEROES, UNLOCKED, MAP_STUB, OOF, BLOCKED, BEAT, TURN, LANG_VI, LANG_EN)
 }

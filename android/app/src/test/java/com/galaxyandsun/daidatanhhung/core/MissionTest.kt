@@ -19,8 +19,8 @@ class MissionTest {
     private fun walkToFight(r: MissionRun) {
         val i = InputFrame().apply { held += Action.RIGHT }
         var n = 0
-        while (r.phase != Phase.FIGHT && n++ < 2000) r.update(dt, i)
-        assertEquals(Phase.FIGHT, r.phase)
+        while (r.phase != Phase.PLAY && n++ < 2000) r.update(dt, i)
+        assertEquals(Phase.PLAY, r.phase)
     }
 
     @Test fun walkingRightStartsBeatOneAndLocksTheCamera() {
@@ -117,7 +117,7 @@ class MissionTest {
         val r = run(); walkToFight(r)
         // Fight beat 1 with attack taps only (the hero is pushed back sometimes, never stopped).
         var n = 0
-        while (r.phase == Phase.FIGHT && n++ < 60 * 120) {
+        while ((r.phase == Phase.PLAY || r.phase == Phase.END) && n++ < 60 * 120) {
             val i = InputFrame()
             if (n % 20 == 0) i.tapped += Action.ATTACK
             r.update(dt, i)
