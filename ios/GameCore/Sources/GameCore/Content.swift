@@ -156,6 +156,11 @@ public struct BeatParams: Codable, Equatable, Sendable {
     public var blocks: Int?
     public var finishSpecial: Bool?
     public var encounters: [Encounter]?
+    /// dialogue (schema 1.4): 2–12 lines, and an optional ask button.
+    public struct DialogueLine: Codable, Equatable, Sendable { public let speaker: String; public let mood: String?; public let text: Text }
+    public struct Ask: Codable, Equatable, Sendable { public let button: Text; public let taps: Int; public let atLine: Int }
+    public var lines: [DialogueLine]?
+    public var ask: Ask?
 }
 
 /// One beat of a mission.
@@ -166,7 +171,8 @@ public struct Beat: Codable, Sendable {
     public let buttons: [String]
     public let title: Text
     public let scene: [Text]
-    public let goal: Text
+    /// Optional only for dialogue beats (schema 1.4).
+    public let goal: Text?
     public let usesBanner: Bool?
     public let params: BeatParams
 
@@ -201,7 +207,10 @@ public struct Mission: Codable, Sendable {
     public var allTexts: [Text] {
         var out = [hero.name, hero.place] + intro
         if let banner { out.append(banner) }
-        for b in beats { out += [b.title] + b.scene + [b.goal] }
+        for b in beats {
+            out += [b.title] + b.scene + (b.goal.map { [$0] } ?? [])
+            out += (b.params.lines ?? []).map(\.text) + (b.params.ask.map { [$0.button] } ?? [])
+        }
         return out + ending.lines
     }
 }

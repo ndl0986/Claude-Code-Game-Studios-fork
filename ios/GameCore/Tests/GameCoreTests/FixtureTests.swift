@@ -121,6 +121,15 @@ final class FixtureTests: XCTestCase {
                                                        box: (field["box_width"] as! NSNumber).doubleValue, allowance: (fit["allowance"] as! NSNumber).doubleValue)
                 if let el = c["expected_lines"] as? Int, lines != nil { XCTAssertEqual(lines, el, name) }
                 if lines == nil || lines! > (field["max_lines"] as! Int) { findings = [.init(rule: "R8c", message: "\(lines ?? -1) lines")] }
+            case "R13d":
+                let a = c["ask"] as! [String: Int]
+                findings = ContentValidator.askFits(lines: c["lines"] as! Int, taps: a["taps"]!, atLine: a["at_line"]!)
+            case "ask":
+                let a = c["ask"] as! [String: Int]
+                XCTAssertEqual(ContentValidator.askButtons(lines: c["lines"] as! Int, taps: a["taps"]!, atLine: a["at_line"]!), c["expected_buttons"] as! [String], name)
+            case "R4c":
+                let lines = try ContentJSON.decode([BeatParams.DialogueLine].self, from: JSONSerialization.data(withJSONObject: c["lines"]!))
+                findings = ContentValidator.dialogueLegend(lines, labels: labels(), markers: markers)
             case "R16":
                 let th = (c["thresholds"] as! [[String: Any]]).map { RulesFile.StarThreshold(stars: $0["stars"] as! Int, maxRetries: $0["max_retries"] as? Int) }
                 findings = ContentValidator.starOrder(th)

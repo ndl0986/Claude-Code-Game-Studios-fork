@@ -61,9 +61,14 @@ public struct ContentValidator {
             }
             // R4 on sentence fields; R4b on label fields (D-12)
             let m = hero.mission
-            let missionSentences = m.intro + m.beats.flatMap(\.scene) + m.ending.lines
-            for t in missionSentences { out += Self.legendMarker(t, labels: labels, markers: content.markers) }
-            var missionLabels = [m.hero.name, m.hero.place] + m.beats.flatMap { [$0.title, $0.goal] }
+            let dialogueSentences = m.beats.flatMap { ($0.params.lines ?? []).map(\.text) }
+            let missionSentences = m.intro + m.beats.flatMap(\.scene) + m.ending.lines + dialogueSentences
+            for t in m.intro + m.beats.flatMap(\.scene) + m.ending.lines { out += Self.legendMarker(t, labels: labels, markers: content.markers) }
+            for b in m.beats where b.type == "dialogue" {
+                out += Self.dialogueLegend(b.params.lines ?? [], labels: labels, markers: content.markers)
+                if let a = b.params.ask { out += Self.askFits(lines: b.params.lines?.count ?? 0, taps: a.taps, atLine: a.atLine) }
+            }
+            var missionLabels = [m.hero.name, m.hero.place] + m.beats.flatMap { [$0.title] + ($0.goal.map { [$0] } ?? []) }
             if let b = m.banner { missionLabels.append(b) }
             for t in missionLabels { out += Self.legendLabel(t, scope: missionSentences, labels: labels, markers: content.markers) }
             for q in hero.quiz.questions {
@@ -163,6 +168,8 @@ public struct ContentValidator {
         case "reach-the-flag":
             need = ["move"] // D-10 B: no special on reach-the-flag in the slice
             if !(params.encounters ?? []).isEmpty { need.insert("attack") }
+        case "dialogue": // no pads at all (schema 1.4)
+            return buttons.isEmpty ? [] : [.init(rule: "R13", message: "dialogue beats have no buttons")]
         default: return [.init(rule: "R13", message: "unknown beat type \(type)")]
         }
         var out: [Finding] = []
@@ -221,6 +228,32 @@ public struct ContentValidator {
         return lines
     }
 
+    /// R13d: the ask button ends on or before the last line.
+    public static func askFits(lines: Int, taps: Int, atLine: Int) -> [Finding] {
+        atLine + taps <= lines ? [] : [.init(rule: "R13d", message: "ask \(atLine)+\(taps) runs past \(lines) lines")]
+    }
+
+    /// The button under each 1-based line L: "ask" when at_line ≤ L < at_line + taps, else "tiep".
+    public static func askButtons(lines: Int, taps: Int, atLine: Int) -> [String] {
+        (1...max(1, lines)).map { $0 >= atLine && $0 < atLine + taps ? "ask" : "tiep" }
+    }
+
+    /// R4c: in a dialogue beat, lines citing a legend claim pass R4 when the first line is a narrator
+    /// line, marked in VI and EN, citing that claim; otherwise each such line needs its own marker.
+    public static func dialogueLegend(_ lines: [BeatParams.DialogueLine], labels: [String: Claim.Label], markers: MarkersFile) -> [Finding] {
+        guard let first = lines.first else { return [] }
+        let firstMarked = first.speaker == "narrator" && legendMarker(first.text, labels: labels, markers: markers).isEmpty
+            && first.text.claims.contains { labels[$0] == .legend }
+        var out: [Finding] = []
+        for l in lines {
+            let legend = l.text.claims.filter { labels[$0] == .legend }
+            guard !legend.isEmpty else { continue }
+            if firstMarked && legend.allSatisfy({ first.text.claims.contains($0) }) { continue }
+            out += legendMarker(l.text, labels: labels, markers: markers).map { .init(rule: "R4c", message: $0.message) }
+        }
+        return out
+    }
+
     /// R19a (error): the declared size matches the file header.
     public static func declaredSize(id: String, declared: (Int, Int), actual: (Int, Int)) -> [Finding] {
         declared == actual ? [] : [.init(rule: "R19a", message: "\(id) declares \(declared.0)×\(declared.1), file is \(actual.0)×\(actual.1)")]
@@ -272,7 +305,11 @@ public struct ContentValidator {
         var pairs: [(String, String)] = [(m.hero.name.en, "hero_name"), (m.hero.place.en, "place")]
         pairs += m.intro.map { ($0.en, "intro") } + m.ending.lines.map { ($0.en, "ending") }
         if let banner = m.banner { pairs.append((banner.en, "banner")) }
-        for beat in m.beats { pairs += [(beat.title.en, "beat_title"), (beat.goal.en, "goal")] + beat.scene.map { ($0.en, "scene") } }
+        for beat in m.beats {
+            pairs += [(beat.title.en, "beat_title")] + (beat.goal.map { [($0.en, "goal")] } ?? []) + beat.scene.map { ($0.en, "scene") }
+            pairs += (beat.params.lines ?? []).map { ($0.text.en, $0.speaker == "narrator" ? "dialogue_narrator" : "dialogue_line") }
+            if let a = beat.params.ask { pairs.append((a.button.en, "button")) }
+        }
         for q in hero.quiz.questions { pairs += [(q.prompt.en, "quiz_prompt"), (q.why.en, "quiz_why")] + q.choices.map { ($0.text.en, "quiz_choice") } }
         return pairs.flatMap { Self.enBudget($0.0, fieldType: $0.1, budgets: b) }
     }

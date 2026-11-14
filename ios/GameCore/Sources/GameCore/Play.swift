@@ -160,7 +160,7 @@ public struct PlayState: Sendable {
     }
 
     /// The beat card's boxes: the scene lines, then the goal (the title is the card's header; parity with Android).
-    public var cardTexts: [Text] { guard let b = currentBeat else { return [] }; return b.scene + [b.goal] }
+    public var cardTexts: [Text] { guard let b = currentBeat else { return [] }; return b.scene + (b.goal.map { [$0] } ?? []) }
     /// The hold meter, 0…1 (F3).
     public var meter: Double { guard let h = currentBeat?.params.holdSeconds, h > 0 else { return 0 }; return min(1, heldTotal / h) }
     /// The flag of a reach-the-flag beat.

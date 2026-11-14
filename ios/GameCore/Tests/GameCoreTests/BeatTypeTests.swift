@@ -13,7 +13,9 @@ final class BeatTypeTests: XCTestCase {
     func test_missionflow_AC20_F5_beat_positions_for_the_tqt_data() {
         let p = fresh()
         XCTAssertEqual(hero.mission.beats.map(\.type), ["walk", "hold-meter", "training", "reach-the-flag"])
-        XCTAssertEqual((0..<4).map { p.beatX($0) }, [900, 6340, 7940, 10740])
+        // F5 with the data's beat_gap: 1600 → [900, 6340, 7940, 10740]; 800 (TASK-005i) → [900, 5540, 6340, 8340]
+        let expected: [Double] = content.tuning["beat_gap"] == 800 ? [900, 5540, 6340, 8340] : [900, 6340, 7940, 10740]
+        XCTAssertEqual((0..<4).map { p.beatX($0) }, expected)
     }
 
     func test_missionflow_non_fight_beats_get_a_card_first_and_pads_follow_the_phase() {

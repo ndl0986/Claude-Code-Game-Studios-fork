@@ -447,8 +447,7 @@ final class GameScene: SKScene {
             button(game.ui("ui.btn.next"), 640 - 150, 470, 300, 110, "next", pulse: true)
             return
         }
-        if p.phase == .beatPlay || p.phase == .beatEnd, p.beat < p.beats.count {
-            let goal = p.beats[p.beat].goal
+        if p.phase == .beatPlay || p.phase == .beatEnd, p.beat < p.beats.count, let goal = p.beats[p.beat].goal {
             add(Font.label(goal.text(game.lang), 37, C.ink, width: 1040), 640, 168) // below the HUD row, R8c goal box
         }
         for (a, c, kind, label) in [(PadAction.left, layout.left, "left", nil), (.right, layout.right, "right", nil),
