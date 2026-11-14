@@ -1028,6 +1028,14 @@
       "text": "Phá cường địch, báo hoàng ân",
       "expected_lines": 1,
       "expected": "valid"
+    },
+    {
+      "name": "goal that fits 1040 but not the 880 box (TASK-005n)",
+      "rule": "R8c",
+      "field_type": "goal",
+      "text": "Cross the village, meet the people, then reach the river!",
+      "expected_lines": 2,
+      "expected": "invalid"
     }
   ]
 }
