@@ -136,7 +136,8 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
                     val key = pressedButton.remove(e.id) ?: continue
                     val r = renderer.hit(e.x, e.y)
                     if (r != null && r.key == key && r.onTap != null && !(firedThisFrame && key.startsWith("card"))) {
-                        if (r.onTap.invoke()) { audio.play(Sfx.TAP); firedThisFrame = true }
+                        // Audio GDD Rule 6: one tone per press; a quiz card's own right/wrong sound is its tone.
+                        if (r.onTap.invoke()) { if (!key.startsWith("card")) audio.play(Sfx.TAP); firedThisFrame = true }
                     }
                 }
                 CancelAll -> { padHolds.clear(); pressedButton.clear(); keyHolds.clear() }
