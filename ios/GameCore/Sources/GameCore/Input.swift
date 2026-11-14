@@ -65,6 +65,10 @@ public struct PadLayout: Equatable, Sendable {
     public var lang: (x: Double, y: Double, w: Double, h: Double)
     /// Points per scene unit.
     public let scale: Double
+    /// The safe rect in scene units (insets plus an 8-unit margin), y down.
+    public let safeLeft, safeTop, safeRight, safeBottom: Double
+    /// `pad_min` in scene units (the touch size every button keeps).
+    public let padWorld: Double
 
     public static func == (a: PadLayout, b: PadLayout) -> Bool {
         a.left == b.left && a.right == b.right && a.defend == b.defend && a.attack == b.attack && a.special == b.special && a.scale == b.scale
@@ -80,6 +84,7 @@ public struct PadLayout: Equatable, Sendable {
         // the safe rect in scene units, plus an 8-unit gap
         let l = max(0, insets.left - ox) / s + 8, r = 1280 - max(0, insets.right - ox) / s - 8
         let tp = max(0, insets.top - oy) / s + 8, b = 720 - max(0, insets.bottom - oy) / s - 8
+        safeLeft = l; safeTop = tp; safeRight = r; safeBottom = b; padWorld = padMin / s
         let gap = padGap / s
         func pad(_ cx: Double, _ cy: Double, _ r0: Double) -> Circle {
             let rr = max(r0, padMin / 2 / s)
@@ -93,8 +98,10 @@ public struct PadLayout: Equatable, Sendable {
         special = pad(attack.cx, attack.cy - attack.r - 14 - max(80, padMin / 2 / s), 80)
         pause = pad(66, 66, 48); mute = pad(176, 66, 48)
         if mute.cx - mute.r < pause.cx + pause.r + gap { mute.cx = pause.cx + pause.r + gap + mute.r }
-        let lw = 160.0, lh = 96.0
-        lang = (x: min(1100, r - lw), y: max(18, tp), w: lw, h: lh)
+        // the VI|EN chip (title.md 5.2): height ≥ pad_min, width ≤ 1.6 × height, its left edge kept ≥ 1028 so it
+        // clears the hero card (x ≤ 1020) at every supported k
+        let lh = max(96, padMin / s), lw = min(1.6 * lh, max(lh, r - 1028))
+        lang = (x: r - lw, y: max(18, tp), w: lw, h: lh)
     }
 
     /// HUD spec §3.3: the top stack (dots, goal plate, banner bar; 920 wide) starts at
