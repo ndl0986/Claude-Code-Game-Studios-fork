@@ -141,6 +141,38 @@ it always ends at the quiz and then the map.
       **clenched fist** (the hero's hand in the orange moment), and training's finish shows the
       **banner**. The pad is called `special` in every GDD. Its label text per beat is content
       (Luan, D-34); until it is decided, the label is the existing `ui.pad.special`.
+    - **The banner moment holds** (r9, leader's call; Android r9 QC: the raise was on screen for
+      a fraction of a second). On a training beat with `finish_special`, `beat_end` lasts
+      **`finish_hold`** (`tuning.json` key **`finish_hold`**, 1.5 s, min 1.0, max 3.0; data
+      TASK-005r) **instead of** `end_pause`. Every other beat keeps `end_pause`. In order:
+      1. **The Cờ tap** meets the goal (`beat_play` → `beat_end`). At that moment **all play pads
+         hide**, and the special-pad hint (if showing) goes with them.
+      2. **The raise:** the hero plays ASSET-108 (8 frames × 83 ms = 0.67 s) and holds its last
+         frame, the banner up, for the rest of `finish_hold` (≈ 0.83 s at 1.5 s).
+      3. **The followers join:** the training partner (**re-entering if it already left**; Android
+         sends it off after the blocks step) **re-enters at the hold start on the side away from
+         the screen edge, 1.2 × `enemy_reach` from the hero, and walks in over the 0.67 s raise**
+         to stand beside the hero. It faces the banner and raises a fist, settling before the hold
+         ends. For the slice the partner alone stands for the followers; more follower figures
+         would need new art.
+      4. **At `finish_hold`'s end** the beat ends as any non-fight beat does: the cheer
+         (`sfx_beat_end_cheer`; the TQT training beat, beat 4 / index 3, "Phần 4", keeps `cheer` on), the progress dot fills, and the hero
+         walks on (`walk_to[i+1]`).
+      - **Taps during the hold are dropped**, not queued: no pad is on screen, and a tap anywhere
+        (including where Cờ was) neither shortens the hold nor carries into the walk. There is no
+        skip.
+      - **Pause** stays available (top-left). Opening it freezes the hold; **on resume the hold
+        restarts from the raise's last frame with a full `finish_hold − 0.67 s` still** (the
+        partner already in place), so a child coming back still sees the moment. Leaving through
+        the leave card discards the run as usual.
+      - The banner, held lower beside the hero on this banner beat, stays wholly at y ≥ 276
+        (`hud.md` §3.3).
+      - **Slice placeholder** (leader's call, r9; both apps build this until ASSET-108 and a fist
+        pose exist): at the Cờ tap the banner appears **beside the hero, lowered as in r9**, and
+        **rises over 0.67 s from y + 40 to its place (ease-out)**, then holds. The partner faces
+        the banner **holding its staff upright**, standing in for the raised fist. Timings are the
+        same as with the real art: the "banner-up" still counts from the end of the rise. The real
+        ASSET-108 frames and the fist pose replace it 1:1.
 7d. **Dialogue beats** (TASK-016, Luan's Bình Than exchange):
     - **Order:** a dialogue beat has **no** separate beat card. Its `title` shows as the heading
       over its first line, and its lines are the story. There's no caption either.
@@ -235,7 +267,7 @@ it always ends at the quiz and then the map.
 | `beat_card[i]` | `walk_to[i]` (non-fight only) | `beat_play[i]` | Last card box's "Tiếp / Next" |
 | `beat_play[i]` | `beat_card[i]` or `walk_to[i]` | `beat_end[i]` | The type's goal is met |
 | `dialogue_line[i][k]` | `walk_to[i]` (dialogue beats; no card) | the next line, or `beat_end[i]` after the last | "Tiếp", or an ask tap while `at_line ≤ k < at_line + taps` |
-| `beat_end[i]` | `beat_play[i]` | `caption[i]` (fight) / `walk_to[i+1]` or `ending` (non-fight) | `end_pause` elapsed |
+| `beat_end[i]` | `beat_play[i]` | `caption[i]` (fight) / `walk_to[i+1]` or `ending` (non-fight) | `end_pause` elapsed (**`finish_hold`** on a training beat with `finish_special`, Rule 7c) |
 | `caption[i]` | `beat_end[i]` (fight only) | `walk_to[i+1]` or `ending` | Last caption box's "Tiếp / Next" |
 | `ending` | `beat_end[last]` | `quiz` | Last ending box's "Tiếp / Next" |
 | `quiz` | `ending` | `results` | Quiz & stars: last question answered right |
@@ -268,7 +300,7 @@ own pace.
 
 The F1 (mission length estimate) formula is defined as:
 
-`T_mission = T_intro + Σ_i (T_card_i + T_play_i + end_pause) + T_ending`
+`T_mission = T_intro + Σ_i (T_card_i + T_play_i + T_end_i) + T_ending`, where `T_end_i` = `finish_hold` for a training beat with `finish_special`, else `end_pause`
 
 **Variables:**
 | Variable | Type | Range | Source | Description |
@@ -277,12 +309,13 @@ The F1 (mission length estimate) formula is defined as:
 | T_box | float (s) | 3–8 | estimate only, not a runtime value (re-measure when voice-over exists) | One sentence of ≤120 chars read aloud or read by the child |
 | T_play_i | float (s) | 3–60 | calculated per type (F2–F4; a fight or encounter set per combat F3: a 20–60 s child target, ≤ 60 s for an adult not blocking, combat AC14) | Play time of beat i |
 | end_pause | float (s) | 0–3 | `tuning.json` `end_pause` (0.6) | Pause after a beat |
+| finish_hold | float (s) | 1.0–3.0 | `tuning.json` `finish_hold` (1.5; TASK-005r) | The banner moment after the training finish (Rule 7c); replaces `end_pause` there. Below 1.0 the pose is a flicker to a 6-year-old; above 3.0 it stalls |
 
 **Output Range:** target 3–5 minutes before the quiz, so a mission plus its quiz fits a
 5–15 minute session (concept). Above 6 minutes, cut scene boxes before cutting beats.
 **Example:** 3 intro boxes, 4 beats with 2 boxes each, 2 ending boxes, T_box 5 s gives
 65 s of story. Play: walk 12 s + hold 3 s + training 40 s + reach-the-flag 60 s (the cap,
-AC22) = 115 s. end_pause 4 × 0.6 = 2.4 s. T_mission ≈ 182 s ≈ 3.0 min. T_box 5 s is an adult or
+AC22) = 115 s. Beat ends 3 × 0.6 + 1.5 (training) = 3.3 s. T_mission ≈ 183 s ≈ 3.0 min. T_box 5 s is an adult or
 voiced pace; a child reading alone is slower (TASK-020 W1, with Luan).
 
 The F2 (walk time) formula is defined as:
@@ -633,6 +666,15 @@ the Bình Than exchange):
 31. **GIVEN** a training beat with dummies 4 and `dummy_spacing` 300 (1200 > 990), **WHEN**
     content is validated, **THEN** it fails R14b; **GIVEN** the TQT training (3 × 300 = 900),
     **THEN** it passes.
+32. **GIVEN** the TQT training beat (beat 4, index 3, "Phần 4"; `finish_special`) with `finish_hold` 1.5, on both
+    apps, **WHEN** Cờ is tapped and the frames are stepped through, **THEN** all pads hide at the
+    tap; the banner rises (ASSET-108, or in the slice the placeholder rise from y + 40 over 0.67 s) and, counted from the end of the rise, stays up on screen ≥ 0.8 s; the
+    partner (re-entering if it had left, from 1.2 × `enemy_reach` on the side away from the screen edge) walks in over the rise and stands beside the hero facing the banner with a raised fist (slice: staff upright) before the hold ends; the cheer
+    plays and the hero starts walking ≥ 1.5 s after the tap, not before. **WHEN** the screen is
+    tapped every 0.2 s through the hold (including where Cờ was), **THEN** the walk still starts
+    ≥ 1.5 s after the Cờ tap and no tap is carried into it. **WHEN** pause opens 0.3 s into the
+    hold and play resumes, **THEN** the banner-up frame is still on screen ≥ 0.8 s after the
+    resume before the cheer. **GIVEN** any other beat, **THEN** its end still lasts `end_pause`.
 
 ## Open Questions
 

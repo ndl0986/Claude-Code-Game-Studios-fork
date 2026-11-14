@@ -77,6 +77,17 @@ the motto bar's band; where it can't bounce above its target below the bar, it p
    purpose: a child coming back from pause gets a fresh `hint_delay`.
 6. **Hints never block.** A hint never pauses play, covers a pad's touch area, or stops the child
    doing something else. The hand is drawn above the pad and doesn't take touches.
+   - **On banner beats every hint stays below the bar** (r9, leader's call; the same rule as the
+     "!" and the stuck arrow, `hud.md` §3.3): every pixel of a hand, pulse or arrow is at
+     **y ≥ 276** (bar bottom + 8). There's no exemption for a hand beside its pad: the hand
+     draws above the bar, so it would cover the motto, and for a child who can't read the hand
+     is the instruction.
+   - **Placement:** the hand sits **above its pad** when its whole shape fits there at y ≥ 276.
+     Otherwise (e.g. the special pad "Cờ" stacked above attack at small k) it sits **beside the
+     pad, on the side away from the screen edge** (left of a right-hand pad), at the pad's
+     mid-height, pointing sideways at it, as the stuck arrow's side fallback does.
+   - Either way the hand **never covers any pad's touch rect** (`pad_min` square plus the
+     touch slop, Input Rule 4), its own pad included.
 7. **Per run, not saved.** Teach flags are kept for one mission run, so a replay shows the hand
    again briefly until each button is used once. Hints saves nothing; the saved keys are listed
    in Save & progress Rule 1.
@@ -214,6 +225,7 @@ need a screenshot per platform.
     **THEN** it hides and the timer restarts. On a line showing "Tiếp", no hint ever shows.
 11. **GIVEN** the first map view, **WHEN** it opens, **THEN** the hand is on the only open pin
     until that pin is tapped.
+12. **GIVEN** the training beat's finish step (a banner beat) at k 0.40, 0.488 and 0.517, in VI and EN, **WHEN** the special-pad teach hand and, separately, the stuck pulse show, **THEN** every hint pixel is at y ≥ 276; where the hand doesn't fit above Cờ it sits left of Cờ at Cờ's mid-height, pointing at it; and no hint pixel lies inside any pad's touch rect.
 
 ## Open Questions
 
