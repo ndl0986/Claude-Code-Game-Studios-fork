@@ -11,16 +11,21 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
-### D-19 Accept ADR-0002: asset pipeline and memory budgets (after measurement)
+### D-19 Accept ADR-0002: asset pipeline and memory budgets
 
 - **Flow:** asset specs (TASK-014) → ADR-0002 → final art export → both apps.
-- **Proposed:** one 1.5× art set (authored at 2×); no texture above 2048×2048 (the 4096² hero sheet
-  is split); atlases by what's on screen together, loaded per mission; WebP (lossless sprites, lossy
-  backgrounds) or PNG; ≤ 64 MB decoded textures per mission, ≤ 60 MB app download, ≤ 15 MB per
-  mission; a new size check (R19). Minimum iOS version 17 (stated in the ADR): per Apple's June 2026 figures it excludes at most 7% of active iPhones, and nothing in the slice needs it, so a lower minimum is Luan's option. ADR written as Proposed (`f9d81be`), in peer review.
-- **Before accepting:** both devs measure memory and frame time with a 2048² test atlas on a low-end
-  Android emulator and the iPhone Duo; the numbers go into the ADR.
-- **Status:** Open (Luan accepts once measured; technical impact).
+- **Read:** `docs/architecture/adr-0002-asset-pipeline-and-budgets.md` on branch
+  `docs/ADR-0002-asset-budgets` (`e96acea`), peer-approved by both devs.
+- **Decides:** one 1.5× art set (drawn at 2×); no image above 2048×2048 (big sheets split);
+  background tiles 1440×1320, so they fill phones from the iPhone Duo's 1.45:1 to 20:9 Android;
+  images loaded per story step (the next step's set prefetched only if its theme differs);
+  memory ≤ 64 MB at any moment (24 MB always loaded + 40 MB per step); WebP or PNG;
+  ≤ 60 MB download, ≤ 15 MB per mission. **Minimum iOS 17**: excludes at most 7% of active
+  iPhones (Apple, June 2026); nothing in the slice needs it, so a lower minimum is your option.
+- **Measured:** a 2048² image = 16 MB in memory, a background tile 6–9 MB; decode times are fine.
+  **Not measurable yet:** frame rate (needs a real low-end Android phone and an iPhone); iOS memory
+  (the iPhone Duo after iOS QC).
+- **Status:** Open. Ready for your acceptance; the open measurements can follow.
 
 ### D-18 How Trần Quốc Toản and the invaders look (portrayal + palette), before final art
 
