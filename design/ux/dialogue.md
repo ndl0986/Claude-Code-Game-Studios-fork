@@ -40,7 +40,7 @@ variant).
 
 | Component | Spec | Source |
 |---|---|---|
-| Portrait | 384×384 at 1.5×, `pic.portrait_<hero_id>_<speaker>[_<mood>]`; hero left, others right | Rule 7d; ASSET-327–329 |
+| Portrait | 384×384 at 1.5×, `pic.portrait_<hero_id>_<speaker>[_<mood>]`; hero left, others right. **The hero's portrait (left) and every box start at y ≥ `corner_bottom` + 8**, below the pause/sound block, as on story screens (`story-screens.md` §5.2; QC r5) | Rule 7d; ASSET-327–329 |
 | Speaker box | `dialogue_line`: 720, 38 px, weight 600, ≤ 3 lines | 005i |
 | Narrator box | `dialogue_narrator`: 880, 38 px, ≤ 2 lines | 005i |
 | Ask button | big gold pill (ASSET-331), story Text (e.g. C14), `button` field; release-inside; debounced | Rule 7d |
