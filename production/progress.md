@@ -25,7 +25,7 @@ Where the project stands, so work can resume from the repo. Newest entry first.
 | --- | --- | --- |
 | TASK-001 concept | merged into `docs/vn-history-game-plan` as `b41d157` (pushed) | Done |
 | TASK-002 Godot 4.7.2 | `setup/TASK-002-engine-godot` @ `6dcdbce` (wip) | Done; toolchain installed at Luan's request: Godot 4.7.2 at ~/Applications/Godot.app (`godot` on PATH), JDK 17, Android build-tools 35.0.1 + android-35, iOS 27.1 runtime; headless import passes. Left: export templates (download stops on restart: rerun), editor SDK paths, JAVA_HOME, squash the wip, /test-setup. Not merged |
-| TASK-003 browser prototype | `proto/TASK-003-mission-prototype` @ `c7f1173` | Code + content review approved. Android: r1 FAIL (low) → r2 FAIL (B4 fullscreen race) → fixed in `c7f1173` → r3 partial (`qa/TASK-003-android` @ `c52a2e9`): B4 PASS 18/18; O5, O6, VI|EN side effect and smoke not run yet. O6 (double tap tone, `lastTap || -1`) sent back to dev-002 for a one-line fix; finish r3 on dev-002's next commit (or `c7f1173` if none). iOS: NOT ASSESSED (`qa/TASK-003-ios` @ `18eff46`) |
+| TASK-003 browser prototype | `proto/TASK-003-mission-prototype` @ `203d73e` | Code + content review approved. Android: r1 FAIL (low) → r2 FAIL (B4 fullscreen race) → fixed in `c7f1173` → r3 partial (`qa/TASK-003-android` @ `c52a2e9`): B4 PASS 18/18; O5, O6, VI|EN side effect and smoke not run yet. O6 fixed by dev-002 in `203d73e`; finish r3 on `203d73e`. iOS: NOT ASSESSED (`qa/TASK-003-ios` @ `18eff46`) |
 | TASK-003b beat types, Special button, arrows, art fixes | — | Ready; starts after TASK-003 (likely dev-001) |
 | TASK-004 art bible + Trần Quốc Toản content | `design/TASK-004-art-bible-tqt-beats` @ `4d7aca2` | Art + structure signed off; claims C01–C11 and source pages not signed; not merged |
 
@@ -43,7 +43,7 @@ Where the project stands, so work can resume from the repo. Newest entry first.
 1. Start the leader: `tools/team/start-leader.sh` (it opens at the repo root as `game-leader` and runs `/game-team-lead`).
 2. Check permissions: `orca computer permissions --json` → `accessibility` and `screenshots` both `granted`.
 3. `ListAgents`; start any missing member with its script above (each script prompts the member to reply "ready" to `game-leader`). Close old duplicates (`game-dev-001-1e`, `game-dev-002-46`). Tell game-dev-001 to resume the TASK-002 leftovers.
-4. Check whether dev-002 committed the O6 fix (`git log proto/TASK-003-mission-prototype`). Re-send Android QC the 4 unfinished r3 items, and iOS QC its cases, on that newest commit (iPhone Duo, safe-area caveat). Android QC must first restart its web server, adb reverse/forward and the DevTools watcher; the emulator runs `-gpu host`. Each QC branch already holds its earlier evidence.
+4. Re-send Android QC the 4 unfinished r3 items (O6 is fixed in `203d73e`), and iOS QC its cases, on `203d73e` (iPhone Duo, safe-area caveat). Android QC must first restart its web server, adb reverse/forward and the DevTools watcher; the emulator runs `-gpu host`. Each QC branch already holds its earlier evidence.
 5. When both platforms pass, ask Luan's go to merge TASK-003 into `docs/vn-history-game-plan`, then hand out TASK-003b.
 
 ## 2026-11-14 — Repo set up, project plan drafted
