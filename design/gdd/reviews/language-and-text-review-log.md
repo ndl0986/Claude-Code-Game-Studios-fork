@@ -23,3 +23,6 @@ Reviewed-Content-Hash: content/data/rules.json f00841c558d539129bcb20973e610bd7e
 - Sizes in world px at the fitted scale: body ≥ 37 (including quiz choices), labels next to icons ≥ 28 (pad labels, counters, map stub); the current sizes to raise are listed.
 - Run-time ellipsis allowed only as a safety net; in a shipped build it is a bug.
 Awaiting confirmation.
+
+## Peer re-review — 2026-11-14 — game-dev-android: items 2–3 APPROVE; F1 fix applied
+F1 reads advances from content/metrics/nunito-advances.json at the field weight (800/600), not hmtx (the variable font defaults to wght 200, and bold renders 8.6% wider). The goal bar and quiz why grow to 37.

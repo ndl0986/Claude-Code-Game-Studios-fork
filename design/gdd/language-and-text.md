@@ -57,7 +57,8 @@ on a screen (each UX spec), or voice-over (Audio & voice-over).
      `text_min_label` = **28 world px**. They cover pad labels, counters ("Câu 2/5") and the
      map-stub line. The icon carries the meaning, so the label is a secondary cue.
    - Today's sizes that must rise: quiz choices 32 → 37, pad labels 24 → 28, map-stub 26 → 28
-     (the quiz counter at 28 is fine). `/ux-design` sets the exact size per screen, at or above
+     (the quiz counter at 28 is fine). The body rule also catches the **goal bar** and the **quiz
+     why** line, which grow to 37 with taller boxes (box values in game-dev-android's 005h branch). `/ux-design` sets the exact size per screen, at or above
      these minimums.
    - Text **never shrinks to fit**: a line that doesn't fit is a content error caught by
      validation (R8c, F1).
@@ -113,18 +114,18 @@ on a screen (each UX spec), or voice-over (Audio & voice-over).
 
 The F1 (line fit) formula is defined as:
 
-`lines = greedy_wrap(text, box_width / (1 + kern), font_px)`, where each word's width is the **sum of Nunito's real advance widths** (from the TTF's `cmap` and `hmtx`, scaled by `font_px / unitsPerEm`). Words go on the current line while they fit; otherwise they start a new line. A field **passes** if `lines ≤ max_lines(field)` in **both** VI and EN. An overflow **fails validation (R8c)**.
+`lines = greedy_wrap(text, box_width / 1.03, font_px)`, where each word's width is the sum of the glyph **advances from `content/metrics/nunito-advances.json` at the field's weight** (800 bold for buttons and titles, 600 semi-bold for body), × `font_px / 1000`. Words go on the current line while they fit; otherwise they start a new line. A field **passes** if `lines ≤ max_lines(field)` in **both** VI and EN. An overflow **fails validation (R8c)**.
 
-This is the check both apps' content tests run. It's deterministic: the same font file and the same numbers give the same result on both platforms.
+The table is generated from the real font for every character the game uses (664, including all precomposed Vietnamese letters), and lives in tests only, not bundled. Widths are **not** read from the TTF's `hmtx`: `nunito.ttf` is a variable font with default weight 200, and rendered bold text is about 8.6% wider, beyond the 3% allowance. Same table, same numbers, same result on both apps.
 
 **Variables:**
 | Variable | Type | Range | Source | Description |
 |----------|------|-------|--------|-------------|
 | text | string | 1–120 chars | content (NFC) | The line, in each language |
-| advance(g) | int (font units) | from the TTF | data file (`content/data/fonts/nunito.ttf`, `hmtx`) | Real width of each glyph |
+| advance(g, weight) | int (per 1000 units) | from the table | test data (`content/metrics/nunito-advances.json`, 600 / 800) | Rendered width of each glyph at the field's weight |
 | font_px | float (world px at 1×) | ≥ `text_min_*` | data file (`rules.json`, per field type; proposed) | Font size |
 | box_width | float (world px at 1×) | per field type | data file (`rules.json`, per field type; proposed) | Text box width |
-| kern | float | 0.03 | constant | Allowance for kerning and shaping differences |
+| 1.03 | float | — | constant | 3% allowance for kerning and shaping differences |
 | max_lines | int | 1–3 | data file (`rules.json`, per field type; proposed, Rule 8 table) | Allowed lines |
 
 **Output Range:** an integer ≥ 1 per language. Words longer than a whole line (none exist in
