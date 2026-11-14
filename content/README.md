@@ -80,6 +80,7 @@ them against `data/` and `samples/`. `fixtures/validity.json` has one case per r
 | R2 | Every claim, source, picture and hero id that is referenced exists. |
 | R3 | Every story Text has at least one claim (schema); only `strings.json` has none. |
 | R4 | A Text citing a **legend** claim contains a legend marker from `markers.json`, in VI and in EN. The writer authors the marker; it is never added automatically. A Text citing a fact_as_recorded claim may use "Sử chép rằng / The chronicle says". |
+| R4b | (D-12) R4 applies to **sentence** fields: intro, beat scene, ending lines, quiz prompt, quiz why. **Label** fields (hero name, place, banner, beat title, goal, quiz choice) are exempt from R4 only if, for each legend claim the label cites, a **marked** sentence citing that same claim exists in its scope. "Marked" is the R4 test: a legend marker in VI **and** in EN. Scope: any sentence of the mission for name, place, banner, title and goal; the choice's own question's prompt or why for a quiz choice. |
 | R5 | A fact or fact_as_recorded claim can't be `approved` while any of its sources is `to_confirm`. R5b: only an invented claim may have no sources. |
 | R6 | An invented claim is never cited by quiz text. |
 | R7 | All text is Unicode NFC. |

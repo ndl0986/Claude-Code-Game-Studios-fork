@@ -347,6 +347,150 @@
         }
       ],
       "expected": "invalid"
+    },
+    {
+      "name": "banner label covered by a marked sentence",
+      "rule": "R4b",
+      "field": "banner",
+      "claims": {
+        "C06": {
+          "label": "legend"
+        },
+        "C08": {
+          "label": "legend"
+        }
+      },
+      "text": {
+        "id": "x.banner",
+        "vi": "Phá cường địch, báo hoàng ân",
+        "en": "Defeat the strong enemy, repay the king's kindness",
+        "claims": [
+          "C08"
+        ]
+      },
+      "scope_sentences": [
+        {
+          "id": "x.intro.1",
+          "vi": "Truyện kể rằng cậu may một lá cờ thêu sáu chữ vàng.",
+          "en": "The story says he made a banner with six golden words.",
+          "claims": [
+            "C08"
+          ]
+        }
+      ],
+      "expected": "valid"
+    },
+    {
+      "name": "banner label with no marked sentence for its claim",
+      "rule": "R4b",
+      "field": "banner",
+      "claims": {
+        "C06": {
+          "label": "legend"
+        },
+        "C08": {
+          "label": "legend"
+        }
+      },
+      "text": {
+        "id": "x.banner",
+        "vi": "Phá cường địch, báo hoàng ân",
+        "en": "Defeat the strong enemy, repay the king's kindness",
+        "claims": [
+          "C08"
+        ]
+      },
+      "scope_sentences": [
+        {
+          "id": "x.intro.1",
+          "vi": "Cậu may một lá cờ thêu sáu chữ vàng.",
+          "en": "He made a banner with six golden words.",
+          "claims": [
+            "C08"
+          ]
+        }
+      ],
+      "expected": "invalid"
+    },
+    {
+      "name": "quiz choice covered by its marked prompt",
+      "rule": "R4b",
+      "field": "quiz_choice",
+      "claims": {
+        "C06": {
+          "label": "legend"
+        },
+        "C08": {
+          "label": "legend"
+        }
+      },
+      "text": {
+        "id": "x.q3.c1",
+        "vi": "Quả cam",
+        "en": "An orange",
+        "claims": [
+          "C06"
+        ]
+      },
+      "scope_sentences": [
+        {
+          "id": "x.q3.prompt",
+          "vi": "Truyện kể rằng Quốc Toản đã bóp nát quả gì?",
+          "en": "The story says Quốc Toản crushed what fruit?",
+          "claims": [
+            "C06"
+          ]
+        },
+        {
+          "id": "x.q3.why",
+          "vi": "Cậu bóp nát quả cam vua ban.",
+          "en": "He crushed the orange from the king.",
+          "claims": [
+            "C06"
+          ]
+        }
+      ],
+      "expected": "valid"
+    },
+    {
+      "name": "quiz choice with unmarked prompt and why",
+      "rule": "R4b",
+      "field": "quiz_choice",
+      "claims": {
+        "C06": {
+          "label": "legend"
+        },
+        "C08": {
+          "label": "legend"
+        }
+      },
+      "text": {
+        "id": "x.q3.c1",
+        "vi": "Quả cam",
+        "en": "An orange",
+        "claims": [
+          "C06"
+        ]
+      },
+      "scope_sentences": [
+        {
+          "id": "x.q3.prompt",
+          "vi": "Quốc Toản đã bóp nát quả gì?",
+          "en": "What fruit did Quốc Toản crush?",
+          "claims": [
+            "C06"
+          ]
+        },
+        {
+          "id": "x.q3.why",
+          "vi": "Cậu bóp nát quả cam vua ban.",
+          "en": "He crushed the orange from the king.",
+          "claims": [
+            "C06"
+          ]
+        }
+      ],
+      "expected": "invalid"
     }
   ]
 }
