@@ -166,7 +166,9 @@ class Game(
         else -> false
     }
 
-    /** The screen under the pause menu (play or quiz, P-05). */
+    private val PAUSABLE = setOf(Screen.PLAY, Screen.QUIZ, Screen.INTRO, Screen.ENDING, Screen.RESULTS)
+
+    /** The screen under the pause menu (P-05). */
     var pausedFrom = Screen.PLAY; private set
 
     /** The dialogue's ask button: debounced like every Next (QC r2 B1). */
@@ -199,7 +201,8 @@ class Game(
         }
     }
 
-    fun pause(): Boolean = (screen == Screen.PLAY || screen == Screen.QUIZ).also { if (it) { pausedFrom = screen; screen = Screen.PAUSE; skipWarning = false } }
+    /** Pause from play, the story screens, the quiz and results (Mission flow States: `paused` from any state; Input Rule 3). */
+    fun pause(): Boolean = (screen in PAUSABLE).also { if (it) { pausedFrom = screen; screen = Screen.PAUSE; skipWarning = false } }
 
     /** Resuming resets the 5 s hint timers (Hints GDD; the prototype froze them). */
     fun resume(): Boolean = (screen == Screen.PAUSE).also { if (it) { screen = pausedFrom; if (screen == Screen.PLAY) run.onResume() } }

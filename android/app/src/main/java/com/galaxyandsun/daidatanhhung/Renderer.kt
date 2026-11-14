@@ -159,6 +159,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         // title.md: the map-stub line, no controls legend (the first-use hands teach the controls in play)
         d.rr(240f, 540f, 800f, 80f, 24f, C.a(C.CREAM, 0.92))
         d.textBox(g.ui(UiIds.MAP_STUB), W / 2, 580f, 760f, 28f, C.INK, 1, semiBold = true) // label ≥ 28
+        corner(g, pause = false) // title.md: sound top-left, no pause
         langButton(g)
     }
 
@@ -179,6 +180,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         badge(g, line, 1010f, 132f) // debug badge in the picture's corner, never over the text (QC r1)
         button("next", g.ui(UiIds.NEXT), W / 2 - 150, 590f, 300f, 110f, t, pulse = true) { g.next() }
         skipButton(g)
+        corner(g)
         skipWarning(g)
     }
 
@@ -210,8 +212,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             d.c.restore(); d.text(g.ui(UiIds.GO), 1060f, 380f, 32f, C.INK)
         }
         // HUD: pause and sound always; beat medallions; the goal and the banner as text layers (never in art).
-        roundIcon("pause", 66f, 66f, 48f, { pauseGlyph(66f, 66f, 48f) }) { g.pause() }
-        roundIcon("mute", 176f, 66f, 48f, { speakerGlyph(176f, 66f, 48f, g.muted) }) { g.toggleMute() }
+        corner(g)
         val n = r.beats.size
         for (i in 0 until n) {
             val x = W / 2 - (n - 1) * 45 + i * 90
@@ -354,8 +355,14 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
 
     private fun bannerGlyph(r: Float) { d.rr(-r * 0.32f, -r * 0.5f, 7f, r * 1.0f, 3f, 0xFF6A4A2A.toInt()); d.poly(C.RED, -r * 0.28f, -r * 0.5f, r * 0.42f, -r * 0.38f, r * 0.42f, r * 0.02f, -r * 0.28f, -r * 0.06f) }
 
+    /** Input Rule 3 (TASK-020 W7): pause and sound sit top-left on every screen that has them. */
+    private fun corner(g: Game, pause: Boolean = true) {
+        if (pause) roundIcon("pause", 66f, 66f, 48f, { pauseGlyph(66f, 66f, 48f) }) { g.pause() }
+        roundIcon("mute", 176f, 66f, 48f, { speakerGlyph(176f, 66f, 48f, g.muted) }) { g.toggleMute() }
+    }
+
     private fun pause(g: Game) {
-        if (g.pausedFrom == Screen.QUIZ) quiz(g) else play(g)
+        when (g.pausedFrom) { Screen.QUIZ -> quiz(g); Screen.INTRO -> story(g, true); Screen.ENDING -> story(g, false); Screen.RESULTS -> results(g); else -> play(g) }
         next = ArrayList()
         d.rr(0f, 0f, W, H, 0f, C.a(0xFF2A2440.toInt(), 0.7))
         d.text(g.ui(UiIds.PAUSED), W / 2, 200f, 64f, C.WHITE)
@@ -379,12 +386,13 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         val q = g.quiz ?: return
         val t = g.t
         d.c.drawColor(C.BG)
-        d.drum(120f, 120f, 70f, C.a(C.GOLD, 0.25)); d.drum(1160f, 640f, 90f, C.a(C.GOLD, 0.18))
+        d.drum(1160f, 640f, 90f, C.a(C.GOLD, 0.18)) // (no drum top-left: pause and sound sit there)
         val n = q.questions.size
         for (i in 0 until n) d.circle(W / 2 - (n - 1) * 30 + i * 60, 50f, 16f, if (i < q.index || (i == q.index && q.rightShown >= 0)) C.GOLD else C.a(C.WHITE, 0.3), C.GOLD_DARK, 3f)
-        d.text("${g.ui(UiIds.QUESTION)} ${min(q.index + 1, n)}/$n", 120f, 50f, 28f, C.GOLD, Paint.Align.LEFT)
+        // quiz-and-results.md: the counter top-centre, just left of the dots (pause and sound own the top-left)
+        d.text("${g.ui(UiIds.QUESTION)} ${min(q.index + 1, n)}/$n", W / 2 - (n - 1) * 30 - 40, 50f, 28f, C.GOLD, Paint.Align.RIGHT)
         val cur = q.current
-        d.textBox(cur.prompt.get(g.lang), W / 2, 150f, 980f, 40f, C.WHITE, 2, semiBold = true); badge(g, cur.prompt, W / 2 + 420, 214f) // fit.quiz_prompt 980 @ 40, weight 600
+        d.textBox(cur.prompt.get(g.lang), W / 2, 165f, 980f, 40f, C.WHITE, 2, semiBold = true); badge(g, cur.prompt, W / 2 + 420, 214f) // two lines 115–215: clear of pause/sound (≤ 114) and the cards (228) // fit.quiz_prompt 980 @ 40, weight 600
         val cw = 390f; val ch = 330f; val gap = 20f; val x0 = (W - 3 * cw - 2 * gap) / 2; val y0 = 228f
         q.order.forEachIndexed { slot, j ->
             val a = cur.choices[j]
@@ -418,7 +426,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             d.textBox(g.ui(UiIds.CORRECT), 1080f, 590f, 330f, 30f, C.GLOW, 1)
             if (q.canAdvance) button("next", g.ui(UiIds.NEXT), 930f, 626f, 300f, 88f, t, pulse = true) { g.next() }
         } else if (q.shakeT > 0 || q.wrongPicked.isNotEmpty()) d.text(g.ui(UiIds.RETRY), W / 2, 640f, 36f, 0xFFE6E0F5.toInt())
-        roundIcon("pause", 1214f, 66f, 48f, { pauseGlyph(1214f, 66f, 48f) }) { g.pause() }
+        corner(g)
     }
 
     private fun results(g: Game) {
@@ -438,6 +446,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         medalLine?.let { d.textBox(g.ui(it), W / 2, 440f, 780f, 37f, C.a(C.WHITE, 0.9), 3, semiBold = true) } // fit.dialog 780 @ 37, weight 600
         if (g.newlyOpen == null) d.textBox(g.ui(UiIds.MORE_HEROES), W / 2, 525f, 700f, 30f, C.a(C.WHITE, 0.8), 1)
         button("next", g.ui(UiIds.NEXT), W / 2 - 150, 580f, 300f, 110f, t, pulse = true) { g.next() }
+        corner(g)
     }
 
     private fun medallion(x: Float, y: Float, r: Float, lit: Boolean) {

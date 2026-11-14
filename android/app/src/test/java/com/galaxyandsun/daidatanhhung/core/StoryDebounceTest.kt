@@ -85,6 +85,18 @@ class StoryDebounceTest {
             if (advances == 1) assertEquals("caption at +$gap s", s1, s2) else assertTrue(second && s2 != s1)
         }
     }
+
+    /** Input Rule 3 / Mission flow States (W7): pause from the story screens and results returns to the same screen and line. */
+    @Test fun pauseFromStoryScreensAndResultsResumesThere() {
+        for (target in listOf("intro", "ending", "results")) {
+            val g = game(); g.debugJump(target); g.wait(0.5)
+            if (target != "results") { g.next(); g.wait(0.5) }
+            val at = g.screen to g.line
+            assertTrue("$target: pause", g.pause()); assertEquals(Screen.PAUSE, g.screen)
+            assertTrue(g.resume()); assertEquals("$target: resumed", at, g.screen to g.line)
+        }
+        val g = game(); g.debugJump("title"); assertFalse("no pause on the title", g.pause())
+    }
 }
 
 /** The dialogue's ask at_line (1-based), read from the beat params. */
