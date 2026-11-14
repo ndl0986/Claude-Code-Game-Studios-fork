@@ -45,7 +45,7 @@ Dải Đất Anh Hùng is a small, story-first game, and its systems are few.
 | 3 | Input & touch controls (inferred) | Core | Vertical Slice | Not Started | — | none |
 | 4 | Save & progress (inferred) | Persistence | Vertical Slice | Not Started | — | none |
 | 5 | Side-scroll movement & combat | Gameplay | Vertical Slice | Not Started | — | 3, 1 |
-| 6 | Mission flow & beat types | Narrative | Vertical Slice | Not Started | — | 5, 1, 2 |
+| 6 | Mission flow & beat types | Narrative | Vertical Slice | In Review | `design/gdd/mission-flow.md` | 5, 1, 2 |
 | 7 | Quiz & stars | Gameplay | Vertical Slice | Not Started | — | 1, 2, 4 |
 | 8 | Hints & onboarding | Meta | Vertical Slice | Not Started | — | 6, 5, 3, 10 |
 | 9 | Hero progression & unlock | Progression | Vertical Slice (unlock screen) / Alpha (full) | Not Started | — | 7, 4, 1 |
@@ -186,8 +186,8 @@ in a GDD cites its source, or is marked ⟨tuning⟩.
 | Metric | Count |
 |--------|-------|
 | Total systems identified | 13 |
-| Design docs started | 0 |
-| Design docs reviewed | 0 |
+| Design docs started | 1 |
+| Design docs reviewed | 1 (lean self-review; peer review pending) |
 | Design docs approved | 1 (Content data & claims, via the TASK-005 data contract) |
 | MVP systems designed | n/a (folded into the Vertical Slice) |
 | Vertical Slice systems designed | 1/10 |
