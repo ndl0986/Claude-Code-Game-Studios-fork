@@ -131,7 +131,7 @@ Trần Quốc Toản mission (walk, dialogue with 2 asks, hold, training, reach-
 and the expected sim state every 30 updates: phase, beat, hero x and facing, lock, dialogue line,
 training step, enemies and RNG draws. Its `rule` field defines how to replay it. A bot on the Android
 core (`TraceTest`) generates it, and both apps replay it. A mismatch is a parity bug, fixed in
-whichever app disagrees with the GDD. Regenerate it whenever `mission.json`, `tuning.json` or a
+whichever app disagrees with the GDD. Trace **1.1** (TASK-005m) adds `cam` (the sim camera after each step) to every snapshot. In training, its bot first holds ▶ for 4 s into Combat Rule 15b's camera cap (xStart − 70) and the hero's right limit (xStart + 990), then walks back for the dummies. Regenerate it whenever `mission.json`, `tuning.json` or a
 combat or flow rule changes on purpose.
 
 Feel (timing on screen,
