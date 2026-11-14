@@ -1,0 +1,5 @@
+side-scrolling	side view; the camera follows the hero left to right and locks at each fight (stop-and-go), drawPlay/updatePlay	evidence/play.png
+2D	canvas 2D, every figure drawn in code	evidence/play.png
+modern kids' cartoon	soft rounded hero and grumpy-cartoon soldiers, bright warm palette	evidence/figures.png
+Vietnamese motifs	bronze-drum ring motif on sun, HUD medallions and panels; bamboo, areca palms, thatched stilt houses, lotus, rattan shield	evidence/title.png
+Landscape	1280x720 logical, letterboxed; portrait shows a turn-your-phone overlay	evidence/s_portrait_390x844.png

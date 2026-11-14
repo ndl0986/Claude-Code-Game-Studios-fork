@@ -1,0 +1,26 @@
+L1	pass	evidence/figures.png	rounded cartoon hero, grumpy-cartoon muted purple soldiers, drum-ring motif, palms, thatched houses, lotus, rattan shield
+L2	pass	evidence/nearest-game.txt	no reference games; genre values only (stop-and-go, telegraphs)
+L3	pass	evidence/play.png	2D side view, camera follows and locks at each fight (index.html:537)
+F1	pass	index.html:537	4 beats from MISSION.beats (config.js); full keyboard run reached the ending through all 4 (evidence/full-run-end.png)
+F2	pass	index.html:185	pointer-per-finger thumb pads + keyboard map; multi-touch not playable by any check (Android QC on device)
+F3	pass	evidence/figures.png	spear, shield and leader each have their own outline
+F4	pass	index.html:577	glow + drawn "!" bubble (evidence/play.png); held defend blocks every strike
+F5	pass	index.html:608	knock-back, star burst; last hit drops the weapon and they run off; drum sound in code, not heard
+F6	pass	index.html:669	hands at index.html:692-694; stall arrow + Attack pulse after tune.hintDelay
+F7	pass	index.html:730	intro, beat captions, ending all from content.js, all ⟨placeholder⟩ (evidence/s_scene-intro.png)
+F8	pass	evidence/s_quiz_q2.png	4 questions (quizCount 3–5), 3 picture answers, wrong answers grey out and retry (evidence/s_scene-quiz_q-1_wrong-3_lang-en.png)
+F9	pass	index.html:757	stars from quiz retries only; unlock screen evidence/s_scene-unlock_ut-3.png
+F10	pass	index.html:67	VI default, toggle on every screen, localStorage tqt.lang (self-check saved row); Nunito embedded in font.css
+F11	pass	index.html:881	pause and mute buttons in play; portrait overlay index.html:16 (shot cropped by headless min width, see evidence/s_portrait_390x844.png)
+M1	pass	evidence/title.png	title with Bắt đầu
+M2	pass	evidence/s_scene-intro.png	picture panel + one placeholder sentence + Tiếp
+M3	pass	index.html:692	hand bobs on ▶ until the hero first moves right; village theme in beat 1
+M4	pass	index.html:608	soldier walks in, hand moves to Attack (index.html:693), staff swing knocks back with stars; drum sound not heard
+M5	pass	index.html:577	windup glow + "!" (evidence/play.png), hand moves to Defend (index.html:694); holding blocks with clang (sound not heard)
+M6	pass	index.html:713	hpSpear 2 → drops spear and runs; caption panel ends the beat
+C1	pass	config.js:53	beat 2: spear, shield, spear with maxActive 2; hpShield 3; reached at ~minute 1–2 in the keyboard run
+C2	pass	config.js:55	beat 3 fromLeft [3]: one walks in behind
+C3	pass	config.js:30	beat 4 leader, hpLeader 5, leaderSpeedMul 0.75 (evidence/leader shot in production/qa/evidence/TASK-003/dev)
+C4	pass	config.js:23	telegraph 1.1 s; whether it reads as "the skill" is for play
+C5	pass	index.html:578	unblocked strike pushes the hero back tune.heroPushback; no health, no game over
+C6	pass	index.html:757	3★ at ≤star3Retries (0), 2★ at ≤star2Retries (2), else 1★

@@ -1,0 +1,47 @@
+time	2026-11-14 13:35:25
+keep	lines	0	pinned	0
+briefword	side-scrolling	shown	evidence/play.png
+briefword	2D	shown	evidence/play.png
+checklist	L1	unlisted	-	Look: modern kids' cartoon with Vietnamese motifs: soft, rounded, bright figures; warm	
+checklist	L2	unlisted	-	References: none from Luan (he skipped the taste questions). Values only from the genre	
+checklist	L3	unlisted	-	View: 2D · Camera: side view, follows the hero; locks at each fight until the group is gone,	
+checklist	F1	unlisted	-	Side-scrolling mission with stop-and-go fights, 4 beats read from `MISSION.beats` (3 or 4 work)	
+checklist	F2	unlisted	-	Move / attack / hold-to-defend, touch-first thumb pads + keyboard mirror, multi-touch	
+checklist	F3	unlisted	-	3 enemy kinds, each with its own silhouette: spear soldier, shield soldier, leader	
+checklist	F4	unlisted	-	Telegraphed attacks (glow + "!"), defend always blocks when held	
+checklist	F5	unlisted	-	Non-violent knock-back: bounce, star burst, drum; the last hit drops the weapon and they run	
+checklist	F6	unlisted	-	First-time hand hints on move, attack and defend; a pulse hint after 5 s with no progress	
+checklist	F7	unlisted	-	Intro panel, beat captions and ending line, all ⟨placeholder⟩, one short sentence each	
+checklist	F8	unlisted	-	Quiz: 4 questions by default (3–5 in config), 3 picture answers each, retry on wrong	
+checklist	F9	unlisted	-	Stars (quiz only) and an unlock screen for the next hero ⟨placeholder⟩	
+checklist	F10	unlisted	-	VI default, EN switch on every screen, remembered in localStorage; bundled Nunito font	
+checklist	F11	unlisted	-	Pause, mute, and a "turn your phone sideways" overlay in portrait	
+checklist	M1	unlisted	-	Title: tap **Bắt đầu**.	
+checklist	M2	unlisted	-	One picture panel with one short ⟨placeholder⟩ sentence, tap **Tiếp**.	
+checklist	M3	unlisted	-	A pointing hand bobs on ▶; the child holds it and the hero walks through a village.	
+checklist	M4	unlisted	-	The screen stops, a soldier walks in, the hand moves to Attack; one tap swings the staff and knocks him back with a drum hit and a burst of stars.	
+checklist	M5	unlisted	-	When a soldier glows yellow with a "!", the hand moves to Defend; holding it blocks with a clang.	
+checklist	M6	unlisted	-	After two hits he drops his spear and runs off, and a one-line ⟨placeholder beat 1⟩ caption ends the beat.	
+checklist	C1	unlisted	-	The first real trouble is beat 2 (about minute 2): two soldiers at once, one of them a shield soldier who takes three hits.	
+checklist	C2	unlisted	-	Beat 3 sends one from behind.	
+checklist	C3	unlisted	-	Beat 4 has the leader, bigger and slower, five hits.	
+checklist	C4	unlisted	-	Telegraphs are 1.1 s, so watching and defending is the skill.	
+checklist	C5	unlisted	-	A missed block only pushes the hero back a little; nothing is lost and there is no game over.	
+checklist	C6	unlisted	-	Stars come from the quiz alone: 3 for no wrong answers, 2 for up to two, 1 for finishing.	
+browser	HeadlessChrome/157.0.0.0
+saved	play	0	localstorage	tqt.lang
+scene	play	0	title
+scene	play	1	intro
+scene	play	35	play
+measure	step-time	play	0.005	0.300	426
+lane	play	stop	7.1	103
+uncaught	play	0
+text	play	canvas	512,110,561,152	54.3	3.22	inside	Ối!
+text	play	canvas	1128,51,1158,74	43.4	4.58	inside	VI
+text	play	canvas	1178,52,1182,79	40.7	3.09	inside	 
+text	play	canvas	1197,51,1235,74	43.4	3.09	inside	EN
+text	play	canvas	933,662,966,681	32.6	11.10	inside	Đỡ
+text	play	canvas	1119,634,1179,653	32.6	11.10	inside	Đánh
+screen	play	drawn
+shot	play	prototypes/tqt-mission/evidence/play.png
+responds	changed	38

@@ -1,0 +1,143 @@
+# The one-shot's small check (check-run/1).
+# Written by one-shot-check.sh --record: the results are /prototype's reading of
+# evidence/self-check.tsv; never edited by hand.
+kind: check-run/1
+engine: web
+browser: "HeadlessChrome/157.0.0.0"
+time: "2026-11-14 13:35:25"
+checks:
+  - id: boots
+    result: pass
+    evidence:
+      - "evidence/self-check.tsv"
+  - id: shot
+    result: pass
+    evidence:
+      - "evidence/play.png"
+  - id: outlines
+    result: pass
+    evidence:
+      - "evidence/figures.png"
+  - id: brief-words
+    result: pass
+    evidence:
+      - "evidence/brief-words.tsv"
+  - id: emoji
+    result: pass
+    evidence:
+      - "evidence/self-check.tsv"
+  - id: nearest-game
+    result: pass
+    evidence:
+      - "evidence/nearest-game.txt"
+brief_checklist:
+  - id: L1
+    result: pass
+    evidence: "evidence/figures.png"
+    item: "Look: modern kids' cartoon with Vietnamese motifs: soft, rounded, bright figures; warm"
+  - id: L2
+    result: pass
+    evidence: "evidence/nearest-game.txt"
+    item: "References: none from Luan (he skipped the taste questions). Values only from the genre"
+  - id: L3
+    result: pass
+    evidence: "evidence/play.png"
+    item: "View: 2D · Camera: side view, follows the hero; locks at each fight until the group is gone,"
+  - id: F1
+    result: pass
+    evidence: "index.html:537"
+    item: "Side-scrolling mission with stop-and-go fights, 4 beats read from `MISSION.beats` (3 or 4 work)"
+  - id: F2
+    result: pass
+    evidence: "index.html:185"
+    item: "Move / attack / hold-to-defend, touch-first thumb pads + keyboard mirror, multi-touch"
+  - id: F3
+    result: pass
+    evidence: "evidence/figures.png"
+    item: "3 enemy kinds, each with its own silhouette: spear soldier, shield soldier, leader"
+  - id: F4
+    result: pass
+    evidence: "index.html:577"
+    item: "Telegraphed attacks (glow + \"!\"), defend always blocks when held"
+  - id: F5
+    result: pass
+    evidence: "index.html:608"
+    item: "Non-violent knock-back: bounce, star burst, drum; the last hit drops the weapon and they run"
+  - id: F6
+    result: pass
+    evidence: "index.html:669"
+    item: "First-time hand hints on move, attack and defend; a pulse hint after 5 s with no progress"
+  - id: F7
+    result: pass
+    evidence: "index.html:730"
+    item: "Intro panel, beat captions and ending line, all ⟨placeholder⟩, one short sentence each"
+  - id: F8
+    result: pass
+    evidence: "evidence/s_quiz_q2.png"
+    item: "Quiz: 4 questions by default (3–5 in config), 3 picture answers each, retry on wrong"
+  - id: F9
+    result: pass
+    evidence: "index.html:757"
+    item: "Stars (quiz only) and an unlock screen for the next hero ⟨placeholder⟩"
+  - id: F10
+    result: pass
+    evidence: "index.html:67"
+    item: "VI default, EN switch on every screen, remembered in localStorage; bundled Nunito font"
+  - id: F11
+    result: pass
+    evidence: "index.html:881"
+    item: "Pause, mute, and a \"turn your phone sideways\" overlay in portrait"
+  - id: M1
+    result: pass
+    evidence: "evidence/title.png"
+    item: "Title: tap **Bắt đầu**."
+  - id: M2
+    result: pass
+    evidence: "evidence/s_scene-intro.png"
+    item: "One picture panel with one short ⟨placeholder⟩ sentence, tap **Tiếp**."
+  - id: M3
+    result: pass
+    evidence: "index.html:692"
+    item: "A pointing hand bobs on ▶; the child holds it and the hero walks through a village."
+  - id: M4
+    result: pass
+    evidence: "index.html:608"
+    item: "The screen stops, a soldier walks in, the hand moves to Attack; one tap swings the staff and knocks him back with a drum hit and a burst of stars."
+  - id: M5
+    result: pass
+    evidence: "index.html:577"
+    item: "When a soldier glows yellow with a \"!\", the hand moves to Defend; holding it blocks with a clang."
+  - id: M6
+    result: pass
+    evidence: "index.html:713"
+    item: "After two hits he drops his spear and runs off, and a one-line ⟨placeholder beat 1⟩ caption ends the beat."
+  - id: C1
+    result: pass
+    evidence: "config.js:53"
+    item: "The first real trouble is beat 2 (about minute 2): two soldiers at once, one of them a shield soldier who takes three hits."
+  - id: C2
+    result: pass
+    evidence: "config.js:55"
+    item: "Beat 3 sends one from behind."
+  - id: C3
+    result: pass
+    evidence: "config.js:30"
+    item: "Beat 4 has the leader, bigger and slower, five hits."
+  - id: C4
+    result: pass
+    evidence: "config.js:23"
+    item: "Telegraphs are 1.1 s, so watching and defending is the skill."
+  - id: C5
+    result: pass
+    evidence: "index.html:578"
+    item: "A missed block only pushes the hero back a little; nothing is lost and there is no game over."
+  - id: C6
+    result: pass
+    evidence: "index.html:757"
+    item: "Stars come from the quiz alone: 3 for no wrong answers, 2 for up to two, 1 for finishing."
+measures:
+  - id: step-time
+    value: 0.300
+    unit: ms
+    by: browser
+    detail: "mean 0.005 ms, slowest 0.300 ms, 426 steps"

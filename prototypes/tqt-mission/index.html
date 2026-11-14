@@ -1,0 +1,954 @@
+<!doctype html>
+<!-- PROTOTYPE - NOT FOR PRODUCTION -->
+<!-- Question: Can a 6-year-old play one hero's story as light touch action on a landscape phone, then answer a short quiz about it? -->
+<!-- Date: 2026-11-14 · TASK-003 -->
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Dải Đất Anh Hùng: Trần Quốc Toản</title>
+<link rel="stylesheet" href="font.css">
+<style>
+  html, body { margin: 0; height: 100%; background: #2a2440; overflow: hidden; }
+  body { font-variant-numeric: tabular-nums; font-family: Nunito, sans-serif;
+         -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+  canvas { display: block; margin: 0 auto; touch-action: none; }
+  #rotate { display: none; position: fixed; inset: 0; background: #2a2440; color: #fff;
+            flex-direction: column; align-items: center; justify-content: center; gap: 24px;
+            font: 800 26px Nunito, sans-serif; text-align: center; padding: 24px; box-sizing: border-box; }
+  #rotate-text { max-width: 100%; overflow-wrap: break-word; }
+  @media (orientation: portrait) { #rotate { display: flex; } }
+  #rotate svg { animation: tilt 2s ease-in-out infinite; }
+  @keyframes tilt { 0%, 30% { transform: rotate(0); } 60%, 100% { transform: rotate(-90deg); } }
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+<div id="rotate">
+  <svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true">
+    <rect x="38" y="12" width="44" height="96" rx="10" fill="#f2b632" stroke="#fff" stroke-width="5"/>
+    <rect x="45" y="24" width="30" height="66" rx="4" fill="#bfe6f0"/>
+    <circle cx="60" cy="99" r="4" fill="#fff"/>
+  </svg>
+  <div id="rotate-text">Xoay ngang điện thoại nhé</div>
+</div>
+<script src="config.js"></script>
+<script src="strings.js"></script>
+<script src="content.js"></script>
+<script>
+'use strict';
+// ---- Built to be checked (the starter's hooks: fixed step, clock, window.game, play, figures) ----
+const params = new URLSearchParams(location.search);
+const tune = new Proxy({}, { get: (_, k) => CONFIG[k].value }); // live: tune.heroSpeed is CONFIG.heroSpeed.value
+const STEP = 1 / 60;
+const W = 1280, H = 720;
+const PIXEL = false;
+const FONT = 'Nunito, sans-serif';
+const TITLE = 'Dải Đất Anh Hùng: Trần Quốc Toản';
+const CONTROLS = ['◀ ▶ / ← →: đi · move', 'J / Space: đánh · attack', 'K (giữ · hold): đỡ · defend', 'L: VI/EN · P: pause · M: mute'];
+const clock = window.GAME_CLOCK || { now: () => performance.now() / 1000 };
+const CHEAP = params.get('render') === 'cheap';
+let seed;
+function rng() { // mulberry32; every gameplay random call reads this, never Math.random
+  seed = (seed + 0x6D2B79F5) | 0;
+  let t = Math.imul(seed ^ (seed >>> 15), seed | 1);
+  t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+}
+const events = [];
+
+// ---- Language: VI default, EN switch, remembered on this device only (plan review 4) ----
+let lang = 'vi';
+try { const l = params.get('lang') || localStorage.getItem('tqt.lang'); if (l === 'vi' || l === 'en') lang = l; } catch (e) { /* storage blocked: stay VI */ }
+const STRESS = params.get('stress') === '1'; // shots: add the stacked-diacritic string to buttons
+const S = k => STRINGS[lang][k] + (STRESS && BTN_KEYS.has(k) && lang === 'vi' ? ' Ặ Ỗ Ữ ẫ ợ' : '');
+const BTN_KEYS = new Set(['start', 'next', 'go', 'resume', 'home', 'toMap', 'replay']);
+const L = o => o[lang]; // a {vi, en} content line
+function setLang(l) {
+  lang = l; document.documentElement.lang = l;
+  try { localStorage.setItem('tqt.lang', l); } catch (e) { /* fine: not remembered */ }
+  document.getElementById('rotate-text').textContent = STRINGS[l].turn;
+  events.push({ type: 'lang', lang: l });
+}
+setLang(lang);
+
+// ---- Screen ----
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+let viewScale = 1;
+function fit() {
+  const k = Math.min(innerWidth / W, innerHeight / H);
+  viewScale = k;
+  const r = k * (devicePixelRatio || 1);
+  canvas.width = Math.round(W * r); canvas.height = Math.round(H * r);
+  canvas.style.width = Math.round(W * k) + 'px'; canvas.style.height = Math.round(H * k) + 'px';
+  canvas.style.marginTop = Math.max(0, Math.floor((innerHeight - H * k) / 2)) + 'px';
+  ctx.setTransform(r, 0, 0, r, 0, 0); ctx.imageSmoothingEnabled = true;
+}
+addEventListener('resize', fit); fit();
+const portrait = () => innerHeight > innerWidth;
+
+// ---- Drawing helpers ----
+const C = { // palette: warm primaries to touch and reward, natural greens and river blues behind
+  red: '#d9342b', gold: '#f2b632', goldDark: '#c98a12', cream: '#fff6e3', ink: '#3a2a1f',
+  skin: '#f5c9a0', hair: '#231a16', indigo: '#2b4c8c', leaf: '#6cbf4f', leafDark: '#3f8a3a',
+  river: '#5ab4d6', earth: '#c99a5b', earthDark: '#a87a45', enemy: '#6b5b95', enemyDark: '#4b3f6e',
+  steel: '#8d93a8', teal: '#3e6b6b', glow: '#ffe24a', panel: 'rgba(42,36,64,0.86)',
+};
+function clear(c) { ctx.fillStyle = c; ctx.fillRect(0, 0, W, H); }
+function font(size, weight = 800) { return `${weight} ${size}px ${FONT}`; }
+function text(s, x, y, size, c, align = 'center', weight = 800) {
+  ctx.fillStyle = c; ctx.font = font(size, weight); ctx.textAlign = align;
+  ctx.textBaseline = 'middle'; ctx.fillText(s, x, y);
+}
+function wrap(s, maxW, size, weight = 800) {
+  ctx.font = font(size, weight);
+  const words = s.split(' '), lines = []; let line = '';
+  for (const w of words) {
+    const t = line ? line + ' ' + w : w;
+    if (ctx.measureText(t).width > maxW && line) { lines.push(line); line = w; } else line = t;
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+// Fit text in a box: shrink until the wrapped lines fit maxLines (EN runs longer).
+function textBox(s, x, y, maxW, size, c, maxLines = 2, lh = 1.25, weight = 800) {
+  let sz = size, lines = wrap(s, maxW, sz, weight);
+  while (lines.length > maxLines && sz > 18) { sz -= 2; lines = wrap(s, maxW, sz, weight); }
+  const top = y - (lines.length - 1) * sz * lh / 2;
+  lines.forEach((ln, i) => text(ln, x, top + i * sz * lh, sz, c, 'center', weight));
+  return sz;
+}
+function rr(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); }
+function circle(x, y, r, fill, stroke, lw = 4) {
+  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+  if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke(); }
+}
+function ellipse(x, y, rx, ry, fill) { ctx.beginPath(); ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); ctx.fillStyle = fill; ctx.fill(); }
+function star(x, y, r, fill, stroke, rot = 0) { // drawn 5-point star (rewards, bursts): never a font symbol
+  ctx.beginPath();
+  for (let i = 0; i < 10; i++) {
+    const a = rot - Math.PI / 2 + i * Math.PI / 5, rad = i % 2 ? r * 0.45 : r;
+    ctx.lineTo(x + Math.cos(a) * rad, y + Math.sin(a) * rad);
+  }
+  ctx.closePath(); ctx.fillStyle = fill; ctx.fill();
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = Math.max(2, r * 0.12); ctx.lineJoin = 'round'; ctx.stroke(); }
+}
+// Bronze-drum ring motif: concentric rings around a star with rays (the Vietnamese accent).
+function drumMotif(x, y, r, col, alpha = 1) {
+  ctx.save(); ctx.globalAlpha *= alpha;
+  circle(x, y, r, null, col, Math.max(2, r * 0.06));
+  circle(x, y, r * 0.72, null, col, Math.max(1.5, r * 0.04));
+  for (let i = 0; i < 14; i++) { // little herons/notches in the ring band, as dashes
+    const a = i * Math.PI * 2 / 14; ctx.beginPath();
+    ctx.moveTo(x + Math.cos(a) * r * 0.78, y + Math.sin(a) * r * 0.78);
+    ctx.lineTo(x + Math.cos(a) * r * 0.94, y + Math.sin(a) * r * 0.94);
+    ctx.strokeStyle = col; ctx.lineWidth = Math.max(1.5, r * 0.05); ctx.stroke();
+  }
+  star(x, y, r * 0.5, col, null);
+  ctx.restore();
+}
+
+// ---- Input: keys + touch, mapped to actions ----
+const down = new Set(), hit = new Set();
+const pressed = code => hit.has(code);
+const KEYMAP = {
+  left: ['ArrowLeft', 'KeyA'], right: ['ArrowRight', 'KeyD'],
+  attack: ['KeyJ', 'Space'], defend: ['KeyK', 'ShiftLeft', 'ShiftRight'],
+  confirm: ['Enter', 'NumpadEnter'],
+};
+const touchHold = new Map(); // pointerId -> action
+const touchTap = new Set();  // actions tapped this step
+const held = a => KEYMAP[a].some(c => down.has(c)) || [...touchHold.values()].includes(a);
+const tapped = a => KEYMAP[a].some(c => hit.has(c)) || touchTap.has(a);
+addEventListener('keydown', e => {
+  startAudio();
+  if (!e.repeat) { down.add(e.code); hit.add(e.code); }
+  if (e.code === 'Space' || e.code.startsWith('Arrow')) e.preventDefault();
+});
+addEventListener('keyup', e => down.delete(e.code));
+addEventListener('blur', () => { down.clear(); touchHold.clear(); });
+
+let ui = []; // buttons drawn this frame: {x,y,w,h, onTap} or {cx,cy,r, action}
+function toLogical(e) {
+  const b = canvas.getBoundingClientRect();
+  return { x: (e.clientX - b.left) * W / b.width, y: (e.clientY - b.top) * H / b.height };
+}
+function uiAt(p) {
+  for (let i = ui.length - 1; i >= 0; i--) {
+    const u = ui[i];
+    if (u.r ? Math.hypot(p.x - u.cx, p.y - u.cy) <= u.r * 1.15 : p.x >= u.x && p.x <= u.x + u.w && p.y >= u.y && p.y <= u.y + u.h) return u;
+  }
+  return null;
+}
+canvas.addEventListener('pointerdown', e => {
+  startAudio(); e.preventDefault();
+  try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* fine */ }
+  const u = uiAt(toLogical(e)); if (!u) return;
+  if (u.action) { touchHold.set(e.pointerId, u.action); touchTap.add(u.action); }
+  else if (u.onTap) pendingTaps.push(u.onTap);
+});
+canvas.addEventListener('pointermove', e => { // a thumb sliding between ◀ and ▶ switches direction
+  const a = touchHold.get(e.pointerId); if (a !== 'left' && a !== 'right') return;
+  const u = uiAt(toLogical(e)); if (u && (u.action === 'left' || u.action === 'right')) touchHold.set(e.pointerId, u.action);
+});
+const lift = e => touchHold.delete(e.pointerId);
+canvas.addEventListener('pointerup', lift); canvas.addEventListener('pointercancel', lift);
+canvas.addEventListener('contextmenu', e => e.preventDefault());
+let pendingTaps = [];
+
+// UI button: rounded, warm, thumb-sized. Draws and registers itself.
+function button(label, x, y, w, h, onTap, opts = {}) {
+  const pulse = opts.pulse ? 1 + Math.sin(state.t * 6) * 0.04 : 1;
+  ctx.save(); ctx.translate(x + w / 2, y + h / 2); ctx.scale(pulse, pulse);
+  rr(-w / 2, -h / 2 + 6, w, h, h / 2.6); ctx.fillStyle = opts.shade || C.goldDark; ctx.fill();
+  rr(-w / 2, -h / 2, w, h, h / 2.6); ctx.fillStyle = opts.fill || C.gold; ctx.fill();
+  ctx.lineWidth = 4; ctx.strokeStyle = '#fff'; ctx.stroke();
+  ctx.restore();
+  textBox(label, x + w / 2, y + h / 2, w - 30, opts.size || 34, opts.ink || C.ink, 1);
+  ui.push({ x, y, w, h, onTap });
+}
+function langButton() { // top right on every screen
+  const x = 1100, y = 18, w = 160, h = 96;
+  rr(x, y, w, h, 30); ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.fill();
+  ctx.lineWidth = 4; ctx.strokeStyle = C.gold; ctx.stroke();
+  text('VI', x + 44, y + h / 2, 32, lang === 'vi' ? C.red : '#9a8f86');
+  text('|', x + 80, y + h / 2, 30, '#9a8f86');
+  text('EN', x + 116, y + h / 2, 32, lang === 'en' ? C.red : '#9a8f86');
+  ui.push({ x, y, w, h, onTap: () => setLang(lang === 'vi' ? 'en' : 'vi') });
+}
+function roundIcon(x, y, r, draw, onTap) {
+  circle(x, y, r, 'rgba(255,255,255,0.85)', C.gold, 4); draw(x, y, r);
+  ui.push({ x: x - r, y: y - r, w: 2 * r, h: 2 * r, onTap });
+}
+function pauseIcon(x, y, r) { ctx.fillStyle = C.ink; rr(x - r * 0.35, y - r * 0.4, r * 0.24, r * 0.8, 4); ctx.fill(); rr(x + r * 0.11, y - r * 0.4, r * 0.24, r * 0.8, 4); ctx.fill(); }
+function speakerIcon(x, y, r) {
+  ctx.fillStyle = C.ink; ctx.beginPath();
+  ctx.moveTo(x - r * 0.45, y - r * 0.18); ctx.lineTo(x - r * 0.2, y - r * 0.18); ctx.lineTo(x + r * 0.12, y - r * 0.45);
+  ctx.lineTo(x + r * 0.12, y + r * 0.45); ctx.lineTo(x - r * 0.2, y + r * 0.18); ctx.lineTo(x - r * 0.45, y + r * 0.18); ctx.fill();
+  ctx.strokeStyle = C.ink; ctx.lineWidth = 4; ctx.lineCap = 'round';
+  if (muted) { ctx.beginPath(); ctx.moveTo(x + r * 0.25, y - r * 0.22); ctx.lineTo(x + r * 0.55, y + r * 0.22); ctx.moveTo(x + r * 0.55, y - r * 0.22); ctx.lineTo(x + r * 0.25, y + r * 0.22); ctx.stroke(); }
+  else { ctx.beginPath(); ctx.arc(x + r * 0.15, y, r * 0.3, -0.8, 0.8); ctx.stroke(); ctx.beginPath(); ctx.arc(x + r * 0.15, y, r * 0.5, -0.8, 0.8); ctx.stroke(); }
+}
+
+// ---- Audio: Web Audio tones, started on first input, mute on M ----
+let audio = null, muted = false;
+function startAudio() {
+  try {
+    if (!audio) {
+      const ac = window.GAME_AUDIO || new (window.AudioContext || window.webkitAudioContext)();
+      const out = ac.createGain(); out.gain.value = muted ? 0 : tune.volume;
+      out.connect(ac.destination); audio = { ac, out };
+    }
+    if (audio.ac.state === 'suspended') audio.ac.resume();
+  } catch (e) { /* no audio: play on silently */ }
+}
+function setMuted(m) { muted = m; if (audio) audio.out.gain.value = m ? 0 : tune.volume; }
+addEventListener('tune', () => setMuted(muted));
+function tone(freq, dur, type = 'square', vol = 0.3, slide = 0) {
+  if (!audio || muted) return;
+  const t = audio.ac.currentTime, o = audio.ac.createOscillator(), g = audio.ac.createGain();
+  o.type = type; o.frequency.setValueAtTime(freq, t);
+  if (slide) o.frequency.exponentialRampToValueAtTime(Math.max(30, freq * slide), t + dur);
+  g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+  o.connect(g).connect(audio.out); o.start(t); o.stop(t + dur);
+}
+const sfx = {
+  drum() { tone(110, 0.25, 'sine', 0.6, 0.5); tone(220, 0.08, 'triangle', 0.2); },
+  clang() { tone(880, 0.18, 'triangle', 0.25); tone(1320, 0.12, 'sine', 0.15); },
+  swoosh() { tone(500, 0.12, 'sawtooth', 0.05, 0.4); },
+  bonk() { tone(180, 0.2, 'triangle', 0.25, 0.7); },
+  chime() { tone(784, 0.2, 'sine', 0.3); setTimeout(() => tone(1046, 0.3, 'sine', 0.3), 0); },
+  soft() { tone(260, 0.25, 'triangle', 0.18, 0.85); },
+  tap() { tone(660, 0.06, 'sine', 0.15); },
+};
+
+// ---- Figures: every one drawn in code (no emoji, no plain circles) ----
+// Hero: rounded young hero, black topknot, red headband, red tunic with gold trim, staff, rattan shield.
+function drawHero(x, y, face, pose, t, s = 1) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(face * s, s);
+  ellipse(0, 4, 60, 12, 'rgba(0,0,0,0.18)');
+  const walk = pose.walk ? Math.sin(t * 14) : 0, bob = pose.walk ? Math.abs(Math.sin(t * 14)) * 4 : 0;
+  ctx.translate(0, -bob);
+  const def = pose.defend;
+  // shield on the back when not defending
+  if (!def) { ellipse(-30, -118, 14, 40, C.goldDark); }
+  // legs
+  ctx.fillStyle = C.indigo;
+  rr(-24 + walk * 8, -70, 20, 68, 8); ctx.fill(); rr(4 - walk * 8, -70, 20, 68, 8); ctx.fill();
+  ctx.fillStyle = C.ink; rr(-28 + walk * 8, -10, 28, 12, 6); ctx.fill(); rr(0 - walk * 8, -10, 28, 12, 6); ctx.fill();
+  // tunic
+  ctx.fillStyle = C.red; ctx.beginPath();
+  ctx.moveTo(-34, -150); ctx.lineTo(34, -150); ctx.lineTo(42, -62); ctx.quadraticCurveTo(0, -52, -42, -62); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = C.gold; rr(-38, -96, 76, 12, 6); ctx.fill();               // belt
+  ctx.beginPath(); ctx.moveTo(-14, -150); ctx.lineTo(0, -126); ctx.lineTo(14, -150); ctx.closePath(); ctx.fill(); // collar
+  // staff (attack) arm
+  const swing = pose.attack != null ? pose.attack : -1; // 0..1 through the swing
+  const ang = swing >= 0 ? -1.9 + swing * 2.6 : (def ? 0.9 : -0.6);
+  ctx.save(); ctx.translate(18, -128); ctx.rotate(ang);
+  ctx.fillStyle = '#8a5a2b'; rr(-6, -150, 12, 190, 6); ctx.fill();
+  ctx.fillStyle = C.gold; rr(-8, -158, 16, 18, 6); ctx.fill();
+  ctx.fillStyle = C.skin; circle(0, 0, 12, C.skin);
+  ctx.restore();
+  if (swing >= 0.2 && swing <= 0.85) { // swoosh arc
+    ctx.strokeStyle = 'rgba(255,255,255,0.8)'; ctx.lineWidth = 10; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.arc(18, -128, 150, -1.9 + 0.3, -1.9 + swing * 2.6 - 1.4 + 1.1); ctx.stroke();
+  }
+  // head
+  circle(0, -196, 44, C.skin);
+  ctx.fillStyle = C.hair; ctx.beginPath(); ctx.arc(-2, -200, 46, Math.PI * 1.02, Math.PI * 2.02); ctx.fill();
+  circle(-14, -246, 15, C.hair);                                              // topknot
+  ctx.fillStyle = C.red; rr(-46, -214, 92, 12, 6); ctx.fill();               // headband
+  const flap = Math.sin(t * 9) * 6;
+  ctx.beginPath(); ctx.moveTo(-44, -210); ctx.quadraticCurveTo(-70, -206 + flap, -84, -192 + flap); ctx.lineTo(-78, -186 + flap); ctx.quadraticCurveTo(-64, -198, -44, -200); ctx.fill();
+  // face (looks the way he faces)
+  circle(14, -190, 6, C.ink); circle(32, -190, 6, C.ink); circle(16, -192, 2, '#fff'); circle(34, -192, 2, '#fff');
+  ctx.strokeStyle = C.ink; ctx.lineWidth = 4; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(8, -204); ctx.lineTo(20, -202); ctx.moveTo(28, -202); ctx.lineTo(40, -204); ctx.stroke(); // brows
+  ctx.beginPath(); ctx.arc(24, -176, 9, 0.2, Math.PI - 0.2); ctx.stroke();  // smile
+  circle(6, -178, 6, 'rgba(240,120,110,0.5)'); circle(40, -178, 5, 'rgba(240,120,110,0.5)');
+  // rattan shield in front when defending
+  if (def) {
+    circle(46, -128, 50, '#d8a657', C.goldDark, 5);
+    circle(46, -128, 36, null, '#b8823a', 3); circle(46, -128, 22, null, '#b8823a', 3);
+    circle(46, -128, 10, C.gold, C.goldDark, 3);
+  }
+  ctx.restore();
+}
+// Enemies: three kinds, three silhouettes, muted purple-grey, grumpy-cartoon (never scary).
+function grumpyFace(fx, fy, r, dizzy, t) {
+  if (dizzy) { // swirly eyes
+    ctx.strokeStyle = C.ink; ctx.lineWidth = 3;
+    for (const ex of [fx - r * 0.3, fx + r * 0.25]) { ctx.beginPath(); ctx.arc(ex, fy, r * 0.14, t * 8, t * 8 + 5); ctx.stroke(); }
+    ctx.beginPath(); ctx.arc(fx, fy + r * 0.42, r * 0.14, 0, Math.PI * 2); ctx.stroke();
+  } else {
+    circle(fx - r * 0.3, fy, r * 0.11, C.ink); circle(fx + r * 0.25, fy, r * 0.11, C.ink);
+    ctx.strokeStyle = C.ink; ctx.lineWidth = 4; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(fx - r * 0.48, fy - r * 0.28); ctx.lineTo(fx - r * 0.12, fy - r * 0.16);
+    ctx.moveTo(fx + r * 0.42, fy - r * 0.28); ctx.lineTo(fx + r * 0.08, fy - r * 0.16); ctx.stroke();
+    ctx.beginPath(); ctx.arc(fx, fy + r * 0.5, r * 0.22, Math.PI + 0.4, -0.4); ctx.stroke(); // pout
+  }
+}
+function drawEnemy(e, t) {
+  const k = e.kind, face = e.face;
+  if (e.state === 'windup') { const p = 0.5 + 0.5 * Math.sin(t * 16); ctx.save(); ctx.globalAlpha = 0.3 + 0.25 * p; ellipse(e.x, GROUND - 130, (k === 'leader' ? 110 : 80) + p * 10, 160, C.glow); ctx.restore(); }
+  ctx.save(); ctx.translate(e.x, GROUND); ctx.scale(face, 1);
+  if (e.state === 'hurt') ctx.rotate(-0.12);
+  ellipse(0, 4, k === 'leader' ? 80 : k === 'shield' ? 66 : 50, 12, 'rgba(0,0,0,0.18)');
+  const walking = e.state === 'enter' || e.state === 'flee' || (e.state === 'approach' && e.moving);
+  const lw = walking ? Math.sin(t * (e.state === 'flee' ? 24 : 12) + e.id) : 0;
+  const lean = e.state === 'windup' ? -0.12 : e.state === 'strike' ? 0.15 : 0;
+  const weapon = e.state !== 'flee';
+  const dizzy = e.state === 'flee' || e.state === 'hurt';
+  if (k === 'spear') { // tall and thin, conical hat, long blunt spear with a pennant
+    ctx.fillStyle = C.enemyDark; rr(-18 + lw * 8, -80, 16, 78, 7); ctx.fill(); rr(2 - lw * 8, -80, 16, 78, 7); ctx.fill();
+    ctx.save(); ctx.rotate(lean);
+    ctx.fillStyle = C.enemy; rr(-26, -176, 52, 104, 18); ctx.fill();
+    ctx.fillStyle = C.steel; rr(-28, -122, 56, 10, 5); ctx.fill();
+    circle(4, -206, 32, C.skin); grumpyFace(14, -206, 32, dizzy, t);
+    ctx.fillStyle = C.steel; ctx.beginPath(); ctx.moveTo(-46, -222); ctx.lineTo(50, -222); ctx.lineTo(4, -278); ctx.closePath(); ctx.fill(); // conical hat
+    if (weapon) {
+      const reach = e.state === 'strike' ? 40 : e.state === 'windup' ? -30 : 0;
+      ctx.fillStyle = '#7a5530'; rr(-40 + reach, -140, 150, 10, 5); ctx.fill();
+      circle(114 + reach, -135, 12, C.steel);                                  // blunt rounded tip
+      ctx.fillStyle = '#9b8fc0'; ctx.beginPath(); ctx.moveTo(80 + reach, -140); ctx.lineTo(100 + reach, -164); ctx.lineTo(66 + reach, -158); ctx.closePath(); ctx.fill();
+    } else { ctx.fillStyle = C.skin; circle(-30, -190, 10, C.skin); circle(36, -194, 10, C.skin); } // hands up
+    ctx.restore();
+  } else if (k === 'shield') { // short and wide, round cap with ear flaps, big square shield
+    ctx.fillStyle = C.enemyDark; rr(-34 + lw * 8, -64, 26, 62, 9); ctx.fill(); rr(8 - lw * 8, -64, 26, 62, 9); ctx.fill();
+    ctx.save(); ctx.rotate(lean);
+    ctx.fillStyle = C.enemy; ctx.beginPath(); ctx.ellipse(0, -112, 58, 56, 0, 0, Math.PI * 2); ctx.fill();
+    circle(0, -184, 34, C.skin); grumpyFace(10, -182, 34, dizzy, t);
+    ctx.fillStyle = C.steel; ctx.beginPath(); ctx.arc(0, -192, 38, Math.PI, 0); ctx.fill();
+    rr(-40, -196, 14, 34, 6); ctx.fill(); rr(26, -196, 14, 34, 6); ctx.fill(); // ear flaps
+    if (weapon) {
+      const push = e.state === 'strike' ? 34 : e.state === 'windup' ? -16 : 0;
+      ctx.fillStyle = C.teal; rr(34 + push, -168, 46, 120, 10); ctx.fill();
+      ctx.strokeStyle = '#2b4f4f'; ctx.lineWidth = 5; ctx.stroke();
+      for (const ry of [-150, -108, -66]) circle(57 + push, ry, 5, '#c8d3d3');
+    } else { circle(-40, -160, 12, C.skin); circle(44, -164, 12, C.skin); }
+    ctx.restore();
+  } else { // leader: big and broad, cape, helmet with a tall plume, big rounded club
+    ctx.fillStyle = C.enemyDark; rr(-38 + lw * 8, -90, 30, 88, 10); ctx.fill(); rr(8 - lw * 8, -90, 30, 88, 10); ctx.fill();
+    ctx.save(); ctx.rotate(lean);
+    ctx.fillStyle = '#3b3a6b'; ctx.beginPath(); ctx.moveTo(-50, -220); ctx.lineTo(-86, -84); ctx.lineTo(-20, -92); ctx.closePath(); ctx.fill(); // cape
+    ctx.fillStyle = C.enemy; rr(-56, -224, 112, 140, 34); ctx.fill();
+    ctx.fillStyle = C.steel; rr(-44, -196, 88, 64, 14); ctx.fill();            // breastplate
+    ctx.fillStyle = C.gold; circle(0, -164, 10, C.gold);
+    circle(6, -262, 42, C.skin); grumpyFace(18, -260, 42, dizzy, t);
+    ctx.fillStyle = C.steel; ctx.beginPath(); ctx.arc(6, -272, 46, Math.PI, 0); ctx.fill();
+    ctx.fillStyle = '#c0733a'; ctx.beginPath(); ctx.moveTo(-4, -316); ctx.quadraticCurveTo(-30, -380, -60, -360); ctx.quadraticCurveTo(-30, -350, -14, -312); ctx.fill(); // plume
+    if (weapon) {
+      const sw = e.state === 'windup' ? -1.2 : e.state === 'strike' ? 0.6 : -0.4;
+      ctx.save(); ctx.translate(46, -170); ctx.rotate(sw);
+      ctx.fillStyle = '#7a5530'; rr(-7, -20, 14, 130, 7); ctx.fill();
+      ctx.fillStyle = '#8f6a3e'; ctx.beginPath(); ctx.ellipse(0, 120, 26, 34, 0, 0, Math.PI * 2); ctx.fill(); // rounded club head
+      ctx.restore();
+    } else { circle(-60, -240, 14, C.skin); circle(70, -244, 14, C.skin); }
+    ctx.restore();
+  }
+  ctx.restore();
+  const topY = GROUND - (k === 'leader' ? 360 : k === 'shield' ? 240 : 290);
+  if (dizzy) for (let i = 0; i < 3; i++) { const a = t * 5 + i * 2.1; star(e.x + Math.cos(a) * 34, topY + 20 + Math.sin(a) * 10, 9, C.glow, C.goldDark, a); }
+  if (e.state === 'windup') { // telegraph: pulsing glow ring + a drawn "!" bubble
+    const bx = e.x, by = topY - 20;
+    circle(bx, by, 30, C.glow, C.goldDark, 4);
+    ctx.fillStyle = C.ink; rr(bx - 5, by - 18, 10, 24, 5); ctx.fill(); circle(bx, by + 14, 5.5, C.ink);
+  }
+}
+function drawDropped(d) { // a dropped weapon lying on the path (it fades)
+  ctx.save(); ctx.globalAlpha = Math.min(1, d.life); ctx.translate(d.x, GROUND - 8); ctx.rotate(d.rot);
+  if (d.kind === 'spear') { ctx.fillStyle = '#7a5530'; rr(-90, -5, 180, 10, 5); ctx.fill(); circle(92, 0, 11, C.steel); }
+  else if (d.kind === 'shield') { ctx.fillStyle = C.teal; rr(-60, -16, 120, 32, 8); ctx.fill(); }
+  else { ctx.fillStyle = '#7a5530'; rr(-60, -6, 120, 12, 6); ctx.fill(); ctx.fillStyle = '#8f6a3e'; ctx.beginPath(); ctx.ellipse(70, 0, 30, 22, 0, 0, Math.PI * 2); ctx.fill(); }
+  ctx.restore();
+}
+// Hand hint: a cartoon pointing hand that bobs toward a control (plan review 1: not text).
+function hand(x, y, t) {
+  const b = Math.sin(t * 6) * 12;
+  ctx.save(); ctx.translate(x, y - 70 - b);
+  ctx.fillStyle = '#fff'; ctx.strokeStyle = C.ink; ctx.lineWidth = 4;
+  rr(-8, -10, 16, 44, 8); ctx.fill(); ctx.stroke();                            // pointing finger (down)
+  rr(-26, -48, 52, 48, 18); ctx.fill(); ctx.stroke();                          // palm
+  rr(-30, -42, 14, 30, 7); ctx.fill(); ctx.stroke();                           // thumb
+  ctx.fillStyle = C.red; rr(-22, -66, 44, 20, 8); ctx.fill();                  // cuff
+  ctx.restore();
+}
+function arrowDown(x, y, t, col = C.glow) {
+  const b = Math.sin(t * 8) * 10;
+  ctx.save(); ctx.translate(x, y + b); ctx.fillStyle = col; ctx.strokeStyle = C.ink; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.moveTo(-14, -40); ctx.lineTo(14, -40); ctx.lineTo(14, -10); ctx.lineTo(30, -10); ctx.lineTo(0, 22); ctx.lineTo(-30, -10); ctx.lineTo(-14, -10); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.restore();
+}
+// Quiz answer icons (plan review 1: every answer has a picture). Generic objects, no history claim.
+const ICONS = {
+  drum(x, y, s) { ellipse(x, y + s * 0.3, s * 0.7, s * 0.18, '#8a5a2b'); ctx.fillStyle = '#b07a3a'; rr(x - s * 0.7, y - s * 0.25, s * 1.4, s * 0.55, 10); ctx.fill(); ellipse(x, y - s * 0.25, s * 0.7, s * 0.2, '#e0a85a'); drumMotif(x, y - s * 0.25, s * 0.18, '#8a5a2b'); },
+  boat(x, y, s) { ctx.fillStyle = '#9a6a3a'; ctx.beginPath(); ctx.moveTo(x - s * 0.8, y); ctx.quadraticCurveTo(x, y + s * 0.5, x + s * 0.8, y); ctx.closePath(); ctx.fill(); ctx.fillStyle = C.river; rr(x - s * 0.9, y + s * 0.25, s * 1.8, s * 0.15, 8); ctx.fill(); ctx.fillStyle = C.cream; ctx.beginPath(); ctx.moveTo(x, y - s * 0.7); ctx.lineTo(x + s * 0.45, y - s * 0.05); ctx.lineTo(x, y - s * 0.05); ctx.closePath(); ctx.fill(); ctx.fillStyle = '#6a4a2a'; rr(x - 3, y - s * 0.75, 6, s * 0.75, 3); ctx.fill(); },
+  lotus(x, y, s) { for (const a of [-0.9, -0.45, 0, 0.45, 0.9]) { ctx.save(); ctx.translate(x, y + s * 0.2); ctx.rotate(a); ctx.fillStyle = a === 0 ? '#f48fb1' : '#f8bbd0'; ctx.beginPath(); ctx.ellipse(0, -s * 0.4, s * 0.17, s * 0.42, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore(); } ellipse(x, y + s * 0.38, s * 0.7, s * 0.12, C.leafDark); },
+  flag(x, y, s, col = C.red) { ctx.fillStyle = '#6a4a2a'; rr(x - s * 0.5, y - s * 0.7, 8, s * 1.4, 4); ctx.fill(); ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(x - s * 0.45, y - s * 0.68); ctx.quadraticCurveTo(x + s * 0.1, y - s * 0.8, x + s * 0.7, y - s * 0.6); ctx.lineTo(x + s * 0.7, y - s * 0.05); ctx.quadraticCurveTo(x + s * 0.1, y - s * 0.2, x - s * 0.45, y - s * 0.1); ctx.closePath(); ctx.fill(); },
+  flag2(x, y, s) { ICONS.flag(x, y, s, C.gold); },
+  flag3(x, y, s) { ICONS.flag(x, y, s, '#3f9a8a'); },
+  child(x, y, s) { // a small child (no history claim): round head, short tunic
+    ctx.fillStyle = C.indigo; rr(x - s * 0.2, y + s * 0.05, s * 0.16, s * 0.45, 6); ctx.fill(); rr(x + s * 0.04, y + s * 0.05, s * 0.16, s * 0.45, 6); ctx.fill();
+    ctx.fillStyle = C.red; rr(x - s * 0.3, y - s * 0.4, s * 0.6, s * 0.55, 14); ctx.fill();
+    circle(x, y - s * 0.62, s * 0.3, C.skin); ctx.fillStyle = C.hair; ctx.beginPath(); ctx.arc(x, y - s * 0.66, s * 0.31, Math.PI, 0); ctx.fill();
+    circle(x - s * 0.1, y - s * 0.6, 4, C.ink); circle(x + s * 0.1, y - s * 0.6, 4, C.ink);
+    ctx.strokeStyle = C.ink; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(x, y - s * 0.52, s * 0.08, 0.3, Math.PI - 0.3); ctx.stroke(); },
+  hourglass(x, y, s) {
+    ctx.fillStyle = '#8a5a2b'; rr(x - s * 0.5, y - s * 0.75, s, s * 0.12, 6); ctx.fill(); rr(x - s * 0.5, y + s * 0.55, s, s * 0.12, 6); ctx.fill();
+    ctx.fillStyle = '#d7eef5'; ctx.beginPath(); ctx.moveTo(x - s * 0.38, y - s * 0.63); ctx.lineTo(x + s * 0.38, y - s * 0.63); ctx.lineTo(x + s * 0.06, y - s * 0.04);
+    ctx.lineTo(x + s * 0.38, y + s * 0.55); ctx.lineTo(x - s * 0.38, y + s * 0.55); ctx.lineTo(x - s * 0.06, y - s * 0.04); ctx.closePath(); ctx.fill(); ctx.strokeStyle = '#8a5a2b'; ctx.lineWidth = 4; ctx.stroke();
+    ctx.fillStyle = C.gold; ctx.beginPath(); ctx.moveTo(x - s * 0.3, y + s * 0.55); ctx.lineTo(x + s * 0.3, y + s * 0.55); ctx.lineTo(x, y + s * 0.22); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(x - s * 0.22, y - s * 0.45); ctx.lineTo(x + s * 0.22, y - s * 0.45); ctx.lineTo(x, y - s * 0.12); ctx.closePath(); ctx.fill(); },
+  bed(x, y, s) {
+    ctx.fillStyle = '#8a5a2b'; rr(x - s * 0.8, y - s * 0.35, s * 0.14, s * 0.8, 5); ctx.fill(); rr(x + s * 0.66, y - s * 0.05, s * 0.14, s * 0.5, 5); ctx.fill();
+    ctx.fillStyle = '#a8794a'; rr(x - s * 0.8, y + s * 0.05, s * 1.6, s * 0.18, 6); ctx.fill();
+    ctx.fillStyle = '#fff'; rr(x - s * 0.62, y - s * 0.12, s * 0.38, s * 0.2, 10); ctx.fill();
+    ctx.fillStyle = '#7aa8d8'; rr(x - s * 0.3, y - s * 0.16, s * 0.96, s * 0.24, 10); ctx.fill(); },
+  orange(x, y, s) { circle(x, y, s * 0.5, '#f39a1e', '#c97010', 4); circle(x - s * 0.16, y - s * 0.16, s * 0.1, 'rgba(255,255,255,0.45)');
+    ctx.fillStyle = C.leafDark; ctx.beginPath(); ctx.ellipse(x + s * 0.14, y - s * 0.56, s * 0.2, s * 0.08, -0.5, 0, Math.PI * 2); ctx.fill(); },
+  banana(x, y, s) { ctx.fillStyle = '#f5d33a'; ctx.strokeStyle = '#b8960f'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x - s * 0.6, y - s * 0.3);
+    ctx.quadraticCurveTo(x - s * 0.3, y + s * 0.55, x + s * 0.6, y - s * 0.15); ctx.quadraticCurveTo(x - s * 0.15, y + s * 0.25, x - s * 0.6, y - s * 0.3); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#6a4a2a'; rr(x - s * 0.68, y - s * 0.4, s * 0.12, s * 0.14, 3); ctx.fill(); },
+  coconut(x, y, s) { circle(x, y, s * 0.5, '#7a5032', '#5a3820', 4); circle(x - s * 0.12, y - s * 0.12, s * 0.06, '#3e2614'); circle(x + s * 0.1, y - s * 0.12, s * 0.06, '#3e2614'); circle(x, y + s * 0.06, s * 0.06, '#3e2614'); },
+  helmet(x, y, s, v = 0) { // three distinct helmet shapes, no faces (art bible §3)
+    ctx.fillStyle = C.steel;
+    if (v === 0) { ctx.beginPath(); ctx.arc(x, y + s * 0.1, s * 0.5, Math.PI, 0); ctx.fill(); ctx.fillStyle = '#c0733a'; ctx.beginPath(); ctx.moveTo(x, y - s * 0.4); ctx.quadraticCurveTo(x - s * 0.2, y - s * 0.9, x - s * 0.45, y - s * 0.75); ctx.quadraticCurveTo(x - s * 0.2, y - s * 0.65, x - s * 0.06, y - s * 0.38); ctx.fill(); rr(x - s * 0.6, y + s * 0.05, s * 1.2, s * 0.14, 6); ctx.fillStyle = '#6f758a'; ctx.fill(); }
+    else if (v === 1) { ctx.beginPath(); ctx.moveTo(x - s * 0.7, y + s * 0.2); ctx.lineTo(x + s * 0.7, y + s * 0.2); ctx.lineTo(x, y - s * 0.6); ctx.closePath(); ctx.fill(); }
+    else { rr(x - s * 0.45, y - s * 0.45, s * 0.9, s * 0.65, 14); ctx.fill(); ctx.fillStyle = '#6f758a'; rr(x - s * 0.55, y + s * 0.1, s * 0.22, s * 0.4, 6); ctx.fill(); rr(x + s * 0.33, y + s * 0.1, s * 0.22, s * 0.4, 6); ctx.fill(); } },
+  helmet2(x, y, s) { ICONS.helmet(x, y, s, 1); },
+  helmet3(x, y, s) { ICONS.helmet(x, y, s, 2); },
+  house(x, y, s) { ctx.fillStyle = '#d9b26a'; ctx.beginPath(); ctx.moveTo(x - s * 0.85, y - s * 0.05); ctx.quadraticCurveTo(x, y - s * 0.95, x + s * 0.85, y - s * 0.05); ctx.closePath(); ctx.fill(); ctx.fillStyle = '#a8794a'; rr(x - s * 0.6, y - s * 0.05, s * 1.2, s * 0.45, 6); ctx.fill(); ctx.fillStyle = '#6a4a2a'; rr(x - s * 0.12, y + s * 0.08, s * 0.24, s * 0.32, 4); ctx.fill(); ctx.fillStyle = '#6a4a2a'; for (const px of [-0.55, 0.5]) { rr(x + s * px, y + s * 0.4, 7, s * 0.2, 3); ctx.fill(); } },
+  bamboo(x, y, s) { for (const [dx, h] of [[-0.35, 1.3], [0, 1.6], [0.35, 1.1]]) { ctx.fillStyle = C.leaf; rr(x + s * dx - 9, y + s * 0.6 - s * h, 18, s * h, 8); ctx.fill(); ctx.fillStyle = C.leafDark; for (let j = 1; j < 4; j++) { rr(x + s * dx - 10, y + s * 0.6 - s * h * j / 4, 20, 5, 2); ctx.fill(); } } ctx.fillStyle = C.leafDark; ctx.beginPath(); ctx.ellipse(x + s * 0.25, y - s * 0.75, s * 0.3, s * 0.08, -0.5, 0, Math.PI * 2); ctx.fill(); },
+};
+
+// ---- World ----
+const GROUND = 470;          // the path's line (feet); thumb pads sit below it
+const BEAT0 = 900, BEAT_GAP = 1600;
+const beats = () => MISSION.beats;
+const beatX = i => BEAT0 + i * BEAT_GAP;
+const HP = { spear: () => tune.hpSpear, shield: () => tune.hpShield, leader: () => tune.hpLeader };
+
+function drawBackground(camX, theme, t) {
+  const g = ctx.createLinearGradient(0, 0, 0, GROUND);
+  g.addColorStop(0, '#ffd59a'); g.addColorStop(0.55, '#ffeccc'); g.addColorStop(1, '#cfeef2');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, GROUND + 10);
+  // sun with the bronze-drum ring motif
+  const sx = 980 - camX * 0.03;
+  circle(sx, 190, 54, 'rgba(255,207,90,0.8)'); drumMotif(sx, 190, 46, 'rgba(201,138,18,0.4)');
+  // far karst mountains
+  ctx.fillStyle = '#a9cfc3';
+  for (let i = -1; i < 8; i++) {
+    const bx = i * 260 - (camX * 0.15) % 260;
+    ctx.beginPath(); ctx.moveTo(bx - 40, GROUND - 60); ctx.quadraticCurveTo(bx + 20, GROUND - 330 - (i % 3) * 30, bx + 90, GROUND - 260 + (i % 2) * 40);
+    ctx.quadraticCurveTo(bx + 150, GROUND - 300, bx + 230, GROUND - 60); ctx.fill();
+  }
+  // mid layer by theme
+  ctx.fillStyle = '#8fc77a'; ctx.fillRect(0, GROUND - 70, W, 80);
+  for (let i = -1; i < 9; i++) {
+    const bx = i * 180 - (camX * 0.45) % 180;
+    if (theme === 'village' && i % 2 === 0) ICONS.house(bx + 60, GROUND - 92, 80);
+    else if (theme === 'bamboo') ICONS.bamboo(bx + 50, GROUND - 120, 90);
+    else if (theme === 'river' && i % 3 === 0) ICONS.boat(bx + 60, GROUND - 98, 55);
+    else if (theme === 'camp' && i % 2 === 1) { ctx.fillStyle = '#c9b38a'; ctx.beginPath(); ctx.moveTo(bx, GROUND - 70); ctx.lineTo(bx + 60, GROUND - 160); ctx.lineTo(bx + 120, GROUND - 70); ctx.closePath(); ctx.fill(); ICONS.flag(bx + 60, GROUND - 190, 40); }
+    else { // areca palm
+      ctx.fillStyle = '#8a6a44'; rr(bx + 52, GROUND - 230, 10, 160, 5); ctx.fill();
+      ctx.fillStyle = C.leafDark;
+      for (const a of [-2.4, -1.9, -1.2, -0.7]) { ctx.save(); ctx.translate(bx + 57, GROUND - 230); ctx.rotate(a); ctx.beginPath(); ctx.ellipse(34, 0, 38, 9, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+    }
+  }
+  if (theme === 'river') { ctx.fillStyle = C.river; ctx.fillRect(0, GROUND - 30, W, 26); }
+  // the path
+  ctx.fillStyle = C.leaf; ctx.fillRect(0, GROUND - 6, W, 14);
+  ctx.fillStyle = C.earth; ctx.fillRect(0, GROUND + 8, W, H - GROUND);
+  ctx.fillStyle = C.earthDark;
+  for (let i = -1; i < 12; i++) { const px = i * 130 - camX % 130; ellipse(px, GROUND + 40 + (i % 3) * 18, 18, 6, C.earthDark); }
+  // near-ground lotus tufts
+  for (let i = -1; i < 6; i++) { const px = i * 340 - (camX * 1.0) % 340 + 120; ICONS.lotus(px, GROUND + 4, 26); }
+}
+
+// ---- State ----
+let scene, state;
+function newState() {
+  return {
+    t: 0, score: 0, gained: '',
+    hero: { x: 300, face: 1, atk: -1, cool: 0, hurt: 0, def: false, walk: false },
+    cam: 0, beat: 0, phase: 'walk', lockX: 0, queue: [], spawnT: 0, endT: 0,
+    enemies: [], dropped: [], parts: [], pops: [], nextId: 1,
+    stall: 0, idle: 0, tut: { moved: false, hit: false, blocked: false, windupSeen: false, enemySeen: false },
+    quiz: null, ut: 0, stars: 0, retries: 0, fromPlay: false,
+  };
+}
+function reset() {
+  seed = Number(params.get('seed')) || CONFIG.seed;
+  state = newState();
+}
+function pop(key, x, y, col) { x = Math.max(state.cam + 90, Math.min(state.cam + W - 90, x)); state.pops.push({ s: S(key), x, y, life: 0.9, col }); }
+function burst(x, y, n, col) {
+  for (let i = 0; i < n; i++) {
+    const a = rng() * Math.PI * 2, v = 160 + rng() * 260;
+    state.parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 120, life: 0.5 + rng() * 0.4, col, r: 8 + rng() * 8, rot: rng() * 6 });
+  }
+}
+
+// ---- The mission (play) ----
+const BEAT_TYPES = ['fight']; // TASK-003b adds 'walk', 'hold', 'training', 'reach' after TASK-004 sign-off
+function startBeat(i) {
+  const b = beats()[i];
+  if (!BEAT_TYPES.includes(b.type || 'fight')) { console.warn(`beat ${i + 1}: type '${b.type}' is not built yet (TASK-003b); playing it as a fight`); events.push({ type: 'beat-type-not-built', beat: i + 1, beatType: b.type }); }
+  state.phase = 'fight'; state.lockX = beatX(i) - 500; state.cam = state.lockX;
+  state.queue = b.enemies.map((k, j) => ({ kind: k, left: (b.fromLeft || []).includes(j) }));
+  state.spawnT = 0.4; state.stall = 0; state.endT = 0;
+  events.push({ type: 'beat', beat: i + 1 });
+}
+function spawn(q) {
+  const left = q.left, x = left ? state.lockX - 80 : state.lockX + W + 80;
+  state.enemies.push({ id: state.nextId++, kind: q.kind, x, face: left ? 1 : -1, state: 'enter', t: 0, hits: 0, kb: 0, moving: true });
+  state.tut.enemySeen = true;
+}
+function updateEnemies(dt) {
+  const h = state.hero;
+  const speed = k => tune.enemySpeed * (k === 'leader' ? tune.leaderSpeedMul : 1);
+  for (const e of state.enemies) {
+    e.t += dt;
+    if (e.kb) { const m = e.kb * dt / 0.25; e.x += m; e.kb -= m; if (Math.abs(e.kb) < 2) e.kb = 0; }
+    const side = Math.sign(e.x - h.x) || 1, dist = Math.abs(e.x - h.x);
+    if (e.state !== 'flee') e.face = -side;
+    // Only the nearest enemy on each side may strike; the others wait a little further back.
+    const sameSide = state.enemies.filter(o => o.state !== 'flee' && Math.sign(o.x - h.x) === side).sort((a, b) => Math.abs(a.x - h.x) - Math.abs(b.x - h.x));
+    const rank = sameSide.indexOf(e);
+    const stand = tune.enemyReach - 10 + Math.max(0, rank) * 150;
+    switch (e.state) {
+      case 'enter': case 'approach': {
+        const target = h.x + side * stand, dx = target - e.x;
+        e.moving = Math.abs(dx) > 6;
+        if (e.moving) e.x += Math.sign(dx) * Math.min(Math.abs(dx), (e.state === 'enter' || Math.abs(dx) > 260 ? tune.enterSpeed : speed(e.kind)) * dt);
+        if (e.state === 'enter' && Math.abs(dx) < 260) { e.state = 'approach'; e.t = 0; }
+        if (e.state === 'approach' && rank === 0 && dist <= tune.enemyReach + 20 && e.t > 0.5 && !state.enemies.some(o => o !== e && (o.state === 'windup' || o.state === 'strike'))) {
+          e.state = 'windup'; e.t = 0; state.tut.windupSeen = true;
+        }
+        break;
+      }
+      case 'windup':
+        if (e.t >= tune.telegraph * (e.kind === 'leader' ? 1.2 : 1)) {
+          e.state = 'strike'; e.t = 0;
+          if (dist <= tune.enemyReach + 40) {
+            if (h.def) { e.kb = side * 70; sfx.clang(); burst((e.x + h.x) / 2, GROUND - 140, 6, '#ffffff'); pop('blocked', h.x, GROUND - 300, C.indigo); state.tut.blocked = true; events.push({ type: 'block' }); }
+            else { h.x -= side * tune.heroPushback; h.hurt = tune.hurtTime; sfx.bonk(); pop('oof', h.x, GROUND - 300, C.red); events.push({ type: 'pushed' }); }
+          }
+        }
+        break;
+      case 'strike': if (e.t >= tune.strikeTime) { e.state = 'rest'; e.t = 0; } break;
+      case 'rest': {
+        const dx = h.x + side * stand - e.x; if (Math.abs(dx) > 6) e.x += Math.sign(dx) * Math.min(Math.abs(dx), speed(e.kind) * 0.5 * dt);
+        if (e.t >= tune.enemyRest) { e.state = 'approach'; e.t = 0.5; }
+        break;
+      }
+      case 'hurt': if (e.t >= 0.35) { e.state = 'approach'; e.t = 0; } break;
+      case 'flee': e.x += e.face * tune.fleeSpeed * dt; break;
+    }
+  }
+  state.enemies = state.enemies.filter(e => !(e.state === 'flee' && (e.x < state.lockX - 250 || e.x > state.lockX + W + 250)));
+}
+function heroAttack() {
+  const h = state.hero;
+  sfx.swoosh();
+  let any = false;
+  for (const e of state.enemies) {
+    if (e.state === 'flee') continue;
+    const dx = e.x - h.x;
+    if ((Math.sign(dx) === h.face && Math.abs(dx) <= tune.attackRange) || Math.abs(dx) < 50) {
+      any = true; e.hits++;
+      const knock = tune.knockback * (e.kind === 'leader' ? tune.leaderKnockMul : 1);
+      e.kb = Math.sign(dx || h.face) * knock;
+      burst(e.x - Math.sign(dx || 1) * 30, GROUND - 160, 8, C.glow); sfx.drum();
+      state.stall = 0; state.tut.hit = true; state.score++;
+      if (e.hits >= HP[e.kind]()) {
+        e.state = 'flee'; e.face = Math.sign(dx || h.face); e.t = 0;
+        state.dropped.push({ x: e.x, kind: e.kind, rot: (rng() - 0.5) * 0.3, life: 4 });
+        events.push({ type: 'flee', kind: e.kind });
+      } else { e.state = 'hurt'; e.t = 0; }
+    }
+  }
+  return any;
+}
+function updatePlay(dt) {
+  const h = state.hero, fight = state.phase === 'fight', canAct = state.phase !== 'caption';
+  state.t += dt;
+  h.def = canAct && held('defend');
+  h.cool = Math.max(0, h.cool - dt); h.hurt = Math.max(0, h.hurt - dt);
+  if (h.atk >= 0) { h.atk += dt / tune.attackTime; if (h.atk >= 0.45 && !h.hitDone) { heroAttack(); h.hitDone = true; } if (h.atk >= 1) { h.atk = -1; h.cool = tune.attackCooldown; } }
+  if (canAct && !h.def && h.atk < 0 && h.cool <= 0 && tapped('attack')) { h.atk = 0; h.hitDone = false; }
+  let mv = 0;
+  if (canAct && !h.def) { if (held('left')) mv -= 1; if (held('right')) mv += 1; }
+  h.walk = mv !== 0;
+  if (mv) { h.face = mv; h.x += mv * tune.heroSpeed * dt * (h.atk >= 0 ? 0.4 : 1); if (mv > 0) state.tut.moved = true; state.idle = 0; } else state.idle += dt;
+  // camera + bounds
+  if (fight || state.phase === 'caption') { h.x = Math.max(state.lockX + 70, Math.min(state.lockX + W - 70, h.x)); state.cam = state.lockX; }
+  else { h.x = Math.max(state.cam + 70, h.x); state.cam = Math.max(state.cam, h.x - 460); }
+  if (state.phase === 'walk' && state.beat < beats().length && h.x >= beatX(state.beat)) startBeat(state.beat);
+  if (fight) {
+    state.stall += dt;
+    state.spawnT -= dt;
+    const active = state.enemies.filter(e => e.state !== 'flee').length;
+    if (state.queue.length && active < beats()[state.beat].maxActive && state.spawnT <= 0) { spawn(state.queue.shift()); state.spawnT = tune.spawnGap; }
+    updateEnemies(dt);
+    if (!state.queue.length && !state.enemies.length) {
+      state.endT += dt;
+      if (state.endT >= tune.endPause) { state.phase = 'caption'; events.push({ type: 'caption', beat: state.beat + 1 }); }
+    }
+  } else updateEnemies(dt);
+  if (state.phase === 'caption' && tapped('confirm')) captionNext();
+  // effects
+  for (const p of state.parts) { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 900 * dt; p.life -= dt; p.rot += dt * 6; }
+  state.parts = state.parts.filter(p => p.life > 0);
+  for (const p of state.pops) { p.y -= 60 * dt; p.life -= dt; }
+  state.pops = state.pops.filter(p => p.life > 0);
+  for (const d of state.dropped) d.life -= dt * 0.25;
+  state.dropped = state.dropped.filter(d => d.life > 0);
+}
+function captionNext() {
+  sfx.tap();
+  state.beat++;
+  if (state.beat >= beats().length) { scene = 'ending'; state.t = 0; events.push({ type: 'ending' }); return; }
+  state.phase = 'walk';
+}
+function drawPlay() {
+  const h = state.hero, t = state.t, cam = state.cam;
+  const b = beats()[Math.min(state.beat, beats().length - 1)];
+  ui = [];
+  drawBackground(cam, b.theme, t);
+  ctx.save(); ctx.translate(-cam, 0);
+  for (const d of state.dropped) drawDropped(d);
+  for (const e of state.enemies) drawEnemy(e, t);
+  if (!(h.hurt > 0 && Math.floor(t * 20) % 2)) drawHero(h.x, GROUND, h.face, { walk: h.walk, defend: h.def, attack: h.atk >= 0 ? h.atk : null }, t);
+  for (const p of state.parts) star(p.x, p.y, p.r, p.col, C.goldDark, p.rot);
+  for (const p of state.pops) { ctx.globalAlpha = Math.min(1, p.life * 2); text(p.s, p.x, p.y, 40, p.col); ctx.globalAlpha = 1; }
+  // stall hint: an arrow over the nearest enemy (plan review 2)
+  const stalled = state.phase === 'fight' && state.stall > tune.hintDelay;
+  if (stalled) { const near = state.enemies.filter(e => e.state !== 'flee').sort((a, b) => Math.abs(a.x - h.x) - Math.abs(b.x - h.x))[0]; if (near) arrowDown(near.x, GROUND - 330, t); }
+  ctx.restore();
+  // "go on" arrow after a caption
+  if (state.phase === 'walk' && state.beat > 0) { const p = Math.sin(t * 6) * 10; ctx.save(); ctx.translate(1060 + p, 300); ctx.fillStyle = C.gold; ctx.strokeStyle = '#fff'; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(-60, -22); ctx.lineTo(10, -22); ctx.lineTo(10, -50); ctx.lineTo(64, 0); ctx.lineTo(10, 50); ctx.lineTo(10, 22); ctx.lineTo(-60, 22); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); text(S('go'), 1060, 380, 32, C.ink); }
+  // HUD: pause, mute, beat medallions, language
+  roundIcon(66, 66, 48, pauseIcon, () => { scene = 'pause'; });
+  roundIcon(176, 66, 48, speakerIcon, () => setMuted(!muted));
+  const n = beats().length;
+  for (let i = 0; i < n; i++) {
+    const x = W / 2 - (n - 1) * 45 + i * 90, done = i < state.beat || (i === state.beat && state.phase === 'caption');
+    circle(x, 60, 30, done ? C.gold : 'rgba(255,255,255,0.75)', C.goldDark, 4);
+    drumMotif(x, 60, 22, done ? C.ink : 'rgba(58,42,31,0.35)');
+  }
+  langButton();
+  // thumb pads (≥ 72 CSS px at 640x360: radius 80 logical = 80 px across at scale 0.5)
+  const showPads = state.phase !== 'caption';
+  if (showPads) {
+    pad(140, 610, 80, 'left', a => arrowIcon(a, -1), held('left'), false);
+    pad(330, 610, 80, 'right', a => arrowIcon(a, 1), held('right'), (!state.tut.moved && state.beat === 0) || (state.phase === 'walk' && state.idle > tune.hintDelay));
+    pad(950, 625, 80, 'defend', shieldIcon, held('defend'), false, S('defend'));
+    pad(1150, 590, 92, 'attack', staffIcon, held('attack'), stalled, S('attack'));
+    // first-time hands (plan review 1)
+    if (!state.tut.moved && state.beat === 0 && state.phase === 'walk') hand(330, 540, t);
+    else if (state.tut.enemySeen && !state.tut.hit) hand(1150, 510, t);
+    else if (state.tut.windupSeen && !state.tut.blocked && state.enemies.some(e => e.state === 'windup')) hand(950, 555, t);
+  }
+  if (state.phase === 'caption') captionPanel(L(CONTENT.beats[state.beat] || CONTENT.beats[0]), S('beat') + ' ' + (state.beat + 1), captionNext);
+}
+function pad(cx, cy, r, action, icon, on, pulse, label) {
+  const p = pulse ? 1 + 0.08 * Math.sin(state.t * 10) : 1;
+  ctx.save(); ctx.translate(cx, cy); ctx.scale(p, p);
+  if (pulse) circle(0, 0, r + 14, 'rgba(255,226,74,0.55)');
+  circle(0, 6, r, 'rgba(58,42,31,0.35)');
+  circle(0, on ? 4 : 0, r, on ? C.gold : 'rgba(255,246,227,0.88)', on ? C.goldDark : C.gold, 6);
+  ctx.translate(0, on ? 4 : 0);
+  ctx.save(); if (label) ctx.translate(0, -r * 0.14); icon({ r }); ctx.restore();
+  if (label) text(label, 0, r * 0.62, 24, C.ink);
+  ctx.restore();
+  ui.push({ cx, cy, r, action });
+}
+function arrowIcon(a, dir) { const r = a.r; ctx.fillStyle = C.ink; ctx.beginPath(); ctx.moveTo(dir * r * 0.45, 0); ctx.lineTo(-dir * r * 0.25, -r * 0.4); ctx.lineTo(-dir * r * 0.25, r * 0.4); ctx.closePath(); ctx.fill(); }
+function shieldIcon(a) { const r = a.r; circle(0, -4, r * 0.55, '#d8a657', C.goldDark, 4); circle(0, -4, r * 0.35, null, '#b8823a', 3); circle(0, -4, r * 0.14, C.gold, C.goldDark, 3); }
+function staffIcon(a) { const r = a.r; ctx.save(); ctx.rotate(-0.8); ctx.fillStyle = '#8a5a2b'; rr(-6, -r * 0.6, 12, r * 1.1, 6); ctx.fill(); ctx.fillStyle = C.gold; rr(-8, -r * 0.66, 16, 16, 6); ctx.fill(); ctx.restore(); ctx.strokeStyle = C.red; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.beginPath(); ctx.arc(0, 0, r * 0.5, -2.6, -1.2); ctx.stroke(); }
+function captionPanel(line, head, onNext) {
+  rr(160, 140, 960, 300, 36); ctx.fillStyle = C.panel; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = C.gold; ctx.stroke();
+  drumMotif(230, 210, 44, 'rgba(242,182,50,0.8)'); drumMotif(1050, 210, 44, 'rgba(242,182,50,0.8)');
+  text(head, W / 2, 190, 30, C.gold);
+  textBox(line, W / 2, 285, 760, 40, '#fff', 2);
+  button(S('next'), W / 2 - 150, 470, 300, 110, onNext, { pulse: true });
+}
+
+// ---- Story panels: intro and ending (one short sentence, a picture) ----
+function storyPicture(kind, t) {
+  rr(240, 110, 800, 360, 30); ctx.save(); ctx.clip();
+  drawBackground(kind === 'ending' ? 5200 : 0, kind === 'ending' ? 'river' : 'village', t);
+  if (kind === 'ending') { const g = ctx.createLinearGradient(0, 110, 0, 470); g.addColorStop(0, 'rgba(255,150,90,0.45)'); g.addColorStop(1, 'rgba(80,60,120,0.25)'); ctx.fillStyle = g; ctx.fillRect(240, 110, 800, 360); }
+  drawHero(kind === 'ending' ? 640 : 560, GROUND, 1, { walk: false, defend: false }, t, 0.9);
+  ctx.restore();
+  rr(240, 110, 800, 360, 30); ctx.lineWidth = 8; ctx.strokeStyle = C.gold; ctx.stroke();
+}
+function storyScene(kind) {
+  return {
+    update(dt) { state.t += dt; if (tapped('confirm') || tapped('attack')) this.next(); },
+    next() { sfx.tap(); if (kind === 'intro') { scene = 'play'; state.t = 0; } else startQuiz(); },
+    draw() {
+      ui = []; clear('#2a2440');
+      storyPicture(kind, state.t);
+      const line = kind === 'intro' ? L(CONTENT.intro) : L(CONTENT.ending);
+      textBox(line, W / 2, 530, 1000, 38, '#fff', 2);
+      button(S('next'), W / 2 - 150, 590, 300, 110, () => this.next(), { pulse: true });
+      langButton();
+    },
+  };
+}
+
+// ---- Quiz: picture answers, retry on wrong, stars from quiz only (plan review 6) ----
+function startQuiz() {
+  const n = Math.max(3, Math.min(5, tune.quizCount, CONTENT.quiz.length));
+  state.quiz = { qs: CONTENT.quiz.slice(0, n), i: 0, wrong: new Set(), ok: -1, okT: 0, shake: -1, shakeT: 0, retries: 0 };
+  scene = 'quiz'; state.t = 0; events.push({ type: 'quiz', count: n });
+}
+function answer(j) {
+  const q = state.quiz, cur = q.qs[q.i];
+  if (q.ok >= 0 || q.wrong.has(j)) return;
+  if (j === cur.correct) { q.ok = j; q.okT = 0; sfx.chime(); burst(0, 0, 0); events.push({ type: 'answer', ok: true }); }
+  else { q.wrong.add(j); q.retries++; q.shake = j; q.shakeT = 0.5; sfx.soft(); events.push({ type: 'answer', ok: false }); }
+}
+function finishQuiz() {
+  const r = state.quiz.retries;
+  state.retries = r; state.stars = r <= tune.star3Retries ? 3 : r <= tune.star2Retries ? 2 : 1;
+  state.gained = `${state.stars}`; scene = 'results'; state.t = 0; sfx.chime();
+  events.push({ type: 'results', stars: state.stars });
+}
+function updateQuiz(dt) {
+  const q = state.quiz; state.t += dt;
+  q.shakeT = Math.max(0, q.shakeT - dt);
+  if (q.ok >= 0) { q.okT += dt; if (q.okT >= tune.feedbackTime) { q.i++; q.ok = -1; q.wrong = new Set(); if (q.i >= q.qs.length) finishQuiz(); } return; }
+  ['Digit1', 'Digit2', 'Digit3'].forEach((c, j) => { if (pressed(c) || pressed('Numpad' + (j + 1))) answer(j); });
+}
+function drawQuiz() {
+  ui = []; clear('#2a2440');
+  const q = state.quiz, cur = q.qs[Math.min(q.i, q.qs.length - 1)];
+  drumMotif(120, 120, 70, 'rgba(242,182,50,0.25)'); drumMotif(1160, 640, 90, 'rgba(242,182,50,0.18)');
+  // progress dots
+  for (let i = 0; i < q.qs.length; i++) circle(W / 2 - (q.qs.length - 1) * 30 + i * 60, 50, 16, i < q.i || (i === q.i && q.ok >= 0) ? C.gold : 'rgba(255,255,255,0.3)', C.goldDark, 3);
+  text(`${S('question')} ${Math.min(q.i + 1, q.qs.length)}/${q.qs.length}`, 120, 50, 28, C.gold, 'left');
+  textBox(L(cur.q), W / 2, 150, 980, 42, '#fff', 2);
+  const cw = 360, ch = 380, gap = 40, x0 = (W - 3 * cw - 2 * gap) / 2, y0 = 250;
+  cur.answers.forEach((a, j) => {
+    let x = x0 + j * (cw + gap);
+    if (q.shake === j && q.shakeT > 0) x += Math.sin(q.shakeT * 60) * 14 * q.shakeT * 2;
+    const wrong = q.wrong.has(j), ok = q.ok === j;
+    rr(x, y0 + 8, cw, ch, 30); ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.fill();
+    rr(x, y0, cw, ch, 30); ctx.fillStyle = ok ? '#c9f0b0' : wrong ? '#d9d4cf' : C.cream; ctx.fill();
+    ctx.lineWidth = ok ? 10 : 5; ctx.strokeStyle = ok ? C.leafDark : wrong ? '#b0a89f' : C.gold; ctx.stroke();
+    ctx.save(); if (wrong) ctx.globalAlpha = 0.45; ICONS[a.icon](x + cw / 2, y0 + 140, 110); ctx.restore();
+    textBox(L(a), x + cw / 2, y0 + 300, cw - 40, 32, wrong ? '#8a8078' : C.ink, 2);
+    text(String(j + 1), x + 34, y0 + 34, 26, 'rgba(58,42,31,0.45)');
+    if (ok) for (let k = 0; k < 5; k++) { const ang = state.t * 3 + k * 1.26; star(x + cw / 2 + Math.cos(ang) * 150, y0 + 140 + Math.sin(ang) * 110, 16, C.glow, C.goldDark, ang); }
+    ui.push({ x, y: y0, w: cw, h: ch, onTap: () => answer(j) });
+  });
+  if (q.ok >= 0) text(S('correct'), W / 2, 680, 40, C.glow);
+  else if (q.shakeT > 0 || q.wrong.size) text(S('retry'), W / 2, 680, 36, '#ffd0c8');
+  langButton();
+}
+
+// ---- Results and the unlock (stars, then the next hero's slot opens) ----
+function drawResults() {
+  ui = []; clear('#2a2440');
+  drumMotif(W / 2, 300, 260, 'rgba(242,182,50,0.15)');
+  text(S('done'), W / 2, 110, 64, C.gold);
+  for (let i = 0; i < 3; i++) {
+    const appear = Math.min(1, Math.max(0, (state.t - 0.3 - i * 0.35) / 0.3)), got = i < state.stars;
+    const x = W / 2 + (i - 1) * 200, y = i === 1 ? 270 : 300, r = (i === 1 ? 90 : 75) * (got ? 0.6 + 0.4 * appear : 1);
+    star(x, y, r, got && appear > 0 ? C.gold : 'rgba(255,255,255,0.18)', got ? '#fff' : 'rgba(255,255,255,0.35)');
+  }
+  text(S('placeholder'), W / 2, 450, 26, 'rgba(255,255,255,0.6)', 'center', 600);
+  button(S('next'), W / 2 - 150, 520, 300, 110, () => { scene = 'unlock'; state.ut = 0; state.t = 0; sfx.chime(); events.push({ type: 'unlock' }); }, { pulse: true });
+  langButton();
+}
+function medallion(x, y, r, lit, t) {
+  circle(x, y, r + 10, lit ? C.gold : '#5a5370', lit ? '#fff' : '#7a7390', 6);
+  circle(x, y, r, lit ? C.cream : '#3e3856');
+  drumMotif(x, y, r * 0.95, lit ? 'rgba(201,138,18,0.5)' : 'rgba(255,255,255,0.12)');
+}
+function drawUnlock() {
+  ui = []; clear('#2a2440');
+  const t = state.t, open = Math.min(1, Math.max(0, (t - 0.6) / 0.8));
+  // the timeline: hero 1 lit, hero 2 unlocking
+  ctx.strokeStyle = C.gold; ctx.lineWidth = 10; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(300, 300); ctx.lineTo(300 + 680 * Math.min(1, t / 0.6), 300); ctx.stroke();
+  medallion(300, 300, 110, true, t);
+  ctx.save(); ctx.beginPath(); ctx.arc(300, 300, 110, 0, Math.PI * 2); ctx.clip(); drawHero(300, 470, 1, {}, t, 0.75); ctx.restore();
+  text(S('hero'), 300, 450, 30, '#fff');
+  medallion(980, 300, 110, open >= 1, t);
+  // padlock opening (drawn)
+  ctx.save(); ctx.translate(980, 300); ctx.globalAlpha = 1 - open * 0.85;
+  ctx.strokeStyle = C.steel; ctx.lineWidth = 14; ctx.beginPath(); ctx.arc(0, -30 - open * 40, 34, Math.PI, 0); ctx.stroke();
+  ctx.fillStyle = C.steel; rr(-50, -30, 100, 80, 14); ctx.fill(); circle(0, 4, 10, '#3e3856'); ctx.restore();
+  if (open >= 1) { for (let k = 0; k < 6; k++) { const a = t * 2 + k * 1.05; star(980 + Math.cos(a) * 150, 300 + Math.sin(a) * 120, 18, C.glow, C.goldDark, a); } text('?', 980, 300, 110, C.goldDark); }
+  text(L(CONTENT.nextHero), 980, 450, 30, '#fff');
+  text(S('unlocked'), W / 2, 100, 52, C.gold);
+  text(S('mapStub'), W / 2, 530, 26, 'rgba(255,255,255,0.6)', 'center', 600);
+  button(S('replay'), 260, 580, 340, 110, () => { reset(); scene = 'intro'; }, { fill: C.cream, shade: '#c8b89a' });
+  button(S('toMap'), 680, 580, 340, 110, () => { reset(); scene = 'title'; }, { pulse: true });
+  langButton();
+}
+
+// ---- Title ----
+function drawTitle() {
+  ui = []; drawBackground(0, 'village', state.t);
+  rr(150, 60, 980, 210, 40); ctx.fillStyle = C.panel; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = C.gold; ctx.stroke();
+  drumMotif(240, 165, 70, 'rgba(242,182,50,0.8)'); drumMotif(1040, 165, 70, 'rgba(242,182,50,0.8)');
+  text(S('title'), W / 2, 140, 76, C.gold);
+  text(S('subtitle'), W / 2, 220, 36, '#fff');
+  drawHero(260, GROUND, 1, { walk: false }, state.t, 0.8);
+  button(S('start'), W / 2 - 190, 330, 380, 130, startIntro, { pulse: true, size: 44 });
+  rr(150, 520, 980, 150, 24); ctx.fillStyle = 'rgba(255,246,227,0.92)'; ctx.fill();
+  // controls legend (drawn icons) + keys
+  const items = [[arrowPair, S('move')], [staffIcon, S('attack')], [shieldIcon, S('defend')]];
+  items.forEach(([ic, lab], i) => { const x = 300 + i * 340; ctx.save(); ctx.translate(x - 60, 575); circle(0, 0, 38, '#fff', C.gold, 4); ic({ r: 38 }); ctx.restore(); text(lab, x + 20, 575, 32, C.ink, 'left'); });
+  text(S('keys'), W / 2, 640, 24, '#6a5a4a', 'center', 700);
+  langButton();
+}
+function arrowPair(a) { ctx.save(); ctx.translate(-12, 0); arrowIcon({ r: a.r * 0.7 }, -1); ctx.translate(24, 0); arrowIcon({ r: a.r * 0.7 }, 1); ctx.restore(); }
+function startIntro() { sfx.tap(); reset(); scene = 'intro'; events.push({ type: 'start' }); }
+
+// ---- Scenes ----
+const scenes = {
+  figures: {
+    update(dt) { state.t += dt; },
+    draw() {
+      ui = []; drawBackground(0, 'village', state.t);
+      ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fillRect(0, 0, W, H);
+      const t = state.t, y = 560;
+      ctx.save(); ctx.translate(0, y - GROUND);
+      drawHero(170, GROUND, 1, { walk: false, defend: false }, t, 0.85);
+      drawEnemy({ x: 470, kind: 'spear', face: -1, state: 'approach', id: 1 }, t);
+      drawEnemy({ x: 780, kind: 'shield', face: -1, state: 'windup', id: 2 }, t);
+      drawEnemy({ x: 1100, kind: 'leader', face: -1, state: 'approach', id: 3 }, t);
+      ctx.restore();
+      [[170, 'heroLabel'], [470, 'spear'], [780, 'shield'], [1100, 'leader']].forEach(([x, k]) => text(S(k), x, 650, 26, C.ink));
+      langButton();
+    },
+  },
+  title: { update(dt) { state.t += dt; if (tapped('confirm') || pressed('Space')) startIntro(); }, draw: drawTitle },
+  intro: storyScene('intro'),
+  play: {
+    update(dt) { if (pressed('KeyP') || pressed('Escape')) { scene = 'pause'; return; } updatePlay(dt); },
+    draw: drawPlay,
+  },
+  pause: {
+    update() { if (pressed('KeyP') || pressed('Escape') || tapped('confirm')) scene = 'play'; },
+    draw() {
+      drawPlay(); ui = [];
+      ctx.fillStyle = 'rgba(42,36,64,0.7)'; ctx.fillRect(0, 0, W, H);
+      text(S('pause'), W / 2, 200, 64, '#fff');
+      button(S('resume'), W / 2 - 200, 290, 400, 120, () => { scene = 'play'; }, { pulse: true });
+      button(S('home'), W / 2 - 200, 450, 400, 110, () => { reset(); scene = 'title'; }, { fill: C.cream, shade: '#c8b89a' });
+      langButton();
+    },
+  },
+  ending: storyScene('ending'),
+  quiz: { update: updateQuiz, draw: drawQuiz },
+  results: { update(dt) { state.t += dt; if (tapped('confirm')) { scene = 'unlock'; state.t = 0; events.push({ type: 'unlock' }); } }, draw: drawResults },
+  unlock: { update(dt) { state.t += dt; if (tapped('confirm')) { reset(); scene = 'title'; } else if (pressed('KeyR')) { reset(); scene = 'intro'; } }, draw: drawUnlock },
+};
+
+// ---- Loop ----
+function step() {
+  if (pressed('KeyM')) { setMuted(!muted); hit.delete('KeyM'); }
+  if (pressed('KeyL')) setLang(lang === 'vi' ? 'en' : 'vi');
+  const taps = pendingTaps; pendingTaps = [];
+  for (const f of taps) { sfx.tap(); f(); }
+  if (!portrait()) scenes[scene].update(STEP);
+  hit.clear(); touchTap.clear();
+}
+let last, acc = 0, ALPHA = 1;
+function tick() {
+  const now = clock.now();
+  acc += Math.min(now - last, 0.25); last = now;
+  while (acc >= STEP) { step(); acc -= STEP; }
+  ALPHA = acc / STEP;
+  drawFrame();
+}
+function drawFrame() { scenes[scene].draw(); }
+function frame() { tick(); requestAnimationFrame(frame); }
+function timer() { if (document.visibilityState === 'visible' && clock.now() - last > 0.1) tick(); }
+
+window.game = {
+  get scene() { return scene; },
+  get state() { return state; },
+  press(code) { hit.add(code); },
+  hold(code, on) { on ? down.add(code) : down.delete(code); },
+  get events() { return events; },
+  step(n = 1, draw = true, alpha = 1) {
+    for (let i = 0; i < n; i++) step();
+    if (draw) { ALPHA = alpha; drawFrame(); }
+  },
+};
+
+// ---- Start: ?scene= opens a screen directly, for screenshots (players never see it) ----
+reset();
+scene = params.get('scene') || 'title';
+if (!scenes[scene]) scene = 'title';
+if (scene === 'quiz') { startQuiz(); state.quiz.i = Math.min(Number(params.get('q') || 1) - 1, state.quiz.qs.length - 1); if (params.get('wrong')) { answer(Number(params.get('wrong')) - 1); state.quiz.shakeT = 0; } }
+if (scene === 'results') state.stars = Number(params.get('stars') || 2);
+if (scene === 'unlock') state.t = Number(params.get('ut') || 0);
+if (scene === 'play' && params.get('beat')) { // ?beat=N: start at beat N's fight; &stage=telegraph: an enemy mid-telegraph
+  const i = Math.max(0, Math.min(beats().length - 1, Number(params.get('beat')) - 1));
+  state.beat = i; state.tut = { moved: true, hit: true, blocked: true, windupSeen: true, enemySeen: true };
+  state.hero.x = beatX(i) + 10; startBeat(i);
+  if (params.get('stage') === 'telegraph') {
+    state.tut.blocked = false; state.queue = state.queue.slice(1);
+    state.enemies.push({ id: 99, kind: beats()[i].enemies[0], x: state.hero.x + tune.enemyReach, face: -1, state: 'windup', t: 0, hits: 0, kb: 0, moving: false });
+    state.spawnT = 99;
+  }
+  if (params.get('stage') === 'caption') { state.queue = []; state.phase = 'caption'; }
+}
+last = clock.now();
+if (params.get('manual') === '1') drawFrame();
+else { requestAnimationFrame(frame); setInterval(timer, 50); }
+</script>
+</body>
+</html>
