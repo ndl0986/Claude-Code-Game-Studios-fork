@@ -85,7 +85,8 @@ public struct ContentValidator {
             out += budget(hero)
             for beat in hero.mission.beats { out += Self.beatButtons(type: beat.type, buttons: beat.buttons, params: beat.params) }
             if checkPictures {
-                let pics = [hero.mission.ending.pictureId] + hero.quiz.questions.flatMap { q in (q.pictureId.map { [$0] } ?? []) + q.choices.map(\.pictureId) }
+                let portraits = hero.mission.beats.flatMap { ($0.params.lines ?? []).filter { $0.speaker != "narrator" }.map { Self.portraitId(hero: hero.mission.hero.id, $0) } }
+                let pics = [hero.mission.ending.pictureId] + portraits + hero.quiz.questions.flatMap { q in (q.pictureId.map { [$0] } ?? []) + q.choices.map(\.pictureId) }
                 for p in pics where !assetIds.contains(p) { out.append(.init(rule: "R10", message: "unknown picture id \(p)")) }
             }
         }
@@ -226,6 +227,11 @@ public struct ContentValidator {
             if cur == 0 { cur = w } else if cur + space + w <= limit { cur += space + w } else { lines += 1; cur = w }
         }
         return lines
+    }
+
+    /// R10 portrait id: pic.portrait_<hero_id>_<speaker>[_<mood>] (a missing mood variant fails, on data/ only).
+    public static func portraitId(hero: String, _ l: BeatParams.DialogueLine) -> String {
+        "pic.portrait_\(hero)_\(l.speaker)" + (l.mood.map { "_\($0)" } ?? "")
     }
 
     /// R13d: the ask button ends on or before the last line.

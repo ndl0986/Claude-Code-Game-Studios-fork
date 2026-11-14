@@ -93,7 +93,7 @@ final class GameScene: SKScene {
         let p = game.play, q = game.quiz
         return [game.screen.rawValue, game.lang.rawValue, "\(game.storyLine)", "\(p.phase)", "\(p.captionLine)", "\(p.beat)",
                 "\(q?.index ?? -1)", "\(q?.okIndex ?? -1)", "\(q?.wrong.sorted() ?? [])", "\(game.muted)", "\(game.stars)", "\(layout.scale)",
-                "\(p.cardLine)", "\(p.trainingStage)", "\(p.visiblePads.map(\.rawValue).sorted())", "\(game.skipWarning)", "\(p.goArrow)"].joined(separator: "|")
+                "\(p.cardLine)", "\(p.trainingStage)", "\(p.lineIndex)", "\(p.askShowing)", "\(p.askHint)", "\(p.visiblePads.map(\.rawValue).sorted())", "\(game.skipWarning)", "\(p.goArrow)"].joined(separator: "|")
     }
 
     // MARK: touches
@@ -139,6 +139,7 @@ final class GameScene: SKScene {
         case "resume": game.resume()
         case "home", "toMap": game.home()
         case "replay": game.replay()
+        case "ask": game.ask()
         case "skip": game.skip()
         case "skipAnyway": game.skipAnyway()
         case "keepReading": game.keepReading()
@@ -424,6 +425,7 @@ final class GameScene: SKScene {
             add(D.circle(0, 0, 30, done ? C.gold : SKColor(white: 1, alpha: 0.75), C.goldDark, 4), x, 60)
             add(D.drum(22, done ? C.ink : SKColor(red: 58 / 255, green: 42 / 255, blue: 31 / 255, alpha: 0.35)), x, 60)
         }
+        if p.phase == .dialogueLine { buildDialogue(p); return }
         if p.phase == .beatCard {
             let texts = p.cardTexts
             add(D.rr(-480, -150, 960, 300, 36, C.panel, C.gold, 6), 640, 290)
@@ -471,6 +473,34 @@ final class GameScene: SKScene {
             let a = D.poly([(-60, -22), (10, -22), (10, -50), (64, 0), (10, 50), (10, 22), (-60, 22)], C.gold, .white, 5)
             a.name = "go"; add(a, 1060, 300)
             add(Font.label(game.ui("ui.btn.go"), 32, C.ink), 1060, 380)
+        }
+    }
+
+    /// A dialogue line (mission-flow 7d): the beat title as a heading over the first line; the
+    /// speaker's portrait on their side (hero left, others right) and the text box away from it;
+    /// narrator lines centred with no portrait; the ask button replaces "Tiếp" while it shows.
+    private func buildDialogue(_ p: PlayState) {
+        let lines = p.dialogueLines
+        guard !lines.isEmpty else { return }
+        let line = lines[min(p.lineIndex, lines.count - 1)]
+        add(D.rr(-600, -170, 1200, 340, 36, C.panel, C.gold, 6), 640, 470)
+        if p.lineIndex == 0 { add(Font.label(p.beats[p.beat].title.text(game.lang), 44, C.gold, width: 880), 640, 250) }
+        switch line.speaker {
+        case "narrator":
+            textBox(line.text, 640, 455, 880, 38, .white)
+        case "hero":
+            let pic = Pictures.node(ContentValidator.portraitId(hero: game.heroId, line), size: 150); add(pic, 190, 450)
+            textBox(line.text, 690, 455, 720, 38, .white)
+        default:
+            let pic = Pictures.node(ContentValidator.portraitId(hero: game.heroId, line), size: 150); add(pic, 1090, 450)
+            textBox(line.text, 590, 455, 720, 38, .white)
+        }
+        if p.askShowing, let a = p.currentBeat?.params.ask {
+            button(a.button.text(game.lang), 640 - 170, 570, 340, 110, "ask", pulse: true, size: 34)
+            badge(a.button, 0, 0)
+            if p.askHint { let h = handHint(); add(h, 640, 560) }
+        } else {
+            button(game.ui("ui.btn.next"), 640 - 150, 580, 300, 100, "next", pulse: true)
         }
     }
 
