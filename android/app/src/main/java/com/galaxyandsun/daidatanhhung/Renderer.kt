@@ -249,7 +249,8 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             Figures.HERO_S, reach = (g.tuning["attack_range"] - 18 * Figures.HERO_S).toFloat()) // body 180 tall, swing arc = attack_range (AC13)
         if (r.bannerRaised && r.beatType == BeatType.TRAINING)
             CueLayout.raisedBanner(ground.toDouble(), bannerBeat).let { f ->
-                fig.icon("flag", (h.x - h.face * CueLayout.raisedBannerOffset(bannerBeat)).toFloat(), f.y.toFloat(), f.size.toFloat()) }
+                val k = r.raiseProgress; val rise = (40 * (1 - k) * (1 - k)).toFloat() // Rule 7c slice: from y + 40, ease-out over 0.67 s
+                fig.icon("flag", (h.x - h.face * CueLayout.raisedBannerOffset(bannerBeat)).toFloat(), f.y.toFloat() + rise, f.size.toFloat()) }
         if (r.beatType == BeatType.HOLD && (r.phase == Phase.PLAY || r.phase == Phase.END)) holdMeter(h.x.toFloat() + h.face * 130f, ground - 200, r.heldTotal / r.holdSeconds(r.beat)) // beside the hero, clear of the goal bar
         for (p in r.parts) d.star(p.x.toFloat(), p.y.toFloat(), p.r.toFloat(), p.color.toInt(), C.GOLD_DARK, p.rot.toFloat())
         if (r.cheerT >= 0 && r.t - r.cheerT < 0.6) { val k = ((r.t - r.cheerT) / 0.6).toFloat() // the cheer's stars, drawn here (no RNG)
@@ -289,8 +290,12 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             val rise = min(20f, (ground - 300f - p.y.toFloat()).coerceAtLeast(0f))
             val old = d.alpha; d.alpha = min(1.0, p.life * 2)
             // QC r5 / spec follow-up: an outline under the colour, ink on light skies and cream on the dark camp sky
-            val ol = fig.skyBand(beat.theme).let { (top, bottom) -> SkyContrast.popOutline(top, bottom) } // r9: from the sky, as iOS
-            d.textOutlined(g.ui(p.textId), (px + side * 120).coerceIn(90f, W - 90), ground - 150 - rise, 40f, p.color.toInt(), ol, 8f); d.alpha = old
+            val style = fig.skyBand(beat.theme).let { (top, bottom) -> SkyContrast.popStyle(top, bottom) } // r9/r10: from the sky, as iOS
+            // r10: ink 8 (4 px outside) on light skies; on a dark sky cream 8 inside an ink 12 (cream 4 px, then ink 2 px)
+            if (style == SkyContrast.PopStyle.DOUBLE) d.textOutlined(g.ui(p.textId), (px + side * 120).coerceIn(90f, W - 90), ground - 150 - rise, 40f, p.color.toInt(),
+                SkyContrast.CREAM, 8f, outer = SkyContrast.INK, outerWidth = 12f)
+            else d.textOutlined(g.ui(p.textId), (px + side * 120).coerceIn(90f, W - 90), ground - 150 - rise, 40f, p.color.toInt(), SkyContrast.INK, 8f)
+            d.alpha = old
         }
         cues(g, r, cam, ground, t)
         val vis = r.visibleButtons()
@@ -304,7 +309,21 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             if ("attack" in vis) pad("attack", 1150f, 590f, 92f, Action.ATTACK, h.atk >= 0, r.pulseAttack, g.ui(UiIds.ATTACK), t) { rr -> staffGlyph(rr) }
             val special = if (r.beatType == BeatType.HOLD) Pair(1150f, 590f) else Pair(1150f, 400f) // alone, it takes attack's place
             if ("special" in vis) pad("special", special.first, special.second, 80f, Action.SPECIAL, false, r.pulseSpecial, g.uiOrNull(UiIds.SPECIAL), t) { rr -> bannerGlyph(rr) }
-            when (r.hand) {
+            val barShown = beat.usesBanner && (r.phase == Phase.PLAY || r.phase == Phase.END)
+            if (barShown && r.hand != HandHint.NONE) { // Hints Rule 6 (r10): below the bar, beside the pad when it can't go above
+                val pads = buildList {
+                    if ("move" in vis) { add(CueLayout.Pad(140.0, 610.0, fit.padRadius(80f).toDouble())); add(CueLayout.Pad(330.0, 610.0, fit.padRadius(80f).toDouble())) }
+                    if ("defend" in vis) add(CueLayout.Pad(950.0, 625.0, fit.padRadius(80f).toDouble()))
+                    if ("attack" in vis) add(CueLayout.Pad(1150.0, 590.0, fit.padRadius(92f).toDouble()))
+                    if ("special" in vis) add(CueLayout.Pad(special.first.toDouble(), special.second.toDouble(), fit.padRadius(80f).toDouble()))
+                }
+                val target = when (r.hand) {
+                    HandHint.MOVE -> pads.getOrNull(1); HandHint.DEFEND -> pads.firstOrNull { it.x == 950.0 }
+                    HandHint.ATTACK -> pads.firstOrNull { it.x == 1150.0 && it.y == 590.0 }
+                    else -> pads.firstOrNull { it.x == special.first.toDouble() && it.y == special.second.toDouble() }
+                }
+                target?.let { CueLayout.hintHand(it, pads) }?.let { hh -> fig.hand(hh.x.toFloat(), hh.y.toFloat(), if (r.hand == HandHint.SPECIAL_HOLD) 0.0 else t, hh.rot) }
+            } else when (r.hand) {
                 HandHint.MOVE -> fig.hand(330f, 540f, t)
                 // QC r2 B3 / r3 B3b: with the flag pad above attack, the hand comes from the upper left, its fingertip on
                 // the attack pad's own edge (its real radius, grown to pad_min), clear of Defend (870–1030) and the flag.

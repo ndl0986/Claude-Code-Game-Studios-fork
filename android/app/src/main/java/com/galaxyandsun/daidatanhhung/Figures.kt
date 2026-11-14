@@ -28,7 +28,8 @@ class Figures(private val d: Draw) {
      * The hero figure (also the partner). [s] scales the body; with [reach] set (play), the staff and the swing arc are
      * drawn at world length instead: the arc reaches [reach] world px from the shoulder (hud.md §3.3, AC13).
      */
-    fun hero(x: Float, y: Float, face: Int, walk: Boolean, defend: Boolean, attack: Double?, t: Double, s: Float = 1f, tunic: Int = C.RED, reach: Float? = null) {
+    fun hero(x: Float, y: Float, face: Int, walk: Boolean, defend: Boolean, attack: Double?, t: Double, s: Float = 1f, tunic: Int = C.RED, reach: Float? = null,
+             staffUp: Boolean = false) {
         c.save(); c.translate(x, y); c.scale(face * s, s)
         d.ellipse(0f, 4f, 60f, 12f, C.a(0, 0.18))
         val w = if (walk) sin(t * 14).toFloat() else 0f
@@ -42,7 +43,7 @@ class Figures(private val d: Draw) {
         d.rr(-38f, -96f, 76f, 12f, 6f, C.GOLD)
         d.poly(C.GOLD, -14f, -150f, 0f, -126f, 14f, -150f)
         val swing = attack ?: -1.0
-        val ang = if (swing >= 0) -1.9 + swing * 2.6 else if (defend) 0.9 else -0.6
+        val ang = if (swing >= 0) -1.9 + swing * 2.6 else if (defend) 0.9 else if (staffUp) -0.05 else -0.6 // staffUp: Rule 7c slice
         val len = reach ?: 150f
         c.save(); c.translate(18f, -128f); if (reach != null) c.scale(1f / s, 1f / s) // the staff keeps its world length
         c.rotate(deg(ang))
@@ -171,7 +172,8 @@ class Figures(private val d: Draw) {
             d.ellipse(x, ground - 90, 58f + k.toFloat() * 8, 116f, C.a(C.GLOW, 0.3 + 0.25 * k))
         }
         val swing = when (p.state) { EnemyState.WINDUP -> 0.0; EnemyState.STRIKE -> 0.6; else -> null }
-        hero(x, ground, p.face, false, false, swing, t, PARTNER_S, tunic = C.INDIGO, reach = 140f - 18f * PARTNER_S) // the stick reaches 140 (hud.md)
+        hero(x, ground, p.face, p.moving && p.staffUp, false, swing, t, PARTNER_S, tunic = C.INDIGO, reach = 140f - 18f * PARTNER_S, // the stick reaches 140 (hud.md)
+            staffUp = p.staffUp)
     }
 
     fun dropped(w: Dropped, ground: Float) {

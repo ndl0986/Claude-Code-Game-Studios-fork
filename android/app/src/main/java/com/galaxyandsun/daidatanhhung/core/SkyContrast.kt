@@ -33,4 +33,8 @@ object SkyContrast {
         val cream = min(contrast(CREAM, top), contrast(CREAM, bottom))
         return if (cream > ink) CREAM else INK
     }
+
+    /** hud.md §3.3 (r10): ink-only where ink wins; where cream wins, a double outline (cream inside, ink outside). */
+    enum class PopStyle { INK, DOUBLE }
+    fun popStyle(top: Int, bottom: Int) = if (popOutline(top, bottom) == CREAM) PopStyle.DOUBLE else PopStyle.INK
 }

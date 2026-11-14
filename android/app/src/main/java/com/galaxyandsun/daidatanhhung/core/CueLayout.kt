@@ -98,4 +98,38 @@ object CueLayout {
     /** The banner the hero raises in training (110, held beside him): on a banner beat it stays below the bar too. */
     fun raisedBanner(ground: Double, banner: Boolean): Prop =
         if (!banner) Prop(ground - 250, 110.0) else Prop(max(ground - 250, FLOOR + FLAG_TOP_K * 110.0), 110.0)
+
+    // ---- Hints Rule 6 (r10): teach hands on banner beats stay below the bar, never over a pad ----
+    // Figures.hand(x, y, t, rot): drawn pointing down, its box x −30 … +26, y −148 … −24 from the anchor including
+    // the ±12 bounce (fingertip at −36 ± 12). Rotated −90° it points right, +90° left.
+    const val HAND_GAP = 6.0
+
+    /** A round pad: centre and radius (its touch rect is the square around it). */
+    data class Pad(val x: Double, val y: Double, val r: Double)
+    /** A placed hand: anchor and rotation (0 points down, −90 right, +90 left). */
+    data class Hand(val x: Double, val y: Double, val rot: Float)
+
+    fun handBox(h: Hand): StoryLayout.Box = when (h.rot) {
+        0f -> StoryLayout.Box(h.x - 30, h.y - 148, h.x + 26, h.y - 24)
+        -90f -> StoryLayout.Box(h.x - 148, h.y - 26, h.x - 24, h.y + 30)
+        else -> StoryLayout.Box(h.x + 24, h.y - 30, h.x + 148, h.y + 26)
+    }
+
+    private fun overlaps(b: StoryLayout.Box, p: Pad) = b.left < p.x + p.r && b.right > p.x - p.r && b.top < p.y + p.r && b.bottom > p.y - p.r
+
+    /**
+     * The hand for [target]: above it when the whole hand fits there at y ≥ 276; otherwise beside it, on the side away
+     * from the screen edge first, at its mid-height, pointing at it. Never over any pad's touch rect ([pads], its own
+     * included). Null when no spot fits (the caller then draws no hand).
+     */
+    fun hintHand(target: Pad, pads: List<Pad>): Hand? {
+        val above = Hand(target.x, target.y - target.r - HAND_GAP + 24, 0f)
+        val left = Hand(target.x - target.r - HAND_GAP + 24, target.y, -90f)
+        val right = Hand(target.x + target.r + HAND_GAP - 24, target.y, 90f)
+        val sides = if (target.x >= SCREEN_W / 2) listOf(left, right) else listOf(right, left)
+        return (listOf(above) + sides).firstOrNull { h ->
+            val b = handBox(h)
+            b.top >= FLOOR && b.left >= EDGE && b.right <= SCREEN_W - EDGE && pads.none { overlaps(b, it) }
+        }
+    }
 }

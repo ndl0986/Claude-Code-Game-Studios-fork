@@ -48,4 +48,11 @@ class SkyContrastTest {
         val ink = SkyContrast.contrast(INK, g); val cream = SkyContrast.contrast(CREAM, g)
         assertEquals(if (cream > ink) CREAM else INK, SkyContrast.popOutline(g, g))
     }
+
+    /** hud.md §3.3 / AC15 (r10): ink-only where ink wins; the double outline (cream inside, ink outside) where cream wins. */
+    @Test fun popStylePerTheme() {
+        val themes = TestContent.load().themes!!.themes
+        for ((name, th) in themes) assertEquals(name, if (name == "camp") SkyContrast.PopStyle.DOUBLE else SkyContrast.PopStyle.INK,
+            SkyContrast.popStyle(hex(th.skyBand.top), hex(th.skyBand.bottom)))
+    }
 }

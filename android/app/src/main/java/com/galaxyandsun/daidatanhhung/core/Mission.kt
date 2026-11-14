@@ -64,6 +64,8 @@ class Enemy(val id: Int, val kind: String, var x: Double, var face: Int) {
     var hits = 0
     var kb = 0.0
     var moving = true
+    /** Rule 7c slice placeholder: the partner stands beside the hero with its staff upright (for the raised fist). */
+    var staffUp = false
 }
 
 class Dropped(val x: Double, val kind: String, val rot: Double) { var life = 4.0 }
@@ -409,7 +411,9 @@ class MissionRun(
     /** The buttons the HUD shows now (mission-flow rule 4): the beat's buttons in play, move while walking. */
     fun visibleButtons(): Set<String> = when (phase) {
         Phase.WALK -> setOf("move")
-        Phase.PLAY, Phase.END -> if (beatType == BeatType.TRAINING) currentBeat.buttons.toSet() intersect trainingPads(trainingStep) else currentBeat.buttons.toSet()
+        Phase.END -> if (finishHolding) emptySet() // Rule 7c: every pad hides at the Cờ tap
+            else if (beatType == BeatType.TRAINING) currentBeat.buttons.toSet() intersect trainingPads(trainingStep) else currentBeat.buttons.toSet()
+        Phase.PLAY -> if (beatType == BeatType.TRAINING) currentBeat.buttons.toSet() intersect trainingPads(trainingStep) else currentBeat.buttons.toSet()
         else -> emptySet()
     }
 
@@ -486,7 +490,8 @@ class MissionRun(
         else if (phase == Phase.END) {
             updateEnemies(dt)
             endT += dt
-            if (endT >= tuning["end_pause"]) endBeat()
+            if (finishHolding) placeFinishPartner()
+            if (endT >= endLength) endBeat()
         } else updateEnemies(dt)
         for (p in parts) { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 900 * dt; p.life -= dt; p.rot += dt * 6 }
         parts.removeAll { it.life <= 0 }
@@ -542,7 +547,33 @@ class MissionRun(
                 !inEncounter && hero.x >= goalX
             }
         }
-        if (goal) { phase = Phase.END; endT = 0.0 }
+        if (goal) { phase = Phase.END; endT = 0.0; holdRestarted = false; if (finishHolding) startFinishHold() }
+    }
+
+    // ---- Mission flow Rule 7c (r10): the banner moment after the training finish ----
+    /** The raise (ASSET-108, 8 × 83 ms; in the slice the banner's rise from y + 40), s. */
+    val raiseTime = 0.67
+    /** True in beat_end of a training beat with `finish_special`: the end lasts `finish_hold`, not `end_pause`. */
+    val finishHolding get() = phase == Phase.END && beatType == BeatType.TRAINING && finishSpecial(beat)
+    private val endLength get() = if (finishHolding) tuning["finish_hold"] else tuning["end_pause"]
+    /** 0 → 1 over the raise (the renderer eases it); 1 while the banner is up. */
+    val raiseProgress get() = if (finishHolding) min(1.0, endT / raiseTime) else 1.0
+    private var holdRestarted = false
+    private var partnerFrom = 0.0; private var partnerTo = 0.0
+
+    /** The partner (re-entering: Android sends it off after the blocks step) walks in beside the hero over the raise. */
+    private fun startFinishHold() {
+        val away = if (hero.x - cam < WORLD_W / 2) 1 else -1 // the side away from the nearer screen edge
+        partnerFrom = hero.x + away * 1.2 * tuning["enemy_reach"]
+        partnerTo = hero.x + away * FINISH_PARTNER_GAP
+        partner = Enemy(0, "partner", partnerFrom, -away).also { it.state = EnemyState.REST; it.moving = true; it.staffUp = true }
+    }
+
+    private fun placeFinishPartner() {
+        val p = partner ?: return
+        val k = raiseProgress; val e = 1 - (1 - k) * (1 - k) // ease-out
+        p.x = partnerFrom + (partnerTo - partnerFrom) * e; p.moving = k < 1
+        p.face = if (hero.x > p.x) 1 else -1 // facing the hero and his banner
     }
 
     /** beat_end: a fight goes to its caption; any other beat cheers and goes on (no caption). */
@@ -596,6 +627,9 @@ class MissionRun(
     /** Resuming from pause (Hints rule 5, combat AC19): hint timers reset; a windup restarts its telegraph. */
     fun onResume() {
         stall = 0.0; idle = 0.0
+        // Rule 7c: resuming in the hold restarts it from the raise's last frame (a full finish_hold − raise left), once
+        // per hold, so pausing again and again can't keep the beat from ending.
+        if (finishHolding && !holdRestarted) { holdRestarted = true; endT = raiseTime; placeFinishPartner() }
         for (e in enemies) if (e.state == EnemyState.WINDUP) e.t = 0.0
         partner?.let { if (it.state == EnemyState.WINDUP) it.t = 0.0 }
     }
@@ -700,5 +734,7 @@ class MissionRun(
     companion object {
         const val WORLD_W = 1280.0
         const val WORLD_H = 720.0
+        /** Rule 7c: where the re-entering partner stands, from the hero's x (beside him, bodies not overlapping). */
+        const val FINISH_PARTNER_GAP = 110.0
     }
 }

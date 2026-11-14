@@ -98,10 +98,17 @@ class Draw(val bold: Typeface, val semi: Typeface) {
     }
 
     /** [text] with a stroke [outline] of [width] world px drawn under the fill (contrast on busy backgrounds). */
-    fun textOutlined(s: String, x: Float, y: Float, size: Float, color: Int, outline: Int, width: Float, semiBold: Boolean = false) {
+    /**
+     * Text with an outline stroke [width] wide (half of it shows outside the glyph). With [outer] set, a second ring
+     * [outerWidth] wide is drawn first under it (hud.md §3.3 r10: cream inside, ink outside).
+     */
+    fun textOutlined(s: String, x: Float, y: Float, size: Float, color: Int, outline: Int, width: Float, semiBold: Boolean = false,
+                     outer: Int? = null, outerWidth: Float = 0f) {
         textP.typeface = if (semiBold) semi else bold; textP.textSize = size; textP.textAlign = Paint.Align.CENTER
         val fm = textP.fontMetrics; val by = y - (fm.ascent + fm.descent) / 2
-        textP.style = Paint.Style.STROKE; textP.strokeWidth = width; textP.strokeJoin = Paint.Join.ROUND
+        textP.style = Paint.Style.STROKE; textP.strokeJoin = Paint.Join.ROUND
+        if (outer != null) { textP.strokeWidth = outerWidth; textP.color = outer; textP.alpha = (Color.alphaOf(outer) * alpha).toInt(); c.drawText(s, x, by, textP) }
+        textP.strokeWidth = width
         textP.color = outline; textP.alpha = (Color.alphaOf(outline) * alpha).toInt(); c.drawText(s, x, by, textP)
         textP.style = Paint.Style.FILL; textP.color = color; textP.alpha = (Color.alphaOf(color) * alpha).toInt(); c.drawText(s, x, by, textP)
     }
