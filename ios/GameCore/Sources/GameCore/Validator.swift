@@ -36,6 +36,10 @@ public struct ContentValidator {
         out += Self.schemaMajor(file: content.index.schemaVersion, app: ContentSet.supportedSchema)
         out += Self.tuningRules(content.tuning.values.mapValues(\.value))
         out += Self.starOrder(content.rules.quizStars.thresholds)
+        // R8d (rules 1.2): every fit field has a size class and meets its minimum
+        if let minPx = content.rules.textLimits.minPx, let fit = content.rules.textLimits.fit {
+            for (name, f) in fit.fields.sorted(by: { $0.key < $1.key }) { out += Self.minSize(field: name, sizeClass: f.sizeClass, fontPx: f.fontPx, minPx: minPx) }
+        }
         // R19a/R19b apply to schema 1.2 assets, which declare width/height
         for a in content.assets.assets where a.kind == "picture" {
             guard let w = a.width, let h = a.height else { continue }
@@ -64,6 +68,14 @@ public struct ContentValidator {
             let dialogueSentences = m.beats.flatMap { ($0.params.lines ?? []).map(\.text) }
             let missionSentences = m.intro + m.beats.flatMap(\.scene) + m.ending.lines + dialogueSentences
             for t in m.intro + m.beats.flatMap(\.scene) + m.ending.lines { out += Self.legendMarker(t, labels: labels, markers: content.markers) }
+            for b in m.beats {
+                out += Self.cheerOnFight(beat: b.id, type: b.type, cheer: b.cheer)
+                if b.type == "training" {
+                    let t = content.tuning
+                    out += Self.trainingZone(beat: b.id, dummies: b.params.dummies ?? 0, spacing: t["dummy_spacing"], enemyReach: t["enemy_reach"],
+                                             edge: t["hero_edge_margin"], worldWidth: t.worldWidth)
+                }
+            }
             for b in m.beats where b.type == "dialogue" {
                 out += Self.dialogueLegend(b.params.lines ?? [], labels: labels, markers: content.markers)
                 if let a = b.params.ask { out += Self.askFits(lines: b.params.lines?.count ?? 0, taps: a.taps, atLine: a.atLine) }
@@ -185,6 +197,25 @@ public struct ContentValidator {
             }
         }
         return out
+    }
+
+    /// R8d (error): a fit field has a known size class and font_px ≥ that class's minimum (Language GDD Rule 6).
+    public static func minSize(field: String, sizeClass: String?, fontPx: Double, minPx: [String: Double]) -> [Finding] {
+        guard let c = sizeClass else { return [.init(rule: "R8d", message: "\(field) has no size class")] }
+        guard let m = minPx[c] else { return [.init(rule: "R8d", message: "\(field) has unknown size class \(c)")] }
+        return fontPx < m ? [.init(rule: "R8d", message: "\(field) font_px \(fontPx) < \(c) minimum \(m)")] : []
+    }
+
+    /// R14b (error, Combat Rule 15b): the last dummy is inside the capped training zone,
+    /// dummies × dummy_spacing ≤ W − enemy_reach − 2 × hero_edge_margin (computed, never stored).
+    public static func trainingZone(beat: String, dummies: Int, spacing: Double, enemyReach: Double, edge: Double, worldWidth: Double) -> [Finding] {
+        let limit = worldWidth - enemyReach - 2 * edge, need = Double(dummies) * spacing
+        return need > limit ? [.init(rule: "R14b", message: "\(beat): \(dummies) dummies × \(spacing) = \(need) > \(limit)")] : []
+    }
+
+    /// R21 (warning): `cheer: false` on a fight beat is ignored (fight beats always cheer).
+    public static func cheerOnFight(beat: String, type: String, cheer: Bool?) -> [Finding] {
+        type == "fight" && cheer == false ? [.init(rule: "R21", message: "\(beat): cheer false is ignored on a fight beat", isWarning: true)] : []
     }
 
     /// R14 (error): the hero reaches the front enemy; R15 (warning): telegraph ≥ 0.8 s.

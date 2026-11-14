@@ -121,6 +121,20 @@ final class FixtureTests: XCTestCase {
                                                        box: (field["box_width"] as! NSNumber).doubleValue, allowance: (fit["allowance"] as! NSNumber).doubleValue)
                 if let el = c["expected_lines"] as? Int, lines != nil { XCTAssertEqual(lines, el, name) }
                 if lines == nil || lines! > (field["max_lines"] as! Int) { findings = [.init(rule: "R8c", message: "\(lines ?? -1) lines")] }
+            case "R8d":
+                let rules = try Repo.json("data/rules.json") as! [String: Any]
+                // the shipped min_px once rules 1.2 lands; the GDD values until then (Language GDD Rule 6)
+                let minPx = ((rules["text_limits"] as! [String: Any])["min_px"] as? [String: NSNumber])?.mapValues(\.doubleValue)
+                    ?? ["heading": 44, "body": 37, "button": 34, "label": 28]
+                findings = ContentValidator.minSize(field: name, sizeClass: c["class"] as? String, fontPx: (c["font_px"] as! NSNumber).doubleValue, minPx: minPx)
+            case "R14b":
+                let t = c["tuning"] as! [String: NSNumber]
+                findings = ContentValidator.trainingZone(beat: name, dummies: c["dummies"] as! Int, spacing: t["dummy_spacing"]!.doubleValue,
+                                                         enemyReach: t["enemy_reach"]!.doubleValue, edge: t["hero_edge_margin"]!.doubleValue,
+                                                         worldWidth: (c["world_width"] as! NSNumber).doubleValue)
+            case "R21":
+                let b = c["beat"] as! [String: Any]
+                findings = ContentValidator.cheerOnFight(beat: name, type: b["type"] as! String, cheer: b["cheer"] as? Bool)
             case "R13d":
                 let a = c["ask"] as! [String: Int]
                 findings = ContentValidator.askFits(lines: c["lines"] as! Int, taps: a["taps"]!, atLine: a["at_line"]!)

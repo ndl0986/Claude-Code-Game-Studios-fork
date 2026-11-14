@@ -101,8 +101,21 @@ public struct RulesFile: Codable, Sendable {
         public let finishingUnlocksNextHero: Bool
     }
     public struct TextLimits: Codable, Sendable {
+        /// One wrap-fit field (R8c); `sizeClass` is rules 1.2's `class` (R8d).
+        public struct FitField: Codable, Sendable {
+            public let boxWidth: Double
+            public let fontPx: Double
+            public let maxLines: Int
+            public let weight: Int
+            public let sizeClass: String?
+            enum CodingKeys: String, CodingKey { case boxWidth, fontPx, maxLines, weight, sizeClass = "class" }
+        }
+        public struct Fit: Codable, Sendable { public let allowance: Double; public let fields: [String: FitField] }
         public let maxChars: Int
         public let enBudget: [String: Int]
+        /// Rules 1.2 (TASK-005l, R8d): the smallest font_px per size class. Absent before 1.2.
+        public let minPx: [String: Double]?
+        public let fit: Fit?
     }
     public let schemaVersion: String
     public let quizStars: QuizStars
@@ -174,6 +187,12 @@ public struct Beat: Codable, Sendable {
     /// Optional only for dialogue beats (schema 1.4).
     public let goal: Text?
     public let usesBanner: Bool?
+    /// Schema 1.5 (TASK-005l): `false` ends a non-fight beat quietly (no cheer pose or sting, the page-turn
+    /// sound once; the dots still fill). Absent means true; ignored on fight beats (R21 warns).
+    public let cheer: Bool?
+
+    /// Whether this beat ends with the cheer: fight beats always do.
+    public var cheers: Bool { type == "fight" || cheer != false }
     public let params: BeatParams
 
     /// Fight params when the beat is a fight; nil for other types (the slice plays them as a fight stand-in).

@@ -20,6 +20,8 @@ public enum FxColor: Sendable { case glow, white, indigo, red }
 public enum PlayEvent: Equatable, Sendable {
     case swoosh, drum, clang, bonk
     case beatStarted(Int), caption(Int), flee(FightParams.Kind), standIn(beat: Int, type: String), cheer
+    /// A non-fight beat with `cheer: false` ends quietly: the page-turn sound, no cheer (Mission flow Rule 2).
+    case quietEnd
 }
 
 /// One enemy (state names and timings from the prototype, 203d73e).
@@ -369,7 +371,7 @@ public struct PlayState: Sendable {
             endT += dt
             if endT >= tuning["end_pause"] {
                 if b.type == "fight" { phase = .caption; captionLine = 0; events.append(.caption(beat + 1)) }
-                else { events.append(.cheer); nextBeat() }
+                else { events.append(b.cheers ? .cheer : .quietEnd); nextBeat() }
             }
         } else {
             if phase == .dialogueLine { stall += dt } // the stuck hint points at the ask button

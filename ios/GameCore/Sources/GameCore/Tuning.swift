@@ -3,11 +3,14 @@ import Foundation
 /// `tuning.json`: every gameplay value, {value, min, max, unit}, in a 1280×720 world.
 public struct Tuning: Sendable {
     public struct Entry: Codable, Sendable { public let value: Double; public let min: Double; public let max: Double; public let unit: String }
-    struct File: Codable { let schemaVersion: String; let seed: Int; let values: [String: Entry] }
+    struct World: Codable { let width: Double; let height: Double }
+    struct File: Codable { let schemaVersion: String; let seed: Int; let values: [String: Entry]; let world: World? }
 
     public let schemaVersion: String
     public let seed: Int
     public let values: [String: Entry]
+    /// `world.width` (1280 today): the screen width W in Combat Rule 15b and R14b.
+    public let worldWidth: Double
 
     /// Every key the iOS core reads. A missing key fails the content test, never a silent default.
     public static let requiredKeys = [
@@ -24,13 +27,13 @@ public struct Tuning: Sendable {
 
     public init(data: Data) throws {
         let f = try ContentJSON.decode(File.self, from: data)
-        schemaVersion = f.schemaVersion; seed = f.seed
+        schemaVersion = f.schemaVersion; seed = f.seed; worldWidth = f.world?.width ?? 1280
         // decode keeps the dictionary keys as written (snake_case): convertFromSnakeCase leaves dictionary keys alone.
         values = f.values
     }
 
     public init(values: [String: Double], seed: Int = 1) {
-        schemaVersion = "1.0"; self.seed = seed
+        schemaVersion = "1.0"; self.seed = seed; worldWidth = 1280
         self.values = values.mapValues { Entry(value: $0, min: $0, max: $0, unit: "") }
     }
 

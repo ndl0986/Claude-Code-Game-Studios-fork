@@ -100,6 +100,7 @@ final class GameScene: SKScene {
             case .clang: audio.play(.clang)
             case .bonk: audio.play(.bonk)
             case .cheer: audio.play(.chime)
+            case .quietEnd: audio.play(.soft) // the page-turn placeholder until sfx_ui_next exists (Android: SOFT)
             default: break
             }
         }
@@ -486,6 +487,16 @@ final class GameScene: SKScene {
             let w = min(1080, l.frame.width + 40), h = l.frame.height + 16
             add(D.rr(-w / 2, -h / 2, w, h, h / 2, SKColor(hex: 0xfff6e3, alpha: 0.9)), 640, 168)
             add(l, 640, 168)
+        }
+        if p.phase == .beatPlay || p.phase == .beatEnd, p.beat < p.beats.count, p.beats[p.beat].usesBanner == true, let b = game.hero.mission.banner {
+            // Mission flow Rule 6: the mission banner as a text layer, never in the art. fit.banner: 880 @ 37,
+            // weight 800, up to 2 lines (body class, TASK-020 W9). Bottom at 554, just under the ground line, so
+            // a second line grows it upward, never into the pads (same geometry as Android).
+            let l = Font.label(b.text(game.lang), 37, C.gold, width: 880)
+            let h = l.frame.height + 26
+            add(D.rr(-450, -h / 2, 900, h, 18, C.red.withAlphaComponent(0.9)), 640, 554 - h / 2)
+            add(l, 640, 554 - h / 2)
+            badge(b, 640 + 380, 554 - h)
         }
         for (a, c, kind, label) in [(PadAction.left, layout.left, "left", nil), (.right, layout.right, "right", nil),
                                     (.defend, layout.defend, "defend", "ui.pad.defend"), (.attack, layout.attack, "attack", "ui.pad.attack"),
