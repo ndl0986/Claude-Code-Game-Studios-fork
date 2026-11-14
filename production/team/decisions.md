@@ -11,6 +11,16 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-23 Voice-over and sound choices (not needed until voice recording)
+
+- **Flow:** Audio & voice-over GDD (`a2fd734`) → voice recording → the iOS audio setting.
+- **(a) iPhone silent switch:** A. **respect it** and the family's own music (text always carries the
+  content, plus a one-time picture hint about the switch) *(recommended)* · B. always play voice,
+  ignoring the silent switch and stopping the parent's music.
+- **(b) Vietnamese narrator accent:** **Northern standard**, matching textbook audio *(recommended)*,
+  or Southern; one accent for every hero.
+- **Status:** Open. Not needed before voice-over recording.
+
 ### D-22 Let the phone's own backup keep the child's progress?
 
 - **Flow:** Save & progress GDD rule 11 → save-data ADR (D-04) → iOS/Android backup settings.
