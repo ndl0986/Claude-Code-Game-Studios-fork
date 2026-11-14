@@ -37,6 +37,7 @@ window.CONFIG = {
   leaderKnockMul: { value: 0.5, min: 0.1, max: 1, step: 0.05 },  // leader knock-back as a share of knockback
 
   // Help for small hands (plan review 1 and 2)
+  padMinCss: { value: 72, min: 44, max: 120, step: 2 },          // thumb pads never smaller across than this, CSS px
   hintDelay: { value: 5, min: 2, max: 15, step: 0.5 },           // no progress this long → pulse Attack / ▶ + arrow, s
   endPause: { value: 0.6, min: 0, max: 3, step: 0.1 },           // after the last soldier runs, before the caption, s
 

@@ -1,40 +1,41 @@
-time	2026-11-14 13:35:25
+time	2026-11-14 14:33:06
 keep	lines	0	pinned	0
 briefword	side-scrolling	shown	evidence/play.png
 briefword	2D	shown	evidence/play.png
-checklist	L1	unlisted	-	Look: modern kids' cartoon with Vietnamese motifs: soft, rounded, bright figures; warm	
-checklist	L2	unlisted	-	References: none from Luan (he skipped the taste questions). Values only from the genre	
-checklist	L3	unlisted	-	View: 2D · Camera: side view, follows the hero; locks at each fight until the group is gone,	
-checklist	F1	unlisted	-	Side-scrolling mission with stop-and-go fights, 4 beats read from `MISSION.beats` (3 or 4 work)	
-checklist	F2	unlisted	-	Move / attack / hold-to-defend, touch-first thumb pads + keyboard mirror, multi-touch	
-checklist	F3	unlisted	-	3 enemy kinds, each with its own silhouette: spear soldier, shield soldier, leader	
-checklist	F4	unlisted	-	Telegraphed attacks (glow + "!"), defend always blocks when held	
-checklist	F5	unlisted	-	Non-violent knock-back: bounce, star burst, drum; the last hit drops the weapon and they run	
-checklist	F6	unlisted	-	First-time hand hints on move, attack and defend; a pulse hint after 5 s with no progress	
-checklist	F7	unlisted	-	Intro panel, beat captions and ending line, all ⟨placeholder⟩, one short sentence each	
-checklist	F8	unlisted	-	Quiz: 4 questions by default (3–5 in config), 3 picture answers each, retry on wrong	
-checklist	F9	unlisted	-	Stars (quiz only) and an unlock screen for the next hero ⟨placeholder⟩	
-checklist	F10	unlisted	-	VI default, EN switch on every screen, remembered in localStorage; bundled Nunito font	
-checklist	F11	unlisted	-	Pause, mute, and a "turn your phone sideways" overlay in portrait	
-checklist	M1	unlisted	-	Title: tap **Bắt đầu**.	
-checklist	M2	unlisted	-	One picture panel with one short ⟨placeholder⟩ sentence, tap **Tiếp**.	
-checklist	M3	unlisted	-	A pointing hand bobs on ▶; the child holds it and the hero walks through a village.	
-checklist	M4	unlisted	-	The screen stops, a soldier walks in, the hand moves to Attack; one tap swings the staff and knocks him back with a drum hit and a burst of stars.	
-checklist	M5	unlisted	-	When a soldier glows yellow with a "!", the hand moves to Defend; holding it blocks with a clang.	
-checklist	M6	unlisted	-	After two hits he drops his spear and runs off, and a one-line ⟨placeholder beat 1⟩ caption ends the beat.	
-checklist	C1	unlisted	-	The first real trouble is beat 2 (about minute 2): two soldiers at once, one of them a shield soldier who takes three hits.	
-checklist	C2	unlisted	-	Beat 3 sends one from behind.	
-checklist	C3	unlisted	-	Beat 4 has the leader, bigger and slower, five hits.	
-checklist	C4	unlisted	-	Telegraphs are 1.1 s, so watching and defending is the skill.	
-checklist	C5	unlisted	-	A missed block only pushes the hero back a little; nothing is lost and there is no game over.	
-checklist	C6	unlisted	-	Stars come from the quiz alone: 3 for no wrong answers, 2 for up to two, 1 for finishing.	
+checklist	L1	pass	evidence/figures.png	Look: modern kids' cartoon with Vietnamese motifs: soft, rounded, bright figures; warm	rounded cartoon hero, grumpy-cartoon muted purple soldiers, drum-ring motif, palms, thatched houses, lotus, rattan shield
+checklist	L2	pass	evidence/nearest-game.txt	References: none from Luan (he skipped the taste questions). Values only from the genre	no reference games; genre values only (stop-and-go, telegraphs)
+checklist	L3	pass	evidence/play.png	View: 2D · Camera: side view, follows the hero; locks at each fight until the group is gone,	2D side view, camera follows and locks at each fight (index.html:537)
+checklist	F1	pass	index.html:537	Side-scrolling mission with stop-and-go fights, 4 beats read from `MISSION.beats` (3 or 4 work)	4 beats from MISSION.beats (config.js); full keyboard run reached the ending through all 4 (evidence/full-run-end.png)
+checklist	F2	pass	index.html:185	Move / attack / hold-to-defend, touch-first thumb pads + keyboard mirror, multi-touch	pointer-per-finger thumb pads + keyboard map; multi-touch not playable by any check (Android QC on device)
+checklist	F3	pass	evidence/figures.png	3 enemy kinds, each with its own silhouette: spear soldier, shield soldier, leader	spear, shield and leader each have their own outline
+checklist	F4	pass	index.html:577	Telegraphed attacks (glow + "!"), defend always blocks when held	glow + drawn "!" bubble (evidence/play.png); held defend blocks every strike
+checklist	F5	pass	index.html:608	Non-violent knock-back: bounce, star burst, drum; the last hit drops the weapon and they run	knock-back, star burst; last hit drops the weapon and they run off; drum sound in code, not heard
+checklist	F6	pass	index.html:669	First-time hand hints on move, attack and defend; a pulse hint after 5 s with no progress	hands at index.html:692-694; stall arrow + Attack pulse after tune.hintDelay
+checklist	F7	pass	index.html:730	Intro panel, beat captions and ending line, all ⟨placeholder⟩, one short sentence each	intro, beat captions, ending all from content.js, all ⟨placeholder⟩ (evidence/s_scene-intro.png)
+checklist	F8	pass	evidence/s_quiz_q2.png	Quiz: 4 questions by default (3–5 in config), 3 picture answers each, retry on wrong	4 questions (quizCount 3–5), 3 picture answers, wrong answers grey out and retry (evidence/s_scene-quiz_q-1_wrong-3_lang-en.png)
+checklist	F9	pass	index.html:757	Stars (quiz only) and an unlock screen for the next hero ⟨placeholder⟩	stars from quiz retries only; unlock screen evidence/s_scene-unlock_ut-3.png
+checklist	F10	pass	index.html:67	VI default, EN switch on every screen, remembered in localStorage; bundled Nunito font	VI default, toggle on every screen, localStorage tqt.lang (self-check saved row); Nunito embedded in font.css
+checklist	F11	pass	index.html:881	Pause, mute, and a "turn your phone sideways" overlay in portrait	pause and mute buttons in play; portrait overlay index.html:16 (shot cropped by headless min width, see evidence/s_portrait_390x844.png)
+checklist	M1	pass	evidence/title.png	Title: tap **Bắt đầu**.	title with Bắt đầu
+checklist	M2	pass	evidence/s_scene-intro.png	One picture panel with one short ⟨placeholder⟩ sentence, tap **Tiếp**.	picture panel + one placeholder sentence + Tiếp
+checklist	M3	pass	index.html:692	A pointing hand bobs on ▶; the child holds it and the hero walks through a village.	hand bobs on ▶ until the hero first moves right; village theme in beat 1
+checklist	M4	pass	index.html:608	The screen stops, a soldier walks in, the hand moves to Attack; one tap swings the staff and knocks him back with a drum hit and a burst of stars.	soldier walks in, hand moves to Attack (index.html:693), staff swing knocks back with stars; drum sound not heard
+checklist	M5	pass	index.html:577	When a soldier glows yellow with a "!", the hand moves to Defend; holding it blocks with a clang.	windup glow + "!" (evidence/play.png), hand moves to Defend (index.html:694); holding blocks with clang (sound not heard)
+checklist	M6	pass	index.html:713	After two hits he drops his spear and runs off, and a one-line ⟨placeholder beat 1⟩ caption ends the beat.	hpSpear 2 → drops spear and runs; caption panel ends the beat
+checklist	C1	pass	config.js:53	The first real trouble is beat 2 (about minute 2): two soldiers at once, one of them a shield soldier who takes three hits.	beat 2: spear, shield, spear with maxActive 2; hpShield 3; reached at ~minute 1–2 in the keyboard run
+checklist	C2	pass	config.js:55	Beat 3 sends one from behind.	beat 3 fromLeft [3]: one walks in behind
+checklist	C3	pass	config.js:30	Beat 4 has the leader, wider and slower, three hits.	beat 4 leader, hpLeader 3, leaderSpeedMul 0.75 (evidence/leader shot in production/qa/evidence/TASK-003/dev)
+checklist	C4	pass	config.js:23	Telegraphs are 1.1 s, so watching and defending is the skill.	telegraph 1.1 s; whether it reads as "the skill" is for play
+checklist	C5	pass	index.html:578	A missed block only pushes the hero back a little; nothing is lost and there is no game over.	unblocked strike pushes the hero back tune.heroPushback; no health, no game over
+checklist	C6	pass	index.html:757	Stars come from the quiz alone: 3 for no wrong answers, 2 for up to two, 1 for finishing.	3★ at ≤star3Retries (0), 2★ at ≤star2Retries (2), else 1★
 browser	HeadlessChrome/157.0.0.0
 saved	play	0	localstorage	tqt.lang
 scene	play	0	title
 scene	play	1	intro
 scene	play	35	play
-measure	step-time	play	0.005	0.300	426
-lane	play	stop	7.1	103
+measure	step-time	play	0.012	3.400	426
+lane	play	stop	7.1	124
+console	play	0	Failed to execute 'requestFullscreen' on 'Element': API can only be initiated by a user gesture.
 uncaught	play	0
 text	play	canvas	512,110,561,152	54.3	3.22	inside	Ối!
 text	play	canvas	1128,51,1158,74	43.4	4.58	inside	VI

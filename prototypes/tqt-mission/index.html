@@ -2,9 +2,11 @@
 <!-- PROTOTYPE - NOT FOR PRODUCTION -->
 <!-- Question: Can a 6-year-old play one hero's story as light touch action on a landscape phone, then answer a short quiz about it? -->
 <!-- Date: 2026-11-14 · TASK-003 -->
-<html lang="vi">
+<html lang="vi" translate="no">
 <head>
 <meta charset="utf-8">
+<meta name="google" content="notranslate">
+<link rel="icon" href="data:,">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Dải Đất Anh Hùng: Trần Quốc Toản</title>
 <link rel="stylesheet" href="font.css">
@@ -203,7 +205,7 @@ function uiAt(p) {
   return null;
 }
 canvas.addEventListener('pointerdown', e => {
-  startAudio(); e.preventDefault();
+  e.preventDefault(); // audio starts on the touch's end (gesture()), never here: Chrome refuses it on pointerdown
   try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* fine */ }
   const u = uiAt(toLogical(e)); if (!u) return;
   if (u.action) { touchHold.set(e.pointerId, u.action); touchTap.add(u.action); }
@@ -214,6 +216,24 @@ canvas.addEventListener('pointermove', e => { // a thumb sliding between ◀ and
   const u = uiAt(toLogical(e)); if (u && (u.action === 'left' || u.action === 'right')) touchHold.set(e.pointerId, u.action);
 });
 const lift = e => touchHold.delete(e.pointerId);
+// Chrome and iOS Safari only count a touch's END as a user gesture: start or resume audio there
+// too (android QC B3), and ask for fullscreen + landscape lock on the title screen (QC O1). iOS
+// Safari has no fullscreen for pages: the request is skipped and the pads keep their minimum size.
+function gesture(e) {
+  startAudio();
+  const real = e && e.isTrusted && (!navigator.userActivation || navigator.userActivation.isActive);
+  if (real && scene === 'title' && !document.fullscreenElement) {
+    const el = document.documentElement;
+    try {
+      const pr = el.requestFullscreen ? el.requestFullscreen({ navigationUI: 'hide' }) : null;
+      if (pr && pr.then) pr.then(() => { try { screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape').catch(() => {}); } catch (e) { /* no lock */ } }).catch(() => {});
+    } catch (e) { /* refused: play in the browser window */ }
+  }
+}
+canvas.addEventListener('pointerup', gesture);
+canvas.addEventListener('touchend', gesture, { passive: true });
+addEventListener('keydown', e => { if (e.code === 'Enter' || e.code === 'Space') gesture(e); });
+addEventListener('fullscreenchange', fit);
 canvas.addEventListener('pointerup', lift); canvas.addEventListener('pointercancel', lift);
 canvas.addEventListener('lostpointercapture', lift); // a lost capture never leaves an action held
 canvas.addEventListener('contextmenu', e => e.preventDefault());
@@ -262,7 +282,7 @@ function startAudio() {
       const out = ac.createGain(); out.gain.value = muted ? 0 : tune.volume;
       out.connect(ac.destination); audio = { ac, out };
     }
-    if (audio.ac.state === 'suspended') audio.ac.resume();
+    if (audio.ac.state === 'suspended') { const pr = audio.ac.resume(); if (pr && pr.catch) pr.catch(() => {}); }
   } catch (e) { /* no audio: play on silently */ }
 }
 function setMuted(m) { muted = m; if (audio) audio.out.gain.value = m ? 0 : tune.volume; }
@@ -670,7 +690,7 @@ function updatePlay(dt) {
   state.dropped = state.dropped.filter(d => d.life > 0);
 }
 function captionNext() {
-  sfx.tap();
+  sfx.tap(); state.idle = 0; state.stall = 0; // the 5 s hints count from the caption closing (QC O2)
   state.beat++;
   if (state.beat >= beats().length) { scene = 'ending'; state.t = 0; events.push({ type: 'ending' }); return; }
   state.phase = 'walk';
@@ -717,6 +737,7 @@ function drawPlay() {
   if (state.phase === 'caption') captionPanel(L(CONTENT.beats[state.beat] || CONTENT.beats[0]), S('beat') + ' ' + (state.beat + 1), captionNext);
 }
 function pad(cx, cy, r, action, icon, on, pulse, label) {
+  r = Math.max(r, tune.padMinCss / 2 / viewScale); // ≥ padMinCss CSS px across at any window size
   const p = pulse ? 1 + 0.08 * Math.sin(state.t * 10) : 1;
   ctx.save(); ctx.translate(cx, cy); ctx.scale(p, p);
   if (pulse) circle(0, 0, r + 14, 'rgba(255,226,74,0.55)');
