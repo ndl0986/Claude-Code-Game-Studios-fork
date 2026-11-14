@@ -22,7 +22,7 @@ public struct Tuning: Sendable {
         "enter_to_approach_dist", "approach_min_time", "windup_reach_extra", "strike_reach_extra", "block_knock",
         "rest_speed_mul", "attack_hit_at", "attack_close_range", "attack_move_mul", "flee_remove_margin",
         "hero_edge_margin", "camera_follow_offset", "ground_y", "beat_start_x", "beat_gap", "hero_start_x",
-        "dummy_spacing", "advance_debounce",
+        "dummy_spacing", "advance_debounce", "pad_gap",
     ]
 
     public init(data: Data) throws {

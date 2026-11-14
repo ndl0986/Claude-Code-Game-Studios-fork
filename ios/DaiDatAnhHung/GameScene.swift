@@ -11,10 +11,13 @@ final class GameScene: SKScene {
     private var lastInsets = UIEdgeInsets.zero, lastSize = CGSize.zero
 
     private let world = SKNode(), fx = SKNode(), ui = SKNode(), worldHints = SKNode()
+    /// The banner motto bar (HUD spec §3.3): above the fighters (z 4–5), under pops (fx 10), hints (12) and the HUD (100).
+    private let bannerLayer = SKNode()
     private var backdropTheme = ""
     private var backdrop: SKNode?
     private var skyNode: SKNode?
-    private let hero = HeroNode()
+    /// The hero at spec height 180 (HUD spec §3.3), the swing arc reaching attack_range (AC13); set up in didMove.
+    private let hero: HeroNode
     private var enemyNodes: [Int: EnemyNode] = [:]
 
     private struct Button { let rect: CGRect; let id: String }
@@ -34,12 +37,14 @@ final class GameScene: SKScene {
 
     init(game: Game, audio: Audio) {
         self.game = game; self.audio = audio
+        hero = HeroNode(scale: 180 / HeroNode.unitHeight, reach: game.tuning["attack_range"])
         super.init(size: CGSize(width: 1280, height: 720))
         scaleMode = .aspectFit
         backgroundColor = C.night
         addChild(world); world.addChild(hero); world.addChild(fx); world.addChild(worldHints)
         hero.zPosition = 5; fx.zPosition = 10; worldHints.zPosition = 12
         addChild(ui); ui.zPosition = 100
+        addChild(bannerLayer); bannerLayer.zPosition = 8
     }
     @available(*, unavailable) required init?(coder: NSCoder) { fatalError() }
 
@@ -53,7 +58,7 @@ final class GameScene: SKScene {
         let ins = v.safeAreaInsets
         guard ins != lastInsets || v.bounds.size != lastSize else { return }
         lastInsets = ins; lastSize = v.bounds.size
-        layout = PadLayout(view: (w: v.bounds.width, h: v.bounds.height), insets: (ins.top, ins.left, ins.bottom, ins.right), padMin: game.tuning["pad_min"])
+        layout = PadLayout(view: (w: v.bounds.width, h: v.bounds.height), insets: (ins.top, ins.left, ins.bottom, ins.right), padMin: game.tuning["pad_min"], padGap: game.tuning["pad_gap"])
         uiKey = ""
     }
 
@@ -219,6 +224,7 @@ final class GameScene: SKScene {
         // training: straw dummies wobble and spring back (never break); the friendly partner in the hero's colours
         for d in p.dummies {
             let n = SKNode(); n.position = D.p(d.x, ground); n.zRotation = -sin(t * 20) * 0.25 * d.wobble
+            n.setScale(130 / 206) // §3.3: the dummy is a body, drawn at spec height ≈ 130 (206 at scale 1)
             n.addChild(D.rr(-6, -170, 12, 170, 6, C.wood))
             n.addChild(D.ellipse(0, -110, 34, 56, d.hit ? SKColor(hex: 0xe8cf7a) : SKColor(hex: 0xd9b26a)))
             n.addChild(D.circle(0, -180, 26, SKColor(hex: 0xe8cf7a)))
@@ -226,12 +232,12 @@ final class GameScene: SKScene {
             fx.addChild(n)
         }
         if let pt = p.partner {
-            let n = HeroNode(scale: 0.95)
+            let n = HeroNode(scale: 160 / HeroNode.unitHeight, reach: game.tuning["enemy_reach"] - game.tuning["stand_gap"]) // §3.3: partner ≤ 180
             n.update(face: pt.face, walk: false, defend: false, attack: pt.state == .strike ? 0.6 : (pt.state == .windup ? 0.05 : nil), hurt: false, t: t)
             n.position = D.p(pt.x, ground); fx.addChild(n)
             if pt.state == .windup {
                 let b = SKNode(); b.addChild(D.circle(0, 0, 30, C.glow, C.goldDark, 4)); b.addChild(D.rr(-5, -18, 10, 24, 5, C.ink)); b.addChild(D.circle(0, 14, 5.5, C.ink))
-                b.position = D.p(pt.x, ground - 300); fx.addChild(b)
+                b.position = D.p(pt.x, ground - 200); fx.addChild(b) // just above the partner's head (160)
             }
         }
         if let fxX = p.flagX {
@@ -258,11 +264,11 @@ final class GameScene: SKScene {
             // the HUD row. Render only: the core's pop position (shared with Android, not in the trace) is unchanged.
             let l = Font.label(game.ui(q.key), 40, color(q.color))
             let sx = max(p.cam + 120, min(p.cam + 1280 - 120, q.x - p.hero.face * 150))
-            l.position = D.p(sx, max(ground - 190, 235)); l.alpha = min(1, q.life * 2); fx.addChild(l)
+            l.position = D.p(sx, ground - 135); l.alpha = min(1, q.life * 2); fx.addChild(l)
         }
         worldHints.removeAllChildren()
-        if let e = p.stallTarget { let a = arrowDown(); a.position = D.p(e.x, ground - 330 + sin(t * 8) * 10); worldHints.addChild(a) }
-        if let dx = p.stallDummyX { let a = arrowDown(); a.position = D.p(dx, ground - 260 + sin(t * 8) * 10); worldHints.addChild(a) }
+        if let e = p.stallTarget { let a = arrowDown(); a.position = D.p(e.x, ground - 250 + sin(t * 8) * 10); worldHints.addChild(a) }
+        if let dx = p.stallDummyX { let a = arrowDown(); a.position = D.p(dx, ground - 190 + sin(t * 8) * 10); worldHints.addChild(a) }
         if p.flagArrow, let fx = p.flagX { let a = arrowDown(); a.position = D.p(fx, ground - 360 + sin(t * 8) * 10); worldHints.addChild(a) }
     }
 
@@ -374,7 +380,7 @@ final class GameScene: SKScene {
     }
 
     private func buildUI() {
-        ui.removeAllChildren(); buttons = []; padNodes = [:]; handNode = nil; cardNodes = []; uiZ = 0; unsignedIds = []
+        ui.removeAllChildren(); bannerLayer.removeAllChildren(); buttons = []; padNodes = [:]; handNode = nil; cardNodes = []; uiZ = 0; unsignedIds = []
         switch game.screen {
         case .title: buildTitle()
         case .intro: buildStory(game.hero.mission.intro, ending: false)
@@ -464,9 +470,9 @@ final class GameScene: SKScene {
         let p = game.play
         roundIcon(layout.pause, "pause", pauseIcon(layout.pause.r))
         roundIcon(layout.mute, "mute", speakerIcon(layout.mute.r))
-        let n = p.beats.count
+        let n = p.beats.count, sx = layout.topStackCentre // 790 unless the pause/sound corner is wide
         for i in 0..<n {
-            let x = 640 - Double(n - 1) * 45 + Double(i) * 90
+            let x = sx - Double(n - 1) * 45 + Double(i) * 90 // the top stack, centred at layout.topStackCentre (§3.3)
             let done = i < p.beat || (i == p.beat && p.phase == .caption)
             add(D.circle(0, 0, 30, done ? C.gold : SKColor(white: 1, alpha: 0.75), C.goldDark, 4), x, 60)
             add(D.drum(22, done ? C.ink : SKColor(red: 58 / 255, green: 42 / 255, blue: 31 / 255, alpha: 0.35)), x, 60)
@@ -494,22 +500,20 @@ final class GameScene: SKScene {
             return
         }
         if p.phase == .beatPlay || p.phase == .beatEnd, p.beat < p.beats.count, let goal = p.beats[p.beat].goal {
-            // a cream plate behind the goal: readable on every sky (camp's navy, iOS-R3-05) and drawn above
-            // the world, so the "!" bubble and pops never cover it (iOS-R3-04)
-            let l = Font.label(goal.text(game.lang), 37, C.ink, width: 1040)
-            let w = min(1080, l.frame.width + 40), h = l.frame.height + 16
-            add(D.rr(-w / 2, -h / 2, w, h, h / 2, SKColor(hex: 0xfff6e3, alpha: 0.9)), 640, 168)
-            add(l, 640, 168)
+            // HUD spec §3.3: the goal plate, 920 × 56 with an 880 box (rules fit.goal), top at dots bottom + 4 (96),
+            // centred on x 790, at the same place on every beat (AC10); cream for every sky (iOS-R3-05)
+            add(D.rr(-460, -28, 920, 56, 28, SKColor(hex: 0xfff6e3, alpha: 0.9)), sx, 124)
+            add(Font.label(goal.text(game.lang), 37, C.ink, width: 880), sx, 124)
         }
         if p.phase == .beatPlay || p.phase == .beatEnd, p.beat < p.beats.count, p.beats[p.beat].usesBanner == true, let b = game.hero.mission.banner {
-            // Mission flow Rule 6: the mission banner as a text layer, never in the art. fit.banner: 880 @ 37,
-            // weight 800, up to 2 lines (body class, TASK-020 W9). Bottom at 554, just under the ground line, so
-            // a second line grows it upward, never into the pads (same geometry as Android).
-            let l = Font.label(b.text(game.lang), 37, C.gold, width: 880)
-            let h = l.frame.height + 26
-            add(D.rr(-450, -h / 2, 900, h, 18, C.red.withAlphaComponent(0.9)), 640, 554 - h / 2)
-            add(l, 640, 554 - h / 2)
-            badge(b, 640 + 380, 554 - h)
+            // Mission flow Rule 6 / HUD spec §3.3 (W9): the motto on a vermilion bar in the sky band, 920 × 112 fixed
+            // (2 lines of 37 at 1.35 + padding) in every language, top 156, centred on x 790; gold text 880 @ 37/800.
+            // Its own layer: above the fighters, under pops, the "!" and hints, and the HUD buttons.
+            let bar = SKNode(); bar.position = D.p(sx, 212)
+            bar.addChild(D.rr(-460, -56, 920, 112, 18, SKColor(hex: 0xD64A2E), C.ink, 4))
+            let l = Font.label(b.text(game.lang), 37, SKColor(hex: 0xFFC531), width: 880); l.zPosition = 1; bar.addChild(l)
+            bannerLayer.addChild(bar)
+            badge(b, sx + 400, 156)
         }
         for (a, c, kind, label) in [(PadAction.left, layout.left, "left", nil), (.right, layout.right, "right", nil),
                                     (.defend, layout.defend, "defend", "ui.pad.defend"), (.attack, layout.attack, "attack", "ui.pad.attack"),

@@ -7,9 +7,18 @@ final class HeroNode: SKNode {
     private let body = SKNode(), arm = SKNode(), legL: SKNode, legR: SKNode
     private let shieldBack: SKNode, shieldFront = SKNode(), swoosh: SKShapeNode
     private let scaleS: Double
+    /// The swing arc's radius in body units: it reaches `reach` world px in front (AC13), whatever the body scale.
+    private let arcR: Double
 
-    init(scale s: Double = 1) {
+    /// The figure is 261 units tall at scale 1 (topknot top). In play it is drawn at spec height
+    /// (`specHeight`, HUD spec §3.3) with `reach`: the staff and swing arc keep that world length
+    /// (attack_range for the hero), so a strike that lands looks like it lands. Render only.
+    static let unitHeight = 261.0
+    init(scale s: Double = 1, reach: Double? = nil) {
         scaleS = s
+        // the shoulder is 18 units in front of the feet; the staff tip is 158 units from the shoulder
+        let worldR = reach.map { $0 - 18 * s } ?? 150 * s
+        arcR = worldR / s
         legL = SKNode(); legR = SKNode()
         legL.addChild(D.rr(-24, -70, 20, 68, 8, C.indigo)); legL.addChild(D.rr(-28, -10, 28, 12, 6, C.ink))
         legR.addChild(D.rr(4, -70, 20, 68, 8, C.indigo)); legR.addChild(D.rr(0, -10, 28, 12, 6, C.ink))
@@ -26,8 +35,9 @@ final class HeroNode: SKNode {
         arm.position = CGPoint(x: 18, y: 128)
         arm.addChild(D.rr(-6, -150, 12, 190, 6, C.wood))
         arm.addChild(D.rr(-8, -158, 16, 18, 6, C.gold))
-        arm.addChild(D.circle(0, 0, 12, C.skin))
+        if reach != nil { arm.yScale = worldR / (158 * s) } // the staff keeps its world length; the hand stays body-sized
         body.addChild(arm)
+        let hand = D.circle(0, 0, 12, C.skin); hand.position = arm.position; body.addChild(hand)
         swoosh.strokeColor = SKColor(white: 1, alpha: 0.8); swoosh.lineWidth = 10; swoosh.lineCap = .round
         body.addChild(swoosh)
         body.addChild(D.circle(0, -196, 44, C.skin))
@@ -61,7 +71,7 @@ final class HeroNode: SKNode {
         arm.zRotation = -ang
         if swing >= 0.2 && swing <= 0.85 {
             let p = CGMutablePath()
-            p.addArc(center: CGPoint(x: 18, y: 128), radius: 150, startAngle: 1.6, endAngle: CGFloat(1.9 - swing * 2.6 + 0.3), clockwise: true)
+            p.addArc(center: CGPoint(x: 18, y: 128), radius: arcR, startAngle: 1.6, endAngle: CGFloat(1.9 - swing * 2.6 + 0.3), clockwise: true)
             swoosh.path = p; swoosh.isHidden = false
         } else { swoosh.isHidden = true }
         alpha = hurt && Int(t * 20) % 2 == 1 ? 0.25 : 1
@@ -75,6 +85,10 @@ final class EnemyNode: SKNode {
     private let lean = SKNode(), weapon = SKNode(), handsUp = SKNode(), glow: SKShapeNode, bubble = SKNode(), dizzy = SKNode()
     private let legL = SKNode(), legR = SKNode(), eyes = SKNode(), swirl = SKNode()
     private let topY: Double
+    /// Body height at scale 1 (helmet top), by kind: drawn at ≤ 170 in play (HUD spec §3.3). The weapon keeps
+    /// its world length (the padded tip 140 px in front, enemy_reach − stand_gap) and the "!" and dizzy stars
+    /// their world size. Render only: the sim has no y.
+    static func unitHeight(_ k: FightParams.Kind) -> Double { k == .spear ? 259 : k == .shield ? 230 : 252 }
 
     init(kind: FightParams.Kind) {
         self.kind = kind
@@ -137,6 +151,10 @@ final class EnemyNode: SKNode {
         for i in 0..<3 { let s = D.star(9, C.glow, C.goldDark); s.name = "\(i)"; dizzy.addChild(s) }
         dizzy.position = CGPoint(x: 0, y: topY - 20)
         addChild(dizzy)
+        let s = min(1, 170 / Self.unitHeight(kind))
+        setScale(s); weapon.xScale = 1 / s
+        // z-order (§3.3): the "!" and the hurt swirl draw over the banner bar (scene z 8)
+        for n in [bubble, dizzy] { n.setScale(1 / s); n.zPosition = 10 }
     }
     required init?(coder: NSCoder) { fatalError() }
 

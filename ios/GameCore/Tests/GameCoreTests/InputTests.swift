@@ -34,6 +34,30 @@ final class InputTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(oy + (l.special.cy - l.special.r) * s, insets.top - 0.001)
     }
 
+    /// HUD spec AC11 / Input Rule 4 on the iOS reference phone (Input F1: a 6.1" Dynamic Island iPhone,
+    /// 852×393 pt landscape, 59 pt side insets, 21 pt home indicator): pause and sound are ≥ pad_min,
+    /// pad_gap apart (as are ◀ ▶), and the block ends left of the top stack, which stays centred at 790.
+    func test_pause_and_sound_keep_pad_min_and_pad_gap_clear_of_the_top_stack() {
+        let insets = (top: 0.0, left: 59.0, bottom: 21.0, right: 59.0)
+        let l = PadLayout(view: (w: 852, h: 393), insets: insets, padMin: 72, padGap: 12)
+        let k = l.scale
+        for c in [l.pause, l.mute] { XCTAssertGreaterThanOrEqual(c.r * 2 * k, 72 - 0.001) }
+        XCTAssertGreaterThanOrEqual(((l.mute.cx - l.mute.r) - (l.pause.cx + l.pause.r)) * k, 12 - 0.001, "pause–sound pad_gap")
+        XCTAssertGreaterThanOrEqual(((l.right.cx - l.right.r) - (l.left.cx + l.left.r)) * k, 12 - 0.001, "◀ ▶ pad_gap")
+        XCTAssertLessThan(l.mute.cx + l.mute.r, 330, "clear of the top stack band")
+        XCTAssertEqual(l.topStackCentre, 790)
+    }
+
+    /// The leader's r5 rule: a big corner (small k, a full-width view with a left inset) moves the stack right,
+    /// its left edge at the corner + 8, with the centre clamped at 810.
+    func test_a_wide_corner_pushes_the_top_stack_right_up_to_810() {
+        let k = 0.49, l = PadLayout(view: (w: 1280 * k, h: 720 * k), insets: (0, 59, 21, 0), padMin: 72, padGap: 12)
+        let corner = l.mute.cx + l.mute.r
+        XCTAssertGreaterThan(corner + 8, 330)
+        XCTAssertEqual(l.topStackCentre, min(810, corner + 8 + 460), accuracy: 1e-9)
+        XCTAssertLessThanOrEqual(l.topStackCentre, 810)
+    }
+
     func test_hit_test_finds_the_pad_with_slop() {
         let l = PadLayout(view: (w: 1280, h: 720), insets: (0, 0, 0, 0), padMin: 72)
         XCTAssertEqual(l.action(at: l.attack.cx + l.attack.r * 1.1, l.attack.cy), .attack)

@@ -72,28 +72,34 @@ public struct PadLayout: Equatable, Sendable {
 
     /// `view` and `insets` (top, left, bottom, right) are in points; the scene is aspect-fit
     /// into the view. Scene y grows downward here (0 = top), like the prototype.
-    public init(view: (w: Double, h: Double), insets: (top: Double, left: Double, bottom: Double, right: Double), padMin: Double) {
+    /// `padGap` (points, tuning `pad_gap`, Input Rule 4): the gap between ◀ ▶ and between pause and sound.
+    public init(view: (w: Double, h: Double), insets: (top: Double, left: Double, bottom: Double, right: Double), padMin: Double, padGap: Double = 12) {
         let s = min(view.w / 1280, view.h / 720)
         scale = s
         let ox = (view.w - 1280 * s) / 2, oy = (view.h - 720 * s) / 2
         // the safe rect in scene units, plus an 8-unit gap
         let l = max(0, insets.left - ox) / s + 8, r = 1280 - max(0, insets.right - ox) / s - 8
         let tp = max(0, insets.top - oy) / s + 8, b = 720 - max(0, insets.bottom - oy) / s - 8
+        let gap = padGap / s
         func pad(_ cx: Double, _ cy: Double, _ r0: Double) -> Circle {
             let rr = max(r0, padMin / 2 / s)
             return Circle(cx: min(max(cx, l + rr), r - rr), cy: min(max(cy, tp + rr), b - rr), r: rr)
         }
         left = pad(140, 610, 80); right = pad(330, 610, 80)
-        if right.cx - right.r < left.cx + left.r + 10 { right.cx = left.cx + left.r + 10 + right.r }
+        if right.cx - right.r < left.cx + left.r + gap { right.cx = left.cx + left.r + gap + right.r }
         defend = pad(950, 625, 80); attack = pad(1150, 590, 92)
         if defend.cx + defend.r > attack.cx - attack.r - 10 { defend.cx = attack.cx - attack.r - 10 - defend.r }
         // special sits above attack (hold-meter and training only)
         special = pad(attack.cx, attack.cy - attack.r - 14 - max(80, padMin / 2 / s), 80)
         pause = pad(66, 66, 48); mute = pad(176, 66, 48)
-        if mute.cx - mute.r < pause.cx + pause.r + 10 { mute.cx = pause.cx + pause.r + 10 + mute.r }
+        if mute.cx - mute.r < pause.cx + pause.r + gap { mute.cx = pause.cx + pause.r + gap + mute.r }
         let lw = 160.0, lh = 96.0
         lang = (x: min(1100, r - lw), y: max(18, tp), w: lw, h: lh)
     }
+
+    /// HUD spec §3.3: the top stack (dots, goal plate, banner bar; 920 wide) starts at
+    /// max(330, the pause/sound block's right edge + 8), its centre clamped to 790–810.
+    public var topStackCentre: Double { min(810, max(790, max(330, mute.cx + mute.r + 8) + 460)) }
 
     /// The pad under a point (scene units, y down), with the prototype's 15% slop.
     public func action(at x: Double, _ y: Double, visible: Set<PadAction> = Set(PadAction.allCases)) -> PadAction? {
