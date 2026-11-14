@@ -265,5 +265,13 @@ Criteria 1–9 and 13–14 are logic (unit tests on the input layer); 10–12 ne
 
 | # | Question | Owner | By |
 |---|---|---|---|
-| — | `pad_gap` (12 pt proposed) as a tuning key, alongside `drag_threshold` | devs | With the next tuning branch |
+| — | New tuning keys (data follow-up by game-dev-android): see the list below | game-dev-android | Data follow-up |
 | — | Haptics in the slice, or later? (Rule 17) | Luan | Optional |
+
+**New tuning keys** (for `content/data/tuning.json`):
+
+| Key | Value | Range | Unit | Used by |
+|---|---|---|---|---|
+| `pad_gap` | 12 | 8–24 | pt_dp | F1: minimum gap between neighbouring pads (Rule 4) |
+| `drag_threshold` | 10 | 6–20 | pt_dp | Rule 16: tap vs drag on the map and timeline; AC14 |
+
