@@ -124,8 +124,23 @@ the king's meeting at Bình Than!", 688 px).
   the side away from the other fighter, never above the head. With bodies at spec height, the
   highest head is at y ≈ 290, so a pop never reaches the bar's band (≤ 268). Both apps follow
   this (iOS does it today).
-- **Colour:** vermilion `#D64A2E` with gold text `#FFC531` and an ink-brown outline on the bar,
-  as built; one motif at most (Luan's rule 4).
+- **Pop contrast (QC r5):** a pop is never a bare colour on the sky. Red pop text `#E4543C`
+  alone measured 1.95:1 on the camp's navy sky and 2.5:1 on the mint mountains (QC r5). Every
+  pop gets an **outline ≥ 3 px** (at 28–37 px text), chosen per theme from the sky band
+  (`themes.json`):
+  - **light skies** (village, bamboo, river): **ink `#3A2A20`** outline. Red fill vs ink
+    **3.68:1**; ink vs the sky bands **7.9–10.5:1**; ink vs the mint mountains ≈ **8.5:1**;
+  - **dark skies** (camp): **cream `#FFF6E3`** outline. Red fill vs cream **3.47:1**; cream vs
+    the camp sky **9.3–11.6:1**.
+  So every pop reaches ≥ 3:1 at both edges, the fill against its outline and the outline
+  against whatever is behind it. The rule: use the outline with the higher contrast against
+  the theme's `sky_band.bottom`.
+- **Colour:** vermilion `#D64A2E` bar with gold text `#FFC531`, as built; one motif at most
+  (Luan's rule 4). **The gold text carries an ink `#3A2A20` outline ≥ 2 px at 37 px** (QC r5):
+  gold on vermilion alone is **2.72:1** (QC measured ≈ 2.6), below 3:1. With the outline, gold
+  vs ink is **8.67:1** and the ink edge vs vermilion **3.18:1**, so the six words pass 3:1 as
+  large text (37 world px, weight 800, ≈ 51 screen px on the reference phone). The gold look
+  stays.
 - **When:** the whole of every `uses_banner` beat, from `beat_play` start. It hides on story
   screens, in the dialogue and on pause (pause shows the dimmed backdrop as usual).
 
@@ -223,5 +238,7 @@ insets; iOS home indicator, notch or Dynamic Island. Rounded corners wait for TA
 10. **GIVEN** any non-banner beat, **WHEN** captured, **THEN** the goal plate is at the same position as on banner beats (dots bottom + 4, centred on x 790).
 11. **GIVEN** the Android reference phone (k 0.527 dp per world px) and the iOS reference phone (k 0.517), with pause and sound at `pad_min`, **WHEN** a training and a reach-the-flag beat are captured in VI and EN, **THEN** no pixel of the dots, the goal plate or the banner bar overlaps the pause or sound button.
 12. **GIVEN** a push, a block and a hit during an encounter at its closest, **WHEN** captured, **THEN** each pop sits beside the fighter's head at head height and no pop pixel overlaps the banner bar.
-13. **GIVEN** a hit and a strike that land at spec height, **WHEN** frame-stepped, **THEN** the hero's swing arc reaches 175 world px in front of him and the enemy's weapon tip 140, so contact is visible.
+13. **GIVEN** a hit and a strike that land at spec height, **WHEN** frame-stepped, **THEN** the hero's swing arc reaches 175 world px in front of him and the enemy's weapon tip 140, so contact is visible; on a landed strike, the padded tip touches the hero's chest for ≥ 2 frames (≈ 33 ms) before the hero's pushed pose (Combat V/A, render-only).
 14. **GIVEN** a phone or emulator with k = 0.46 (e.g. a left gesture inset), **WHEN** a training beat is captured in VI and EN, **THEN** the stack starts at `corner_right` + 8, the goal plate and the banner bar narrow to `1270 − start` (≥ 760), nothing overlaps pause or sound, and the EN banner is ≤ 2 lines with no text cut.
+15. **GIVEN** each theme (village, bamboo, river, camp), **WHEN** "Ối!/Oof!", "Đỡ được!/Blocked!" and a hit pop are captured over the sky band and over the mid layer (e.g. the mint mountains), **THEN** each pop has an outline (ink on light skies, cream on the camp) and measures ≥ 3:1 fill-to-outline and outline-to-background.
+16. **GIVEN** the banner bar in VI and EN, **WHEN** captured, **THEN** the gold text has an ink outline ≥ 2 px and the measured contrast is ≥ 3:1 at the text edge (target 3.18:1 outline-to-vermilion, 8.67:1 gold-to-outline).
