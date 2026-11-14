@@ -1,6 +1,8 @@
 # UX Spec: Dialogue Beat (e.g. "Xin gặp vua" at Bình Than)
 
 > **Status**: In Review · Task: TASK-021 · Author: game-art-content
+> **Template**: UX Spec
+> **Platform Target**: Android + iOS phones, landscape, touch only (`project.yaml` goal mobile; no gamepad or keyboard). Accessibility tier: Basic+ (`design/accessibility-requirements.md`).
 > **Records what's built** (TASK-016a). Sources: Mission flow Rule 7d, states (`dialogue_line`),
 > F6, AC23–25; schema 1.4 (R4c, R13d); Input Rules 8, 12, 13; Hints (the stuck hand on the ask
 > button); assets ASSET-327–331; the hero doc §3 beat 1b (script approved by Luan).
@@ -75,3 +77,5 @@ D-17: lines between characters may use "cậu", "cháu" or "ta"; nothing address
 3. **GIVEN** each line in VI and EN, **WHEN** captured, **THEN** the portrait is on the correct side and
    the text fits its box (720 or 880).
 4. **GIVEN** Skip then "Vẫn bỏ qua" in this scene, **WHEN** the quiz finishes, **THEN** no medal.
+5. **GIVEN** no tap on the ask button for `hint_delay`, **WHEN** waiting, **THEN** the hint hand points at it.
+6. **GIVEN** the lowest target Android phone, **WHEN** a line advances, **THEN** the next line and portrait show within 150 ms; checked on the narrowest phone and a 20:9 phone.

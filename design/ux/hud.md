@@ -1,6 +1,8 @@
 # HUD Design: Mission
 
 > **Status**: In Review · Task: TASK-021 · Author: game-art-content
+> **Template**: HUD Design
+> **Platform Target**: Android + iOS phones, landscape, touch only (`project.yaml` goal mobile; no gamepad or keyboard). Accessibility tier: Basic+ (`design/accessibility-requirements.md`).
 > **Records what's built.** Sources: Input & touch GDD Rules 1–17; Mission flow Rules 4, 7, 7b,
 > 7c, 11; Combat V/A; Hints Rules 2–6; `design/accessibility-requirements.md`; QC TASK-003 r3
 > (O5, O6) and TASK-006 iOS r2 (the "Ối!" placement).
@@ -83,15 +85,32 @@ iOS's home-indicator inset (QC r3 O5: pad bottoms clear of the gesture zone).
 
 ## 6. Information Hierarchy
 
-1. The hero and the telegraphed enemy (the play area).
-2. The pads in use.
-3. The goal line.
-4. Dots, pause and sound (small, peripheral).
+| Element | Tier |
+|---|---|
+| Play area (hero, telegraph) | MUST KEEP |
+| The beat's pads | MUST KEEP |
+| Pause | MUST KEEP |
+| Goal line | SHOULD KEEP (hidden on dialogue beats) |
+| Progress dots, sound | SHOULD KEEP |
+| Hints | CAN HIDE (only when triggered) |
+| Health, score, timers, language chip in play | ALWAYS HIDE (don't exist) |
 
 ## 7. Visual Budget
 
-At most 5 pads plus pause and sound; one hint at a time (Hints Rule 3); no more than 2 pops at
-once.
+At most 5 pads plus pause and sound (7 controls); one hint at a time (Hints Rule 3); no more than
+2 pops at once. Controls cover ≤ 25% of the screen: the bottom corners and a thin top row; the
+centre is never covered.
+
+### Tuning Knobs
+
+| Knob | Value | Source |
+|---|---|---|
+| `pad_min` | 72 pt | `tuning.json` |
+| `pad_gap` | 12 pt | `tuning.json` (data follow-up) |
+| `hint_delay` | 5 s | `tuning.json` |
+
+There are no player-adjustable HUD settings in the slice (HUD repositioning is out of scope,
+accessibility requirements).
 
 ## 8. Feedback & Notification Systems
 
@@ -118,3 +137,5 @@ insets; iOS home indicator, notch or Dynamic Island. Rounded corners wait for TA
    gesture zone and inside the safe rect (O5). The same holds on a Dynamic Island iPhone, both ways.
 3. **GIVEN** a push, **WHEN** "Ối!" pops, **THEN** it doesn't overlap pause or sound.
 4. **GIVEN** a dialogue beat, **WHEN** shown, **THEN** no pads and no goal line show.
+5. **GIVEN** the lowest target Android phone, **WHEN** a pad is pressed, **THEN** its action starts in the next frame (combat AC12).
+6. **GIVEN** the narrowest supported phone, **WHEN** captured, **THEN** the pads keep ≥ 12 pt gaps and never overlap the goal line.

@@ -1,6 +1,8 @@
 # UX Spec: Quiz and Results (stars and medal)
 
 > **Status**: In Review · Task: TASK-021 · Author: game-art-content
+> **Template**: UX Spec
+> **Platform Target**: Android + iOS phones, landscape, touch only (`project.yaml` goal mobile; no gamepad or keyboard). Accessibility tier: Basic+ (`design/accessibility-requirements.md`).
 > **Records what's built.** Sources: Quiz & stars Rules 2–10 (P-05), F1; Hero progression Rule 10;
 > Mission flow Rule 15 (the medal); Input Rules 8, 12, 13 (QC r2 B4); Audio Rules 3, 6; art
 > bible §2 (quiz mood), §4; assets ASSET-001–023, 036–037.
@@ -97,3 +99,4 @@ fill vs outline. No timers.
    outline stars, a gold medal and `ui.medal.earned`.
 5. **GIVEN** a replay scoring lower than the best, **WHEN** results show, **THEN** this run's stars
    and "best" with the higher value; the saved stars stay.
+6. **GIVEN** the lowest target Android phone, **WHEN** a card is tapped, **THEN** its feedback starts within 100 ms; layouts checked on the narrowest phone and a 20:9 phone.

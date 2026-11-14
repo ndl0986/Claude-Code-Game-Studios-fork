@@ -1,6 +1,8 @@
 # UX Spec: Pause Menu
 
 > **Status**: In Review · Task: TASK-021 · Author: game-art-content
+> **Template**: UX Spec
+> **Platform Target**: Android + iOS phones, landscape, touch only (`project.yaml` goal mobile; no gamepad or keyboard). Accessibility tier: Basic+ (`design/accessibility-requirements.md`).
 > **Records what's built.** Sources: Mission flow Rules 11, 12, states (`paused`); Input Rule 11
 > (clear-all); Combat edge case (the windup restarts on resume); Language Rules 2, 4; Audio Rules
 > 10, 14, 16; QC iOS r2 **iOS-R2-06** (the backdrop is the screen pause came from). Note: in
@@ -66,3 +68,4 @@ Big, clearly separated buttons; text plus icons; no timers.
    menu; after switching to EN and resuming, the same card is greyed and the text is EN.
 4. **GIVEN** the app backgrounded mid-fight, **WHEN** it returns, **THEN** the pause menu shows and
    nothing has moved.
+5. **GIVEN** the lowest target Android phone, **WHEN** pause is tapped, **THEN** the menu shows within 150 ms; checked on the narrowest phone and a 20:9 phone.

@@ -1,6 +1,8 @@
 # UX Spec: Hero Unlock and the Map Stub
 
 > **Status**: In Review · Task: TASK-021 · Author: game-art-content
+> **Template**: UX Spec
+> **Platform Target**: Android + iOS phones, landscape, touch only (`project.yaml` goal mobile; no gamepad or keyboard). Accessibility tier: Basic+ (`design/accessibility-requirements.md`).
 > **Records what's built.** Sources: Hero progression Rules 4–6, 10; Mission flow states
 > (`unlock`); Map & timeline Rule 7 (the later arrival sequence); Audio (`sfx_unlock_reveal`); assets
 > ASSET-038 (the reveal glow).
@@ -63,3 +65,4 @@ Calm, with no stingers (Audio).
 3. **GIVEN** Trần Quốc Toản (next_hero null), **WHEN** results finish, **THEN** the more-heroes line
    shows and the game returns to the title.
 4. **GIVEN** the reveal, **WHEN** frame-stepped, **THEN** it lasts ≤ 3 s with nothing over 3 Hz.
+5. **GIVEN** the narrowest supported phone and a 20:9 phone, **WHEN** captured in VI and EN, **THEN** the name and title fit their boxes and the button is ≥ 72 pt.

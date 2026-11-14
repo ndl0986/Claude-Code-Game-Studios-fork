@@ -1,6 +1,8 @@
 # UX Spec: Title Screen (the slice's "map")
 
 > **Status**: In Review · Task: TASK-021 · Author: game-art-content
+> **Template**: UX Spec
+> **Platform Target**: Android + iOS phones, landscape, touch only (`project.yaml` goal mobile; no gamepad or keyboard). Accessibility tier: Basic+ (`design/accessibility-requirements.md`).
 > **Records what's built**, plus two **PENDING** variants waiting for Luan (D-27, D-20).
 > Sources: Mission flow Rule 1 ("the map" = the title in the slice), P-04, Hero progression
 > Rules 2–5 and 10, Map & timeline (the later home), Language Rule 3, QC G5.
@@ -111,6 +113,8 @@ The title and every label are VI/EN text layers within the `ui` and `button` bud
    Start and the more-heroes line shows, with no error.
 4. **GIVEN** D-27 accepted and the hero completed with 2★ and no medal, **WHEN** the title shows,
    **THEN** the card shows 2 filled and 1 outline star and an outline medal.
+5. **GIVEN** the lowest target Android phone, **WHEN** the app launches, **THEN** the title is interactive within 2 s (after the SFX preload, Audio Rule 7).
+6. **GIVEN** the narrowest supported phone and a 20:9 phone, **WHEN** captured in VI and EN, **THEN** no element overlaps and all text fits (R8c).
 
 ## 15. Open Questions
 

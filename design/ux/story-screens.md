@@ -1,6 +1,8 @@
 # UX Spec: Story Screens (intro, beat card, caption, ending) and the Skip Warning
 
 > **Status**: In Review · Task: TASK-021 · Author: game-art-content
+> **Template**: UX Spec
+> **Platform Target**: Android + iOS phones, landscape, touch only (`project.yaml` goal mobile; no gamepad or keyboard). Accessibility tier: Basic+ (`design/accessibility-requirements.md`).
 > **Records what's built.** Sources: Mission flow Rules 2, 10, 15 (D-07), states table; P-06
 > (the step's background); Input Rules 8, 12, 13 (QC r2 B1); Audio Rules 17, 22; Language
 > field types; art bible §2 (story and calm-ending moods); assets ASSET-035, 323, 324.
@@ -105,3 +107,5 @@ bell (Audio `sfx_skip_warning_open`). Last beat → ending: a 3 s music crossfad
    Skips in the run skip at once.
 4. **GIVEN** any story screen, **WHEN** captured in VI and EN, **THEN** each box is one sentence
    within its box, with no red anywhere on the warning card.
+5. **GIVEN** the last caption box, **WHEN** Tiếp is double-tapped across the screen change, **THEN** the next screen's first line is not skipped.
+6. **GIVEN** the lowest target Android phone, **WHEN** Tiếp is tapped, **THEN** the next box shows within 150 ms; checked on the narrowest phone and a 20:9 phone.
