@@ -1,7 +1,7 @@
 # ADR-0002: Asset pipeline and texture/memory budgets
 
 ## Status
-Proposed
+Accepted (Luan, 2026-11-14, D-19)
 
 ## Date
 2026-11-14
@@ -131,8 +131,7 @@ low-end Android phones and primary-school children's hand-me-down devices. Witho
    versions**. iOS 17 therefore excludes **at most 7%** of active iPhones (the share below iOS 17 alone
    is NOT SOURCEABLE from that data; the 7% includes iOS 17 itself). iPads aren't covered by those
    figures. Lowering the target is possible: nothing in the slice needs iOS 17 specifically
-   (SpriteKit, SwiftUI's `SpriteView` and WebP decoding all predate it). Luan decides; the default is
-   iOS 17.
+   (SpriteKit, SwiftUI's `SpriteView` and WebP decoding all predate it). **Decided by Luan (2026-11-14, D-19): keep iOS 17.**
 7. **Not decided here:** the final art style and its lock (D-18), voice-over sizes, a tablet 2× set,
    any download or streaming (offline only, ADR-0001).
 
@@ -226,7 +225,9 @@ The slice's placeholder art is drawn in code, so nothing to migrate. Final art f
 first export; `assets.json` gets width/height in the follow-up data branch.
 
 ## Validation Criteria
-To be filled before acceptance (the leader logs this ADR as D-19):
+Accepted by Luan (D-19) with the unchecked boxes below **open after acceptance**: iOS memory on the
+Duo after iOS QC, and frame time on real devices for both platforms. If a measurement breaks a budget,
+the budget is revised by a new ADR.
 - [x] Android decode memory (game-dev-android, AVD devandroid002 API 36 arm64, debug AtlasBenchActivity @ 2852a4e):
   2048² atlas = 16.0 MB decoded; a 1440×1620 tile = 8.9 MB (RGB_565: 4.45 MB, WebP only);
   `Bitmap.Config.HARDWARE` heap +0.005 MB (GPU memory only).
