@@ -51,8 +51,9 @@ on a screen (each UX spec), or voice-over (Audio & voice-over).
    weights (regular, bold). It must render every Vietnamese character, including stacked marks
    (Ặ Ỗ Ữ ẫ ợ ệ ằ) and both tone-mark placements (khoá/khóa), with no clipped diacritics.
 6. **Sizes** (art bible §7, three sizes: title, body, button), in **world px at the fitted
-   scale**. The fit is `k_px` screen px per world px (Input F1): 1.383 on the Android reference
-   phone, where 1 world px = 0.527 dp, so 37 world px ≈ 19.5 dp.
+   scale**. The fit is `k_px` screen px per world px (Input F1): 1.383 in the geometry example
+   (k 0.527, Input F1), where 1 world px = 0.527 dp, so 37 world px ≈ 19.5 dp (≈ 18.1 dp on the
+   Android AVDs, k 0.488).
    - **Every R8c field type belongs to one size class**, and its `font_px` is never below the
      class minimum (TASK-020 W9):
 

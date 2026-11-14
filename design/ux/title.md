@@ -50,8 +50,8 @@ Root. Title → mission (intro) → … → results → (unlock) → title.
 ### 5.2 Layout Zones and 5.3 Component Inventory
 
 Boxes are world px in the 1280×720 world, drawn at `k_px` (Input F1). "Ref" numbers are the
-Android reference phone (k 0.527, `pad_min` = 137 world px); every box below is also checked on
-the iOS reference (k 0.517). Supported k ≥ 0.40, the shared floor (`design/ux/hud.md` §3.3).
+geometry example (k 0.527, `pad_min` = 137 world px; Input F1, no test device); every box below
+is checked on the Android AVDs (k ≈ 0.488, `pad_min` ≈ 148) and the iOS QC phone (k 0.517). Supported k ≥ 0.40, the shared floor (`design/ux/hud.md` §3.3).
 
 | Component | Box (world px) | Size / field | Source |
 |---|---|---|---|
@@ -71,7 +71,8 @@ debug line) could run past the safe rect's bottom. The world is fitted inside th
 (Input Rule 1), so `safe_bottom` = 720 in world px.
 - **At every supported k (≥ 0.40) the column stays stacked, in release and debug builds.** At
   k 0.40: Start 375–555 (180 tall), the stub 571–609, the debug line 617–651, all inside 720
-  (69 px spare). At the reference (k 0.527): Start 375–512, stub 528–566, debug 574–608.
+  (69 px spare). In the geometry example (k 0.527): Start 375–512, stub 528–566, debug 574–608. On the Android
+  AVDs (k 0.488): Start 375–522.5, stub 538.5–576.5, debug 584.5–618.5.
 - **The beside-Start fallback stays only as a coded guard** for a device that reports k below
   the floor. It would switch at k < ≈ 0.29 (debug) or ≈ 0.25 (release), so no supported phone
   reaches it, and QC doesn't test it.
@@ -96,7 +97,7 @@ Start → the hero card → title → language and sound.
 ### 5.5 The hero card (D-27: A)
 
 Positions are world px in the 1280×720 world, drawn at `k_px` (Input F1); the corner buttons are
-≥ `pad_min` (137 world px on the Android reference phone, k 0.527).
+≥ `pad_min` (137 world px in the k 0.527 geometry example; ≈ 148 on the Android AVDs, k 0.488).
 
 | Part | Spec |
 |---|---|
@@ -179,7 +180,7 @@ The title and every label are VI/EN text layers within the `ui` and `button` bud
    in full colour, 3 outline stars and an outline medal, and no text badge.
 4c. **GIVEN** a best of 3★ with the medal, **WHEN** the hero is replayed for 1★ and the title shows
    again, **THEN** the card still shows 3 filled stars and the gold medal.
-4d. **GIVEN** the Android reference phone (k 0.527) and the iOS reference phone (k 0.517), with sound and
+4d. **GIVEN** an Android AVD (k ≈ 0.488) and the iOS QC phone (k 0.517), with sound and
    the chip at `pad_min`, **WHEN** the title is captured in VI and EN in a release and a debug build, **THEN**
    the title row is inside x 260–1020, y 18–155 on 1 line; the card is at y 175–355; Start's top is at y 375
    and it is ≥ `pad_min`; the map stub starts 16 below Start; no two of sound, chip, title row, card, Start,
@@ -189,7 +190,8 @@ The title and every label are VI/EN text layers within the `ui` and `button` bud
    a debug build, VI and EN, **THEN** Start is at x 430–850, y 375–555; the map stub is stacked under Start
    (y 571–609) and, in the debug build, the debug line under it (y 617–651); nothing passes y 720; and
    nothing overlaps the card, the chip or Start. **GIVEN** the reference phones, **THEN** the same stacked
-   layout (stub 528–566, debug 574–608). The beside-Start guard is not tested (it can't fire at k ≥ 0.40).
+   layout (Android AVD k 0.488: stub 538.5–576.5, debug 584.5–618.5; iOS QC k 0.517: stub
+   530.3–568.3, debug 576.3–610.3). The beside-Start guard is not tested (it can't fire at k ≥ 0.40).
 5. **GIVEN** the lowest target Android phone, **WHEN** the app launches, **THEN** the title is interactive within 2 s (after the SFX preload, Audio Rule 7).
 6. **GIVEN** the narrowest supported phone and a 20:9 phone, **WHEN** captured in VI and EN, **THEN** no element overlaps and all text fits (R8c).
 7. **GIVEN** a fresh launch, **WHEN** the title shows before the audio preload ends, **THEN** every button is drawn disabled and a tap does nothing; when the preload ends they all enable.
