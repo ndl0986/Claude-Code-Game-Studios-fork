@@ -199,7 +199,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         for (e in r.enemies) fig.enemy(e, ground, t)
         if (!(h.hurt > 0 && (t * 20).toInt() % 2 == 1)) fig.hero(h.x.toFloat(), ground, h.face, h.walk, h.def, if (h.atk >= 0) h.atk else null, t)
         if (r.bannerRaised && r.beatType == BeatType.TRAINING) fig.icon("flag", h.x.toFloat() - h.face * 60f, ground - 250, 110f)
-        if (r.beatType == BeatType.HOLD && r.phase != Phase.CARD) holdMeter(h.x.toFloat() + h.face * 130f, ground - 200, r.heldTotal / r.holdSeconds(r.beat)) // beside the hero, clear of the goal bar
+        if (r.beatType == BeatType.HOLD && (r.phase == Phase.PLAY || r.phase == Phase.END)) holdMeter(h.x.toFloat() + h.face * 130f, ground - 200, r.heldTotal / r.holdSeconds(r.beat)) // beside the hero, clear of the goal bar
         for (p in r.parts) d.star(p.x.toFloat(), p.y.toFloat(), p.r.toFloat(), p.color.toInt(), C.GOLD_DARK, p.rot.toFloat())
         for (p in r.pops) { val old = d.alpha; d.alpha = min(1.0, p.life * 2); d.text(g.ui(p.textId), p.x.toFloat(), p.y.toFloat(), 40f, p.color.toInt()); d.alpha = old }
         r.stallTargetX?.let { fig.arrowDown(it.toFloat(), ground - 330, t) }
@@ -228,8 +228,14 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             d.rr(W / 2 - 530, 168f, 1060f, 58f, 22f, C.a(C.CREAM, 0.88))
             beat.goal?.let { gl -> d.textBox(gl.get(g.lang), W / 2, 197f, 1040f, 37f, C.INK, 1); badge(g, gl, W / 2 + 430, 168f) }
             if (beat.usesBanner) g.bundle.mission.banner?.let { b ->
-                d.rr(W / 2 - 450, 234f, 900f, 84f, 18f, C.a(C.RED, 0.9)); d.textBox(b.get(g.lang), W / 2, 276f, 880f, 28f, C.GOLD, 2); badge(g, b, W / 2 + 380, 234f) // fit.banner 880 @ 28, 2 lines
+                // just above the ground line, below the fighters' heads (fit.banner 880 @ 28, 2 lines)
+                d.rr(W / 2 - 450, 478f, 900f, 76f, 18f, C.a(C.RED, 0.9)); d.textBox(b.get(g.lang), W / 2, 516f, 880f, 28f, C.GOLD, 2); badge(g, b, W / 2 + 380, 478f)
             }
+        }
+        // The telegraph "!" is the key cue: draw it again above the goal and banner layers.
+        for (e in r.enemies) if (e.state == com.galaxyandsun.daidatanhhung.core.EnemyState.WINDUP) {
+            val bx = e.x.toFloat() - cam; val by = ground - (if (e.kind == "leader") 280 else if (e.kind == "shield") 240 else 272) - 20
+            d.circle(bx, by, 30f, C.GLOW, C.GOLD_DARK, 4f); d.rr(bx - 5, by - 18, 10f, 24f, 5f, C.INK); d.circle(bx, by + 14, 5.5f, C.INK)
         }
         val vis = r.visibleButtons()
         if (r.phase != Phase.CAPTION && r.phase != Phase.CARD && r.phase != Phase.DIALOGUE) {
