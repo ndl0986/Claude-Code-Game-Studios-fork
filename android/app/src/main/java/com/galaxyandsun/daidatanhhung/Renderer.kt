@@ -156,15 +156,9 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         if (debug) d.text(g.ui(UiIds.SUBTITLE_DEBUG), W / 2, 220f, 36f, C.WHITE)
         fig.hero(260f, GROUND, 1, false, false, null, t, 0.8f)
         button("start", g.ui(UiIds.START), W / 2 - 190, 330f, 380f, 130f, t, pulse = true, size = 44f, enabled = ready) { ready && g.start() }
-        d.rr(150f, 520f, 980f, 150f, 24f, C.a(C.CREAM, 0.92))
-        val items = listOf<Pair<(Float) -> Unit, String>>(
-            { r: Float -> d.c.save(); d.c.translate(-12f, 0f); arrowGlyph(r * 0.7f, -1); d.c.translate(24f, 0f); arrowGlyph(r * 0.7f, 1); d.c.restore() } to g.ui(UiIds.MOVE),
-            { r: Float -> staffGlyph(r) } to g.ui(UiIds.ATTACK), { r: Float -> shieldGlyph(r) } to g.ui(UiIds.DEFEND))
-        items.forEachIndexed { i, (ic, lab) ->
-            val x = 300f + i * 340
-            d.c.save(); d.c.translate(x - 60, 595f); d.circle(0f, 0f, 38f, C.WHITE, C.GOLD, 4f); ic(38f); d.c.restore()
-            d.text(lab, x + 20, 595f, 32f, C.INK, Paint.Align.LEFT)
-        }
+        // title.md: the map-stub line, no controls legend (the first-use hands teach the controls in play)
+        d.rr(240f, 540f, 800f, 80f, 24f, C.a(C.CREAM, 0.92))
+        d.textBox(g.ui(UiIds.MAP_STUB), W / 2, 580f, 760f, 28f, C.INK, 1, semiBold = true) // label ≥ 28
         langButton(g)
     }
 
@@ -396,13 +390,21 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             if (q.lastWrong == j && q.shakeT > 0) x += (sin(q.shakeT * 60) * 14 * q.shakeT * 2).toFloat()
             val wrong = j in q.wrongPicked; val ok = q.rightShown == j
             d.rr(x, y0 + 8, cw, ch, 30f, C.a(0, 0.3))
-            d.rr(x, y0, cw, ch, 30f, if (ok) 0xFFD9F2D0.toInt() else if (wrong) C.TRY_AGAIN else C.CREAM, if (ok) C.RIGHT else if (wrong) 0xFF7E7299.toInt() else C.GOLD, if (ok) 10f else 5f)
-            val old = d.alpha; if (wrong) d.alpha = 0.5
+            // quiz-and-results.md: right = #D9F2D0 fill, #3FA34D 10 px border, tick; wrong = #E6E1F0 fill, #9C8FB8 10 px
+            // border, circular arrow; ink labels; icons carry a thick ink outline (colour-blind-safe signals)
+            d.rr(x, y0, cw, ch, 30f, if (ok) 0xFFD9F2D0.toInt() else if (wrong) 0xFFE6E1F0.toInt() else C.CREAM, if (ok) C.RIGHT else if (wrong) C.TRY_AGAIN else C.GOLD, if (ok || wrong) 10f else 5f)
             picture(a.pictureId, x + cw / 2, y0 + 120, 100f)
-            d.alpha = old
-            if (wrong) { d.arc(x + cw - 44, y0 + 44, 18f, -0.3f, 4.4f, C.WHITE, 6f); d.poly(C.WHITE, x + cw - 26, y0 + 30, x + cw - 18, y0 + 46, x + cw - 34, y0 + 46) }
-            if (ok) { val p = d.stroke(C.RIGHT, 10f); d.c.drawLine(x + cw - 64, y0 + 44, x + cw - 50, y0 + 60, p); d.c.drawLine(x + cw - 50, y0 + 60, x + cw - 24, y0 + 28, p) }
-            d.textBox(a.text.get(g.lang), x + cw / 2, y0 + 262, cw - 30, 37f, if (wrong) 0xFF4A4060.toInt() else C.INK, 2) // fit.quiz_choice 360 @ 37
+            if (wrong) {
+                val ax = x + cw - 44; val ay = y0 + 44
+                d.arc(ax, ay, 18f, -0.3f, 4.4f, C.INK, 14f); d.arc(ax, ay, 18f, -0.3f, 4.4f, C.TRY_AGAIN, 7f)
+                d.poly(C.TRY_AGAIN, ax + 18, ay - 18, ax + 28, ay + 4, ax + 6, ay + 4); d.c.drawPath(d.path, d.stroke(C.INK, 4f))
+            }
+            if (ok) {
+                for ((col, w) in listOf(C.INK to 18f, C.RIGHT to 10f)) { // d.stroke is one shared Paint: set it per pass
+                    val s0 = d.stroke(col, w); d.c.drawLine(x + cw - 64, y0 + 44, x + cw - 50, y0 + 60, s0); d.c.drawLine(x + cw - 50, y0 + 60, x + cw - 24, y0 + 28, s0)
+                }
+            }
+            d.textBox(a.text.get(g.lang), x + cw / 2, y0 + 262, cw - 30, 37f, C.INK, 2) // fit.quiz_choice 360 @ 37
             badge(g, a.text, x + cw / 2, y0 + 322)
             if (ok) for (kk in 0 until 5) { val ang = t * 3 + kk * 1.26; d.star(x + cw / 2 + cos(ang).toFloat() * 150, y0 + 120 + sin(ang).toFloat() * 90, 16f, C.GLOW, C.GOLD_DARK, ang.toFloat()) }
             next += Region("card$slot", x, y0, cw, ch, false, onTap = { g.answer(j) != com.galaxyandsun.daidatanhhung.core.PickResult.IGNORED })
@@ -457,8 +459,8 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         if (open >= 1) { for (kk in 0 until 6) { val a = t * 2 + kk * 1.05; d.star(980 + cos(a).toFloat() * 150, 300 + sin(a).toFloat() * 120, 18f, C.GLOW, C.GOLD_DARK, a.toFloat()) }; d.text("?", 980f, 300f, 110f, C.GOLD_DARK) }
         d.text(g.ui(UiIds.UNLOCKED), W / 2, 100f, 52f, C.GOLD)
         d.text(g.ui(UiIds.MAP_STUB), W / 2, 530f, 28f, C.a(C.WHITE, 0.6), semiBold = true)
-        button("replay", g.ui(UiIds.REPLAY), 260f, 580f, 340f, 110f, t, fill = C.CREAM, shade = 0xFFC8B89A.toInt()) { g.replay() }
-        button("tomap", g.ui(UiIds.TO_MAP), 680f, 580f, 340f, 110f, t, pulse = true) { g.home() } // slice: "the map" is the title screen
+        // unlock.md: one button, no "Play again" (replaying starts from the title); slice: "the map" is the title screen
+        button("tomap", g.ui(UiIds.TO_MAP), W / 2 - 170, 580f, 340f, 110f, t, pulse = true) { g.home() }
     }
 
     private fun rotate(canvas: Canvas, g: Game) {
