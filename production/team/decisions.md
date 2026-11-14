@@ -11,6 +11,38 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-11 Quiz data fixes (for the devs)
+
+- **Flow:** Quiz & stars GDD (`eaf221b`) → `content/fixtures/quiz-scoring.json`, `tuning.json`,
+  validation → both apps.
+- **What:** (a) a repeat tap on an already-greyed wrong card is ignored and not counted (as in the
+  prototype), so the quiz always ends; (b) `quiz_count` = 5, so each hero's content decides 3–5
+  questions (random tapping earns ≥2★ 37% of the time with 3 questions, 8.6% with 5);
+  (c) validation fails if `rules.json` t2 < t3.
+- **Status:** Done, merged in `3074d43` (data/TASK-005d). Raised by game-art-content.
+
+### D-10 A "Special" (banner) move in combat
+
+- **Flow:** combat GDD (`design/gdd/side-scroll-combat.md`, rule 16) → a 4th button, the banner
+  ("Cờ / Banner") → both apps. It ties combat to the six-word banner story (C08).
+- **What it does (proposed):** a tap raises the banner and pushes nearby enemies back
+  (`special_push` 170 px), then a 6 s cooldown. No damage, no violence.
+- **Steps it affects:** a 4th thumb pad on screen (crowding on small phones), a new hint step,
+  new art and sound, two tuning keys.
+- **Options:** A. add it in the slice (with D-08 C or B) · B. add it later, with the training beat
+  (D-08 B) · C. no Special in combat; the banner stays a story/training moment only.
+- **Recommendation:** B. Keep the slice to three pads; bring the banner move in with the training
+  beat that teaches it.
+- **Status:** Open. Raised by game-art-content (TASK-008).
+
+### D-09 Two new tuning keys and two content checks (for the devs): AGREED by both devs + art-content (schema 1.1, data/TASK-005d)
+
+- **Flow:** combat GDD → `content/data/tuning.json` (game-dev-android edits) → both apps.
+- **What:** 14 of the GDD's proposed keys already exist (TASK-005b); the GDD switches to those
+  names. New: `special_push` 170 px, `special_cooldown` 6 s, `advance_debounce` 0.25 s (story-box tap debounce), `bump_stop` 0.5 s (walk-beat bump stop); checks: fail if
+  `attack_range < enemy_reach − stand_gap`, warn if `telegraph < 0.8 s`.
+- **Status:** Open (the two devs + game-art-content agree; Luan only if they disagree).
+
 ### D-08 Vertical-slice beat set for Trần Quốc Toản
 
 - **Flow:** TASK-008 mission-flow GDD defines 5 beat types → content `mission.json` → TASK-006/007
@@ -42,7 +74,7 @@ it) · **Decided** (Luan's call, with the date).
   shouldn't make a child sit through it again, and the quiz still checks what they remember.
 - **Status:** Open. Raised by game-art-content (TASK-008).
 
-### D-06 Content schema: params for training and reach-the-flag
+### D-06 Content schema: params for training and reach-the-flag: AGREED (option A, schema 1.1) by both devs + art-content
 
 - **Flow:** mission-flow GDD → `content/schema/mission.schema.json` (schema change needs both devs
   + game-art-content) → `mission.json`.
@@ -118,6 +150,16 @@ it) · **Decided** (Luan's call, with the date).
 ---
 
 ## Proposed (applied by the team; Luan can overturn)
+
+### P-05 Quiz in the slice follows the Quiz & stars GDD
+
+- **Flow:** quiz question → answer → feedback → next question.
+- **What the team applied (both apps):** after the right answer and its "why" line, the child taps
+  **Tiếp / Next** (no automatic advance, so there's time to read or hear it); a wrong answer shakes
+  for 0.5 s and ignores taps meanwhile; the quiz screen has a **pause** button (the only place to
+  switch VI|EN during the quiz); answer cards are shuffled per question with a seeded order shared
+  by both apps (a fixture tests it). The browser prototype auto-advanced and didn't shuffle.
+- **Status:** Proposed.
 
 ### P-04 Both apps behave identically: parity rules (TASK-006/007)
 
