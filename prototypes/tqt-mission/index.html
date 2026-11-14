@@ -306,7 +306,8 @@ const sfx = {
   bonk() { tone(180, 0.2, 'triangle', 0.25, 0.7); },
   chime() { tone(784, 0.2, 'sine', 0.3); setTimeout(() => tone(1046, 0.3, 'sine', 0.3), 0); },
   soft() { tone(260, 0.25, 'triangle', 0.18, 0.85); },
-  tap() { if (audio && audio.ac.currentTime - (sfx.lastTap || -1) < 0.08) return; if (audio) sfx.lastTap = audio.ac.currentTime; tone(660, 0.06, 'sine', 0.15); }, // once per press (QC O6)
+  lastTap: null, // null = never tapped; real-time clock, so it works before and after the audio clock starts
+  tap() { const now = clock.now(); if (sfx.lastTap !== null && now - sfx.lastTap < 0.08) return; sfx.lastTap = now; tone(660, 0.06, 'sine', 0.15); }, // once per press (QC O6)
 };
 
 // ---- Figures: every one drawn in code (no emoji, no plain circles) ----
