@@ -248,7 +248,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
                 HandHint.MOVE -> fig.hand(330f, 540f, t)
                 // QC r2 B3 / r3 B3b: with the flag pad above attack, the hand comes from the upper left, its fingertip on
                 // the attack pad's own edge (its real radius, grown to pad_min), clear of Defend (870–1030) and the flag.
-                HandHint.ATTACK -> if ("special" in vis) { val ra = fit.padRadius(92f) * 0.72f; fig.hand(1150f - ra, 590f - ra, t, -45f) } else fig.hand(1150f, 510f, t)
+                HandHint.ATTACK -> if ("special" in vis) { val ra = fit.padRadius(92f); fig.hand(1150f - ra * 0.82f, 590f - ra * 0.57f, t, -55f) } else fig.hand(1150f, 510f, t) // fingertip on the pad edge at 145°
                 HandHint.DEFEND -> fig.hand(950f, 555f, t)
                 HandHint.SPECIAL_TAP, HandHint.SPECIAL_HOLD -> fig.hand(special.first, special.second - 70, if (r.hand == HandHint.SPECIAL_HOLD) 0.0 else t)
                 HandHint.NONE -> Unit

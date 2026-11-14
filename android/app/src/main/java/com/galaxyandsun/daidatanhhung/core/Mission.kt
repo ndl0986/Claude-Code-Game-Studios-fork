@@ -625,6 +625,9 @@ class MissionRun(
         if (caption && typeOf(beat) == BeatType.FIGHT) { queue.clear(); phase = Phase.CAPTION; captionLine = 0 }
     }
 
+    /** Debug: the training teach hints as on a first play (the attack hand at the dummies, QC r3 B3b). */
+    fun debugTeach() { tut.hit = false; tut.specialTapped = false }
+
     /** Debug: jump a training beat to its blocks or special step, or a hold to [meter] full. */
     fun debugTraining(step: String, meter: Double = 0.0) {
         tut.blocked = false; tut.specialTapped = false

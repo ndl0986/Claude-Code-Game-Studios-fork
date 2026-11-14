@@ -73,7 +73,7 @@ adb shell am start -n com.galaxyandsun.daidatanhhung/.GameActivity \
   D-07 warning over the intro).
 - `beat`: the beat number for play and caption. `q`: the question number for quiz. `stars`: the
   star count for results and unlock.
-- `stage`: for play, `start`, `card` (a non-fight beat's card), `telegraph` (fight), `meter`
+- `stage`: for play, `start`, `card` (a non-fight beat's card), `telegraph` (fight), `teach` (training with its first-play teach hints, e.g. the attack hand), `meter`
   (hold-meter at 60%), `blocks` / `special` (training steps) or `encounter` (reach-the-flag). For
   quiz, `wrong` or `right`. For results, `nomedal` or `newmedal` (the run that first earns it).
 - `--es hero sample` loads the test-only sample hero. `--es missionFile <file>` plays a draft
