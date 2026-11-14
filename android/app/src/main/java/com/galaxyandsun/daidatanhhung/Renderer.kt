@@ -82,13 +82,13 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
 
     // ---- Widgets ----
     private fun button(key: String, label: String, x: Float, y: Float, w: Float, h: Float, t: Double, pulse: Boolean = false,
-                       fill: Int = C.GOLD, shade: Int = C.GOLD_DARK, size: Float = 34f, enabled: Boolean = true, onTap: () -> Boolean) {
+                       fill: Int = C.GOLD, shade: Int = C.GOLD_DARK, size: Float = 34f, enabled: Boolean = true, labelColor: Int = C.INK, onTap: () -> Boolean) {
         val p = if (pulse && enabled) 1 + sin(t * 6).toFloat() * 0.04f else 1f
         val old = d.alpha; if (!enabled) d.alpha = 0.5
         d.c.save(); d.c.translate(x + w / 2, y + h / 2); d.c.scale(p, p)
         d.rr(-w / 2, -h / 2 + 6, w, h, h / 2.6f, shade); d.rr(-w / 2, -h / 2, w, h, h / 2.6f, fill, C.WHITE, 4f)
         d.c.restore()
-        d.textBox(label, x + w / 2, y + h / 2, w - 30, size, C.INK, 1)
+        d.textBox(label, x + w / 2, y + h / 2, w - 30, size, labelColor, 1)
         d.alpha = old
         next += Region(key, x, y, w, h, false, onTap = onTap)
     }
@@ -171,15 +171,17 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
     private fun story(g: Game, intro: Boolean) {
         val t = g.t
         d.c.drawColor(C.BG)
-        d.c.save(); d.path.reset(); d.path.addRoundRect(240f, 110f, 1040f, 470f, 30f, 30f, android.graphics.Path.Direction.CW); d.c.clipPath(d.path)
-        d.c.save(); d.c.translate(0f, 0f); fig.background(if (intro) 0.0 else 5200.0, if (intro) "village" else "river", GROUND); d.c.restore()
-        if (!intro) d.rr(240f, 110f, 800f, 360f, 0f, C.a(0xFFFF965A.toInt(), 0.3))
+        d.c.save(); d.path.reset(); d.path.addRoundRect(240f, 100f, 1040f, 440f, 30f, 30f, android.graphics.Path.Direction.CW); d.c.clipPath(d.path)
+        d.c.save(); d.c.translate(0f, -30f) // the picture ends at 440, so two text lines clear both it and Tiếp
+        d.c.save(); fig.background(if (intro) 0.0 else 5200.0, if (intro) "village" else "river", GROUND); d.c.restore()
+        if (!intro) d.rr(240f, 130f, 800f, 340f, 0f, C.a(0xFFFF965A.toInt(), 0.3))
         fig.hero(if (intro) 560f else 640f, GROUND, 1, false, false, null, t, 0.9f)
         d.c.restore()
-        d.rr(240f, 110f, 800f, 360f, 30f, null, C.GOLD, 8f)
+        d.c.restore()
+        d.rr(240f, 100f, 800f, 340f, 30f, null, C.GOLD, 8f)
         val lines = if (intro) g.bundle.mission.intro else g.bundle.mission.ending.lines
         val line = lines[g.line.coerceIn(0, lines.size - 1)]
-        d.textBox(line.get(g.lang), W / 2, 530f, 1000f, 38f, C.WHITE, 2, semiBold = true) // fit.intro/ending 1000 @ 38, weight 600
+        d.textBox(line.get(g.lang), W / 2, 505f, 1000f, 38f, C.WHITE, 2, semiBold = true) // centred at 505, clear of Tiếp (QC r3); fit.intro/ending 1000 @ 38, weight 600
         badge(g, line, 1010f, 132f) // debug badge in the picture's corner, never over the text (QC r1)
         button("next", g.ui(UiIds.NEXT), W / 2 - 150, 590f, 300f, 110f, t, pulse = true) { g.next() }
         skipButton(g)
@@ -250,8 +252,9 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             if ("special" in vis) pad("special", special.first, special.second, 80f, Action.SPECIAL, false, r.pulseSpecial, g.uiOrNull(UiIds.SPECIAL), t) { rr -> bannerGlyph(rr) }
             when (r.hand) {
                 HandHint.MOVE -> fig.hand(330f, 540f, t)
-                // QC r2 B3: with the flag pad above attack, a hand from above would seem to point at the flag; come from the left
-                HandHint.ATTACK -> if ("special" in vis) fig.hand(1150f - 92 - 30, 590f, t, -90f) else fig.hand(1150f, 510f, t)
+                // QC r2 B3 / r3 B3b: with the flag pad above attack, the hand comes from the upper left, its fingertip on
+                // the attack pad's own edge (its real radius, grown to pad_min), clear of Defend (870–1030) and the flag.
+                HandHint.ATTACK -> if ("special" in vis) { val ra = fit.padRadius(92f) * 0.72f; fig.hand(1150f - ra, 590f - ra, t, -45f) } else fig.hand(1150f, 510f, t)
                 HandHint.DEFEND -> fig.hand(950f, 555f, t)
                 HandHint.SPECIAL_TAP, HandHint.SPECIAL_HOLD -> fig.hand(special.first, special.second - 70, if (r.hand == HandHint.SPECIAL_HOLD) 0.0 else t)
                 HandHint.NONE -> Unit
@@ -297,7 +300,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         badge(g, line.text, cx, 540f)
         if (r.dialogueButton == "ask") {
             val ask = dlg.ask!!.button
-            button("ask", ask.get(g.lang), W / 2 - 170, 590f, 340f, 110f, t, pulse = true, fill = C.RED, shade = 0xFF9E2620.toInt(), size = 34f) { g.ask() }
+            button("ask", ask.get(g.lang), W / 2 - 170, 590f, 340f, 110f, t, pulse = true, fill = C.RED, shade = 0xFF9E2620.toInt(), size = 34f, labelColor = C.WHITE) { g.ask() } // white on #D9342B is 4.7:1 (QC r3)
             if (r.askHint) fig.hand(W / 2, 600f, t)
         } else button("next", g.ui(UiIds.NEXT), W / 2 - 150, 590f, 300f, 110f, t, pulse = true) { g.next() }
         skipButton(g)
@@ -315,7 +318,6 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
     /** A caption or beat card: header, one sentence, Next and Skip (D-07). */
     private fun storyPanel(head: String, line: Text, g: Game, t: Double, badgeFor: Text? = null) {
         d.rr(160f, 140f, 960f, 300f, 36f, C.PANEL, C.GOLD, 6f)
-        d.drum(230f, 210f, 44f, C.a(C.GOLD, 0.8)); d.drum(1050f, 210f, 44f, C.a(C.GOLD, 0.8))
         d.textBox(head, W / 2, 196f, 880f, 44f, C.GOLD, 1); badgeFor?.let { badge(g, it, W / 2 + 380, 160f) } // fit.beat_title 880 @ 44
         d.textBox(line.get(g.lang), W / 2, 310f, 880f, 38f, C.WHITE, 2, semiBold = true); badge(g, line, W / 2, 415f) // fit.scene 880 @ 38, weight 600
         button("next", g.ui(UiIds.NEXT), W / 2 - 150, 470f, 300f, 110f, t, pulse = true) { g.next() }
