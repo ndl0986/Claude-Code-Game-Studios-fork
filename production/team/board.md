@@ -108,3 +108,5 @@ the design reference.
 **Decided (Luan, 2026-11-14):** skip the cross-platform version; TASK-006/007 rebuild the full first
 mission natively on each platform, then QC tests the native builds. Android draws with pure Android
 (Kotlin + Android SDK: SurfaceView/Canvas game loop, SoundPool), no game framework.
+
+**Decided (Luan, 2026-11-14):** Android compileSdk/targetSdk 35 for now; **pre-release item:** raise to 36 (Play requires it for new apps and updates since 2026-08-31) and install `platforms;android-36` + `build-tools;36.0.0` before any Play upload. kotlinx.serialization approved as the Android app's one dependency. Emulator mp17863 is owned by game-qc-android (start/stop/wipe); devs only install, launch, log and screenshot. It was stopped from outside 3 times on 2026-11-14 (not by the game team): watch for another team's cleanup.
