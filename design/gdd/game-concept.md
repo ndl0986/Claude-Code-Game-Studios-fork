@@ -272,7 +272,7 @@ Vietnamese legends as told to children, school history lessons, national celebra
 | **Art Style** | 2D modern kids' cartoon |
 | **Art Pipeline Complexity** | Medium (custom 2D; likely AI-assisted, needs an art bible for consistency) |
 | **Audio Needs** | Moderate: voice-over in two languages per mission, music, SFX |
-| **Networking** | None for MVP (offline). Later content delivery is an open question (app updates vs. a data-free download) |
+| **Networking** | None. The game stays fully offline; storybook content ships in **timed app updates** (Luan, 2026-11-14), so no content server or download |
 | **Content Volume** | MVP: 1 hero mission (~5 min), 1 map region, 1 quiz. First release: 2 heroes + 1 storybook. Full vision: many heroes ⟨placeholder count⟩ + a calendar of storybooks |
 | **Procedural Systems** | None |
 
@@ -289,8 +289,10 @@ Vietnamese legends as told to children, school history lessons, national celebra
 ### Technical Risks
 - Engine not chosen; both mobile builds are unproven in this template (plan: build an
   empty project for Android and iOS in phase 0).
-- Storybooks "day by day or on celebrations" need content after release; a download
-  must not collect child data, or the dates must be planned as app updates.
+- Storybooks "day by day or on celebrations" ship in **timed app updates** (decided):
+  each celebration's update must clear Google Play and App Store review before the date,
+  so releases are planned on a content calendar with review lead time. "Day by day"
+  pages are bundled in the update and unlocked by the device date, offline.
 - Runtime VI/EN switching with voice doubles audio assets and requires layouts that fit both.
 - `TD-FEASIBILITY skipped — Lean mode`: feasibility not reviewed by the technical-director.
 
@@ -309,7 +311,7 @@ Vietnamese legends as told to children, school history lessons, national celebra
 - **Which heroes and events, in what order?** Placeholder until the team's history material arrives.
 - **Who is the named history reviewer?** Needed before any content is final.
 - **Monetization**: paid, free, school/government funded? (Luan decides; no ads to kids by default.)
-- **How storybook content arrives after release**: app updates or a data-free download? (Technical decision for Luan and the leader.)
+- ~~How storybook content arrives after release~~ **Decided (Luan, 2026-11-14): timed app updates**, no content download.
 - **Portrait or landscape?** Answer with the first prototype on a real phone.
 - **Do children read the story scenes or skip them?** Answer with an MVP playtest.
 
@@ -330,7 +332,7 @@ light touch action, and afterwards can answer simple questions about that story.
 **Explicitly NOT in MVP** (defer to later):
 - Storybook mini-games and the celebration calendar
 - More than one hero; the full map and card album
-- Any content download, accounts, analytics or monetization
+- Accounts, analytics or monetization (and no content download at any tier: storybooks ship in app updates)
 
 ### Scope Tiers (if budget/time shrinks)
 
