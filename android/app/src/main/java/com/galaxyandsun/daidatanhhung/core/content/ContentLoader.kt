@@ -16,6 +16,8 @@ data class Content(
     val markers: MarkersFile,
     val sources: SourcesFile,
     val heroes: Map<String, HeroBundle>,
+    /** themes.json; null only on a content tree from before TASK-005g. */
+    val themes: ThemesFile? = null,
 ) {
     private val ui = strings.strings.associateBy { it.id }
 
@@ -43,11 +45,14 @@ class ContentLoader(private val strict: Boolean = false, private val read: (Stri
             markers = decode("markers.json"),
             sources = decode("sources.json"),
             heroes = heroes,
+            themes = read("themes.json")?.let { decodeText<ThemesFile>("themes.json", it) },
         )
     }
 
-    private inline fun <reified T> decode(path: String): T {
-        val text = read(path) ?: throw ContentException("missing content file $path")
+    private inline fun <reified T> decode(path: String): T =
+        decodeText(path, read(path) ?: throw ContentException("missing content file $path"))
+
+    private inline fun <reified T> decodeText(path: String, text: String): T {
         return try {
             (if (strict) JSON else LENIENT).decodeFromString<T>(text)
         } catch (e: Exception) {

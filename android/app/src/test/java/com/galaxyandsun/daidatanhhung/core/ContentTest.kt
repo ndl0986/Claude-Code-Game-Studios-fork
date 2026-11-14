@@ -40,6 +40,13 @@ class ContentTest {
         assertEquals("tran-quoc-toan", content.heroes.keys.first())
     }
 
+    /** R19a over the real bundle: every picture's declared size matches its PNG/WebP header. */
+    @Test fun pictureSizesMatchTheirFiles() {
+        if (content.assets.schemaVersion < "1.2") { println("assets.json < 1.2: R19a not applicable yet"); return }
+        assertEquals(emptyList<String>(), Validator.pictureSizes(content) { f -> File(TestContent.root, "data/$f").takeIf { it.isFile }?.readBytes() })
+        println("warnings: ${Validator.warnings(content)}")
+    }
+
     @Test fun everyTuningKeyTheAppReadsExists() {
         val missing = Tuning.Keys.ALL.filterNot { it in content.tuning.values }
         assertEquals(emptyList<String>(), missing)

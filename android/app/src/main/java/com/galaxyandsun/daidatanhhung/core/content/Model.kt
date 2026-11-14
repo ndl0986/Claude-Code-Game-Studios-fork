@@ -175,3 +175,13 @@ data class Source(val id: String, val citation: String, val kind: String, val lo
 
 @Serializable
 data class SourcesFile(@SerialName("schema_version") val schemaVersion: String, val sources: List<Source>)
+
+@Serializable
+data class SkyBand(val top: String, val bottom: String)
+
+@Serializable
+data class Theme(@SerialName("sky_band") val skyBand: SkyBand)
+
+/** themes.json (ADR-0002 follow-up): per-theme sky band behind the background tiles. */
+@Serializable
+data class ThemesFile(@SerialName("schema_version") val schemaVersion: String, val themes: Map<String, Theme>)

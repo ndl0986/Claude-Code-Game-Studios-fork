@@ -87,6 +87,59 @@ object Validator {
         return out
     }
 
+    /** R19a (error): the declared picture size matches the file's header. */
+    fun sizeMatches(id: String, declared: Pair<Int, Int>, actual: Pair<Int, Int>?): List<String> =
+        if (actual == null) listOf("R19a $id: can't read the image header")
+        else if (declared != actual) listOf("R19a $id: declared ${declared.first}×${declared.second}, file is ${actual.first}×${actual.second}")
+        else emptyList()
+
+    /** R19b (warning until ADR-0002 is measured): ≤ 2048, quiz pictures ≤ 512², scene tiles ≤ 1440×1320. */
+    fun sizeLimits(id: String, w: Int, h: Int): List<String> {
+        val out = mutableListOf<String>()
+        if (w > 2048 || h > 2048) out += "R19b $id: $w×$h is over 2048"
+        if (id.startsWith("pic.quiz_") && (w > 512 || h > 512)) out += "R19b $id: quiz picture $w×$h is over 512×512"
+        if (id.startsWith("pic.scene_") && (w > 1440 || h > 1320)) out += "R19b $id: scene tile $w×$h is over 1440×1320"
+        return out
+    }
+
+    /** The mission schema's theme enum. */
+    val THEMES = setOf("village", "bamboo", "river", "camp")
+
+    /** R20: every theme a beat uses is in the enum and has a sky band. */
+    fun themesCovered(themes: Set<String>, beatThemes: List<String>): List<String> =
+        beatThemes.distinct().flatMap { t ->
+            listOfNotNull(if (t !in THEMES) "R20 theme $t is not in the mission enum" else null,
+                if (t !in themes) "R20 theme $t has no sky band in themes.json" else null)
+        }
+
+    /** A PNG or WebP's pixel size from its header bytes (null if neither). */
+    fun imageSize(b: ByteArray): Pair<Int, Int>? {
+        fun u(i: Int) = b[i].toInt() and 0xFF
+        if (b.size >= 24 && u(0) == 0x89 && b[1] == 'P'.code.toByte()) // PNG IHDR
+            return ((u(16) shl 24) or (u(17) shl 16) or (u(18) shl 8) or u(19)) to ((u(20) shl 24) or (u(21) shl 16) or (u(22) shl 8) or u(23))
+        if (b.size >= 30 && String(b, 0, 4) == "RIFF" && String(b, 8, 4) == "WEBP") {
+            return when (String(b, 12, 4)) {
+                "VP8 " -> ((u(26) or (u(27) shl 8)) and 0x3FFF) to ((u(28) or (u(29) shl 8)) and 0x3FFF)
+                "VP8L" -> { val v = u(21) or (u(22) shl 8) or (u(23) shl 16) or (u(24) shl 24); ((v and 0x3FFF) + 1) to (((v shr 14) and 0x3FFF) + 1) }
+                "VP8X" -> (1 + (u(24) or (u(25) shl 8) or (u(26) shl 16))) to (1 + (u(27) or (u(28) shl 8) or (u(29) shl 16)))
+                else -> null
+            }
+        }
+        return null
+    }
+
+    /** R19a over the bundle's pictures, given a way to read a file under content/data. */
+    fun pictureSizes(c: Content, bytes: (String) -> ByteArray?): List<String> =
+        c.assets.assets.filter { it.kind == "picture" }.flatMap { a ->
+            if (a.width == null || a.height == null) listOf("R19a ${a.id}: no width/height (assets.json 1.2)")
+            else sizeMatches(a.id, a.width to a.height, bytes(a.file)?.let(::imageSize))
+        }
+
+    /** Warnings that never fail a build (R15, R19b). */
+    fun warnings(c: Content): List<String> =
+        telegraphWarnings(c.tuning.values.mapValues { it.value.value }) +
+            c.assets.assets.filter { it.kind == "picture" && it.width != null && it.height != null }.flatMap { sizeLimits(it.id, it.width!!, it.height!!) }
+
     /** R9: Text ids are unique. */
     fun duplicateIds(ids: List<String>): List<String> =
         ids.groupingBy { it }.eachCount().filter { it.value > 1 }.keys.map { "R9 duplicate id $it" }
@@ -216,6 +269,7 @@ object Validator {
         out += timeline(c.heroes.filterKeys { it in c.index.heroes }.values.map { Triple(it.mission.hero.id, it.mission.hero.timelineOrder, it.mission.nextHero) })
         out += attackReaches(c.tuning.values.mapValues { it.value.value })
         out += starThresholds(c.rules.quizStars.thresholds)
+        c.themes?.let { th -> out += themesCovered(th.themes.keys, c.heroes.values.flatMap { h -> h.mission.beats.map { it.theme } }) }
         out += duplicateIds(allIds)
         return out
     }

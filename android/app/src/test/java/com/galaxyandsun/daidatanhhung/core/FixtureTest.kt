@@ -102,12 +102,16 @@ class FixtureTest {
                 "R17", "R18" -> Validator.timeline(c["heroes"]!!.jsonArray.map { h -> val o = h.jsonObject
                     Triple(o["id"]!!.jsonPrimitive.content, o["timeline_order"]!!.jsonPrimitive.int, o["next_hero"]!!.jsonPrimitive.let { if (it is kotlinx.serialization.json.JsonNull) null else it.content }) })
                     .filter { it.startsWith(rule + " ") }
+                "R19a" -> { val d = c["declared"]!!.jsonObject; val a = c["actual"]!!.jsonObject
+                    Validator.sizeMatches("case", d["width"]!!.jsonPrimitive.int to d["height"]!!.jsonPrimitive.int, a["width"]!!.jsonPrimitive.int to a["height"]!!.jsonPrimitive.int) }
+                "R19b" -> Validator.sizeLimits(c["id"]!!.jsonPrimitive.content, c["width"]!!.jsonPrimitive.int, c["height"]!!.jsonPrimitive.int)
+                "R20" -> Validator.themesCovered(c["themes"]!!.jsonArray.map { it.jsonPrimitive.content }.toSet(), c["beat_themes"]!!.jsonArray.map { it.jsonPrimitive.content })
                 "R14" -> Validator.attackReaches(c["tuning"]!!.jsonObject.mapValues { it.value.jsonPrimitive.content.toDouble() })
                 "R15" -> Validator.telegraphWarnings(c["tuning"]!!.jsonObject.mapValues { it.value.jsonPrimitive.content.toDouble() })
                 "R16" -> Validator.starThresholds(ContentLoader.JSON.decodeFromJsonElement<List<com.galaxyandsun.daidatanhhung.core.content.Threshold>>(c["thresholds"]!!))
                 else -> { println("validity.json: rule $rule not checked by this app yet"); continue }
             }
-            val got = when (rule) { "R11" -> if (problems.isEmpty()) "build_passes" else "build_fails"; "R15" -> if (problems.isEmpty()) "valid" else "warn"; else -> if (problems.isEmpty()) "valid" else "invalid" }
+            val got = when (rule) { "R11" -> if (problems.isEmpty()) "build_passes" else "build_fails"; "R15", "R19b" -> if (problems.isEmpty()) "valid" else "warn"; else -> if (problems.isEmpty()) "valid" else "invalid" }
             assertEquals("${c["name"]} ($rule): $problems", expected, got)
             ran++
         }
