@@ -49,7 +49,7 @@ Dải Đất Anh Hùng is a small, story-first game, and its systems are few.
 | 7 | Quiz & stars | Gameplay | Vertical Slice | Approved | `design/gdd/quiz-and-stars.md` | 1, 2, 4 |
 | 8 | Hints & onboarding | Meta | Vertical Slice | Approved | `design/gdd/hints-and-onboarding.md` | 6, 5, 3, 10, 1 |
 | 9 | Hero progression & unlock | Progression | Vertical Slice (unlock screen) / Alpha (full) | In Review | `design/gdd/hero-progression.md` | 7, 4, 1 |
-| 10 | Audio & voice-over | Audio | Vertical Slice | In Review | `design/gdd/audio-and-voice-over.md` | 1, 2, 4 |
+| 10 | Audio & voice-over | Audio | Vertical Slice | Approved | `design/gdd/audio-and-voice-over.md` | 1, 2, 4 |
 | 11 | Map & timeline | UI | Alpha (stub in VS) | Not Started (open: QC G5) | — | 9, 1 |
 | 12 | Settings & parent area (inferred: sources and credits page) | UI | Full Vision (first release) | Not Started | — | 2, 1 |
 | 13 | Storybook mini-games & content calendar | Gameplay | Full Vision | Not Started | — | 2, 4, 1 |

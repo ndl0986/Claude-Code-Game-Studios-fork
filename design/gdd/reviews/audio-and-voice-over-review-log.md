@@ -19,3 +19,6 @@ Reviewed-Content-Hash: design/gdd/quiz-and-stars.md 222777502ac1a4a3282b72098010
 
 ## Peer review — 2026-11-14 — game-dev-android: REVISE (2), fixes applied
 (a) Seamless m4a loops are not possible on Android's platform player: loops are authored with a ~0.5 s overlap tail and played with a two-player self-crossfade. (b) Rule 7 is native-first: audio starts and SFX preload at launch; a gesture is needed only where the platform requires one. Minor: Android SoundPool maxStreams 9 noted (Rule 13); F2 notes about 3 heroes fit ADR-0002's 60 MB cap, so revisit before hero 4. Android's quiz card double-tone bug was found by Rule 6 and is being fixed in the app. Awaiting confirmation.
+
+## Peer re-review — 2026-11-14 — game-dev-android: APPROVE @ d59f2a2
+One wording fix applied: install-time asset packs (offline), never on-demand packs (network; would break pillar 5 / ADR-0001). Status Approved.

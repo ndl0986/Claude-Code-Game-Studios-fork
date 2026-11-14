@@ -1,6 +1,6 @@
 # Audio & Voice-over
 
-> **Status**: In Review
+> **Status**: Approved (peer review: game-dev-android, 2026-11-14)
 > **Author**: game-art-content, with the audio-director and sound-designer agents (Luan decides)
 > **Last Updated**: 2026-11-14
 > **Last Verified**: 2026-11-14
@@ -233,7 +233,7 @@ The F2 (audio size per hero) formula is defined as:
 | lines | int | ~40 | content | Voiced lines per language |
 | sfx | float (MB) | ~0.9 | estimate (wav) | Effects |
 
-**Output Range:** about 8–10 MB for the first hero. Music (~5.6 MB) and SFX (~0.9 MB) are shared, so each **further** hero adds about 3.2 MB of VO, plus up to 15 MB of art. **Against ADR-0002's 60 MB download cap that's about 3 heroes**, so revisit the cap (or on-demand packs) before hero 4.
+**Output Range:** about 8–10 MB for the first hero. Music (~5.6 MB) and SFX (~0.9 MB) are shared, so each **further** hero adds about 3.2 MB of VO, plus up to 15 MB of art. **Against ADR-0002's 60 MB download cap that's about 3 heroes**, so revisit the cap (or install-time asset packs, which ship with the app download and stay offline; never on-demand packs, which would need the network) before hero 4.
 **Example:** 5.6 MB music + 2 × 1.6 MB VO + 0.9 MB SFX ≈ 9.7 MB.
 
 ## Edge Cases
