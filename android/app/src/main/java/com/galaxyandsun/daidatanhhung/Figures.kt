@@ -290,12 +290,14 @@ class Figures(private val d: Draw) {
 
     /** Sky band colours per theme from content/data/themes.json (ADR-0002); set by the activity. */
     var skyBands: Map<String, Pair<Int, Int>> = emptyMap()
+    /** The theme's sky band (top, bottom); the prototype's sky until themes.json names the theme. */
+    fun skyBand(theme: String): Pair<Int, Int> = skyBands[theme] ?: (0xFFFFD59A.toInt() to 0xFFCFEEF2.toInt())
     private val skyPaint = android.graphics.Paint()
     private var skyKey = ""
 
     fun background(camX: Double, theme: String, ground: Float) {
         val cam = camX.toFloat()
-        val (top, bottom) = skyBands[theme] ?: (0xFFFFD59A.toInt() to 0xFFCFEEF2.toInt()) // the prototype's sky until themes.json lands
+        val (top, bottom) = skyBand(theme)
         val key = "$theme/$ground"
         if (key != skyKey) { skyKey = key; skyPaint.shader = android.graphics.LinearGradient(0f, 0f, 0f, ground + 10, top, bottom, android.graphics.Shader.TileMode.CLAMP) }
         c.drawRect(0f, 0f, 1280f, ground + 10, skyPaint)

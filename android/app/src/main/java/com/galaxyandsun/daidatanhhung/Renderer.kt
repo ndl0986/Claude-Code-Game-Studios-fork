@@ -6,6 +6,7 @@ import android.graphics.Typeface
 import com.galaxyandsun.daidatanhhung.core.CueLayout
 import com.galaxyandsun.daidatanhhung.core.StoryLayout
 import com.galaxyandsun.daidatanhhung.core.QuizLayout
+import com.galaxyandsun.daidatanhhung.core.SkyContrast
 import com.galaxyandsun.daidatanhhung.core.Action
 import com.galaxyandsun.daidatanhhung.core.ScreenFit
 import com.galaxyandsun.daidatanhhung.core.BeatType
@@ -284,7 +285,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             val rise = min(20f, (ground - 300f - p.y.toFloat()).coerceAtLeast(0f))
             val old = d.alpha; d.alpha = min(1.0, p.life * 2)
             // QC r5 / spec follow-up: an outline under the colour, ink on light skies and cream on the dark camp sky
-            val ol = if (beat.theme == "camp") 0xFFFFF6E3.toInt() else OUTLINE_INK
+            val ol = fig.skyBand(beat.theme).let { (top, bottom) -> SkyContrast.popOutline(top, bottom) } // r9: from the sky, as iOS
             d.textOutlined(g.ui(p.textId), (px + side * 120).coerceIn(90f, W - 90), ground - 150 - rise, 40f, p.color.toInt(), ol, 8f); d.alpha = old
         }
         cues(g, r, cam, ground, t)
