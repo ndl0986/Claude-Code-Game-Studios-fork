@@ -5,6 +5,126 @@
       "id": "ui.app.title",
       "vi": "Dải Đất Anh Hùng",
       "en": "Land of Heroes"
+    },
+    {
+      "id": "ui.app.subtitle",
+      "vi": "Trần Quốc Toản · bản thử",
+      "en": "Trần Quốc Toản · slice"
+    },
+    {
+      "id": "ui.btn.start",
+      "vi": "Bắt đầu",
+      "en": "Start"
+    },
+    {
+      "id": "ui.btn.next",
+      "vi": "Tiếp",
+      "en": "Next"
+    },
+    {
+      "id": "ui.btn.go",
+      "vi": "Đi tiếp",
+      "en": "Go on"
+    },
+    {
+      "id": "ui.btn.resume",
+      "vi": "Chơi tiếp",
+      "en": "Keep playing"
+    },
+    {
+      "id": "ui.btn.home",
+      "vi": "Về màn đầu",
+      "en": "Title screen"
+    },
+    {
+      "id": "ui.btn.to_map",
+      "vi": "Về bản đồ",
+      "en": "To the map"
+    },
+    {
+      "id": "ui.btn.replay",
+      "vi": "Chơi lại",
+      "en": "Play again"
+    },
+    {
+      "id": "ui.pad.move",
+      "vi": "Đi",
+      "en": "Move"
+    },
+    {
+      "id": "ui.pad.attack",
+      "vi": "Đánh",
+      "en": "Attack"
+    },
+    {
+      "id": "ui.pad.defend",
+      "vi": "Đỡ",
+      "en": "Defend"
+    },
+    {
+      "id": "ui.pause.title",
+      "vi": "Tạm dừng",
+      "en": "Paused"
+    },
+    {
+      "id": "ui.quiz.retry",
+      "vi": "Thử lại nhé!",
+      "en": "Try again!"
+    },
+    {
+      "id": "ui.quiz.correct",
+      "vi": "Đúng rồi!",
+      "en": "That’s right!"
+    },
+    {
+      "id": "ui.quiz.question",
+      "vi": "Câu",
+      "en": "Question"
+    },
+    {
+      "id": "ui.results.done",
+      "vi": "Hoàn thành!",
+      "en": "Well done!"
+    },
+    {
+      "id": "ui.unlock.title",
+      "vi": "Mở khoá anh hùng tiếp theo!",
+      "en": "Next hero unlocked!"
+    },
+    {
+      "id": "ui.unlock.map_stub",
+      "vi": "(Bản đồ sẽ làm sau)",
+      "en": "(The map comes later)"
+    },
+    {
+      "id": "ui.play.oof",
+      "vi": "Ối!",
+      "en": "Oof!"
+    },
+    {
+      "id": "ui.play.blocked",
+      "vi": "Đỡ được!",
+      "en": "Blocked!"
+    },
+    {
+      "id": "ui.play.beat",
+      "vi": "Cảnh",
+      "en": "Beat"
+    },
+    {
+      "id": "ui.rotate.turn",
+      "vi": "Xoay ngang điện thoại nhé",
+      "en": "Turn your phone sideways"
+    },
+    {
+      "id": "ui.lang.vi",
+      "vi": "VI",
+      "en": "VI"
+    },
+    {
+      "id": "ui.lang.en",
+      "vi": "EN",
+      "en": "EN"
     }
   ]
 }
