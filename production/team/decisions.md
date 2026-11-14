@@ -202,6 +202,7 @@ it) · **Decided** (Luan's call, with the date).
   `medal.<hero>` (never cleared) and `lang`. Unlocks are worked out from those.
 - **Why:** with timed content updates, a stored list can't open a hero added later for a child who
   already finished the previous one, and a hero inserted earlier in history breaks the chain.
+- **Update (TASK-020 W2):** the saved keys are now defined once in Save & progress Rule 1 (adds `save_version` and `sound`); ADR-0003 (D-30) implements them.
 - **Status:** Proposed. The leader applied it to the slice so both apps write it once; the devs' D-04
   save ADR formalises it. Luan can overturn it.
 
