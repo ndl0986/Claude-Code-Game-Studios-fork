@@ -1,6 +1,6 @@
 # Input & Touch Controls
 
-> **Status**: In Review
+> **Status**: Approved (peer review: game-dev-android, 2026-11-14)
 > **Author**: game-art-content (Luan decides)
 > **Last Updated**: 2026-11-14
 > **Last Verified**: 2026-11-14
@@ -126,7 +126,7 @@ Clear-all (Rule 11) forces every pad to `released` and every pointer to `cancell
 | Hints & onboarding | (none) | pad positions for the hand | Hints GDD |
 | Map & timeline | (none) | taps and drags | Map GDD |
 | Audio & voice-over | (none) | menu press (one tone) | Audio GDD |
-| Content data | `tuning.json` `pad_min`, `advance_debounce`, `drag_threshold` | (none) | Content contract |
+| Content data | `tuning.json` `pad_min`, `pad_gap`, `advance_debounce`, `drag_threshold` | (none) | Content contract |
 
 ## Formulas
 

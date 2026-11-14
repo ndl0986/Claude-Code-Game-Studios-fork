@@ -21,3 +21,6 @@ Rule 5b: pointers are tracked by identity; a release or cancel always releases t
 
 ## Peer review — 2026-11-14 — game-dev-android: REVISE (4), applied (leader agreed)
 1. Rule 6 / AC3: a second pointer on an owned pad is ignored until it lifts. 2. Rule 9: a pointer keeps its pad from down to up or cancel; only the ◀↔▶ slide changes it; drift is forgiven (new edge case). 3. AC14: the flag counts at press; the drag_threshold key is used by Rule 16 only. 4. Rule 2: Android mandatory gesture insets; iOS home-indicator inset.
+
+## Peer re-review — 2026-11-14 — game-dev-android: APPROVE @ bab0c9c
+Nit applied: pad_gap added to the Content data row of the Interactions table. Status Approved.
