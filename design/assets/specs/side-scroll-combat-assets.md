@@ -197,7 +197,10 @@ Negative: text, letters, watermark, blood, gore, injury, weapons pointed at view
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
 | Texture Res | 1× and 2× per art bible §8 |
 
-**Visual Description:** A round speech-bubble shape in `#FFD54F` with a thick ink-brown `#4A3428` outline and a short rounded tail pointing down at the enemy. Inside is the "!" **drawn as a shape**: a fat rounded-end vertical bar over a round dot, in ink brown. It is not a font glyph. It pops in with a squash and bobs gently.
+**Visual Description:** A round speech-bubble shape in `#FFD54F` with a thick ink-brown `#4A3428` outline and a short rounded tail pointing down at the enemy. Inside is the "!" **drawn as a shape**: a fat rounded-end vertical bar over a round dot, in ink brown. It is not a font glyph. It pops in with a squash and bobs gently. **Placement:** above the helmet knob, except on banner
+beats where that would reach the motto bar: there it sits beside the head, away from the hero,
+with the tail pointing sideways; it never straddles the bar (`design/ux/hud.md` §3.3). The tail is
+drawn so it can be mirrored and rotated 90° in the engine.
 
 **Art Bible Anchors:**
 - Combat GDD Visual/Audio: "!" bubble visible at thumbnail size, yellow-gold, never red.

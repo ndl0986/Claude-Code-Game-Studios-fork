@@ -389,6 +389,8 @@ Mission flow lists this system as a hard dependency (`design/gdd/mission-flow.md
 
 Art-director lens (art bible §§3–5):
 - **Telegraph:** a pulsing glow ring plus a "!" bubble over the enemy, visible at thumbnail size.
+  On a banner beat the bubble never straddles the motto bar: it sits fully below it, beside the
+  head away from the hero when it can't fit above the helmet (`design/ux/hud.md` §3.3).
   It is yellow-gold, never red (§4: red never reads as threat or blood here).
 - **Hit:** the enemy leans back, with a soft spark burst in the colour of the staff's wood, and
   its helmet wobbles. No impact marks or injury frames (§3).

@@ -263,7 +263,7 @@ Also draws on `design/gdd/hints-and-onboarding.md` (Visual/Audio) for ASSET-033 
 | Replaces | new |
 | Texture Res | 1× and 2× per art bible §8 |
 
-**Visual Description:** A chunky, downward-pointing arrow with a fat rounded head and a short rounded shaft. It is filled star gold `#FFC531` with a lighter highlight and a thick ink outline. The game rotates it as needed and makes it bounce above the target. It must read at thumbnail size.
+**Visual Description:** A chunky, downward-pointing arrow with a fat rounded head and a short rounded shaft. It is filled star gold `#FFC531` with a lighter highlight and a thick ink outline. The game rotates it as needed and makes it bounce above the target. It must read at thumbnail size. **Never red** (red is the banner's and the hero's; both apps draw a red placeholder today). On banner beats it stays fully below the motto bar and, where it can't bounce above the target there, points at it from the side (`design/ux/hud.md` §3.3).
 
 **Art Bible Anchors:**
 - Hints GDD: a gold bouncing arrow above the target, readable at thumbnail size
