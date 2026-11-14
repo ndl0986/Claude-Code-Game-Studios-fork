@@ -1,6 +1,6 @@
 # Side-scroll Movement & Combat
 
-> **Status**: In Review
+> **Status**: Approved (peer review: game-dev-ios, 2026-11-14)
 > **Author**: game-art-content (Luan decides)
 > **Last Updated**: 2026-11-14
 > **Last Verified**: 2026-11-14

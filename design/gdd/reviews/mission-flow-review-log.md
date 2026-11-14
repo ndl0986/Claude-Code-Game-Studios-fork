@@ -29,3 +29,6 @@ Findings and fixes:
 - F2 and AC4: the walk start and end are defined (x_start, + length_screens × 1280).
 - VI|EN only on the title and pause screens (P-04); the HUD toggle is removed.
 Awaiting game-dev-ios confirmation.
+
+## Peer re-review — 2026-11-14 — game-dev-ios: APPROVE @ 08046fb
+All peer findings were checked as fixed. Status set to Approved.

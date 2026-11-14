@@ -32,3 +32,6 @@ Findings and fixes:
 - AC11 cites R14 and R15 (schema 1.1 validity fixtures).
 - Rule 16 (special): waits for Luan. The push goes away from the hero on both sides; no "not ready" text.
 Awaiting game-dev-ios confirmation.
+
+## Peer re-review — 2026-11-14 — game-dev-ios: APPROVE @ 0b0d8f5
+All peer findings were checked as fixed. Status set to Approved.
