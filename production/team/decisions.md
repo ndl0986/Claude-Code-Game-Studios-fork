@@ -74,6 +74,21 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Proposed (applied by the team; Luan can overturn)
 
+### P-04 Both apps behave identically: parity rules (TASK-006/007)
+
+- **Flow:** prototype spec (203d73e) → shared `content/` data → iOS and Android read the same values
+  and rules → shared fixtures test both.
+- **What the team applied:**
+  1. 17 numbers the prototype hard-coded (enemy timings and distances, camera, ground, beat spacing,
+     first spawn delay) move into `content/data/tuning.json`, owned by game-dev-android's one edit.
+  2. The prototype's **results** screen (stars, then Next) stays: title → intro → play → caption →
+     ending → quiz → results → unlock.
+  3. Saved on the device only: `lang`, `stars.<hero>` (best ever, never lowered), `unlocked` heroes.
+  4. Firing rules as in P-01, with quiz answer cards firing on release; one tap tone per menu press.
+  5. Sample pictures are drawn in code in debug builds; the picture-id check applies to real data.
+  6. Quiz shows 3–5 questions (the first N available); the stall hint resets on a hit or caption close.
+- **Status:** Proposed. The combat, mission-flow and quiz GDDs (TASK-008) formalise them.
+
 ### P-01 Menu buttons fire on release, gameplay pads on press
 
 - **Flow:** touch → button. The browser prototype fired everything on press.
