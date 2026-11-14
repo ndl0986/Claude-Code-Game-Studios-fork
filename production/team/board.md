@@ -172,3 +172,4 @@ test-setup, smoke-check), those checks report NOT ASSESSED by design (ADR-0001).
 - D-22 platform backup decision before a Kids-category submission (Android manifest change if "allow").
 **Android QC r6 (2026-11-14):** frozen 7790ee9 (107 tests), APK sha256 2fed0ba2…9181. D-27 title card, full-bleed story, pad_min buttons, AC13 contact, outlines, line pitch 1.35 em. Quiz small-k spec merged → r7.
 **iOS QC r6 (2026-11-14):** frozen fa163d3 (GameCore 105, app 4, UI 5), app fingerprint 9a3b1bd8…, folder 47303622…. First run of the XCUITest touch harness (tools/qa/ios-touch-tests.sh). Release byte-identical with/without debug harness code.
+**iOS QC r6 FAIL (2026-11-14):** fa163d3, evidence qa/TASK-006-ios-r6 @ bc448a0. Touch harness 5/5 PASS (first iOS touch pass: R2-03, slide, hold across beat, B1 @0.050 s, 15b). Bugs: R6-01 flat bar under full-bleed story pictures (home-indicator inset); R6-02 two-line quiz prompt under sound button. → r7.
