@@ -117,7 +117,17 @@ them against `data/` and `samples/`. `fixtures/validity.json` has one case per r
 ## Shared fixtures
 
 `fixtures/quiz-stars.json`, `quiz-scoring.json`, `quiz-shuffle.json` (P-05 card order), `rng.json` (mulberry32), `claim-gate.json` and `validity.json` are
-input plus expected output, and both apps' unit tests run every case. Feel (timing on screen,
+input plus expected output, and both apps' unit tests run every case.
+
+`fixtures/trace-tqt.json` is the **simulation trace**. It holds a fixed input script over the real
+Trần Quốc Toản mission (walk, dialogue with 2 asks, hold, training, reach-the-flag with 2 encounters)
+and the expected sim state every 30 updates: phase, beat, hero x and facing, lock, dialogue line,
+training step, enemies and RNG draws. Its `rule` field defines how to replay it. A bot on the Android
+core (`TraceTest`) generates it, and both apps replay it. A mismatch is a parity bug, fixed in
+whichever app disagrees with the GDD. Regenerate it whenever `mission.json`, `tuning.json` or a
+combat or flow rule changes on purpose.
+
+Feel (timing on screen,
 knock-back, button size and touch) is not a fixture; it is checked by per-platform QC.
 
 ## Assets (ADR-0002, Proposed)

@@ -11,6 +11,38 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-29 Download size as heroes are added (revisit before hero 4)
+
+- **Flow:** ADR-0002 (≤ 60 MB download) + Audio GDD (music, sound, voice-over) → each timed content
+  update adds a hero.
+- **Finding:** at about 6.5 MB of shared music and sound plus about 18 MB per hero (art + voice-over),
+  60 MB fits about 3 heroes.
+- **Options (later):** A. raise the cap per update (simplest; app stores allow much larger apps) ·
+  B. lighter art and voice-over per hero · C. optional downloadable hero packs (breaks "fully offline,
+  no server" unless bundled through the stores' own asset delivery).
+- **Status:** Open; not needed until hero 3–4.
+
+### D-27 Show progress on the slice's title screen before the map exists? (QC G5)
+
+- **Flow:** QC G5 ("the title shows no progress") → Map & timeline GDD → the slice title screen.
+- **Options:** A. **a small hero card on the title now** with best stars and the medal (gold/outline),
+  reusing the results-screen pieces; it later becomes the map's timeline card · B. wait for the map
+  (Alpha); until then a child who finishes sees no progress.
+- **Recommendation:** A (cheap, fixes G5, nothing wasted).
+- **Status:** Open.
+
+### D-28 The map of Vietnam: today's outline, including Hoàng Sa and Trường Sa
+
+- **Flow:** Map & timeline GDD (TASK-018) → map art → store review for Vietnam.
+- **What:** the map shows **today's Vietnam**, traced from an authoritative source, **with the Hoàng
+  Sa and Trường Sa archipelagos**; historical borders are never drawn; each hero's place is labelled
+  with its modern location (e.g. "Bình Than: nay thuộc Bắc Ninh"), as a claim to sign off.
+- **Options:** A. as above *(recommended)* · B. a stylised map without the islands (not acceptable for
+  a Vietnamese audience; may breach publishing rules) · C. historical borders per era (every era
+  becomes a history claim to verify).
+- **Decide also:** which official source to trace (e.g. a national administrative map).
+- **Status:** Open.
+
 ### D-23 Voice-over and sound choices (not needed until voice recording)
 
 - **Flow:** Audio & voice-over GDD (`a2fd734`) → voice recording → the iOS audio setting.
