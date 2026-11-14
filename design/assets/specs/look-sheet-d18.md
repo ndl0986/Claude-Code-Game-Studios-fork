@@ -86,3 +86,17 @@ ground · `#B5673F` roof tiles · `#7A3B2A` lacquer-brown posts · `#D9CDB5` / `
 clouds and light · `#FFD27A` juice · `#FFFFFF` block spark.
 
 9. **Approve these palette additions** (or mark the rows to change)?
+
+## The Bình Than exchange scene (TASK-016): portraits (ASSET-327–329)
+
+- **Quốc Toản:** the same boy as the hero sheet, in three expressions (calm, pleading,
+  determined), facing right.
+- **Guard:** a kind, sturdy Trần guard in the hero's team colours (never the enemy dome-helmet or
+  slate-violet family). One hand raised palm-out; the spear upright and out of frame.
+- **King (Trần Nhân Tông):** a **symbolic image, not a likeness** (Luan, 2026-11-14): a Trần-era
+  royal headdress ⟨placeholder; never a European crown⟩, a full beard, thick brows, warm eyes, a
+  gold robe with lacquer-brown trim. There's a smiling variant for his praise line.
+
+10. **Approve the three portraits' direction?** In particular: the king's headdress form (to be
+    sourced; what should it look like?), and the guard's cap (Trần side, distinct from the
+    enemies).

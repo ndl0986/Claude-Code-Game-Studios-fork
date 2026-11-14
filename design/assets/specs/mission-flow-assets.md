@@ -6,7 +6,7 @@
 > **Review**: lean mode. art-director wrote the specs; technical-artist was skipped, so technical constraints were not validated. Sizes follow art bible §8 as set by game-art-content.
 > **Portrayal sign-off**: Luan (D-18) before any final art. Trần-era details are ⟨placeholder⟩.
 > **Backgrounds (ASSET-307–322)**: shipped per ADR-0002 (2880×1320 at 1.5×, sky band in code from `content/data/themes.json`), updated 2026-11-14 (TASK-014a).
-> **Status**: 26 assets specced / 0 approved / 0 in production / 0 done
+> **Status**: 32 assets specced / 0 approved / 0 in production / 0 done
 
 **Shared conventions:**
 - **Props** use the hero's scale (hero 360 px tall at 2×), a bottom-centre pivot and the feet line at `ground_y`.
@@ -657,3 +657,186 @@ petal sparkles, modern kids' cartoon VFX, flat soft gradients, no outlines. Nega
 lightning, fire, explosion, red, harsh flash, photorealistic, anime.
 
 **Status:** Needed
+
+---
+
+*ASSET-327–332 added by game-art-content for TASK-016, the Bình Than exchange scene (`dialogue` beat). The script was approved by Luan on 2026-11-14.*
+
+## ASSET-327 — Portrait: Trần Quốc Toản (neutral, pleading, determined)
+
+| Field | Value |
+|-------|-------|
+| Category | Sprite / UI |
+| Dimensions | Author 512×512 (2×); ship 384×384 at 1.5× (ADR-0002) |
+| Format | PNG (sRGB, alpha) |
+| Naming | portrait_tqt_hero.png, portrait_tqt_hero_pleading.png, portrait_tqt_hero_determined.png → ids `pic.portrait_tran-quoc-toan_hero[_pleading/_determined]` |
+| Replaces | new |
+| Texture Res | 1.5× shipped; R19b ≤ 2048 |
+
+**Visual Description:** A head-and-shoulders bust of the same boy as the hero sheet (ASSET-101):
+round face, topknot, vermilion headband with its two tails, cream tunic ⟨placeholder⟩, facing
+**right** (he stands on the left of the dialogue). Neutral is calm and attentive. Pleading has
+raised brows, hands together at the chest, and an earnest open mouth. Determined has set brows,
+a firm mouth and a chin up: brave, never angry at anyone. Same proportions and palette as the
+sprite sheet, so the child sees one character.
+
+**Art Bible Anchors:**
+- §5 expressions: earnest and brave, never goofy or scary
+- §4 vermilion as an accent only (headband, sash); skin `#F1C9A0` (D-18)
+
+**Generation Prompt:** Modern kids' cartoon character portrait, head and shoulders, a brave
+13th-century Vietnamese boy of about 15 with a big round head, kind eyes, a black topknot and a
+vermilion headband (#D64A2E) with two flowing tails, cream cross-collar tunic (#F3E6C8) with gold
+trim (#E8A93B), facing right, soft rounded shapes, flat colours with soft gradients, warm
+ink-brown outlines (#4A3428), transparent background. Three expressions: calm; pleading with
+hands together at the chest; determined with chin up. Negative: text, letters, watermark, anime,
+photorealistic, angry snarl, tears, weapons, scary face.
+
+**Status:** Needed
+
+---
+
+## ASSET-328 — Portrait: palace guard
+
+| Field | Value |
+|-------|-------|
+| Category | Sprite / UI |
+| Dimensions | Author 512×512 (2×); ship 384×384 at 1.5× |
+| Format | PNG (sRGB, alpha) |
+| Naming | portrait_tqt_guard.png → id `pic.portrait_tran-quoc-toan_guard` |
+| Replaces | new |
+| Texture Res | 1.5× shipped |
+
+**Visual Description:** A friendly, sturdy Trần palace guard, facing **left**: a round face, a
+small kind moustache, and a simple helmet or cap of the **Trần side**. It is clearly **not** the
+enemy dome-helmet family (ASSET-201–206), and it has no slate-violet. His uniform is in the hero's
+team colours, muted: straw `#D8C9A3` with a muted vermilion `#B9705C` sash ⟨placeholder⟩. A spear
+is held **upright**, its tip out of frame. His expression is firm but kind, a gentle "not now"
+with one hand raised palm out. Never rough or mocking.
+
+**Art Bible Anchors:**
+- §5 neutral NPCs are friendly; guards raise a hand, not a weapon
+- §3 no weapon pointed at the viewer; Luan's rule 1 (faces in the same style as everyone)
+
+**Generation Prompt:** Modern kids' cartoon character portrait, head and shoulders, a kind sturdy
+Vietnamese palace guard of the Trần dynasty era, round face, small moustache, simple rounded cap,
+straw-coloured tunic (#D8C9A3) with a muted red sash (#B9705C), one hand raised palm-out in a
+gentle "stop" gesture, an upright spear tip out of frame, facing left, firm but friendly
+expression, soft rounded shapes, flat colours with soft gradients, warm ink-brown outlines
+(#4A3428), transparent background. Negative: text, letters, watermark, angry face, shouting,
+weapon pointed at viewer, dome helmet, conical hat, purple, anime, photorealistic.
+
+**Status:** Needed
+
+---
+
+## ASSET-329 — Portrait: the king (symbolic, Trần Nhân Tông)
+
+| Field | Value |
+|-------|-------|
+| Category | Sprite / UI |
+| Dimensions | Author 512×512 (2×); ship 384×384 at 1.5× |
+| Format | PNG (sRGB, alpha) |
+| Naming | portrait_tqt_king.png (+ portrait_tqt_king_smiling.png for line 8) → ids `pic.portrait_tran-quoc-toan_king[_smiling]` |
+| Replaces | new |
+| Texture Res | 1.5× shipped |
+
+**Visual Description:** **A symbolic image, not a likeness** (Luan, 2026-11-14): a dignified,
+warm king facing **left**. He has a **Trần-era royal headdress** ("vương miện"; the period form
+is ⟨placeholder⟩ until a source is checked, and it must **never** be a European crown), a full
+neat beard, **thick brows**, kind eyes and calm authority. His robe is in rich gold `#E8A93B`
+with a deep lacquer-brown `#7A3B2A` trim; the motif and the form are ⟨placeholder⟩. The neutral
+pose is upright and composed. The smiling variant (line 8, praising Quốc Toản) has warm eyes and
+a gentle smile, never comic.
+
+**Art Bible Anchors:**
+- §5 respectful portrayal: dignified, never comic; a teacher must be comfortable
+- §4 gold for honour; no red dominance
+- Pillar *True to history*: a symbolic image, and every period detail is ⟨placeholder⟩
+
+**Generation Prompt:** Modern kids' cartoon portrait, head and shoulders, a dignified and kind
+Vietnamese king of the 13th-century Trần dynasty, symbolic and not a real likeness, a
+traditional Vietnamese royal headdress (not a European crown), full neat black beard, thick
+eyebrows, warm calm eyes, a rich gold robe (#E8A93B) with deep lacquer-brown trim (#7A3B2A),
+facing left, soft rounded shapes, flat colours with soft gradients, warm ink-brown outlines
+(#4A3428), transparent background. Variant: gentle proud smile. Negative: text, letters,
+watermark, European crown, Chinese emperor costume, stern scary face, comic, anime,
+photorealistic, real person likeness.
+
+**Status:** Needed
+
+---
+
+## ASSET-330 — Dialogue boxes (speaker and narrator)
+
+| Field | Value |
+|-------|-------|
+| Category | UI |
+| Dimensions | 9-slice; speaker box base 720×200 and narrator box 880×200, in world px at 1× (`dialogue_line` field); author 2× |
+| Format | PNG (sRGB, alpha) |
+| Naming | ui_dialogue_speaker_left.png, ui_dialogue_speaker_right.png, ui_dialogue_narrator.png |
+| Replaces | new |
+| Texture Res | 1.5× shipped |
+
+**Visual Description:** Speaker boxes are rounded cream `#FFF6E3` panels with a thick ink outline
+and a small tail pointing to the portrait's side. Narrator boxes are centred, with no tail and
+the warm paper frame of the story screen (ASSET-035), so narration reads differently from speech.
+No text in art.
+
+**Art Bible Anchors:**
+- §7 UI rounded panels; the story frame motif (§3 drum ring) on the narrator box only
+
+**Generation Prompt:** Three mobile game dialogue boxes on a transparent background, modern kids'
+cartoon UI, cream rounded panels (#FFF6E3) with thick warm ink-brown outlines (#3A2A20): one with
+a small speech tail on the left, one with the tail on the right, and one centred panel with no
+tail and a thin bronze-drum ring border (#E8A93B). Empty centres for text. Negative: text,
+letters, red, sharp corners, photorealistic.
+
+**Status:** Needed
+
+---
+
+## ASSET-331 — Ask button ("Xin vào! / Let me in!")
+
+| Field | Value |
+|-------|-------|
+| Category | UI |
+| Dimensions | 9-slice pill, base 400×150 at 2× (bigger than "Tiếp", ASSET-323) |
+| Format | PNG (sRGB, alpha) |
+| Naming | ui_btn_ask.png, ui_btn_ask_pressed.png |
+| Replaces | new |
+| Texture Res | 1.5× shipped |
+
+**Visual Description:** A big, inviting pill in star gold `#FFC531` with a thick ink outline and
+an icon of two hands raised together (asking), on the left. The label is a text layer; the words
+are story Text, Quốc Toản's own speech. Pressed: a 4% squash. It gently pulses when the hint
+fires (Hints GDD).
+
+**Art Bible Anchors:**
+- §7 UI: the primary action is the most prominent; one icon plus a distinct shape
+
+**Generation Prompt:** A large rounded pill button on a transparent background, warm golden
+yellow (#FFC531), thick warm ink-brown outline (#3A2A20), a small icon of two hands raised
+together at the left end, an empty centre for a label, a soft highlight. Modern kids' cartoon UI.
+Negative: text, letters, red, sharp corners, photorealistic.
+
+**Status:** Needed
+
+---
+
+## ASSET-332 — Meeting-gate scene background (dialogue)
+
+| Field | Value |
+|-------|-------|
+| Category | Environment |
+| Dimensions | Uses the river set's play layers with the gate set-piece (ASSET-312) centred; no new tile |
+| Format | — (composition note) |
+| Naming | — |
+| Replaces | — |
+| Texture Res | — |
+
+**Visual Description:** The dialogue plays over the closed meeting gate and royal canopy
+(ASSET-312), dimmed 30% behind the boxes and portraits so the faces read first. No new art is
+needed; this is a layout note for `/ux-design`.
+
+**Status:** Needed (layout only)

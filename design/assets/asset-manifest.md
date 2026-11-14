@@ -8,7 +8,7 @@
 
 | Total | Needed | In Progress | Done | Approved |
 |-------|--------|-------------|------|----------|
-| 87 | 87 | 0 | 0 | 0 |
+| 93 | 93 | 0 | 0 | 0 |
 
 ## Assets by Context
 
@@ -122,3 +122,9 @@
 | ASSET-324 | Skip-warning card | UI | Needed | design/assets/specs/mission-flow-assets.md |
 | ASSET-325 | Training checklist icons (dummy, shield, banner) | UI | Needed | design/assets/specs/mission-flow-assets.md |
 | ASSET-326 | Hold-meter fill pulse and done flash | VFX | Needed | design/assets/specs/mission-flow-assets.md |
+| ASSET-327 | Portrait: Trần Quốc Toản (neutral, pleading, determined) | Sprite / UI | Needed | design/assets/specs/mission-flow-assets.md |
+| ASSET-328 | Portrait: palace guard | Sprite / UI | Needed | design/assets/specs/mission-flow-assets.md |
+| ASSET-329 | Portrait: the king (symbolic, Trần Nhân Tông) | Sprite / UI | Needed | design/assets/specs/mission-flow-assets.md |
+| ASSET-330 | Dialogue boxes (speaker and narrator) | UI | Needed | design/assets/specs/mission-flow-assets.md |
+| ASSET-331 | Ask button ("Xin vào! / Let me in!") | UI | Needed | design/assets/specs/mission-flow-assets.md |
+| ASSET-332 | Meeting-gate scene background (dialogue) | Environment | Needed | design/assets/specs/mission-flow-assets.md |
