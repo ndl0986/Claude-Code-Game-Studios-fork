@@ -102,7 +102,6 @@
         "buttons",
         "title",
         "scene",
-        "goal",
         "params",
         "theme"
       ],
@@ -117,12 +116,12 @@
             "walk",
             "hold-meter",
             "training",
-            "reach-the-flag"
+            "reach-the-flag",
+            "dialogue"
           ]
         },
         "buttons": {
           "type": "array",
-          "minItems": 1,
           "uniqueItems": true,
           "items": {
             "$ref": "#/$defs/Button"
@@ -132,7 +131,11 @@
           "$ref": "common.schema.json#/$defs/Text"
         },
         "scene": {
-          "$ref": "common.schema.json#/$defs/TextList"
+          "description": "One sentence per box. May be empty only for a dialogue beat (schema 1.4).",
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/Text"
+          }
         },
         "goal": {
           "$ref": "common.schema.json#/$defs/Text"
@@ -231,6 +234,47 @@
             "properties": {
               "params": {
                 "$ref": "#/$defs/TrainingParams"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "dialogue"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "params": {
+                "$ref": "#/$defs/DialogueParams"
+              },
+              "buttons": {
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "dialogue"
+              }
+            }
+          },
+          "else": {
+            "required": [
+              "goal"
+            ],
+            "properties": {
+              "buttons": {
+                "minItems": 1
+              },
+              "scene": {
+                "minItems": 1
               }
             }
           }
@@ -376,6 +420,70 @@
           "default": [],
           "items": {
             "$ref": "#/$defs/Encounter"
+          }
+        }
+      }
+    },
+    "DialogueLine": {
+      "type": "object",
+      "required": [
+        "speaker",
+        "text"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "speaker": {
+          "description": "narrator (no portrait), hero (the mission's hero, left), or another speaker id (right). Portrait: pic.portrait_<hero_id>_<speaker>[_<mood>].",
+          "type": "string",
+          "pattern": "^[a-z_]+$"
+        },
+        "mood": {
+          "type": "string",
+          "pattern": "^[a-z_]+$"
+        },
+        "text": {
+          "$ref": "common.schema.json#/$defs/Text"
+        }
+      }
+    },
+    "DialogueParams": {
+      "description": "Schema 1.4 (TASK-016). The button is the ask button while at_line <= L < at_line + taps (L = 1-based line showing); R13d: at_line + taps <= lines.",
+      "type": "object",
+      "required": [
+        "lines"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "lines": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 12,
+          "items": {
+            "$ref": "#/$defs/DialogueLine"
+          }
+        },
+        "ask": {
+          "type": "object",
+          "required": [
+            "button",
+            "taps",
+            "at_line"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "button": {
+              "description": "The hero's action line (a story Text with claims; R8c field button).",
+              "$ref": "common.schema.json#/$defs/Text"
+            },
+            "taps": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 3
+            },
+            "at_line": {
+              "type": "integer",
+              "minimum": 1
+            }
           }
         }
       }

@@ -760,6 +760,137 @@
       "field_type": "button",
       "vi": "Quay về màn hình chính",
       "expected": "invalid"
+    },
+    {
+      "name": "dialogue beat with buttons",
+      "rule": "R13",
+      "beat": {
+        "type": "dialogue",
+        "buttons": [
+          "move"
+        ],
+        "params": {
+          "lines": []
+        }
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "dialogue beat without buttons",
+      "rule": "R13",
+      "beat": {
+        "type": "dialogue",
+        "buttons": [],
+        "params": {
+          "lines": []
+        }
+      },
+      "expected": "valid"
+    },
+    {
+      "name": "ask runs past the last line",
+      "rule": "R13d",
+      "lines": 4,
+      "ask": {
+        "taps": 2,
+        "at_line": 3
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "ask ends on the last line",
+      "rule": "R13d",
+      "lines": 4,
+      "ask": {
+        "taps": 2,
+        "at_line": 2
+      },
+      "expected": "valid"
+    },
+    {
+      "name": "dialogue legend covered by a marked narrator first line",
+      "rule": "R4c",
+      "claims": {
+        "C14": {
+          "label": "legend"
+        }
+      },
+      "lines": [
+        {
+          "speaker": "narrator",
+          "text": {
+            "id": "x.d.1",
+            "vi": "Truyện kể rằng cậu xin vào dự họp.",
+            "en": "The story says he asked to join the meeting.",
+            "claims": [
+              "C14"
+            ]
+          }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "id": "x.d.2",
+            "vi": "Cho cháu vào với!",
+            "en": "Please let me in!",
+            "claims": [
+              "C14"
+            ]
+          }
+        }
+      ],
+      "expected": "valid"
+    },
+    {
+      "name": "dialogue legend with an unmarked first line",
+      "rule": "R4c",
+      "claims": {
+        "C14": {
+          "label": "legend"
+        }
+      },
+      "lines": [
+        {
+          "speaker": "narrator",
+          "text": {
+            "id": "x.d.1",
+            "vi": "Cậu xin vào dự họp.",
+            "en": "He asked to join the meeting.",
+            "claims": [
+              "C14"
+            ]
+          }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "id": "x.d.2",
+            "vi": "Cho cháu vào với!",
+            "en": "Please let me in!",
+            "claims": [
+              "C14"
+            ]
+          }
+        }
+      ],
+      "expected": "invalid"
+    },
+    {
+      "name": "ask button per line",
+      "rule": "ask",
+      "lines": 5,
+      "ask": {
+        "taps": 2,
+        "at_line": 2
+      },
+      "expected_buttons": [
+        "tiep",
+        "ask",
+        "ask",
+        "tiep",
+        "tiep"
+      ],
+      "expected": "valid"
     }
   ]
 }

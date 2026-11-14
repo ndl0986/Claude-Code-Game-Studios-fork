@@ -46,7 +46,7 @@ Schema **1.1** (D-06, a MINOR bump): optional training `blocks` / `finish_specia
 - **Mission** `{hero{id, name, timeline_order, place}, next_hero, intro[], banner?, beats[], ending{lines[], picture_id}}`.
   - The banner is defined once as Text, a text layer that is never baked into art. A beat with `uses_banner` shows it.
 - **Beat** `{id, type, theme, buttons[], title, scene[], goal, uses_banner?, params}`.
-  - `type` is one of fight, walk, hold-meter, training or reach-the-flag.
+  - `type` is one of fight, walk, hold-meter, training, reach-the-flag or **dialogue** (schema 1.4: `params.lines` 2–12 of {speaker, mood?, text}, optional `ask` {button: Text, taps 1–3, at_line}; `buttons` [], `scene` may be [], `goal` optional, no card or caption). Speaker `narrator` has no portrait; `hero` is reserved for the mission's hero (left); other speaker ids are on the right. Portraits are `pic.portrait_<hero_id>_<speaker>[_<mood>]` and must resolve for real heroes (R10; a missing mood variant fails). R8c field types: `dialogue_line` (speaker lines, 720/38/3/600) and `dialogue_narrator` (880/38/2/600); the ask button is a `button`.
   - `buttons` is a subset of move, attack, defend and special.
   - `params` are per type. A fight's are `enemies[]`, `max_active` and `from_left[]`, as in the prototype.
 - **Quiz** has 3–5 questions; `tuning.json` `quiz_count` is 5, so the file's question count decides (D-11b). Each has `prompt`, an optional `picture_id`, 3 choices `{text, picture_id}`, `correct_index` and `why` (shown after the right answer).
@@ -84,6 +84,7 @@ them against `data/` and `samples/`. `fixtures/validity.json` has one case per r
 | R3 | Every story Text has at least one claim (schema); only `strings.json` has none. |
 | R4 | A Text citing a **legend** claim contains a legend marker from `markers.json`, in VI and in EN. The writer authors the marker; it is never added automatically. A Text citing a fact_as_recorded claim may use "Sử chép rằng / The chronicle says". |
 | R4b | (D-12) R4 applies to **sentence** fields: intro, beat scene, ending lines, quiz prompt, quiz why. **Label** fields (hero name, place, banner, beat title, goal, quiz choice) are exempt from R4 only if, for each legend claim the label cites, a **marked** sentence citing that same claim exists in its scope. "Marked" is the R4 test: a legend marker in VI **and** in EN. Scope: any sentence of the mission for name, place, banner, title and goal; the choice's own question's prompt or why for a quiz choice. |
+| R4c | (schema 1.4) Dialogue lines and the ask button citing a legend claim pass R4 if the beat's **first line** is a `narrator` line marked in VI and EN that cites the same claim. Dialogue lines count as sentences in the R4b scope. |
 | R5 | A fact or fact_as_recorded claim can't be `approved` while any of its sources is `to_confirm`. R5b: only an invented claim may have no sources. |
 | R6 | An invented claim is never cited by quiz text. |
 | R7 | All text is Unicode NFC. |
@@ -96,6 +97,7 @@ them against `data/` and `samples/`. `fixtures/validity.json` has one case per r
 | R12 | **Claim gate:** see below. |
 | R13 | Buttons per beat type (schema 1.1, D-06). Minimum: walk {move}; hold-meter {special}; fight {move, attack}; training {move, attack} + defend if `blocks` > 0 + special if `finish_special`; reach-the-flag {move} + attack if `encounters` is non-empty. `special` is allowed only on hold-meter and training with `finish_special`; never on walk, fight or reach-the-flag (D-10 B: no Special in fights or encounters for now). Defend is optional on a fight (blocking is taught, never required). |
 | R13b | reach-the-flag `encounters` are sorted by `at_screen`, strictly ascending, each `0 < at_screen < length_screens`. |
+| R13d | (schema 1.4) A `dialogue` beat has `buttons: []`; if it has `ask`, `at_line + taps ≤ lines`. The button is the ask button while `at_line ≤ L < at_line + taps` (L = the 1-based line showing); each ask tap shows line L + 1. |
 | R14 | `tuning.json`: `attack_range` ≥ `enemy_reach` − `stand_gap`, so the hero can reach the enemy in front of him (error). |
 | R15 | `tuning.json`: `telegraph` < 0.8 s is a **warning**, not an error. |
 | R16 | `rules.json`: each lower star's `max_retries` is ≥ the higher star's (2★ ≥ 3★); `null` means no limit. |
