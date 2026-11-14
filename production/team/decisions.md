@@ -39,7 +39,7 @@ it) · **Decided** (Luan's call, with the date).
 
 - **Flow:** combat GDD → `content/data/tuning.json` (game-dev-android edits) → both apps.
 - **What:** 14 of the GDD's proposed keys already exist (TASK-005b); the GDD switches to those
-  names. New: `special_push` 170 px, `special_cooldown` 6 s; checks: fail if
+  names. New: `special_push` 170 px, `special_cooldown` 6 s, `advance_debounce` 0.25 s (story-box tap debounce), `bump_stop` 0.5 s (walk-beat bump stop); checks: fail if
   `attack_range < enemy_reach − stand_gap`, warn if `telegraph < 0.8 s`.
 - **Status:** Open (the two devs + game-art-content agree; Luan only if they disagree).
 
