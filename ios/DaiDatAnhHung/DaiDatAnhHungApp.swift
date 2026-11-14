@@ -10,10 +10,11 @@ struct DaiDatAnhHungApp: App {
 
     var body: some Scene {
         WindowGroup {
-            Group {
-                if let scene { SpriteView(scene: scene, options: [.ignoresSiblingOrder]) }
-                else { Color.black } // content failed to load (logged); never a crash in front of a child
-            }
+            ZStack {
+                // the launch colour behind the first SpriteKit frame: no grey flash on a fresh install (iOS-R2-02)
+                Color("LaunchColor")
+                if let scene { SpriteView(scene: scene, options: [.ignoresSiblingOrder, .allowsTransparency]) }
+            } // content that fails to load leaves the launch colour (logged); never a crash in front of a child
             .ignoresSafeArea()
             .statusBarHidden(true)
             .persistentSystemOverlays(.hidden)

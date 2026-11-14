@@ -351,7 +351,10 @@ final class GameScene: SKScene {
         let b = Backdrop.world(theme: "village", from: -100, to: 1400, ground: game.tuning["ground_y"]); b.position = CGPoint(x: 0, y: 720); uiZ += 1; b.zPosition = uiZ; ui.addChild(b)
         add(D.rr(-490, -105, 980, 210, 40, C.panel, C.gold, 6), 640, 165)
         for x in [240.0, 1040] { add(D.drum(70, SKColor(hex: 0xf2b632, alpha: 0.8)), x, 165) }
-        add(Font.label(game.ui("ui.app.title"), 76, C.gold), 640, 140)
+        // the title fits between the two drum emblems in every language (iOS-R2-01)
+        let title = Font.label(game.ui("ui.app.title"), 76, C.gold)
+        if title.frame.width > 600 { title.setScale(600 / title.frame.width) }
+        add(title, 640, 140)
         if game.isDebug { add(Font.label(game.ui("ui.debug.subtitle"), 36, .white), 640, 220) }
         let h = HeroNode(scale: 0.8); h.update(face: 1, walk: false, defend: false, attack: nil, hurt: false, t: 0); add(h, 260, game.tuning["ground_y"])
         if game.isPlayable { button(game.ui("ui.btn.start"), 640 - 190, 330, 380, 130, "start", pulse: true, size: 44) }
@@ -509,8 +512,8 @@ final class GameScene: SKScene {
         if q.okIndex != nil {
             // the why strip sits below the cards (cards end at y 580)
             add(D.rr(-560, -45, 1120, 90, 24, C.panel), 640, 640)
-            add(Font.label(game.ui("ui.quiz.correct"), 30, C.glow), 260, 640)
-            add(Font.label(cur.why.text(game.lang), 26, .white, width: 600), 640, 640)
+            add(Font.label(game.ui("ui.quiz.correct"), 30, C.glow, width: 200), 200, 640)
+            add(Font.label(cur.why.text(game.lang), 26, .white, width: 640), 660, 640) // 2 lines fit, clear of the "right" label
             button(game.ui("ui.btn.next"), 1280 - 300, 598, 220, 84, "next", pulse: true)
             badge(cur.why, 0, 0)
         } else if !q.wrong.isEmpty {
