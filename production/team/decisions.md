@@ -97,26 +97,26 @@ it) · **Decided** (Luan's call, with the date).
   no server" unless bundled through the stores' own asset delivery).
 - **Status:** Open; not needed until hero 3–4.
 
-### D-27 Show progress on the slice's title screen before the map exists? (QC G5)
+### D-28b Which official map to trace for today's Vietnam (incl. Hoàng Sa, Trường Sa)
 
-- **Flow:** QC G5 ("the title shows no progress") → Map & timeline GDD → the slice title screen.
-- **Options:** A. **a small hero card on the title now** with best stars and the medal (gold/outline),
-  reusing the results-screen pieces; it later becomes the map's timeline card · B. wait for the map
-  (Alpha); until then a child who finishes sees no progress.
-- **Recommendation:** A (cheap, fixes G5, nothing wasted).
-- **Status:** Open.
-
-### D-28 The map of Vietnam: today's outline, including Hoàng Sa and Trường Sa
-
-- **Flow:** Map & timeline GDD (TASK-018) → map art → store review for Vietnam.
-- **What:** the map shows **today's Vietnam**, traced from an authoritative source, **with the Hoàng
-  Sa and Trường Sa archipelagos**; historical borders are never drawn; each hero's place is labelled
-  with its modern location (e.g. "Bình Than: nay thuộc Bắc Ninh"), as a claim to sign off.
-- **Options:** A. as above *(recommended)* · B. a stylised map without the islands (not acceptable for
-  a Vietnamese audience; may breach publishing rules) · C. historical borders per era (every era
-  becomes a history claim to verify).
-- **Decide also:** which official source to trace (e.g. a national administrative map).
-- **Status:** Open.
+- **Flow:** D-28 A (decided) → game-art-content traces the national outline, coast and both
+  archipelagos (no province borders needed) → map art → your sign-off.
+- **Candidates (researched by game-art-content, 2026-11-14; please verify):**
+  - **A. "Bản đồ Cộng hòa Xã hội Chủ nghĩa Việt Nam" (2025, 34 provinces)**, NXB Tài nguyên – Môi
+    trường và Bản đồ Việt Nam (state map publisher), 1:2,300,000, print + free electronic copy.
+    *Recommended.* To check on the actual sheet: how Hoàng Sa and Trường Sa are drawn (inset or in place).
+  - **B. The online administrative map of Cục Đo đạc, Bản đồ và Thông tin địa lý Việt Nam** (same
+    authority, digital, easiest to trace). Reuse terms to check.
+  - **C. The school map** (SGK Lịch sử và Địa lí lớp 4, or the Atlat Địa lí Việt Nam): what children
+    know, but current editions may predate the 2025 changes.
+  - Not acceptable: foreign open data (Natural Earth, GADM): they don't show the archipelagos as Vietnamese.
+- **Recommendation:** trace from A (using B's digital copy if its terms allow), cross-check with A's
+  print; use C only as a "looks like the map a child knows" check.
+- **Release item to confirm:** maps showing national territory published in Vietnam may need content
+  appraisal (thẩm định) by Cục Đo đạc, Bản đồ và Thông tin địa lý. Possibly applies to the app's map;
+  goes on the release checklist.
+- **Sources:** mae.gov.vn (new map publications); VietnamPlus, Vietnam Law Magazine, Lao Động (34-province map).
+- **Status:** Open (not urgent: map art is Alpha). Answer "D-28b: A" or another letter.
 
 ### D-23 Voice-over and sound choices (not needed until voice recording)
 
@@ -406,6 +406,8 @@ it) · **Decided** (Luan's call, with the date).
 
 | Date | Decision |
 | --- | --- |
+| 2026-11-14 | **D-27: A.** A small hero card on the slice title now, with best stars and the medal (gold/outline), reusing the results-screen pieces; it later becomes the map's timeline card (fixes QC G5). |
+| 2026-11-14 | **D-28: A.** The map shows **today's Vietnam** traced from an authoritative source, **including the Hoàng Sa and Trường Sa archipelagos**; historical borders are never drawn; each hero's place is labelled with its modern location as a claim to sign off. Which source to trace stays open (D-28b). |
 | 2026-11-14 | **Bình Than exchange script approved** (9 lines, legend-labelled), with Luan's changes: the king calls Quốc Toản **"cháu"**, and **"nhà vua"** replaces "Quan gia". |
 | 2026-11-14 | **TASK-016 plan approved:** walk to Bình Than 3 → 1 screen, gaps between steps halved; a new exchange scene (the "Xin vào!" button tapped twice, the guard refuses, the king comes out and gives the orange) before the orange beat. **The king (Trần Nhân Tông) is shown symbolically:** royal headdress, beard, thick brows, dignified (period headdress a placeholder until sourced). Script still to be approved. |
 | 2026-11-14 | **D-25 (design direction):** shorten the movement, especially the walk to Bình Than; add an exchange scene where Quốc Toản asks to join the meeting and is refused, then crushes the orange, to show his spirit and character. game-art-content proposes the scene and script (TASK-016); Luan approves before the build. |
