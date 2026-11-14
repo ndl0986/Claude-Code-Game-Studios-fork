@@ -29,6 +29,8 @@ Where the project stands, so work can resume from the repo. Newest entry first.
 | TASK-003b beat types, Special button, arrows, art fixes | — | Ready; starts after TASK-003 (likely dev-001) |
 | TASK-004 art bible + Trần Quốc Toản content | `design/TASK-004-art-bible-tqt-beats` @ `4d7aca2` | Art + structure signed off; claims C01–C11 and source pages not signed; not merged |
 
+**Engine decision (Luan, 2026-11-14):** native per platform. iOS: Swift + SpriteKit (game-dev-001). Android: Kotlin (game-dev-002), 2D approach to be picked by Luan in TASK-007. Godot shelved (TASK-002 branch kept, not merged; local tip `82c016e`). New tasks: TASK-005 ADR + shared `content/`, TASK-006 iOS setup, TASK-007 Android setup.
+
 ### Waiting on Luan
 
 1. (Done) Orca Screen Recording: both Orca and Orca Computer Use are on; `orca computer permissions` shows both granted.
