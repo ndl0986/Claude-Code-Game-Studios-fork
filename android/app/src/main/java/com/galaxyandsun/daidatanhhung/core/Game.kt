@@ -117,6 +117,17 @@ class Game(
         return advance().also { if (it) lastAdvance = clock }
     }
 
+    /**
+     * Whether a press that starts now on [key] may fire when it is released (menus fire on release).
+     * QC r2: a press that begins inside the Next debounce, or on a quiz card during the wrong-card
+     * shake, is ignored even if it is released after the window ends (B1 on beat cards, quiz AC6).
+     */
+    fun pressAllowed(key: String): Boolean = when {
+        key == "next" -> clock - lastAdvance >= tuning["advance_debounce"]
+        key.startsWith("card") -> (quiz?.shakeT ?: 0.0) <= 0.0
+        else -> true
+    }
+
     private fun advance(): Boolean = when (screen) {
         Screen.INTRO -> { if (line < bundle.mission.intro.size - 1) line++ else go(Screen.PLAY); true }
         Screen.ENDING -> { if (line < bundle.mission.ending.lines.size - 1) line++ else startQuiz(); true }

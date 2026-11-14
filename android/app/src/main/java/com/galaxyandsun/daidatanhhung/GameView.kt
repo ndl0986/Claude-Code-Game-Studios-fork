@@ -128,7 +128,7 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
                     val r = renderer.hit(e.x, e.y) ?: continue
                     val a = r.pad
                     if (a != null) { padHolds.down(e.id, a); input.tapped += a }
-                    else pressedButton[e.id] = r.key
+                    else if (g == null || g.pressAllowed(r.key)) pressedButton[e.id] = r.key // QC r2: gate at press time
                 }
                 is Move -> padHolds.move(e.id, renderer.hit(e.x, e.y)?.pad)
                 is Up -> {

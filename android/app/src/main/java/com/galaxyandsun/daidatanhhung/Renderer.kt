@@ -130,7 +130,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         d.circle(0f, if (held) 4f else 0f, r, if (held) C.GOLD else C.a(C.CREAM, 0.88), if (held) C.GOLD_DARK else C.GOLD, 6f)
         d.c.translate(0f, if (held) 4f else 0f)
         d.c.save(); if (label != null) d.c.translate(0f, -r * 0.14f); icon(r); d.c.restore()
-        if (label != null) d.text(label, 0f, r * 0.62f, 24f, C.INK)
+        if (label != null) d.text(label, 0f, r * 0.62f, 28f, C.INK) // labels next to an icon ≥ 28 (Language GDD rule 6)
         d.c.restore()
         next += Region(key, cx, cy, r, r, true, pad = action)
     }
@@ -223,10 +223,11 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             d.circle(x, 60f, 30f, if (done) C.GOLD else C.a(C.WHITE, 0.75), C.GOLD_DARK, 4f); d.drum(x, 60f, 22f, if (done) C.INK else C.a(C.INK, 0.35))
         }
         if (r.phase == Phase.PLAY || r.phase == Phase.END) { // the goal under the medallions; its badge clear of the "!" bubble
-            d.rr(W / 2 - 300, 98f, 600f, 44f, 18f, C.a(C.CREAM, 0.85))
-            d.textBox(beat.goal.get(g.lang), W / 2, 120f, 580f, 24f, C.INK, 1); badge(g, beat.goal, W / 2 + 390, 120f)
+            // goal: body text, box 1040 @ 37 px, 1 line (rules.json fit.goal)
+            d.rr(W / 2 - 530, 108f, 1060f, 58f, 22f, C.a(C.CREAM, 0.88))
+            d.textBox(beat.goal.get(g.lang), W / 2, 137f, 1040f, 37f, C.INK, 1); badge(g, beat.goal, W / 2 + 430, 108f)
             if (beat.usesBanner) g.bundle.mission.banner?.let { b ->
-                d.rr(W / 2 - 450, 150f, 900f, 72f, 18f, C.a(C.RED, 0.9)); d.textBox(b.get(g.lang), W / 2, 186f, 880f, 24f, C.GOLD, 2); badge(g, b, W / 2 + 540, 172f) // up to 2 lines
+                d.rr(W / 2 - 450, 174f, 900f, 84f, 18f, C.a(C.RED, 0.9)); d.textBox(b.get(g.lang), W / 2, 216f, 880f, 28f, C.GOLD, 2); badge(g, b, W / 2 + 380, 174f) // fit.banner 880 @ 28, 2 lines
             }
         }
         val vis = r.visibleButtons()
@@ -261,7 +262,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         d.rr(160f, 140f, 960f, 300f, 36f, C.PANEL, C.GOLD, 6f)
         d.drum(230f, 210f, 44f, C.a(C.GOLD, 0.8)); d.drum(1050f, 210f, 44f, C.a(C.GOLD, 0.8))
         d.textBox(head, W / 2, 190f, 700f, 30f, C.GOLD, 1); badgeFor?.let { badge(g, it, W / 2, 222f) }
-        d.textBox(line.get(g.lang), W / 2, 295f, 760f, 40f, C.WHITE, 2); badge(g, line, W / 2, 410f)
+        d.textBox(line.get(g.lang), W / 2, 300f, 880f, 38f, C.WHITE, 2); badge(g, line, W / 2, 415f) // fit.scene 880 @ 38
         button("next", g.ui(UiIds.NEXT), W / 2 - 150, 470f, 300f, 110f, t, pulse = true) { g.next() }
         skipButton(g)
     }
@@ -269,7 +270,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
     private fun skipButton(g: Game) {
         if (!g.onStoryBox) return
         val label = g.uiOrNull(UiIds.SKIP) ?: return
-        button("skip", label, 1040f, 610f, 210f, 84f, g.t, fill = C.a(C.CREAM, 0.85), shade = 0xFFC8B89A.toInt(), size = 28f) { g.skip() }
+        button("skip", label, 960f, 610f, 300f, 84f, g.t, fill = C.a(C.CREAM, 0.85), shade = 0xFFC8B89A.toInt(), size = 34f) { g.skip() } // fit.button 270 @ 34
     }
 
     /** D-07: one kind warning per run; fires on release like every menu. */
@@ -279,7 +280,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         d.rr(0f, 0f, W, H, 0f, C.a(0xFF2A2440.toInt(), 0.75))
         d.rr(200f, 150f, 880f, 420f, 36f, C.CREAM, C.GOLD, 6f)
         medal(W / 2, 250f, 56f, false)
-        d.textBox(g.ui(UiIds.SKIP_WARNING), W / 2, 365f, 780f, 34f, C.INK, 3)
+        d.textBox(g.ui(UiIds.SKIP_WARNING), W / 2, 365f, 780f, 37f, C.INK, 3) // fit.dialog 780 @ 37, 3 lines
         button("keep", g.ui(UiIds.KEEP_READING), 260f, 450f, 360f, 96f, g.t, pulse = true) { g.keepReading() }
         button("skipok", g.ui(UiIds.SKIP_CONFIRM), 660f, 450f, 360f, 96f, g.t, fill = C.a(C.WHITE, 0.9), shade = 0xFFC8B89A.toInt()) { g.confirmSkip() }
     }
@@ -331,7 +332,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         d.text("${g.ui(UiIds.QUESTION)} ${min(q.index + 1, n)}/$n", 120f, 50f, 28f, C.GOLD, Paint.Align.LEFT)
         val cur = q.current
         d.textBox(cur.prompt.get(g.lang), W / 2, 140f, 980f, 40f, C.WHITE, 2); badge(g, cur.prompt, W / 2, 222f)
-        val cw = 360f; val ch = 350f; val gap = 40f; val x0 = (W - 3 * cw - 2 * gap) / 2; val y0 = 248f
+        val cw = 390f; val ch = 330f; val gap = 20f; val x0 = (W - 3 * cw - 2 * gap) / 2; val y0 = 228f
         q.order.forEachIndexed { slot, j ->
             val a = cur.choices[j]
             var x = x0 + slot * (cw + gap)
@@ -340,20 +341,22 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             d.rr(x, y0 + 8, cw, ch, 30f, C.a(0, 0.3))
             d.rr(x, y0, cw, ch, 30f, if (ok) 0xFFD9F2D0.toInt() else if (wrong) C.TRY_AGAIN else C.CREAM, if (ok) C.RIGHT else if (wrong) 0xFF7E7299.toInt() else C.GOLD, if (ok) 10f else 5f)
             val old = d.alpha; if (wrong) d.alpha = 0.5
-            picture(a.pictureId, x + cw / 2, y0 + 140, 110f)
+            picture(a.pictureId, x + cw / 2, y0 + 120, 100f)
             d.alpha = old
             if (wrong) { d.arc(x + cw - 44, y0 + 44, 18f, -0.3f, 4.4f, C.WHITE, 6f); d.poly(C.WHITE, x + cw - 26, y0 + 30, x + cw - 18, y0 + 46, x + cw - 34, y0 + 46) }
             if (ok) { val p = d.stroke(C.RIGHT, 10f); d.c.drawLine(x + cw - 64, y0 + 44, x + cw - 50, y0 + 60, p); d.c.drawLine(x + cw - 50, y0 + 60, x + cw - 24, y0 + 28, p) }
-            d.textBox(a.text.get(g.lang), x + cw / 2, y0 + 290, cw - 40, 30f, if (wrong) 0xFF4A4060.toInt() else C.INK, 2)
-            badge(g, a.text, x + cw / 2, y0 + 340)
-            if (ok) for (kk in 0 until 5) { val ang = t * 3 + kk * 1.26; d.star(x + cw / 2 + cos(ang).toFloat() * 150, y0 + 140 + sin(ang).toFloat() * 110, 16f, C.GLOW, C.GOLD_DARK, ang.toFloat()) }
+            d.textBox(a.text.get(g.lang), x + cw / 2, y0 + 262, cw - 30, 37f, if (wrong) 0xFF4A4060.toInt() else C.INK, 2) // fit.quiz_choice 360 @ 37
+            badge(g, a.text, x + cw / 2, y0 + 322)
+            if (ok) for (kk in 0 until 5) { val ang = t * 3 + kk * 1.26; d.star(x + cw / 2 + cos(ang).toFloat() * 150, y0 + 120 + sin(ang).toFloat() * 90, 16f, C.GLOW, C.GOLD_DARK, ang.toFloat()) }
             next += Region("card$slot", x, y0, cw, ch, false, onTap = { g.answer(j) != com.galaxyandsun.daidatanhhung.core.PickResult.IGNORED })
         }
         if (q.rightShown >= 0) {
-            d.rr(40f, 606f, 860f, 108f, 24f, C.a(C.RIGHT, 0.9)) // the why line: up to 3 lines (Language GDD rule 8)
-            d.textBox("${g.ui(UiIds.CORRECT)} ${cur.why.get(g.lang)}", 470f, 660f, 820f, 24f, C.WHITE, 3); badge(g, cur.why, 470f, 600f)
-            if (q.canAdvance) button("next", g.ui(UiIds.NEXT), 940f, 618f, 280f, 90f, t, pulse = true) { g.next() }
-        } else if (q.shakeT > 0 || q.wrongPicked.isNotEmpty()) d.text(g.ui(UiIds.RETRY), W / 2, 670f, 36f, 0xFFE6E0F5.toInt())
+            // the why line: fit.quiz_why 820 @ 37, up to 3 lines; "Đúng rồi!" sits above Next
+            d.rr(30f, 566f, 860f, 150f, 24f, C.a(C.RIGHT, 0.92))
+            d.textBox(cur.why.get(g.lang), 460f, 641f, 820f, 37f, C.WHITE, 3); badge(g, cur.why, 460f, 566f)
+            d.textBox(g.ui(UiIds.CORRECT), 1080f, 590f, 330f, 30f, C.GLOW, 1)
+            if (q.canAdvance) button("next", g.ui(UiIds.NEXT), 930f, 626f, 300f, 88f, t, pulse = true) { g.next() }
+        } else if (q.shakeT > 0 || q.wrongPicked.isNotEmpty()) d.text(g.ui(UiIds.RETRY), W / 2, 640f, 36f, 0xFFE6E0F5.toInt())
         roundIcon("pause", 1214f, 66f, 48f, { pauseGlyph(1214f, 66f, 48f) }) { g.pause() }
     }
 
@@ -368,12 +371,12 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             val r = (if (i == 1) 90f else 75f) * (if (got) 0.6f + 0.4f * appear else 1f)
             if (got && appear > 0) d.star(x, y, r, C.GOLD, C.WHITE) else { d.star(x, y, r, C.a(C.WHITE, 0.08), C.a(C.WHITE, 0.55)) }
         }
-        medal(1080f, 300f, 60f, g.medalThisRun || g.medalEarned)
+        medal(1100f, 290f, 60f, g.medalThisRun || g.medalEarned)
         // Gold if earned in this or any run; the "earned" line only in the run that earns it (progression GDD rule 10).
         val medalLine = if (g.medalThisRun) UiIds.MEDAL_EARNED else if (!g.medalEarned) UiIds.MEDAL_MISSING else null
-        medalLine?.let { d.textBox(g.ui(it), 1080f, 400f, 300f, 22f, C.a(C.WHITE, 0.85), 2) }
-        if (g.newlyOpen == null) d.text(g.ui(UiIds.MORE_HEROES), W / 2, 450f, 30f, C.a(C.WHITE, 0.8), semiBold = true)
-        button("next", g.ui(UiIds.NEXT), W / 2 - 150, 520f, 300f, 110f, t, pulse = true) { g.next() }
+        medalLine?.let { d.textBox(g.ui(it), W / 2, 440f, 780f, 37f, C.a(C.WHITE, 0.9), 3) } // fit.dialog 780 @ 37
+        if (g.newlyOpen == null) d.textBox(g.ui(UiIds.MORE_HEROES), W / 2, 525f, 700f, 30f, C.a(C.WHITE, 0.8), 1)
+        button("next", g.ui(UiIds.NEXT), W / 2 - 150, 580f, 300f, 110f, t, pulse = true) { g.next() }
     }
 
     private fun medallion(x: Float, y: Float, r: Float, lit: Boolean) {
@@ -389,14 +392,14 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         d.c.save(); d.path.reset(); d.path.addCircle(300f, 300f, 110f, android.graphics.Path.Direction.CW); d.c.clipPath(d.path)
         fig.hero(300f, 470f, 1, false, false, null, t, 0.75f); d.c.restore()
         val name = g.bundle.mission.hero.name
-        d.textBox(name.get(g.lang), 300f, 450f, 360f, 30f, C.WHITE, 1); badge(g, name, 300f, 490f)
+        d.textBox(name.get(g.lang), 300f, 450f, 400f, 30f, C.WHITE, 1); badge(g, name, 300f, 490f) // fit.hero_name 400 @ 30
         medallion(980f, 300f, 110f, open >= 1)
         d.c.save(); d.c.translate(980f, 300f); val old = d.alpha; d.alpha = 1.0 - open * 0.85
         d.arc(0f, -30 - open * 40, 34f, Math.PI.toFloat(), (2 * Math.PI).toFloat(), C.STEEL, 14f); d.rr(-50f, -30f, 100f, 80f, 14f, C.STEEL); d.circle(0f, 4f, 10f, 0xFF3E3856.toInt())
         d.alpha = old; d.c.restore()
         if (open >= 1) { for (kk in 0 until 6) { val a = t * 2 + kk * 1.05; d.star(980 + cos(a).toFloat() * 150, 300 + sin(a).toFloat() * 120, 18f, C.GLOW, C.GOLD_DARK, a.toFloat()) }; d.text("?", 980f, 300f, 110f, C.GOLD_DARK) }
         d.text(g.ui(UiIds.UNLOCKED), W / 2, 100f, 52f, C.GOLD)
-        d.text(g.ui(UiIds.MAP_STUB), W / 2, 530f, 26f, C.a(C.WHITE, 0.6), semiBold = true)
+        d.text(g.ui(UiIds.MAP_STUB), W / 2, 530f, 28f, C.a(C.WHITE, 0.6), semiBold = true)
         button("replay", g.ui(UiIds.REPLAY), 260f, 580f, 340f, 110f, t, fill = C.CREAM, shade = 0xFFC8B89A.toInt()) { g.replay() }
         button("tomap", g.ui(UiIds.TO_MAP), 680f, 580f, 340f, 110f, t, pulse = true) { g.home() } // slice: "the map" is the title screen
     }

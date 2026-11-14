@@ -203,6 +203,34 @@ class BeatTypesTest {
         assertFalse(g.next()); assertEquals(i, g.quiz!!.index)
     }
 
+    /** QC r2 B1 on beat cards: a second press 0.15 s after an advance is refused even if released later. */
+    @Test fun b1CardDoubleTapPressGate() {
+        val g = atBeat(2) // training: a card with several boxes
+        idle(g)
+        assertEquals(Phase.CARD, g.run.phase)
+        assertTrue(g.pressAllowed("next")); assertTrue(g.next())
+        val line = g.run.cardLine
+        idle(g, 9) // 0.15 s
+        assertFalse(g.pressAllowed("next")) // this press can't fire on its release
+        assertFalse(g.next())
+        assertEquals(line, g.run.cardLine)
+        idle(g, 7) // 0.27 s after the advance
+        assertTrue(g.pressAllowed("next"))
+    }
+
+    /** QC r2 quiz AC6: a card pressed during the 0.5 s shake is ignored, not applied when the shake ends. */
+    @Test fun ac6CardPressDuringShakeIsIgnored() {
+        val g = TestContent.fullGame()
+        g.debugJump("quiz"); idle(g)
+        val q = g.quiz!!
+        assertEquals(PickResult.WRONG, g.answer((q.current.correctIndex + 1) % 3))
+        idle(g, 24) // 0.4 s into the shake
+        assertFalse(g.pressAllowed("card0"))
+        idle(g, 7) // the shake has ended
+        assertTrue(g.pressAllowed("card0"))
+        assertEquals(1, q.retries)
+    }
+
     /** AC10: pause (the app going to the background) freezes the meter and the enemies. */
     @Test fun ac10PauseKeepsTheMeter() {
         val g = atBeat(1)
