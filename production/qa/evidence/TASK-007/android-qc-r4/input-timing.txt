@@ -1,0 +1,9 @@
+r4-03-B1-intro-box1-dbl: script='down 0 560 645; wait 0.04; up 0; wait 0.10; down 0 560 645; wait 0.04; up 0' kernel: down0@0.000, up0@0.029, down0@0.129, up0@0.169
+r4-04-B1-intro-box2-dbl-0p20: script='down 0 560 645; wait 0.05; up 0; wait 0.15; down 0 560 645; wait 0.05; up 0' kernel: down0@0.000, up0@0.041, down0@0.196, up0@0.239
+r4-05-B1-intro-box3-dbl-0p06: script='down 0 560 645; wait 0.03; up 0; wait 0.03; down 0 560 645; wait 0.03; up 0' kernel: down0@0.000, up0@0.049, down0@0.060, up0@0.112
+r4-07-B1-card-f1-dbl: script='down 0 560 525; wait 0.04; up 0; wait 0.10; down 0 560 525; wait 0.04; up 0' kernel: down0@0.000, up0@0.040, down0@0.139, up0@0.179
+r4-09-B1-dialogue-tiep-dbl-line1: script='down 0 560 645; wait 0.04; up 0; wait 0.10; down 0 560 645; wait 0.04; up 0' kernel: down0@0.000, up0@0.040, down0@0.144, up0@0.187
+r4-10-B1-ask-dbl-line2-to-3-plea: script='down 0 560 645; wait 0.04; up 0; wait 0.10; down 0 560 645; wait 0.04; up 0' kernel: down0@0.000, up0@0.049, down0@0.139, up0@0.180
+r4-12-AC3 second pointer on held Đỡ: kernel: down0@0.000, down1@0.608, up0@1.408, up1@3.030
+r4-21-B1-ending-box1-dbl: script='down 0 560 645; wait 0.04; up 0; wait 0.10; down 0 560 645; wait 0.04; up 0' kernel: down0@0.000, up0@0.034, down0@0.141, up0@0.182
+r4-23-B4-tap-during-shake: script='down 0 240 433; wait 0.05; up 0; wait 0.2; down 0 640 433; wait 0.05; up 0' kernel: down0@0.000, up0@0.002, down0@0.202, up0@0.263
