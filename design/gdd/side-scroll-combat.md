@@ -51,7 +51,9 @@ Combat is how a child takes part in the story's battle moments.
    within `attack_range`, or closer than `attack_close_range` on either side (F5). One swing can
    hit two enemies.
 4. **Defend.** While defend is held, the hero raises the shield. The hero can't move or attack
-   while defending: one action at a time, readable for a child.
+   while defending: one action at a time, readable for a child. An attack tap while defending
+   is **dropped, not queued**: releasing defend does not start a late swing. Defend doesn't
+   count as held while a caption is showing.
 5. **No health.** The hero has no health, lives or energy. An unblocked strike:
    - pushes the hero back by `hero_pushback`, away from the striker;
    - flashes the hero for `hurt_time`;
@@ -72,7 +74,8 @@ Combat is how a child takes part in the story's battle moments.
 7. **Spawning.** A fight's `enemies` list walks in, in order.
    - Each enemy starts `spawn_offset` past the screen edge (the left edge for indexes in
      `from_left`, otherwise the right).
-   - Enemies come one per `spawn_gap`, never more than `max_active` on screen.
+   - The first walk-in waits `first_spawn_delay` (0.4 s) after the fight starts. Then
+     enemies come one per `spawn_gap`, never more than `max_active` on screen.
    - Fleeing enemies don't count toward `max_active`.
 8. **Queueing.** On each side of the hero, enemies line up by distance.
    - The nearest stands at `enemy_reach − stand_gap`.
@@ -80,12 +83,15 @@ Combat is how a child takes part in the story's battle moments.
 9. **One strike at a time.** An enemy may start a windup only when all of these hold:
    - it is the nearest on its side;
    - it is within `enemy_reach + windup_reach_extra`;
-   - it has been approaching for at least `approach_min_time`;
+   - it has been approaching for **more than** `approach_min_time` (strictly greater). On
+     leaving `rest`, its approach timer starts already at `approach_min_time`, so it may wind
+     up again from the next frame;
    - **no other enemy anywhere is in windup or strike**.
 10. **Telegraph.** In windup, the enemy glows and shows a "!" for `telegraph` seconds (× 1.2 for
     the leader). At the end it strikes.
     - The strike lands if the hero is within `enemy_reach + strike_reach_extra`.
-    - If defend is held at that instant, the strike is **blocked**: the enemy is knocked back
+    - If defend is held **at that instant** (the frame the strike resolves), the strike is
+      **blocked**. Pressing and releasing defend earlier in the windup does not block: the enemy is knocked back
       by `block_knock`, and the game shows "Đỡ được! / Blocked!" with a clang.
     - Otherwise the hero is pushed (rule 5).
 11. **Getting hit.** A hit enemy is knocked back by its knock-back distance, played out over
@@ -105,11 +111,49 @@ Combat is how a child takes part in the story's battle moments.
 15. **Locked fight.** A `fight` beat, and each encounter in `reach-the-flag` (D-06), locks the
     camera with the hero at `lock_offset` px from the left edge. The hero is kept within
     `hero_edge_margin` of both screen edges until the fight ends.
-16. **Special in combat** (reach-the-flag only; proposed, not in the prototype):
+16. **Special in combat** (reach-the-flag only; proposed, not in the prototype; **waits for
+    Luan's decision**, raised with D-08):
     - Tapping special waves the banner: followers cheer, and every non-fleeing enemy on screen
-      is pushed back by `special_push`.
+      is pushed by `special_push` **away from the hero**, on both sides.
     - It does **not** count as a hit, so special never ends a fight by itself.
-    - Cooldown is `special_cooldown` (D-09).
+    - Cooldown is `special_cooldown`. During cooldown the special pad shows a draining ring and
+      a tap plays a soft sound. There is no "not ready" text.
+
+**World layout** (`ground_y`, `hero_start_x`, `beat_start_x`, `beat_gap` in `tuning.json`)
+belongs to Mission flow (`design/gdd/mission-flow.md`, Core Rule 2 and F2). This system only
+reads it.
+
+### Frame order
+
+One fixed step, dt = 1/60, in this order. It is the prototype's `updatePlay` / `updateEnemies`
+(`203d73e`), agreed by game-dev-ios and game-dev-android. Both apps must follow it, because the
+same-frame edge cases below depend on it.
+
+1. Read input. Defend counts as held only while not in a caption.
+2. Update the hero's timers: attack cooldown, hurt flash.
+3. Advance the current swing (`atk += dt / attack_time`). When it crosses `attack_hit_at`, run
+   the hit check (F5) once. When it reaches 1, the swing ends and `attack_cooldown` starts.
+4. Start a new swing if attack was tapped and the hero is not defending, not swinging and has
+   no cooldown. Otherwise the tap is dropped. A new swing first advances on the **next** step.
+5. Move the hero (× `attack_move_mul` while swinging; no move while defending).
+6. Clamp the hero and set the camera (locked during a fight and a caption; otherwise
+   `camera = max(camera, hero.x − camera_follow_offset)`).
+7. Start the beat once the hero passes `beat_start_x + i × beat_gap`.
+8. In a fight: the stall timer and the spawn timer advance by dt. Spawn at most one enemy if the
+   queue isn't empty, active (non-fleeing) < `max_active` and the spawn timer ≤ 0. The timer
+   then resets to `spawn_gap`.
+9. For each enemy, in list order:
+   1. its timer += dt;
+   2. its knock-back step (F4);
+   3. side, rank and stand distance;
+   4. its state switch. Windup → strike resolves here, and block is checked only at this
+      instant (F6).
+10. Remove enemies that fled past the locked screen ± `flee_remove_margin`.
+11. Fight end: when the queue and the enemy list are both empty, the end timer advances. At
+    `end_pause`, Mission flow shows the caption.
+12. Effects: particles, floating words, dropped weapons.
+
+A hit resets the stall timer, and a caption closing resets the idle and stall timers.
 
 ### States and Transitions
 
@@ -237,15 +281,17 @@ The F6 (block) formula is defined as:
 | hero_pushback | float (px) | 0–250 | data file (90) | Push on an unblocked hit |
 | block_knock | float (px) | 0–200 | data file (70) | Push on the enemy when blocked |
 
-**Output Range:** boolean. There is no timing window: holding defend at any time during the
-telegraph blocks. That is deliberate for ages 6–10.
+**Output Range:** boolean. Only the frame the strike resolves counts: defend held then
+blocks, and defend pressed and released earlier in the windup does not. The habit taught is
+"hold the shield from the '!' until the strike". The 1.1 s telegraph makes that easy for ages
+6–10.
 **Example:** the hero holds defend 0.3 s into a 1.1 s windup and keeps holding: blocked.
 
 ## Edge Cases
 
-- **If `telegraph` is set below 0.8 s**: validation warns, because the strike becomes hard to
+- **If `telegraph` is set below 0.8 s**: validation warns (R15), because the strike becomes hard to
   react to for a 6-year-old (F1). The schema allows 0.4, but content should not go below 0.8.
-- **If `attack_range` < `enemy_reach − stand_gap`**: validation fails. The front enemy stands
+- **If `attack_range` < `enemy_reach − stand_gap`**: validation fails (R14). The front enemy stands
   out of reach and the fight could never end.
 - **If the child holds defend forever**: no enemy is ever hit, so the fight doesn't end. After
   `hint_delay` of no hit while enemies are present, Hints shows the attack hint. There is no
@@ -258,8 +304,16 @@ telegraph blocks. That is deliberate for ages 6–10.
   so the hero is never hit from both sides at once.
 - **If an enemy is hit during windup**: its strike is cancelled, and it goes to `hurt`, then
   `approach`, and its telegraph starts again later.
-- **If an enemy is hit at the moment its strike resolves**: the strike resolves first, at
-  windup end, then the hit applies.
+- **If the hero's hit lands in the same frame an enemy's windup would end**: the hero's hit
+  check (frame step 3) runs before enemies update (step 9). The enemy goes to `hurt` first, so
+  **its strike is cancelled**, and nothing is blocked or pushed that frame.
+- **If attack is tapped in the same frame defend is released**: step 1 reads defend as not held,
+  so the swing starts (step 4). If defend is still held that frame, the tap is dropped.
+- **If the hit check and a move happen in the same frame**: the hit check uses the hero's
+  position before this frame's move (step 3 before step 5).
+- **If an enemy's knock-back and a strike happen in the same frame**: knock-back moves it first
+  (step 9.2), then the strike's range check (step 9.4) uses the new position, so a far-knocked
+  enemy can miss.
 - **If a swing hits the last enemy and another is still queued**: the queued enemy spawns
   after `spawn_gap`. The fight ends only when the queue is empty and the screen is clear.
 - **If the hero is pushed into the locked-camera edge**: the position is clamped at
@@ -270,8 +324,8 @@ telegraph blocks. That is deliberate for ages 6–10.
 - **If the app is paused mid-windup**: all timers freeze, and the telegraph resumes with its
   remaining time.
 - **If `max_active` is larger than the enemy count**: everyone spawns, one per `spawn_gap`.
-- **If special is tapped during cooldown**: nothing happens and a soft "not ready" sound
-  plays. Special never breaks the one-strike-at-a-time rule.
+- **If special is tapped during cooldown**: nothing happens, and a soft sound plays with the
+  draining ring on the pad. There is no text. Special never breaks the one-strike-at-a-time rule.
 
 ## Dependencies
 
@@ -340,9 +394,6 @@ Mission flow's screens.
 
 ## Acceptance Criteria
 
-Logic criteria (1–11) need automated unit tests; feel criteria (12–14) need a QC recording or
-screenshot on each platform.
-
 1. **GIVEN** a spear enemy (`hp_spear` 2) in range, **WHEN** the hero lands 2 swings,
    **THEN** after the first it is `hurt` for 0.35 s, and after the second it is `flee` with its
    weapon on the ground.
@@ -367,7 +418,9 @@ screenshot on each platform.
 10. **GIVEN** defend held, **WHEN** move or attack is pressed, **THEN** the hero neither moves
     nor swings.
 11. **GIVEN** `tuning.json` with `attack_range` 130 and `enemy_reach − stand_gap` 140, **WHEN**
-    the content is validated, **THEN** validation fails with the coupling error.
+    the content is validated, **THEN** validation fails with R14. **GIVEN** `telegraph` 0.7,
+    **THEN** validation warns with R15 (both in `content/README.md` and
+    `content/fixtures/validity.json`, schema 1.1).
 12. **GIVEN** the vertical slice on a phone, **WHEN** the attack pad is pressed, **THEN** the swing
     visibly starts in the next frame (frame-step recording) and the hit spark appears within
     0.15 s.
@@ -376,6 +429,19 @@ screenshot on each platform.
     `production/qa/evidence/`).
 14. **GIVEN** the Trần Quốc Toản slice fights, **WHEN** an adult plays without blocking, **THEN**
     each fight still ends (no fail state), within 2 minutes per fight.
+15. **GIVEN** an enemy in `windup`, **WHEN** defend is pressed and released 0.5 s into it and
+    not held when the strike resolves, **THEN** the strike is **not** blocked and the hero is
+    pushed 90 px.
+16. **GIVEN** a fight starts, **WHEN** 0.39 s have passed, **THEN** no enemy has spawned. At
+    0.4 s (`first_spawn_delay`), the first enemy spawns.
+17. **GIVEN** an enemy whose windup ends on frame N, **WHEN** the hero's swing crosses
+    `attack_hit_at` on the same frame N, **THEN** the enemy is `hurt` and no strike, block or
+    push happens on frame N (frame order steps 3 → 9).
+18. **GIVEN** the hero is defending, **WHEN** attack is tapped and defend released on the next
+    frame, **THEN** no swing starts (the tap was dropped, not queued).
+
+Logic criteria 1–11 and 15–18 need automated unit tests that follow the frame order. Feel
+criteria 12–14 need a QC recording or screenshot on each platform.
 
 ## Open Questions
 
