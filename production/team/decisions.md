@@ -11,6 +11,19 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-17 How the game speaks to the child in Vietnamese ("bạn", "em", or no pronoun)
+
+- **Flow:** UI strings and story text → every screen. It sets the game's voice.
+- **Context:** the skip warning is the first string that addresses the child directly: "Nếu bỏ qua,
+  **bạn** sẽ chưa nhận được huy hiệu của câu chuyện này nhé." Other strings avoid pronouns
+  ("Thử lại nhé!", "Giỏi lắm!").
+- **Options:** A. **no pronoun** where possible (e.g. "Nếu bỏ qua, câu chuyện này sẽ chưa có huy hiệu
+  nhé."), matching the other strings · B. **"em"**, as the textbooks address pupils (the game sounds
+  like a teacher or older sibling) · C. **"bạn"**, friendly and neutral (the current text).
+- **Recommendation:** A now, and B wherever a pronoun is unavoidable, so the voice matches what
+  children hear at school.
+- **Status:** Open. Small; game-art-content changes it in one place.
+
 ### D-16 Saved progress keys: work out unlocks instead of storing them
 
 - **Flow:** Hero progression GDD (`89afd10`) → D-04 save ADR → both apps' save code.
