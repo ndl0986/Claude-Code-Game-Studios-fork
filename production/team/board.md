@@ -8,12 +8,12 @@ an issue once Issues are on. The leader owns this file.
 |---|---|---|---|---|---|---|
 | TASK-001 | `/brainstorm`: game concept for the Vietnamese-heroes mobile game | design | game-dev-001 | done (merged `b41d157`) | `design/TASK-001-game-concept` @ `6dcf8ba` | 2026-11-14 |
 | TASK-002 | `/setup-engine godot`: pin Godot 4 for the game (SHELVED 2026-11-14: Luan chose native per platform) | setup | game-dev-001 | done (awaiting merge; Luan's installs pending) | `setup/TASK-002-engine-godot` @ `dda2ca7` | 2026-11-14 |
-| TASK-003 | `/prototype --path html`: one side-scrolling Trần Quốc Toản mission (placeholder beats) + quiz | dev | game-dev-002 | Android r3 partial (B4 PASS 18/18; O6 fixed in 203d73e); Android r3 finishing + iOS QC running on 203d73e (iPhone Duo) | `proto/TASK-003-mission-prototype` @ `203d73e` | 2026-11-14 |
+| TASK-003 | `/prototype --path html`: one side-scrolling Trần Quốc Toản mission (placeholder beats) + quiz | dev | game-dev-002 | CLOSED as design reference (Luan stopped browser testing 2026-11-14; Android r3 partial, iOS not run) | `proto/TASK-003-mission-prototype` @ `203d73e` | 2026-11-14 |
 | TASK-004 | `/art-bible` draft + Trần Quốc Toản mission beats and quiz, sourced | design | game-art-content | art + structure signed off; claims C01–C11 pending | `design/TASK-004-art-bible-tqt-beats` @ `4d7aca2` | 2026-11-14 |
 | TASK-005 | ADR: native per platform (Swift iOS, Kotlin Android); shared content as data in content/; project.yaml engine block | design | game-dev-001 | plan | `docs/TASK-005-adr-native` | 2026-11-14 |
 | TASK-006 | iOS setup: Swift + SpriteKit (SwiftUI shell), ios/, XCTest, Simulator proof | setup | game-dev-001 | after TASK-005 plan | — | 2026-11-14 |
 | TASK-007 | Android setup: Kotlin, android/, 2D approach for Luan to pick, JUnit, emulator proof | setup | game-dev-002 | plan | `setup/TASK-007-android-kotlin` | 2026-11-14 |
-| TASK-003b | Mission beat types from TASK-004: Special button, walk / hold-meter / training / reach-the-flag beats, arrows; BEAT_TYPES dispatch table first; art fixes: wrong-answer #9C8FB8 + circular-arrow icon, tangerine attack icon (not a pickaxe), vermilion only as a tunic accent; quiz to 5 questions once claims are signed | dev | unassigned | ready (structure approved); starts after TASK-003 | — | 2026-11-14 |
+| TASK-003b | Mission beat types from TASK-004: Special button, walk / hold-meter / training / reach-the-flag beats, arrows; BEAT_TYPES dispatch table first; art fixes: wrong-answer #9C8FB8 + circular-arrow icon, tangerine attack icon (not a pickaxe), vermilion only as a tunic accent; quiz to 5 questions once claims are signed | dev | unassigned | CANCELLED (browser); beat types and art fixes move to native tasks | — | 2026-11-14 |
 
 ## Team changes
 
@@ -102,3 +102,5 @@ until Luan installs Godot and a headless import runs.
 (game-dev-001), Android in Kotlin (game-dev-002). Godot is shelved; the TASK-002 branch is kept, not
 merged. Missions, quiz and VI/EN text are shared as data (TASK-005). The browser prototype stays as
 the design reference.
+
+**Decided (Luan, 2026-11-14):** stop all browser testing. TASK-003 closed as the design reference at `203d73e`; TASK-003b cancelled. QC moves to the native apps (TASK-006 iOS, TASK-007 Android).

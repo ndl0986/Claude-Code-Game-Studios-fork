@@ -29,6 +29,8 @@ Where the project stands, so work can resume from the repo. Newest entry first.
 | TASK-003b beat types, Special button, arrows, art fixes | — | Ready; starts after TASK-003 (likely dev-001) |
 | TASK-004 art bible + Trần Quốc Toản content | `design/TASK-004-art-bible-tqt-beats` @ `4d7aca2` | Art + structure signed off; claims C01–C11 and source pages not signed; not merged |
 
+**Browser testing stopped (Luan, 2026-11-14):** TASK-003 closed as the design reference at `203d73e` (Android r3 partial, iOS not run); TASK-003b cancelled. QC waits for the native builds.
+
 **Engine decision (Luan, 2026-11-14):** native per platform. iOS: Swift + SpriteKit (game-dev-001). Android: Kotlin (game-dev-002), 2D approach to be picked by Luan in TASK-007. Godot shelved (TASK-002 branch kept, not merged; local tip `82c016e`). New tasks: TASK-005 ADR + shared `content/`, TASK-006 iOS setup, TASK-007 Android setup.
 
 ### Waiting on Luan
@@ -45,7 +47,7 @@ Where the project stands, so work can resume from the repo. Newest entry first.
 1. Start the leader: `tools/team/start-leader.sh` (it opens at the repo root as `game-leader` and runs `/game-team-lead`).
 2. Check permissions: `orca computer permissions --json` → `accessibility` and `screenshots` both `granted`.
 3. `ListAgents`; start any missing member with its script above (each script prompts the member to reply "ready" to `game-leader`). Close old duplicates (`game-dev-001-1e`, `game-dev-002-46`). Tell game-dev-001 to resume the TASK-002 leftovers.
-4. Re-send Android QC the 4 unfinished r3 items (O6 is fixed in `203d73e`), and iOS QC its cases, on `203d73e` (iPhone Duo, safe-area caveat). Android QC must first restart its web server, adb reverse/forward and the DevTools watcher; the emulator runs `-gpu host`. Each QC branch already holds its earlier evidence.
+4. (Superseded: browser testing stopped.) Next QC is on the native builds from TASK-006/007 (iPhone Duo, safe-area caveat). Android QC must first restart its web server, adb reverse/forward and the DevTools watcher; the emulator runs `-gpu host`. Each QC branch already holds its earlier evidence.
 5. When both platforms pass, ask Luan's go to merge TASK-003 into `docs/vn-history-game-plan`, then hand out TASK-003b.
 
 ## 2026-11-14 — Repo set up, project plan drafted
