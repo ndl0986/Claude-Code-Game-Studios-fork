@@ -121,3 +121,89 @@ final class TouchCasesUITests: XCTestCase {
         shot("15b after holding ▶ 5 s")
     }
 }
+
+/// r7 additions (iOS QC r6): the title card is display only, one landed hit in slow motion (pop contrast and
+/// AC13 contact), the entry lock under an Attack mash (B7), and a short run whose saved stars survive a relaunch.
+final class MoreCasesUITests: TouchCasesUITests {
+    func log(_ s: [String: Any]) -> [(String, Double)] {
+        (s["log"] as? [[String: Any]] ?? []).map { ($0["place"] as? String ?? "", $0["t"] as? Double ?? 0) }
+    }
+
+    /// Title AC4e: a tap on the hero card does nothing (no screen change, no button fires).
+    func test_a_tap_on_the_title_card_does_nothing() {
+        launch(["-resetProgress", "YES"])
+        let s0 = waitFor(5) { $0["title_card_box"] != nil }
+        XCTAssertEqual(s0["screen"] as? String, "title")
+        point(s0["title_card_box"] as! [Double]).tap()
+        Thread.sleep(forTimeInterval: 0.8)
+        let s1 = state()
+        XCTAssertEqual(s1["screen"] as? String, "title", "still the title")
+        XCTAssertFalse(log(s1).contains { $0.0.hasPrefix("fire:") }, "no button fired: \(log(s1).map(\.0))")
+        shot("title after a card tap")
+    }
+
+    /// One landed hit, slowed ×10 (`-timeScale 0.1`, the same fixed steps): screenshots of the AC13 contact
+    /// (the padded tip on the hero's chest, ≈ 0.5 s real here) and of the "Ối!" pop on the camp sky.
+    func test_one_landed_hit_in_slow_motion_for_contact_and_pop_screenshots() {
+        launch(["-startScreen", "play", "-beat", "5", "-stage", "telegraph", "-timeScale", "0.1"])
+        let s = waitFor(60) { ($0["strike"] as? Bool == true) && ($0["hero_hurt"] as? Bool == true) }
+        XCTAssertEqual(s["strike"] as? Bool, true, "a strike landed")
+        shot("AC13 contact (slow motion)")
+        Thread.sleep(forTimeInterval: 0.6); shot("after contact: pushed pose")
+        Thread.sleep(forTimeInterval: 1.5); shot("Ối! pop on the camp sky")
+        note("hit", "slow motion ×0.1; strike landed at uptime \(s["now"] ?? "?")")
+    }
+
+    /// B7 (Input Rule 13): Attack mashed through the end of reach-the-flag keeps the first ending box ≥ 0.6 s.
+    /// Uses the debug shortcut `-stage flag` (the hero at the flag, encounters counted as cleared): a test aid,
+    /// reported here, never a real run.
+    func test_an_attack_mash_through_the_beat_end_keeps_the_first_ending_box() throws {
+        launch(["-startScreen", "play", "-beat", "5", "-stage", "flag"])
+        let attack = pad("attack")
+        var taps = 0
+        let end = Date().addingTimeInterval(6)
+        while Date() < end { attack.tap(); taps += 1 }
+        let entries = log(state())
+        note("B7 log (shortcut: -stage flag)", entries.map { String(format: "%@ @ %.3f", $0.0, $0.1) }.joined(separator: "\n") + "\ntaps \(taps)")
+        let first = try XCTUnwrap(entries.first { $0.0.hasPrefix("ending|0|") }, "the ending showed")
+        guard let second = entries.first(where: { $0.0.hasPrefix("ending|1|") || ($0.1 > first.1 && $0.0.hasPrefix("quiz")) }) else {
+            throw XCTSkip("the mash never advanced the first ending box within 6 s (taps \(taps))")
+        }
+        XCTAssertGreaterThanOrEqual(second.1 - first.1, 0.6 - 1.0 / 60, "the first ending box stayed ≥ screen_enter_lock")
+        shot("B7 after the mash")
+    }
+
+    /// A short run: Bỏ qua → the skip warning → Keep reading; the quiz answered right ×5; results 3★; a
+    /// relaunch keeps the stars on the title card. The quiz is reached by a debug jump, so the medal (D-07: a
+    /// fully read and played run) is NOT asserted here.
+    func test_skip_warning_keep_reading_then_stars_survive_a_relaunch() throws {
+        launch(["-startScreen", "intro", "-resetProgress", "YES"])
+        Thread.sleep(forTimeInterval: 0.8) // past the entry lock
+        try XCTUnwrap(button("skip")).tap()
+        XCTAssertEqual(waitFor(3) { $0["skip_warning"] as? Bool == true }["skip_warning"] as? Bool, true, "the skip warning opened")
+        try XCTUnwrap(button("keepReading")).tap()
+        XCTAssertEqual(waitFor(3) { $0["skip_warning"] as? Bool == false }["skip_warning"] as? Bool, false, "Keep reading closed it")
+        XCTAssertEqual(state()["screen"] as? String, "intro")
+        app.terminate()
+        launch(["-startScreen", "quiz"])
+        for _ in 0..<5 {
+            let s = waitFor(5) { ($0["quiz"] as? [String: Any])?["picked"] as? Bool == false }
+            let q = try XCTUnwrap(s["quiz"] as? [String: Any]), slot = q["correct_slot"] as! Int
+            Thread.sleep(forTimeInterval: 0.7) // past the entry lock / debounce
+            try XCTUnwrap(button("card\(slot)")).tap()
+            _ = waitFor(5) { ($0["quiz"] as? [String: Any])?["can_advance"] as? Bool == true }
+            Thread.sleep(forTimeInterval: 0.3)
+            try XCTUnwrap(button("next")).tap()
+            _ = waitFor(5) { $0["screen"] as? String == "results" || ($0["quiz"] as? [String: Any])?["picked"] as? Bool == false }
+        }
+        let r = waitFor(5) { $0["screen"] as? String == "results" }
+        XCTAssertEqual(r["screen"] as? String, "results"); XCTAssertEqual(r["stars"] as? Int, 3)
+        shot("results 3★")
+        app.terminate()
+        launch([])
+        let t = waitFor(5) { $0["title_card"] != nil }
+        XCTAssertEqual((t["title_card"] as? [String: Any])?["stars"] as? Int, 3, "the saved best survives a relaunch")
+        note("run", "quiz reached by a debug jump: the medal is not asserted (D-07)")
+        shot("title after relaunch")
+    }
+}

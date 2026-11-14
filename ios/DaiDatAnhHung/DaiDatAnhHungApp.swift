@@ -77,6 +77,12 @@ enum Boot {
             for a in content.assets.assets where a.kind == "picture" { Pictures.files[a.id] = data.appendingPathComponent(a.file) }
             for (id, t) in content.themes?.themes ?? [:] { Backdrop.bands[id] = (Backdrop.hex(t.skyBand.top), Backdrop.hex(t.skyBand.bottom)) }
             let d = UserDefaults.standard
+            #if DEBUG
+            // UI tests (TASK-023 G): `-resetProgress YES` starts from a fresh install's saved state
+            if d.bool(forKey: "resetProgress") {
+                for h in content.heroes.map(\.mission.hero.id) { for k in ["stars", "completed", "medal", "seen_open"] { d.removeObject(forKey: "\(k).\(h)") } }
+            }
+            #endif
             let wanted = isDebug ? d.string(forKey: "hero") : nil
             guard let hero = content.heroes.first(where: { $0.mission.hero.id == wanted }) ?? content.heroes.first else {
                 NSLog("[content] no hero bundled"); return nil

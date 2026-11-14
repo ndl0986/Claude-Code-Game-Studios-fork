@@ -103,7 +103,10 @@ final class GameScene: SKScene {
         // Input GDD Rule 9/11: a screen or phase change only cancels a pressed menu button; held pads
         // stay held (hidden pads are filtered by the beat's buttons in the core, not released)
         if place != lastPlace { if !lastPlace.isEmpty { menuTouches = [:] }; lastPlace = place }
-        let dt = last == 0 ? 0 : min(currentTime - last, 0.25)
+        var dt = last == 0 ? 0 : min(currentTime - last, 0.25)
+        #if DEBUG
+        dt *= debugTimeScale // `-timeScale 0.1`: slow motion for UI-test screenshots; the same fixed steps, only slower
+        #endif
         last = currentTime; acc += dt; clock += dt
         while acc >= step {
             let input = pads.take()
@@ -193,6 +196,9 @@ final class GameScene: SKScene {
     /// `press` is the activating touch's own time (Input GDD Rule 12): the advance debounce compares it,
     /// not the frame clock, which jumps when loading the next box stalls a frame.
     private func fire(_ id: String, at press: TimeInterval) {
+        #if DEBUG
+        debugLog.append(("fire:\(id)", press)); debugLog = Array(debugLog.suffix(24))
+        #endif
         audio.volume = Float(game.tuning["volume"])
         switch id {
         case "start": game.start()
@@ -499,6 +505,15 @@ final class GameScene: SKScene {
         add(medal, nx + 3 * 60 + 40, b.y + 125)
     }
 
+    /// The view's area outside the world, in world px on each side (Input Rule 1: the world sits in the safe rect).
+    private func outsideMargins() -> (left: Double, top: Double, right: Double, bottom: Double) {
+        guard let v = view else { return (0, 0, 0, 0) }
+        let k = root.xScale
+        guard k > 0 else { return (0, 0, 0, 0) }
+        return (worldOrigin.x / k, worldOrigin.y / k,
+                (v.bounds.width - worldOrigin.x) / k - 1280, (v.bounds.height - worldOrigin.y) / k - 720)
+    }
+
     private func storyPicture(ending: Bool) {
         let crop = SKCropNode()
         let ph = 320.0
@@ -521,9 +536,13 @@ final class GameScene: SKScene {
         // P-06 / story-screens §5.2: full-bleed, the 800:320 picture scaled to cover the screen (and the outside
         // area of Input Rule 1), so there is no frame corner under the pause/sound block
         crop.maskNode = D.rr(0, 0, 800, ph, 0, .white)
-        let f = max(1280 / 800, 720 / ph) // 2.25: covers the world; the outside area keeps the night colour
+        // iOS-R6-01: it covers the outside area too (the home-indicator band and the Dynamic Island sides),
+        // from the real margins between the view and the world fitted to the safe rect (Input Rule 1)
+        let m = outsideMargins()
+        let cw = 1280 + m.left + m.right, ch = 720 + m.top + m.bottom
+        let f = max(cw / 800, ch / ph)
         let pic = SKNode(); pic.addChild(crop); pic.setScale(f)
-        add(pic, 640 - 400 * f, 360 - ph / 2 * f)
+        add(pic, -m.left + cw / 2 - 400 * f, -m.top + ch / 2 - ph / 2 * f)
     }
 
     private func buildStory(_ lines: [Text], ending: Bool) {
@@ -834,6 +853,10 @@ final class GameScene: SKScene {
     /// "Tiếp" presses: the activating touch's UITouch.timestamp and whether the press advanced (B1).
     private var debugPresses: [(TimeInterval, Bool)] = []
     private var debugFrame = 0
+    private lazy var debugTimeScale: Double = { let v = UserDefaults.standard.double(forKey: "timeScale"); return v > 0 ? v : 1 }()
+    /// Context changes (screen / story line / phase / beat / line) with the press-clock time they were first drawn.
+    private var debugLog: [(String, TimeInterval)] = []
+    private var debugLastPlace = ""
 
     private func debugAttach(_ v: SKView) {
         let l = UILabel(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
@@ -854,6 +877,8 @@ final class GameScene: SKScene {
     }
 
     private func debugPublish() {
+        let place = debugPlace()
+        if place != debugLastPlace { debugLastPlace = place; debugLog.append((place, ProcessInfo.processInfo.systemUptime)); debugLog = Array(debugLog.suffix(24)) }
         debugFrame += 1
         guard debugFrame % 6 == 0, let l = debugLabel else { return }
         let p = game.play
@@ -863,7 +888,7 @@ final class GameScene: SKScene {
         }
         var btns: [String: [Double]] = [:]
         for b in buttons { btns[b.id] = debugNorm(b.rect.midX, b.rect.midY) }
-        let state: [String: Any] = [
+        let base: [String: Any] = [
             "screen": "\(game.screen)", "story_line": game.storyLine, "phase": "\(p.phase)", "beat": p.beat,
             "card_line": p.cardLine, "caption_line": p.captionLine, "line": p.lineIndex,
             "training_step": "\(p.trainingStage)", "held": debugHeld.map(\.rawValue).sorted(),
@@ -871,7 +896,22 @@ final class GameScene: SKScene {
             "train_cap": p.trainCap ?? NSNull(), "x_start": p.xStart,
             "presses": debugPresses.map { ["t": $0.0, "advanced": $0.1] },
             "pads": pads, "buttons": btns,
+            "skip_warning": game.skipWarning, "stars": game.stars, "medal_earned": game.medalEarned,
+            "hero_hurt": p.hero.hurt > 0, "strike": p.enemies.contains { $0.state == .strike },
+            "entered_at": game.enteredAt ?? NSNull(), "now": ProcessInfo.processInfo.systemUptime,
+            "log": debugLog.map { ["place": $0.0, "t": $0.1] },
         ]
+        var extra: [String: Any] = [:]
+        if let q = game.quiz, !q.isFinished {
+            extra["quiz"] = ["index": q.index, "correct_slot": q.order.firstIndex(of: q.current.correctIndex) ?? -1,
+                             "picked": q.okIndex != nil, "can_advance": game.quizCanAdvance]
+        }
+        if game.screen == .title {
+            let tl = TitleLayout(pad: layout, debug: game.isDebug)
+            extra["title_card_box"] = debugNorm(tl.card.midX, tl.card.midY)
+            if let c = game.titleCard { extra["title_card"] = ["stars": c.stars, "medal": c.medal] }
+        }
+        let state = base.merging(extra) { a, _ in a }
         if let d = try? JSONSerialization.data(withJSONObject: state, options: [.sortedKeys]) { l.accessibilityValue = String(data: d, encoding: .utf8) }
     }
     #endif

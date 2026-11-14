@@ -42,6 +42,27 @@ final class EntryLockTests: XCTestCase {
         g.next(at: entered - 0.05); XCTAssertEqual(g.storyLine, 2, "a press stamped before the entry is dropped")
     }
 
+    /// TASK-005q: the lock rolls. A 0.35 s mash keeps it closed until the cap (1.5 s from entry), then the next
+    /// press is accepted; box 2 then keeps the debounce. (The cap comes from a test tuning until 005q merges.)
+    func test_a_continuous_mash_rolls_the_lock_up_to_the_cap() throws {
+        let c = try ContentSet.load(dataRoot: Repo.data)
+        var values = c.tuning.values.mapValues(\.value); values["screen_enter_lock_max"] = 1.5
+        let t = Tuning(values: values, seed: c.tuning.seed)
+        let content = ContentSet(index: c.index, strings: c.strings, sources: c.sources, markers: c.markers, rules: c.rules, tuning: t, assets: c.assets, themes: c.themes, heroes: c.heroes)
+        let g = Game(content: content, hero: realHero(content), store: MemoryStore(), isDebug: true)
+        g.uptime = { [unowned self] in self.now }
+        g.debugStart(screen: "ending", q: nil, beat: nil, stage: nil, stars: nil)
+        step(g)
+        let e = try XCTUnwrap(g.enteredAt)
+        var advancedAt: Double?
+        for i in 1...8 {
+            let p = e + Double(i) * 0.35
+            g.next(at: p)
+            if g.storyLine > 0 && advancedAt == nil { advancedAt = p }
+        }
+        XCTAssertEqual(try XCTUnwrap(advancedAt), e + 5 * 0.35, accuracy: 1e-9, "presses at 0.35…1.40 roll the lock to the 1.5 s cap; 1.75 advances")
+    }
+
     func test_pause_is_exempt_and_quiz_cards_are_locked() throws {
         let g = try game()
         g.debugStart(screen: "quiz", q: nil, beat: nil, stage: nil, stars: nil)

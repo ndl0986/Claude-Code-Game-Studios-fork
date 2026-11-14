@@ -688,6 +688,11 @@ public struct PlayState: Sendable {
             for i in dummies.indices { dummies[i].hit = true }
             tut.windupSeen = false; tut.blocked = false
             advanceTraining()
+        } else if stage == "flag" && beats[beat].type == "reach-the-flag" {
+            // debug shortcut (QC harness): the encounters counted as cleared, the hero at the flag, so the beat
+            // ends on the next step; tests that use it report it (it is never a real run)
+            encounterIndex = beats[beat].params.encounters?.count ?? 0
+            hero.x = xStart + (beats[beat].params.lengthScreens ?? 0) * 1280
         } else if stage == "encounter", let e = beats[beat].params.encounters?.first {
             hero.x = xStart + e.atScreen * 1280
         } else if stage == "caption" && beats[beat].type == "fight" {

@@ -104,7 +104,9 @@ public final class Game {
     public var uptime: () -> Double = { ProcessInfo.processInfo.systemUptime }
     /// The lock context last seen, and when it was entered (press clock).
     var lockContext: String?
-    var enteredAt: Double?
+    public private(set) var enteredAt: Double?
+    /// The rolling lock's end (press clock): each press dropped inside it restarts the window, up to the cap.
+    var lockUntil: Double?
     public private(set) var pausedFrom: Screen = .play
 
     /// `hero` is the mission to play. In a release build a hero whose claims aren't all approved
@@ -182,14 +184,21 @@ public final class Game {
     /// Stamps the entry time when the lock context changes (called after every step and action).
     func noteContext() {
         let c = currentLockContext()
-        if c != lockContext { lockContext = c; enteredAt = c == nil ? nil : uptime() }
+        if c != lockContext { lockContext = c; enteredAt = c == nil ? nil : uptime(); lockUntil = enteredAt.map { $0 + tuning["screen_enter_lock"] } }
     }
 
-    /// Input Rule 13 / TASK-005p: within screen_enter_lock of entering a context, a press is dropped. Only real
-    /// presses (with a press time) are locked; a press stamped before the entry (a finger already down) too.
+    /// Input Rule 13 / TASK-005p/q: within screen_enter_lock of entering a context a press is dropped, and a
+    /// dropped press restarts the window (a rolling lock), capped at screen_enter_lock_max from the entry; then the
+    /// normal debounce applies. Only real presses (with a press time) are locked; one stamped before the entry
+    /// (a finger already down) is dropped without extending the lock.
     func entryLocked(_ press: Double?) -> Bool {
-        guard let p = press, let e = enteredAt, lockContext != nil else { return false }
-        return p - e < tuning["screen_enter_lock"]
+        guard let p = press, let e = enteredAt, let until = lockUntil, lockContext != nil else { return false }
+        if p < e { return true }
+        guard p < until else { return false }
+        // the cap: 1.5 s (TASK-005q); until that key lands in tuning.json the lock doesn't roll past the fixed window
+        let cap = e + (tuning.values["screen_enter_lock_max"]?.value ?? tuning["screen_enter_lock"])
+        lockUntil = min(max(until, p + tuning["screen_enter_lock"]), cap)
+        return true
     }
 
     // MARK: actions (menus and cards fire on touch-up inside)
