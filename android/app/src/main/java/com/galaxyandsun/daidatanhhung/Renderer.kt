@@ -151,7 +151,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean) {
         fig.background(0.0, "village", GROUND)
         d.rr(150f, 60f, 980f, 210f, 40f, C.PANEL, C.GOLD, 6f)
         d.drum(240f, 165f, 70f, C.a(C.GOLD, 0.8)); d.drum(1040f, 165f, 70f, C.a(C.GOLD, 0.8))
-        d.text(g.ui(UiIds.TITLE), W / 2, 140f, 76f, C.GOLD)
+        d.textBox(g.ui(UiIds.TITLE), W / 2, 140f, 740f, 68f, C.GOLD, 1)
         if (debug) d.text(g.ui(UiIds.SUBTITLE_DEBUG), W / 2, 220f, 36f, C.WHITE)
         fig.hero(260f, GROUND, 1, false, false, null, t, 0.8f)
         button("start", g.ui(UiIds.START), W / 2 - 190, 330f, 380f, 130f, t, pulse = true, size = 44f, enabled = ready) { ready && g.start() }
@@ -211,11 +211,12 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean) {
             val done = i < r.beat || (i == r.beat && r.phase == Phase.CAPTION)
             d.circle(x, 60f, 30f, if (done) C.GOLD else C.a(C.WHITE, 0.75), C.GOLD_DARK, 4f); d.drum(x, 60f, 22f, if (done) C.INK else C.a(C.INK, 0.35))
         }
-        if (r.phase == Phase.FIGHT) {
-            d.rr(W / 2 - 300, 104f, 600f, 52f, 20f, C.a(C.CREAM, 0.85))
-            d.textBox(beat.goal.get(g.lang), W / 2, 130f, 580f, 26f, C.INK, 1); badge(g, beat.goal, W / 2, 170f)
+        if (r.phase == Phase.FIGHT) { // the goal under the medallions; its badge sits at its right end, clear of the "!" bubble
+            d.rr(W / 2 - 300, 98f, 600f, 44f, 18f, C.a(C.CREAM, 0.85))
+            d.textBox(beat.goal.get(g.lang), W / 2, 120f, 580f, 24f, C.INK, 1); badge(g, beat.goal, W / 2 + 390, 120f)
             if (beat.usesBanner) g.bundle.mission.banner?.let { b ->
-                d.rr(W - 420, 104f, 400f, 52f, 20f, C.a(C.RED, 0.9)); d.textBox(b.get(g.lang), W - 220, 130f, 380f, 24f, C.GOLD, 1); badge(g, b, W - 220, 170f)
+                d.rr(250f, 98f, 0f, 0f, 0f, null)
+                d.rr(W - 430, 150f, 410f, 44f, 18f, C.a(C.RED, 0.9)); d.textBox(b.get(g.lang), W - 225, 172f, 390f, 22f, C.GOLD, 1); badge(g, b, W - 225, 210f)
             }
         }
         if (r.phase != Phase.CAPTION) {
@@ -299,6 +300,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean) {
             val r = (if (i == 1) 90f else 75f) * (if (got) 0.6f + 0.4f * appear else 1f)
             if (got && appear > 0) d.star(x, y, r, C.GOLD, C.WHITE) else { d.star(x, y, r, C.a(C.WHITE, 0.08), C.a(C.WHITE, 0.55)) }
         }
+        if (g.bundle.mission.nextHero == null) d.text(g.ui(UiIds.MORE_HEROES), W / 2, 450f, 30f, C.a(C.WHITE, 0.8), semiBold = true)
         button("next", g.ui(UiIds.NEXT), W / 2 - 150, 520f, 300f, 110f, t, pulse = true) { g.next() }
     }
 

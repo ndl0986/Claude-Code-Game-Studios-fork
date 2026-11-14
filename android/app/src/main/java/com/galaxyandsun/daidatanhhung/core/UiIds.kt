@@ -19,6 +19,8 @@ object UiIds {
     const val CORRECT = "ui.quiz.correct"
     const val QUESTION = "ui.quiz.question"
     const val DONE = "ui.results.done"
+    /** Results when next_hero is null (TASK-009 adds the string). */
+    const val MORE_HEROES = "ui.results.more_heroes"
     const val UNLOCKED = "ui.unlock.title"
     const val MAP_STUB = "ui.unlock.map_stub"
     const val OOF = "ui.play.oof"

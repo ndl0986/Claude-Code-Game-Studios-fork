@@ -92,7 +92,8 @@ class Game(
         Screen.ENDING -> { if (line < bundle.mission.ending.lines.size - 1) line++ else startQuiz(); true }
         Screen.PLAY -> if (run.phase == Phase.CAPTION) { if (run.captionNext()) { line = 0; go(Screen.ENDING) }; true } else false
         Screen.QUIZ -> quiz?.let { q -> if (!q.canAdvance) false else { if (q.advance()) finishQuiz(); true } } ?: false
-        Screen.RESULTS -> { go(Screen.UNLOCK); true }
+        // next_hero null (the last hero shipped): no unlock screen, back to the title.
+        Screen.RESULTS -> { if (bundle.mission.nextHero == null) { reset(); go(Screen.TITLE) } else go(Screen.UNLOCK); true }
         else -> false
     }
 
@@ -157,7 +158,8 @@ class Game(
             "caption" -> { go(Screen.PLAY); run.debugStartBeat(beat - 1, telegraph = false, caption = true) }
             "pause" -> { go(Screen.PLAY); pause() }
             "ending" -> go(Screen.ENDING)
-            "quiz" -> { startQuiz(); repeat((question - 1).coerceAtLeast(0)) { skipQuestion() }; if (stage == "wrong") quiz?.let { answer((it.current.correctIndex + 1) % it.current.choices.size) } }
+            "quiz" -> { startQuiz(); repeat((question - 1).coerceAtLeast(0)) { skipQuestion() }; if (stage == "wrong") quiz?.let { answer((it.current.correctIndex + 1) % it.current.choices.size) }
+                if (stage == "right") quiz?.let { answer(it.current.correctIndex); it.update(tuning["feedback_time"]) } }
             "results" -> { stars = starCount; go(Screen.RESULTS) }
             "unlock" -> { stars = starCount; go(Screen.UNLOCK) }
             else -> go(Screen.TITLE)
