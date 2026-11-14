@@ -226,7 +226,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             d.rr(W / 2 - 300, 98f, 600f, 44f, 18f, C.a(C.CREAM, 0.85))
             d.textBox(beat.goal.get(g.lang), W / 2, 120f, 580f, 24f, C.INK, 1); badge(g, beat.goal, W / 2 + 390, 120f)
             if (beat.usesBanner) g.bundle.mission.banner?.let { b ->
-                d.rr(W / 2 - 450, 150f, 900f, 44f, 18f, C.a(C.RED, 0.9)); d.textBox(b.get(g.lang), W / 2, 172f, 880f, 24f, C.GOLD, 1); badge(g, b, W / 2 + 540, 172f)
+                d.rr(W / 2 - 450, 150f, 900f, 72f, 18f, C.a(C.RED, 0.9)); d.textBox(b.get(g.lang), W / 2, 186f, 880f, 24f, C.GOLD, 2); badge(g, b, W / 2 + 540, 172f) // up to 2 lines
             }
         }
         val vis = r.visibleButtons()
@@ -331,7 +331,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         d.text("${g.ui(UiIds.QUESTION)} ${min(q.index + 1, n)}/$n", 120f, 50f, 28f, C.GOLD, Paint.Align.LEFT)
         val cur = q.current
         d.textBox(cur.prompt.get(g.lang), W / 2, 140f, 980f, 40f, C.WHITE, 2); badge(g, cur.prompt, W / 2, 222f)
-        val cw = 360f; val ch = 370f; val gap = 40f; val x0 = (W - 3 * cw - 2 * gap) / 2; val y0 = 248f
+        val cw = 360f; val ch = 350f; val gap = 40f; val x0 = (W - 3 * cw - 2 * gap) / 2; val y0 = 248f
         q.order.forEachIndexed { slot, j ->
             val a = cur.choices[j]
             var x = x0 + slot * (cw + gap)
@@ -344,15 +344,15 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             d.alpha = old
             if (wrong) { d.arc(x + cw - 44, y0 + 44, 18f, -0.3f, 4.4f, C.WHITE, 6f); d.poly(C.WHITE, x + cw - 26, y0 + 30, x + cw - 18, y0 + 46, x + cw - 34, y0 + 46) }
             if (ok) { val p = d.stroke(C.RIGHT, 10f); d.c.drawLine(x + cw - 64, y0 + 44, x + cw - 50, y0 + 60, p); d.c.drawLine(x + cw - 50, y0 + 60, x + cw - 24, y0 + 28, p) }
-            d.textBox(a.text.get(g.lang), x + cw / 2, y0 + 300, cw - 40, 32f, if (wrong) 0xFF4A4060.toInt() else C.INK, 2)
-            badge(g, a.text, x + cw / 2, y0 + 358)
+            d.textBox(a.text.get(g.lang), x + cw / 2, y0 + 290, cw - 40, 30f, if (wrong) 0xFF4A4060.toInt() else C.INK, 2)
+            badge(g, a.text, x + cw / 2, y0 + 340)
             if (ok) for (kk in 0 until 5) { val ang = t * 3 + kk * 1.26; d.star(x + cw / 2 + cos(ang).toFloat() * 150, y0 + 140 + sin(ang).toFloat() * 110, 16f, C.GLOW, C.GOLD_DARK, ang.toFloat()) }
             next += Region("card$slot", x, y0, cw, ch, false, onTap = { g.answer(j) != com.galaxyandsun.daidatanhhung.core.PickResult.IGNORED })
         }
         if (q.rightShown >= 0) {
-            d.rr(40f, 636f, 840f, 72f, 24f, C.a(C.RIGHT, 0.9))
-            d.textBox("${g.ui(UiIds.CORRECT)} ${cur.why.get(g.lang)}", 460f, 672f, 800f, 26f, C.WHITE, 2); badge(g, cur.why, 460f, 620f)
-            if (q.canAdvance) button("next", g.ui(UiIds.NEXT), 940f, 630f, 280f, 84f, t, pulse = true) { g.next() }
+            d.rr(40f, 606f, 860f, 108f, 24f, C.a(C.RIGHT, 0.9)) // the why line: up to 3 lines (Language GDD rule 8)
+            d.textBox("${g.ui(UiIds.CORRECT)} ${cur.why.get(g.lang)}", 470f, 660f, 820f, 24f, C.WHITE, 3); badge(g, cur.why, 470f, 600f)
+            if (q.canAdvance) button("next", g.ui(UiIds.NEXT), 940f, 618f, 280f, 90f, t, pulse = true) { g.next() }
         } else if (q.shakeT > 0 || q.wrongPicked.isNotEmpty()) d.text(g.ui(UiIds.RETRY), W / 2, 670f, 36f, 0xFFE6E0F5.toInt())
         roundIcon("pause", 1214f, 66f, 48f, { pauseGlyph(1214f, 66f, 48f) }) { g.pause() }
     }

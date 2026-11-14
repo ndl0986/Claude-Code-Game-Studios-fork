@@ -100,11 +100,16 @@ class Draw(val bold: Typeface, val semi: Typeface) {
         textP.typeface = bold; textP.textSize = size; textP.color = color; textP.textAlign = Paint.Align.LEFT
         textP.alpha = (Color.alphaOf(color) * alpha).toInt()
         val l = StaticLayout.Builder.obtain(s, 0, s.length, textP, maxW.toInt()).setAlignment(Layout.Alignment.ALIGN_CENTER)
-            .setMaxLines(maxLines).setEllipsize(TextUtils.TruncateAt.END).setLineSpacing(0f, 1.1f).build()
+            .setMaxLines(maxLines).setEllipsize(TextUtils.TruncateAt.END).setLineSpacing(0f, LINE_HEIGHT).build()
         c.save(); c.translate(x - maxW / 2, y - l.height / 2f); l.draw(c); c.restore()
     }
 
     fun measure(s: String, size: Float): Float { textP.typeface = bold; textP.textSize = size; return textP.measureText(s) }
 
     object Color { fun alphaOf(c: Int) = (c ushr 24) and 0xFF }
+
+    companion object {
+        /** Language & text GDD rule 7: line height ≥ 1.35 × the font size (stacked Vietnamese marks never touch). */
+        const val LINE_HEIGHT = 1.35f
+    }
 }
