@@ -167,10 +167,11 @@ public final class Game {
             let lines = screen == .intro ? hero.mission.intro : hero.mission.ending.lines
             if storyLine + 1 < lines.count { storyLine += 1; return }
             if screen == .intro { go(.play) } else { startQuiz() }
-        case .play where play.phase == .caption || play.phase == .beatCard:
-            guard !debounced() else { return }
+        case .play where play.phase == .caption || play.phase == .beatCard || play.phase == .dialogueLine:
+            // while the ask button shows, "Tiếp" isn't on screen: ignore it without using up the debounce
+            guard !(play.phase == .dialogueLine && play.askShowing), !debounced() else { return }
             tap()
-            if play.phase == .caption { play.captionNext() } else { play.cardNext() }
+            switch play.phase { case .caption: play.captionNext(); case .beatCard: play.cardNext(); default: play.dialogueNext() }
             if play.finished { storyLine = 0; go(.ending) }
         case .quiz:
             guard let q = quiz, q.okIndex != nil, q.okTime >= tuning["feedback_time"], !debounced() else { return }
@@ -185,13 +186,19 @@ public final class Game {
         }
     }
 
+    /// The ask button in a dialogue beat (fires on touch-up inside, debounced like Next).
+    public func ask() {
+        guard screen == .play, play.askShowing, !skipWarning, !debounced() else { return }
+        tap(); play.dialogueAsk()
+    }
+
     // MARK: D-07 skip, warning and medal
 
     /// Skip is offered on story screens: intro, beat card, caption, ending (not the quiz why).
     public var canSkip: Bool {
         switch screen {
         case .intro, .ending: return true
-        case .play: return play.phase == .beatCard || play.phase == .caption
+        case .play: return play.phase == .beatCard || play.phase == .caption || play.phase == .dialogueLine
         default: return false
         }
     }

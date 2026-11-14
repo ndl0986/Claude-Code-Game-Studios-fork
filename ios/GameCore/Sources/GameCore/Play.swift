@@ -71,7 +71,7 @@ public struct Dummy: Sendable { public let x: Double; public var hit = false; pu
 /// line-by-line port of the prototype's updatePlay / updateEnemies / heroAttack, in the agreed
 /// frame order; walk, hold-meter, training and reach-the-flag follow F2–F5 and the parity rules.
 public struct PlayState: Sendable {
-    public enum Phase: String, Sendable { case walkTo = "walk_to", beatCard = "beat_card", beatPlay = "beat_play", beatEnd = "beat_end", caption }
+    public enum Phase: String, Sendable { case walkTo = "walk_to", beatCard = "beat_card", beatPlay = "beat_play", beatEnd = "beat_end", caption, dialogueLine = "dialogue_line" }
     public enum TrainingStage: String, Sendable { case dummies, blocks, special, done }
 
     public let tuning: Tuning
@@ -112,6 +112,9 @@ public struct PlayState: Sendable {
     public var partner: Enemy?
     // reach-the-flag
     public private(set) var encounterIndex = 0
+    // dialogue (schema 1.4): the 0-based line showing, and ask taps made
+    public private(set) var lineIndex = 0
+    public private(set) var asksDone = 0
     /// True once the last beat's end (or caption) closes: the flow moves to the ending.
     public private(set) var finished = false
     public private(set) var events: [PlayEvent] = []
@@ -149,7 +152,7 @@ public struct PlayState: Sendable {
     public var visiblePads: Set<PadAction> {
         switch phase {
         case .walkTo: return [.left, .right]
-        case .beatCard, .caption: return []
+        case .beatCard, .caption, .dialogueLine: return []
         case .beatPlay, .beatEnd:
             var out: Set<PadAction> = []
             for b in currentBeat?.buttons ?? [] {
@@ -298,7 +301,9 @@ public struct PlayState: Sendable {
         }
         // 7. walk_to → beat
         if phase == .walkTo && beat < beats.count && hero.x >= beatX(beat) {
-            if beats[beat].type == "fight" { startPlay(beat) } else { phase = .beatCard; cardLine = 0; hero.walk = false }
+            if beats[beat].type == "fight" { startPlay(beat) }
+            else if beats[beat].type == "dialogue" { phase = .dialogueLine; lineIndex = 0; asksDone = 0; stall = 0; hero.walk = false; events.append(.beatStarted(beat + 1)) }
+            else { phase = .beatCard; cardLine = 0; hero.walk = false }
         }
         // 8–11. the beat
         if phase == .beatPlay, let b = currentBeat {
@@ -346,7 +351,10 @@ public struct PlayState: Sendable {
                 if b.type == "fight" { phase = .caption; captionLine = 0; events.append(.caption(beat + 1)) }
                 else { events.append(.cheer); nextBeat() }
             }
-        } else { updateEnemies(dt) }
+        } else {
+            if phase == .dialogueLine { stall += dt } // the stuck hint points at the ask button
+            updateEnemies(dt)
+        }
         if phase == .caption && input.confirm { captionNext() }
         // 12. effects
         for i in particles.indices {
@@ -432,9 +440,36 @@ public struct PlayState: Sendable {
         nextBeat()
     }
 
+    // MARK: dialogue (mission-flow 7d)
+
+    public var dialogueLines: [BeatParams.DialogueLine] { currentBeat?.params.lines ?? [] }
+    /// Whether the ask button replaces "Tiếp" on the line showing: at_line ≤ L < at_line + taps (L 1-based).
+    public var askShowing: Bool {
+        guard phase == .dialogueLine, let a = currentBeat?.params.ask else { return false }
+        let l = lineIndex + 1
+        return l >= a.atLine && l < a.atLine + a.taps
+    }
+    /// "Tiếp" on a dialogue line (ignored while the ask button shows): the next line, or the beat's end.
+    public mutating func dialogueNext() {
+        guard phase == .dialogueLine, !askShowing else { return }
+        advanceDialogue()
+    }
+    /// The ask button: counts the tap and shows the next line.
+    public mutating func dialogueAsk() {
+        guard askShowing else { return }
+        asksDone += 1; stall = 0
+        advanceDialogue()
+    }
+    mutating func advanceDialogue() {
+        if lineIndex + 1 < dialogueLines.count { lineIndex += 1 } else { phase = .beatEnd; endT = 0 }
+    }
+    /// Stuck on the ask button for hint_delay: the hint hand points at it.
+    public var askHint: Bool { askShowing && stall > tuning["hint_delay"] }
+
     /// D-07 "Skip anyway": ends only the current story section (a beat card or a caption).
     public mutating func skipSection() {
         switch phase {
+        case .dialogueLine: phase = .beatEnd; endT = 0
         case .beatCard: idle = 0; stall = 0; startPlay(beat)
         case .caption: nextBeat()
         default: break
@@ -610,6 +645,7 @@ public struct PlayState: Sendable {
         tut = Tutorial(moved: true, hit: true, blocked: true, windupSeen: true, enemySeen: true)
         hero.x = beatX(beat) + 10
         cam = hero.x - tuning["camera_follow_offset"]
+        if beats[beat].type == "dialogue" { phase = .dialogueLine; lineIndex = 0; asksDone = 0; if stage == "ask", let a = beats[beat].params.ask { lineIndex = a.atLine - 1 }; return }
         if stage == "card" && beats[beat].type != "fight" { phase = .beatCard; cardLine = 0; return }
         startPlay(beat)
         // the telegraph jump also works on a reach-the-flag encounter (iOS-R1 note: TQT has no fight beat)

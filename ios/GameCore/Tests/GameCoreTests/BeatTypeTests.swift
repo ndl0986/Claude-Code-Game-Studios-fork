@@ -259,3 +259,50 @@ extension ParityTests {
         }
     }
 }
+
+/// The dialogue beat (mission-flow 7d; TASK-016 Bình Than exchange).
+final class DialogueTests: XCTestCase {
+    let dt = 1.0 / 60
+    func setup() throws -> (Game, Int) {
+        let c = try ContentSet.load(dataRoot: Repo.data)
+        let h = realHero(c)
+        let g = Game(content: c, hero: h, store: MemoryStore(), isDebug: true)
+        return (g, beatIndex(h, "dialogue"))
+    }
+    func wait(_ g: Game, _ s: Double) { for _ in 0..<Int(s * 60) { g.step(dt, StepInput()) } }
+
+    func test_missionflow_AC23_ask_replaces_next_for_exactly_its_taps_and_no_pads_show() throws {
+        let (g, i) = try setup()
+        g.debugStart(screen: "play", q: nil, beat: i + 1, stage: nil, stars: nil)
+        XCTAssertEqual(g.play.phase, .dialogueLine, "no beat card for dialogue")
+        let lines = g.play.dialogueLines.count, ask = g.play.currentBeat!.params.ask!
+        var kinds: [String] = []
+        while g.play.phase == .dialogueLine {
+            XCTAssertTrue(g.play.visiblePads.isEmpty)
+            kinds.append(g.play.askShowing ? "ask" : "tiep")
+            wait(g, 0.3)
+            if g.play.askShowing { g.next(); XCTAssertTrue(g.play.askShowing, "Next is ignored while ask shows"); g.ask() } else { g.next() }
+        }
+        XCTAssertEqual(kinds, ContentValidator.askButtons(lines: lines, taps: ask.taps, atLine: ask.atLine))
+        XCTAssertEqual(g.play.asksDone, ask.taps)
+        XCTAssertEqual(g.play.phase, .beatEnd)
+    }
+
+    func test_missionflow_AC25_skipping_a_dialogue_costs_the_medal() throws {
+        let (g, i) = try setup()
+        g.debugStart(screen: "play", q: nil, beat: i + 1, stage: nil, stars: nil)
+        XCTAssertTrue(g.canSkip)
+        g.skip(); g.skipAnyway()
+        XCTAssertTrue(g.skipped)
+        XCTAssertEqual(g.play.phase, .beatEnd)
+    }
+
+    func test_ask_hint_after_hint_delay() throws {
+        let (g, i) = try setup()
+        g.debugStart(screen: "play", q: nil, beat: i + 1, stage: "ask", stars: nil)
+        XCTAssertTrue(g.play.askShowing)
+        XCTAssertFalse(g.play.askHint)
+        for _ in 0..<301 { g.step(dt, StepInput()) }
+        XCTAssertTrue(g.play.askHint)
+    }
+}

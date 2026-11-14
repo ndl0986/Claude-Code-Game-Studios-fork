@@ -157,6 +157,7 @@ func botRun(_ p: inout PlayState, maxSteps: Int = 60 * 900) -> Int {
     var step = 0
     while !p.finished && step < maxSteps {
         if p.phase == .beatCard { p.cardNext(); continue }
+        if p.phase == .dialogueLine { if p.askShowing { p.dialogueAsk() } else { p.dialogueNext() }; continue }
         p.update(1.0 / 60, botInput(p, step: step)); step += 1
     }
     return step
