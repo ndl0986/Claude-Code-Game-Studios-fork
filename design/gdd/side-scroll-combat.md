@@ -47,6 +47,12 @@ Combat is how a child takes part in the story's battle moments.
    - A new swing can start after `attack_cooldown`.
    - Moving during a swing is slowed to `attack_move_mul` (40%) of `hero_speed`.
    - Pads fire on press (P-01).
+   - **Auto-face (G2):** when a swing starts, the hero first turns to face the **nearest
+     non-fleeing enemy**. Only enemies count, never training dummies or the practice partner.
+     On a tie, or with no enemy present, the hero keeps the current facing.
+   - **Facing locked during a swing (G2, rule 2b):** while a swing is active, move input still
+     moves the hero (× `attack_move_mul`) but **doesn't change facing**. Facing follows the move
+     direction again once the swing ends.
 3. **Hit test.** A swing hits **every** non-fleeing enemy that is either in front of the hero
    within `attack_range`, or closer than `attack_close_range` on either side (F5). One swing can
    hit two enemies.
@@ -109,8 +115,16 @@ Combat is how a child takes part in the story's battle moments.
     follows the hero, keeping it `camera_follow_offset` px from the left edge. It never scrolls back
     left. The hero can't walk off the left edge (`hero_edge_margin`).
 15. **Locked fight.** A `fight` beat, and each encounter in `reach-the-flag` (D-06), locks the
-    camera with the hero at `lock_offset` px from the left edge. The hero is kept within
-    `hero_edge_margin` of both screen edges until the fight ends.
+    camera with the hero at `lock_offset` px from the left edge.
+    - **Fight-zone bounds (G2):** until the fight ends, the hero is clamped to
+      [`lockX + enemy_reach + hero_edge_margin`, `lockX + W − enemy_reach − hero_edge_margin`],
+      which is [220, 1060] with today's tuning. A front enemy's stand point (`enemy_reach −
+      stand_gap` away) is then always on screen, on either side. These bounds are derived, so
+      there's no new tuning key.
+    - Outside locked fights, the bounds are `hero_edge_margin` from the left edge only, as before.
+    - Why: before this rule, a child holding ▶ ended up at the right edge facing away, with a
+      right-side enemy standing off-screen. The reach-the-flag beat couldn't be finished by
+      touch (Android QC r2, G2: 280–410 s; measured unfinishable within 900 s).
 16. **Special in combat: not now** (D-10: B, Luan 2026-11-14). Fights and reach-the-flag
     encounters have no special pad. The rules below are kept for a later version, so the design
     isn't lost; `special_push` and `special_cooldown` stay in `tuning.json` unused:
@@ -135,9 +149,12 @@ same-frame edge cases below depend on it.
 3. Advance the current swing (`atk += dt / attack_time`). When it crosses `attack_hit_at`, run
    the hit check (F5) once. When it reaches 1, the swing ends and `attack_cooldown` starts.
 4. Start a new swing if attack was tapped and the hero is not defending, not swinging and has
-   no cooldown. Otherwise the tap is dropped. A new swing first advances on the **next** step.
-5. Move the hero (× `attack_move_mul` while swinging; no move while defending).
-6. Clamp the hero and set the camera (locked during a fight and a caption; otherwise
+   no cooldown. Otherwise the tap is dropped. **When a swing starts, the hero auto-faces the
+   nearest non-fleeing enemy** (Rule 2). A new swing first advances on the **next** step.
+5. Move the hero (× `attack_move_mul` while swinging; no move while defending). **While a swing
+   is active, movement doesn't change facing** (Rule 2, 2b).
+6. Clamp the hero (**to the fight-zone bounds while locked**, Rule 15) and set the camera (locked
+   during a fight and a caption; otherwise
    `camera = max(camera, hero.x − camera_follow_offset)`).
 7. Start the beat once the hero passes `beat_start_x + i × beat_gap`.
 8. In a fight: the spawn timer advances by dt (the stall timer is Hints' `progress_timer`; see
@@ -448,8 +465,18 @@ Mission flow's screens.
 19. **GIVEN** an enemy 0.8 s into a 1.1 s windup with defend held, **WHEN** the game is paused
     and resumed, **THEN** defend is no longer held, and the windup lasts another full 1.1 s
     before the strike (the telegraph restarts from 0).
+20. **GIVEN** a locked encounter with `tuning.json` defaults, **WHEN** the child holds ▶ the whole
+    time, **THEN** the hero's x never exceeds lockX + 1060, and the first enemy is fully on
+    screen and in front of the hero.
+21. **GIVEN** an enemy on the hero's left and ▶ held, **WHEN** attack is tapped, **THEN** the swing
+    faces left and stays facing left until the swing ends, even though ▶ is held (2b).
+22. **GIVEN** a training beat with dummies and the partner, **WHEN** attack is tapped, **THEN**
+    auto-face ignores them (facing changes only from move input).
+23. **GIVEN** the Trần Quốc Toản reach-the-flag beat and the three scripted strategies (hold ▶ and
+    tap 2/s; alternate ▶ ½ s and tap; stand still and tap 2/s while an encounter holds the camera, walk ▶ otherwise), **WHEN** each is simulated in the
+    core, **THEN** each finishes the beat in **≤ 60 s** (measured: Android 31–39 s, iOS 34–47 s).
 
-Logic criteria 1–11 and 15–19 need automated unit tests that follow the frame order. Feel
+Logic criteria 1–11 and 15–23 need automated unit tests that follow the frame order. Feel
 criteria 12–14 need a QC recording or screenshot on each platform.
 
 ## Open Questions

@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.4",
   "hero": {
     "id": "tran-quoc-toan",
     "name": {
@@ -30,6 +30,30 @@
       "claims": [
         "C01"
       ]
+    },
+    {
+      "id": "tqt.intro.2",
+      "vi": "Năm ấy, quân Mông–Nguyên chuẩn bị sang xâm lược Đại Việt.",
+      "en": "That year, the Mông–Nguyên army was getting ready to invade Đại Việt.",
+      "claims": [
+        "C03"
+      ]
+    },
+    {
+      "id": "tqt.intro.3",
+      "vi": "Năm ấy, Trần Quốc Toản mới 15 tuổi.",
+      "en": "That year, Trần Quốc Toản was only 15 years old.",
+      "claims": [
+        "C13"
+      ]
+    },
+    {
+      "id": "tqt.intro.4",
+      "vi": "Vua Trần họp các vương hầu và trăm quan ở bến Bình Than để bàn việc đánh giặc.",
+      "en": "The Trần king called his lords and officials to Bình Than to plan the defence.",
+      "claims": [
+        "C04"
+      ]
     }
   ],
   "banner": {
@@ -50,8 +74,8 @@
       ],
       "title": {
         "id": "tqt.f1.title",
-        "vi": "Đến bến Bình Than",
-        "en": "To the Bình Than riverbank",
+        "vi": "Khi các vương hầu họp bàn ở Bình Than",
+        "en": "When the lords met at Bình Than",
         "claims": [
           "C04"
         ]
@@ -59,39 +83,169 @@
       "scene": [
         {
           "id": "tqt.f1.scene.1",
-          "vi": "Giặc Nguyên sắp sang xâm lược.",
-          "en": "The Nguyên army is coming.",
+          "vi": "Quốc Toản muốn xin vua cho cùng đi đánh giặc.",
+          "en": "Quốc Toản wants to ask the king to let him fight too.",
           "claims": [
-            "C03"
+            "C05"
           ]
         },
         {
           "id": "tqt.f1.scene.2",
-          "vi": "Vua họp các tướng ở bến Bình Than.",
-          "en": "The king is meeting his generals at Bình Than.",
+          "vi": "Cậu vội đến bến Bình Than, nơi vua đang họp.",
+          "en": "He hurries to Bình Than, where the king is holding the meeting.",
           "claims": [
             "C04"
-          ]
-        },
-        {
-          "id": "tqt.f1.scene.3",
-          "vi": "Quốc Toản muốn được góp sức!",
-          "en": "Quốc Toản wants to help!",
-          "claims": [
-            "C05"
           ]
         }
       ],
       "goal": {
         "id": "tqt.f1.goal",
-        "vi": "Đi đến bến Bình Than!",
-        "en": "Walk to Bình Than!",
+        "vi": "Đến chỗ vua họp ở Bình Than!",
+        "en": "Get to the king's meeting at Bình Than!",
         "claims": [
           "C12"
         ]
       },
       "params": {
-        "length_screens": 3
+        "length_screens": 1
+      }
+    },
+    {
+      "id": "tqt.d1",
+      "type": "dialogue",
+      "theme": "river",
+      "buttons": [],
+      "title": {
+        "id": "tqt.d1.title",
+        "vi": "Xin gặp vua",
+        "en": "Asking to see the king",
+        "claims": [
+          "C14"
+        ]
+      },
+      "scene": [],
+      "params": {
+        "lines": [
+          {
+            "speaker": "narrator",
+            "text": {
+              "id": "tqt.d1.line.1",
+              "vi": "Truyện kể rằng Quốc Toản đến bến Bình Than, xin được gặp vua.",
+              "en": "The story says Quốc Toản came to Bình Than and asked to see the king.",
+              "claims": [
+                "C14",
+                "C15",
+                "C16"
+              ]
+            }
+          },
+          {
+            "speaker": "guard",
+            "text": {
+              "id": "tqt.d1.line.2",
+              "vi": "Cậu còn nhỏ quá, chưa được vào họp đâu.",
+              "en": "You are too young to join the meeting.",
+              "claims": [
+                "C05",
+                "C14"
+              ]
+            }
+          },
+          {
+            "speaker": "hero",
+            "text": {
+              "id": "tqt.d1.line.3",
+              "vi": "Xin cho tôi gặp nhà vua!",
+              "en": "Please let me see the King!",
+              "claims": [
+                "C14"
+              ]
+            },
+            "mood": "pleading"
+          },
+          {
+            "speaker": "guard",
+            "text": {
+              "id": "tqt.d1.line.4",
+              "vi": "Không được đâu, vua đang bàn việc nước.",
+              "en": "You can't. The king is planning for the country.",
+              "claims": [
+                "C04",
+                "C12"
+              ]
+            }
+          },
+          {
+            "speaker": "narrator",
+            "text": {
+              "id": "tqt.d1.line.5",
+              "vi": "Nghe ồn ào, vua bước ra.",
+              "en": "Hearing the noise, the king came out.",
+              "claims": [
+                "C14"
+              ]
+            }
+          },
+          {
+            "speaker": "hero",
+            "text": {
+              "id": "tqt.d1.line.6",
+              "vi": "Xin nhà vua cho đánh!",
+              "en": "Let us fight, Your Majesty!",
+              "claims": [
+                "C16"
+              ]
+            },
+            "mood": "determined"
+          },
+          {
+            "speaker": "hero",
+            "text": {
+              "id": "tqt.d1.line.7",
+              "vi": "Cho giặc mượn đường là mất nước!",
+              "en": "Letting the enemy pass means losing our country!",
+              "claims": [
+                "C16"
+              ]
+            },
+            "mood": "determined"
+          },
+          {
+            "speaker": "king",
+            "text": {
+              "id": "tqt.d1.line.8",
+              "vi": "Cháu còn trẻ mà đã biết lo cho đất nước, ta khen cháu.",
+              "en": "You are young, yet you already care for our country. I praise you.",
+              "claims": [
+                "C15"
+              ]
+            },
+            "mood": "smiling"
+          },
+          {
+            "speaker": "narrator",
+            "text": {
+              "id": "tqt.d1.line.9",
+              "vi": "Vua ban cho Quốc Toản một quả cam, rồi bảo cậu về.",
+              "en": "The king gave Quốc Toản an orange and told him to go home.",
+              "claims": [
+                "C15"
+              ]
+            }
+          }
+        ],
+        "ask": {
+          "button": {
+            "id": "tqt.d1.ask",
+            "vi": "Xin vào!",
+            "en": "Let me in!",
+            "claims": [
+              "C14"
+            ]
+          },
+          "taps": 2,
+          "at_line": 2
+        }
       }
     },
     {
@@ -110,14 +264,6 @@
         ]
       },
       "scene": [
-        {
-          "id": "tqt.f2.scene.1",
-          "vi": "Quốc Toản còn nhỏ nên không được vào bàn việc nước.",
-          "en": "Quốc Toản was too young to join the meeting.",
-          "claims": [
-            "C05"
-          ]
-        },
         {
           "id": "tqt.f2.scene.2",
           "vi": "Truyện kể rằng cậu tức quá, bóp nát quả cam lúc nào không biết.",

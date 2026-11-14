@@ -41,3 +41,12 @@ Core Rule 15 (skip on every story screen, a one-time kind warning per run, "Skip
 
 ## Update — 2026-11-14 — devs' parity review additions
 F5 beat positions (with the beat extent per type); the warning returns after "Keep reading" and only "Skip anyway" stops it (leader's call); pads by phase; end_pause for every type; Rule 7c training partner, dummies and hold-meter cap; the F4 walk_gap estimate from dummy_spacing; AC20–21.
+
+## Update — 2026-11-14 — TASK-016: dialogue beat type
+Rule 7 (six types), 7b (dialogue: no buttons), new 7d (order, speakers and portraits, ask button, skip/medal, R4c requested, language, hints), the dialogue_line state, F5 extent, new F6 dialogue time, AC23–25. Needs dev peer review together with the schema request.
+
+## Peer review — 2026-11-14 — game-dev-android: REVISE (2), plus game-dev-ios schema details, applied
+Ask timing (at_line ≤ L < at_line + taps; each tap shows L+1; debounce; at_line + taps ≤ lines), AC23 rewritten; F5 example and AC20 recomputed (900, 2980, 3780, 4580, 6580); ask.button is a story Text (C14), not a UiText; field type dialogue_line (720 speaker, 880 narrator; all 9 Bình Than lines fit); hero is a reserved speaker id. Re-review: game-dev-android APPROVE.
+
+## Update — 2026-11-14 — G2 (Android QC r2): fight-zone bounds, auto-face, facing locked during a swing
+Rules agreed by game-dev-android and game-dev-ios with measurements (unfinishable before; 31–47 s after). Combat Rules 2 and 15 and the frame order (steps 4–6); AC20–23. Mission flow reach-the-flag row; AC22.

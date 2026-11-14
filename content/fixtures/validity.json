@@ -682,6 +682,215 @@
         "desert"
       ],
       "expected": "invalid"
+    },
+    {
+      "name": "quiz_choice: The Mông–Nguyên army",
+      "rule": "R8c",
+      "field_type": "quiz_choice",
+      "text": "The Mông–Nguyên army",
+      "expected_lines": 2,
+      "expected": "valid"
+    },
+    {
+      "name": "quiz_choice: Quân Mông–Nguyên",
+      "rule": "R8c",
+      "field_type": "quiz_choice",
+      "text": "Quân Mông–Nguyên",
+      "expected_lines": 2,
+      "expected": "valid"
+    },
+    {
+      "name": "button: Keep reading",
+      "rule": "R8c",
+      "field_type": "button",
+      "text": "Keep reading",
+      "expected_lines": 1,
+      "expected": "valid"
+    },
+    {
+      "name": "goal: Đẩy lùi quân giặc!",
+      "rule": "R8c",
+      "field_type": "goal",
+      "text": "Đẩy lùi quân giặc!",
+      "expected_lines": 1,
+      "expected": "valid"
+    },
+    {
+      "name": "goal: Đi qua làng, gặp mọi người, rồi đến bến ",
+      "rule": "R8c",
+      "field_type": "goal",
+      "text": "Đi qua làng, gặp mọi người, rồi đến bến sông Bình Than để dự họp với vua nhé!",
+      "expected_lines": 2,
+      "expected": "invalid"
+    },
+    {
+      "name": "quiz_choice: Mông–Nguyên–Mông–Nguyên",
+      "rule": "R8c",
+      "field_type": "quiz_choice",
+      "text": "Mông–Nguyên–Mông–Nguyên",
+      "expected_lines": 1,
+      "expected": "invalid"
+    },
+    {
+      "name": "dialog: Nếu bỏ qua, sẽ chưa nhận được huy hiệu c",
+      "rule": "R8c",
+      "field_type": "dialog",
+      "text": "Nếu bỏ qua, sẽ chưa nhận được huy hiệu của câu chuyện này nhé.",
+      "expected_lines": 2,
+      "expected": "valid"
+    },
+    {
+      "name": "intro: Ặ Ỗ Ữ ẫ ợ ặ ỗ ữ Ẫ Ợ ệ ằ khoá khóa",
+      "rule": "R8c",
+      "field_type": "intro",
+      "text": "Ặ Ỗ Ữ ẫ ợ ặ ỗ ữ Ẫ Ợ ệ ằ khoá khóa",
+      "expected_lines": 1,
+      "expected": "valid"
+    },
+    {
+      "name": "VI button within 1.6x budget",
+      "rule": "R8b",
+      "field_type": "button",
+      "vi": "Màn hình chính",
+      "expected": "valid"
+    },
+    {
+      "name": "VI button over its budget",
+      "rule": "R8b",
+      "field_type": "button",
+      "vi": "Quay về màn hình chính",
+      "expected": "invalid"
+    },
+    {
+      "name": "dialogue beat with buttons",
+      "rule": "R13",
+      "beat": {
+        "type": "dialogue",
+        "buttons": [
+          "move"
+        ],
+        "params": {
+          "lines": []
+        }
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "dialogue beat without buttons",
+      "rule": "R13",
+      "beat": {
+        "type": "dialogue",
+        "buttons": [],
+        "params": {
+          "lines": []
+        }
+      },
+      "expected": "valid"
+    },
+    {
+      "name": "ask runs past the last line",
+      "rule": "R13d",
+      "lines": 4,
+      "ask": {
+        "taps": 2,
+        "at_line": 3
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "ask ends on the last line",
+      "rule": "R13d",
+      "lines": 4,
+      "ask": {
+        "taps": 2,
+        "at_line": 2
+      },
+      "expected": "valid"
+    },
+    {
+      "name": "dialogue legend covered by a marked narrator first line",
+      "rule": "R4c",
+      "claims": {
+        "C14": {
+          "label": "legend"
+        }
+      },
+      "lines": [
+        {
+          "speaker": "narrator",
+          "text": {
+            "id": "x.d.1",
+            "vi": "Truyện kể rằng cậu xin vào dự họp.",
+            "en": "The story says he asked to join the meeting.",
+            "claims": [
+              "C14"
+            ]
+          }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "id": "x.d.2",
+            "vi": "Cho cháu vào với!",
+            "en": "Please let me in!",
+            "claims": [
+              "C14"
+            ]
+          }
+        }
+      ],
+      "expected": "valid"
+    },
+    {
+      "name": "dialogue legend with an unmarked first line",
+      "rule": "R4c",
+      "claims": {
+        "C14": {
+          "label": "legend"
+        }
+      },
+      "lines": [
+        {
+          "speaker": "narrator",
+          "text": {
+            "id": "x.d.1",
+            "vi": "Cậu xin vào dự họp.",
+            "en": "He asked to join the meeting.",
+            "claims": [
+              "C14"
+            ]
+          }
+        },
+        {
+          "speaker": "hero",
+          "text": {
+            "id": "x.d.2",
+            "vi": "Cho cháu vào với!",
+            "en": "Please let me in!",
+            "claims": [
+              "C14"
+            ]
+          }
+        }
+      ],
+      "expected": "invalid"
+    },
+    {
+      "name": "ask button per line",
+      "rule": "ask",
+      "lines": 5,
+      "ask": {
+        "taps": 2,
+        "at_line": 2
+      },
+      "expected_buttons": [
+        "tiep",
+        "ask",
+        "ask",
+        "tiep",
+        "tiep"
+      ],
+      "expected": "valid"
     }
   ]
 }

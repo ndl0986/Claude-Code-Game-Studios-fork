@@ -3,13 +3,23 @@
   "$id": "https://galaxyandsun.com/daidatanhhung/content/rules.schema.json",
   "title": "Data rules both apps apply: quiz stars and text limits.",
   "type": "object",
-  "required": ["schema_version", "quiz_stars", "text_limits"],
+  "required": [
+    "schema_version",
+    "quiz_stars",
+    "text_limits"
+  ],
   "additionalProperties": false,
   "properties": {
-    "schema_version": { "$ref": "common.schema.json#/$defs/SchemaVersion" },
+    "schema_version": {
+      "$ref": "common.schema.json#/$defs/SchemaVersion"
+    },
     "quiz_stars": {
       "type": "object",
-      "required": ["retries_counted", "thresholds", "finishing_unlocks_next_hero"],
+      "required": [
+        "retries_counted",
+        "thresholds",
+        "finishing_unlocks_next_hero"
+      ],
       "additionalProperties": false,
       "properties": {
         "retries_counted": {
@@ -22,27 +32,121 @@
           "minItems": 1,
           "items": {
             "type": "object",
-            "required": ["stars", "max_retries"],
+            "required": [
+              "stars",
+              "max_retries"
+            ],
             "additionalProperties": false,
             "properties": {
-              "stars": { "type": "integer", "minimum": 1, "maximum": 3 },
-              "max_retries": { "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }] }
+              "stars": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 3
+              },
+              "max_retries": {
+                "oneOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
             }
           }
         },
-        "finishing_unlocks_next_hero": { "const": true }
+        "finishing_unlocks_next_hero": {
+          "const": true
+        }
       }
     },
     "text_limits": {
       "type": "object",
-      "required": ["max_chars", "en_budget"],
+      "required": [
+        "max_chars",
+        "en_budget"
+      ],
       "additionalProperties": false,
       "properties": {
-        "max_chars": { "type": "integer", "const": 120 },
+        "max_chars": {
+          "type": "integer",
+          "const": 120
+        },
         "en_budget": {
           "description": "Max EN characters per field type (rule R8). VI is held to max_chars.",
           "type": "object",
-          "additionalProperties": { "type": "integer", "minimum": 1, "maximum": 120 }
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 120
+          }
+        },
+        "vi_budget": {
+          "description": "Max VI characters per field type (R8b) = floor(1.6 × en_budget), capped at max_chars (D-21).",
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 120
+          }
+        },
+        "fit": {
+          "description": "R8c line fit (D-21): world px at 1×; advances from metrics at the field's weight; greedy word wrap into box_width / (1 + allowance).",
+          "type": "object",
+          "required": [
+            "allowance",
+            "metrics",
+            "fields"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "allowance": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.1
+            },
+            "metrics": {
+              "type": "string"
+            },
+            "fields": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "required": [
+                  "box_width",
+                  "font_px",
+                  "max_lines",
+                  "weight"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "box_width": {
+                    "type": "integer",
+                    "minimum": 40,
+                    "maximum": 1280
+                  },
+                  "font_px": {
+                    "type": "integer",
+                    "minimum": 12,
+                    "maximum": 96
+                  },
+                  "max_lines": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 4
+                  },
+                  "weight": {
+                    "enum": [
+                      600,
+                      800
+                    ]
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
