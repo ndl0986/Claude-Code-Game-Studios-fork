@@ -41,16 +41,16 @@ Dải Đất Anh Hùng is a small, story-first game, and its systems are few.
 | # | System Name | Category | Priority | Status | Design Doc | Depends On |
 |---|-------------|----------|----------|--------|------------|------------|
 | 1 | Content data & claims | Core | Vertical Slice | Approved (data contract) | `content/README.md` + `content/schema/` (no GDD) | none |
-| 2 | Language & text (VI/EN) | Core | Vertical Slice | Not Started | — | 1 |
+| 2 | Language & text (VI/EN) | Core | Vertical Slice | Approved | `design/gdd/language-and-text.md` | 1, 4 |
 | 3 | Input & touch controls (inferred) | Core | Vertical Slice | Not Started | — | none |
-| 4 | Save & progress (inferred) | Persistence | Vertical Slice | Not Started | — | none |
+| 4 | Save & progress (inferred) | Persistence | Vertical Slice | Approved | `design/gdd/save-and-progress.md` | none |
 | 5 | Side-scroll movement & combat | Gameplay | Vertical Slice | Approved | `design/gdd/side-scroll-combat.md` | 3, 1 |
 | 6 | Mission flow & beat types | Narrative | Vertical Slice | Approved | `design/gdd/mission-flow.md` | 5, 1, 2, 3 |
 | 7 | Quiz & stars | Gameplay | Vertical Slice | Approved | `design/gdd/quiz-and-stars.md` | 1, 2, 4 |
 | 8 | Hints & onboarding | Meta | Vertical Slice | Approved | `design/gdd/hints-and-onboarding.md` | 6, 5, 3, 10, 1 |
 | 9 | Hero progression & unlock | Progression | Vertical Slice (unlock screen) / Alpha (full) | In Review | `design/gdd/hero-progression.md` | 7, 4, 1 |
-| 10 | Audio & voice-over | Audio | Vertical Slice | Not Started | — | 1, 2 |
-| 11 | Map & timeline | UI | Alpha (stub in VS) | Not Started | — | 9, 1 |
+| 10 | Audio & voice-over | Audio | Vertical Slice | Approved | `design/gdd/audio-and-voice-over.md` | 1, 2, 4 |
+| 11 | Map & timeline | UI | Alpha (stub in VS) | Not Started (open: QC G5) | — | 9, 1 |
 | 12 | Settings & parent area (inferred: sources and credits page) | UI | Full Vision (first release) | Not Started | — | 2, 1 |
 | 13 | Storybook mini-games & content calendar | Gameplay | Full Vision | Not Started | — | 2, 4, 1 |
 
@@ -109,7 +109,7 @@ No economy, no social and no analytics, by pillar (*An toàn cho trẻ / Safe fo
 1. Content data & claims: every line and number the apps show comes from here, and every history line traces to a signed-off claim.
 2. Input & touch controls: every action a child takes goes through the same big landscape thumb pads.
 3. Save & progress: stars and unlocks must survive app restarts, offline, with no child data.
-4. Language & text: depends on 1. Every string is `{vi, en}` and can switch at any moment.
+4. Language & text: depends on 1 and Save & progress (`lang`). Every string is `{vi, en}` and can switch at any moment.
 
 ### Core Layer (depends on foundation)
 
@@ -162,6 +162,13 @@ in a GDD cites its source, or is marked ⟨tuning⟩.
 
 ---
 
+**Open item for Map & timeline (#11), from QC (G5, 2026-11-14):** the slice's title screen,
+which stands in for the map, shows **no progress**: no stars, medal or completed state for the
+hero. A child who finished the mission sees the same screen as before. The Map & timeline GDD
+must show each hero's state, best stars and medal (Hero progression Rule 10 and UI). Until then,
+the slice title could show the hero's stars and medal as a minimal stub; that's a decision with
+the GDD.
+
 ## Circular Dependencies
 
 - **None found.** Hints depends on Audio (voice prompts), and Audio does not depend on Hints.
@@ -186,7 +193,7 @@ in a GDD cites its source, or is marked ⟨tuning⟩.
 | Metric | Count |
 |--------|-------|
 | Total systems identified | 13 |
-| Design docs started | 5 |
+| Design docs started | 8 |
 | Design docs reviewed | 4 (lean self-reviews; peer reviews in progress) |
 | Design docs approved | 5 (Content data & claims via TASK-005; Mission flow; Combat; Quiz & stars; Hints & onboarding) |
 | MVP systems designed | n/a (folded into the Vertical Slice) |
