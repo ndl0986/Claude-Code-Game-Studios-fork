@@ -891,6 +891,143 @@
         "tiep"
       ],
       "expected": "valid"
+    },
+    {
+      "name": "body field below the body minimum",
+      "rule": "R8d",
+      "class": "body",
+      "font_px": 30,
+      "expected": "invalid"
+    },
+    {
+      "name": "body field at the body minimum",
+      "rule": "R8d",
+      "class": "body",
+      "font_px": 37,
+      "expected": "valid"
+    },
+    {
+      "name": "label field at the label minimum",
+      "rule": "R8d",
+      "class": "label",
+      "font_px": 28,
+      "expected": "valid"
+    },
+    {
+      "name": "unknown size class",
+      "rule": "R8d",
+      "class": "tiny",
+      "font_px": 40,
+      "expected": "invalid"
+    },
+    {
+      "name": "no size class",
+      "rule": "R8d",
+      "class": null,
+      "font_px": 40,
+      "expected": "invalid"
+    },
+    {
+      "name": "4 dummies don't fit the training zone",
+      "rule": "R14b",
+      "dummies": 4,
+      "world_width": 1280,
+      "tuning": {
+        "dummy_spacing": 300,
+        "enemy_reach": 150,
+        "hero_edge_margin": 70
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "3 dummies fit",
+      "rule": "R14b",
+      "dummies": 3,
+      "world_width": 1280,
+      "tuning": {
+        "dummy_spacing": 300,
+        "enemy_reach": 150,
+        "hero_edge_margin": 70
+      },
+      "expected": "valid"
+    },
+    {
+      "name": "exactly at the limit (3 x 330 = 990)",
+      "rule": "R14b",
+      "dummies": 3,
+      "world_width": 1280,
+      "tuning": {
+        "dummy_spacing": 330,
+        "enemy_reach": 150,
+        "hero_edge_margin": 70
+      },
+      "expected": "valid"
+    },
+    {
+      "name": "just over the limit (3 x 331 = 993)",
+      "rule": "R14b",
+      "dummies": 3,
+      "world_width": 1280,
+      "tuning": {
+        "dummy_spacing": 331,
+        "enemy_reach": 150,
+        "hero_edge_margin": 70
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "no dummies",
+      "rule": "R14b",
+      "dummies": 0,
+      "world_width": 1280,
+      "tuning": {
+        "dummy_spacing": 300,
+        "enemy_reach": 150,
+        "hero_edge_margin": 70
+      },
+      "expected": "valid"
+    },
+    {
+      "name": "cheer false on a fight beat",
+      "rule": "R21",
+      "beat": {
+        "type": "fight",
+        "cheer": false
+      },
+      "expected": "warn"
+    },
+    {
+      "name": "cheer false on a walk beat",
+      "rule": "R21",
+      "beat": {
+        "type": "walk",
+        "cheer": false
+      },
+      "expected": "valid"
+    },
+    {
+      "name": "cheer absent",
+      "rule": "R21",
+      "beat": {
+        "type": "fight"
+      },
+      "expected": "valid"
+    },
+    {
+      "name": "EN banner at 37 takes 2 lines",
+      "rule": "R8c",
+      "field_type": "banner",
+      "text": "Defeat the strong enemy, repay the king's kindness",
+      "expected_lines": 2,
+      "expected": "valid"
+    },
+    {
+      "name": "VI banner at 37 takes 1 line",
+      "rule": "R8c",
+      "field_type": "banner",
+      "text": "Phá cường địch, báo hoàng ân",
+      "expected_lines": 1,
+      "expected": "valid"
     }
   ]
 }
