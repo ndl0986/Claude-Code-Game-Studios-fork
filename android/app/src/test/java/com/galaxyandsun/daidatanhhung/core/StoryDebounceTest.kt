@@ -60,7 +60,7 @@ class StoryDebounceTest {
      */
     @Test fun aFrameStallBetweenTwoPressesDoesNotLetTheSecondThrough() {
         var real = 100.0 // the platform's uptime clock, s
-        val g = Game(TestContent.fullContent(), "tran-quoc-toan", MemoryStore(), { real }) {}
+        val g = Game(TestContent.noEnterLock(TestContent.fullContent()), "tran-quoc-toan", MemoryStore(), { real }) {}
         g.debugJump("intro"); g.wait(0.5); real += 0.5
         assertTrue(g.pressAllowed("next", real)); g.pressAt = real; assertTrue(g.next()); g.pressAt = null
         val tap1 = real

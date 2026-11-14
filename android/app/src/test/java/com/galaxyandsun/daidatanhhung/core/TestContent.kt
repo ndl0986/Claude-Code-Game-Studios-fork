@@ -20,8 +20,14 @@ object TestContent {
 
     fun fixture(name: String): JsonObject = Json.parseToJsonElement(File(root, "fixtures/$name").readText()).jsonObject
 
+    /**
+     * The content with `screen_enter_lock` 0: the flow tests drive presses back to back, so they run without the
+     * B7 screen-enter lock; EnterLockTest covers the lock with the real value.
+     */
+    fun noEnterLock(c: Content): Content = c.copy(tuning = c.tuning.copy(values = c.tuning.values.mapValues { (k, v) -> if (k == "screen_enter_lock") v.copy(value = 0.0) else v }))
+
     fun game(store: Store = MemoryStore(), sfx: MutableList<Sfx> = mutableListOf()): Game =
-        Game(load(), "sample", store) { sfx += it }
+        Game(noEnterLock(load()), "sample", store) { sfx += it }
 
     /**
      * The full 4-type Trần Quốc Toản mission (D-08 B): data/ once TASK-011 lands, else the draft
@@ -37,5 +43,5 @@ object TestContent {
     }
 
     fun fullGame(store: Store = MemoryStore(), sfx: MutableList<Sfx> = mutableListOf()): Game =
-        Game(fullContent(), "tran-quoc-toan", store) { sfx += it }
+        Game(noEnterLock(fullContent()), "tran-quoc-toan", store) { sfx += it }
 }

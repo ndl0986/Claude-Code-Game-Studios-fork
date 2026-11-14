@@ -24,7 +24,7 @@ class DialogueTest {
     private fun game(store: Store = MemoryStore()): Game {
         val c = TestContent.fullContent(); val h = c.heroes.getValue("tran-quoc-toan")
         val m = h.mission.copy(beats = listOf(dialogueBeat) + h.mission.beats)
-        return Game(c.copy(heroes = mapOf("tran-quoc-toan" to h.copy(mission = m))), "tran-quoc-toan", store) {}
+        return Game(TestContent.noEnterLock(c.copy(heroes = mapOf("tran-quoc-toan" to h.copy(mission = m)))), "tran-quoc-toan", store) {}
     }
 
     private fun toDialogue(g: Game) {

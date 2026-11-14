@@ -97,6 +97,36 @@ class Game(
     var pressAt: Double? = null
     private fun pressTime() = pressAt ?: now?.invoke() ?: clock
 
+    // ---- Input Rule 13b (QC r6 B7): the screen-enter lock ----
+    /** The UI context the child is in; a change into a story, card, dialogue, quiz, results, unlock or title context locks. */
+    private var ctx = ""
+    /** When the current context was entered, on the press clock (uptime): the time the new screen first shows. */
+    var enteredAt = -1e9; private set
+    /** Set by the renderer: at 0.40 ≤ k < 0.48 each new quiz question also locks (Tiếp lies over card slot 3 there). */
+    var lockEachQuestion = false
+
+    private fun context(): String {
+        val base = when (screen) {
+            Screen.PLAY -> when (run.phase) { Phase.CARD -> "card${run.beat}"; Phase.CAPTION -> "caption${run.beat}"; Phase.DIALOGUE -> "dialogue${run.beat}"; else -> "play" }
+            Screen.PAUSE -> return ctx // pausing doesn't change the context, and the pause menu is exempt
+            Screen.QUIZ -> if (lockEachQuestion) "quiz${quiz?.index}" else "quiz"
+            else -> screen.name
+        }
+        return if (skipWarning) "$base/warn" else base
+    }
+
+    /** Stamps [enteredAt] when the context changes (not between boxes; not when the skip warning closes back onto its box). */
+    private fun syncContext() {
+        val c = context(); if (c == ctx) return
+        val returning = ctx == "$c/warn"
+        ctx = c
+        if (c != "play" && !returning) enteredAt = now?.invoke() ?: clock
+    }
+
+    /** Presses on these keys are dropped within `screen_enter_lock` of entering a context; pause, sound, VI|EN and the pause menu are exempt. */
+    private fun lockedKey(key: String) = key in setOf("next", "ask", "skip", "tomap", "start", "keep", "skipok") || key.startsWith("card")
+    private fun inEnterLock(at: Double): Boolean { syncContext(); return at - enteredAt < tuning["screen_enter_lock"] }
+
     init { reset(); Progression.markSeen(content, store) } // the title loading counts as "seen open"
 
     private fun reset() {
@@ -116,13 +146,14 @@ class Game(
     /** One fixed step (1/60 s). Paused and title screens only animate. */
     fun step(dt: Double, input: InputFrame) {
         t += dt; clock += dt
-        if (skipWarning) { input.clearTaps(); return }
+        if (skipWarning) { input.clearTaps(); syncContext(); return }
         when (screen) {
             Screen.PLAY -> { run.update(dt, input); if (run.missionDone) { line = 0; go(Screen.ENDING) } }
             Screen.QUIZ -> quiz?.update(dt)
             else -> Unit
         }
         input.clearTaps()
+        syncContext() // a context entered by the sim (walk into a card or dialogue, play into the ending) starts its lock here
     }
 
     // ---- Menu actions (fired on touch-up inside, by the platform layer) ----
@@ -137,8 +168,8 @@ class Game(
         if (skipWarning) return false
         // AC9 / QC B1: every Next (intro, card, caption, ending, quiz Tiếp, results) advances once per 0.25 s.
         val at = pressTime()
-        if (at - lastAdvance < tuning["advance_debounce"]) return false
-        return advance().also { if (it) lastAdvance = at }
+        if (at - lastAdvance < tuning["advance_debounce"] || inEnterLock(at)) return false
+        return advance().also { if (it) { lastAdvance = at; syncContext() } }
     }
 
     /**
@@ -147,6 +178,7 @@ class Game(
      * shake, is ignored even if it is released after the window ends (B1 on beat cards, quiz AC6).
      */
     fun pressAllowed(key: String, at: Double = pressTime()): Boolean = when {
+        lockedKey(key) && inEnterLock(at) -> false // B7: a press made (or begun) before the lock ends is dropped
         key == "next" || key == "ask" -> at - lastAdvance >= tuning["advance_debounce"]
         key.startsWith("card") -> (quiz?.shakeT ?: 0.0) <= 0.0
         else -> true
@@ -177,8 +209,8 @@ class Game(
     fun ask(): Boolean {
         if (skipWarning || screen != Screen.PLAY || run.phase != Phase.DIALOGUE) return false
         val at = pressTime()
-        if (at - lastAdvance < tuning["advance_debounce"]) return false
-        return run.dialogueAsk().also { if (it) lastAdvance = at }
+        if (at - lastAdvance < tuning["advance_debounce"] || inEnterLock(at)) return false
+        return run.dialogueAsk().also { if (it) { lastAdvance = at; syncContext() } }
     }
 
     // ---- D-07: skip a story section. The kind warning shows on every Skip until the child chooses
@@ -227,13 +259,13 @@ class Game(
     /** A quiz card. Returns the pick's result; the platform plays chime / soft for it. */
     fun answer(choice: Int): PickResult {
         val q = quiz ?: return PickResult.IGNORED
-        if (screen != Screen.QUIZ) return PickResult.IGNORED
+        if (screen != Screen.QUIZ || inEnterLock(pressTime())) return PickResult.IGNORED
         val r = q.pick(choice)
         when (r) { PickResult.RIGHT -> sfx(Sfx.CHIME); PickResult.WRONG -> sfx(Sfx.SOFT); else -> Unit }
         return r
     }
 
-    private fun go(s: Screen) { screen = s; t = 0.0; if (s == Screen.INTRO || s == Screen.ENDING) line = 0 }
+    private fun go(s: Screen) { screen = s; t = 0.0; if (s == Screen.INTRO || s == Screen.ENDING) line = 0; syncContext() }
 
     private fun startQuiz() {
         val qs = bundle.quiz.questions
