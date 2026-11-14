@@ -138,7 +138,7 @@ The grammar: **circles mean friendly and safe, upward triangles mean the hero an
 ### UI shape grammar
 - **Everything is rounded.** Panels and cards are large-radius rounded rectangles, and buttons are pill shapes. There are no sharp corners anywhere in the UI.
 - **Action buttons (move, attack, defend, special) are circles,** the largest round objects on screen. They sit in the bottom-left (move) and bottom-right (actions) thumb zones in landscape. Each has a **unique icon and a unique outer shape cue**, so buttons never depend on colour alone (see §4). *Minimum touch-target size is set with ux-designer in the accessibility spec. Visually, the targets must read as big, chunky and pressable.*
-- **Bronze-drum ring** is the signature frame motif for hero portraits, map places and star rewards. It is a circle with a concentric pattern band, used only on frames and never inside a touch area.
+- **Bronze-drum ring** is the signature frame motif for hero portraits, map places and star rewards. It is a circle with a concentric pattern band, used on frames, never as a full pattern inside a touch area. **Exception (Luan's rule 4, 2026-11-14):** an in-mission pad may carry **one** motif accent, e.g. a thin drum ring on the defend pad's rim, never under its icon.
 - **Stars** are soft five-point stars with rounded tips: a filled shape when earned and an outline shape when not.
 
 ### Hero shapes vs. supporting shapes
