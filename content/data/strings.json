@@ -62,6 +62,11 @@
       "en": "Defend"
     },
     {
+      "id": "ui.pad.special",
+      "vi": "Cờ",
+      "en": "Flag"
+    },
+    {
       "id": "ui.pause.title",
       "vi": "Tạm dừng",
       "en": "Paused"
