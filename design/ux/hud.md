@@ -67,7 +67,7 @@ covered the fighters' legs (Android r5 evidence, `production/qa/evidence/TASK-00
 on the Android branch @ 5d58123).
 
 **Horizontal: the free band.** Pause and sound are ≥ `pad_min` (Input Rule 4), which is 137
-world px on the Android reference phone (k 0.527, Input F1), so the top-left block covers about
+world px in the geometry example (k 0.527, Input F1; ≈ 148 on the Android AVDs, k 0.488), so the top-left block covers about
 x 18–315, y 18–155. A stack centred on x = 640 would collide with it. **The whole top stack
 (dots, goal plate, banner bar) is centred in the free band x 330–1250, centre x 790**, on every
 beat. The goal plate and the banner bar are both **920 wide** (an 880 text box plus 20 each
@@ -167,7 +167,7 @@ the king's meeting at Bình Than!", 688 px).
   (Luan's rule 4). **The gold text carries an ink `#3A2A20` outline ≥ 2 px at 37 px** (QC r5):
   gold on vermilion alone is **2.72:1** (QC measured ≈ 2.6), below 3:1. With the outline, gold
   vs ink is **8.67:1** and the ink edge vs vermilion **3.18:1**, so the six words pass 3:1 as
-  large text (37 world px, weight 800, ≈ 51 screen px on the reference phone). The gold look
+  large text (37 world px, weight 800, ≈ 51 screen px in the k 0.527 geometry example). The gold look
   stays.
 - **When:** the whole of every `uses_banner` beat, from `beat_play` start. It hides on story
   screens, in the dialogue and on pause (pause shows the dimmed backdrop as usual).
@@ -264,7 +264,7 @@ insets; iOS home indicator, notch or Dynamic Island. Rounded corners wait for TA
 8. **GIVEN** the hold-meter beat, **WHEN** captured, **THEN** the special pad shows the fist icon, not the banner.
 9. **GIVEN** the training and reach-the-flag beats at k = 1 (the 1280×720 world drawn 1:1), in VI and in EN, **WHEN** each is captured with the hero and every enemy or dummy on screen (including an encounter at its closest), **THEN** no banner-bar pixel overlaps any hero or enemy body pixel (props such as a staff tip may pass behind), the bar is 112 px tall in both languages, and the goal plate and banner never overlap each other or the dots.
 10. **GIVEN** any non-banner beat, **WHEN** captured, **THEN** the goal plate is at the same position as on banner beats (dots bottom + 4, centred on x 790).
-11. **GIVEN** the Android reference phone (k 0.527 dp per world px) and the iOS reference phone (k 0.517), with pause and sound at `pad_min`, **WHEN** a training and a reach-the-flag beat are captured in VI and EN, **THEN** no pixel of the dots, the goal plate or the banner bar overlaps the pause or sound button.
+11. **GIVEN** an Android AVD (k ≈ 0.488 dp per world px) and the iOS QC phone (k 0.517), with pause and sound at `pad_min`, **WHEN** a training and a reach-the-flag beat are captured in VI and EN, **THEN** no pixel of the dots, the goal plate or the banner bar overlaps the pause or sound button.
 12. **GIVEN** a push, a block and a hit during an encounter at its closest, **WHEN** captured, **THEN** each pop sits beside the fighter's head at head height and no pop pixel overlaps the banner bar.
 13. **GIVEN** a hit and a strike that land at spec height, **WHEN** frame-stepped, **THEN** the hero's swing arc reaches 175 world px in front of him and the enemy's weapon tip 140, so contact is visible; on a landed strike, the padded tip touches the hero's chest for ≥ 2 frames (≈ 33 ms) before the hero's pushed pose (Combat V/A, render-only).
 14. **GIVEN** a phone or emulator with k = 0.40 (the floor; e.g. a small phone with a left gesture inset), **WHEN** a training beat is captured in VI and EN, **THEN** the stack starts at `corner_right` + 8, the goal plate and the banner bar narrow to `1270 − start` (≥ 760), nothing overlaps pause or sound, and the EN banner is ≤ 2 lines with no text cut.

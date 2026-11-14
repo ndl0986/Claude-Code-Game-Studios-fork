@@ -56,7 +56,7 @@ above it, so nothing on a dialogue screen sits above `corner_bottom` + 8 (the pa
 - **Bottom-anchored like the beat card:** panel bottom = Tiếp's top − 8.
 - **Portrait:** 256 world px tall (the 384 px asset at 1.5×), bottom-aligned with the panel, on
   the speaker's side (hero left, others right), 16 from the panel.
-- **Worked numbers:** at the reference (k 0.527): Tiếp 565–702; panel 271–557; portrait
+- **Worked numbers:** in the geometry example (k 0.527, no test device): Tiếp 565–702; panel 271–557; portrait
   301–557; `corner_bottom` + 8 = 163, clear. **At the floor (k 0.40):** pad 180, Tiếp 522–702;
   panel 228–514; portrait 258–514; `corner_bottom` + 8 = 206, clear by 22.
 - **Fit condition:** `2 × pad_min / k + 52 + 286 ≤ safe_bottom`, i.e. 698 ≤ 720 at k 0.40. An
