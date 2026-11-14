@@ -152,15 +152,15 @@ The F2 (pin size, clusters and labels) formula is defined as:
 | Variable | Type | Range | Source | Description |
 |----------|------|-------|--------|-------------|
 | pad_min | float (pt/dp) | 44–120 | data file (`tuning.json` `pad_min`, 72) | Minimum touch target |
-| k | float (pt/dp per world px) | device | calculated (Input F1) | Converts touch size to world px (0.527 on the Android reference phone, 0.517 on the iOS one) |
-| pin_world | float (world px) | ≈ 135–140 on the reference phones | calculated | Pin touch target in world px |
+| k | float (pt/dp per world px) | device | calculated (Input F1) | Converts touch size to world px (≈ 0.488 on the Android AVDs, 0.517 on the iOS QC phone; 0.527 is the geometry example) |
+| pin_world | float (world px) | ≈ 136–148 on the reference phones | calculated | Pin touch target in world px |
 | label_offset | float (world px) | 40–80 | constant ⟨UX⟩ | How far a label moves |
 
 **Output Range:** pins mark real places and never move on their own. Only clustering merges
 them, and only labels shift or hide. Both apps compute clusters from the same numbers, so they
 match. Northern places that sit close together (e.g. Thăng Long, Bình Than, Bạch Đằng, Chi Lăng)
 will often cluster.
-**Example:** on the Android reference phone, `pad_min` 72 and k 0.527 give `pin_world` ≈ 137.
+**Example** (the geometry example, Input F1): `pad_min` 72 and k 0.527 give `pin_world` ≈ 137.
 Two pins 80 world px apart merge into a cluster showing "2". A pin 160 px away stays separate,
 and its label shifts down 60 px if it overlaps. A pin 130 px away would merge here, so the
 cluster fixture names k for each case.
