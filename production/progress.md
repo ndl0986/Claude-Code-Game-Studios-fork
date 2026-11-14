@@ -13,8 +13,8 @@ Where the project stands, so work can resume from the repo. Newest entry first.
 | Session | Role | Start with |
 | --- | --- | --- |
 | game-leader (repo root) | Leader (`/game-team-lead`); never implements | `tools/team/start-leader.sh` (fixed name `game-leader`, which the member scripts message) |
-| game-dev-001 | Developer, iOS owner | `tools/team/start-game-dev-001.sh` |
-| game-dev-002 | Developer, Android owner | `tools/team/start-game-dev-002.sh` |
+| game-dev-ios | Developer, iOS owner | `tools/team/start-game-dev-ios.sh` |
+| game-dev-android | Developer, Android owner | `tools/team/start-game-dev-android.sh` |
 | game-art-content | Art + content/history (Luan signs off history) | `tools/team/start-game-art-content.sh` |
 | game-qc-android | Android QC (emulator `mp17863`) | `tools/team/start-game-qc-android.sh` |
 | game-qc-ios | iOS QC (Simulator) | `tools/team/start-game-qc-ios.sh` |
@@ -24,14 +24,14 @@ Where the project stands, so work can resume from the repo. Newest entry first.
 | Task | Branch @ commit | State |
 | --- | --- | --- |
 | TASK-001 concept | merged into `docs/vn-history-game-plan` as `b41d157` (pushed) | Done |
-| TASK-002 Godot 4.7.2 | `setup/TASK-002-engine-godot` @ `d44bb07` local (GitHub still has `6dcdbce`: the amended `5063c5d` needs Luan's force push) | Done; toolchain installed at Luan's request: Godot 4.7.2 at ~/Applications/Godot.app (`godot` on PATH), JDK 17, Android build-tools 35.0.1 + android-35, iOS 27.1 runtime; headless import passes. Export templates 4.7.2 installed (sha512 OK). `d44bb07`: gdUnit4 6.2.2 + tests/ + CI workflow (runner 2/2 pass, proven to fail when broken). Editor Java/Android SDK paths and JAVA_HOME/ANDROID_HOME set. Left: first empty iOS export in the Simulator (dev-001 shows Luan the main scene + preset first); Android debug keystore not created yet (dev-002); squash decision at the end. Not merged |
-| TASK-003 browser prototype | `proto/TASK-003-mission-prototype` @ `203d73e` | Code + content review approved. Android: r1 FAIL (low) → r2 FAIL (B4 fullscreen race) → fixed in `c7f1173` → r3 partial (`qa/TASK-003-android` @ `c52a2e9`): B4 PASS 18/18; O5, O6, VI|EN side effect and smoke not run yet. O6 fixed by dev-002 in `203d73e`; finish r3 on `203d73e`. iOS: NOT ASSESSED (`qa/TASK-003-ios` @ `18eff46`) |
-| TASK-003b beat types, Special button, arrows, art fixes | — | Ready; starts after TASK-003 (likely dev-001) |
+| TASK-002 Godot 4.7.2 | `setup/TASK-002-engine-godot` @ `d44bb07` local (GitHub still has `6dcdbce`: the amended `5063c5d` needs Luan's force push) | Done; toolchain installed at Luan's request: Godot 4.7.2 at ~/Applications/Godot.app (`godot` on PATH), JDK 17, Android build-tools 35.0.1 + android-35, iOS 27.1 runtime; headless import passes. Export templates 4.7.2 installed (sha512 OK). `d44bb07`: gdUnit4 6.2.2 + tests/ + CI workflow (runner 2/2 pass, proven to fail when broken). Editor Java/Android SDK paths and JAVA_HOME/ANDROID_HOME set. Left: first empty iOS export in the Simulator (dev-ios shows Luan the main scene + preset first); Android debug keystore not created yet (dev-android); squash decision at the end. Not merged |
+| TASK-003 browser prototype | `proto/TASK-003-mission-prototype` @ `203d73e` | Code + content review approved. Android: r1 FAIL (low) → r2 FAIL (B4 fullscreen race) → fixed in `c7f1173` → r3 partial (`qa/TASK-003-android` @ `c52a2e9`): B4 PASS 18/18; O5, O6, VI|EN side effect and smoke not run yet. O6 fixed by dev-android in `203d73e`; finish r3 on `203d73e`. iOS: NOT ASSESSED (`qa/TASK-003-ios` @ `18eff46`) |
+| TASK-003b beat types, Special button, arrows, art fixes | — | Ready; starts after TASK-003 (likely dev-ios) |
 | TASK-004 art bible + Trần Quốc Toản content | `design/TASK-004-art-bible-tqt-beats` @ `4d7aca2` | Art + structure signed off; claims C01–C11 and source pages not signed; not merged |
 
 **Browser testing stopped (Luan, 2026-11-14):** TASK-003 closed as the design reference at `203d73e` (Android r3 partial, iOS not run); TASK-003b cancelled. QC waits for the native builds.
 
-**Engine decision (Luan, 2026-11-14):** native per platform. iOS: Swift + SpriteKit (game-dev-001). Android: Kotlin (game-dev-002), 2D approach to be picked by Luan in TASK-007. Godot shelved (TASK-002 branch kept, not merged; local tip `82c016e`). New tasks: TASK-005 ADR + shared `content/`, TASK-006 iOS setup, TASK-007 Android setup.
+**Engine decision (Luan, 2026-11-14):** native per platform. iOS: Swift + SpriteKit (game-dev-ios). Android: Kotlin (game-dev-android), 2D approach to be picked by Luan in TASK-007. Godot shelved (TASK-002 branch kept, not merged; local tip `82c016e`). New tasks: TASK-005 ADR + shared `content/`, TASK-006 iOS setup, TASK-007 Android setup.
 
 ### Waiting on Luan
 
@@ -46,7 +46,7 @@ Where the project stands, so work can resume from the repo. Newest entry first.
 
 1. Start the leader: `tools/team/start-leader.sh`. It resumes the saved leader conversation (id in the gitignored `production/session-state/leader-session.txt`) under the fixed name `game-leader`; `--fresh` starts a new one.
 2. Check permissions: `orca computer permissions --json` → `accessibility` and `screenshots` both `granted`.
-3. `ListAgents`; start any missing member with its script above: add `--resume` to continue its last conversation under the same name, or omit it for a fresh session that replies "ready" to `game-leader`. Close old duplicates (`game-dev-001-1e`, `game-dev-002-46`). Tell game-dev-001 to resume the TASK-002 leftovers.
+3. `ListAgents`; start any missing member with its script above: add `--resume` to continue its last conversation under the same name, or omit it for a fresh session that replies "ready" to `game-leader`. Close old duplicates (`game-dev-ios-1e`, `game-dev-android-46`). Tell game-dev-ios to resume the TASK-002 leftovers.
 4. (Superseded: browser testing stopped.) Next QC is on the native builds from TASK-006/007 (iPhone Duo, safe-area caveat). Android QC must first restart its web server, adb reverse/forward and the DevTools watcher; the emulator runs `-gpu host`. Each QC branch already holds its earlier evidence.
 5. When both platforms pass, ask Luan's go to merge TASK-003 into `docs/vn-history-game-plan`, then hand out TASK-003b.
 

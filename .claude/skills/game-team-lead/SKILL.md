@@ -1,6 +1,6 @@
 ---
 name: game-team-lead
-description: Game team leader / orchestrator for the Vietnamese-heroes mobile game. Use when Luan says "lead the team", "start the team", "check the team", "/game-team-lead", or runs it under /loop. This session becomes the LEADER: it tracks work as GitHub Issues on the fork, hands each issue to an idle worker session (game-dev-001, game-dev-002, game-qc-android, game-qc-ios, game-art-content), routes plan peer reviews, drives labels and merges, and reports to Luan. The leader never implements anything itself.
+description: Game team leader / orchestrator for the Vietnamese-heroes mobile game. Use when Luan says "lead the team", "start the team", "check the team", "/game-team-lead", or runs it under /loop. This session becomes the LEADER: it tracks work as GitHub Issues on the fork, hands each issue to an idle worker session (game-dev-ios, game-dev-android, game-qc-android, game-qc-ios, game-art-content), routes plan peer reviews, drives labels and merges, and reports to Luan. The leader never implements anything itself.
 ---
 
 # Game team lead
@@ -18,17 +18,17 @@ merges (with Luan's go) and reports**. All work happens in the worker sessions.
 | Session | Role | Owns |
 |---|---|---|
 | this session | **Leader** | GitHub Issues, labels, milestones, dispatch, merges into `main` (with Luan's go), reports |
-| `game-dev-001` | Developer, **iOS app owner** | Owns the whole native iOS app in Swift + SpriteKit (`ios/`): code, tests, Xcode project, signing, iOS bugs. One issue at a time |
-| `game-dev-002` | Developer, **Android app owner** | Owns the whole native Android app in Kotlin (`android/`): code, tests, Gradle project, keystore, Android bugs. One issue at a time. The two devs peer-review each other's plans and PRs |
+| `game-dev-ios` | Developer, **iOS app owner** | Owns the whole native iOS app in Swift + SpriteKit (`ios/`): code, tests, Xcode project, signing, iOS bugs. One issue at a time |
+| `game-dev-android` | Developer, **Android app owner** | Owns the whole native Android app in Kotlin (`android/`): code, tests, Gradle project, keystore, Android bugs. One issue at a time. The two devs peer-review each other's plans and PRs |
 | `game-qc-android` | QC, Android | Tests each PR's build on an Android emulator or phone |
 | `game-qc-ios` | QC, iOS | Tests each PR's build on the iOS Simulator or an iPhone |
 | `game-art-content` | Art designer + content/history | Art direction (`/art-bible`, `/asset-spec`), each hero's mission story beats, history facts with sources; reviews every PR that shows a hero, event, date or story text |
 
 **Platform ownership (Luan, 2026-11-14): native per platform.** The game is two native apps:
-iOS in Swift + SpriteKit owned by `game-dev-001`, Android in Kotlin owned by `game-dev-002`. Each
+iOS in Swift + SpriteKit owned by `game-dev-ios`, Android in Kotlin owned by `game-dev-android`. Each
 feature becomes a pair of tasks, one per app, built to the same spec and the same shared data in
 `content/` (missions, quiz, VI/EN strings; TASK-005 ADR). Content is written once, by
-`game-art-content`. `game-qc-ios` bugs go to dev-001 and `game-qc-android` bugs go to dev-002.
+`game-art-content`. `game-qc-ios` bugs go to dev-ios and `game-qc-android` bugs go to dev-android.
 Changes to `content/` or its schema need both devs' review. Browser prototypes under
 `prototypes/` are design references, owned by whoever built them.
 
@@ -61,7 +61,7 @@ restart it only on his go: `orca worktree create --name <session> --no-parent --
 - Labels (create once): `type:design`, `type:dev`, `type:qc`, `type:setup`,
   `status:ready`, `status:in-progress`, `status:plan-review`, `status:code-review`,
   `status:qa-android`, `status:qa-ios`, `status:content-review`, `status:rework`, `status:blocked`, `status:done`,
-  `qa:android-pass`, `qa:ios-pass`, `content:approved`, `owner:dev-001`, `owner:dev-002`, `owner:art-content`.
+  `qa:android-pass`, `qa:ios-pass`, `content:approved`, `owner:dev-ios`, `owner:dev-android`, `owner:art-content`.
 - One `status:*` label at a time. Change it with `gh issue edit --add-label/--remove-label`
   and read it back.
 - Every issue body carries: goal, acceptance criteria, the spec file, the platforms to
@@ -117,7 +117,7 @@ Reply `APPROVE` or `REVISE` with findings.
 | plan sent | `status:plan-review` |
 | PR opened, other dev reviewing the code | `status:code-review` |
 | code review APPROVE + CI green | `status:qa-android` **and** `status:qa-ios`: hand the PR to both QC sessions at once |
-| QC finds a bug | `status:rework`; relay to the platform owner (iOS → game-dev-001, Android → game-dev-002); a `content/` data bug goes to game-art-content |
+| QC finds a bug | `status:rework`; relay to the platform owner (iOS → game-dev-ios, Android → game-dev-android); a `content/` data bug goes to game-art-content |
 | QC passes | that QC's `qa:<platform>-pass` label |
 | PR shows a hero, event, date or story text | `game-art-content` reviews it against its sourced beats; Luan signs off history (`content:approved` label) before merge |
 | both passes present | report to Luan; on his go the leader merges (`gh pr merge --merge`, branch kept) |
