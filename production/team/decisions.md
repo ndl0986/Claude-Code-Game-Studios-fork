@@ -11,6 +11,15 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-12 Legend markers on short labels (R4b, for the devs + art)
+
+- **Flow:** content validation → both apps' tests.
+- **What:** legend markers ("Truyện kể rằng / The story says") are required in sentences (intro,
+  scene, ending, quiz prompt, why). Short labels (banner, beat title, goal, hero name, place, quiz
+  choice) are exempt when the same mission or question already has a marked sentence for that
+  legend claim.
+- **Status:** AGREED by both devs + game-art-content: scope is the whole mission for labels, the question's prompt/why for quiz choices; "marked" = VI and EN both. game-dev-ios writes it on data/TASK-009a-r4b.
+
 ### D-11 Quiz data fixes (for the devs)
 
 - **Flow:** Quiz & stars GDD (`eaf221b`) → `content/fixtures/quiz-scoring.json`, `tuning.json`,
