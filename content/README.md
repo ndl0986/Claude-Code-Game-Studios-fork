@@ -112,6 +112,15 @@ them against `data/` and `samples/`. `fixtures/validity.json` has one case per r
 input plus expected output, and both apps' unit tests run every case. Feel (timing on screen,
 knock-back, button size and touch) is not a fixture; it is checked by per-platform QC.
 
+## Assets (ADR-0002, Proposed)
+
+- One resolution set: authored at 2×, shipped at **1.5×** (a 1920×1080 world). No density buckets.
+- No picture larger than **2048×2048**; bigger sheets split by animation set, backgrounds into tiles.
+- Backgrounds ship as 1440×1320 tiles at 1.5×. Above them, the sky band is a code-drawn **gradient** whose colours come from `themes.json` `sky_band {top, bottom}` per theme (planned). Far-sky tiles fade their top ~10% into the band; key sky elements stay below ~15% from the top.
+- Lossless WebP for sprites, lossy WebP (q ≈ 85) for backgrounds; PNG still allowed.
+- Atlases by what is on screen together; a mission's art loads at its start and is released at its end; ≤ 64 MB decoded per mission.
+- Planned after acceptance: `width` / `height` in `assets.json` (schema 1.2), `themes.json` (sky band colours), and rule R19 (size check).
+
 ## Planned (later phases)
 
 - `pictures.json` registry: ids that follow the art bible § 8 naming, alt text `{vi, en}`, the asset spec and status.

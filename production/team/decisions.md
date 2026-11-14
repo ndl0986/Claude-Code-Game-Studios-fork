@@ -11,17 +11,6 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
-### D-19 Accept ADR-0002: asset pipeline and memory budgets (after measurement)
-
-- **Flow:** asset specs (TASK-014) → ADR-0002 → final art export → both apps.
-- **Proposed:** one 1.5× art set (authored at 2×); no texture above 2048×2048 (the 4096² hero sheet
-  is split); atlases by what's on screen together, loaded per mission; WebP (lossless sprites, lossy
-  backgrounds) or PNG; ≤ 64 MB decoded textures per mission, ≤ 60 MB app download, ≤ 15 MB per
-  mission; a new size check (R19). Minimum iOS version 17 (stated in the ADR): per Apple's June 2026 figures it excludes at most 7% of active iPhones, and nothing in the slice needs it, so a lower minimum is Luan's option. ADR written as Proposed (`f9d81be`), in peer review.
-- **Before accepting:** both devs measure memory and frame time with a 2048² test atlas on a low-end
-  Android emulator and the iPhone Duo; the numbers go into the ADR.
-- **Status:** Open (Luan accepts once measured; technical impact).
-
 ### D-18 How Trần Quốc Toản and the invaders look (portrayal + palette), before final art
 
 - **Flow:** art bible → asset specs (TASK-014, 87 assets) → **Luan's look sign-off** → final art
@@ -245,6 +234,7 @@ it) · **Decided** (Luan's call, with the date).
 
 | Date | Decision |
 | --- | --- |
+| 2026-11-14 | **D-19: ADR-0002 accepted, minimum iOS 17 kept.** One 1.5× art set, ≤2048² images, 1440×1320 background tiles with a gradient sky band, per-step loading, ≤64 MB image memory at any moment, ≤60 MB download. Frame-rate and iOS-memory measurements follow on real devices. |
 | 2026-11-14 | **D-17:** Vietnamese text uses **no pronoun** where possible; when one is needed, address the child as **"em"** (as the textbooks do). The skip warning drops "bạn". |
 | 2026-11-14 | **D-08: B, the full structure** in the slice: walk (riverbank to Bình Than) → hold-meter (the orange) → training (dummies, blocks, raise the banner) → reach-the-flag with fight encounters. `mission-full.json` becomes the slice's mission. |
 | 2026-11-14 | **D-10: B, later.** No Special move in fights or encounters yet; the banner button appears only in the hold-meter and training beats (R13). Combat Special comes back as its own decision. |
