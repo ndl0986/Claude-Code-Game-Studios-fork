@@ -22,3 +22,6 @@ Reviewed-Content-Hash: design/gdd/side-scroll-combat.md 1ecde74bbfd569d1ceb4c454
 - The move hand shows during walk_to[0] in the slice; later, the first beat with move (Rule 2, AC1).
 - AC4 is strict: not shown at step 300, shown at step 301 (5.0167 s) at dt 1/60.
 Awaiting game-dev-ios confirmation.
+
+## Peer re-review — 2026-11-14 — game-dev-ios: APPROVE @ 4769035
+All findings were checked as fixed. Status set to Approved.
