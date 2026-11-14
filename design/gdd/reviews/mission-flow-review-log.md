@@ -41,3 +41,6 @@ Core Rule 15 (skip on every story screen, a one-time kind warning per run, "Skip
 
 ## Update — 2026-11-14 — devs' parity review additions
 F5 beat positions (with the beat extent per type); the warning returns after "Keep reading" and only "Skip anyway" stops it (leader's call); pads by phase; end_pause for every type; Rule 7c training partner, dummies and hold-meter cap; the F4 walk_gap estimate from dummy_spacing; AC20–21.
+
+## Update — 2026-11-14 — G2 (Android QC r2): fight-zone bounds, auto-face, facing locked during a swing
+Rules agreed by game-dev-android and game-dev-ios with measurements (unfinishable before; 31–47 s after). Combat Rules 2 and 15 and the frame order (steps 4–6); AC20–23. Mission flow reach-the-flag row; AC22.
