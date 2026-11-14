@@ -35,9 +35,9 @@ an issue once Issues are on. The leader owns this file.
 | TASK-005g | ADR-0002 follow-up: themes.json sky bands, assets width/height (schema 1.2), R19a/R19b/R20 | data | game-dev-ios (+ android review) | MERGED | `data/TASK-005g-assets-themes` | 2026-11-14 |
 | TASK-005j | Shared sim trace fixture content/fixtures/trace-tqt.json (cross-app parity; Android generates + replays) | data | game-dev-android (+ ios replay) | MERGED (`b661802`); iOS replay test after iOS r3 freeze | `data/TASK-005j-trace` | 2026-11-14 |
 | TASK-005k | pad_gap + drag_threshold tuning keys (TASK-019), no schema change | data | game-dev-android (+ ios load-check) | MERGED | `data/TASK-005k-input-keys` | 2026-11-14 |
-| TASK-020 | /review-all-gdds across the 11 approved GDDs (independent reader) | design | game-dev-android (fixes: art-content) | plan requested | `design/TASK-020-gdd-review` | 2026-11-14 |
+| TASK-020 | /review-all-gdds across the 11 approved GDDs (independent reader) | design | game-dev-android (fixes: art-content) | plan approved, reviewing | `design/TASK-020-gdd-review` | 2026-11-14 |
 | TASK-021 | UX specs for slice screens + design/accessibility-requirements.md | design | game-art-content (+ ios review) | plan approved (8 files), writing | `design/TASK-021-ux` | 2026-11-14 |
-| TASK-022 | Architecture blueprint (/create-architecture) + critical-ADR list (save ADR-0004) | docs | game-dev-ios (+ android review) | plan requested | `docs/TASK-022-architecture` | 2026-11-14 |
+| TASK-022 | Architecture blueprint (/create-architecture) + critical-ADR list; then ADR-0003 save (Proposed) | docs | game-dev-ios (+ android review) | plan approved, writing | `docs/TASK-022-architecture` | 2026-11-14 |
 | TASK-003b | Mission beat types from TASK-004: Special button, walk / hold-meter / training / reach-the-flag beats, arrows; BEAT_TYPES dispatch table first; art fixes: wrong-answer #9C8FB8 + circular-arrow icon, tangerine attack icon (not a pickaxe), vermilion only as a tunic accent; quiz to 5 questions once claims are signed | dev | unassigned | CANCELLED (browser); beat types and art fixes move to native tasks | — | 2026-11-14 |
 
 ## Team changes
