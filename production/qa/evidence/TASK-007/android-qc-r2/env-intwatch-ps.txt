@@ -1,0 +1,1385 @@
+== 19:44:14
+32170 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 32170:adb <- 32169:Python <- 32168:Python <- 31903:Python
+== 19:44:16
+32219 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 32219:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:44:19
+32271 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 32271:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:44:21
+32351 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 32351:adb <- 32350:Python <- 32349:Python <- 31903:Python
+== 19:44:23
+32409 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 32409:adb <- 32408:Python <- 32405:Python <- 31903:Python
+== 19:44:25
+32435 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 32435:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:44:27
+32487 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 32487:adb <- 32484:Python <- 32480:Python <- 31903:Python
+== 19:44:29
+32532 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 32532:adb <- 32530:Python <- 32529:Python <- 31903:Python
+== 19:44:31
+32565 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 32565:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:44:34
+32614 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 32614:adb <- 32613:Python <- 32612:Python <- 31903:Python
+== 19:44:36
+32752 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 32752:adb <- 32751:Python <- 32748:Python <- 31903:Python
+== 19:44:38
+32781 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 32781:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:44:40
+32818 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 32818:adb <- 32817:Python <- 32816:Python <- 31903:Python
+== 19:44:42
+32861 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 32861:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:44:44
+32891 (adb) | 
+== 19:44:46
+33010 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 33010:adb <- 33009:Python <- 33008:Python <- 31903:Python
+== 19:44:49
+33143 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 33143:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:44:51
+33265 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 33265:adb <- 33264:Python <- 33262:Python <- 31903:Python
+== 19:44:53
+33338 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 33338:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:44:55
+33363 /Users/luannguyend/Android/sdk/platform-tools/adb -s emulator-5556 install -r app/build/outputs/apk/debug/app-debug.apk | 
+== 19:44:57
+33584 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 33584:adb <- 33583:Python <- 33580:Python <- 31903:Python
+== 19:45:01
+33616 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 33616:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+33618 /Users/luannguyend/Android/sdk/platform-tools/adb -s emulator-5556 exec-out screencap -p |  <- 33618:adb <- 33214:zsh <- 82946:claude <- 82636:zsh
+== 19:45:04
+33616 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 33616:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:45:06
+33880 /Users/luannguyend/Android/sdk/platform-tools/adb -s emulator-5556 exec-out screencap -p | 
+== 19:45:09
+33981 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 33981:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:45:11
+34036 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 34036:adb <- 34034:Python <- 34032:Python <- 31903:Python
+== 19:45:14
+34183 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 34183:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:45:18
+34256 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 34256:adb <- 34255:Python <- 34254:Python <- 31903:Python
+== 19:45:22
+34397 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 34397:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:45:24
+34549 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 34549:adb <- 34545:Python <- 34543:Python <- 31903:Python
+== 19:45:29
+34816 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 34816:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:45:31
+34893 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 34893:adb <- 34892:Python <- 34891:Python <- 31903:Python
+== 19:45:35
+35025 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 35025:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:45:38
+35103 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 35103:adb <- 35102:Python <- 35101:Python <- 31903:Python
+== 19:45:40
+35103 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 35103:adb <- 35102:Python <- 35101:Python <- 31903:Python
+35214 /bin/zsh -c source '/Users/luannguyend/Library/Application Support/orca/claude-profiles/b13c9c73-4211-4531-9178-dc863d3fde71/home/shell-snapshots/snapshot-zsh-1 |  <- 35214:zsh <- 82946:claude <- 82636:zsh <- 82635:login
+35228 /Users/luannguyend/Android/sdk/platform-tools/adb -s emulator-5556 shell am start -W -n com.galaxyandsun.daidatanhhung/.GameActivity --es startScreen play --ei  |  <- 35228:adb <- 35214:zsh <- 82946:claude <- 82636:zsh
+== 19:45:42
+35214 /bin/zsh -c source '/Users/luannguyend/Library/Application Support/orca/claude-profiles/b13c9c73-4211-4531-9178-dc863d3fde71/home/shell-snapshots/snapshot-zsh-1 |  <- 35214:zsh <- 82946:claude <- 82636:zsh <- 82635:login
+35339 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 35339:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:45:44
+35214 /bin/zsh -c source '/Users/luannguyend/Library/Application Support/orca/claude-profiles/b13c9c73-4211-4531-9178-dc863d3fde71/home/shell-snapshots/snapshot-zsh-1 |  <- 35214:zsh <- 82946:claude <- 82636:zsh <- 82635:login
+35402 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 35402:adb <- 35401:Python <- 35400:Python <- 31903:Python
+== 19:45:47
+35214 /bin/zsh -c source '/Users/luannguyend/Library/Application Support/orca/claude-profiles/b13c9c73-4211-4531-9178-dc863d3fde71/home/shell-snapshots/snapshot-zsh-1 |  <- 35214:zsh <- 82946:claude <- 82636:zsh <- 82635:login
+35402 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 35402:adb <- 35401:Python <- 35400:Python <- 31903:Python
+35455 /Users/luannguyend/Android/sdk/platform-tools/adb -s emulator-5556 shell am start -W -n com.galaxyandsun.daidatanhhung/.GameActivity --es startScreen play --ei  |  <- 35455:adb <- 35214:zsh <- 82946:claude <- 82636:zsh
+== 19:45:49
+35214 /bin/zsh -c source '/Users/luannguyend/Library/Application Support/orca/claude-profiles/b13c9c73-4211-4531-9178-dc863d3fde71/home/shell-snapshots/snapshot-zsh-1 |  <- 35214:zsh <- 82946:claude <- 82636:zsh <- 82635:login
+35605 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 35605:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:45:51
+35214 /bin/zsh -c source '/Users/luannguyend/Library/Application Support/orca/claude-profiles/b13c9c73-4211-4531-9178-dc863d3fde71/home/shell-snapshots/snapshot-zsh-1 |  <- 35214:zsh <- 82946:claude <- 82636:zsh <- 82635:login
+35869 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 35869:adb <- 35868:Python <- 35867:Python <- 31903:Python
+== 19:45:54
+35214 /bin/zsh -c source '/Users/luannguyend/Library/Application Support/orca/claude-profiles/b13c9c73-4211-4531-9178-dc863d3fde71/home/shell-snapshots/snapshot-zsh-1 |  <- 35214:zsh <- 82946:claude <- 82636:zsh <- 82635:login
+35869 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 35869:adb <- 35868:Python <- 35867:Python <- 31903:Python
+35940 /Users/luannguyend/Android/sdk/platform-tools/adb -s emulator-5556 shell am start -W -n com.galaxyandsun.daidatanhhung/.GameActivity --es startScreen quiz --ei  |  <- 35940:adb <- 35214:zsh <- 82946:claude <- 82636:zsh
+== 19:45:56
+35214 /bin/zsh -c source '/Users/luannguyend/Library/Application Support/orca/claude-profiles/b13c9c73-4211-4531-9178-dc863d3fde71/home/shell-snapshots/snapshot-zsh-1 |  <- 35214:zsh <- 82946:claude <- 82636:zsh <- 82635:login
+36020 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 36020:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:45:58
+35214 /bin/zsh -c source '/Users/luannguyend/Library/Application Support/orca/claude-profiles/b13c9c73-4211-4531-9178-dc863d3fde71/home/shell-snapshots/snapshot-zsh-1 |  <- 35214:zsh <- 82946:claude <- 82636:zsh <- 82635:login
+36185 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 36185:adb <- 36184:Python <- 36183:Python <- 31903:Python
+== 19:46:00
+36185 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 36185:adb <- 36184:Python <- 36183:Python <- 31903:Python
+== 19:46:02
+36386 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 36386:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:46:05
+36486 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 36486:adb <- 36485:Python <- 36483:Python <- 31903:Python
+== 19:46:12
+36653 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 36653:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:46:14
+36740 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 36740:adb <- 36737:Python <- 36736:Python <- 31903:Python
+== 19:46:16
+36760 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 36760:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:46:21
+
+== 19:46:24
+36873 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 36873:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:46:26
+36951 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 36951:adb <- 36950:Python <- 36948:Python <- 31903:Python
+== 19:46:28
+36979 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 36979:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:46:32
+37183 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 37183:adb <- 37180:Python <- 37173:Python <- 31903:Python
+== 19:46:36
+37330 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 37330:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:46:40
+37405 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 37405:adb <- 37404:Python <- 37402:Python <- 31903:Python
+== 19:46:45
+37478 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 37478:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:46:48
+37538 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 37538:adb <- 37537:Python <- 37536:Python <- 31903:Python
+== 19:46:52
+37634 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 37634:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:46:55
+37670 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 37670:adb <- 37669:Python <- 37668:Python <- 31903:Python
+== 19:46:59
+37747 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 37747:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:47:04
+37842 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 37842:adb <- 37839:Python <- 37836:Python <- 31903:Python
+== 19:47:09
+38219 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 38219:adb <- 38217:Python <- 38215:Python <- 31903:Python
+== 19:47:14
+38286 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 38286:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:47:16
+38331 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 38331:adb <- 38330:Python <- 38326:Python <- 31903:Python
+== 19:47:20
+38413 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 38413:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:47:22
+38459 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 38459:adb <- 38457:Python <- 38454:Python <- 31903:Python
+== 19:47:27
+38674 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 38674:adb <- 38673:Python <- 38671:Python <- 31903:Python
+== 19:47:31
+38798 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 38798:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:47:40
+39246 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 39246:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:47:44
+39491 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 39491:adb <- 39488:Python <- 39474:Python <- 31903:Python
+== 19:47:49
+39709 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 39709:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:47:51
+39764 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 39764:adb <- 39763:Python <- 39761:Python <- 31903:Python
+== 19:47:53
+39764 (adb) | 
+== 19:47:55
+39923 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 39923:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:47:57
+39990 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 39990:adb <- 39989:Python <- 39988:Python <- 31903:Python
+== 19:48:03
+40342 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 40342:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:48:16
+40872 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 40872:adb <- 40871:Python <- 40870:Python <- 31903:Python
+== 19:48:21
+
+== 19:48:24
+41111 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 41111:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:48:29
+41318 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 41318:adb <- 41317:Python <- 41316:Python <- 31903:Python
+== 19:48:33
+41398 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 41398:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:48:38
+41475 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 41475:adb <- 41472:Python <- 41469:Python <- 31903:Python
+== 19:48:42
+41475 (adb) | 
+== 19:48:45
+41559 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 41559:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:48:51
+41665 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 41665:adb <- 41662:Python <- 41658:Python <- 31903:Python
+== 19:48:55
+41765 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 41765:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:49:02
+41870 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 41870:adb <- 41869:Python <- 41868:Python <- 31903:Python
+== 19:49:07
+41983 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 41983:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:49:12
+42045 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 42045:adb <- 42044:Python <- 42042:Python <- 31903:Python
+== 19:49:16
+42045 (adb) | 
+== 19:49:18
+42144 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 42144:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:49:24
+42274 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 42274:adb <- 42243:Python <- 42238:Python <- 31903:Python
+== 19:49:29
+42388 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 42388:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:49:33
+42489 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 42489:adb <- 42488:Python <- 42486:Python <- 31903:Python
+== 19:49:41
+42572 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 42572:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:49:46
+42848 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 42848:adb <- 42846:Python <- 42841:Python <- 31903:Python
+== 19:49:54
+43026 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 43026:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:50:15
+43026 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap | 
+== 19:50:28
+43363 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 43363:adb <- 43357:Python <- 43352:Python <- 31903:Python
+== 19:50:35
+43671 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 43671:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:50:39
+43780 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap -p | 
+== 19:50:42
+43859 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 43859:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:50:50
+44005 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 44005:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:50:57
+44290 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 44290:adb <- 44286:Python <- 44282:Python <- 31903:Python
+== 19:51:02
+44447 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 44447:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:51:09
+44624 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 44624:adb <- 44623:Python <- 44622:Python <- 31903:Python
+== 19:51:17
+44755 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 44755:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:51:21
+45247 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 45247:adb <- 45241:Python <- 45239:Python <- 31903:Python
+== 19:51:32
+45470 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 45470:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:51:42
+45839 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 45839:adb <- 45835:Python <- 45828:Python <- 31903:Python
+== 19:51:46
+46029 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 46029:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:51:48
+46060 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 46060:adb <- 46059:Python <- 46056:Python <- 31903:Python
+== 19:51:50
+46309 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 46309:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:51:52
+46344 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 46344:adb <- 46343:Python <- 46341:Python <- 31903:Python
+== 19:51:55
+46453 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 46453:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:51:57
+46800 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 46800:adb <- 46795:Python <- 46792:Python <- 31903:Python
+== 19:51:59
+46892 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 46892:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:52:04
+46993 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 46993:adb <- 46990:Python <- 46988:Python <- 31903:Python
+== 19:52:06
+47098 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 47098:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:52:08
+47139 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 47139:adb <- 47132:Python <- 47122:Python <- 31903:Python
+== 19:52:10
+47212 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 47212:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:52:12
+47233 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 47233:adb <- 47232:Python <- 47231:Python <- 31903:Python
+== 19:52:14
+47280 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 47280:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:52:16
+47314 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 47314:adb <- 47313:Python <- 47312:Python <- 31903:Python
+== 19:52:19
+47363 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 47363:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:52:21
+47443 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 47443:adb <- 47437:Python <- 47431:Python <- 31903:Python
+== 19:52:23
+47484 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 47484:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:52:25
+47669 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 47669:adb <- 47666:Python <- 47665:Python <- 31903:Python
+== 19:52:29
+47961 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 47961:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:52:32
+48062 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 48062:adb <- 48061:Python <- 48059:Python <- 31903:Python
+== 19:52:34
+48407 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 48407:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:52:36
+48458 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 48458:adb <- 48457:Python <- 48450:Python <- 31903:Python
+== 19:52:38
+48699 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 48699:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:52:40
+48758 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 48758:adb <- 48757:Python <- 48754:Python <- 31903:Python
+== 19:52:42
+48877 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 48877:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:52:44
+48950 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 48950:adb <- 48946:Python <- 48944:Python <- 31903:Python
+== 19:52:46
+48950 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  | 
+== 19:52:49
+49163 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 49163:adb <- 49162:Python <- 49160:Python <- 31903:Python
+== 19:52:53
+49275 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 49275:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:52:55
+49474 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 49474:adb <- 49473:Python <- 49472:Python <- 31903:Python
+== 19:52:57
+49584 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 49584:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:52:59
+49606 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 49606:adb <- 49605:Python <- 49603:Python <- 31903:Python
+== 19:53:01
+49658 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 49658:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:53:04
+49698 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 49698:adb <- 49697:Python <- 49696:Python <- 31903:Python
+== 19:53:06
+49750 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 49750:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:53:08
+49775 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 49775:adb <- 49773:Python <- 49769:Python <- 31903:Python
+== 19:53:10
+49814 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 49814:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:53:12
+49840 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 49840:adb <- 49839:Python <- 49838:Python <- 31903:Python
+== 19:53:14
+49887 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 49887:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:53:16
+49916 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 49916:adb <- 49915:Python <- 49914:Python <- 31903:Python
+== 19:53:18
+49962 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 49962:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:53:21
+50051 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 50051:adb <- 50050:Python <- 50000:Python <- 31903:Python
+== 19:53:25
+50308 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 50308:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:53:27
+50351 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 50351:adb <- 50350:Python <- 50349:Python <- 31903:Python
+== 19:53:29
+50398 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 50398:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:53:31
+50427 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 50427:adb <- 50426:Python <- 50425:Python <- 31903:Python
+== 19:53:33
+50476 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 50476:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:53:35
+50599 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 50599:adb <- 50598:Python <- 50597:Python <- 31903:Python
+== 19:53:38
+50645 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 50645:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:53:40
+50667 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 50667:adb <- 50666:Python <- 50665:Python <- 31903:Python
+== 19:53:42
+50715 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 50715:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:53:44
+50738 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 50738:adb <- 50736:Python <- 50735:Python <- 31903:Python
+== 19:53:46
+50791 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 50791:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:53:48
+50819 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 50819:adb <- 50818:Python <- 50817:Python <- 31903:Python
+== 19:53:50
+50924 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 50924:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:53:52
+50978 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 50978:adb <- 50977:Python <- 50976:Python <- 31903:Python
+== 19:53:55
+51072 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 51072:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:53:57
+51111 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 51111:adb <- 51110:Python <- 51107:Python <- 31903:Python
+== 19:53:59
+51214 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 51214:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:54:01
+51261 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 51261:adb <- 51260:Python <- 51259:Python <- 31903:Python
+== 19:54:03
+51306 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 51306:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:54:05
+51333 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 51333:adb <- 51332:Python <- 51331:Python <- 31903:Python
+== 19:54:07
+51333 (adb) | 
+== 19:54:09
+51461 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 51461:adb <- 51460:Python <- 51459:Python <- 31903:Python
+== 19:54:14
+51680 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 51680:adb <- 51679:Python <- 51677:Python <- 31903:Python
+== 19:54:18
+51831 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 51831:adb <- 51827:Python <- 51825:Python <- 31903:Python
+== 19:54:22
+51901 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 51901:adb <- 51899:Python <- 51891:Python <- 31903:Python
+== 19:54:26
+52087 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 52087:adb <- 52080:Python <- 52079:Python <- 31903:Python
+== 19:54:30
+52185 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 52185:adb <- 52183:Python <- 52182:Python <- 31903:Python
+== 19:54:35
+52253 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 52253:adb <- 52252:Python <- 52251:Python <- 31903:Python
+== 19:54:39
+52332 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap | 
+== 19:54:41
+52370 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 52370:adb <- 52368:Python <- 52364:Python <- 31903:Python
+== 19:54:43
+52410 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 52410:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:54:45
+52437 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 52437:adb <- 52433:Python <- 52432:Python <- 31903:Python
+== 19:54:47
+52478 (adb) | 
+== 19:54:49
+52496 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 52496:adb <- 52492:Python <- 52491:Python <- 31903:Python
+== 19:54:51
+52560 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 52560:adb <- 52559:Python <- 52558:Python <- 31903:Python
+== 19:54:56
+52665 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 52665:adb <- 52659:Python <- 52641:Python <- 31903:Python
+== 19:55:00
+52814 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 52814:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:55:02
+52960 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 52960:adb <- 52959:Python <- 52958:Python <- 31903:Python
+== 19:55:04
+53163 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 53163:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:55:06
+53256 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 53256:adb <- 53255:Python <- 53251:Python <- 31903:Python
+== 19:55:08
+53321 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 53321:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:55:10
+53466 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 53466:adb <- 53454:Python <- 53446:Python <- 31903:Python
+== 19:55:13
+53558 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 53558:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:55:15
+53819 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 53819:adb <- 53811:Python <- 53809:Python <- 31903:Python
+== 19:55:17
+53871 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 53871:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:55:19
+53903 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 53903:adb <- 53902:Python <- 53901:Python <- 31903:Python
+== 19:55:21
+53943 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 53943:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:55:23
+53976 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 53976:adb <- 53975:Python <- 53974:Python <- 31903:Python
+== 19:55:25
+54028 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 54028:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:55:27
+54054 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 54054:adb <- 54053:Python <- 54052:Python <- 31903:Python
+== 19:55:29
+54095 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 54095:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:55:32
+54120 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 54120:adb <- 54118:Python <- 54117:Python <- 31903:Python
+== 19:55:34
+54196 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 54196:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:55:36
+54242 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 54242:adb <- 54241:Python <- 54240:Python <- 31903:Python
+== 19:55:38
+54289 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 54289:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:55:40
+54327 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 54327:adb <- 54326:Python <- 54325:Python <- 31903:Python
+== 19:55:42
+54489 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 54489:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:55:44
+54763 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 54763:adb <- 54761:Python <- 54760:Python <- 31903:Python
+== 19:55:49
+55098 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 55098:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:55:51
+55126 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 55126:adb <- 55124:Python <- 55122:Python <- 31903:Python
+== 19:55:53
+55280 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 55280:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:55:55
+55386 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 55386:adb <- 55380:Python <- 55376:Python <- 31903:Python
+== 19:55:57
+55555 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 55555:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:55:59
+55889 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 55889:adb <- 55888:Python <- 55887:Python <- 31903:Python
+== 19:56:01
+55941 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 55941:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:56:03
+55990 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 55990:adb <- 55988:Python <- 55987:Python <- 31903:Python
+== 19:56:05
+56036 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 56036:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:56:07
+56053 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 56053:adb <- 56052:Python <- 56051:Python <- 31903:Python
+== 19:56:10
+56226 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 56226:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:56:12
+56391 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 56391:adb <- 56384:Python <- 56376:Python <- 31903:Python
+== 19:56:14
+56675 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 56675:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:56:16
+56715 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 56715:adb <- 56714:Python <- 56713:Python <- 31903:Python
+== 19:56:18
+56868 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 56868:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:56:20
+56887 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 56887:adb <- 56886:Python <- 56885:Python <- 31903:Python
+== 19:56:22
+56940 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 56940:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:56:24
+57006 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 57006:adb <- 57005:Python <- 57004:Python <- 31903:Python
+== 19:56:26
+57148 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 57148:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:56:29
+57175 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 57175:adb <- 57174:Python <- 57173:Python <- 31903:Python
+== 19:56:31
+57224 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 57224:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:56:33
+57265 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 57265:adb <- 57264:Python <- 57263:Python <- 31903:Python
+== 19:56:37
+
+== 19:56:39
+57334 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 57334:adb <- 57329:Python <- 57328:Python <- 31903:Python
+== 19:56:41
+57392 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 57392:adb <- 57390:Python <- 57389:Python <- 31903:Python
+== 19:56:45
+57492 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 57492:adb <- 57491:Python <- 57490:Python <- 31903:Python
+== 19:56:49
+57555 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 57555:adb <- 57552:Python <- 57548:Python <- 31903:Python
+== 19:56:54
+57624 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 57624:adb <- 57615:Python <- 57611:Python <- 31903:Python
+== 19:56:58
+57705 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 57705:adb <- 57704:Python <- 57702:Python <- 31903:Python
+== 19:57:02
+
+== 19:57:04
+57850 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 57850:adb <- 57840:Python <- 57837:Python <- 31903:Python
+== 19:57:06
+58034 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 58034:adb <- 58031:Python <- 58030:Python <- 31903:Python
+== 19:57:11
+58213 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 58213:adb <- 58212:Python <- 58211:Python <- 31903:Python
+== 19:57:15
+58266 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 58266:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:57:17
+58374 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 58374:adb <- 58373:Python <- 58372:Python <- 31903:Python
+== 19:57:19
+58410 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 58410:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:57:21
+58439 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 58439:adb <- 58438:Python <- 58437:Python <- 31903:Python
+== 19:57:23
+58477 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 58477:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:57:25
+58523 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 58523:adb <- 58522:Python <- 58520:Python <- 31903:Python
+== 19:57:27
+58571 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 58571:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:57:30
+58604 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 58604:adb <- 58603:Python <- 58602:Python <- 31903:Python
+== 19:57:32
+58791 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 58791:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:57:34
+58821 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 58821:adb <- 58820:Python <- 58819:Python <- 31903:Python
+== 19:57:36
+59085 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 59085:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:57:41
+59360 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 59360:adb <- 59359:Python <- 59358:Python <- 31903:Python
+== 19:57:43
+59623 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 59623:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:57:47
+59825 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 59825:adb <- 59815:Python <- 59798:Python <- 31903:Python
+== 19:57:49
+60079 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 60079:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:57:51
+60245 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 60245:adb <- 60232:Python <- 60229:Python <- 31903:Python
+== 19:57:54
+60245 (adb) | 
+== 19:57:56
+60432 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 60432:adb <- 60431:Python <- 60430:Python <- 31903:Python
+== 19:58:00
+60499 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap -p |  <- 60499:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:58:02
+60539 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 60539:adb <- 31903:Python <- 30968:zsh <- 84696:claude
+== 19:58:04
+
+== 19:58:06
+60605 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap -p | 
+== 19:58:08
+
+== 19:58:31
+61413 /bin/zsh -c source '/Users/luannguyend/Library/Application Support/orca/claude-profiles/b13c9c73-4211-4531-9178-dc863d3fde71/home/shell-snapshots/snapshot-zsh-1 |  <- 61413:zsh <- 84696:claude <- 84447:zsh <- 84446:login
+== 19:58:36
+
+== 19:58:46
+62075 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 62075:adb <- 62073:Python <- 62072:Python <- 61966:zsh
+== 19:58:48
+
+== 19:59:01
+62658 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 62658:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 19:59:03
+62838 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 62838:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 19:59:06
+
+== 19:59:08
+63121 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap -p |  <- 63121:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 19:59:10
+63189 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 63189:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 19:59:12
+
+== 19:59:14
+63339 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 63339:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 19:59:16
+63339 (adb) | 
+== 19:59:19
+63551 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 63551:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 19:59:21
+63688 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 63688:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 19:59:23
+63763 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 63763:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 19:59:25
+
+== 19:59:27
+64034 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap -p |  <- 64034:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 19:59:29
+
+== 19:59:32
+64270 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 64270:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 19:59:34
+
+== 19:59:36
+64539 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 64539:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 19:59:38
+64573 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 64573:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 19:59:40
+64785 (adb) | 
+== 19:59:43
+64797 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 64797:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 19:59:45
+64797 (adb) | 
+== 19:59:48
+65017 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 65017:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 19:59:52
+65354 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 65354:adb <- 65353:Python <- 65351:Python <- 62610:Python
+== 19:59:55
+65379 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 65379:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:00:02
+65816 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 65816:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:00:06
+65816 (adb) | 
+== 20:00:09
+65918 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 65918:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:00:14
+66052 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 66052:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:00:22
+66384 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 66384:adb <- 66378:Python <- 66370:Python <- 62610:Python
+== 20:00:24
+66499 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 66499:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:00:28
+66620 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 66620:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:00:33
+66713 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 66713:adb <- 66712:Python <- 66711:Python <- 62610:Python
+== 20:00:35
+66739 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 66739:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:00:38
+66739 (adb) | 
+== 20:00:40
+66811 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 66811:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:00:45
+66958 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 66958:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:00:49
+
+== 20:00:51
+67103 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 67103:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:00:53
+67546 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 67546:adb <- 67545:Python <- 67543:Python <- 62610:Python
+== 20:00:55
+67584 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 67584:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:00:58
+67619 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 67619:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:01:00
+67682 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 67682:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:01:02
+67719 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 67719:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:01:04
+67749 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 67749:adb <- 67748:Python <- 67747:Python <- 62610:Python
+== 20:01:06
+67782 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 67782:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:01:08
+67818 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 67818:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:01:11
+67901 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 67901:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:01:13
+
+== 20:01:15
+68005 (adb) | 
+== 20:01:17
+68048 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 68048:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:01:19
+68108 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 68108:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:01:21
+68249 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 68249:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:01:23
+68286 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 68286:adb <- 62610:Python <- 62604:zsh <- 84696:claude
+== 20:01:25
+
+== 20:01:30
+68520 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 68520:adb <- 68519:Python <- 68518:Python <- 62610:Python
+== 20:01:32
+
+== 20:01:42
+69379 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 69379:adb <- 69376:Python <- 69371:Python <- 69368:zsh
+== 20:01:44
+69634 /Users/luannguyend/Android/sdk/platform-tools/adb shell am start -W -n com.galaxyandsun.daidatanhhung/.GameActivity |  <- 69634:adb <- 69368:zsh <- 84696:claude <- 84447:zsh
+== 20:01:46
+
+== 20:01:49
+69847 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap -p |  <- 69847:adb <- 69368:zsh <- 84696:claude <- 84447:zsh
+== 20:01:51
+
+== 20:02:01
+70568 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 70568:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:02:03
+
+== 20:02:05
+70787 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 70787:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:02:09
+70891 (adb) | 
+== 20:02:11
+71059 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 71059:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:02:13
+
+== 20:02:15
+71299 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 71299:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:02:17
+71424 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 71424:adb <- 71422:Python <- 71419:Python <- 70565:Python
+== 20:02:20
+71470 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 71470:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:02:22
+71619 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 71619:adb <- 71617:Python <- 71616:Python <- 70565:Python
+== 20:02:24
+71655 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 71655:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:02:26
+71739 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 71739:adb <- 71737:Python <- 71736:Python <- 70565:Python
+== 20:02:29
+71842 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 71842:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:02:33
+71982 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 71982:adb <- 71981:Python <- 71978:Python <- 70565:Python
+== 20:02:35
+72048 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 72048:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:02:37
+72082 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 72082:(adb) <- 72081:Python <- 72080:Python <- 70565:Python
+== 20:02:39
+72318 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 72318:adb <- 72304:Python <- 72299:Python <- 70565:Python
+== 20:02:41
+72444 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 72444:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:02:43
+72596 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 72596:adb <- 72595:Python <- 72594:Python <- 70565:Python
+== 20:02:46
+72624 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 72624:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:02:48
+72736 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 72736:adb <- 72733:Python <- 72729:Python <- 70565:Python
+== 20:02:50
+72795 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 72795:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:02:52
+72833 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 72833:adb <- 72832:Python <- 72823:Python <- 70565:Python
+== 20:02:54
+72865 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 72865:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:02:56
+72946 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 72946:adb <- 72945:Python <- 72944:Python <- 70565:Python
+== 20:02:58
+72986 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 72986:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:03:01
+73020 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap -p |  <- 73020:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:03:03
+73076 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 73076:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:03:05
+73206 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 73206:adb <- 73205:Python <- 73202:Python <- 70565:Python
+== 20:03:09
+
+== 20:03:11
+73483 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 73483:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:03:16
+73827 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 73827:adb <- 73826:Python <- 73825:Python <- 70565:Python
+== 20:03:20
+74263 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 74263:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:03:22
+74350 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 74350:adb <- 74345:Python <- 74333:Python <- 70565:Python
+== 20:03:26
+74571 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 74571:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:03:28
+74645 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 74645:adb <- 74639:Python <- 74638:Python <- 70565:Python
+== 20:03:33
+74788 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 74788:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:03:35
+74936 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 74936:adb <- 74935:Python <- 74934:Python <- 70565:Python
+== 20:03:39
+75092 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 75092:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:03:41
+75151 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 75151:adb <- 75150:Python <- 75149:Python <- 70565:Python
+== 20:03:46
+75223 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 75223:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:03:48
+75300 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 75300:adb <- 75294:Python <- 75289:Python <- 70565:Python
+== 20:03:52
+75414 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 75414:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:03:54
+75472 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 75472:adb <- 75470:Python <- 75468:Python <- 70565:Python
+== 20:03:58
+75623 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 75623:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:04:00
+75684 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 75684:adb <- 75682:Python <- 75678:Python <- 70565:Python
+== 20:04:05
+75798 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 75798:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:04:07
+
+== 20:04:09
+75950 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 75950:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:04:11
+76079 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 76079:adb <- 76078:Python <- 76076:Python <- 70565:Python
+== 20:04:15
+76444 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 76444:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:04:17
+76560 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 76560:adb <- 76559:Python <- 76557:Python <- 70565:Python
+== 20:04:22
+76695 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 76695:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:04:24
+76961 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 76961:adb <- 76957:Python <- 76946:Python <- 70565:Python
+== 20:04:31
+77283 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 77283:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:04:33
+
+== 20:04:35
+77669 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 77669:adb <- 77666:Python <- 77663:Python <- 70565:Python
+== 20:04:37
+78006 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 78006:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:04:41
+78247 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 78247:adb <- 78245:Python <- 78242:Python <- 70565:Python
+== 20:04:46
+78451 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 78451:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:04:48
+78537 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 78537:adb <- 78536:Python <- 78535:Python <- 70565:Python
+== 20:04:52
+78696 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 78696:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:04:54
+78865 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 78865:adb <- 78864:Python <- 78861:Python <- 70565:Python
+== 20:04:59
+79003 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 79003:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:05:01
+79283 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 79283:adb <- 79272:Python <- 79258:Python <- 70565:Python
+== 20:05:05
+79392 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 79392:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:05:07
+79432 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 79432:adb <- 79431:Python <- 79430:Python <- 70565:Python
+== 20:05:12
+79638 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 79638:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:05:14
+79682 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 79682:adb <- 79681:Python <- 79679:Python <- 70565:Python
+== 20:05:18
+80045 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 80045:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:05:20
+80045 (adb) | 
+== 20:05:23
+80131 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 80131:adb <- 80126:Python <- 80124:Python <- 70565:Python
+== 20:05:27
+80382 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 80382:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:05:29
+80753 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 80753:adb <- 80748:Python <- 80747:Python <- 70565:Python
+== 20:05:33
+80896 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 80896:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:05:35
+80982 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 80982:adb <- 80979:Python <- 80974:Python <- 70565:Python
+== 20:05:42
+81118 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 81118:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:05:44
+81186 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 81186:adb <- 81173:Python <- 81171:Python <- 70565:Python
+== 20:05:49
+81375 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 81375:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:05:51
+81470 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 81470:adb <- 81461:Python <- 81452:Python <- 70565:Python
+== 20:05:56
+81700 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 81700:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:05:58
+81772 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 81772:adb <- 81771:Python <- 81770:Python <- 70565:Python
+== 20:06:02
+81876 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 81876:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:06:07
+81964 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 81964:adb <- 81962:Python <- 81952:Python <- 70565:Python
+== 20:06:11
+82431 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 82431:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:06:13
+82544 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 82544:adb <- 82543:Python <- 82542:Python <- 70565:Python
+== 20:06:18
+82725 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 82725:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:06:20
+82824 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 82824:adb <- 82823:Python <- 82821:Python <- 70565:Python
+== 20:06:24
+83139 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 83139:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:06:26
+83262 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 83262:adb <- 83261:Python <- 83255:Python <- 70565:Python
+== 20:06:32
+83393 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 83393:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:06:37
+83658 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 83658:adb <- 83654:Python <- 83653:Python <- 70565:Python
+== 20:06:41
+83824 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 83824:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:06:43
+
+== 20:06:45
+83886 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 83886:adb <- 83883:Python <- 83878:Python <- 70565:Python
+== 20:06:47
+83886 (adb) | 
+== 20:06:49
+83974 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 83974:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:06:52
+84168 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 84168:adb <- 84163:Python <- 84160:Python <- 70565:Python
+== 20:06:56
+84310 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 84310:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:06:58
+84403 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 84403:adb <- 84402:Python <- 84401:Python <- 70565:Python
+== 20:07:05
+84638 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 84638:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:07:07
+84715 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 84715:adb <- 84713:Python <- 84712:Python <- 70565:Python
+== 20:07:11
+84919 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 84919:adb <- 84917:Python <- 84916:Python <- 70565:Python
+== 20:07:16
+85147 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 85147:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:07:18
+
+== 20:07:20
+85548 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 85548:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:07:22
+85611 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 85611:adb <- 85610:Python <- 85609:Python <- 70565:Python
+== 20:07:24
+85778 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 85778:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:07:26
+85886 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 85886:adb <- 85884:Python <- 85875:Python <- 70565:Python
+== 20:07:30
+86105 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 86105:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:07:32
+86260 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 86260:adb <- 86257:Python <- 86256:Python <- 70565:Python
+== 20:07:35
+86426 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 86426:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:07:37
+86482 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 86482:adb <- 86481:Python <- 86480:Python <- 70565:Python
+== 20:07:39
+86668 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 86668:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:07:43
+86798 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 86798:adb <- 86797:Python <- 86796:Python <- 70565:Python
+== 20:07:46
+86867 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 86867:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:07:48
+86931 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 86931:adb <- 86930:Python <- 86929:Python <- 70565:Python
+== 20:07:50
+87014 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 87014:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:07:52
+87072 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 87072:adb <- 87071:Python <- 87070:Python <- 70565:Python
+== 20:07:54
+87198 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 87198:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:07:56
+87258 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 87258:adb <- 87255:Python <- 87252:Python <- 70565:Python
+== 20:07:58
+87307 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 87307:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:08:00
+87440 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 87440:adb <- 87439:Python <- 87437:Python <- 70565:Python
+== 20:08:04
+87640 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 87640:adb <- 87639:Python <- 87637:Python <- 70565:Python
+== 20:08:09
+87756 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 87756:adb <- 87755:Python <- 87754:Python <- 70565:Python
+== 20:08:13
+
+== 20:08:15
+87855 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 87855:adb <- 87854:Python <- 87849:Python <- 70565:Python
+== 20:08:17
+87915 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 87915:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:08:19
+87956 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 87956:adb <- 87955:Python <- 87951:Python <- 70565:Python
+== 20:08:21
+88075 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 88075:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:08:23
+88120 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 88120:adb <- 88119:Python <- 88117:Python <- 70565:Python
+== 20:08:26
+88294 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 88294:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:08:28
+88369 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 88369:adb <- 88368:Python <- 88367:Python <- 70565:Python
+== 20:08:30
+88465 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 88465:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:08:32
+88596 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 88596:adb <- 88595:Python <- 88594:Python <- 70565:Python
+== 20:08:34
+88713 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 88713:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:08:36
+88763 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 88763:adb <- 88755:Python <- 88753:Python <- 70565:Python
+== 20:08:38
+88763 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 88763:adb <- 88755:Python
+== 20:08:41
+88888 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 88888:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:08:43
+88950 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 88950:adb <- 88948:Python <- 88945:Python <- 70565:Python
+== 20:08:45
+89036 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 89036:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:08:47
+89104 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 89104:adb <- 89103:Python <- 89101:Python <- 70565:Python
+== 20:08:49
+89220 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 89220:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:08:51
+89314 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 89314:adb <- 89313:Python <- 89311:Python <- 70565:Python
+== 20:08:53
+89377 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 89377:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:08:55
+89416 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 89416:adb <- 89414:Python <- 89413:Python <- 70565:Python
+== 20:09:00
+89687 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 89687:adb <- 89685:Python <- 89684:Python <- 70565:Python
+== 20:09:04
+89839 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 89839:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:09:06
+89948 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 89948:adb <- 89947:Python <- 89943:Python <- 70565:Python
+== 20:09:08
+90175 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 90175:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:09:10
+90254 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 90254:adb <- 90248:Python <- 90244:Python <- 70565:Python
+== 20:09:15
+90495 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 90495:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:09:20
+90683 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 90683:adb <- 90682:Python <- 90681:Python <- 70565:Python
+== 20:09:22
+90998 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 90998:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:09:24
+91067 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 91067:adb <- 91066:Python <- 91064:Python <- 70565:Python
+== 20:09:26
+91199 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 91199:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:09:28
+
+== 20:09:30
+91507 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 91507:adb <- 91505:Python <- 91500:Python <- 70565:Python
+== 20:09:33
+91669 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 91669:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:09:35
+
+== 20:09:37
+91763 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 91763:adb <- 91762:Python <- 91757:Python <- 70565:Python
+== 20:09:39
+91874 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 91874:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:09:41
+91922 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 91922:adb <- 91921:Python <- 91920:Python <- 70565:Python
+== 20:09:43
+91956 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 91956:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:09:45
+91993 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 91993:adb <- 91992:Python <- 91991:Python <- 70565:Python
+== 20:09:50
+92080 (adb) | 
+== 20:09:52
+92156 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 92156:adb <- 92154:Python <- 92150:Python <- 70565:Python
+== 20:09:54
+92242 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 92242:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:09:56
+92312 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 92312:adb <- 92310:Python <- 92308:Python <- 70565:Python
+== 20:09:58
+92388 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 92388:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:10:00
+92424 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 92424:adb <- 92423:Python <- 92422:Python <- 70565:Python
+== 20:10:05
+92527 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 92527:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:10:07
+92608 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 92608:adb <- 92598:Python <- 92591:Python <- 70565:Python
+== 20:10:09
+92693 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 92693:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:10:11
+92693 (adb) | 
+== 20:10:13
+92736 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 92736:adb <- 92733:Python <- 92730:Python <- 70565:Python
+== 20:10:15
+92824 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 92824:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:10:18
+92891 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 92891:adb <- 92890:Python <- 92889:Python <- 70565:Python
+== 20:10:20
+92952 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 92952:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:10:22
+93002 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 93002:adb <- 93000:Python <- 92999:Python <- 70565:Python
+== 20:10:24
+93230 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 93230:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:10:26
+93289 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 93289:adb <- 93286:Python <- 93285:Python <- 70565:Python
+== 20:10:31
+93430 (adb) | 
+== 20:10:33
+93486 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 93486:adb <- 93481:Python <- 93480:Python <- 70565:Python
+== 20:10:35
+93552 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 93552:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:10:37
+93654 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 93654:adb <- 93653:Python <- 93652:Python <- 70565:Python
+== 20:10:39
+93797 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 93797:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:10:41
+93947 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 93947:adb <- 93946:Python <- 93944:Python <- 70565:Python
+== 20:10:46
+94016 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 94016:adb <- 94015:Python <- 94014:Python <- 70565:Python
+== 20:10:50
+
+== 20:10:52
+94156 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 94156:adb <- 94153:Python <- 94149:Python <- 70565:Python
+== 20:10:54
+94226 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 94226:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:10:56
+94318 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 94318:adb <- 94317:Python <- 94316:Python <- 70565:Python
+== 20:10:58
+94356 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 94356:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:11:01
+94391 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 94391:adb <- 94390:Python <- 94389:Python <- 70565:Python
+== 20:11:05
+94476 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 94476:adb <- 94475:Python <- 94473:Python <- 70565:Python
+== 20:11:09
+94599 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 94599:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:11:11
+94665 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 94665:adb <- 94664:Python <- 94663:Python <- 70565:Python
+== 20:11:13
+94738 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 94738:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:11:15
+94800 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 94800:adb <- 94799:Python <- 94798:Python <- 70565:Python
+== 20:11:18
+94837 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 94837:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:11:20
+94892 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 94892:adb <- 94889:Python <- 94883:Python <- 70565:Python
+== 20:11:24
+95016 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 95016:adb <- 95015:Python <- 95014:Python <- 70565:Python
+== 20:11:28
+95062 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 95062:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:11:30
+95159 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 95159:adb <- 95151:Python <- 95150:Python <- 70565:Python
+== 20:11:32
+95226 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 95226:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:11:35
+95243 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 95243:adb <- 95242:Python <- 95241:Python <- 70565:Python
+== 20:11:37
+95337 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 95337:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:11:39
+95374 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 95374:adb <- 95372:Python <- 95371:Python <- 70565:Python
+== 20:11:41
+95441 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 95441:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:11:43
+95505 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 95505:adb <- 95504:Python <- 95503:Python <- 70565:Python
+== 20:11:45
+95545 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 95545:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:11:47
+95670 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 95670:adb <- 95669:Python <- 95668:Python <- 70565:Python
+== 20:11:51
+95978 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 95978:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:11:54
+96277 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 96277:adb <- 96275:Python <- 96274:Python <- 70565:Python
+== 20:11:56
+96323 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 96323:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:11:58
+96379 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 96379:adb <- 96377:Python <- 96375:Python <- 70565:Python
+== 20:12:00
+96429 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 96429:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:12:08
+96616 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 96616:adb <- 96607:Python <- 96583:Python <- 70565:Python
+== 20:12:10
+96721 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 96721:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:12:12
+96765 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 96765:adb <- 96764:Python <- 96762:Python <- 70565:Python
+== 20:12:14
+96881 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 96881:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:12:16
+97013 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 97013:adb <- 97012:Python <- 97011:Python <- 70565:Python
+== 20:12:19
+97182 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 97182:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:12:21
+97214 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 97214:adb <- 97213:Python <- 97212:Python <- 70565:Python
+== 20:12:23
+97313 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 97313:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:12:25
+97392 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 97392:adb <- 97390:Python <- 97388:Python <- 70565:Python
+== 20:12:27
+97434 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 97434:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:12:29
+97472 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 97472:adb <- 97471:Python <- 97469:Python <- 70565:Python
+== 20:12:32
+97583 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 97583:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:12:34
+97928 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 97928:adb <- 97924:Python <- 97922:Python <- 70565:Python
+== 20:12:36
+97981 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 97981:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:12:38
+98007 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 98007:adb <- 98006:Python <- 98005:Python <- 70565:Python
+== 20:12:40
+98227 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 98227:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:12:42
+98277 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 98277:adb <- 98276:Python <- 98269:Python <- 70565:Python
+== 20:12:44
+98350 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 98350:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:12:46
+98385 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 98385:adb <- 98384:Python <- 98383:Python <- 70565:Python
+== 20:12:49
+98533 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 98533:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:12:51
+98581 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 98581:adb <- 98580:Python <- 98577:Python <- 70565:Python
+== 20:12:53
+98639 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 98639:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:12:55
+98678 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 98678:adb <- 98676:Python <- 98675:Python <- 70565:Python
+== 20:12:57
+98722 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 98722:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:12:59
+98773 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 98773:adb <- 98772:Python <- 98771:Python <- 70565:Python
+== 20:13:01
+98816 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 98816:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:13:04
+98847 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 98847:adb <- 98845:Python <- 98843:Python <- 70565:Python
+== 20:13:06
+98890 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 98890:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:13:08
+98926 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 98926:adb <- 98925:Python <- 98923:Python <- 70565:Python
+== 20:13:10
+98981 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 98981:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:13:12
+99024 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 99024:adb <- 99021:Python <- 99020:Python <- 70565:Python
+== 20:13:14
+99158 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 99158:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:13:19
+99231 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 99231:adb <- 99230:Python <- 99228:Python <- 70565:Python
+== 20:13:21
+99317 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 99317:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:13:23
+99408 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 99408:adb <- 99407:Python <- 99406:Python <- 70565:Python
+== 20:13:25
+99489 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 99489:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:13:27
+99517 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 99517:adb <- 99516:Python <- 99515:Python <- 70565:Python
+== 20:13:29
+99554 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 99554:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:13:31
+99592 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 99592:adb <- 99581:Python <- 99580:Python <- 70565:Python
+== 20:13:34
+99639 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 99639:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:13:36
+99701 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 99701:adb <- 99689:Python <- 99688:Python <- 70565:Python
+== 20:13:38
+99786 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 99786:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:13:40
+99847 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 99847:adb <- 99845:Python <- 99842:Python <- 70565:Python
+== 20:13:42
+99940 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 99940:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:13:44
+109 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 109:adb
+== 20:13:46
+144 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 144:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:13:48
+191 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 191:adb
+== 20:13:50
+230 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 230:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:13:53
+260 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 260:adb
+== 20:13:55
+428 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 428:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:13:57
+527 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 527:adb
+== 20:13:59
+578 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 578:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:14:01
+634 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 634:adb
+== 20:14:05
+764 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 764:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:14:07
+857 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 857:adb
+== 20:14:10
+1008 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 1008:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:14:12
+1081 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 1081:adb
+== 20:14:14
+1081 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  | 
+== 20:14:16
+1195 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 1195:adb
+== 20:14:20
+1266 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 1266:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:14:22
+1302 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 1302:adb
+== 20:14:25
+1382 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 1382:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:14:27
+1427 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 1427:adb
+== 20:14:29
+1490 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 1490:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:14:31
+1527 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 1527:adb
+== 20:14:33
+1567 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 1567:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:14:35
+1680 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 1680:adb
+== 20:14:37
+
+== 20:14:40
+1937 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 1937:adb
+== 20:14:44
+2121 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 2121:adb
+== 20:14:48
+2189 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 2189:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:14:50
+2238 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 2238:adb
+== 20:14:52
+2321 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 2321:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:14:55
+2370 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 2370:adb
+== 20:14:57
+2436 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 2436:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:14:59
+2471 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 2471:adb
+== 20:15:01
+2551 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 2551:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:15:03
+2692 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 2692:adb
+== 20:15:05
+2692 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  | 
+== 20:15:07
+2773 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 2773:adb
+== 20:15:11
+2843 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 2843:adb
+== 20:15:16
+2911 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 2911:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:15:18
+2945 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 2945:adb
+== 20:15:20
+3041 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 3041:adb <- 70565:Python <- 70445:zsh <- 84696:claude
+== 20:15:22
+
+== 20:15:24
+3162 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap -p | 
+== 20:15:26
+3204 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 3204:adb
+== 20:15:28
+
+== 20:15:30
+3313 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 3313:adb
+== 20:15:32
+3357 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 3357:adb
+== 20:15:35
+3397 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 3397:adb
+== 20:15:37
+
+== 20:15:39
+3479 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 3479:adb
+== 20:15:41
+3554 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 3554:adb
+== 20:15:43
+3668 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 3668:adb
+== 20:15:45
+3691 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 3691:adb
+== 20:15:47
+3728 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 3728:adb
+== 20:15:49
+
+== 20:15:51
+3890 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 3890:adb
+== 20:15:53
+3974 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 3974:adb
+== 20:15:56
+4055 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 4055:adb
+== 20:15:58
+4080 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 4080:adb
+== 20:16:00
+4119 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 4119:adb
+== 20:16:02
+4172 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 4172:adb
+== 20:16:04
+4274 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 4274:adb
+== 20:16:06
+
+== 20:16:08
+4356 /Users/luannguyend/Android/sdk/platform-tools/adb shell sendevent /dev/input/event1 3 47 0012sendevent /dev/input/event1 3 57 101012sendevent /dev/input/event1  |  <- 4356:adb
+== 20:16:10
+4414 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 4414:adb
+== 20:16:12
+4464 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 4464:adb
+== 20:16:14
+4567 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 4567:adb
+== 20:16:17
+
+== 20:16:19
+4670 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 4670:adb
+== 20:16:21
+4764 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 4764:adb
+== 20:16:23
+4812 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 4812:adb
+== 20:16:25
+4865 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 4865:adb
+== 20:16:27
+
+== 20:16:29
+4907 (adb) | 
+== 20:16:31
+5063 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 5063:adb
+== 20:16:33
+5121 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 5121:adb
+== 20:16:35
+5182 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 5182:adb
+== 20:16:38
+
+== 20:16:40
+5268 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 5268:adb
+== 20:16:42
+
+== 20:16:44
+5385 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 5385:adb
+== 20:16:46
+5442 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 5442:adb
+== 20:16:48
+5500 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 5500:adb
+== 20:16:50
+
+== 20:16:52
+5599 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 5599:adb
+== 20:16:54
+5739 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 5739:adb
+== 20:16:58
+5804 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 5804:adb
+== 20:17:01
+5887 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 5887:adb
+== 20:17:03
+5924 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 5924:adb
+== 20:17:05
+5963 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 5963:adb
+== 20:17:07
+
+== 20:17:09
+6021 /Users/luannguyend/Android/sdk/platform-tools/adb exec-out screencap |  <- 6021:adb
+== 20:17:11
+
