@@ -1,0 +1,7 @@
+{
+  "completed.tran-quoc-toan" => true
+  "lang" => "en"
+  "medal.tran-quoc-toan" => true
+  "seen_open.tran-quoc-toan" => true
+  "stars.tran-quoc-toan" => 3
+}
