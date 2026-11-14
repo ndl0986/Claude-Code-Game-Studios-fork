@@ -581,6 +581,107 @@
         }
       ],
       "expected": "valid"
+    },
+    {
+      "name": "declared size matches the file header",
+      "rule": "R19a",
+      "declared": {
+        "width": 512,
+        "height": 512
+      },
+      "actual": {
+        "width": 512,
+        "height": 512
+      },
+      "expected": "valid"
+    },
+    {
+      "name": "declared size differs from the file header",
+      "rule": "R19a",
+      "declared": {
+        "width": 512,
+        "height": 512
+      },
+      "actual": {
+        "width": 512,
+        "height": 384
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "picture over 2048",
+      "rule": "R19b",
+      "id": "pic.prop_river_boat",
+      "width": 2049,
+      "height": 1024,
+      "expected": "warn"
+    },
+    {
+      "name": "quiz picture over 512",
+      "rule": "R19b",
+      "id": "pic.quiz_fruit_orange",
+      "width": 600,
+      "height": 512,
+      "expected": "warn"
+    },
+    {
+      "name": "scene tile over 1440x1320",
+      "rule": "R19b",
+      "id": "pic.scene_tqt_ending",
+      "width": 2880,
+      "height": 1320,
+      "expected": "warn"
+    },
+    {
+      "name": "scene tile within 1440x1320",
+      "rule": "R19b",
+      "id": "pic.scene_tqt_ending",
+      "width": 1440,
+      "height": 1320,
+      "expected": "valid"
+    },
+    {
+      "name": "every beat theme has a sky band",
+      "rule": "R20",
+      "themes": [
+        "village",
+        "river",
+        "camp"
+      ],
+      "beat_themes": [
+        "river",
+        "river",
+        "village",
+        "camp"
+      ],
+      "expected": "valid"
+    },
+    {
+      "name": "a beat theme has no sky band",
+      "rule": "R20",
+      "themes": [
+        "village",
+        "river"
+      ],
+      "beat_themes": [
+        "river",
+        "camp"
+      ],
+      "expected": "invalid"
+    },
+    {
+      "name": "a beat uses a theme outside the mission enum",
+      "rule": "R20",
+      "themes": [
+        "village",
+        "bamboo",
+        "river",
+        "camp"
+      ],
+      "beat_themes": [
+        "desert"
+      ],
+      "expected": "invalid"
     }
   ]
 }
