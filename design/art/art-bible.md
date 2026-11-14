@@ -1,6 +1,6 @@
 # Art Bible: Dải Đất Anh Hùng (Land of Heroes)
 
-> **Status**: Draft (Under Review by Luan) · Task: TASK-004
+> **Status**: Draft. References and 4 art rules approved by Luan (2026-11-14); period details still ⟨placeholder⟩ · Task: TASK-004
 > **Owned By**: art-director (drafted by game-art-content)
 > **Last Updated**: 2026-11-14
 > **Art Director Sign-Off (AD-ART-BIBLE)**: SKIPPED 2026-11-14 — lean mode
@@ -252,7 +252,7 @@ be comfortable pausing on any frame.
 landscape. Detail that doesn't survive at that size is cut: there's no fine embroidery, and
 period clothing is suggested by **2–3 shapes** (headwear, collar or sash, sleeve shape). Clothing
 and hair of the Trần era are ⟨placeholder: to be sourced from the reference picture books
-(§ 9, ref 5) and Luan's sign-off⟩.
+(§ 9, ref 2) and Luan's sign-off⟩.
 
 ## 6. Environment Design Language
 
@@ -355,41 +355,46 @@ from damage, fire on people, or bodies.
 
 ## 9. Reference Direction
 
-These five references are additive. Each one covers a different part of the look, and no two are used for the same thing.
+**Decided (Luan, 2026-11-14):** two references are kept, and both are Vietnamese sources.
 
-### 1. Rayman Legends / Rayman Origins: *for motion and side-scroll readability*
-- **Take:** the clean playfield/background split (bold-edged ground with soft, layered parallax behind it), rounded squash-and-stretch on run, jump, hit and knock-back, and the way speed reads through motion while the player stays legible against busy backgrounds.
-- **Avoid:** the zany, silly humour and rubbery comic faces. Our heroes are friendly but dignified. Also avoid its dense mid-ground detail and frantic screen-filling action, which overload a 6-year-old on a small phone.
-
-### 2. The Kirby series: *for enemy design and defeat feedback*
-- **Take:** enemies that are round, soft and almost huggable yet clearly "in the way"; defeat as a "poof", a star burst or a tumble off screen, with no gore; enemy behaviour that reads as slow and harmless from shape alone.
-- **Avoid:** the pastel-only, candy-coloured palette. Ours is earthy and national (bronze, rice, river, vermilion), and battles must still feel dramatic. Also avoid enemy designs so cute that they cancel the story's stakes.
-
-### 3. Cartoon Saloon films (*Song of the Sea*, *Wolfwalkers*): *for folk pattern built into flat backgrounds*
-- **Take:** traditional patterns built into the structure of flat 2D backgrounds, frames and borders rather than stuck on top; storybook framing for our story scenes; strong flat colour shapes that carry mood (the sky and water as the emotion).
-- **Avoid:** fine, dense linework and intricate textures that turn to noise at phone size and cost too much on low-end devices. Also avoid Celtic-specific motifs and their melancholy, painterly palette. We use Vietnamese motifs and a brighter cartoon key.
-
-### 4. Đông Hồ folk prints and Đông Sơn bronze-drum patterns: *for the motif library and pigment palette*
+### 1. Đông Hồ folk prints and Đông Sơn bronze-drum patterns: *for the motif library and pigment palette*
 - **Take:** the source library of motifs (bronze-drum concentric rings, sun star and bird bands, lotus, rice and village imagery) for frames, borders, UI rings and costume trim, plus the earthy natural-pigment palette (warm paper ground, ochre, deep natural reds and greens) that informs our primaries. *Every motif's origin and meaning to be sourced and reviewed before use.*
 - **Avoid:** copying the woodblock print style itself (flat registration, carved outline look, period figure drawing). Luan chose modern cartoon over Đông Hồ. Also avoid using sacred or ceremonial patterns as decoration without the content owner's review.
 
-### 5. Vietnamese historical picture books for children (e.g. NXB Kim Đồng's *Tranh truyện lịch sử Việt Nam*): *for period objects as Vietnamese kids know them*
+### 2. Vietnamese historical picture books for children (e.g. NXB Kim Đồng's *Tranh truyện lịch sử Việt Nam*): *for period objects as Vietnamese kids know them*
 - **Take:** how Trần-era clothing, armour, weapons, boats and court settings ⟨placeholder: to be sourced⟩ are presented to Vietnamese children today, so our hero matches the image they already have from school and home. It is a cross-check for recognisability. It is not a historical source, and every detail still goes through the content owner.
 - **Avoid:** their realistic battle violence (wounds, bodies, weapons striking people) and their realistic rendering and anatomy. We take what is *depicted*, not *how* it is depicted.
 
-**Luan picks or rejects each (status: proposed)**
+### Considered and rejected (Luan, 2026-11-14)
 
-## Open items for Luan
+- **Rayman Legends / Origins**, **the Kirby series** and **Cartoon Saloon's films** were
+  proposed for side-scroll motion, soft enemy defeat and folk patterns in flat backgrounds.
+  Luan rejected all three.
+- The rules in §§ 1–8 that cover the same ground stand on their own and name no
+  reference:
+  - squash-and-stretch posing;
+  - the clean play-layer and parallax split;
+  - defeat as a knock-back, tumble, "poof" or run-home, never injury;
+  - motifs built into frames.
+  They come from the pillars (*Small hands can do it*, *Safe for kids*) and the concept's
+  anchor.
 
-1. **References (§ 9):** pick or reject each of the five.
-2. **Enemy design (§ 3, § 5):** no ethnic caricature. Enemies are identified by armour shape,
-   colour and banner, never by exaggerated faces. Confirm this rule.
-3. **The banner's six words (§ 3, § 7):** never painted into the art. They appear as a VI/EN
-   text layer, matching the beats doc. Confirm this.
-4. **Wrong-answer colour (§ 4):** a soft lavender-grey, not red, so a mistake never feels
-   like shame. Confirm this.
-5. **In-mission buttons (§ 7):** plain shapes with one motif accent, keeping richer motifs for
-   menus and frames. Confirm, or ask for richer buttons.
-6. **Hex values (§ 4)** are untested proposals and will be tuned on a low-end phone and
+## Luan's decisions (2026-11-14)
+
+1. **References (§ 9):** keep the Đông Hồ prints with Đông Sơn drum motifs, and Kim
+   Đồng's historical picture books. Rayman, Kirby and Cartoon Saloon are rejected.
+2. **Enemy design (§ 3, § 5): approved.** No ethnic caricature. Enemies are identified by
+   armour shape, colour and banner, never by exaggerated faces.
+3. **The banner's six words (§ 3, § 7): approved.** They are never painted into the art and
+   appear as a VI/EN text layer.
+4. **Wrong-answer colour (§ 4): approved.** A soft lavender-grey, not red.
+5. **In-mission buttons (§ 7): approved.** Plain shapes with one motif accent. Richer motifs
+   go on menus and frames.
+
+## Still open
+
+1. **Hex values (§ 4)** are untested proposals. They get tuned on a low-end phone and
    checked in colour-blind simulation. **Sound backups** are for audio-director to define.
-7. **Asset budgets (§ 8)** wait for `/setup-engine`. None are invented here.
+2. **Asset budgets (§ 8)** wait for `/setup-engine`. None are invented here.
+3. **Period details** (clothing, armour, architecture, boats, map borders) stay
+   ⟨placeholder⟩ until they are sourced and signed off.

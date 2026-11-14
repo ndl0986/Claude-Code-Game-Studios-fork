@@ -14,6 +14,9 @@
 | D2 | **Popular-tradition details** (the orange, the banner) are labelled **legend**. |
 | D3 | **His death:** one short, calm line in the ending. No scene. |
 | D4 | **Landscape** for the missions, menus and the map, until the phone prototype confirms it. |
+| D5 | **Quiz stars, retry until right:** 3★ every question right first try, 2★ up to 2 retries, 1★ finished. A wrong answer is soft lavender-grey. Finishing always unlocks the next hero. |
+| D6 | **C06 and C08** stay legend until the S3 1282 passage is confirmed, then become fact (as the chronicle records it). |
+| D7 | **Beat structure (§ 3, § 6) approved** for TASK-003b. Claims C01–C11 and the source locations are **not yet signed off**. |
 
 ## 1. Sources
 
@@ -40,19 +43,18 @@ Labels: **fact** · **interpretation** · **legend** (popular tradition, D2) · 
 | C03 | Quân Mông–Nguyên chuẩn bị sang xâm lược Đại Việt. | The Mông–Nguyên (Yuan) army was preparing to invade Đại Việt. | fact | S1, S3 | ⟨placeholder⟩ |
 | C04 | Vua Trần họp các vương hầu ở Bình Than để bàn việc đánh giặc. | The Trần king gathered the princes and lords at Bình Than to plan the defence. | fact | S3 (1282) ⟨to confirm⟩ | ⟨placeholder⟩ |
 | C05 | Trần Quốc Toản còn nhỏ tuổi nên không được dự bàn. | Trần Quốc Toản was too young, so he was not allowed to join the meeting. | fact | S3 (1282) ⟨to confirm⟩ | ⟨placeholder⟩ |
-| C06 | Vì quá tức giận, ông bóp nát quả cam vua ban lúc nào không biết. | He was so angry that he crushed the orange the king had given him, without noticing. | **legend** (D2) | S4, S2 ⟨to confirm⟩; possibly also S3 (see note) | ⟨placeholder⟩ |
+| C06 | Vì quá tức giận, ông bóp nát quả cam vua ban lúc nào không biết. | He was so angry that he crushed the orange the king had given him, without noticing. | **legend** (D2); becomes fact (as the chronicle records it) once the S3 1282 passage is confirmed | S4, S2 ⟨to confirm⟩; S3 1282 ⟨to confirm⟩ | ⟨placeholder⟩ |
 | C07 | Ông về nhà tập hợp người thân và gia nhân, luyện tập để đánh giặc. | He went home, gathered his relatives and followers, and trained them to fight. | fact | S3 ⟨to confirm⟩ | ⟨placeholder⟩ |
-| C08 | Ông may lá cờ thêu sáu chữ vàng "Phá cường địch, báo hoàng ân". | He made a banner with six golden words, "Phá cường địch, báo hoàng ân" ("Defeat the strong enemy, repay the king's kindness"). | **legend** (D2) | S4, S2 ⟨to confirm⟩; possibly also S3 (see note) | ⟨placeholder⟩ |
+| C08 | Ông may lá cờ thêu sáu chữ vàng "Phá cường địch, báo hoàng ân". | He made a banner with six golden words, "Phá cường địch, báo hoàng ân" ("Defeat the strong enemy, repay the king's kindness"). | **legend** (D2); becomes fact (as the chronicle records it) once the S3 1282 passage is confirmed | S4, S2 ⟨to confirm⟩; S3 1282 ⟨to confirm⟩ | ⟨placeholder⟩ |
 | C09 | Đội quân của ông cùng quân nhà Trần đánh giặc Nguyên. | His band fought the Nguyên invaders alongside the Trần army. | fact | S1, S3 (1285) ⟨to confirm⟩ | ⟨placeholder⟩ |
 | C10 | Trần Quốc Toản hy sinh khi còn rất trẻ, vì đất nước. | Trần Quốc Toản gave his life for his country while he was still very young. | fact (D3 wording) | S3 (1285) ⟨to confirm⟩ | ⟨placeholder⟩ |
 | C11 | Nhà Trần đánh thắng quân Mông–Nguyên. | The Trần dynasty defeated the Mông–Nguyên army. | fact | S1, S3 | ⟨placeholder⟩ |
 | C12 | Bến sông đông thuyền, rơm tập đánh, giặc rơi vũ khí rồi bỏ chạy… | A busy riverbank, straw training dummies, enemies dropping weapons and running away… | **invented** | none (game play) | ⟨placeholder⟩ |
 
-> **Note for Luan on C06 and C08.** Following D2, both are labelled legend. However, the
-> chronicle (S3) may itself record the orange and the six-word banner in its 1282 entry.
-> If Luan or the team confirms that in S3, I'd suggest relabelling them as
-> **fact (as the chronicle records it)**. Until then the quiz words them "Truyện kể rằng… /
-> The story says…". **Luan decides.**
+> **C06 and C08: relabel condition (Luan, 2026-11-14).** Both stay **legend** for now.
+> They become **fact (as the chronicle records it)** only once the S3 passage for 1282 is
+> confirmed in the book, with its edition and page. Until then, the beats and the quiz word
+> them "Truyện kể rằng… / The story says…".
 >
 > **Not stated anywhere in this draft:** his exact age, birth year, where and how he died,
 > or the number of followers. These differ between tellings, so the beats say "young" and
@@ -162,21 +164,21 @@ on). These go to `/asset-spec` after Luan's sign-off.
 
 - [ ] S1 to S4: confirm the grade, lesson and page for S1 and S2 (does the Kết nối tri thức *Tiếng Việt* have the reading?) and the S3 translation edition.
 - [ ] C01 to C11: sign each claim, or correct it.
-- [ ] C06 and C08: keep as **legend** (D2), or relabel as fact if S3 records them (see the note in § 2).
-- [ ] The four beats: story order and choice of moments.
+- [x] C06 and C08: the rule is decided (Luan, 2026-11-14). They stay legend until the S3 1282 passage is confirmed (see § 2).
+- [x] The four beats: the structure is approved (Luan, 2026-11-14). The claims inside them still need sign-off.
 - [ ] The ending lines (D3 wording).
 - [ ] Quiz Q1 to Q5. The star rule is decided (retry until right, Luan 2026-11-14).
 - [ ] Portrayal: the orange beat shows anger without shaming; the battle shows knock-back only.
 
 When signed, change each row's status to `signed (Luan, <date>)` and remove ⟨placeholder⟩.
 
-## 6. Beat structure: proposed for TASK-003b, awaiting Luan's sign-off
+## 6. Beat structure for TASK-003b: structure approved by Luan; claims still need sign-off
 
-**Status: proposed for TASK-003b, awaiting Luan's sign-off.** TASK-003 ships as approved
-(Luan, 2026-11-14): 4 combat beats with move, attack and defend. The special button, the
-non-combat beats (the orange, training) and the arrows below become TASK-003b once Luan
-signs off this structure. The text is still ⟨placeholder⟩, so keep strings in data, not
-code.
+**Status: structure approved by Luan (2026-11-14); claims still need sign-off.** This is
+the structure for TASK-003b: the riverbank to Bình Than, then the orange, then training
+and raising the banner, then fighting beside the Trần army. TASK-003 ships as approved,
+with 4 combat beats and move, attack and defend. The text is still ⟨placeholder⟩, so keep
+strings in data, not code.
 
 | Beat | Buttons used | New button taught | Enemies | Ends when |
 |---|---|---|---|---|
