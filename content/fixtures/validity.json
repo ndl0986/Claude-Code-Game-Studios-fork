@@ -1036,6 +1036,33 @@
       "text": "Cross the village, meet the people, then reach the river!",
       "expected_lines": 2,
       "expected": "invalid"
+    },
+    {
+      "name": "EN banner at the narrow 720 box",
+      "rule": "R8c",
+      "field_type": "banner",
+      "box": "narrow",
+      "text": "Defeat the strong enemy, repay the king's kindness",
+      "expected_lines": 2,
+      "expected": "valid"
+    },
+    {
+      "name": "EN goal f1 at the narrow 720 box",
+      "rule": "R8c",
+      "field_type": "goal",
+      "box": "narrow",
+      "text": "Get to the king's meeting at Bình Than!",
+      "expected_lines": 1,
+      "expected": "valid"
+    },
+    {
+      "name": "goal that fits 880 but not the narrow 720 box",
+      "rule": "R8c",
+      "field_type": "goal",
+      "box": "narrow",
+      "text": "Walk to the river and meet the king's men!",
+      "expected_lines": 2,
+      "expected": "invalid"
     }
   ]
 }

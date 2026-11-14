@@ -47,6 +47,8 @@ slice.
 | Line height | ≥ 1.35 × font size; Vietnamese stacked marks never clipped | Language Rules 5, 7 |
 | Text never shrinks | A line that doesn't fit fails validation (R8c); a run-time "…" is a bug | Language Rule 6, F1 |
 | Contrast | Text on panels: ink `#3A2A20` on cream `#FFF6E3`, ≥ 7:1. Pads: a thick ink outline on every UI element (art bible §4 UI palette). Gameplay telegraph is a warm yellow glow plus a drawn "!" shape | art bible §4, combat V/A |
+| Pops ("Ối!", "Đỡ được!", hit pops) | **Always outlined, ≥ 3 px:** ink `#3A2A20` on light skies (red fill vs ink 3.68:1; ink vs sky 7.9–10.5:1), cream `#FFF6E3` on the camp's dark sky (red vs cream 3.47:1; cream vs sky 9.3–11.6:1). A bare red pop measured 1.95:1 on navy and 2.5:1 on mint (QC r5) | `design/ux/hud.md` §3.3; QC r5 |
+| Banner motto | Gold `#FFC531` on vermilion `#D64A2E` is 2.72:1 alone, so the text carries an **ink outline ≥ 2 px at 37 px**: gold vs ink 8.67:1, ink vs vermilion 3.18:1, passing 3:1 as large text | `design/ux/hud.md` §3.3; QC r5 |
 | Card labels (quiz) | **Card labels are ink `#3A2A20` on a pale fill; the border, the icon and the motion carry the meaning.** Right: pale green fill `#D9F2D0` (ink **11.5:1**), a `#3FA34D` 10 px border, a drawn tick, and the green "Đúng rồi!" bar. Wrong: pale lavender fill `#E6E1F0` (ink **10.7:1**), a `#9C8FB8` 10 px border, the circular-arrow icon, and the 0.5 s shake. Icons (tick, arrow) carry a thick ink outline, so they read against the pale fills (the bare green tick on the pale green is only 2.7:1). **Fallback:** a label that must sit on a saturated fill uses deep ink `#1A120C` (5.8:1 on `#3FA34D`, 6.2:1 on `#9C8FB8`). Never white: white on `#3FA34D` is 3.2:1 and on `#9C8FB8` 3.0:1, which fail at small-phone sizes (k < 1) | Quiz Rules 4–5; TASK-021 review |
 | No text in pictures | All words are text layers (VI/EN) | art bible; Luan's rule 2 |
 | Flashing | Nothing flashes faster than 3 Hz (pulses, hints, unlock reveal, region glow) | Hints V/A; Map Rule 7 |
@@ -70,6 +72,7 @@ slice.
 | Requirement | Rule | Source |
 |---|---|---|
 | Touch size | Every pad and button ≥ 72 pt/dp (`pad_min`), with ≥ 12 pt (`pad_gap`) between pads | Input Rule 4, F1 |
+| Minimum screen | **Minimum supported landscape height ≈ 288 dp after insets (k 0.40; ≥ 512 dp wide).** A 320 dp-tall phone is k ≈ 0.44. Every screen is laid out and tested down to k 0.40 | `design/ux/hud.md` §3.3; `story-screens.md` §5.2 |
 | Safe areas | Pads clear of the notch, rounded corners and system gesture zones | Input Rule 2 (QC r3 O5). *NOT YET BUILT: rounded-corner insets wait for TASK-013* |
 | Forgiving touch | Thumb drift off a held pad doesn't release it; a second finger on the same pad is ignored | Input Rules 6, 9 |
 | No stuck input | Pause, background, focus loss or cancel release every pad | Input Rule 11 |
