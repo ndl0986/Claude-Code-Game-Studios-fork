@@ -144,9 +144,11 @@ rounds: TASK-003 r3 O5/O6, TASK-007 r2 B1/B4, and the TASK-006 iOS rounds.
       An ask tap ("Xin vào!") is a line advance too, so two quick ask taps advance one line.
     - **The quiz keeps its own rules:** the next quiz question takes no lock (only the debounce),
       except on small phones (below).
-    - **One exception, small phones only:** at 0.40 ≤ k < 0.48 the quiz's Tiếp lies over the third
-      card slot (`quiz-and-results.md` §5.2), so a second tap on Tiếp could pick a card on the next
-      question. There, each new question takes the lock too.
+    - **One exception, small phones only:** in the quiz's small layout (`quiz-and-results.md`
+      §5.2: the reference cards' bottom would pass Tiếp's top, k < ≈ 0.533, which includes both reference phones) Tiếp lies over
+      the third card slot, so a second tap on Tiếp could pick a card on the next
+      question. There, each new question takes the lock too. The lock follows the layout's own
+      flag, never a separate k test.
     - **Pause and sound are exempt** (top-left, nowhere near the play pads; a child must always be
       able to pause), and so is the pause menu.
 
