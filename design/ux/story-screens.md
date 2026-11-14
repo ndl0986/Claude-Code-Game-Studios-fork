@@ -57,7 +57,18 @@ world px on every supported phone (Android clamps it with `min(720, ·)`).
   with `corner_bottom` = 18 + `pad_min / k` (155 at the Android reference, k 0.527) and
   `corner_right` = 18 + 2 × `pad_min / k` + `pad_gap / k` (≈ 315), as in `design/ux/hud.md` §3.3.
 - **The story picture is full-bleed** (P-06: the step's background fills the screen behind
-  everything), so it has no frame corner to collide with. An app that draws the picture inside
+  everything), so it has no frame corner to collide with.
+- **Story screens show the background only, no play sprites** (QC r6, for r8). Behind a story
+  panel the hero, enemies, the partner and dummies aren't drawn: at spec height a standing figure
+  (y ≈ 290–470) sits right where the panel goes, so the panel would cut him at the chest (QC saw
+  it at the neck with the taller placeholder). Characters on story screens come from stills and
+  portraits only, composed for the safe zone below.
+- **Picture safe zone:** in any picture shown behind a story panel (a background set on a story
+  screen, the ending still, future per-box pictures), **faces, figures and the key subject sit
+  above the panel's top at the floor (k 0.40)**: above **y 340** world px for intro, caption and
+  ending (panel top 347), and above **y 270** for pictures behind a beat card (panel top 279; at
+  the reference the tops are 390 and 322). Below that line goes only ground, water, grass or
+  background, which the panel may cover. Asset specs carry the rule in their own pixel sizes. An app that draws the picture inside
   a frame starts that frame at **y ≥ `corner_bottom` + 8** (ref ≥ 163), never under the block.
 - **Bottom row:** "Tiếp" (right) and "Bỏ qua" (left) sit on `safe_bottom` − 18 and are **both
   ≥ `pad_min` tall** (Input Rule 4), on the same row (ref y 565–702). "Bỏ qua" is smaller only
@@ -157,3 +168,4 @@ either app).*
 9. **GIVEN** the Android (k 0.527) and iOS (k 0.517) reference phones and a k 0.40 phone or emulator, with pause and sound at `pad_min`, **WHEN** a beat card, an intro box, a caption and the ending are captured in VI and EN, **THEN** no pixel of the paper frame, the beat-card panel or a framed picture lies inside the pause/sound block (x ≤ `corner_right`, y ≤ `corner_bottom`); the panel's top is ≥ `corner_bottom` + 8 and its bottom ≤ Tiếp's top − 8.
 10. **GIVEN** any story screen on the reference phones and at k 0.40, **WHEN** captured, **THEN** "Bỏ qua" is ≥ `pad_min` tall (≥ 137 world px at k 0.527, ≥ 180 at k 0.40), its top and bottom match Tiếp's, and it stays left of Tiếp with ≥ `pad_gap` between them.
 11. **GIVEN** the TQT reach-the-flag beat ending while Attack is pressed every 0.35 s for 3 s or more, **WHEN** the ending appears, **THEN** box 1 holds until 1.5 s (`screen_enter_lock_max`), box 2 ("…đã hy sinh…") also holds ≥ 1.5 s or until the mash pauses for 0.6 s, none is skipped silently, and the quiz starts only after each box was advanced once (Input AC17, AC21).
+12. **GIVEN** the intro, a caption and the ending at the reference phones and at k 0.40, **WHEN** captured, **THEN** no hero, enemy, partner or dummy sprite is drawn behind the panel, and in the ending still (ASSET-016) the banner cloth and the warm light are above the panel's top.
