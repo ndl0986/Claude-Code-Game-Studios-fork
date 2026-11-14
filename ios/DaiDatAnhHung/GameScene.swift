@@ -378,12 +378,9 @@ final class GameScene: SKScene {
         if game.isDebug { add(Font.label(game.ui("ui.debug.subtitle"), 36, .white), 640, 220) }
         let h = HeroNode(scale: 0.8); h.update(face: 1, walk: false, defend: false, attack: nil, hurt: false, t: 0); add(h, 260, game.tuning["ground_y"])
         if game.isPlayable { button(game.ui("ui.btn.start"), 640 - 190, 330, 380, 130, "start", pulse: true, size: 44) }
-        add(D.rr(-490, -75, 980, 150, 24, SKColor(hex: 0xfff6e3, alpha: 0.92)), 640, 595)
-        for (i, (k, icon)) in [("ui.pad.move", "move"), ("ui.pad.attack", "attack"), ("ui.pad.defend", "defend")].enumerated() {
-            let x = 300.0 + Double(i) * 340
-            let c = SKNode(); c.addChild(D.circle(0, 0, 38, .white, C.gold, 4)); c.addChild(padIcon(icon, 38)); add(c, x - 60, 595)
-            add(Font.label(game.ui(k), 32, C.ink, align: .left), x - 10, 595)
-        }
+        // the slice title shows the map-stub line (UX title spec); the controls are taught in play by the hints
+        add(D.rr(-420, -40, 840, 80, 24, SKColor(hex: 0xfff6e3, alpha: 0.92)), 640, 600)
+        add(Font.label(game.ui("ui.unlock.map_stub"), 28, C.ink, width: 800), 640, 600)
         langButton()
     }
 
@@ -550,14 +547,16 @@ final class GameScene: SKScene {
             let wrong = q.wrong.contains(j), ok = q.okIndex == j
             let card = SKNode()
             card.addChild(D.rr(0, 8, cw, ch, 30, SKColor(white: 0, alpha: 0.3)))
-            card.addChild(D.rr(0, 0, cw, ch, 30, ok ? SKColor(hex: 0xc9f0b0) : wrong ? SKColor(hex: 0xd9d4cf) : C.cream,
-                               ok ? C.leafDark : wrong ? C.wrong : C.gold, ok ? 10 : 5))
+            // right: green #3FA34D with a tick (UX quiz spec); wrong: lavender #9C8FB8 with a circular arrow
+            card.addChild(D.rr(0, 0, cw, ch, 30, ok ? SKColor(hex: 0x3FA34D) : wrong ? SKColor(hex: 0xd9d4cf) : C.cream,
+                               ok ? .white : wrong ? C.wrong : C.gold, ok ? 8 : 5))
+            if ok { card.addChild(D.poly([(cw - 64, 40), (cw - 52, 28), (cw - 42, 40), (cw - 22, 16), (cw - 10, 28), (cw - 42, 60)], .white)) }
             let pic = Pictures.node(choice.pictureId, size: 110); pic.position = CGPoint(x: cw / 2, y: -115); pic.alpha = wrong ? 0.45 : 1; card.addChild(pic)
             if wrong { // the "try again" mark: a circular arrow, never a red cross (TASK-004 art fix)
                 let p = CGMutablePath(); p.addArc(center: CGPoint(x: cw - 40, y: -40), radius: 18, startAngle: 0.3, endAngle: 5.6, clockwise: false)
                 card.addChild(D.shape(p, nil, C.wrong, 6))
             }
-            let l = Font.label(choice.text.text(game.lang), 37, wrong ? SKColor(hex: 0x8a8078) : C.ink, width: cw - 30); l.position = CGPoint(x: cw / 2, y: -258); card.addChild(l)
+            let l = Font.label(choice.text.text(game.lang), 37, ok ? .white : wrong ? SKColor(hex: 0x8a8078) : C.ink, width: cw - 30); l.position = CGPoint(x: cw / 2, y: -258); card.addChild(l)
             card.position = D.p(x0 + Double(slot) * (cw + gap), y0); card.name = "\(j)"
             uiZ += 1; card.zPosition = uiZ
             ui.addChild(card); cardNodes.append(card)
@@ -613,8 +612,7 @@ final class GameScene: SKScene {
         if let next = game.unlockedHero { add(Font.label(next.mission.hero.name.text(game.lang), 44, .white, width: 560), 980, 455) }
         add(Font.label(game.ui("ui.unlock.title"), 52, C.gold, width: 1100), 640, 100)
         add(Font.label(game.ui("ui.unlock.map_stub"), 28, SKColor(white: 1, alpha: 0.7)), 640, 530)
-        button(game.ui("ui.btn.replay"), 260, 580, 340, 110, "replay", fill: C.cream)
-        button(game.ui("ui.btn.to_map"), 680, 580, 340, 110, "toMap", pulse: true)
+        button(game.ui("ui.btn.to_map"), 640 - 170, 580, 340, 110, "toMap", pulse: true) // one button (UX unlock spec)
     }
 
     // MARK: per-frame UI animation (hint pulses, hands, quiz shake)
