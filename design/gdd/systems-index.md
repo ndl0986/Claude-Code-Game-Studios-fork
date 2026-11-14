@@ -42,7 +42,7 @@ Dải Đất Anh Hùng is a small, story-first game, and its systems are few.
 |---|-------------|----------|----------|--------|------------|------------|
 | 1 | Content data & claims | Core | Vertical Slice | Approved (data contract) | `content/README.md` + `content/schema/` (no GDD) | none |
 | 2 | Language & text (VI/EN) | Core | Vertical Slice | Approved | `design/gdd/language-and-text.md` | 1, 4 |
-| 3 | Input & touch controls (inferred) | Core | Vertical Slice | Not Started | — | none |
+| 3 | Input & touch controls (inferred) | Core | Vertical Slice | In Review | `design/gdd/input-and-touch.md` | 1 |
 | 4 | Save & progress (inferred) | Persistence | Vertical Slice | Approved | `design/gdd/save-and-progress.md` | none |
 | 5 | Side-scroll movement & combat | Gameplay | Vertical Slice | Approved | `design/gdd/side-scroll-combat.md` | 3, 1 |
 | 6 | Mission flow & beat types | Narrative | Vertical Slice | Approved | `design/gdd/mission-flow.md` | 5, 1, 2, 3 |
@@ -193,7 +193,7 @@ the GDD.
 | Metric | Count |
 |--------|-------|
 | Total systems identified | 13 |
-| Design docs started | 9 |
+| Design docs started | 10 |
 | Design docs reviewed | 9 (lean self-review plus a dev peer review each; Map & timeline in peer review) |
 | Design docs approved | 9 (Content data & claims via TASK-005; Mission flow; Combat; Quiz & stars; Hints & onboarding; Hero progression; Language & text; Save & progress; Audio & voice-over) |
 | MVP systems designed | n/a (folded into the Vertical Slice) |
