@@ -87,6 +87,14 @@ object CueLayout {
         return Prop(ground - FLAG_FOOT_K * s, s)
     }
 
+    /**
+     * How far behind the hero the raised banner's icon centre sits (its x = hero.x − face × this). Off banner beats it
+     * is held high (60); on banner beats it is held lower, at head height, so it moves back until the cloth (icon
+     * x − 0.45 s … x + 0.7 s) clears the head (±32 at HERO_S) by ≥ 8 (r9 pre-freeze: 60 put the cloth over his face).
+     */
+    fun raisedBannerOffset(banner: Boolean) = if (banner) 125.0 else 60.0
+    const val HERO_HEAD_HALF = 32.0
+
     /** The banner the hero raises in training (110, held beside him): on a banner beat it stays below the bar too. */
     fun raisedBanner(ground: Double, banner: Boolean): Prop =
         if (!banner) Prop(ground - 250, 110.0) else Prop(max(ground - 250, FLOOR + FLAG_TOP_K * 110.0), 110.0)

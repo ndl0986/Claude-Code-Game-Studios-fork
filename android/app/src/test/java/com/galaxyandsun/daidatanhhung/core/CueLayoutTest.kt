@@ -77,4 +77,15 @@ class CueLayoutTest {
         val b = CueLayout.raisedBanner(g, banner = true)
         assertTrue("the raised training banner stays below the bar too: ${b.top}", b.top >= CueLayout.FLOOR - 1e-9)
     }
+
+    /** r9 pre-freeze: held lower on a banner beat, the raised banner's cloth stays clear of the hero's head (both facings). */
+    @Test fun theRaisedBannerClearsTheHerosHead() {
+        val s = 110.0; val off = CueLayout.raisedBannerOffset(banner = true); val hero = 600.0
+        for (face in listOf(1, -1)) {
+            val x = hero - face * off
+            val clothL = x - 0.45 * s; val clothR = x + 0.7 * s
+            if (face == 1) assertTrue("facing right: cloth ends at $clothR", clothR <= hero - CueLayout.HERO_HEAD_HALF - 8)
+            else assertTrue("facing left: cloth starts at $clothL", clothL >= hero + CueLayout.HERO_HEAD_HALF + 8)
+        }
+    }
 }

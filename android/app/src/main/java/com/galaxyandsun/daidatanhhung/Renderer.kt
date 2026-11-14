@@ -248,7 +248,8 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         if (!blinkOff) fig.hero(heroX.toFloat(), ground, h.face, h.walk, h.def, if (h.atk >= 0) h.atk else null, t,
             Figures.HERO_S, reach = (g.tuning["attack_range"] - 18 * Figures.HERO_S).toFloat()) // body 180 tall, swing arc = attack_range (AC13)
         if (r.bannerRaised && r.beatType == BeatType.TRAINING)
-            CueLayout.raisedBanner(ground.toDouble(), bannerBeat).let { f -> fig.icon("flag", h.x.toFloat() - h.face * 60f, f.y.toFloat(), f.size.toFloat()) }
+            CueLayout.raisedBanner(ground.toDouble(), bannerBeat).let { f ->
+                fig.icon("flag", (h.x - h.face * CueLayout.raisedBannerOffset(bannerBeat)).toFloat(), f.y.toFloat(), f.size.toFloat()) }
         if (r.beatType == BeatType.HOLD && (r.phase == Phase.PLAY || r.phase == Phase.END)) holdMeter(h.x.toFloat() + h.face * 130f, ground - 200, r.heldTotal / r.holdSeconds(r.beat)) // beside the hero, clear of the goal bar
         for (p in r.parts) d.star(p.x.toFloat(), p.y.toFloat(), p.r.toFloat(), p.color.toInt(), C.GOLD_DARK, p.rot.toFloat())
         if (r.cheerT >= 0 && r.t - r.cheerT < 0.6) { val k = ((r.t - r.cheerT) / 0.6).toFloat() // the cheer's stars, drawn here (no RNG)

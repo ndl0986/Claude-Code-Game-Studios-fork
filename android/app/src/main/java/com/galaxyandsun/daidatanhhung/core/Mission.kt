@@ -678,6 +678,13 @@ class MissionRun(
         hero.x = xStart + encounterAt(beat).first() * WORLD_W; cam = maxOf(cam, hero.x - tuning["camera_follow_offset"])
     }
 
+    /** Debug (screenshots): reach-the-flag past every encounter, the hero 600 px before the flag, so the flag is on screen. */
+    fun debugNearFlag() {
+        if (beatType != BeatType.REACH) return
+        encounterNext = encounters(beat).size; inEncounter = false; enemies.clear()
+        hero.x = goalX - 600; cam = maxOf(0.0, hero.x - tuning["camera_follow_offset"])
+    }
+
     /** Debug (QC: measure the leader's 1.32 s): the encounter with a leader, the leader already in windup. */
     fun debugLeaderWindup() {
         if (beatType != BeatType.REACH) return
