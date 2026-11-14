@@ -2,6 +2,50 @@
 
 Where the project stands, so work can resume from the repo. Newest entry first.
 
+## 2026-11-14 (afternoon) — Team running, prototype in QC
+
+**Status:** Concept stage. Concept approved; Godot 4.7.2 pinned; art bible and first hero's content drafted; the browser prototype of the first mission is in QC. Paused for an Orca restart (macOS Screen Recording grant for iOS QC).
+
+**Main doc:** [Dải Đất Anh Hùng — Development Roadmap](https://claude.ai/artifact/E2dscdjUpVJLj63i4et2uz). Live task board: `production/team/board.md` (GitHub Issues are off). Team rules: `.claude/skills/game-team-lead/SKILL.md`.
+
+### Team (one Claude Code session each; worktrees under `~/orca/workspaces/Claude-Code-Game-Studios-fork/<name>`)
+
+| Session | Role | Start with |
+| --- | --- | --- |
+| game-leader (repo root) | Leader (`/game-team-lead`); never implements | `tools/team/start-leader.sh` (fixed name `game-leader`, which the member scripts message) |
+| game-dev-001 | Developer, iOS owner | `tools/team/start-game-dev-001.sh` |
+| game-dev-002 | Developer, Android owner | `tools/team/start-game-dev-002.sh` |
+| game-art-content | Art + content/history (Luan signs off history) | `tools/team/start-game-art-content.sh` |
+| game-qc-android | Android QC (emulator `mp17863`) | `tools/team/start-game-qc-android.sh` |
+| game-qc-ios | iOS QC (Simulator) | `tools/team/start-game-qc-ios.sh` |
+
+### Tasks and branches (none pushed unless noted)
+
+| Task | Branch @ commit | State |
+| --- | --- | --- |
+| TASK-001 concept | merged into `docs/vn-history-game-plan` as `b41d157` (pushed) | Done |
+| TASK-002 Godot 4.7.2 | `setup/TASK-002-engine-godot` @ `6dcdbce` (wip) | Done; toolchain installed at Luan's request: Godot 4.7.2 at ~/Applications/Godot.app (`godot` on PATH), JDK 17, Android build-tools 35.0.1 + android-35, iOS 27.1 runtime; headless import passes. Left: export templates (download stops on restart: rerun), editor SDK paths, JAVA_HOME, squash the wip, /test-setup. Not merged |
+| TASK-003 browser prototype | `proto/TASK-003-mission-prototype` @ `c7f1173` | Code + content review approved. Android: r1 FAIL (low) → r2 FAIL (B4 fullscreen race) → fixed in `c7f1173` → r3 running on `qa/TASK-003-android`. iOS: NOT ASSESSED (`qa/TASK-003-ios` @ `18eff46`) |
+| TASK-003b beat types, Special button, arrows, art fixes | — | Ready; starts after TASK-003 (likely dev-001) |
+| TASK-004 art bible + Trần Quốc Toản content | `design/TASK-004-art-bible-tqt-beats` @ `4d7aca2` | Art + structure signed off; claims C01–C11 and source pages not signed; not merged |
+
+### Waiting on Luan
+
+1. Orca Screen Recording: add `/Applications/Orca.app` (the helper `Orca Computer Use` is already on, but macOS checks the parent), Quit & Reopen.
+2. Go to merge TASK-002 and TASK-004 into `docs/vn-history-game-plan`.
+3. Next task for game-art-content (`/asset-spec` for the mission, or hero #2).
+4. Sign off claims C01–C11 in `design/narrative/heroes/tran-quoc-toan.md` and confirm textbook pages.
+5. Listen to the prototype's sound on a real phone; a real iPhone and low-end Android phone when possible.
+6. Open questions: monetization; "weeks" = MVP only.
+
+### Resume here (after the Orca restart)
+
+1. Start the leader: `tools/team/start-leader.sh` (it opens at the repo root as `game-leader` and runs `/game-team-lead`).
+2. Check permissions: `orca computer permissions --json` → `accessibility` and `screenshots` both `granted`.
+3. `ListAgents`; start any missing member with its script above (each script prompts the member to reply "ready" to `game-leader`). Close old duplicates (`game-dev-001-1e`, `game-dev-002-46`). Tell game-dev-001 to resume the TASK-002 leftovers.
+4. Re-send TASK-003 Android r3 (if no result was reported) and iOS QC on `c7f1173` (iPhone Duo, safe-area caveat). Each QC branch already holds its earlier evidence.
+5. When both platforms pass, ask Luan's go to merge TASK-003 into `docs/vn-history-game-plan`, then hand out TASK-003b.
+
 ## 2026-11-14 — Repo set up, project plan drafted
 
 **Status:** Planning. No engine chosen in config, no game code yet. Waiting on team material.

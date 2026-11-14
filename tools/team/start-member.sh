@@ -4,12 +4,12 @@
 #
 # Usage: tools/team/start-member.sh <game-dev-001|game-dev-002|game-qc-android|game-qc-ios|game-art-content>
 # Env:   WORKSPACES  worktree parent dir (default ~/orca/workspaces/Claude-Code-Game-Studios-fork)
-#        LEADER      leader session name (default claude-code-game-studios-fork-b5)
+#        LEADER      leader session name (default game-leader; start it with tools/team/start-leader.sh)
 set -euo pipefail
 
 member="${1:-}"
 WORKSPACES="${WORKSPACES:-$HOME/orca/workspaces/Claude-Code-Game-Studios-fork}"
-LEADER="${LEADER:-claude-code-game-studios-fork-b5}"
+LEADER="${LEADER:-game-leader}"
 dir="$WORKSPACES/$member"
 
 dev_prompt() { # $1 = this dev, $2 = the other dev

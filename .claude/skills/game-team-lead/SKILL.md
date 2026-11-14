@@ -18,11 +18,17 @@ merges (with Luan's go) and reports**. All work happens in the worker sessions.
 | Session | Role | Owns |
 |---|---|---|
 | this session | **Leader** | GitHub Issues, labels, milestones, dispatch, merges into `main` (with Luan's go), reports |
-| `game-dev-001` | Developer | One issue at a time: plan → code/design → tests → PR |
-| `game-dev-002` | Developer | Same. The two devs peer-review each other's plans and PRs |
+| `game-dev-001` | Developer, **iOS owner** | One issue at a time: plan → code/design → tests → PR. Owns iOS-specific work: Xcode export, iOS project settings, signing, iOS-only bugs |
+| `game-dev-002` | Developer, **Android owner** | Same. Owns Android-specific work: Gradle export, Android settings, keystore, Android-only bugs. The two devs peer-review each other's plans and PRs |
 | `game-qc-android` | QC, Android | Tests each PR's build on an Android emulator or phone |
 | `game-qc-ios` | QC, iOS | Tests each PR's build on the iOS Simulator or an iPhone |
 | `game-art-content` | Art designer + content/history | Art direction (`/art-bible`, `/asset-spec`), each hero's mission story beats, history facts with sources; reviews every PR that shows a hero, event, date or story text |
+
+**Platform ownership (Luan, 2026-11-14):** iOS work and bugs found by `game-qc-ios` go to
+`game-dev-001`; Android work and bugs found by `game-qc-android` go to `game-dev-002`. Shared game
+code (GDScript, browser prototypes) goes to whichever dev is free, and a bug that shows on both
+platforms goes to the author of the code. The one-issue-per-dev rule still holds: a platform bug
+waits, or Luan decides, when its owner is busy.
 
 **History sign-off is Luan's.** `game-art-content` drafts and cites sources; a Claude session
 cannot verify history, so no hero, event, date or story text is final until Luan signs it off
@@ -109,7 +115,7 @@ Reply `APPROVE` or `REVISE` with findings.
 | plan sent | `status:plan-review` |
 | PR opened, other dev reviewing the code | `status:code-review` |
 | code review APPROVE + CI green | `status:qa-android` **and** `status:qa-ios`: hand the PR to both QC sessions at once |
-| QC finds a bug | `status:rework`; relay to the PR's dev with the QC report |
+| QC finds a bug | `status:rework`; relay to the platform owner (iOS → game-dev-001, Android → game-dev-002), or to the PR's author when it shows on both |
 | QC passes | that QC's `qa:<platform>-pass` label |
 | PR shows a hero, event, date or story text | `game-art-content` reviews it against its sourced beats; Luan signs off history (`content:approved` label) before merge |
 | both passes present | report to Luan; on his go the leader merges (`gh pr merge --merge`, branch kept) |
@@ -139,7 +145,7 @@ A platform the issue doesn't target (a design doc, for example) skips that QC; s
 ## 7. Worker role prompts (used when a session is started)
 
 - **Dev:** "You are `<name>`, a developer on the game team in Claude Code Game Studios.
-  The leader session (`claude-code-game-studios-fork-b5`, the game team leader) sends you
+  The leader session (`game-leader`, started by `tools/team/start-leader.sh`) sends you
   one GitHub issue at a time with SendMessage. Wait for it. Work only on that issue in this
   worktree, plan first and wait for PLAN APPROVED, follow the repo's CLAUDE.md and skills,
   open a PR into main, never merge, and report back to the leader. You also peer-review the
