@@ -27,8 +27,13 @@ window.CONFIG = {
   fleeSpeed: { value: 420, min: 150, max: 800, step: 10 },       // running away after the last hit, px/s
   hpSpear: { value: 2, min: 1, max: 6, step: 1 },                // hits before a spear soldier drops his spear
   hpShield: { value: 3, min: 1, max: 8, step: 1 },               // hits before a shield soldier gives up
-  hpLeader: { value: 5, min: 1, max: 12, step: 1 },              // hits before the leader gives up
+  hpLeader: { value: 3, min: 1, max: 12, step: 1 },              // hits before the leader gives up (approved plan: 3)
   leaderSpeedMul: { value: 0.75, min: 0.3, max: 1.5, step: 0.05 },// leader walk speed as a share of enemySpeed
+  standGap: { value: 10, min: 0, max: 60, step: 2 },            // how far inside enemyReach the front enemy stands, px
+  queueSpacing: { value: 150, min: 60, max: 300, step: 10 },     // gap between enemies waiting their turn on one side, px
+  kbDecay: { value: 0.25, min: 0.05, max: 1, step: 0.05 },       // time a knock-back takes to play out, s
+  spawnOffset: { value: 80, min: 0, max: 300, step: 10 },        // how far off-screen enemies start, px
+  lockOffset: { value: 500, min: 200, max: 900, step: 10 },      // hero's screen x when a fight's camera locks, px
   leaderKnockMul: { value: 0.5, min: 0.1, max: 1, step: 0.05 },  // leader knock-back as a share of knockback
 
   // Help for small hands (plan review 1 and 2)

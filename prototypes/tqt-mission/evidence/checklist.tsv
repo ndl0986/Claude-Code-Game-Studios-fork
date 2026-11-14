@@ -20,7 +20,7 @@ M5	pass	index.html:577	windup glow + "!" (evidence/play.png), hand moves to Defe
 M6	pass	index.html:713	hpSpear 2 → drops spear and runs; caption panel ends the beat
 C1	pass	config.js:53	beat 2: spear, shield, spear with maxActive 2; hpShield 3; reached at ~minute 1–2 in the keyboard run
 C2	pass	config.js:55	beat 3 fromLeft [3]: one walks in behind
-C3	pass	config.js:30	beat 4 leader, hpLeader 5, leaderSpeedMul 0.75 (evidence/leader shot in production/qa/evidence/TASK-003/dev)
+C3	pass	config.js:30	beat 4 leader, hpLeader 3, leaderSpeedMul 0.75 (evidence/leader shot in production/qa/evidence/TASK-003/dev)
 C4	pass	config.js:23	telegraph 1.1 s; whether it reads as "the skill" is for play
 C5	pass	index.html:578	unblocked strike pushes the hero back tune.heroPushback; no health, no game over
 C6	pass	index.html:757	3★ at ≤star3Retries (0), 2★ at ≤star2Retries (2), else 1★

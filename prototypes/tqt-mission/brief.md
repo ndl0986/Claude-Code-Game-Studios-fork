@@ -32,6 +32,8 @@ move / attack / defend buttons, then answer a picture quiz to unlock the next he
 **Controls:** touch: ◀ ▶ pads bottom-left, Attack and hold-to-Defend bottom-right, every button
 at least 72 CSS px on a 640x360 screen. Keys mirror them: ← → or A D move, J or Space attack,
 hold K or Shift defend, Enter next, 1 2 3 answer, L language, P pause, M mute.
+For QC: menu and answer buttons fire on touch-down (pointerdown), not on release. The canvas
+fits inside the safe-area insets (notch, home-indicator zone).
 
 **Question:** Can a 6-year-old play one hero's story as light touch action on a landscape phone,
 then answer a short quiz about it?
@@ -64,8 +66,8 @@ and a one-line ⟨placeholder beat 1⟩ caption ends the beat.
 
 ## Challenge
 The first real trouble is beat 2 (about minute 2): two soldiers at once, one of them a shield
-soldier who takes three hits. Beat 3 sends one from behind. Beat 4 has the leader, bigger and
-slower, five hits. Telegraphs are 1.1 s, so watching and defending is the skill. A missed block
+soldier who takes three hits. Beat 3 sends one from behind. Beat 4 has the leader, wider and
+slower, three hits. Telegraphs are 1.1 s, so watching and defending is the skill. A missed block
 only pushes the hero back a little; nothing is lost and there is no game over. Stars come from
 the quiz alone: 3 for no wrong answers, 2 for up to two, 1 for finishing.
 

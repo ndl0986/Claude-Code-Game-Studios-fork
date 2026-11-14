@@ -12,7 +12,9 @@
   html, body { margin: 0; height: 100%; background: #2a2440; overflow: hidden; }
   body { font-variant-numeric: tabular-nums; font-family: Nunito, sans-serif;
          -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
-  canvas { display: block; margin: 0 auto; touch-action: none; }
+  :root { --sat: env(safe-area-inset-top, 0px); --sar: env(safe-area-inset-right, 0px);
+          --sab: env(safe-area-inset-bottom, 0px); --sal: env(safe-area-inset-left, 0px); }
+  canvas { display: block; position: absolute; touch-action: none; }
   #rotate { display: none; position: fixed; inset: 0; background: #2a2440; color: #fff;
             flex-direction: column; align-items: center; justify-content: center; gap: 24px;
             font: 800 26px Nunito, sans-serif; text-align: center; padding: 24px; box-sizing: border-box; }
@@ -76,16 +78,32 @@ setLang(lang);
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 let viewScale = 1;
+// Safe areas (notch, home-indicator swipe zone): the canvas fits inside innerWidth/innerHeight minus
+// env(safe-area-inset-*), read through the --sa* CSS vars. ?inset=top,right,bottom,left (CSS px)
+// simulates a phone's insets for a desktop screenshot; players never see it.
+const SIM_INSET = (params.get('inset') || '').split(',').map(Number);
+function insets() {
+  if (SIM_INSET.length === 4 && SIM_INSET.every(n => n >= 0)) return { t: SIM_INSET[0], r: SIM_INSET[1], b: SIM_INSET[2], l: SIM_INSET[3] };
+  const cs = getComputedStyle(document.documentElement), v = n => parseFloat(cs.getPropertyValue(n)) || 0;
+  return { t: v('--sat'), r: v('--sar'), b: v('--sab'), l: v('--sal') };
+}
 function fit() {
-  const k = Math.min(innerWidth / W, innerHeight / H);
+  const ins = insets(), aw = Math.max(1, innerWidth - ins.l - ins.r), ah = Math.max(1, innerHeight - ins.t - ins.b);
+  const k = Math.min(aw / W, ah / H);
   viewScale = k;
   const r = k * (devicePixelRatio || 1);
   canvas.width = Math.round(W * r); canvas.height = Math.round(H * r);
   canvas.style.width = Math.round(W * k) + 'px'; canvas.style.height = Math.round(H * k) + 'px';
-  canvas.style.marginTop = Math.max(0, Math.floor((innerHeight - H * k) / 2)) + 'px';
+  canvas.style.left = Math.floor(ins.l + (aw - W * k) / 2) + 'px';
+  canvas.style.top = Math.floor(ins.t + (ah - H * k) / 2) + 'px';
   ctx.setTransform(r, 0, 0, r, 0, 0); ctx.imageSmoothingEnabled = true;
+  if (SIM_INSET.length === 4) { // show the simulated unsafe band in the shot
+    let d = document.getElementById('inset-sim');
+    if (!d) { d = document.createElement('div'); d.id = 'inset-sim'; document.body.appendChild(d); }
+    d.style.cssText = `position:fixed;left:0;right:0;bottom:0;height:${ins.b}px;background:repeating-linear-gradient(45deg,rgba(255,60,60,.55) 0 6px,transparent 6px 12px);pointer-events:none`;
+  }
 }
-addEventListener('resize', fit); fit();
+addEventListener('resize', fit); addEventListener('orientationchange', fit); fit();
 const portrait = () => innerHeight > innerWidth;
 
 // ---- Drawing helpers ----
@@ -168,7 +186,9 @@ addEventListener('keydown', e => {
   if (e.code === 'Space' || e.code.startsWith('Arrow')) e.preventDefault();
 });
 addEventListener('keyup', e => down.delete(e.code));
-addEventListener('blur', () => { down.clear(); touchHold.clear(); });
+const releaseAll = () => { down.clear(); touchHold.clear(); };
+addEventListener('blur', releaseAll);
+document.addEventListener('visibilitychange', () => { if (document.hidden) releaseAll(); }); // more reliable than blur on phones
 
 let ui = []; // buttons drawn this frame: {x,y,w,h, onTap} or {cx,cy,r, action}
 function toLogical(e) {
@@ -195,6 +215,7 @@ canvas.addEventListener('pointermove', e => { // a thumb sliding between ◀ and
 });
 const lift = e => touchHold.delete(e.pointerId);
 canvas.addEventListener('pointerup', lift); canvas.addEventListener('pointercancel', lift);
+canvas.addEventListener('lostpointercapture', lift); // a lost capture never leaves an action held
 canvas.addEventListener('contextmenu', e => e.preventDefault());
 let pendingTaps = [];
 
@@ -341,18 +362,18 @@ function drawEnemy(e, t) {
   const lean = e.state === 'windup' ? -0.12 : e.state === 'strike' ? 0.15 : 0;
   const weapon = e.state !== 'flee';
   const dizzy = e.state === 'flee' || e.state === 'hurt';
-  if (k === 'spear') { // tall and thin, conical hat, long blunt spear with a pennant
+  if (k === 'spear') { // slim, rounded dome helmet with a small knob (no real-world headwear), padded prop spear
     ctx.fillStyle = C.enemyDark; rr(-18 + lw * 8, -80, 16, 78, 7); ctx.fill(); rr(2 - lw * 8, -80, 16, 78, 7); ctx.fill();
     ctx.save(); ctx.rotate(lean);
     ctx.fillStyle = C.enemy; rr(-26, -176, 52, 104, 18); ctx.fill();
     ctx.fillStyle = C.steel; rr(-28, -122, 56, 10, 5); ctx.fill();
     circle(4, -206, 32, C.skin); grumpyFace(14, -206, 32, dizzy, t);
-    ctx.fillStyle = C.steel; ctx.beginPath(); ctx.moveTo(-46, -222); ctx.lineTo(50, -222); ctx.lineTo(4, -278); ctx.closePath(); ctx.fill(); // conical hat
+    ctx.fillStyle = C.steel; ctx.beginPath(); ctx.arc(4, -214, 36, Math.PI, 0); ctx.fill(); rr(-36, -218, 80, 10, 5); ctx.fill(); circle(4, -252, 7, C.steel); // dome helmet + knob
     if (weapon) {
       const reach = e.state === 'strike' ? 40 : e.state === 'windup' ? -30 : 0;
       ctx.fillStyle = '#7a5530'; rr(-40 + reach, -140, 150, 10, 5); ctx.fill();
-      circle(114 + reach, -135, 12, C.steel);                                  // blunt rounded tip
-      ctx.fillStyle = '#9b8fc0'; ctx.beginPath(); ctx.moveTo(80 + reach, -140); ctx.lineTo(100 + reach, -164); ctx.lineTo(66 + reach, -158); ctx.closePath(); ctx.fill();
+      circle(118 + reach, -135, 17, '#e9e1cf', '#b8ab90', 3);                // big padded tip (prop-like, no point)
+      ctx.fillStyle = '#9b8fc0'; ctx.beginPath(); ctx.ellipse(86 + reach, -150, 14, 9, -0.3, 0, Math.PI * 2); ctx.fill(); // soft cloth tuft
     } else { ctx.fillStyle = C.skin; circle(-30, -190, 10, C.skin); circle(36, -194, 10, C.skin); } // hands up
     ctx.restore();
   } else if (k === 'shield') { // short and wide, round cap with ear flaps, big square shield
@@ -369,27 +390,27 @@ function drawEnemy(e, t) {
       for (const ry of [-150, -108, -66]) circle(57 + push, ry, 5, '#c8d3d3');
     } else { circle(-40, -160, 12, C.skin); circle(44, -164, 12, C.skin); }
     ctx.restore();
-  } else { // leader: big and broad, cape, helmet with a tall plume, big rounded club
-    ctx.fillStyle = C.enemyDark; rr(-38 + lw * 8, -90, 30, 88, 10); ctx.fill(); rr(8 - lw * 8, -90, 30, 88, 10); ctx.fill();
+  } else { // leader: as tall as the hero at most (art-content review), much wider; cape, dome helmet, short plume, padded club
+    ctx.fillStyle = C.enemyDark; rr(-50 + lw * 8, -66, 36, 64, 12); ctx.fill(); rr(14 - lw * 8, -66, 36, 64, 12); ctx.fill();
     ctx.save(); ctx.rotate(lean);
-    ctx.fillStyle = '#3b3a6b'; ctx.beginPath(); ctx.moveTo(-50, -220); ctx.lineTo(-86, -84); ctx.lineTo(-20, -92); ctx.closePath(); ctx.fill(); // cape
-    ctx.fillStyle = C.enemy; rr(-56, -224, 112, 140, 34); ctx.fill();
-    ctx.fillStyle = C.steel; rr(-44, -196, 88, 64, 14); ctx.fill();            // breastplate
-    ctx.fillStyle = C.gold; circle(0, -164, 10, C.gold);
-    circle(6, -262, 42, C.skin); grumpyFace(18, -260, 42, dizzy, t);
-    ctx.fillStyle = C.steel; ctx.beginPath(); ctx.arc(6, -272, 46, Math.PI, 0); ctx.fill();
-    ctx.fillStyle = '#c0733a'; ctx.beginPath(); ctx.moveTo(-4, -316); ctx.quadraticCurveTo(-30, -380, -60, -360); ctx.quadraticCurveTo(-30, -350, -14, -312); ctx.fill(); // plume
+    ctx.fillStyle = '#3b3a6b'; ctx.beginPath(); ctx.moveTo(-60, -170); ctx.lineTo(-100, -64); ctx.lineTo(-30, -70); ctx.closePath(); ctx.fill(); // cape
+    ctx.fillStyle = C.enemy; rr(-78, -174, 156, 116, 44); ctx.fill();
+    ctx.fillStyle = C.steel; rr(-54, -156, 108, 56, 16); ctx.fill();           // breastplate
+    circle(0, -128, 10, C.gold);
+    circle(6, -200, 38, C.skin); grumpyFace(18, -198, 38, dizzy, t);
+    ctx.fillStyle = C.steel; ctx.beginPath(); ctx.arc(6, -208, 42, Math.PI, 0); ctx.fill(); rr(-40, -212, 92, 10, 5); ctx.fill();
+    ctx.fillStyle = '#c0733a'; ctx.beginPath(); ctx.moveTo(2, -246); ctx.quadraticCurveTo(-18, -260, -40, -252); ctx.quadraticCurveTo(-20, -248, -8, -242); ctx.fill(); // short plume
     if (weapon) {
       const sw = e.state === 'windup' ? -1.2 : e.state === 'strike' ? 0.6 : -0.4;
-      ctx.save(); ctx.translate(46, -170); ctx.rotate(sw);
-      ctx.fillStyle = '#7a5530'; rr(-7, -20, 14, 130, 7); ctx.fill();
-      ctx.fillStyle = '#8f6a3e'; ctx.beginPath(); ctx.ellipse(0, 120, 26, 34, 0, 0, Math.PI * 2); ctx.fill(); // rounded club head
+      ctx.save(); ctx.translate(60, -130); ctx.rotate(sw);
+      ctx.fillStyle = '#7a5530'; rr(-7, -16, 14, 100, 7); ctx.fill();
+      ctx.fillStyle = '#e9e1cf'; ctx.beginPath(); ctx.ellipse(0, 96, 28, 32, 0, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#b8ab90'; ctx.lineWidth = 3; ctx.stroke(); // padded club head
       ctx.restore();
-    } else { circle(-60, -240, 14, C.skin); circle(70, -244, 14, C.skin); }
+    } else { circle(-80, -170, 14, C.skin); circle(90, -174, 14, C.skin); }
     ctx.restore();
   }
   ctx.restore();
-  const topY = GROUND - (k === 'leader' ? 360 : k === 'shield' ? 240 : 290);
+  const topY = GROUND - (k === 'leader' ? 280 : k === 'shield' ? 240 : 272);
   if (dizzy) for (let i = 0; i < 3; i++) { const a = t * 5 + i * 2.1; star(e.x + Math.cos(a) * 34, topY + 20 + Math.sin(a) * 10, 9, C.glow, C.goldDark, a); }
   if (e.state === 'windup') { // telegraph: pulsing glow ring + a drawn "!" bubble
     const bx = e.x, by = topY - 20;
@@ -399,9 +420,9 @@ function drawEnemy(e, t) {
 }
 function drawDropped(d) { // a dropped weapon lying on the path (it fades)
   ctx.save(); ctx.globalAlpha = Math.min(1, d.life); ctx.translate(d.x, GROUND - 8); ctx.rotate(d.rot);
-  if (d.kind === 'spear') { ctx.fillStyle = '#7a5530'; rr(-90, -5, 180, 10, 5); ctx.fill(); circle(92, 0, 11, C.steel); }
+  if (d.kind === 'spear') { ctx.fillStyle = '#7a5530'; rr(-75, -5, 150, 10, 5); ctx.fill(); circle(80, 0, 15, '#e9e1cf', '#b8ab90', 3); }
   else if (d.kind === 'shield') { ctx.fillStyle = C.teal; rr(-60, -16, 120, 32, 8); ctx.fill(); }
-  else { ctx.fillStyle = '#7a5530'; rr(-60, -6, 120, 12, 6); ctx.fill(); ctx.fillStyle = '#8f6a3e'; ctx.beginPath(); ctx.ellipse(70, 0, 30, 22, 0, 0, Math.PI * 2); ctx.fill(); }
+  else { ctx.fillStyle = '#7a5530'; rr(-60, -6, 120, 12, 6); ctx.fill(); ctx.fillStyle = '#e9e1cf'; ctx.beginPath(); ctx.ellipse(70, 0, 30, 24, 0, 0, Math.PI * 2); ctx.fill(); }
   ctx.restore();
 }
 // Hand hint: a cartoon pointing hand that bobs toward a control (plan review 1: not text).
@@ -537,13 +558,13 @@ const BEAT_TYPES = ['fight']; // TASK-003b adds 'walk', 'hold', 'training', 'rea
 function startBeat(i) {
   const b = beats()[i];
   if (!BEAT_TYPES.includes(b.type || 'fight')) { console.warn(`beat ${i + 1}: type '${b.type}' is not built yet (TASK-003b); playing it as a fight`); events.push({ type: 'beat-type-not-built', beat: i + 1, beatType: b.type }); }
-  state.phase = 'fight'; state.lockX = beatX(i) - 500; state.cam = state.lockX;
+  state.phase = 'fight'; state.lockX = beatX(i) - tune.lockOffset; state.cam = state.lockX;
   state.queue = b.enemies.map((k, j) => ({ kind: k, left: (b.fromLeft || []).includes(j) }));
   state.spawnT = 0.4; state.stall = 0; state.endT = 0;
   events.push({ type: 'beat', beat: i + 1 });
 }
 function spawn(q) {
-  const left = q.left, x = left ? state.lockX - 80 : state.lockX + W + 80;
+  const left = q.left, x = left ? state.lockX - tune.spawnOffset : state.lockX + W + tune.spawnOffset;
   state.enemies.push({ id: state.nextId++, kind: q.kind, x, face: left ? 1 : -1, state: 'enter', t: 0, hits: 0, kb: 0, moving: true });
   state.tut.enemySeen = true;
 }
@@ -552,13 +573,13 @@ function updateEnemies(dt) {
   const speed = k => tune.enemySpeed * (k === 'leader' ? tune.leaderSpeedMul : 1);
   for (const e of state.enemies) {
     e.t += dt;
-    if (e.kb) { const m = e.kb * dt / 0.25; e.x += m; e.kb -= m; if (Math.abs(e.kb) < 2) e.kb = 0; }
+    if (e.kb) { const m = e.kb * Math.min(1, dt / tune.kbDecay); e.x += m; e.kb -= m; if (Math.abs(e.kb) < 2) e.kb = 0; }
     const side = Math.sign(e.x - h.x) || 1, dist = Math.abs(e.x - h.x);
     if (e.state !== 'flee') e.face = -side;
     // Only the nearest enemy on each side may strike; the others wait a little further back.
     const sameSide = state.enemies.filter(o => o.state !== 'flee' && Math.sign(o.x - h.x) === side).sort((a, b) => Math.abs(a.x - h.x) - Math.abs(b.x - h.x));
     const rank = sameSide.indexOf(e);
-    const stand = tune.enemyReach - 10 + Math.max(0, rank) * 150;
+    const stand = tune.enemyReach - tune.standGap + Math.max(0, rank) * tune.queueSpacing;
     switch (e.state) {
       case 'enter': case 'approach': {
         const target = h.x + side * stand, dx = target - e.x;
@@ -863,7 +884,7 @@ const scenes = {
       ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fillRect(0, 0, W, H);
       const t = state.t, y = 560;
       ctx.save(); ctx.translate(0, y - GROUND);
-      drawHero(170, GROUND, 1, { walk: false, defend: false }, t, 0.85);
+      drawHero(170, GROUND, 1, { walk: false, defend: false }, t, 1);
       drawEnemy({ x: 470, kind: 'spear', face: -1, state: 'approach', id: 1 }, t);
       drawEnemy({ x: 780, kind: 'shield', face: -1, state: 'windup', id: 2 }, t);
       drawEnemy({ x: 1100, kind: 'leader', face: -1, state: 'approach', id: 3 }, t);
