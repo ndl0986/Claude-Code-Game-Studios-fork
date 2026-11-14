@@ -53,7 +53,14 @@ now. This needs `sdkmanager "platforms;android-36"`.
   cited by a bundled hero is not approved, or when a schema MAJOR is newer (R11). Debug builds
   play with `UNSIGNED Cxx` badges instead. At run time, a release build hides an unsigned
   mission and logs it.
-- **Saved data:** `lang`, the best `stars.<hero>` and `unlocked`, and nothing else.
+- **Saved data (D-16, D-07):** `lang`, the best `stars.<hero>`, `completed.<hero>`,
+  `seen_open.<hero>` and `medal.<hero>`, and nothing else. They are written with a synchronous
+  commit at quiz finish, before results. `seen_open` is also written on every title load.
+- **Beats (D-08 B):** walk, hold-meter, training, fight and reach-the-flag. Non-fight beats show a
+  card before play; fights show a caption after. Beat starts follow mission-flow F5 (`beatX`).
+- **QC builds:** a build handed to QC is committed and copied to
+  `production/qa/builds/TASK-007-<hash>.apk` (git-ignored). Evidence is captured on a separate
+  AVD, never on the QC device during a round.
 
 ## Debug screen jumps (screenshots)
 
@@ -62,10 +69,15 @@ adb shell am start -n com.galaxyandsun.daidatanhhung/.GameActivity \
   --es startScreen quiz --ei q 2 --es stage wrong --es lang en
 ```
 
-- `startScreen`: title, intro, play, caption, pause, ending, quiz, results, unlock.
+- `startScreen`: title, intro, play, caption, pause, ending, quiz, results, unlock, skipwarn (the
+  D-07 warning over the intro).
 - `beat`: the beat number for play and caption. `q`: the question number for quiz. `stars`: the
   star count for results and unlock.
-- `stage`: telegraph or start (play), wrong or right (quiz).
+- `stage`: for play, `start`, `card` (a non-fight beat's card), `telegraph` (fight), `meter`
+  (hold-meter at 60%), `blocks` / `special` (training steps) or `encounter` (reach-the-flag). For
+  quiz, `wrong` or `right`. For results, `nomedal`.
+- `--es hero sample` loads the test-only sample hero. `--es missionFile <file>` plays a draft
+  mission from `content/drafts/heroes/<id>/`.
 - `--ez freeze true` draws without stepping, to capture a 1.1 s telegraph.
 - Keys mirror the prototype for QC with `adb shell input keyevent`: A/D or the D-pad move,
   J/Space attack, K defend, Enter next, P pause, M mute, L language, 1–3 answer.
