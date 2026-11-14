@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.2",
+  "schema_version": "1.3",
   "quiz_stars": {
     "retries_counted": "total_across_quiz",
     "thresholds": [
@@ -107,7 +107,8 @@
           "font_px": 37,
           "max_lines": 1,
           "weight": 800,
-          "class": "body"
+          "class": "body",
+          "narrow_box_width": 720
         },
         "scene": {
           "box_width": 880,
@@ -135,7 +136,8 @@
           "font_px": 37,
           "max_lines": 2,
           "weight": 800,
-          "class": "body"
+          "class": "body",
+          "narrow_box_width": 720
         },
         "quiz_prompt": {
           "box_width": 980,
