@@ -76,3 +76,103 @@ Accessibility.
 A3, B, C behaviour (with the parity switches PR), D timing and rules, E timing (stall hint, reset on resume, hold
 hand when stuck, stuck arrow, flag hints), F flow plus medal, G save at quiz finish, H the 2nd landscape direction,
 I resume, J, K2 (Ối! in training).
+
+---
+
+# Part 2: touch cases on the iPhone 18 Pro (iOS 27.0)
+
+- **Device change (Luan's call, relayed by the leader):** iPhone 18 Pro Simulator, iOS 27.0
+  (`E9F515E9-58F2-4A92-ABEF-C5CD59CE8183`), a Dynamic Island phone, so there is no foldable caveat. The Duo was shut down
+  (not erased). The same frozen `0bb4826` copy was installed after an uninstall.
+- **Input:** Device Hub window, driven by macOS mouse events posted to the simulator view (one pointer), plus `orca computer`.
+  Real multi-touch isn't possible this way: **NOT ASSESSED**.
+- **Captures:** `simctl io screenshot` (2622×1206), about 0.5–0.7 s per frame, so timings are ± one frame.
+  There was no frame-step tool, so exact timings (1.1 s telegraph, the 0.25 s debounce, 5.0 s stall) are bounded, not measured.
+- **Runs:** run A was a fresh install that skipped story (Skip → Keep reading → Skip → Skip anyway), with 3 quiz retries.
+  Run B read every story box with Tiếp only and had 0 retries. Run C started a new run with the medal earned.
+
+**Overall part 2: FAIL. 2 new bugs (1 S2 input, 1 S3 quiz timing) and 2 low ones.** The full mission plays
+end to end, on both runs, and saving works.
+
+| # | Case | Steps | Expected | Actual | Result | File |
+|---|---|---|---|---|---|---|
+| H1 | Safe area, island on the left | Rotate the device in Device Hub; title and training | Nothing under the island or the home indicator | The game is 16:9 (≈713×402 pt) inside the 874×402 pt screen, with ≈80 pt bars on both sides (island inset 62 pt). Pads sit ≥24 pt above the bottom edge (indicator inset 21 pt) | **PASS** | h1_frame_island-left_title.png, h1b_frame_island-left_training.png |
+| H2 | Safe area, island on the right | Rotate 180° | Same | Same layout, mirrored device | **PASS** | h2_frame_island-right_training.png, h2_device_island-right_training.png |
+| H3 | Pads ≥72 pt (18 Pro) | Measured on the device shots | ≥72 pt | ◀/▶ ≈89, Đỡ ≈88, Đánh ≈103, Cờ ≈90 pt | **PASS** | h2_device_island-right_training.png |
+| A3 | VI\|EN kept after relaunch | Tap EN, kill, relaunch | EN kept | EN title after relaunch; `lang = en` in UserDefaults | **PASS** | a3a_after-tap-EN.png, a3b_relaunch_EN-kept.png |
+| B | Story flow; double tap within 0.25 s advances once (MF AC9) | Two taps 0.15 s apart on Tiếp: card 1 box 1, ending box 1 | One box | Card 1: box 1 → box 2 only. Ending: box 1 → box 2 only. The intro has a single box, then the `walk_to` leg (correct per data). Each card is scene lines + the goal box (card 1: 4 boxes) | **PASS** | b2_card1-box1.png, b3_card1-after-double-tap.png, b4_ending_after-double-tap.png |
+| C1 | Walk (card first, move pads only, 11.6 s) | Hold ▶ from rest | Ends ≈11.6 s | Still walking at 11.4 s, done (medal 1 lit, "Đi tiếp") at 12.0 s from the press, which includes ~0.1–0.3 s input latency. Only ◀▶ shown | **PASS** (±0.4 s) | c1_walk_t11.4s_still-walking.png, c1_walk_t12.0s_done_medal1.png |
+| C2 | Hold-meter (Cờ only, 2.5 s, no drain) | Hold 1.2 s, release 2.5 s, hold 1.0 s, then 0.5 s | Meter keeps its level while released; ends at 2.5 s total | The ring stayed at the same fill while released, ≈88% after 2.2 s, and the beat ended on the next 0.5 s hold | **PASS** | c2_hold_after-1.2s.png, c2_hold_released-2.5s_no-drain.png, c2_hold_after-2.2s-total.png, c2_hold_done_medal2.png |
+| C3 | Training: early flag tap does nothing; 3 dummies → blocks; blocks count only if held at the strike; flag | As named | As named | Early Cờ tap: nothing. 3 dummies hit, and the partner switched to blocks right after the last dummy. A defend press released mid-windup: hit with "Ối!", not counted. Defend held: "Đỡ được!" ×3, then the partner leaves and the flag tap ends the beat | **PASS** | c3_*.png |
+| C4 | Parity: partner rest → windup cycle | Watch the partner | Rest, then windup | Rest ↔ windup with "!" each cycle | **PASS** | c3_partner-windup_defend-hand.png, i1_*.png |
+| C5 | Reach-the-flag: 2 encounters lock the camera, then the flag; no flag pad in fights | Play both runs | Camera locks until enemies flee; flag ends the beat | The camera locks and unlocks after each encounter, and the flag ends the beat; no flag pad in fights. The known **G2 pinning** (fixed in later builds): the hero walks *through* the first enemy and gets pinned at the right screen edge with enemies behind him or half off-screen (the leader overlaps the hero). Both runs finished: run A in 154 s, run B in ~176 s (within the 3-min cap) | **PASS with the known G2 issue** | d1_*.png, d3_*.png, d6_hero-walks-through-enemy_pinning.png, d5_reached-flag_ending-box1_t154s.png |
+| D1 | Telegraph 1.1 s | Idle in the encounter, frames every ~0.6 s | "!" ≈1.1 s, then strike | "!" in 2 consecutive frames (2.5–3.8 s), strike in the next (3.8–4.3 s): ≥0.65 s and ≤1.8 s, consistent with 1.1 s. Leader 1.32 s: not separately timed | Consistent; exact timing NOT ASSESSED | d7_*.png |
+| D2 | Block rules, flee, no lives | Fights | Weapon dropped on flee; no lose screen | Two hits → enemy flees, weapon on the ground. Many hits taken, no lose screen or lives | **PASS** | d2_enemy-flee_weapon-dropped.png |
+| D3 | Dropped attack while defending (SSC AC18) | — | — | Needs two simultaneous touches | NOT ASSESSED (single pointer) | — |
+| E1 | First-use hands | Run start | Hand on ▶ until the first move; hand on Đánh in training until the first hit; hand on Đỡ during windup until the first block | All seen as specified | **PASS** | c0_walk-to-0_hand-on-right.png, c3_*.png |
+| E2 | Hold hand to 25%; again when stuck | Hold 0.6 s (24%), then idle | Hand stays below 25%; returns when stuck | Hand still on at 24%; back with a pulse after ~6 s idle | **PASS** | e1_hold-hand-still-at-24pct.png, e1_hold-hand-back-when-stuck.png |
+| E3 | Stuck hint ~5 s (arrow over the next dummy); reset on resume | Idle in training; pause/resume while the hint shows | Hint after 5 s; hidden on resume; back after another 5 s | Arrow over the next dummy plus the attack pulse after ≈5 s. After resume: hidden at 0.5 and 3.5 s, back by 6 s | **PASS** (±0.6 s) | e2_stuck-arrow-over-next-dummy.png, e3_*.png |
+| E4 | Separate flag hints: held vs tapped | Hold-meter, then training after blocks | Different teach hints | Hold-meter: hand plus ring (hold). Training: hand on Cờ after the 3 blocks (tap), with a pulse when idle | **PASS** | e1_*.png, e4_flag-tap-teach-hand_after-blocks.png, c3_flag-pulse-after-blocks.png |
+| F1 | D-07: first Skip → warning (Keep reading default); Keep reading → same box | Run A, intro | As named | Warning with "Đọc tiếp" highlighted; Keep reading returns to the same box | **PASS** | f1_run-A_skip-tapped_warning.png, f2_run-A_keep-reading_same-box.png |
+| F2 | Warning returns after Keep reading; Skip anyway → silent for the run | Run A, card 1, then cards 2–4 | As named | The warning came back on card 1; "Vẫn bỏ qua" skipped the card. Skip on cards 2, 3 and 4 went straight to play with no warning | **PASS** | f3_run-A_skip-again_warning-returns.png, f4_run-A_after-skip-anyway.png |
+| F3 | Medal gold only for a full read | Results of run A and run B | A: outline; B: gold | A: outline medal, "Read it all for a medal", no `medal` key. B: gold "Nhận được huy hiệu!", `medal.tran-quoc-toan = true` | **PASS** | g1_run-A_results_skipped.png, g3_run-B_results_full-read.png |
+| F4 | No warning once the medal is earned; medal never lost | Run C: Start, Skip | No warning; medal stays | Straight into play; `medal` still true | **PASS** | f5_medal-earned_skip-no-warning.png |
+| G1 | D-16: saved at quiz finish; kill on results → relaunch keeps it | Run A: finish quiz, kill on results, relaunch | Completed and stars kept | `completed = true`, `stars = 1` saved before the kill and kept after relaunch | **PASS** | g2_relaunch-after-kill-on-results_title.png |
+| G2 | Best stars kept / improved | Run B with 0 retries | 3★ replaces 1★ | `stars = 3` | **PASS** | g3_run-B_results_full-read.png |
+| G3 | Results → title ("More heroes are coming") | Tiếp on results | Title | Title | **PASS** | g4_results-next_title.png |
+| Q1 | Quiz: greyed card, 2 wrong → third only; why; stars by retries | Run A Q1: 2 wrong, then right; Q3: 1 wrong | Rules per GDD | Greyed lavender cards with the circular arrow; third card only after 2 wrong; `why` shown; R=3 → 1★; R=0 → 3★ | **PASS** | k_quiz1_*.png, g1/g3 |
+| Q2 | Next not visible before `feedback_time` (0.9 s) (QS AC5) | Timed capture after a right pick | No Tiếp before 0.9 s | **Tiếp already visible in the first frame, ≤0.73 s after the pick**, on Q1 and Q2 | **FAIL: iOS-R2-04** | bug_quiz2_tiep-visible-within-0.67s.png, k_quiz1_right_tiep-at-~0.3s.png |
+| Q3 | Language switch mid-quiz (QS AC10) | Wrong pick, pause → EN → resume | Same card greyed, all EN | Same card greyed, all EN | **PASS** | k_quiz3_wrong_vi.png, k_quiz3_after-lang-EN_still-greyed.png |
+| I1 | Resume restarts the telegraph (SSC AC19) | Training: pause mid-windup, resume, timed frames | No early strike; full windup after resume | The partner went back to rest (no "!") for ~1.3 s, then a full new windup, strike at 2.3–2.8 s. No early strike | **PASS** (the partner re-enters rest first; enemy case not separately timed) | i1_resume-*.png |
+| I2 | Pause screen during the quiz | Pause on Q3 | Pause over the quiz | The pause overlay shows the **last battle scene** (camp, hero) behind it, not the quiz | **Note: iOS-R2-06 (low)** | i_pause_from-quiz.png |
+| J | Sound path | Mute toggle | Icon toggles | Speaker ↔ muted icon. Hearing: NOT ASSESSED in the Simulator | Icon PASS; audio NOT ASSESSED | j1_sound-toggled.png |
+| K2 | "Ối!" in training clear of pause | Hits in training | Below the HUD | "Ối!" sits above the hero, below the HUD row, in training and reach | **PASS** | c3_early-release-not-blocked_oi-below-hud.png |
+| M | Multi-touch (hold ◀/▶ and attack) | — | — | Single pointer only | NOT ASSESSED | — |
+
+## New bugs, part 2 (bug-report format)
+
+### iOS-R2-03: A pad stays "held" after release if the touch reported movement while held (stuck input)
+- **Severity:** High (S2): the hero keeps walking, or keeps defending (can't attack), after the child lifts the finger.
+  **Priority:** P1. **Confidence:** PLAUSIBLE on a real device (seen with Simulator mouse input; needs one device check).
+- **Steps (Simulator):** in play, press ▶ (or Đỡ) and keep it down for ≥0.1 s while the pointer reports move events at the
+  same spot (a mouse drag with no movement), then release.
+- **Expected:** the pad releases; the hero stops.
+- **Actual:** the pad stays lit and the action continues (▶: the hero keeps walking ~2 s+ after release; Đỡ: the shield
+  stays up). A separate short tap anywhere on a pad clears it. **Control:** the same hold with *no* move events releases
+  correctly. A real finger nearly always reports small `touchesMoved` while held, so this likely reproduces on devices;
+  `touchesEnded` for a moved touch may be matched against a different pad/ID. The same thing made a training flag tap with a
+  move event not count.
+- **Evidence:** bug_right-stuck-2s-after-release.png, bug_defend-stuck-1s-after-release.png,
+  bug_control_left-held-no-move-events_released-ok.png.
+
+### iOS-R2-04: The quiz "Tiếp" appears before `feedback_time` (0.9 s) after a right answer
+- **Severity:** Medium (S3), QS AC5. **Priority:** P2.
+- **Steps:** in the quiz, pick the right card and capture continuously.
+- **Expected:** no Tiếp until 0.9 s (`tuning.feedback_time`).
+- **Actual:** Tiếp is in the first capture, taken 0.0–0.67 s after the release (≤0.73 s after touch-down), on Q1 and Q2.
+  A child can skip the `why` line instantly.
+- **Evidence:** bug_quiz2_tiep-visible-within-0.67s.png (with timing log), k_quiz1_right_tiep-at-~0.3s.png.
+
+### iOS-R2-05 (update to R2-02): grey screen after a fresh install lasts several seconds on the 18 Pro
+- **Severity:** Low (S4).
+- **Actual:** on the 18 Pro, a capture ~8 s after the first launch post-install was still flat grey; the app then showed
+  (taps during the grey period started the run). The Duo showed a single grey frame. Same likely cause as R2-02.
+- **Evidence:** l4_grey-after-fresh-install_18pro_t8s.png.
+
+### iOS-R2-06: The pause overlay during the quiz shows the last battle scene behind it
+- **Severity:** Low (S4).
+- **Steps:** in the quiz, tap pause.
+- **Expected:** pause over the dimmed quiz.
+- **Actual:** the dimmed camp scene with the hero is behind "Tạm dừng"; on resume the quiz returns correctly.
+- **Evidence:** i_pause_from-quiz.png.
+
+## Notes, part 2
+
+- **Known G2 pinning** (reach-the-flag): the hero walks through enemies and is pinned at the right edge; the leader overlaps the
+  hero, and enemies are drawn half off-screen. Both runs still finished in under 3 min. Also in training the hero is pushed to
+  the left edge and partly clipped by each partner strike.
+- The quiz question's 2nd line sits close to the card tops on Q2 and Q4/Q5 EN (no overlap).
+- The quiz order was the same in both runs (deterministic shuffle).
+- Early files `b1_double-tap_after-1..7.png`, `f1_skip-warning-first-play.png` and `f2_after-keep-reading_box1.png` are from my first
+  attempt, before I knew the intro has one box: they show one Tiếp tap going from intro box 1 to the `walk_to` leg (correct).
+- Input caveat: occasionally the first click after bringing Device Hub to the front was swallowed by macOS; repeated where needed.
