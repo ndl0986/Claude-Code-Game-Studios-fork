@@ -11,6 +11,65 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-31 The slice has too much reading for a 6-year-old, and no voice (TASK-020 W1)
+
+- **Flow:** cross-GDD review (`design/gdd/reviews/gdd-cross-review-TASK-020.md` W1) → mission text
+  (`content/data/mission.json`) and Audio GDD → playtest with children.
+- **Finding:** about 15 text boxes before the first real action (4 intro, the walk card, 9 dialogue
+  lines + 2 asks); about 26 story boxes in all. A child at the end of grade 1 reads roughly 40–60
+  syllables a minute (estimate), so the story alone takes 4–6 min, over the 3–5 min mission target.
+  Some words are above grade 1–2 ("vương hầu", "trăm quan", "xâm lược", "hy sinh").
+- **Options:** A. **record voice-over** for the intro, dialogue and ending of the slice · B. **cut**:
+  intro to 2 boxes, dialogue to ≤ 6 lines, simpler words · C. both · D. keep as is, and playtests
+  only with an adult reading aloud.
+- **Recommendation:** C, but B first (it's cheap and helps even with voice); then VO before
+  playtesting with 6–7-year-olds. Any re-wording of history lines comes back to you to sign off.
+- **Status:** Open.
+
+### D-32 What the medal means (TASK-020 W13)
+
+- **Flow:** Hero progression GDD (medal) + Mission flow Rule 15 (a box counts as read when advanced).
+- **Finding:** mashing "Tiếp" through all 26 boxes (~7 s) keeps the medal; an honest Skip loses it.
+  The medal is described as "hearing the whole story", which isn't true without voice.
+- **Options:** A. keep the rule; reword the medal as "turned every page" · B. after voice-over exists,
+  a box counts only once its clip has played (or a minimum time passed) · C. Skip costs nothing on
+  the first play.
+- **Recommendation:** A now, B when voice-over lands.
+- **Status:** Open.
+
+### D-33 Quiz Q1 and Q5 need new pictures/wording (TASK-020 W15)
+
+- **Flow:** quiz data (`content/data/quiz.json`) → claims (C01, C02) → your sign-off.
+- **Finding:** Q1's choices are dynasty flags and Q5's are helmets; a 6-year-old can't tell them
+  apart from pictures alone, and choices aren't voiced. Q1 ("…thời nhà nào?") sits under the name
+  "**Trần** Quốc Toản" and its why line teaches "surname = dynasty", which is wrong as a general rule.
+- **Proposal:** game-art-content rewrites Q1 (no surname giveaway) and makes Q5 use the enemy helmets
+  the child actually fought in beat 4. You sign off the new wording and the flag/helmet pictures.
+- **Status:** Open (game-art-content drafts on your go).
+
+### D-34 The orange: anger or determination? (TASK-020 W17, claim C06)
+
+- **Flow:** beat 2 hold-meter (`tqt.f2`) → claim C06 → audio cue and goal text.
+- **Finding:** C06 says he crushed the orange "lúc nào không biết" (without noticing) because he was
+  angry; the game makes it a deliberate 2.5 s hold, with a "determination, not anger" sound. The goal
+  also says "Hold down the flag button!" before the banner exists in the story.
+- **Options:** A. **determination** (gentler for children; the text says he squeezed it without
+  noticing while thinking hard) · B. **anger**, as in the sources.
+- **Team fix either way:** the pad shows a fist/orange icon on this beat, and the goal is reworded
+  ("Nắm chặt quả cam!").
+- **Recommendation:** A, worded so it stays true to C06 ("he was so upset he didn't notice").
+- **Status:** Open.
+
+### D-35 Concept wording on ads and purchases (TASK-020 A13)
+
+- **Flow:** `design/gdd/game-concept.md` line 67 vs the "Safe for kids" pillar.
+- **Finding:** line 67 says "no ads or purchases aimed at kids **unless Luan decides**"; the pillar
+  says none. The "unless" leaves an opening.
+- **Options:** A. **remove "unless Luan decides"** so it matches the pillar · B. keep it as an open
+  question for later.
+- **Recommendation:** A.
+- **Status:** Open.
+
 ### D-30 Accept ADR-0003: how the game saves progress
 
 - **Flow:** Save & progress GDD → ADR-0003 (`docs/architecture/adr-0003-save-format-and-storage.md`)
@@ -77,6 +136,7 @@ it) · **Decided** (Luan's call, with the date).
   a new phone · B. **exclude** the save from backups, so nothing leaves the device even in the
   parent's backup, but progress is lost on a new phone.
 - **Recommendation:** A (non-personal flags; losing a child's medals on a new phone feels unkind). Both devs agree; on iOS A is the default (no code).
+- **Update (TASK-020 A15, ADR-0003):** backup is the only way data could leave the phone. iOS: no code; Android: allowBackup is false today, so "allow" is a manifest change backing up only save.json. Decide before a Kids-category submission.
 - **Status:** Open (privacy: your call).
 
 ### D-20 A language choice screen on first launch?
@@ -155,6 +215,7 @@ it) · **Decided** (Luan's call, with the date).
   · B. give blocking a small reward (a blocked enemy is stunned and the next hit counts double, or a
   block fills the banner meter) · C. decide after the slice playtest.
 - **Recommendation:** C, then B if children ignore defend.
+- **Update (TASK-020 A7):** still true in the cross-review: spamming attack wins every fight; defend has no payoff.
 - **Status:** Open.
 
 ### D-14 What stars measure, and what they're for
@@ -176,6 +237,7 @@ it) · **Decided** (Luan's call, with the date).
 - **Options:** A. accept · B. reseed per run (seed + run_count + question_index); both apps stay
   identical for the same run_count, and the fixture still tests the algorithm.
 - **Recommendation:** B (small change: devs + Quiz GDD rule 3).
+- **Update (TASK-020 W14):** still open; a per-run counter in the shuffle seed is the team's proposed fix (both apps).
 - **Status:** Open.
 
 ### D-12 Legend markers on short labels (R4b, for the devs + art)
