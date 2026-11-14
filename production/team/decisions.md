@@ -37,19 +37,6 @@ it) · **Decided** (Luan's call, with the date).
   for everyone, enemy slate tones, quiz and material colours)?
 - **Status:** Open. Blocks final art only; the slice runs on placeholders meanwhile.
 
-### D-17 How the game speaks to the child in Vietnamese ("bạn", "em", or no pronoun)
-
-- **Flow:** UI strings and story text → every screen. It sets the game's voice.
-- **Context:** the skip warning is the first string that addresses the child directly: "Nếu bỏ qua,
-  **bạn** sẽ chưa nhận được huy hiệu của câu chuyện này nhé." Other strings avoid pronouns
-  ("Thử lại nhé!", "Giỏi lắm!").
-- **Options:** A. **no pronoun** where possible (e.g. "Nếu bỏ qua, câu chuyện này sẽ chưa có huy hiệu
-  nhé."), matching the other strings · B. **"em"**, as the textbooks address pupils (the game sounds
-  like a teacher or older sibling) · C. **"bạn"**, friendly and neutral (the current text).
-- **Recommendation:** A now, and B wherever a pronoun is unavoidable, so the voice matches what
-  children hear at school.
-- **Status:** Open. Small; game-art-content changes it in one place.
-
 ### D-16 Saved progress keys: work out unlocks instead of storing them
 
 - **Flow:** Hero progression GDD (`89afd10`) → D-04 save ADR → both apps' save code.
@@ -258,6 +245,7 @@ it) · **Decided** (Luan's call, with the date).
 
 | Date | Decision |
 | --- | --- |
+| 2026-11-14 | **D-17:** Vietnamese text uses **no pronoun** where possible; when one is needed, address the child as **"em"** (as the textbooks do). The skip warning drops "bạn". |
 | 2026-11-14 | **D-08: B, the full structure** in the slice: walk (riverbank to Bình Than) → hold-meter (the orange) → training (dummies, blocks, raise the banner) → reach-the-flag with fight encounters. `mission-full.json` becomes the slice's mission. |
 | 2026-11-14 | **D-10: B, later.** No Special move in fights or encounters yet; the banner button appears only in the hold-meter and training beats (R13). Combat Special comes back as its own decision. |
 | 2026-11-14 | **D-07 (Luan's own option):** story boxes can be skipped, but the game warns that skipping means the mission isn't fully completed, so the child doesn't earn **that mission's medal**. A medal per mission rewards playing the full story; quiz stars stay separate. |
