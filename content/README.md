@@ -11,6 +11,7 @@ The first apps to read it (TASK-006 iOS, TASK-007 Android) are a **native vertic
 | `data/` | **yes**, the whole folder | `index.json`, `strings.json`, `sources.json`, `markers.json`, `rules.json`, `tuning.json`, `assets.json`, `heroes/<hero_id>/{mission,quiz,claims}.json`, `fonts/`, pictures and sounds |
 | `schema/` | no (tests only) | JSON Schema 2020-12, one per file type, plus `common.schema.json` |
 | `samples/` | no (tests only) | `heroes/sample/`: a full ⟨placeholder⟩ hero; the apps run it until real data lands |
+| `metrics/` | no (tests only) | `nunito-advances.json`: Nunito's advance per code point at the rendered weights (800, 600), per 1000 em, generated on Android by the debug-only `FontMetricsActivity`. The font's own `hmtx` is its wght 200 default and is ~8% narrower, so R8c uses this table. |
 | `fixtures/` | no (tests only) | Input plus expected output for the data rules both apps must agree on |
 
 - **Android:** `sourceSets.main.assets.srcDirs("../../content/data")`; debug builds may add `samples/`.
@@ -86,7 +87,9 @@ them against `data/` and `samples/`. `fixtures/validity.json` has one case per r
 | R5 | A fact or fact_as_recorded claim can't be `approved` while any of its sources is `to_confirm`. R5b: only an invented claim may have no sources. |
 | R6 | An invented claim is never cited by quiz text. |
 | R7 | All text is Unicode NFC. |
-| R8 | No vi or en line is over 120 characters (schema), and EN fits `rules.json` `text_limits.en_budget` for its field type. For `strings.json` the type comes from the id: `ui.btn.*`, `ui.pad.*`, `ui.lang.*` and `*_confirm` / `*_keep_reading` are `button`; ids ending in `_warning` are `dialog` (60, TASK-005e); every other `ui.*` id is `ui`. |
+| R8 | No vi or en line is over 120 characters (schema), and EN fits `rules.json` `text_limits.en_budget` for its field type. For `strings.json` the type is the entry's optional `field` (button, ui, dialog; D-21) if set, else it comes from the id: `ui.btn.*`, `ui.pad.*`, `ui.lang.*` and `*_confirm` / `*_keep_reading` are `button`; ids ending in `_warning` are `dialog` (60, TASK-005e); every other `ui.*` id is `ui`. |
+| R8b | (D-21) VI fits `rules.json` `text_limits.vi_budget` for its field type (= floor(1.6 × en_budget), capped at 120). |
+| R8c | (D-21, Language & text GDD F1) Each VI and EN line fits its field's box: advances from `content/metrics/nunito-advances.json` at the field's `weight` × `font_px` / 1000, greedy word wrap at spaces into `box_width / (1 + allowance)`, at most `max_lines`; one word wider than the box fails. Values in `text_limits.fit.fields` (world px at 1×). |
 | R9 | Text ids are unique across the bundle. |
 | R10 | Every `picture_id` and asset id resolves in `assets.json` and the file exists. |
 | R11 | An app refuses a `schema_version` with a newer MAJOR number at **build** time. A newer MINOR number is fine. |
