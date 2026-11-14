@@ -403,10 +403,10 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         if (!g.skipWarning) return
         next = ArrayList()
         d.rr(0f, 0f, W, H, 0f, C.a(0xFF2A2440.toInt(), 0.75))
-        d.rr(200f, 150f, 880f, 420f, 36f, C.CREAM, C.GOLD, 6f)
+        val bh = rowH(); val by = 455f // pad_min buttons (Input Rule 4) inside the card, which grows to hold them (QC r6)
+        d.rr(200f, 150f, 880f, by + bh + 24f - 150f, 36f, C.CREAM, C.GOLD, 6f)
         medal(W / 2, 250f, 56f, false)
         d.textBox(g.ui(UiIds.SKIP_WARNING), W / 2, 365f, 780f, 37f, C.INK, 3, semiBold = true) // fit.dialog 780 @ 37, 3 lines, weight 600
-        val bh = rowH(); val by = min(450f, 570f - bh) // pad_min (Input Rule 4), inside the 150–570 card
         button("keep", g.ui(UiIds.KEEP_READING), 260f, by, 360f, bh, g.t, pulse = true) { g.keepReading() }
         button("skipok", g.ui(UiIds.SKIP_CONFIRM), 660f, by, 360f, bh, g.t, fill = C.a(C.WHITE, 0.9), shade = 0xFFC8B89A.toInt()) { g.confirmSkip() }
     }
@@ -479,23 +479,40 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         bmpPaint.alpha = (d.alpha * 255).toInt(); d.c.drawBitmap(b, null, dst, bmpPaint)
     }
 
+    /** quiz-and-results.md §5.2: the small-k quiz layout applies at 0.40 ≤ k < 0.48 (pad_min > 72 dp / 0.48 world px). */
+    private fun smallK(g: Game) = fit.padMinWorld > g.tuning["pad_min"].toFloat() / 0.48f
+
     private fun quiz(g: Game) {
         val q = g.quiz ?: return
         val t = g.t
+        val small = smallK(g); g.lockEachQuestion = small // §5.2: there each new question takes the entry lock (Tiếp over slot 3)
         d.c.drawColor(C.BG)
         d.drum(1160f, 640f, 90f, C.a(C.GOLD, 0.18)) // (no drum top-left: pause and sound sit there)
-        val n = q.questions.size
-        for (i in 0 until n) d.circle(W / 2 - (n - 1) * 30 + i * 60, 50f, 16f, if (i < q.index || (i == q.index && q.rightShown >= 0)) C.GOLD else C.a(C.WHITE, 0.3), C.GOLD_DARK, 3f)
-        // quiz-and-results.md: the counter top-centre, just left of the dots (pause and sound own the top-left)
-        d.text("${g.ui(UiIds.QUESTION)} ${min(q.index + 1, n)}/$n", W / 2 - (n - 1) * 30 - 40, 50f, 28f, C.GOLD, Paint.Align.RIGHT)
+        // The counter and dots: top-centre of the free band right of pause/sound (max(330, corner right + 8) … 1262)
+        val (cr, cgap) = cornerSize(g); val band0 = max(330f, 18f + 4 * cr + cgap + 8f); val bandC = (band0 + 1262f) / 2
+        val n = q.questions.size; val dx = 60f; val d0 = bandC + 70f - (n - 1) * dx / 2
+        for (i in 0 until n) d.circle(d0 + i * dx, 50f, 16f, if (i < q.index || (i == q.index && q.rightShown >= 0)) C.GOLD else C.a(C.WHITE, 0.3), C.GOLD_DARK, 3f)
+        d.text("${g.ui(UiIds.QUESTION)} ${min(q.index + 1, n)}/$n", d0 - 40f, 50f, 28f, C.GOLD, Paint.Align.RIGHT)
         val cur = q.current
-        d.textBox(cur.prompt.get(g.lang), W / 2, 213f, 980f, 40f, C.WHITE, 2, semiBold = true); badge(g, cur.prompt, W / 2 + 420, 262f) // two lines 163–263: below pause/sound at pad_min (≤ 155), above the cards (270) // fit.quiz_prompt 980 @ 40, weight 600
-        val cw = 390f; val ch = 290f; val gap = 20f; val x0 = (W - 3 * cw - 2 * gap) / 2; val y0 = 270f // cards 270–560, clear of the why bar (566)
+        // Prompt: 2 lines (≤ 108 at 40 px) from corner_bottom + 8 (163 at ref, 206 at k 0.40), then the cards 8 below
+        val pTop = cornerClear(g)
+        d.textBox(cur.prompt.get(g.lang), W / 2, pTop + 54f, 980f, 40f, C.WHITE, 2, semiBold = true); badge(g, cur.prompt, W / 2 + 420, pTop + 100f) // fit.quiz_prompt 980 @ 40, weight 600
+        val ch = 290f; val y0 = pTop + 116f
+        val (cw, gap) = if (small) 380f to 30f else 390f to 20f
+        val x0 = if (small) 40f else (W - 3 * cw - 2 * gap) / 2
+        // §5.2 after the right pick (small k): the wrong cards fade out over 0.2 s and are removed, then the right card glides
+        // to the left slot over 0.3 s; all render-only from rightT, inside feedback_time (0.9 s), before Tiếp shows.
+        val rt = if (q.rightShown >= 0) q.rightT else -1.0
+        val fade = if (small && rt >= 0) (1 - rt / 0.2).coerceIn(0.0, 1.0) else 1.0
+        val glide = if (small && rt >= 0) ((rt - 0.2) / 0.3).coerceIn(0.0, 1.0).toFloat() else 0f
         q.order.forEachIndexed { slot, j ->
             val a = cur.choices[j]
-            var x = x0 + slot * (cw + gap)
-            if (q.lastWrong == j && q.shakeT > 0) x += (sin(q.shakeT * 60) * 14 * q.shakeT * 2).toFloat()
             val wrong = j in q.wrongPicked; val ok = q.rightShown == j
+            if (!ok && small && rt >= 0 && fade <= 0.0) return@forEachIndexed // removed
+            var x = x0 + slot * (cw + gap)
+            if (ok && small) x += (x0 - x) * glide
+            if (q.lastWrong == j && q.shakeT > 0) x += (sin(q.shakeT * 60) * 14 * q.shakeT * 2).toFloat()
+            val old = d.alpha; if (!ok && small && rt >= 0) d.alpha = fade
             d.rr(x, y0 + 8, cw, ch, 30f, C.a(0, 0.3))
             // quiz-and-results.md: right = #D9F2D0 fill, #3FA34D 10 px border, tick; wrong = #E6E1F0 fill, #9C8FB8 10 px
             // border, circular arrow; ink labels; icons carry a thick ink outline (colour-blind-safe signals)
@@ -510,22 +527,26 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
                 for ((col, w) in listOf(C.INK to 18f, C.RIGHT to 10f)) { // d.stroke is one shared Paint: set it per pass
                     val s0 = d.stroke(col, w); d.c.drawLine(x + cw - 64, y0 + 44, x + cw - 50, y0 + 60, s0); d.c.drawLine(x + cw - 50, y0 + 60, x + cw - 24, y0 + 28, s0)
                 }
+                d.rr(x + cw / 2 - 110, y0 + 8, 220f, 40f, 20f, C.RIGHT); d.textBox(g.ui(UiIds.CORRECT), x + cw / 2, y0 + 28, 200f, 30f, C.WHITE, 1) // rides with the card
             }
             d.textBox(a.text.get(g.lang), x + cw / 2, y0 + 232, cw - 30, 37f, C.INK, 2) // fit.quiz_choice 360 @ 37
             badge(g, a.text, x + cw / 2, y0 + 282)
             if (ok) for (kk in 0 until 5) { val ang = t * 3 + kk * 1.26; d.star(x + cw / 2 + cos(ang).toFloat() * 150, y0 + 100 + sin(ang).toFloat() * 80, 16f, C.GLOW, C.GOLD_DARK, ang.toFloat()) }
-            next += Region("card$slot", x, y0, cw, ch, false, onTap = { g.answer(j) != com.galaxyandsun.daidatanhhung.core.PickResult.IGNORED })
+            d.alpha = old
+            if (!(small && rt >= 0)) next += Region("card$slot", x, y0, cw, ch, false, onTap = { g.answer(j) != com.galaxyandsun.daidatanhhung.core.PickResult.IGNORED })
         }
         if (q.rightShown >= 0) {
-            // the why line: fit.quiz_why 820 @ 37, up to 3 lines; "Đúng rồi!" sits above Next
-            d.rr(30f, 566f, 860f, 150f, 24f, C.a(C.RIGHT, 0.92))
-            d.textBox(cur.why.get(g.lang), 460f, 641f, 820f, 37f, C.WHITE, 3, semiBold = true); badge(g, cur.why, 460f, 566f)
-            // Tiếp at pad_min on the bottom row's right (Input Rule 4); "Đúng rồi!" rides on the right card's top edge
-            q.order.indexOf(q.rightShown).takeIf { it >= 0 }?.let { slot -> val rx = x0 + slot * (cw + gap) + cw / 2 // inside the right card's top
-                d.rr(rx - 110, y0 + 8, 220f, 40f, 20f, C.RIGHT); d.textBox(g.ui(UiIds.CORRECT), rx, y0 + 28, 200f, 30f, C.WHITE, 1) }
-            // never over the cards (which end at 560); at k < ≈ 0.48 the quiz needs the spec's small-k layout (flagged)
-            if (q.canAdvance) button("next", g.ui(UiIds.NEXT), 1262f - 330f, max(rowTop(), y0 + ch + 6f), 330f, rowH(), t, pulse = true) { g.next() }
-        } else if (q.shakeT > 0 || q.wrongPicked.isNotEmpty()) d.text(g.ui(UiIds.RETRY), W / 2, 640f, 36f, 0xFFE6E0F5.toInt())
+            if (small) {
+                // §5.2: the why line takes the freed space right of the right card (box 750, ≤ 3 lines), after the glide
+                if (glide >= 1f) { d.rr(450f, y0, 790f, 135f, 24f, C.a(C.RIGHT, 0.92)); d.textBox(cur.why.get(g.lang), 845f, y0 + 67f, 750f, 37f, C.WHITE, 3, semiBold = true); badge(g, cur.why, 845f, y0) }
+                if (q.canAdvance) button("next", g.ui(UiIds.NEXT), 812f, rowTop(), 450f, rowH(), t, pulse = true) { g.next() } // over the spent slot 3
+            } else {
+                // the why line: fit.quiz_why 820 @ 37, up to 3 lines, under the cards; Tiếp at pad_min on the bottom row's right
+                d.rr(30f, y0 + ch + 6f, 860f, 150f, 24f, C.a(C.RIGHT, 0.92))
+                d.textBox(cur.why.get(g.lang), 460f, y0 + ch + 81f, 820f, 37f, C.WHITE, 3, semiBold = true); badge(g, cur.why, 460f, y0 + ch + 6f)
+                if (q.canAdvance) button("next", g.ui(UiIds.NEXT), 1262f - 330f, max(rowTop(), y0 + ch + 6f), 330f, rowH(), t, pulse = true) { g.next() }
+            }
+        } else if (q.shakeT > 0 || q.wrongPicked.isNotEmpty()) d.text(g.ui(UiIds.RETRY), W / 2, min(H - 40f, y0 + ch + 40f), 36f, 0xFFE6E0F5.toInt())
         corner(g)
     }
 
