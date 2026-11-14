@@ -2,6 +2,64 @@
 
 Where the project stands, so work can resume from the repo. Newest entry first.
 
+## 2026-11-15 — PAUSE (Luan): checkpoint to resume
+
+**Status:** native vertical slice (Trần Quốc Toản mission) in QC rounds, both apps nearly at feature
+parity. Paused on Luan's instruction; all branches committed and pushed (hashes below). Detailed
+history: `production/team/board.md` (bottom = newest). Open decisions: `production/team/decisions.md`.
+
+### Where each app stands
+
+| App | Last QC PASS | Frozen / in flight | Next |
+|---|---|---|---|
+| Android (`setup/TASK-007-android-kotlin`) | **r11** 742a230 (evidence `qa/TASK-007-android-r11` @ 4321a86) | **r12** coded @ e24855a, NOT frozen: hero banner #D64A2E + #E8A93B border, partner = follower look, camera cut at the beat change (158 JVM) | pre-freeze pass on 5556 → freeze → QC |
+| iOS (`feat/TASK-006-ios-native`) | **r7** b53cfde (evidence `qa/TASK-006-ios-r7` @ 6c02e5a) | **r8** frozen c388736 (build folder `production/qa/builds/TASK-006-ios-c388736/` in game-dev-001); **QC INCOMPLETE** (stopped for the pause, `qa/TASK-006-ios-r8`). **r9** core done (8eeef44, GameCore 145, trace 1.3 green); app side written, NOT compiled | re-run r8 QC from the start → r9 build/freeze → QC |
+
+r9 (iOS) / r12 (Android) bring both apps to the same spec: Rule 7c finish hold (finish_hold 1.5 s,
+partner placement, every resume restarts), Hints Rule 6, double pop outline (AC15), AC14 picture
+bundle test, follower look and hero banner. When both PASS → **/gate-check** (vertical slice).
+
+### Docs branch `docs/vn-history-game-plan` (pushed)
+
+Merged this stretch: r8 (4495f7f), r8b, r8c (quiz small-layout switch, corner_bottom 18 + P), r8d
+(ending still + AC14), r8e (device k labels), r9 design (finish hold, hints ≥ 276, double outline),
+r10 (partner placement, AC32–34), r11 (ending pole, AC7/AC10 at rest, slice looks), data 005r
+(finish_hold), 005t (trace 1.3, green on both cores).
+
+### Resume steps
+
+1. Start the sessions (`tools/team/start-*.sh`), `ListAgents`, tell each member "resume".
+2. game-qc-ios: re-run iOS r8 QC from the start on E9F515E9. DiagnosticReports was cleared
+   2026-11-15 (122 reports) to fix the ~300 s XCTest teardown — check per-case durations; if it is
+   still slow, restart the Mac between QC rounds.
+3. After iOS r8 reports: game-dev-ios compiles r9, screen pass, full suite, Release byte check,
+   freeze. game-dev-android: r12 pre-freeze pass on 5556 (adbdev), freeze. Both to QC (one at a
+   time on the host if load is high).
+4. Queued doc fix (game-art-content): Hints Rule 6 / AC12 / hud.md:136 — "never covers the pad's
+   visible square (touch slop excluded); the hand takes no touches".
+5. Known minors / backlog: none blocking. Not yet assessed on either app: sound, a real low-end phone.
+
+### Waiting on Luan (nothing blocks the slice)
+
+- **D-18** character looks — "D-18 all as recommended" or list changes; new (11) final follower height.
+- **C01–C16** history claims: release builds stop at gate R12 until signed off.
+- Other open decisions in `production/team/decisions.md` (D-20, D-22, D-23, D-29–D-35, D-28b …).
+- Release checklist items on the board (map thẩm định, Android targetSdk 36, k ≥ 0.40 floor, D-22).
+
+### Branches at pause (all pushed to origin)
+
+| Worktree | Branch | Hash |
+|---|---|---|
+| repo root (leader) | docs/vn-history-game-plan | (this commit) |
+| game-dev-001 | feat/TASK-006-ios-native | 70f2cd1 (r9 app side wip, not compiled) |
+| game-dev-002 | setup/TASK-007-android-kotlin | e24855a (r12, carries trace 1.3) |
+| game-qc-ios | qa/TASK-006-ios-r8 | PENDING (r8 QC incomplete) |
+| game-qc-android | qa/TASK-007-android-r11 | 4321a86 |
+| game-art-content | design/r11-ending-pole-ac7 (merged) | be1d08d |
+| (backup) | setup/TASK-002-engine-godot-local | 82c016e (old Godot setup, diverged; origin/setup/TASK-002-engine-godot left as is) |
+
+All other local task branches (content/*, data/*, design/*, docs/*) are merged into the docs branch, so their commits are on origin.
+
 ## 2026-11-14 (afternoon) — Team running, prototype in QC
 
 **Status:** Concept stage. Concept approved; Godot 4.7.2 pinned; art bible and first hero's content drafted; the browser prototype of the first mission is in QC. Orca Screen Recording granted live (adding Orca.app itself fixed it); no restart was needed.
