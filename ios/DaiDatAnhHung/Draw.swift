@@ -89,6 +89,7 @@ enum Font {
         let l = SKLabelNode(fontNamed: name)
         let style = NSMutableParagraphStyle()
         style.alignment = align == .left ? .left : (align == .right ? .right : .center)
+        style.lineHeightMultiple = 1.35 // Language & text GDD: line height >= 1.35x
         let font = heavy(size)
         l.attributedText = NSAttributedString(string: s, attributes: [.font: font, .foregroundColor: c, .paragraphStyle: style])
         l.numberOfLines = 0

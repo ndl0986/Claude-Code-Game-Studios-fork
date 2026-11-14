@@ -323,7 +323,7 @@ final class GameScene: SKScene {
         add(D.rr(0, 0, 1280, 720, 0, SKColor(red: 42 / 255, green: 36 / 255, blue: 64 / 255, alpha: 0.75)), 0, 0)
         add(D.rr(-420, -170, 840, 340, 36, C.cream, C.gold, 6), 640, 330)
         add(D.drum(50, SKColor(hex: 0xc98a12, alpha: 0.5)), 640, 210)
-        add(Font.label(game.ui("ui.story.skip_warning"), 34, C.ink, width: 720), 640, 300)
+        add(Font.label(game.ui("ui.story.skip_warning"), 37, C.ink, width: 720), 640, 300)
         button(game.ui("ui.story.keep_reading"), 250 + 70, 400, 300, 100, "keepReading", pulse: true)
         button(game.ui("ui.story.skip_confirm"), 660, 400, 300, 100, "skipAnyway", fill: C.cream)
     }
@@ -444,7 +444,7 @@ final class GameScene: SKScene {
         }
         if p.phase == .beatPlay || p.phase == .beatEnd, p.beat < p.beats.count {
             let goal = p.beats[p.beat].goal
-            add(Font.label(goal.text(game.lang), 26, C.ink, width: 600), 640, 120)
+            add(Font.label(goal.text(game.lang), 37, C.ink, width: 760), 640, 125)
         }
         for (a, c, kind, label) in [(PadAction.left, layout.left, "left", nil), (.right, layout.right, "right", nil),
                                     (.defend, layout.defend, "defend", "ui.pad.defend"), (.attack, layout.attack, "attack", "ui.pad.attack"),
@@ -454,7 +454,7 @@ final class GameScene: SKScene {
             pad.addChild(D.circle(0, -6, c.r, SKColor(red: 58 / 255, green: 42 / 255, blue: 31 / 255, alpha: 0.35)))
             let face = D.circle(0, 0, c.r, SKColor(hex: 0xfff6e3, alpha: 0.88), C.gold, 6); face.name = "face"; pad.addChild(face)
             let ic = padIcon(kind, c.r); if label != nil { ic.position.y = c.r * 0.14 }; pad.addChild(ic)
-            if let label { let l = Font.label(game.ui(label), 24, C.ink); l.position.y = -c.r * 0.62; pad.addChild(l) }
+            if let label { let l = Font.label(game.ui(label), 28, C.ink); l.position.y = -c.r * 0.6; pad.addChild(l) }
             if a == .special {
                 let ring = SKShapeNode(); ring.name = "meter"; ring.strokeColor = C.gold; ring.lineWidth = 12; ring.lineCap = .round; ring.zPosition = 2
                 pad.addChild(ring)
@@ -490,7 +490,7 @@ final class GameScene: SKScene {
         add(Font.label("\(game.ui("ui.quiz.question")) \(q.index + 1)/\(n)", 28, C.gold, align: .left), layout.pause.cx + layout.pause.r + 24, layout.pause.cy)
         roundIcon(layout.pause, "pause", pauseIcon(layout.pause.r))
         textBox(cur.prompt, 640, 175, 900, 40, .white)
-        let cw = 360.0, ch = 340.0, gap = 40.0, x0 = (1280 - 3 * cw - 2 * gap) / 2, y0 = 240.0
+        let cw = 360.0, ch = 320.0, gap = 40.0, x0 = (1280 - 3 * cw - 2 * gap) / 2, y0 = 230.0
         for slot in 0..<3 {
             let j = q.order[slot], choice = cur.choices[j]
             let wrong = q.wrong.contains(j), ok = q.okIndex == j
@@ -498,12 +498,12 @@ final class GameScene: SKScene {
             card.addChild(D.rr(0, 8, cw, ch, 30, SKColor(white: 0, alpha: 0.3)))
             card.addChild(D.rr(0, 0, cw, ch, 30, ok ? SKColor(hex: 0xc9f0b0) : wrong ? SKColor(hex: 0xd9d4cf) : C.cream,
                                ok ? C.leafDark : wrong ? C.wrong : C.gold, ok ? 10 : 5))
-            let pic = Pictures.node(choice.pictureId, size: 110); pic.position = CGPoint(x: cw / 2, y: -125); pic.alpha = wrong ? 0.45 : 1; card.addChild(pic)
+            let pic = Pictures.node(choice.pictureId, size: 110); pic.position = CGPoint(x: cw / 2, y: -115); pic.alpha = wrong ? 0.45 : 1; card.addChild(pic)
             if wrong { // the "try again" mark: a circular arrow, never a red cross (TASK-004 art fix)
                 let p = CGMutablePath(); p.addArc(center: CGPoint(x: cw - 40, y: -40), radius: 18, startAngle: 0.3, endAngle: 5.6, clockwise: false)
                 card.addChild(D.shape(p, nil, C.wrong, 6))
             }
-            let l = Font.label(choice.text.text(game.lang), 32, wrong ? SKColor(hex: 0x8a8078) : C.ink, width: cw - 40); l.position = CGPoint(x: cw / 2, y: -275); card.addChild(l)
+            let l = Font.label(choice.text.text(game.lang), 37, wrong ? SKColor(hex: 0x8a8078) : C.ink, width: cw - 40); l.position = CGPoint(x: cw / 2, y: -258); card.addChild(l)
             card.position = D.p(x0 + Double(slot) * (cw + gap), y0); card.name = "\(j)"
             uiZ += 1; card.zPosition = uiZ
             ui.addChild(card); cardNodes.append(card)
@@ -511,13 +511,14 @@ final class GameScene: SKScene {
         }
         if q.okIndex != nil {
             // the why strip sits below the cards (cards end at y 580)
-            add(D.rr(-560, -45, 1120, 90, 24, C.panel), 640, 640)
-            add(Font.label(game.ui("ui.quiz.correct"), 30, C.glow, width: 200), 200, 640)
-            add(Font.label(cur.why.text(game.lang), 26, .white, width: 640), 660, 640) // 2 lines fit, clear of the "right" label
-            button(game.ui("ui.btn.next"), 1280 - 300, 598, 220, 84, "next", pulse: true)
+            // the why strip below the cards (they end at y 550): 3 lines at 37 with 1.35 line height
+            add(D.rr(-620, -80, 1240, 160, 24, C.panel), 640, 635)
+            add(Font.label(game.ui("ui.quiz.correct"), 30, C.glow, width: 200), 145, 635)
+            add(Font.label(cur.why.text(game.lang), 37, .white, width: 780), 650, 635)
+            button(game.ui("ui.btn.next"), 1060, 593, 190, 84, "next", pulse: true)
             badge(cur.why, 0, 0)
         } else if !q.wrong.isEmpty {
-            add(Font.label(game.ui("ui.quiz.retry"), 36, SKColor(hex: 0xffd0c8)), 640, 640)
+            add(Font.label(game.ui("ui.quiz.retry"), 37, SKColor(hex: 0xffd0c8)), 640, 620)
         }
     }
 
@@ -536,9 +537,9 @@ final class GameScene: SKScene {
         medal.addChild(D.circle(0, 0, 44, game.medalEarned ? C.gold : nil, game.medalEarned ? .white : SKColor(white: 1, alpha: 0.5), 5))
         medal.addChild(D.drum(32, game.medalEarned ? C.goldDark : SKColor(white: 1, alpha: 0.4)))
         add(medal, 1060, 300)
-        if game.medalNew { add(Font.label(game.ui("ui.medal.earned"), 26, C.glow, width: 300), 1060, 380) }
-        else if !game.medalEarned { add(Font.label(game.ui("ui.medal.missing"), 22, SKColor(white: 1, alpha: 0.7), width: 300), 1060, 380) }
-        if game.unlockedHero == nil { add(Font.label(game.ui("ui.results.more_heroes"), 30, SKColor(white: 1, alpha: 0.8), width: 900), 640, 450) }
+        if game.medalNew { add(Font.label(game.ui("ui.medal.earned"), 28, C.glow, width: 300), 1060, 390) }
+        else if !game.medalEarned { add(Font.label(game.ui("ui.medal.missing"), 28, SKColor(white: 1, alpha: 0.75), width: 300), 1060, 400) }
+        if game.unlockedHero == nil { add(Font.label(game.ui("ui.results.more_heroes"), 37, SKColor(white: 1, alpha: 0.8), width: 900), 640, 450) }
         button(game.ui("ui.btn.next"), 490, 520, 300, 110, "next", pulse: true)
     }
 
@@ -555,7 +556,7 @@ final class GameScene: SKScene {
         add(Font.label("?", 110, C.goldDark), 980, 300)
         if let next = game.unlockedHero { add(Font.label(next.mission.hero.name.text(game.lang), 30, .white), 980, 450) }
         add(Font.label(game.ui("ui.unlock.title"), 52, C.gold, width: 1100), 640, 100)
-        add(Font.label(game.ui("ui.unlock.map_stub"), 26, SKColor(white: 1, alpha: 0.6)), 640, 530)
+        add(Font.label(game.ui("ui.unlock.map_stub"), 28, SKColor(white: 1, alpha: 0.7)), 640, 530)
         button(game.ui("ui.btn.replay"), 260, 580, 340, 110, "replay", fill: C.cream)
         button(game.ui("ui.btn.to_map"), 680, 580, 340, 110, "toMap", pulse: true)
     }
