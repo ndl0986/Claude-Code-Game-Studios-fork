@@ -1,14 +1,17 @@
 ; Engine configuration file.
 ; Written by /setup-engine (TASK-002, 2026-11-14) for Godot 4.7.2.
 ; VERIFIED 2026-11-14: headless import with Godot 4.7.2.stable.official.ed1daf0bf exits 0 with no errors.
-; run/main_scene is unset on purpose: /dev-story or the user sets it once a scene exists.
+; run/main_scene is a placeholder boot scene (src/main.tscn) for the first iOS Simulator export.
 
 config_version=5
 
 [application]
 
 config/name="Dải Đất Anh Hùng"
+run/main_scene="res://src/main.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
+; Placeholder icon (solid colour, TASK-002); game-art-content supplies the real one.
+config/icon="res://icon.png"
 
 [display]
 
@@ -23,3 +26,5 @@ enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
+; Mobile exports (iOS, Android) need ETC2/ASTC; Godot 4.7.2 refuses the iOS export without it, with an empty error.
+textures/vram_compression/import_etc2_astc=true
