@@ -18,17 +18,19 @@ merges (with Luan's go) and reports**. All work happens in the worker sessions.
 | Session | Role | Owns |
 |---|---|---|
 | this session | **Leader** | GitHub Issues, labels, milestones, dispatch, merges into `main` (with Luan's go), reports |
-| `game-dev-001` | Developer, **iOS owner** | One issue at a time: plan → code/design → tests → PR. Owns iOS-specific work: Xcode export, iOS project settings, signing, iOS-only bugs |
-| `game-dev-002` | Developer, **Android owner** | Same. Owns Android-specific work: Gradle export, Android settings, keystore, Android-only bugs. The two devs peer-review each other's plans and PRs |
+| `game-dev-001` | Developer, **iOS app owner** | Owns the whole native iOS app in Swift + SpriteKit (`ios/`): code, tests, Xcode project, signing, iOS bugs. One issue at a time |
+| `game-dev-002` | Developer, **Android app owner** | Owns the whole native Android app in Kotlin (`android/`): code, tests, Gradle project, keystore, Android bugs. One issue at a time. The two devs peer-review each other's plans and PRs |
 | `game-qc-android` | QC, Android | Tests each PR's build on an Android emulator or phone |
 | `game-qc-ios` | QC, iOS | Tests each PR's build on the iOS Simulator or an iPhone |
 | `game-art-content` | Art designer + content/history | Art direction (`/art-bible`, `/asset-spec`), each hero's mission story beats, history facts with sources; reviews every PR that shows a hero, event, date or story text |
 
-**Platform ownership (Luan, 2026-11-14):** iOS work and bugs found by `game-qc-ios` go to
-`game-dev-001`; Android work and bugs found by `game-qc-android` go to `game-dev-002`. Shared game
-code (GDScript, browser prototypes) goes to whichever dev is free, and a bug that shows on both
-platforms goes to the author of the code. The one-issue-per-dev rule still holds: a platform bug
-waits, or Luan decides, when its owner is busy.
+**Platform ownership (Luan, 2026-11-14): native per platform.** The game is two native apps:
+iOS in Swift + SpriteKit owned by `game-dev-001`, Android in Kotlin owned by `game-dev-002`. Each
+feature becomes a pair of tasks, one per app, built to the same spec and the same shared data in
+`content/` (missions, quiz, VI/EN strings; TASK-005 ADR). Content is written once, by
+`game-art-content`. `game-qc-ios` bugs go to dev-001 and `game-qc-android` bugs go to dev-002.
+Changes to `content/` or its schema need both devs' review. Browser prototypes under
+`prototypes/` are design references, owned by whoever built them.
 
 **History sign-off is Luan's.** `game-art-content` drafts and cites sources; a Claude session
 cannot verify history, so no hero, event, date or story text is final until Luan signs it off
@@ -115,7 +117,7 @@ Reply `APPROVE` or `REVISE` with findings.
 | plan sent | `status:plan-review` |
 | PR opened, other dev reviewing the code | `status:code-review` |
 | code review APPROVE + CI green | `status:qa-android` **and** `status:qa-ios`: hand the PR to both QC sessions at once |
-| QC finds a bug | `status:rework`; relay to the platform owner (iOS → game-dev-001, Android → game-dev-002), or to the PR's author when it shows on both |
+| QC finds a bug | `status:rework`; relay to the platform owner (iOS → game-dev-001, Android → game-dev-002); a `content/` data bug goes to game-art-content |
 | QC passes | that QC's `qa:<platform>-pass` label |
 | PR shows a hero, event, date or story text | `game-art-content` reviews it against its sourced beats; Luan signs off history (`content:approved` label) before merge |
 | both passes present | report to Luan; on his go the leader merges (`gh pr merge --merge`, branch kept) |
