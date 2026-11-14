@@ -27,7 +27,10 @@ struct DaiDatAnhHungApp: App {
             }
             .onChange(of: phase) { _, p in if p != .active { scene?.appWillResignActive() } }
             .onReceive(NotificationCenter.default.publisher(for: AVAudioSession.routeChangeNotification)) { _ in
-                scene?.releaseAllInput() // harmless extra clear (TASK-019 is about screen changes, done in the scene)
+                scene?.releaseAllInput() // Input GDD Rule 11: audio route change
+            }
+            .onReceive(NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification)) { _ in
+                scene?.releaseAllInput() // Input GDD Rule 11: audio interruption
             }
         }
     }

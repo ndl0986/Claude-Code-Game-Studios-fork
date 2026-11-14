@@ -28,7 +28,7 @@ final class GameScene: SKScene {
     private var cardNodes: [SKNode] = []
 
     private var last: TimeInterval = 0, acc = 0.0, clock = 0.0
-    /// The screen and play phase last frame: any change releases every held pad (TASK-019).
+    /// The screen and play phase last frame: a change cancels a pressed menu button (Input GDD).
     private var lastPlace = "" 
     private let step = 1.0 / 60
 
@@ -60,7 +60,8 @@ final class GameScene: SKScene {
     /// No stuck input: every held pad is released when the app loses focus or pauses.
     func appWillResignActive() { releaseAllInput(); game.backgrounded(); uiKey = "" }
 
-    /// Every held pad is released on cancel, pause, background and an audio route change (TASK-019).
+    /// Input GDD Rule 11: every held pad is released on cancel, focus loss, pause, background and an
+    /// audio route change or interruption.
     func releaseAllInput() { pads.clearAll(); padTouches = [:]; menuTouches = [:] }
 
     /// iOS-R2-03: a moved touch's end may never reach the scene; drop holds whose touch is over.
@@ -75,7 +76,9 @@ final class GameScene: SKScene {
         relayout()
         reconcileTouches()
         let place = "\(game.screen)|\(game.play.phase)|\(game.skipWarning)"
-        if place != lastPlace { if !lastPlace.isEmpty { releaseAllInput() }; lastPlace = place }
+        // Input GDD Rule 9/11: a screen or phase change only cancels a pressed menu button; held pads
+        // stay held (hidden pads are filtered by the beat's buttons in the core, not released)
+        if place != lastPlace { if !lastPlace.isEmpty { menuTouches = [:] }; lastPlace = place }
         let dt = last == 0 ? 0 : min(currentTime - last, 0.25)
         last = currentTime; acc += dt; clock += dt
         while acc >= step {
