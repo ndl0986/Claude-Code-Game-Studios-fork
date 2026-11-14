@@ -20,7 +20,7 @@ an issue once Issues are on. The leader owns this file.
 | TASK-010 | `/review-all-gdds` across the 4 slice GDDs | design | game-art-content | MERGED: CONCERNS, 0 blockers; fixes C1–C5, S2 applied; D-13..D-15 to Luan | `design/TASK-010-gdd-review` | 2026-11-14 |
 | TASK-011 | Slice plays the full structure (D-08 B): full mission in data; skip + medal strings (D-07) | content | game-art-content | MERGED; validated by game-dev-ios | `content/TASK-011-tqt-full-beats` | 2026-11-14 |
 | TASK-012 | Hero progression & medal GDD + mission-flow D-07/parity updates | design | game-art-content | MERGED (`da7435c`), peer-approved by game-dev-android | `design/TASK-012-progression-medal` | 2026-11-14 |
-| TASK-014 | `/asset-spec` for the vertical slice (hero, enemies, partner, props, backgrounds, UI, medal, quiz pictures) | design | game-art-content | plan | `design/TASK-014-asset-spec` | 2026-11-14 |
+| TASK-014 | `/asset-spec` for the vertical slice (hero, enemies, partner, props, backgrounds, UI, medal, quiz pictures) | design | game-art-content | building (plan approved) | `design/TASK-014-asset-spec` | 2026-11-14 |
 | TASK-013 | Full-screen layout on both apps: backdrop + HUD to the screen edges, gameplay stays 1280×720 (fixes the 20:9 letterbox) | dev | both devs | after the slice's first QC pass | — | 2026-11-14 |
 | TASK-005b | Tuning parity keys (19) in content/data/tuning.json | data | game-dev-android | MERGED (`012114c`) | `data/TASK-005b-tuning-parity` | 2026-11-14 |
 | TASK-005c | 24 UI strings VI/EN in content/data/strings.json | data | game-dev-android (+ art-content review) | MERGED (`a2109fe`) | `data/TASK-005c-ui-strings` | 2026-11-14 |
