@@ -33,7 +33,10 @@ move / attack / defend buttons, then answer a picture quiz to unlock the next he
 at least 72 CSS px on a 640x360 screen. Keys mirror them: ← → or A D move, J or Space attack,
 hold K or Shift defend, Enter next, 1 2 3 answer, L language, P pause, M mute.
 For QC: menu and answer buttons fire on touch-down (pointerdown), not on release. The canvas
-fits inside the safe-area insets (notch, home-indicator zone).
+fits inside the safe-area insets (notch, home-indicator zone). The first real tap on the title asks for
+fullscreen (Android shows its one-time "Viewing full screen" dialog and Chrome its exit toast: OS
+behaviour, not the game); in fullscreen the bottom fsGestureInset (32 CSS px) stays clear for the
+system swipe-up.
 
 **Question:** Can a 6-year-old play one hero's story as light touch action on a landscape phone,
 then answer a short quiz about it?

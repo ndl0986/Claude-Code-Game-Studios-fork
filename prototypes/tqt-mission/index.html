@@ -87,7 +87,8 @@ const SIM_INSET = (params.get('inset') || '').split(',').map(Number);
 function insets() {
   if (SIM_INSET.length === 4 && SIM_INSET.every(n => n >= 0)) return { t: SIM_INSET[0], r: SIM_INSET[1], b: SIM_INSET[2], l: SIM_INSET[3] };
   const cs = getComputedStyle(document.documentElement), v = n => parseFloat(cs.getPropertyValue(n)) || 0;
-  return { t: v('--sat'), r: v('--sar'), b: v('--sab'), l: v('--sal') };
+  const fsB = document.fullscreenElement ? CONFIG.fsGestureInset.value : 0; // fullscreen has no inset; Android's swipe-up zone is still there (QC O5)
+  return { t: v('--sat'), r: v('--sar'), b: Math.max(v('--sab'), fsB), l: v('--sal') };
 }
 function fit() {
   const ins = insets(), aw = Math.max(1, innerWidth - ins.l - ins.r), ah = Math.max(1, innerHeight - ins.t - ins.b);
@@ -204,8 +205,10 @@ function uiAt(p) {
   }
   return null;
 }
+let wantFs = false; // set on the touch's start: the Start tap changes the scene before the finger lifts (QC B4)
 canvas.addEventListener('pointerdown', e => {
-  e.preventDefault(); // audio starts on the touch's end (gesture()), never here: Chrome refuses it on pointerdown
+  e.preventDefault();
+  if (scene === 'title' && !document.fullscreenElement) wantFs = true; // audio starts on the touch's end (gesture()), never here: Chrome refuses it on pointerdown
   try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* fine */ }
   const u = uiAt(toLogical(e)); if (!u) return;
   if (u.action) { touchHold.set(e.pointerId, u.action); touchTap.add(u.action); }
@@ -222,7 +225,8 @@ const lift = e => touchHold.delete(e.pointerId);
 function gesture(e) {
   startAudio();
   const real = e && e.isTrusted && (!navigator.userActivation || navigator.userActivation.isActive);
-  if (real && scene === 'title' && !document.fullscreenElement) {
+  const go = wantFs; wantFs = false;
+  if (real && go && !document.fullscreenElement) {
     const el = document.documentElement;
     try {
       const pr = el.requestFullscreen ? el.requestFullscreen({ navigationUI: 'hide' }) : null;
@@ -232,7 +236,7 @@ function gesture(e) {
 }
 canvas.addEventListener('pointerup', gesture);
 canvas.addEventListener('touchend', gesture, { passive: true });
-addEventListener('keydown', e => { if (e.code === 'Enter' || e.code === 'Space') gesture(e); });
+addEventListener('keydown', e => { if ((e.code === 'Enter' || e.code === 'Space') && scene === 'title') wantFs = true; if (e.code === 'Enter' || e.code === 'Space') gesture(e); });
 addEventListener('fullscreenchange', fit);
 canvas.addEventListener('pointerup', lift); canvas.addEventListener('pointercancel', lift);
 canvas.addEventListener('lostpointercapture', lift); // a lost capture never leaves an action held
@@ -302,7 +306,7 @@ const sfx = {
   bonk() { tone(180, 0.2, 'triangle', 0.25, 0.7); },
   chime() { tone(784, 0.2, 'sine', 0.3); setTimeout(() => tone(1046, 0.3, 'sine', 0.3), 0); },
   soft() { tone(260, 0.25, 'triangle', 0.18, 0.85); },
-  tap() { tone(660, 0.06, 'sine', 0.15); },
+  tap() { if (audio && audio.ac.currentTime - (sfx.lastTap || -1) < 0.08) return; if (audio) sfx.lastTap = audio.ac.currentTime; tone(660, 0.06, 'sine', 0.15); }, // once per press (QC O6)
 };
 
 // ---- Figures: every one drawn in code (no emoji, no plain circles) ----
