@@ -11,6 +11,16 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-11 Quiz data fixes (for the devs)
+
+- **Flow:** Quiz & stars GDD (`eaf221b`) → `content/fixtures/quiz-scoring.json`, `tuning.json`,
+  validation → both apps.
+- **What:** (a) a repeat tap on an already-greyed wrong card is ignored and not counted (as in the
+  prototype), so the quiz always ends; (b) `quiz_count` = 5, so each hero's content decides 3–5
+  questions (random tapping earns ≥2★ 37% of the time with 3 questions, 8.6% with 5);
+  (c) validation fails if `rules.json` t2 < t3.
+- **Status:** Open (devs, in data/TASK-005d). Raised by game-art-content.
+
 ### D-10 A "Special" (banner) move in combat
 
 - **Flow:** combat GDD (`design/gdd/side-scroll-combat.md`, rule 16) → a 4th button, the banner
@@ -25,7 +35,7 @@ it) · **Decided** (Luan's call, with the date).
   beat that teaches it.
 - **Status:** Open. Raised by game-art-content (TASK-008).
 
-### D-09 Two new tuning keys and two content checks (for the devs)
+### D-09 Two new tuning keys and two content checks (for the devs): AGREED by both devs + art-content (schema 1.1, data/TASK-005d)
 
 - **Flow:** combat GDD → `content/data/tuning.json` (game-dev-android edits) → both apps.
 - **What:** 14 of the GDD's proposed keys already exist (TASK-005b); the GDD switches to those
@@ -64,7 +74,7 @@ it) · **Decided** (Luan's call, with the date).
   shouldn't make a child sit through it again, and the quiz still checks what they remember.
 - **Status:** Open. Raised by game-art-content (TASK-008).
 
-### D-06 Content schema: params for training and reach-the-flag
+### D-06 Content schema: params for training and reach-the-flag: AGREED (option A, schema 1.1) by both devs + art-content
 
 - **Flow:** mission-flow GDD → `content/schema/mission.schema.json` (schema change needs both devs
   + game-art-content) → `mission.json`.
