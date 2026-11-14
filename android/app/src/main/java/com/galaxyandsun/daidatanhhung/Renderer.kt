@@ -5,6 +5,7 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import com.galaxyandsun.daidatanhhung.core.CueLayout
 import com.galaxyandsun.daidatanhhung.core.StoryLayout
+import com.galaxyandsun.daidatanhhung.core.QuizLayout
 import com.galaxyandsun.daidatanhhung.core.Action
 import com.galaxyandsun.daidatanhhung.core.ScreenFit
 import com.galaxyandsun.daidatanhhung.core.BeatType
@@ -326,7 +327,9 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
     }
 
     /** Target geometry for the cues, in screen px: centre x, top, head (or mid) height and half width (hud.md §3.3). */
-    private fun enemyTarget(x: Float, ground: Float) = CueLayout.Target(x.toDouble(), ground - 170.0, ground - 140.0, 40.0) // spec height: top ≈ 300
+    /** Spec height: top ≈ 300; the half width covers the body and the held weapon's head (the leader's hammer is wide). */
+    private fun enemyTarget(x: Float, ground: Float, kind: String = "spear") =
+        CueLayout.Target(x.toDouble(), ground - 170.0, ground - 140.0, when (kind) { "leader" -> 95.0; "shield" -> 55.0; else -> 40.0 })
     private fun partnerTarget(x: Float, ground: Float) = CueLayout.Target(x.toDouble(), ground - 162.0, ground - 121.0, 30.0) // PARTNER_S 0.62
     private fun dummyTarget(x: Float, ground: Float) = CueLayout.Target(x.toDouble(), ground - 151.0, ground - 80.0, 30.0) // DUMMY_S 0.75
     private fun flagTarget(x: Float, ground: Float) = CueLayout.Target(x + 15.0, ground - 240.0, ground - 120.0, 90.0) // icon 150 at ground − 120
@@ -341,12 +344,12 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         val arrowAt = when {
             r.stallTargetX == null -> null
             r.beatType == BeatType.TRAINING && r.trainingStep == com.galaxyandsun.daidatanhhung.core.TrainingStep.DUMMIES -> dummyTarget(r.stallTargetX!!.toFloat() - cam, ground)
-            else -> enemyTarget(r.stallTargetX!!.toFloat() - cam, ground)
+            else -> enemyTarget(r.stallTargetX!!.toFloat() - cam, ground, r.stallTarget?.kind ?: "spear")
         }
         arrowAt?.let { val c = CueLayout.arrow(it, heroX, banner); fig.arrow(c.x.toFloat(), c.y.toFloat(), c.dir, t) }
         if (r.flagArrow) { val c = CueLayout.arrow(flagTarget(r.goalX.toFloat() - cam, ground), heroX, banner); fig.arrow(c.x.toFloat(), c.y.toFloat(), c.dir, t) }
         for (e in r.enemies) if (e.state == com.galaxyandsun.daidatanhhung.core.EnemyState.WINDUP) {
-            val c = CueLayout.bubble(enemyTarget(e.x.toFloat() - cam, ground), heroX, banner); fig.bubble(c.x.toFloat(), c.y.toFloat(), c.dir)
+            val c = CueLayout.bubble(enemyTarget(e.x.toFloat() - cam, ground, e.kind), heroX, banner); fig.bubble(c.x.toFloat(), c.y.toFloat(), c.dir)
         }
         r.partner?.takeIf { it.state == com.galaxyandsun.daidatanhhung.core.EnemyState.WINDUP }?.let {
             val c = CueLayout.bubble(partnerTarget(it.x.toFloat() - cam, ground), heroX, banner); fig.bubble(c.x.toFloat(), c.y.toFloat(), c.dir)
@@ -543,7 +546,8 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
      * quiz §5.2: k < 0.48 (as iOS QuizLayout.small). iOS's extra "cards reach Tiếp" guard isn't needed here: at k ≥ 0.48
      * Android's Tiếp goes below the cards (max(rowTop, cards bottom + 6)), so the cards never reach it.
      */
-    private fun smallK(g: Game) = fit.padMinWorld > g.tuning["pad_min"].toFloat() / 0.48f
+    private fun quizBoxes(g: Game) = QuizLayout.boxes(cornerClear(g).toDouble(), fit.padMinWorld.toDouble(), safeBottom.toDouble())
+    private fun smallK(g: Game) = quizBoxes(g).small
 
     private fun quiz(g: Game) {
         val q = g.quiz ?: return
@@ -590,15 +594,17 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
                 for ((col, w) in listOf(C.INK to 18f, C.RIGHT to 10f)) { // d.stroke is one shared Paint: set it per pass
                     val s0 = d.stroke(col, w); d.c.drawLine(x + cw - 64, y0 + 44, x + cw - 50, y0 + 60, s0); d.c.drawLine(x + cw - 50, y0 + 60, x + cw - 24, y0 + 28, s0)
                 }
-                // 220×40 pill centred on the card's top row, drawn over the picture; deep-ink label (accessibility-requirements,
-                // quiz card labels: white on #3FA34D is 3.2:1), sized down to the 28 px label floor so "That's right!" never clips
-                val okLabel = g.ui(UiIds.CORRECT); var okSize = 30f
-                while (okSize > 28f && d.measure(okLabel, okSize) > 204f) okSize -= 0.5f
-                d.rr(x + cw / 2 - 110, y0 + 8, 220f, 40f, 20f, C.RIGHT); d.textBox(okLabel, x + cw / 2, y0 + 28, 208f, okSize, C.DEEP_INK, 1) // rides with the card
             }
             d.textBox(a.text.get(g.lang), x + cw / 2, y0 + 232, cw - 30, 37f, C.INK, 2) // fit.quiz_choice 360 @ 37
             badge(g, a.text, x + cw / 2, y0 + 282)
             if (ok) for (kk in 0 until 5) { val ang = t * 3 + kk * 1.26; d.star(x + cw / 2 + cos(ang).toFloat() * 150, y0 + 100 + sin(ang).toFloat() * 80, 16f, C.GLOW, C.GOLD_DARK, ang.toFloat()) }
+            // 220×40 pill centred on the card's top row, over the picture and after the orbiting stars (no star crosses it);
+            // deep-ink label (accessibility-requirements, quiz card labels: white on #3FA34D is 3.2:1), down to the 28 px floor
+            if (ok) {
+                val okLabel = g.ui(UiIds.CORRECT); var okSize = 30f
+                while (okSize > 28f && d.measure(okLabel, okSize) > 204f) okSize -= 0.5f
+                d.rr(x + cw / 2 - 110, y0 + 8, 220f, 40f, 20f, C.RIGHT); d.textBox(okLabel, x + cw / 2, y0 + 28, 208f, okSize, C.DEEP_INK, 1) // rides with the card
+            }
             d.alpha = old
             if (!(small && rt >= 0)) next += Region("card$slot", x, y0, cw, ch, false, onTap = { g.answer(j) != com.galaxyandsun.daidatanhhung.core.PickResult.IGNORED })
         }
@@ -609,9 +615,11 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
                 if (q.canAdvance) button("next", g.ui(UiIds.NEXT), 812f, rowTop(), 450f, rowH(), t, pulse = true) { g.next() } // over the spent slot 3
             } else {
                 // the why line: fit.quiz_why 820 @ 37, up to 3 lines, under the cards; Tiếp at pad_min on the bottom row's right
-                d.rr(30f, y0 + ch + 6f, 860f, 150f, 24f, C.a(C.RIGHT, 0.92))
-                d.textBox(cur.why.get(g.lang), 460f, y0 + ch + 81f, 820f, 37f, C.WHITE, 3, semiBold = true); badge(g, cur.why, 460f, y0 + ch + 6f)
-                if (q.canAdvance) button("next", g.ui(UiIds.NEXT), 1262f - 330f, max(rowTop(), y0 + ch + 6f), 330f, rowH(), t, pulse = true) { g.next() }
+                // r8: the why line left of Tiếp on the bottom row (QuizLayout; as iOS), Tiếp on the bottom row, both ≤ 702
+                val qb = quizBoxes(g); val wt = qb.whyTop.toFloat(); val wb = qb.whyBottom.toFloat()
+                d.rr(30f, wt, 866f, wb - wt, 24f, C.a(C.RIGHT, 0.92)) // x 30–896, 26 px clear of Tiếp at 922
+                d.textBox(cur.why.get(g.lang), 463f, (wt + wb) / 2, 820f, 37f, C.WHITE, 3, semiBold = true); badge(g, cur.why, 463f, wt)
+                if (q.canAdvance) button("next", g.ui(UiIds.NEXT), qb.tiepLeft.toFloat(), rowTop(), (QuizLayout.TIEP_RIGHT - qb.tiepLeft).toFloat(), rowH(), t, pulse = true) { g.next() }
             }
         } else if (q.shakeT > 0 || q.wrongPicked.isNotEmpty()) d.text(g.ui(UiIds.RETRY), W / 2, min(H - 40f, y0 + ch + 40f), 36f, 0xFFE6E0F5.toInt())
         corner(g)
