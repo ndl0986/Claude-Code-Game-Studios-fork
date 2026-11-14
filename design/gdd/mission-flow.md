@@ -201,7 +201,12 @@ it always ends at the quiz and then the map.
         pose exist): at the Cờ tap the banner appears **behind the hero (back side, 125), lowered
         as in r9**, and
         **rises over 0.67 s from y + 40 to its place (ease-out)**, then holds. The partner faces
-        the banner **holding its staff upright**, standing in for the raised fist. Timings are the
+        the banner **holding its staff upright**, standing in for the raised fist. **Looks** (r11,
+        leader's call, pending Luan's D-18 sign-off): the banner is a plain vermilion `#D64A2E`
+        cloth with a ≈ 4 px gold `#E8A93B` border; the partner, in the blocks step and the hold,
+        is a **follower** (look sheet D-18): straw-beige tunic `#D8C9A3`, muted-vermilion sash
+        `#B9705C`, a plain topknot, skin `#F1C9A0`, at 0.62 × the hero's height, with **no headband
+        or tails** (the hero's signature), so it never reads as a second hero. Timings are the
         same as with the real art: the "banner-up" still counts from the end of the rise. The real
         ASSET-108 frames and the fist pose replace it 1:1.
 7d. **Dialogue beats** (TASK-016, Luan's Bình Than exchange):

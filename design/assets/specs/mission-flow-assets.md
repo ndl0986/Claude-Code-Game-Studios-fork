@@ -48,14 +48,14 @@ Negative: text, letters, watermark, blood, gore, injury, weapons pointed at view
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
 | Texture Res | 1× and 2× per art bible §8 |
 
-**Visual Description:** A friendly older village youth in the team colour: a desaturated vermilion `#B9705C` headband and sash, a straw-beige tunic `#D8C9A3` and trousers `#7A6250`, with the same skin and face style as the hero. There is no helmet and no slate-violet anywhere, so the child never reads them as an enemy. They hold a padded practice stick `#A8743F` with fat cream cloth ends `#F3E6C8`. The windup is a big, slow, playful wind-back with an encouraging smile, and a blocked strike gets a proud "well done" nod.
+**Visual Description:** A friendly village youth, one of the hero's **followers** (look sheet D-18, r11), in the team colour: a desaturated vermilion `#B9705C` sash and a **plain topknot, with no headband and no tails** (the headband and its two tails are the hero's signature, so the partner never reads as a second hero), a straw-beige tunic `#D8C9A3` and trousers `#7A6250`, with the same skin and face style as the hero. There is no helmet and no slate-violet anywhere, so the child never reads them as an enemy. In the slice the placeholder is drawn at **0.62 × the hero's height** (smaller than the hero; the stick keeps its 140 world px reach, as weapons keep their length). They hold a padded practice stick `#A8743F` with fat cream cloth ends `#F3E6C8`. The windup is a big, slow, playful wind-back with an encouraging smile, and a blocked strike gets a proud "well done" nod.
 
 **Art Bible Anchors:**
 - Mission-flow Visual/Audio: the partner wears the hero's team colour, never read as an enemy.
 - §5 Followers/allies: the team colour desaturated.
 - Mission-flow Rule 7c: windup and strike timing as combat.
 
-**Generation Prompt:** Character animation key poses, side view facing left, a friendly smiling Vietnamese village youth from 13th-century Đại Việt as a sparring partner, muted vermilion headband and sash #B9705C, straw-beige tunic #D8C9A3, brown trousers #7A6250, warm skin #F1C9A0, holding a padded wooden practice stick #A8743F with fat cream cloth ends #F3E6C8. Poses: ready stance, playful slow wind-back, gentle tap forward, rest, small hop back with a proud smile, cheering. Modern kids' cartoon, soft rounded shapes, flat colours with soft gradients, warm ink-brown outlines #4A3428, Vietnamese motifs as accents. Clear morning light, transparent background.
+**Generation Prompt:** Character animation key poses, side view facing left, a friendly smiling Vietnamese village youth from 13th-century Đại Việt as a sparring partner, a plain topknot with no headband, muted vermilion sash #B9705C, straw-beige tunic #D8C9A3, brown trousers #7A6250, warm skin #F1C9A0, holding a padded wooden practice stick #A8743F with fat cream cloth ends #F3E6C8. Poses: ready stance, playful slow wind-back, gentle tap forward, rest, small hop back with a proud smile, cheering. Modern kids' cartoon, soft rounded shapes, flat colours with soft gradients, warm ink-brown outlines #4A3428, Vietnamese motifs as accents. Clear morning light, transparent background.
 Negative: text, letters, watermark, blood, gore, injury, weapons pointed at viewer, scary faces, exaggerated ethnic features, conical hat, photorealistic, anime, helmet, armour, slate or violet colours, angry face, sharp stick, taller than the hero.
 
 **Status:** Needed
@@ -117,7 +117,7 @@ Negative: text, letters, watermark, blood, gore, injury, weapons pointed at view
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
 | Texture Res | 1× and 2× per art bible §8 |
 
-**Visual Description:** A wooden pole `#A8743F` with a rounded cap and a plain rectangular cloth in vermilion `#D64A2E` with a thin bronze-gold `#E8A93B` border. **Furled:** the cloth is wrapped around the pole and tied. **Raising:** it unrolls and catches the wind. **Flying:** it ripples only along the trailing edge, so the text-safe zone stays flat and evenly lit for the VI/EN text layer (the six words). The cloth is plain, with no painted marks. ⟨placeholder: the period form of the banner is to be sourced⟩.
+**Visual Description:** A wooden pole `#A8743F` with a rounded cap and a plain rectangular cloth in vermilion `#D64A2E` with a thin bronze-gold `#E8A93B` border. **Slice placeholder** (leader's call, r11, pending D-18): the apps draw the hero's raised training banner as a plain vermilion `#D64A2E` cloth with a **≈ 4 px gold `#E8A93B` border**, no marks, on the pole. **Furled:** the cloth is wrapped around the pole and tied. **Raising:** it unrolls and catches the wind. **Flying:** it ripples only along the trailing edge, so the text-safe zone stays flat and evenly lit for the VI/EN text layer (the six words). The cloth is plain, with no painted marks. ⟨placeholder: the period form of the banner is to be sourced⟩.
 
 **Art Bible Anchors:**
 - §3 Historical banner text / Luan rule 2: plain shape and colour, with the words as a localised layer.
