@@ -46,6 +46,13 @@ above it, so nothing on a dialogue screen sits above `corner_bottom` + 8 (the pa
   beat, so the panel never changes height between lines; the title text shows on line 1 only, as
   Mission flow 7d says. Height: speaker lines 32 + 68 + 154 (3 × 38 px lines at 1.35) + 32 =
   **286**; narrator lines 32 + 68 + 103 + 32 = **235**.
+- **No play sprites** (r8b, leader's call; as `story-screens.md` §5.2). A dialogue screen draws
+  only the scene background (dimmed 30%), the portrait medallions, the dialogue panel, the bottom
+  row and the pause/sound corner. **No** hero, enemies, partner or dummies, no flag prop, no fx
+  or pops, no hints from play, and no top stack (beat dots, goal, banner). The ask-button hint
+  hand (Hints Rule 4) is the dialogue's own and still shows. Why: the standing figures (y ≈
+  290–470) sit where the panel and portraits go, and a sprite next to the hero's portrait shows
+  him twice.
 - **Bottom-anchored like the beat card:** panel bottom = Tiếp's top − 8.
 - **Portrait:** 256 world px tall (the 384 px asset at 1.5×), bottom-aligned with the panel, on
   the speaker's side (hero left, others right), 16 from the panel.
@@ -105,5 +112,6 @@ D-17: lines between characters may use "cậu", "cháu" or "ta"; nothing address
 4. **GIVEN** Skip then "Vẫn bỏ qua" in this scene, **WHEN** the quiz finishes, **THEN** no medal.
 5. **GIVEN** no tap on the ask button for `hint_delay`, **WHEN** waiting, **THEN** the hint hand points at it.
 6. **GIVEN** the reference phones and a k 0.40 phone or emulator, **WHEN** lines 1, 2 (ask button) and a narrator line of the Bình Than dialogue are captured in VI and EN, **THEN** the title "Xin gặp vua" is inside the top of the panel on line 1; the panel's height is the same on every speaker line; the panel's bottom is Tiếp's top − 8; and no pixel of the panel, the title or a portrait is above `corner_bottom` + 8 (y 163 at k 0.527, 206 at k 0.40).
+9. **GIVEN** each line of the Bình Than dialogue (speaker and narrator) at the reference phones and at k 0.40, **WHEN** captured, **THEN** only the dimmed background, the portrait(s), the panel, the bottom row and the pause/sound corner are drawn: no hero, enemy, partner, dummy or flag sprite, no fx, pop or play hint, no beat dots, goal or banner, and no "Phần n" label; the ask-button hint hand may show on an ask line.
 7. **GIVEN** the lowest target Android phone, **WHEN** a line advances, **THEN** the next line and portrait show within 150 ms; checked on the narrowest phone and a 20:9 phone.
 8. **GIVEN** the walk into the dialogue beat with taps every 0.35 s that keep going (on Tiếp's and the ask button's spot), **WHEN** the dialogue plays, **THEN** every line, 1 to 9, holds ≥ 1.5 s (until the taps pause for 0.6 s or 1.5 s pass), no line is skipped, and each press inside a lock is dropped, not queued.
