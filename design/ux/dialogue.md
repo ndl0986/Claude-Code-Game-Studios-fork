@@ -62,7 +62,7 @@ otherwise Tiếp. For Bình Than {at_line 2, taps 2}: line 1 Tiếp; lines 2–3
 
 Lines with speaker, mood and text (R4c: the marked opening narrator line covers the scene's
 legend lines). Events: "line shown", "ask tapped", "dialogue done". A soft slide per line, and the
-portrait swaps with a 0.15 s fade.
+portrait swaps with a 0.15 s fade. *NOT YET BUILT: iOS swaps portraits instantly; Android ⟨to confirm⟩.*
 
 ## 11–13. Input, Accessibility, Localization
 

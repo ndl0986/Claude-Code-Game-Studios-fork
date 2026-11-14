@@ -22,3 +22,6 @@
 pulses ≤ 3 Hz; reveals ≤ 3 s.
 **Sound standards:** one tone per menu press; play pads are silent; right is louder than wrong
 (Audio Rules 3, 6).
+
+**Audio cues named in these specs** (the skip-warning bell, fanfares, star plucks, voice lines):
+*NOT YET BUILT on both apps; placeholder tones only.*

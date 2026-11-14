@@ -38,7 +38,7 @@ the title in the slice (the map later).
 | Hero reveal | the hero's portrait lifts from silhouette to colour over ~1.5 s with a soft glow (ASSET-038); no flashing over 3 Hz | Hero progression V/A |
 | Name | the hero's `name` Text (hero_name field, 44 px heading) | 005h |
 | Map stub line | `ui.unlock.map_stub` (label) | strings |
-| Button | `ui.btn.to_map`, ≥ 72 pt, release-inside | P-01 |
+| Button | **one** button: `ui.btn.to_map`, ≥ 72 pt, release-inside. There's no "Chơi lại / Play again"; replaying starts from the title (leader's call) | P-01 |
 
 ## 6. States & Variants
 

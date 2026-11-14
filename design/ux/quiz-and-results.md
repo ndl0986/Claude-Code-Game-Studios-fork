@@ -46,7 +46,7 @@ the title. Pause is available (P-05).
 
 | Component | Spec | Source |
 |---|---|---|
-| Answer card | cream default (ASSET-017); **wrong:** lavender `#9C8FB8` (ASSET-018) plus a circular-arrow icon (ASSET-020) plus a 0.5 s shake; **right:** green `#3FA34D` (ASSET-019) plus a tick (ASSET-021) | Quiz Rules 4–5; Luan's rule 3 |
+| Answer card | cream default (ASSET-017); **wrong:** lavender `#9C8FB8` (ASSET-018) plus a circular-arrow icon (ASSET-020) plus a 0.5 s shake; **right:** green `#3FA34D` (ASSET-019) plus a tick (ASSET-021). The tick is required: it's the colour-blind-safe signal (leader's call; iOS's light-green fill with no tick changes after QC r3) | Quiz Rules 4–5; Luan's rule 3 |
 | Card order | shuffled per question (Mulberry32, Fisher–Yates) | Quiz Rule 3 |
 | Why line | shown after the right pick; Tiếp appears after `feedback_time` (0.9 s) and never auto-advances | Quiz Rule 5 (P-05) |
 | Counter | "Câu n/N" label, ≥ 28 px | Language Rule 11 |

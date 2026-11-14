@@ -56,6 +56,7 @@ Root. Title → mission (intro) → … → results → (unlock) → title.
 | VI \| EN chip | ≥ 72 pt; the active language bold plus underline | Language Rules 2, 4; ASSET-031 |
 | Sound | ≥ 72 pt | Audio Rule 14 |
 | Map stub line | label ≥ 28 px | `ui.unlock.map_stub` |
+| ~~Controls legend~~ | **Removed.** The slice title shows the map-stub line, not a controls legend; the first-use hint hands teach the controls in play (Hints GDD; leader's call) | — |
 | **PENDING D-27: progress card** | hero portrait, name, best stars (filled vs outline), medal (gold vs outline) | Hero progression Rule 10; QC G5 |
 | Debug only | `ui.debug.*` subtitle "Bản chơi thử / Test build" | TASK-005c |
 
