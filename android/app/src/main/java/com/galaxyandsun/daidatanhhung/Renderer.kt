@@ -198,7 +198,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         for (e in r.enemies) fig.enemy(e, ground, t)
         if (!(h.hurt > 0 && (t * 20).toInt() % 2 == 1)) fig.hero(h.x.toFloat(), ground, h.face, h.walk, h.def, if (h.atk >= 0) h.atk else null, t)
         if (r.bannerRaised && r.beatType == BeatType.TRAINING) fig.icon("flag", h.x.toFloat() - h.face * 60f, ground - 250, 110f)
-        if (r.beatType == BeatType.HOLD && r.phase != Phase.CARD) holdMeter(h.x.toFloat(), ground - 330, r.heldTotal / r.holdSeconds(r.beat))
+        if (r.beatType == BeatType.HOLD && r.phase != Phase.CARD) holdMeter(h.x.toFloat() + h.face * 130f, ground - 200, r.heldTotal / r.holdSeconds(r.beat)) // beside the hero, clear of the goal bar
         for (p in r.parts) d.star(p.x.toFloat(), p.y.toFloat(), p.r.toFloat(), p.color.toInt(), C.GOLD_DARK, p.rot.toFloat())
         for (p in r.pops) { val old = d.alpha; d.alpha = min(1.0, p.life * 2); d.text(g.ui(p.textId), p.x.toFloat(), p.y.toFloat(), 40f, p.color.toInt()); d.alpha = old }
         r.stallTargetX?.let { fig.arrowDown(it.toFloat(), ground - 330, t) }

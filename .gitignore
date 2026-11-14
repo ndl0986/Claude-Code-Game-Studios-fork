@@ -173,3 +173,6 @@ $RECYCLE.BIN/
 # the project root. Anchored so a reports/ folder elsewhere stays tracked.
 /reports/
 /test-results/
+
+# QC build copies (TASK-007): never committed
+production/qa/builds/
