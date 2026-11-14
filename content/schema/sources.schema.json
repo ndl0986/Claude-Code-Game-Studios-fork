@@ -3,22 +3,55 @@
   "$id": "https://galaxyandsun.com/daidatanhhung/content/sources.schema.json",
   "title": "Source list, shared by every hero. Written by game-art-content.",
   "type": "object",
-  "required": ["schema_version", "sources"],
+  "required": [
+    "schema_version",
+    "sources"
+  ],
   "additionalProperties": false,
   "properties": {
-    "schema_version": { "$ref": "common.schema.json#/$defs/SchemaVersion" },
+    "schema_version": {
+      "$ref": "common.schema.json#/$defs/SchemaVersion"
+    },
     "sources": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id", "citation", "kind", "location", "status"],
+        "required": [
+          "id",
+          "citation",
+          "kind",
+          "location",
+          "status"
+        ],
         "additionalProperties": false,
         "properties": {
-          "id": { "$ref": "common.schema.json#/$defs/SourceId" },
-          "citation": { "type": "string", "minLength": 1 },
-          "kind": { "enum": ["textbook", "chronicle", "literature"] },
-          "location": { "description": "Volume, page, year entry.", "type": "string", "minLength": 1 },
-          "status": { "enum": ["to_confirm", "confirmed"] }
+          "id": {
+            "$ref": "common.schema.json#/$defs/SourceId"
+          },
+          "citation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "textbook",
+              "chronicle",
+              "literature",
+              "secondary"
+            ],
+            "description": "textbook | chronicle | literature, or secondary (a reference work or article citing one, e.g. an encyclopedia entry quoted by Wikipedia; schema 1.3)"
+          },
+          "location": {
+            "description": "Volume, page, year entry.",
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "to_confirm",
+              "confirmed"
+            ]
+          }
         }
       }
     }

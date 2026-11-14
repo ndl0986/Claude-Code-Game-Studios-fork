@@ -41,7 +41,7 @@ Schema **1.1** (D-06, a MINOR bump): optional training `blocks` / `finish_specia
 - **Claim** `{id, vi, en, label, sources[], relabel_condition?, signoff{status, by?, date?}}`.
   - `label` is one of fact, fact_as_recorded, interpretation, legend or invented.
 - **Source** `{id, citation, kind, location, status}`.
-  - `kind` is textbook, chronicle or literature.
+  - `kind` is textbook, chronicle, literature or **secondary** (a reference work or article citing one; schema 1.3).
   - `status` is to_confirm or confirmed.
 - **Mission** `{hero{id, name, timeline_order, place}, next_hero, intro[], banner?, beats[], ending{lines[], picture_id}}`.
   - The banner is defined once as Text, a text layer that is never baked into art. A beat with `uses_banner` shows it.
