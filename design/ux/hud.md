@@ -125,7 +125,7 @@ the king's meeting at Bình Than!", 688 px).
   - **Goal flag** (ASSET-303, reach-the-flag): box **y 290–470**, 180 tall, pole top 290, foot
     on `ground_y` 470, on both apps. Off banner beats it keeps its normal size.
   - **The banner the hero raises at the end of training** (ASSET-305): on banner beats it is
-    **held lower, beside the hero**, at its usual size (**110** tall), with its top ≥ 276. It
+    **held lower, on the hero's back side (125 behind; Mission flow Rule 7c)**, at its usual size (**110** tall), with its top ≥ 276. It
     is never lifted overhead into the bar.
   - Render-only: the flag's x, the reach trigger and the training finish don't change.
 - **Z-order** (bottom to top): play layers (background, fighters, props) → **banner bar** →

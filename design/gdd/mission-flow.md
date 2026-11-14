@@ -150,25 +150,56 @@ it always ends at the quiz and then the map.
       2. **The raise:** the hero plays ASSET-108 (8 frames × 83 ms = 0.67 s) and holds its last
          frame, the banner up, for the rest of `finish_hold` (≈ 0.83 s at 1.5 s).
       3. **The followers join:** the training partner (**re-entering if it already left**; Android
-         sends it off after the blocks step) **re-enters at the hold start on the side away from
-         the screen edge, 1.2 × `enemy_reach` from the hero, and walks in over the 0.67 s raise**
-         to stand beside the hero. It faces the banner and raises a fist, settling before the hold
+         sends it off after the blocks step) walks in over the 0.67 s raise to its place (below),
+         **faces the banner at the end of its walk-in** and raises a fist, settled before the hold
          ends. For the slice the partner alone stands for the followers; more follower figures
          would need new art.
+      - **Placement** (r10, leader's call; Android QC r10 B8: the cloth covered the partner's head):
+        - **The banner is on the hero's back side** (opposite the way the hero faces), **125**
+          world px behind the hero on banner beats, as built.
+        - **The partner stands on the hero's other side, the front**, **110** from the hero, **if
+          its whole box fits on screen with ≥ 8 px margin**. Otherwise it stands **beyond the
+          banner**, on the back side, with its whole box **≥ 8 px clear of the cloth's x-range**.
+        - It **never overlaps the banner cloth or the hero**.
+        - It **enters from its outward side** (away from the hero), re-entering if it left: it
+          starts a **fixed 1.2 × `enemy_reach`** from its spot on that side and walks in over the
+          0.67 s raise at a constant distance and speed, so the walk never becomes a blur. If that
+          start point is on screen, the partner **fades in over the first 0.2 s** while walking;
+          if it is off screen, no fade.
+        - **When the fallback happens:** the training camera cap (Combat Rule 15b) keeps the hero
+          at screen x ≈ 70–1060, so facing right the front spot always fits. The only real
+          fallback is **near the left edge facing left** (hero screen x ≈ 70–150).
+        - Example (hero at screen x H ≈ 100, facing left): the front spot (H − 110 ≈ −10) is off
+          screen, so the partner stands beyond the banner. The banner is 125 to the right, the
+          cloth spans H + 70 … H + 202 (170–302), and the partner stands at H + 242 (≈ 342). It
+          starts 1.2 × `enemy_reach` (180 today) further right, at ≈ 522, which is on screen, so
+          it fades in over the first 0.2 s. It walks left to its spot and faces left, toward the
+          banner.
+        - **Motion curves** (leader's call): the partner's walk-in is **linear**, at constant
+          speed: `x = from + (to − from) × min(1, t / 0.67)`. The banner's rise keeps its
+          **ease-out**.
       4. **At `finish_hold`'s end** the beat ends as any non-fight beat does: the cheer
          (`sfx_beat_end_cheer`; the TQT training beat, beat 4 / index 3, "Phần 4", keeps `cheer` on), the progress dot fills, and the hero
          walks on (`walk_to[i+1]`).
       - **Taps during the hold are dropped**, not queued: no pad is on screen, and a tap anywhere
         (including where Cờ was) neither shortens the hold nor carries into the walk. There is no
         skip.
-      - **Pause** stays available (top-left). Opening it freezes the hold; **on resume the hold
-        restarts from the raise's last frame with a full `finish_hold − 0.67 s` still** (the
-        partner already in place), so a child coming back still sees the moment. Leaving through
-        the leave card discards the run as usual.
-      - The banner, held lower beside the hero on this banner beat, stays wholly at y ≥ 276
+      - **Pause** stays available (top-left). Opening it freezes the hold. **Every resume** during
+        the hold (the first and any later one) **restarts it to "rise done"** (elapsed = the rise
+        time, 0.67 s): the banner is up, the partner is in place facing it, and a full
+        `finish_hold − 0.67 s` (≈ 0.83 s) of banner-up follows before the cheer. A child who
+        pauses twice still gets the whole moment. Each pause needs its own deliberate tap, so
+        this can't loop on its own. Leaving through the leave card discards the run as usual.
+      - The banner, held lower behind the hero on this banner beat, stays wholly at y ≥ 276
         (`hud.md` §3.3).
+      - **Training props go with the beat** (r10): when a training beat ends, the straw dummies,
+        the partner and any other training prop are **removed before any pixel of the next
+        beat's background is on screen**, at the latest when `walk_to[i+1]` starts. A prop may
+        fade out only over its own beat's background; **faded dummies are never drawn over
+        another theme**.
       - **Slice placeholder** (leader's call, r9; both apps build this until ASSET-108 and a fist
-        pose exist): at the Cờ tap the banner appears **beside the hero, lowered as in r9**, and
+        pose exist): at the Cờ tap the banner appears **behind the hero (back side, 125), lowered
+        as in r9**, and
         **rises over 0.67 s from y + 40 to its place (ease-out)**, then holds. The partner faces
         the banner **holding its staff upright**, standing in for the raised fist. Timings are the
         same as with the real art: the "banner-up" still counts from the end of the rise. The real
@@ -674,7 +705,28 @@ the Bình Than exchange):
     tapped every 0.2 s through the hold (including where Cờ was), **THEN** the walk still starts
     ≥ 1.5 s after the Cờ tap and no tap is carried into it. **WHEN** pause opens 0.3 s into the
     hold and play resumes, **THEN** the banner-up frame is still on screen ≥ 0.8 s after the
-    resume before the cheer. **GIVEN** any other beat, **THEN** its end still lasts `end_pause`.
+    resume before the cheer. **WHEN** pause opens N times during the hold (N = 1, 2, 3; once
+    during the rise, then after it), **THEN** after the last resume the banner is up, the
+    partner is in place facing it, and the banner-up still lasts ≥ 0.8 s before the cheer. A
+    resume **during the rise** jumps the partner straight to its spot at full opacity (intended:
+    "restart to rise done").
+    **GIVEN** any other beat, **THEN** its end still lasts `end_pause`.
+33. **GIVEN** the TQT training finish on both apps, with the hero tapping Cờ (a) near the right
+    edge facing right, (b) near the left edge facing right, (c) near the right edge facing left
+    and (d) near the left edge facing left, **WHEN** the hold is frame-stepped, **THEN** the
+    banner is on the hero's back side, 125 behind; the partner stands on the front side 110 from
+    the hero when its whole box fits on screen with ≥ 8 px margin, otherwise beyond the banner
+    with its box ≥ 8 px clear of the cloth's x-range. **Expected:** (a), (b) and (c) → the front
+    spot; (d) at hero screen x ≈ 100 → beyond the banner (partner at H + 242, cloth H + 70 …
+    H + 202). Then it starts 1.2 × `enemy_reach` from its spot on its outward side (away from the hero) and walks
+    in over the 0.67 s rise linearly (`x = from + (to − from) × min(1, t / 0.67)`; the banner rises with ease-out), fading in over the first 0.2 s if the start point
+    is on screen and with no fade if it is off screen; at the end of its walk-in it **faces the banner** (not the hero's back, not the
+    screen edge); and in no frame does any partner pixel overlap the banner cloth or the hero.
+34. **GIVEN** the training beat ending and the hero walking on into the next beat's theme, on
+    both apps, **WHEN** the frames are stepped from `beat_end` to the first frame showing the
+    next background, **THEN** no dummy, partner or other training prop is drawn in any frame
+    that shows any of the next beat's background, and no faded dummy is drawn over another
+    theme.
 
 ## Open Questions
 
