@@ -517,7 +517,7 @@ final class GameScene: SKScene {
         guard !lines.isEmpty else { return }
         let line = lines[min(p.lineIndex, lines.count - 1)]
         add(D.rr(-600, -170, 1200, 340, 36, C.panel, C.gold, 6), 640, 470)
-        if p.lineIndex == 0 { add(Font.label(p.beats[p.beat].title.text(game.lang), 44, C.gold, width: 880), 640, 170) } // above the hero (iOS-R3-04)
+        if p.lineIndex == 0 { add(Font.label(p.beats[p.beat].title.text(game.lang), 44, C.gold, width: 880), 640, 335) } // inside the panel's top, clear of the hero (iOS-R3-04)
         switch line.speaker {
         case "narrator":
             textBox(line.text, 640, 455, 880, 38, .white)
