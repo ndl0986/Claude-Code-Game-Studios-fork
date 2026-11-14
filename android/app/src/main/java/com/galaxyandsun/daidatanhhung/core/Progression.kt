@@ -19,4 +19,7 @@ object Progression {
         }
         return open
     }
+
+    /** Writes `seen_open` for every open hero (title load and quiz finish), so a later update never re-locks one. */
+    fun markSeen(content: Content, store: Store) { for (h in openHeroes(content, store)) if (!store.flag("seen_open.$h")) store.setFlag("seen_open.$h") }
 }

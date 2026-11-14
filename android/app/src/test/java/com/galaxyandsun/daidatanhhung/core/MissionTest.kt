@@ -113,6 +113,23 @@ class MissionTest {
         assertEquals(1, r.dropped.size)
     }
 
+    /** Combat AC8: a hit knocks a soldier back 170 px (the leader 85); the knock-back plays out fully. */
+    @Test fun ac8KnockBackDistance() {
+        for ((kind, expected) in listOf("spear" to 170.0, "leader" to 85.0)) {
+            val r = run(); r.debugStartBeat(0, telegraph = false, caption = false)
+            val e = Enemy(50, kind, r.hero.x + 120, -1).also { it.state = EnemyState.APPROACH }
+            r.enemies.clear(); r.enemies += e
+            r.update(dt, InputFrame().apply { tapped += Action.ATTACK })
+            while (r.hero.atk >= 0 && e.hits == 0) r.update(dt, InputFrame())
+            // The hit's step already applied its first share of the knock-back (frame order: hit, then enemies).
+            val initial = e.kb / (1 - dt / tuning["kb_decay"])
+            assertEquals(kind, expected, kotlin.math.abs(initial), 2.0)
+            var moved = initial - e.kb; var kb = e.kb
+            while (kotlin.math.abs(kb) >= 2) { val m = kb * minOf(1.0, dt / tuning["kb_decay"]); moved += m; kb -= m }
+            assertEquals(kind, expected, kotlin.math.abs(moved), 2.0)
+        }
+    }
+
     @Test fun beatEndsInACaptionOnlyWhenTheGroupIsGone() {
         val r = run(); walkToFight(r)
         // Fight beat 1 with attack taps only (the hero is pushed back sometimes, never stopped).

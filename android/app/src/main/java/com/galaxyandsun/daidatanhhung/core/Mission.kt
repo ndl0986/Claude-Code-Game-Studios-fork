@@ -119,8 +119,8 @@ class MissionRun(
     var stall = 0.0; private set
     var idle = 0.0; private set
     val tut = Tutorial()
-    /** Beats whose type is not built and so play as a fight (debug only, P-02); the app logs them. */
-    val stubbedBeats = mutableListOf<Int>()
+    /** Beats whose type this app doesn't build (none today); computed once, never mutated by a getter. */
+    val stubbedBeats: List<Int> = mission.beats.indices.filter { BeatType.of(mission.beats[it].type) == null }
 
     // ---- Per-beat play state ----
     /** Hero x when beat_play started (walk, training, reach-the-flag measure from here, F2). */
@@ -140,8 +140,8 @@ class MissionRun(
     val currentBeat: Beat get() = beats[beat.coerceAtMost(beats.size - 1)]
     val beatType: BeatType get() = typeOf(beat)
 
-    /** A type this app doesn't build plays as a fight (P-02, debug only). */
-    fun typeOf(i: Int): BeatType = BeatType.of(beats[i].type) ?: BeatType.FIGHT.also { if (i !in stubbedBeats) stubbedBeats += i }
+    /** All five schema types are built, so the P-02 stub (an unknown type plays as a fight) is only a fallback. */
+    fun typeOf(i: Int): BeatType = BeatType.of(beats[i].type) ?: BeatType.FIGHT
 
     private fun num(b: Beat, k: String) = (b.params[k] as? JsonPrimitive)?.content?.toDoubleOrNull()
     private fun bool(b: Beat, k: String) = (b.params[k] as? JsonPrimitive)?.content == "true"
@@ -179,9 +179,7 @@ class MissionRun(
     fun fightParams(i: Int): FightParams {
         val b = beats[i]
         val p = if (b.type == "fight") ContentLoader.fightParams(b) else null
-        if (p != null) return p
-        if (i !in stubbedBeats && BeatType.of(b.type) == null) stubbedBeats += i
-        return ContentLoader.fightParams(b) ?: FightParams(listOf("spear"), 1, emptyList())
+        return p ?: FightParams(listOf("spear"), 1, emptyList())
     }
 
     private fun hp(kind: String) = when (kind) {
@@ -286,7 +284,8 @@ class MissionRun(
             val side = side(e); val dist = abs(e.x - h.x)
             if (e.state != EnemyState.FLEE) e.face = -side
             // Only the nearest enemy on each side may strike; the others wait a little further back.
-            val sameSide = enemies.filter { it.state != EnemyState.FLEE && side(it) == side }.sortedBy { abs(it.x - h.x) }
+            // Raw sign, as the prototype's Math.sign(o.x − h.x) === side: an enemy exactly at the hero is on no side.
+            val sameSide = enemies.filter { it.state != EnemyState.FLEE && (it.x - h.x).sign.toInt() == side }.sortedBy { abs(it.x - h.x) }
             val rank = sameSide.indexOf(e)
             val stand = tuning["enemy_reach"] - tuning["stand_gap"] + maxOf(0, rank) * tuning["queue_spacing"]
             when (e.state) {

@@ -47,6 +47,25 @@ class BeatTypesTest {
         assertEquals(1, g.run.beat)
     }
 
+    /** Mission-flow AC20 (F5): the TQT beats start at 900, 6340, 7940, 10740. */
+    @Test fun ac20BeatPositions() {
+        val r = TestContent.fullGame().run
+        assertEquals(listOf(900.0, 6340.0, 7940.0, 10740.0), (0..3).map { r.beatX(it) })
+    }
+
+    /** Mission-flow AC21: a training block counts only when defend is held at strike resolve. */
+    @Test fun ac21TrainingBlockOnlyAtResolve() {
+        val g = TestContent.fullGame()
+        g.debugJump("play", beat = 3, stage = "blocks")
+        val p = g.run.partner!!
+        assertEquals(EnemyState.WINDUP, p.state)
+        repeat(30) { g.step(dt, input(Action.DEFEND)) }   // held for 0.5 s of the windup, then released
+        while (p.state == EnemyState.WINDUP) g.step(dt, InputFrame())
+        assertEquals(0, g.run.blocksDone)
+        repeat(60 * 4) { g.step(dt, input(Action.DEFEND)) } // held through the next resolve
+        assertEquals(1, g.run.blocksDone)
+    }
+
     /** AC3: a beat with buttons [move] shows only the move pads. */
     @Test fun ac3OnlyTheBeatsButtons() {
         val g = atBeat(0)
@@ -169,6 +188,19 @@ class BeatTypesTest {
         assertEquals(before + 1, g.line)
         idle(g, 16) // 0.27 s later the next tap counts again
         assertTrue(g.next())
+    }
+
+    /** QC B1: two taps 0.1 s apart advance one box, on the intro and on the quiz's Tiếp. */
+    @Test fun b1TwoTapsPointOneSecondApart() {
+        val g = TestContent.fullGame()
+        g.debugJump("ending"); idle(g)
+        assertTrue(g.next()); idle(g, 6); assertFalse(g.next())
+        assertEquals(1, g.line)
+        g.debugJump("quiz"); idle(g)
+        g.answer(g.quiz!!.current.correctIndex); idle(g, 60)
+        assertTrue(g.next()); val i = g.quiz!!.index
+        g.answer(g.quiz!!.current.correctIndex); idle(g, 6)
+        assertFalse(g.next()); assertEquals(i, g.quiz!!.index)
     }
 
     /** AC10: pause (the app going to the background) freezes the meter and the enemies. */

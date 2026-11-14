@@ -76,7 +76,7 @@ class Game(
     private var clock = 0.0
     private var lastAdvance = -1e9
 
-    init { reset() }
+    init { reset(); Progression.markSeen(content, store) } // the title loading counts as "seen open"
 
     private fun reset() {
         run = MissionRun(bundle.mission, tuning, Mulberry32(tuning.seed), sfx)
@@ -112,11 +112,9 @@ class Game(
     /** Next on intro, a beat card, a caption or the ending: one sentence per box, then on. */
     fun next(): Boolean {
         if (skipWarning) return false
-        if (onStoryBox) {
-            if (clock - lastAdvance < tuning["advance_debounce"]) return false // AC9: one box per 0.25 s
-            lastAdvance = clock
-        }
-        return advance()
+        // AC9 / QC B1: every Next (intro, card, caption, ending, quiz Tiếp, results) advances once per 0.25 s.
+        if (clock - lastAdvance < tuning["advance_debounce"]) return false
+        return advance().also { if (it) lastAdvance = clock }
     }
 
     private fun advance(): Boolean = when (screen) {
@@ -208,7 +206,8 @@ class Game(
         medalThisRun = !skipped
         if (medalThisRun) store.setFlag("medal.$heroId")
         val after = Progression.openHeroes(content, store)
-        newlyOpen = (after - before).firstOrNull()?.also { store.setFlag("seen_open.$it") }
+        newlyOpen = (after - before).firstOrNull()
+        Progression.markSeen(content, store)
         sfx(Sfx.CHIME)
         go(Screen.RESULTS)
     }

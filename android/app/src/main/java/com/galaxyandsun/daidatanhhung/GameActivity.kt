@@ -36,11 +36,12 @@ class GameActivity : Activity() {
         val content = ContentLoader { path ->
             val p = if (missionFile != null && path.endsWith("/mission.json")) path.replace("mission.json", missionFile) else path
             try { assets.open(p).bufferedReader().readText() } catch (e: Exception) { if (p != path) try { assets.open(path).bufferedReader().readText() } catch (e2: Exception) { null } else null }
-        }.load(extraHeroes = if (BuildConfig.DEBUG) listOf("sample") else emptyList())
+        }.load(extraHeroes = if (BuildConfig.DEBUG && intent?.getStringExtra("hero") == "sample") listOf("sample") else emptyList())
         val problems = Validator.validate(content, checkPictures = !BuildConfig.DEBUG)
         problems.forEach { Log.w(TAG, "content: $it") }
         // Release: a mission whose claims are not all approved is hidden and logged, never a crash (R12).
-        val heroId = content.heroes.keys.firstOrNull { id ->
+        val wanted = intent?.getStringExtra("hero")
+        val heroId = content.heroes.keys.sortedBy { if (it == wanted) 0 else 1 }.firstOrNull { id ->
             val b = content.heroes.getValue(id)
             val gate = ClaimGate.evaluate(b.claims.claims.associate { it.id to it.signoff.status }, Validator.texts(b).map { it.second.claims })
             (BuildConfig.DEBUG || gate.runtimeShow).also { ok -> if (!ok) Log.w(TAG, "hiding mission $id: unsigned ${gate.debugBadges}") }
@@ -97,7 +98,7 @@ class GameActivity : Activity() {
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        if (hasFocus) immersive() else view.releaseAll()
+        if (hasFocus) immersive() else view.autoPause()
     }
 
     override fun onResume() { super.onResume(); view.onHostResume() }

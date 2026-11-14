@@ -45,12 +45,12 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
     private val handler = Handler(thread.looper)
     private var choreographer: Choreographer? = null
     private var running = false
-    private var surfaceOk = false
+    @Volatile private var surfaceOk = false
     private var hostResumed = true
     private var lastNanos = -1L
     private var acc = 0.0
     private val input = InputFrame()
-    private val padHolds = HashMap<Int, Action>()
+    private val padHolds = com.galaxyandsun.daidatanhhung.core.PadHolds()
     private val keyHolds = HashSet<Action>()
     private val pressedButton = HashMap<Int, String>()
     @Volatile private var safe = IntArray(4)
@@ -65,10 +65,12 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
 
     fun setSafeInsets(i: IntArray) { safe = i }
     fun releaseAll() { events += CancelAll }
+    /** Focus loss or going to the background pauses play and the quiz (AC10). */
+    fun autoPause() { events += CancelAll; events += AutoPause }
 
     fun onHostResume() { hostResumed = true; startLoop() }
     /** AC10: going to the background pauses the game; it stays paused on return. */
-    fun onHostPause() { events += CancelAll; events += AutoPause; hostResumed = false; stopLoop() }
+    fun onHostPause() { autoPause(); hostResumed = false; stopLoop() }
 
     override fun surfaceCreated(h: SurfaceHolder) { surfaceOk = true; startLoop() }
     override fun surfaceChanged(h: SurfaceHolder, format: Int, w: Int, hgt: Int) {}
@@ -87,7 +89,7 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
     private fun stopLoop() {
         val latch = CountDownLatch(1)
         handler.post { running = false; choreographer?.removeFrameCallback(this); latch.countDown() }
-        latch.await(1, TimeUnit.SECONDS)
+        latch.await(150, TimeUnit.MILLISECONDS) // short: never stall the UI thread; the draw is guarded by surfaceOk
     }
 
     override fun doFrame(frameTimeNanos: Long) {
@@ -101,13 +103,13 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
         if (game != null && !portrait && !frozen) {
             acc += dt
             while (acc >= STEP) {
-                input.held.clear(); input.held += padHolds.values; input.held += keyHolds
+                input.held.clear(); input.held += padHolds.held(); input.held += keyHolds
                 game.step(STEP, input)
                 acc -= STEP
             }
         }
         audio.muted = game?.muted ?: false
-        val c = try { holder.surface.lockHardwareCanvas() } catch (e: Exception) { null }
+        val c = if (!surfaceOk) null else try { holder.surface.lockHardwareCanvas() } catch (e: Exception) { null }
         if (c != null) {
             try { renderer.draw(c, game, audio.ready, portrait) } finally { holder.surface.unlockCanvasAndPost(c) }
         }
@@ -125,18 +127,12 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
                 is Down -> {
                     val r = renderer.hit(e.x, e.y) ?: continue
                     val a = r.pad
-                    if (a != null) { padHolds[e.id] = a; input.tapped += a }
+                    if (a != null) { padHolds.down(e.id, a); input.tapped += a }
                     else pressedButton[e.id] = r.key
                 }
-                is Move -> {
-                    val a = padHolds[e.id] ?: continue
-                    if (a == Action.LEFT || a == Action.RIGHT) {
-                        val r = renderer.hit(e.x, e.y)
-                        if (r?.pad == Action.LEFT || r?.pad == Action.RIGHT) padHolds[e.id] = r.pad!!
-                    }
-                }
+                is Move -> padHolds.move(e.id, renderer.hit(e.x, e.y)?.pad)
                 is Up -> {
-                    padHolds.remove(e.id)
+                    padHolds.up(e.id)
                     val key = pressedButton.remove(e.id) ?: continue
                     val r = renderer.hit(e.x, e.y)
                     if (r != null && r.key == key && r.onTap != null && !(firedThisFrame && key.startsWith("card"))) {

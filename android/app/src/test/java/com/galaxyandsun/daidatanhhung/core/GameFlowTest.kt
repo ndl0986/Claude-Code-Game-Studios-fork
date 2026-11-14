@@ -57,6 +57,7 @@ class GameFlowTest {
         assertEquals(1, store.stars("sample"))
         assertTrue(store.flag("completed.sample")) // saved at quiz finish, before results (D-16)
         // sample2 is not a bundled hero, so nothing newly opens: results goes to the title.
+        repeat(20) { g.step(dt, InputFrame()) }
         g.next(); assertEquals(Screen.TITLE, g.screen)
     }
 

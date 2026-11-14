@@ -4,6 +4,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Typeface
 import com.galaxyandsun.daidatanhhung.core.Action
+import com.galaxyandsun.daidatanhhung.core.ScreenFit
 import com.galaxyandsun.daidatanhhung.core.BeatType
 import com.galaxyandsun.daidatanhhung.core.ClaimGate
 import com.galaxyandsun.daidatanhhung.core.Game
@@ -34,15 +35,13 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
     private var regions = ArrayList<Region>()
     private var next = ArrayList<Region>()
     @Volatile private var k = 1f; @Volatile private var ox = 0f; @Volatile private var oy = 0f
-    private var padMinWorld = 0f
     private var lastGame: Game? = null
 
     fun layout(w: Float, h: Float, safe: IntArray, density: Float, padMinDp: Float) {
-        val aw = max(1f, w - safe[0] - safe[2]); val ah = max(1f, h - safe[1] - safe[3])
-        k = min(aw / W, ah / H)
-        ox = safe[0] + (aw - W * k) / 2; oy = safe[1] + (ah - H * k) / 2
-        padMinWorld = padMinDp * density / k // pads are never smaller across than pad_min dp
+        val f = ScreenFit.of(w, h, safe, density, padMinDp)
+        k = f.k; ox = f.ox; oy = f.oy; fit = f
     }
+    private var fit = ScreenFit(1f, 0f, 0f, 0f)
 
     /** The region under a screen point (topmost first), from the last frame drawn. */
     fun hit(sx: Float, sy: Float): Region? {
@@ -122,7 +121,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
     }
 
     private fun pad(key: String, cx: Float, cy: Float, r0: Float, action: Action, held: Boolean, pulse: Boolean, label: String?, t: Double, icon: (Float) -> Unit) {
-        val r = max(r0, padMinWorld / 2)
+        val r = fit.padRadius(r0)
         val p = if (pulse) 1 + 0.08f * sin(t * 10).toFloat() else 1f
         d.c.save(); d.c.translate(cx, cy); d.c.scale(p, p)
         if (pulse) d.circle(0f, 0f, r + 14, C.a(C.GLOW, 0.55))
@@ -366,7 +365,9 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             if (got && appear > 0) d.star(x, y, r, C.GOLD, C.WHITE) else { d.star(x, y, r, C.a(C.WHITE, 0.08), C.a(C.WHITE, 0.55)) }
         }
         medal(1080f, 300f, 60f, g.medalThisRun || g.medalEarned)
-        d.textBox(g.ui(if (g.medalThisRun || g.medalEarned) UiIds.MEDAL_EARNED else UiIds.MEDAL_MISSING), 1080f, 400f, 300f, 22f, C.a(C.WHITE, 0.85), 2)
+        // Gold if earned in this or any run; the "earned" line only in the run that earns it (progression GDD rule 10).
+        val medalLine = if (g.medalThisRun) UiIds.MEDAL_EARNED else if (!g.medalEarned) UiIds.MEDAL_MISSING else null
+        medalLine?.let { d.textBox(g.ui(it), 1080f, 400f, 300f, 22f, C.a(C.WHITE, 0.85), 2) }
         if (g.newlyOpen == null) d.text(g.ui(UiIds.MORE_HEROES), W / 2, 450f, 30f, C.a(C.WHITE, 0.8), semiBold = true)
         button("next", g.ui(UiIds.NEXT), W / 2 - 150, 520f, 300f, 110f, t, pulse = true) { g.next() }
     }
