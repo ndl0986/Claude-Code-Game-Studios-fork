@@ -112,10 +112,13 @@ class Game(
 
     private fun context(): String {
         val base = when (screen) {
-            Screen.PLAY -> when (run.phase) { Phase.CARD -> "card${run.beat}"; Phase.CAPTION -> "caption${run.beat}"; Phase.DIALOGUE -> "dialogue${run.beat}"; else -> "play" }
+            // Input Rule 13b (QC r7, r8): every story box and every dialogue line takes the rolling lock as if entered
+            Screen.PLAY -> when (run.phase) { Phase.CARD -> "card${run.beat}.${run.cardLine}"; Phase.CAPTION -> "caption${run.beat}.${run.captionLine}"
+                Phase.DIALOGUE -> "dialogue${run.beat}.${run.lineIndex}"; else -> "play" }
+            Screen.INTRO -> "INTRO$line"
             Screen.PAUSE -> return ctx // pausing doesn't change the context, and the pause menu is exempt
             Screen.QUIZ -> if (lockEachQuestion) "quiz${quiz?.index}" else "quiz"
-            Screen.ENDING -> "ENDING$line" // every ending box takes the lock: the hero's last lines never flash past under a mash
+            Screen.ENDING -> "ENDING$line" // the hero's last lines never flash past under a mash
             else -> screen.name
         }
         return if (skipWarning) "$base/warn" else base

@@ -9,7 +9,7 @@ import org.junit.Test
  * QC r6 B7 (Input Rule 13, tuning `screen_enter_lock` 0.6 s): a child mashing Attack (where Tiếp sits)
  * across a context change mustn't skip the new screen's first box. Presses within the lock of entering a
  * context (intro, ending, quiz, results, unlock; in play beat_card, caption and a dialogue's first line)
- * are dropped; box-to-box within one context keeps only the 0.25 s debounce; pause and sound are exempt.
+ * are dropped; since r8 every story box and dialogue line takes the lock too (Input 13b); pause and sound are exempt.
  * All times are the press clock (uptime), as the platform passes them.
  */
 class EnterLockTest {
@@ -53,11 +53,64 @@ class EnterLockTest {
         assertFalse("+0.55 s", g.tap("next") { next() }); assertEquals(0, g.line)
     }
 
-    @Test fun boxToBoxWithinAContextKeepsOnlyTheDebounce() {
+    /** Input Rule 13b (QC r7, r8): the next box of the same screen takes the lock too, so +0.30 s is dropped, +0.6 s passes. */
+    @Test fun everyBoxTakesTheLock() {
         val g = tqt(); g.debugJump("intro"); g.frames(1.0)
         assertTrue(g.tap("next") { next() }); g.frames(0.30)
-        assertTrue("line 2 → 3 at +0.30 s: no entry lock inside the intro", g.tap("next") { next() })
+        assertFalse("line 2 → 3 at +0.30 s: box 2 has its own entry lock", g.tap("next") { next() })
+        assertEquals(1, g.line)
+        g.frames(0.65); assertTrue("a deliberate tap 0.6 s after the last press", g.tap("next") { next() })
         assertEquals(2, g.line)
+    }
+
+    /** The quiz keeps its own rules (Input 13b): at normal k the next question takes no lock, only the debounce. */
+    @Test fun quizQuestionsTakeNoLockAtNormalK() {
+        val g = tqt(); g.debugJump("quiz", stage = "right"); g.frames(2.0)
+        val q0 = g.quiz!!.index
+        assertTrue(g.tap("next") { next() }); assertEquals(q0 + 1, g.quiz!!.index)
+        g.frames(0.30)
+        assertTrue("a card pick at +0.30 s on the new question", g.tap("card0") { answer(quiz!!.order[0]) != PickResult.IGNORED })
+    }
+
+    /** Presses every [every] s on whatever advances the screen; returns each box's hold time (from its appearance to its advance). */
+    private fun Game.mashBoxes(state: Game.() -> Any?, press: Game.() -> Boolean, every: Double = 0.35, maxS: Double = 40.0): List<Double> {
+        val holds = mutableListOf<Double>(); var shown = now; var s = state(); var t = 0.0
+        while (t < maxS) {
+            if (press()) { val s2 = state(); if (s2 != s) { holds += now - shown; shown = now; s = s2 } }
+            if (s == null) break
+            frames(every); t += every
+        }
+        return holds
+    }
+
+    /** Input AC22 / dialogue AC8: a 0.35 s mash from entry through the Bình Than dialogue (9 lines); ask taps count as advances. */
+    @Test fun aMashHoldsEveryDialogueLine() {
+        val g = tqt()
+        val i = g.run.beats.indices.first { g.run.typeOf(it) == BeatType.DIALOGUE }
+        g.debugJump("play", beat = i + 1, stage = "line", line = 1); val n = g.run.dialogue!!.lines.size
+        val seen = mutableListOf<Int>()
+        val holds = g.mashBoxes({ if (run.phase == Phase.DIALOGUE) run.lineIndex.also { if (seen.lastOrNull() != it) seen += it } else null },
+            { if (run.dialogueButton == "ask") tap("ask") { ask() } else tap("next") { next() } })
+        val cap = g.tuning["screen_enter_lock_max"]; println("AC22 holds: $holds")
+        assertEquals("9 lines", 9, n)
+        assertEquals("every line shown, none skipped", (0 until n).toList(), seen)
+        assertTrue("every line held ≥ $cap s: $holds", holds.size >= n && holds.all { it >= cap - 1e-9 })
+    }
+
+    /** Story AC11: a 0.35 s mash holds every box of the intro, a beat card, a caption and the ending ≥ 1.5 s. */
+    @Test fun aMashHoldsEveryStoryBox() {
+        val cap = TestContent.load().tuning.let { Tuning.from(it)["screen_enter_lock_max"] }
+        fun check(name: String, g: Game, state: Game.() -> Any?) {
+            val holds = g.mashBoxes(state, { tap("next") { next() } })
+            println("AC11 $name holds: $holds")
+            assertTrue("$name: ≥ 2 boxes advanced: $holds", holds.size >= 2)
+            assertTrue("$name: every box held ≥ $cap s: $holds", holds.all { it >= cap - 1e-9 })
+        }
+        tqt().let { g -> g.debugJump("intro"); check("intro", g) { if (screen == Screen.INTRO) line else null } }
+        tqt().let { g -> g.debugJump("ending"); check("ending", g) { if (screen == Screen.ENDING) line else null } }
+        tqt().let { g -> g.debugJump("play", beat = 1, stage = "card"); assertTrue("beat 1 card has ≥ 2 boxes", g.run.cardBoxes().size >= 2)
+            check("beat card", g) { if (run.phase == Phase.CARD) run.cardLine else null } }
+        sample().let { g -> g.debugJump("caption", beat = 2); check("caption", g) { if (run.phase == Phase.CAPTION && run.beat == 1) run.captionLine else null } }
     }
 
     @Test fun pauseAndSoundStayTappableInTheLock() {
