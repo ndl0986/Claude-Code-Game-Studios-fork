@@ -1,0 +1,125 @@
+# Chrome remote DevTools log (Runtime/Log/Network events), emulator mp17863, 2026-11-14
+# data: URLs truncated. Covers the session after the emulator restart (14:08 onward).
+14:08:03 CONTEXT-CREATED (page load/reload)
+14:08:03 LOG.error [network] Failed to load resource: the server responded with a status of 404 (File not found) http://localhost:8000/favicon.ico
+14:08:09 NET-REQ GET http://localhost:8000/
+14:08:13 NET-REQ GET http://localhost:8000/font.css
+14:08:13 NET-REQ GET http://localhost:8000/config.js
+14:08:13 NET-REQ GET http://localhost:8000/strings.js
+14:08:13 NET-REQ GET http://localhost:8000/content.js
+14:08:13 CONTEXT-CREATED (page load/reload)
+14:08:13 NET-REQ GET data:font/ttf;base64,…(inline font, no network)
+14:10:39 LOG.warning [other] The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://goo.gl/7K7WLu http://localhost:8000/
+14:18:53 NET-REQ GET http://localhost:8000/
+14:18:54 NET-REQ GET http://localhost:8000/font.css
+14:18:54 NET-REQ GET http://localhost:8000/config.js
+14:18:54 NET-REQ GET http://localhost:8000/strings.js
+14:18:54 NET-REQ GET http://localhost:8000/content.js
+14:18:54 CONTEXT-CREATED (page load/reload)
+14:18:54 NET-REQ GET data:font/ttf;base64,…(inline font, no network)
+14:19:57 NET-REQ GET http://localhost:8000/?scene=play&beat=2&stage=caption
+14:19:57 NET-REQ GET http://localhost:8000/font.css
+14:19:57 NET-REQ GET http://localhost:8000/config.js
+14:19:57 NET-REQ GET http://localhost:8000/strings.js
+14:19:57 NET-REQ GET http://localhost:8000/content.js
+14:19:57 CONTEXT-CREATED (page load/reload)
+14:19:57 NET-REQ GET data:font/ttf;base64,…(inline font, no network)
+14:20:08 NET-REQ GET http://localhost:8000/?scene=ending
+14:20:08 NET-REQ GET http://localhost:8000/font.css
+14:20:08 NET-REQ GET http://localhost:8000/config.js
+14:20:08 NET-REQ GET http://localhost:8000/strings.js
+14:20:08 NET-REQ GET http://localhost:8000/content.js
+14:20:08 CONTEXT-CREATED (page load/reload)
+14:20:08 NET-REQ GET data:font/ttf;base64,…(inline font, no network)
+14:20:50 NET-REQ GET http://localhost:8000/?scene=quiz
+14:20:50 NET-REQ GET http://localhost:8000/font.css
+14:20:50 NET-REQ GET http://localhost:8000/config.js
+14:20:50 NET-REQ GET http://localhost:8000/strings.js
+14:20:50 NET-REQ GET http://localhost:8000/content.js
+14:20:50 CONTEXT-CREATED (page load/reload)
+14:20:50 NET-REQ GET data:font/ttf;base64,…(inline font, no network)
+14:21:34 NET-REQ GET http://localhost:8000/?scene=quiz&t=1794640893767
+14:21:34 NET-REQ GET http://localhost:8000/font.css
+14:21:34 NET-REQ GET http://localhost:8000/config.js
+14:21:34 NET-REQ GET http://localhost:8000/strings.js
+14:21:34 NET-REQ GET http://localhost:8000/content.js
+14:21:34 CONTEXT-CREATED (page load/reload)
+14:21:34 NET-REQ GET data:font/ttf;base64,…(inline font, no network)
+14:21:48 NET-REQ GET http://localhost:8000/?scene=quiz&t=1794640907851
+14:21:48 NET-REQ GET http://localhost:8000/font.css
+14:21:48 NET-REQ GET http://localhost:8000/config.js
+14:21:48 NET-REQ GET http://localhost:8000/strings.js
+14:21:48 NET-REQ GET http://localhost:8000/content.js
+14:21:48 CONTEXT-CREATED (page load/reload)
+14:21:48 NET-REQ GET data:font/ttf;base64,…(inline font, no network)
+14:21:59 NET-REQ GET http://localhost:8000/?scene=quiz&t=1794640919384
+14:21:59 CONTEXT-CREATED (page load/reload)
+14:21:59 NET-REQ GET http://localhost:8000/font.css
+14:21:59 NET-REQ GET http://localhost:8000/config.js
+14:21:59 NET-REQ GET http://localhost:8000/strings.js
+14:21:59 NET-REQ GET http://localhost:8000/content.js
+14:21:59 NET-REQ GET data:font/ttf;base64,…(inline font, no network)
+14:22:22 NET-REQ GET http://localhost:8000/?scene=quiz&t=1794640941992
+14:22:22 NET-REQ GET http://localhost:8000/font.css
+14:22:22 NET-REQ GET http://localhost:8000/config.js
+14:22:22 NET-REQ GET http://localhost:8000/strings.js
+14:22:22 NET-REQ GET http://localhost:8000/content.js
+14:22:22 CONTEXT-CREATED (page load/reload)
+14:22:22 NET-REQ GET data:font/ttf;base64,…(inline font, no network)
+14:22:37 NET-REQ GET http://localhost:8000/?scene=quiz&t=1794640957308
+14:22:37 NET-REQ GET http://localhost:8000/font.css
+14:22:37 NET-REQ GET http://localhost:8000/config.js
+14:22:37 NET-REQ GET http://localhost:8000/strings.js
+14:22:37 NET-REQ GET http://localhost:8000/content.js
+14:22:37 CONTEXT-CREATED (page load/reload)
+14:22:37 NET-REQ GET data:font/ttf;base64,…(inline font, no network)
+14:22:52 NET-REQ GET http://localhost:8000/?scene=quiz&t=1794640972192
+14:22:52 NET-REQ GET http://localhost:8000/font.css
+14:22:52 NET-REQ GET http://localhost:8000/config.js
+14:22:52 NET-REQ GET http://localhost:8000/strings.js
+14:22:52 NET-REQ GET http://localhost:8000/content.js
+14:22:52 CONTEXT-CREATED (page load/reload)
+14:22:52 NET-REQ GET data:font/ttf;base64,…(inline font, no network)
+14:23:21 NET-REQ GET http://localhost:8000/?scene=quiz&t=1794641000808
+14:23:21 NET-REQ GET http://localhost:8000/font.css
+14:23:21 NET-REQ GET http://localhost:8000/config.js
+14:23:21 NET-REQ GET http://localhost:8000/strings.js
+14:23:21 NET-REQ GET http://localhost:8000/content.js
+14:23:21 CONTEXT-CREATED (page load/reload)
+14:23:21 NET-REQ GET data:font/ttf;base64,…(inline font, no network)
+14:24:02 NET-REQ GET http://localhost:8000/?scene=play&beat=1&stage=caption&t=1794641041809
+14:24:02 NET-REQ GET http://localhost:8000/font.css
+14:24:02 NET-REQ GET http://localhost:8000/config.js
+14:24:02 NET-REQ GET http://localhost:8000/strings.js
+14:24:02 NET-REQ GET http://localhost:8000/content.js
+14:24:02 CONTEXT-CREATED (page load/reload)
+14:24:02 NET-REQ GET data:font/ttf;base64,…(inline font, no network)
+14:24:46 NET-REQ GET http://localhost:8000/?scene=play&beat=4&t=1794641086019
+14:24:46 NET-REQ GET http://localhost:8000/font.css
+14:24:46 NET-REQ GET http://localhost:8000/config.js
+14:24:46 NET-REQ GET http://localhost:8000/strings.js
+14:24:46 NET-REQ GET http://localhost:8000/content.js
+14:24:46 CONTEXT-CREATED (page load/reload)
+14:24:46 NET-REQ GET data:font/ttf;base64,…(inline font, no network)
+14:26:01 NET-REQ GET http://localhost:8000/?scene=play&beat=1&t=1794641160597
+14:26:01 CONTEXT-CREATED (page load/reload)
+14:26:01 NET-REQ GET http://localhost:8000/font.css
+14:26:01 NET-REQ GET http://localhost:8000/config.js
+14:26:01 NET-REQ GET http://localhost:8000/strings.js
+14:26:01 NET-REQ GET http://localhost:8000/content.js
+14:26:01 NET-REQ GET data:font/ttf;base64,…(inline font, no network)
+14:26:36 NET-REQ GET http://localhost:8000/?scene=play&beat=1&t=1794641196104
+14:26:38 NET-REQ GET http://localhost:8000/font.css
+14:26:38 NET-REQ GET http://localhost:8000/config.js
+14:26:38 NET-REQ GET http://localhost:8000/strings.js
+14:26:38 NET-REQ GET http://localhost:8000/content.js
+14:26:38 CONTEXT-CREATED (page load/reload)
+14:26:39 NET-REQ GET data:font/ttf;base64,…(inline font, no network)
+14:27:24 NET-REQ GET http://localhost:8000/?scene=quiz&t=1794641244039
+14:27:24 NET-REQ GET http://localhost:8000/font.css
+14:27:24 NET-REQ GET http://localhost:8000/config.js
+14:27:24 NET-REQ GET http://localhost:8000/strings.js
+14:27:24 NET-REQ GET http://localhost:8000/content.js
+14:27:24 CONTEXT-CREATED (page load/reload)
+14:27:24 NET-REQ GET data:font/ttf;base64,…(inline font, no network)
+--- offline: server stopped at 14:27:38

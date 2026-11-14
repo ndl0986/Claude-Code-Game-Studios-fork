@@ -1,0 +1,6 @@
+# Sound signal check (TC8). The QC session cannot listen to the emulator.
+Web Audio: AudioContext.state=running, sampleRate=48000, master gain=0.5, muted=false
+sfx calls counted during one touch-played beat 1: {bonk:1, swoosh:3, drum:3, clang:2}
+sfx calls counted during one touch-played quiz: {tap:4, chime:5}
+Android playback (adb shell dumpsys audio) while beat 1 played:
+  AudioPlaybackConfiguration piid:183 deviceIds:[2] type:AAudio u/pid:10153/2490 state:started attr:AudioAttributes: usage=USAGE_MEDIA content=CONTENT_TYPE_UNKNOWN source=DEFAULT flags=0x0 tags= bundle=null sessionId:-1 mutedState:none  FormatInfo{isSpatialized=false, channelMask=0x3, sampleRate=48000}
