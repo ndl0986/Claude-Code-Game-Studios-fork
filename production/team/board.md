@@ -160,3 +160,4 @@ test-setup, smoke-check), those checks report NOT ASSESSED by design (ADR-0001).
 **Merged (2026-11-14):** TASK-005n goal box 880; W9 banner sky-band spec (hud.md §3.3, AC9–13). Both apps build in r5.
 **Android QC r5 (2026-11-14):** frozen f02c0d6 (107 tests), APK sha256 b5d00847…0283 verified; game-qc-android testing. D-27 A (title hero card) → title.md spec → r6 both apps. D-28 A decided; D-28b map source: art-content proposes.
 **iOS QC r5 (2026-11-14):** frozen 1a8c443 (96 tests), app fingerprint 02fb413a… (from game-dev-001 root). Replaces r4 (r4: non-touch PASS, touch NOT ASSESSED). Touch still blocked on Accessibility toggle.
+**Merged (2026-11-14):** D-27 title card spec + hud §3.3 k-band (df22e4a). r6 both apps: title card/row/Start, chip at pad_min, plates narrowing for 0.32 ≤ k < 0.48, TASK-005o data.
