@@ -44,3 +44,4 @@
 
 - **Build swapped during the round (process):** a dev session installed a newer APK mid-round, which invalidated a full playthrough. The leader has set a rule: no dev installs on mp17863 during a QC round. QC now keeps a copy of each APK it is given.
 - **Not yet seen on a real low-end phone.** Sound has not been heard.
+- **Data cleared at 18:43:** the dev session also ran `pm clear` at 18:43. Every persistence result above was observed before then: EN remembered at 18:30, VI saved and remembered at about 18:39, and the prefs read at 18:31 and 18:39. **None of them is affected.** No r1 result was observed after 18:43.
