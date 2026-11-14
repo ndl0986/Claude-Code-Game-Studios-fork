@@ -107,7 +107,7 @@ class Game(
 
     /** True on a story box: intro, beat card, caption or ending (D-07 skip shows there). */
     val onStoryBox get() = !skipWarning && (screen == Screen.INTRO || screen == Screen.ENDING ||
-        (screen == Screen.PLAY && (run.phase == Phase.CARD || run.phase == Phase.CAPTION)))
+        (screen == Screen.PLAY && (run.phase == Phase.CARD || run.phase == Phase.CAPTION || run.phase == Phase.DIALOGUE)))
 
     /** Next on intro, a beat card, a caption or the ending: one sentence per box, then on. */
     fun next(): Boolean {
@@ -123,7 +123,7 @@ class Game(
      * shake, is ignored even if it is released after the window ends (B1 on beat cards, quiz AC6).
      */
     fun pressAllowed(key: String): Boolean = when {
-        key == "next" -> clock - lastAdvance >= tuning["advance_debounce"]
+        key == "next" || key == "ask" -> clock - lastAdvance >= tuning["advance_debounce"]
         key.startsWith("card") -> (quiz?.shakeT ?: 0.0) <= 0.0
         else -> true
     }
@@ -133,6 +133,7 @@ class Game(
         Screen.ENDING -> { if (line < bundle.mission.ending.lines.size - 1) line++ else startQuiz(); true }
         Screen.PLAY -> when (run.phase) {
             Phase.CARD -> run.cardNext()
+            Phase.DIALOGUE -> run.dialogueNext()
             Phase.CAPTION -> { if (run.captionNext()) { line = 0; go(Screen.ENDING) }; true }
             else -> false
         }
@@ -145,6 +146,13 @@ class Game(
 
     /** The screen under the pause menu (play or quiz, P-05). */
     var pausedFrom = Screen.PLAY; private set
+
+    /** The dialogue's ask button: debounced like every Next (QC r2 B1). */
+    fun ask(): Boolean {
+        if (skipWarning || screen != Screen.PLAY || run.phase != Phase.DIALOGUE) return false
+        if (clock - lastAdvance < tuning["advance_debounce"]) return false
+        return run.dialogueAsk().also { if (it) lastAdvance = clock }
+    }
 
     // ---- D-07: skip a story section. The kind warning shows on every Skip until the child chooses
     // "Skip anyway" once in this run (then later skips are silent); none once the medal is earned. ----

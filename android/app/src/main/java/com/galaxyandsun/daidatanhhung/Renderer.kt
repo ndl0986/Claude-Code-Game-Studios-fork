@@ -232,7 +232,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             }
         }
         val vis = r.visibleButtons()
-        if (r.phase != Phase.CAPTION && r.phase != Phase.CARD) {
+        if (r.phase != Phase.CAPTION && r.phase != Phase.CARD && r.phase != Phase.DIALOGUE) {
             // Only the beat's own pads are drawn (mission-flow rule 4): hidden, not greyed.
             if ("move" in vis) {
                 pad("left", 140f, 610f, 80f, Action.LEFT, false, false, null, t) { rr -> arrowGlyph(rr, -1) }
@@ -250,6 +250,8 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
                 HandHint.SPECIAL_TAP, HandHint.SPECIAL_HOLD -> fig.hand(special.first, special.second - 70, if (r.hand == HandHint.SPECIAL_HOLD) 0.0 else t)
                 HandHint.NONE -> Unit
             }
+        } else if (r.phase == Phase.DIALOGUE) {
+            dialogue(g, r, t)
         } else if (r.phase == Phase.CAPTION) {
             storyPanel("${g.ui(UiIds.BEAT)} ${r.beat + 1}", beat.scene[r.captionLine.coerceIn(0, beat.scene.size - 1)], g, t)
         } else {
@@ -257,6 +259,47 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             storyPanel(beat.title.get(g.lang), boxes[r.cardLine.coerceIn(0, boxes.size - 1)], g, t, badgeFor = beat.title)
         }
         skipWarning(g)
+    }
+
+    /**
+     * A dialogue line (mission-flow 7d): the speaker's portrait on their side (the hero left, others
+     * right), the text box beside it (rules.json dialogue_line 720 / dialogue_narrator 880, 38 px,
+     * weight 600), the title as the heading over line 1, then Tiếp or the ask button, and Skip.
+     */
+    private fun dialogue(g: Game, r: com.galaxyandsun.daidatanhhung.core.MissionRun, t: Double) {
+        val dlg = r.dialogue ?: return
+        val line = dlg.lines[r.lineIndex.coerceIn(0, dlg.lines.size - 1)]
+        d.rr(40f, 230f, 1200f, 330f, 36f, C.PANEL, C.GOLD, 6f)
+        if (r.lineIndex == 0) { d.textBox(r.currentBeat.title.get(g.lang), W / 2, 200f, 880f, 44f, C.GOLD, 1); badge(g, r.currentBeat.title, W / 2 + 380, 170f) }
+        val narrator = line.speaker == "narrator"
+        val heroSide = line.speaker == "hero"
+        if (!narrator) {
+            val px = if (heroSide) 170f else 1110f
+            d.circle(px, 395f, 120f, C.a(C.CREAM, 0.95), C.GOLD, 6f)
+            val id = "pic.portrait_${g.heroId}_${line.speaker}" + (line.mood?.let { "_$it" } ?: "")
+            if (!portrait(id, px, 395f, 110f)) { // debug placeholder: a figure cropped in the medallion (no text in art)
+                d.c.save(); d.path.reset(); d.path.addCircle(px, 395f, 114f, android.graphics.Path.Direction.CW); d.c.clipPath(d.path)
+                fig.hero(px, 395f + 230f, if (heroSide) 1 else -1, false, false, null, t, 0.95f,
+                    tunic = when (line.speaker) { "hero" -> C.RED; "king" -> C.GOLD; else -> C.INDIGO })
+                d.c.restore()
+            }
+        }
+        val (cx, box) = when { narrator -> W / 2 to 880f; heroSide -> (320f + 360f) to 720f; else -> (200f + 360f) to 720f }
+        d.textBox(line.text.get(g.lang), cx, 395f, box, 38f, C.WHITE, if (narrator) 2 else 3, semiBold = true)
+        badge(g, line.text, cx, 540f)
+        if (r.dialogueButton == "ask") {
+            val ask = dlg.ask!!.button
+            button("ask", ask.get(g.lang), W / 2 - 170, 590f, 340f, 110f, t, pulse = true, fill = C.RED, shade = 0xFF9E2620.toInt(), size = 34f) { g.ask() }
+            if (r.askHint) fig.hand(W / 2, 600f, t)
+        } else button("next", g.ui(UiIds.NEXT), W / 2 - 150, 590f, 300f, 110f, t, pulse = true) { g.next() }
+        skipButton(g)
+    }
+
+
+    /** A dialogue portrait from assets.json; false when the id has no picture yet (debug placeholder). */
+    private fun portrait(id: String, x: Float, y: Float, r: Float): Boolean {
+        val b = pictures(id) ?: return false
+        dst.set(x - r, y - r, x + r, y + r); bmpPaint.alpha = 255; d.c.drawBitmap(b, null, dst, bmpPaint); return true
     }
 
     /** A caption or beat card: header, one sentence, Next and Skip (D-07). */

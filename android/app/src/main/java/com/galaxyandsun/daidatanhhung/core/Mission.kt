@@ -31,10 +31,10 @@ enum class Sfx { TAP, DRUM, CLANG, SWOOSH, BONK, CHIME, SOFT }
  * (non-fight beats, before play), PLAY = beat_play[i], END = beat_end[i] (end_pause), CAPTION =
  * caption[i] (fight beats only, after play).
  */
-enum class Phase { WALK, CARD, PLAY, END, CAPTION }
+enum class Phase { WALK, CARD, PLAY, END, CAPTION, DIALOGUE }
 
 /** The beat types the slice implements (D-08 B). */
-enum class BeatType(val id: String) { FIGHT("fight"), WALK("walk"), HOLD("hold-meter"), TRAINING("training"), REACH("reach-the-flag");
+enum class BeatType(val id: String) { FIGHT("fight"), WALK("walk"), HOLD("hold-meter"), TRAINING("training"), REACH("reach-the-flag"), DIALOGUE("dialogue");
     companion object { fun of(id: String) = entries.firstOrNull { it.id == id } }
 }
 
@@ -161,7 +161,7 @@ class MissionRun(
     private fun extent(i: Int): Double = when (typeOf(i)) {
         BeatType.WALK, BeatType.REACH -> lengthScreens(i) * WORLD_W
         BeatType.TRAINING -> (dummyCount(i) + 1) * tuning["dummy_spacing"]
-        else -> 0.0
+        else -> 0.0 // fight, hold-meter, dialogue
     }
 
     /**
@@ -189,7 +189,37 @@ class MissionRun(
 
     /** Reaching beat i's start: fights go straight to play, other types show their card first. */
     private fun arriveAtBeat(i: Int) {
-        if (typeOf(i) == BeatType.FIGHT) startPlay(i) else { phase = Phase.CARD; cardLine = 0 }
+        when (typeOf(i)) {
+            BeatType.FIGHT -> startPlay(i)
+            BeatType.DIALOGUE -> { phase = Phase.DIALOGUE; lineIndex = 0; asksDone = 0; stall = 0.0; hero.walk = false } // no card
+            else -> { phase = Phase.CARD; cardLine = 0 }
+        }
+    }
+
+    // ---- Dialogue beat (mission-flow Rule 7d, schema 1.4): phase dialogue_line, lineIndex (0-based), asksDone ----
+    var lineIndex = 0; private set
+    var asksDone = 0; private set
+    val dialogue get() = ContentLoader.dialogueParams(currentBeat)
+    /** The button the current line shows: "ask" or "tiep" (at_line ≤ L < at_line + taps, L 1-based). */
+    val dialogueButton: String get() = dialogue?.buttonOn(lineIndex + 1) ?: "tiep"
+
+    /** Tiếp on a dialogue line (refused while the line shows the ask button). */
+    fun dialogueNext(): Boolean {
+        if (phase != Phase.DIALOGUE || dialogueButton != "tiep") return false
+        return advanceLine()
+    }
+
+    /** The ask button (the child's action in the scene): shows the next line. */
+    fun dialogueAsk(): Boolean {
+        if (phase != Phase.DIALOGUE || dialogueButton != "ask") return false
+        asksDone++; return advanceLine()
+    }
+
+    private fun advanceLine(): Boolean {
+        stall = 0.0; idle = 0.0
+        val n = dialogue?.lines?.size ?: 0
+        if (lineIndex < n - 1) lineIndex++ else { phase = Phase.END; endT = 0.0 }
+        return true
     }
 
     /** The card's boxes: the scene lines, then the goal (title is the card's header). */
@@ -213,6 +243,7 @@ class MissionRun(
                 trainingStep = if (dummies.isNotEmpty()) TrainingStep.DUMMIES else nextTrainingStep(TrainingStep.DUMMIES, i)
             }
             BeatType.REACH -> encounterNext = 0
+            BeatType.DIALOGUE -> { phase = Phase.DIALOGUE; lineIndex = 0; asksDone = 0 }
         }
     }
 
@@ -427,7 +458,8 @@ class MissionRun(
         }
         else { h.x = maxOf(cam + edge, h.x); cam = maxOf(cam, h.x - tuning["camera_follow_offset"]) }
         if (phase == Phase.WALK && beat < beats.size && h.x >= beatX(beat)) arriveAtBeat(beat)
-        if (phase == Phase.PLAY) playStep(dt, held, tapped)
+        if (phase == Phase.DIALOGUE) { if (dialogueButton == "ask") stall += dt }
+        else if (phase == Phase.PLAY) playStep(dt, held, tapped)
         else if (phase == Phase.END) {
             updateEnemies(dt)
             endT += dt
@@ -454,6 +486,7 @@ class MissionRun(
 
     private fun playStep(dt: Double, held: Set<Action>, tapped: Set<Action>) {
         val goal = when (beatType) {
+            BeatType.DIALOGUE -> false // advanced by its lines (phase DIALOGUE), never by play
             BeatType.FIGHT -> groupStep(dt)
             BeatType.WALK -> { updateEnemies(dt); hero.x >= goalX }
             BeatType.HOLD -> {
@@ -516,6 +549,7 @@ class MissionRun(
     /** Skip the rest of the current story section (D-07): a card goes to play, a caption ends. */
     fun skipSection(): Boolean = when (phase) {
         Phase.CARD -> { startPlay(beat); idle = 0.0; stall = 0.0; true }
+        Phase.DIALOGUE -> { phase = Phase.END; endT = 0.0; true } // the whole exchange is the story section
         Phase.CAPTION -> { captionLine = currentBeat.scene.size - 1; captionNext(); true }
         else -> false
     }
@@ -550,6 +584,8 @@ class MissionRun(
         ((phase == Phase.WALK || (phase == Phase.PLAY && (beatType == BeatType.WALK || (beatType == BeatType.REACH && !inEncounter)))) && idle > tuning["hint_delay"])
     val pulseAttack get() = stalled && (beatType == BeatType.FIGHT || inEncounter || (beatType == BeatType.TRAINING && trainingStep == TrainingStep.DUMMIES))
     val pulseDefend get() = stalled && beatType == BeatType.TRAINING && trainingStep == TrainingStep.BLOCKS
+    /** Hints: the hand on the ask button after hint_delay without an ask tap (mission-flow 7d). */
+    val askHint get() = phase == Phase.DIALOGUE && dialogueButton == "ask" && stall > tuning["hint_delay"]
     val pulseSpecial get() = stalled && ((beatType == BeatType.TRAINING && trainingStep == TrainingStep.SPECIAL) || beatType == BeatType.HOLD)
     val hand: HandHint get() = when {
         phase != Phase.WALK && phase != Phase.PLAY -> HandHint.NONE
@@ -576,6 +612,7 @@ class MissionRun(
         beat = i.coerceIn(0, beats.size - 1)
         tut.moved = true; tut.hit = true; tut.blocked = true; tut.windupSeen = true; tut.enemySeen = true
         hero.x = beatX(beat) + 10; cam = maxOf(0.0, hero.x - tuning["camera_follow_offset"])
+        if (typeOf(beat) == BeatType.DIALOGUE) { arriveAtBeat(beat); return }
         if (card && typeOf(beat) != BeatType.FIGHT) { phase = Phase.CARD; cardLine = 0; return }
         startPlay(beat)
         if (telegraph && typeOf(beat) == BeatType.FIGHT) {
