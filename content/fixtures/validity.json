@@ -491,6 +491,96 @@
         }
       ],
       "expected": "invalid"
+    },
+    {
+      "name": "two heroes share a timeline_order",
+      "rule": "R17",
+      "heroes": [
+        {
+          "id": "a",
+          "timeline_order": 10,
+          "next_hero": "b"
+        },
+        {
+          "id": "b",
+          "timeline_order": 10,
+          "next_hero": null
+        }
+      ],
+      "expected": "invalid"
+    },
+    {
+      "name": "unique timeline_order in gaps of 10",
+      "rule": "R17",
+      "heroes": [
+        {
+          "id": "a",
+          "timeline_order": 10,
+          "next_hero": "b"
+        },
+        {
+          "id": "b",
+          "timeline_order": 20,
+          "next_hero": null
+        }
+      ],
+      "expected": "valid"
+    },
+    {
+      "name": "next_hero skips the next hero by timeline",
+      "rule": "R18",
+      "heroes": [
+        {
+          "id": "a",
+          "timeline_order": 10,
+          "next_hero": "c"
+        },
+        {
+          "id": "b",
+          "timeline_order": 20,
+          "next_hero": "c"
+        },
+        {
+          "id": "c",
+          "timeline_order": 30,
+          "next_hero": null
+        }
+      ],
+      "expected": "invalid"
+    },
+    {
+      "name": "last hero has a next_hero",
+      "rule": "R18",
+      "heroes": [
+        {
+          "id": "a",
+          "timeline_order": 10,
+          "next_hero": "b"
+        },
+        {
+          "id": "b",
+          "timeline_order": 20,
+          "next_hero": "a"
+        }
+      ],
+      "expected": "invalid"
+    },
+    {
+      "name": "next_hero follows the timeline, not index order",
+      "rule": "R18",
+      "heroes": [
+        {
+          "id": "b",
+          "timeline_order": 20,
+          "next_hero": null
+        },
+        {
+          "id": "a",
+          "timeline_order": 10,
+          "next_hero": "b"
+        }
+      ],
+      "expected": "valid"
     }
   ]
 }
