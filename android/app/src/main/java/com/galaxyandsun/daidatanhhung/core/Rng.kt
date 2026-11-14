@@ -7,8 +7,12 @@ package com.galaxyandsun.daidatanhhung.core
 class Mulberry32(seed: Long) {
     private var state: Int = seed.toInt()
 
+    /** How many values [next] has returned (the shared trace fixture compares it across apps). */
+    var draws = 0L; private set
+
     /** The next value in [0, 1). */
     fun next(): Double {
+        draws++
         state += 0x6D2B79F5
         var t = imul(state xor (state ushr 15), state or 1)
         t = t xor (t + imul(t xor (t ushr 7), t or 61))
