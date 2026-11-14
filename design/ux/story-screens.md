@@ -61,13 +61,41 @@ world px on every supported phone (Android clamps it with `min(720, ·)`).
   cards, captions and the ending (and on dialogue screens). Only the pause/sound corner block shows
   (`hud.md` §5, "story, dialogue screens"). *Today iOS draws the beat dots at y 30–90 on story
   screens: a dev ticket (r8).*
-- **Part label** ("Phần n / Part n", as both apps draw it): a 28–30 px label centred above the
-  panel, its box ≈ panel top − 38 … panel top − 10 (at the floor: y 241–269 over a beat card,
-  309–337 over the other boxes).
+- **Part label** ("Phần 3 / Part 3"; r8b, from iOS r7 `GameScene.buildPlayHUD`, agreed with
+  Android, which adds it in r8):
+  - **Text:** the string `ui.play.beat` (vi "Phần", en "Part") + a space + **n**, where n = the
+    mission beat index, **1-based**, over **all** beats (walk, hold-meter, training, dialogue,
+    fight), the same index as the beat dots. TQT has 5 beats, so n is 1…5. Only " " + n is
+    composed in code; the word comes from the strings file.
+  - **Screens:** **beat cards and captions only**. Not on the intro, the ending, dialogue or the
+    quiz. (A dialogue beat keeps its number in the count, though no label shows on it.)
+  - **Type:** Nunito 800, **28 px** on both screens and both apps (label size, Language Rule 6),
+    centred on x 640, 1 line.
+  - **Position:** centre y = max(`corner_bottom` + 8 + 16, panel top − 24), so the box is panel
+    top − 38 … panel top − 10. At the floor (k 0.40): y 241–269 over a beat card (panel 279),
+    309–337 over a caption (panel 347). The `corner_bottom` clamp never binds on the supported
+    range.
+  - **Colour and contrast:** star gold **`#FFC531`** fill with an **ink `#3A2A20` outline ≥ 2 px**,
+    as the banner motto (`design/accessibility-requirements.md`). It sits on the scene picture,
+    so one of fill or outline must separate it from every background it can land on (checked
+    against the theme sky bands and palette anchors, `mission-flow-assets.md`):
+    | Behind the label | Gold fill vs it | Ink outline vs it |
+    |---|---|---|
+    | River sky `#9CCBEA`–`#BFE0F2` | 1.1 | **7.9–9.9** |
+    | Village sky `#A9D3EC`–`#CDE6EE` | 1.0–1.2 | **8.6–10.5** |
+    | Camp sky `#2E3156`–`#3B3F6B` | **6.3–7.9** | 1.1–1.4 |
+    | Camp sun shaft `#E8A93B` | 1.3 | **6.6** |
+    | Haze `#F3E6C8` / river blue `#3E8FC4` / roof `#B5673F` | 1.3 / 2.2 / 2.7 | **11.1 / 3.9 / 3.3** |
+    The worst case is 3.25:1 (roof, by the outline), ≥ 3:1. Inside the glyph, gold vs ink is
+    8.67:1. The iOS r7 gold `#F2B632` (7.52:1 vs ink) moves to `#FFC531`. **Never** bare gold
+    without the outline: on the river and village skies it is ≈ 1.1:1 (invisible).
 - **The story picture is full-bleed** (P-06: the step's background fills the screen behind
   everything), so it has no frame corner to collide with.
-- **Story screens show the background only, no play sprites** (QC r6, for r8). Behind a story
-  panel the hero, enemies, the partner and dummies aren't drawn: at spec height a standing figure
+- **Story screens show the background only, no play sprites** (QC r6, for r8; r8b). Behind a story
+  panel **nothing of the play layer is drawn**: no hero, enemies, partner or dummies, **no flag
+  prop**, no fx or pops, no hints. A beat card or caption is the scene background plus the
+  placeholder (or its real still), the panel, the part label, the bottom row and the pause/sound
+  corner, nothing else. Dialogue screens follow the same rule (`dialogue.md` §5.2). Why: at spec height a standing figure
   (y ≈ 290–470) sits right where the panel goes, so the panel would cut him at the chest (QC saw
   it at the neck with the taller placeholder). Characters on story screens come from stills and
   portraits only, composed for the safe zone below.
@@ -77,7 +105,8 @@ world px on every supported phone (Android clamps it with `min(720, ·)`).
   name its own portrait later) in a round drum-ring frame, on the scene background, **centred on
   x 640**, wholly in the safe zone and **clear of the part label: bottom ≤ label top − 8**
   (= panel top − 46, taken at the floor, so the same world position at every k):
-  - **intro and caption:** 256 × 256, **bottom ≤ 301**, so y 45–301 (label 309–337, panel 347);
+  - **intro and caption:** 256 × 256, **bottom ≤ 301**, so y 45–301 (label 309–337, panel 347).
+    The intro has no label but uses the same position, so the stills line up;
   - **beat card:** **208 × 208**, **bottom ≤ 233**, so y 25–233 (label 241–269, panel 279). 240
     no longer fits under the label and above the top margin (y ≥ 18);
   - **minimum size 192 × 192** (≈ 77 dp at k 0.40, a face still reads). If a later layout leaves
@@ -193,4 +222,5 @@ either app).*
 9. **GIVEN** the Android (k 0.527) and iOS (k 0.517) reference phones and a k 0.40 phone or emulator, with pause and sound at `pad_min`, **WHEN** a beat card, an intro box, a caption and the ending are captured in VI and EN, **THEN** no pixel of the paper frame, the beat-card panel or a framed picture lies inside the pause/sound block (x ≤ `corner_right`, y ≤ `corner_bottom`); the panel's top is ≥ `corner_bottom` + 8 and its bottom ≤ Tiếp's top − 8.
 10. **GIVEN** any story screen on the reference phones and at k 0.40, **WHEN** captured, **THEN** "Bỏ qua" is ≥ `pad_min` tall (≥ 137 world px at k 0.527, ≥ 180 at k 0.40), its top and bottom match Tiếp's, and it stays left of Tiếp with ≥ `pad_gap` between them.
 11. **GIVEN** any story screen (intro, a beat card, a caption, the ending) and a press every 0.35 s that keeps going, **WHEN** it plays, **THEN** every box holds ≥ 1.5 s (`screen_enter_lock_max`) or until the presses pause for 0.6 s, none is skipped silently, and the next screen starts only after each box was advanced once (Input AC17, AC21).
-12. **GIVEN** the intro, a beat card, a caption and the ending at the reference phones and at k 0.40, **WHEN** captured, **THEN** no hero, enemy, partner or dummy sprite is drawn behind the panel; **no story screen shows only background**: no beat dots, goal plate or banner bar show (only the pause/sound corner); the intro and captions show the placeholder portrait still (256, bottom ≤ 301), beat cards show it at 208 with bottom ≤ 233, centred, clear of the pause/sound block and ≥ 8 px above the "Phần n / Part n" label, and the ending shows ASSET-016 with the banner cloth and the warm light above the panel's top.
+12. **GIVEN** the intro, a beat card, a caption and the ending at the reference phones and at k 0.40, **WHEN** captured, **THEN** no hero, enemy, partner, dummy or flag sprite, fx, pop or hint is drawn; **no story screen shows only background**: no beat dots, goal plate or banner bar show (only the pause/sound corner); the intro and captions show the placeholder portrait still (256, bottom ≤ 301), beat cards show it at 208 with bottom ≤ 233, centred, clear of the pause/sound block and ≥ 8 px above the "Phần n / Part n" label, and the ending shows ASSET-016 with the banner cloth and the warm light above the panel's top.
+13. **GIVEN** each TQT beat card and caption in VI and EN, at the reference phones and at k 0.40, **WHEN** captured, **THEN** the label reads "Phần n" / "Part n" with n the beat's 1-based mission index (the same as its beat dot), 28 px, gold `#FFC531` with an ink outline ≥ 2 px, its box at panel top − 38 … − 10 (241–269 over a card, 309–337 over a caption at k 0.40); the intro, the ending, dialogue and the quiz show no label; and on the river, village and camp backgrounds the label's edge is visible in greyscale.
