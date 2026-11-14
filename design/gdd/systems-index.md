@@ -45,9 +45,9 @@ Dải Đất Anh Hùng is a small, story-first game, and its systems are few.
 | 3 | Input & touch controls (inferred) | Core | Vertical Slice | Not Started | — | none |
 | 4 | Save & progress (inferred) | Persistence | Vertical Slice | Not Started | — | none |
 | 5 | Side-scroll movement & combat | Gameplay | Vertical Slice | Approved | `design/gdd/side-scroll-combat.md` | 3, 1 |
-| 6 | Mission flow & beat types | Narrative | Vertical Slice | Approved | `design/gdd/mission-flow.md` | 5, 1, 2 |
+| 6 | Mission flow & beat types | Narrative | Vertical Slice | Approved | `design/gdd/mission-flow.md` | 5, 1, 2, 3 |
 | 7 | Quiz & stars | Gameplay | Vertical Slice | Approved | `design/gdd/quiz-and-stars.md` | 1, 2, 4 |
-| 8 | Hints & onboarding | Meta | Vertical Slice | Approved | `design/gdd/hints-and-onboarding.md` | 6, 5, 3, 10 |
+| 8 | Hints & onboarding | Meta | Vertical Slice | Approved | `design/gdd/hints-and-onboarding.md` | 6, 5, 3, 10, 1 |
 | 9 | Hero progression & unlock | Progression | Vertical Slice (unlock screen) / Alpha (full) | Not Started | — | 7, 4, 1 |
 | 10 | Audio & voice-over | Audio | Vertical Slice | Not Started | — | 1, 2 |
 | 11 | Map & timeline | UI | Alpha (stub in VS) | Not Started | — | 9, 1 |
@@ -115,12 +115,12 @@ No economy, no social and no analytics, by pillar (*An toàn cho trẻ / Safe fo
 
 1. Side-scroll movement & combat: depends on Input, Content data.
 2. Quiz & stars: depends on Content data, Language, Save.
-3. Mission flow & beat types: depends on Combat, Content data, Language.
+3. Mission flow & beat types: depends on Combat, Content data, Language, Input.
 
 ### Feature Layer (depends on core)
 
 1. Hero progression & unlock: depends on Quiz & stars, Save, Content data.
-2. Hints & onboarding: depends on Mission flow, Combat, Input, Audio.
+2. Hints & onboarding: depends on Mission flow, Combat, Input, Audio, Content data.
 3. Map & timeline: depends on Hero progression, Content data.
 4. Storybook mini-games & content calendar: depends on Language, Save, Content data.
 

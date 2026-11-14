@@ -46,7 +46,7 @@ flags, `stall`/`idle`), plan reviews 1–2, and QC O2 (hints count from the capt
 | move | Slice: during `walk_to[0]` (walking to beat 1) while the hero hasn't moved right yet. Later: the first beat with `move` | Hand on ▶ + ▶ pulses | The hero moves right once |
 | attack | The first enemy or dummy is on screen and no hit has landed yet | Hand on attack | The first hit lands |
 | defend | An enemy or practice partner is in `windup` and the child hasn't blocked yet in this run | Hand on defend, only while a windup is showing | The first block |
-| special (tap) | A beat with `special` starts (training's finish step, or reach-the-flag) and special hasn't been tapped yet | Hand on special | The first tap |
+| special (tap) | Training's finish step starts and special hasn't been tapped yet (no special in combat, D-10) | Hand on special | The first tap |
 | special (hold) | A `hold-meter` beat starts | Hand pressing and holding on special, with the meter ring glowing | The meter passes 25% |
 
 3. **One teach hint at a time.** Priority: move, then attack, then defend, then special. A
@@ -62,7 +62,8 @@ flags, `stall`/`idle`), plan reviews 1–2, and QC O2 (hints count from the capt
 | hold-meter | The meter rose | Hand on special again |
 | reach-the-flag (path clear) | Any movement, left or right | An arrow over the flag, if it is on screen; otherwise ▶ pulses |
 
-5. **Timers reset** on progress, when a caption or beat card closes (QC O2: hints count from the
+5. **This system owns the no-progress timer** (`progress_timer`, called `stall`/`idle` in the
+   prototype) and `hint_delay`. Mission flow and Combat only send events. **Timers reset** on progress, when a caption or beat card closes (QC O2: hints count from the
    caption closing, not from behind it), and when the game resumes from pause. **The reset on
    resume is new versus the prototype**, which froze the timers across a pause. Both apps add it on
    purpose: a child coming back from pause gets a fresh `hint_delay`.
@@ -87,7 +88,7 @@ caption or card closing, or resume).
 | System | In | Out | Owner |
 |---|---|---|---|
 | Mission flow & beat types | beat started (type, buttons, which are new), card or caption closed, meter value, training step | (none) | Mission flow GDD |
-| Side-scroll movement & combat | events `hit`, `block`, `pushed`, `windup_started`, `flee`, hero moved right; stall timer | (none) | Combat GDD |
+| Side-scroll movement & combat | events `hit`, `block`, `pushed`, `windup_started`, `flee`, hero moved | (none) | Combat GDD |
 | Input & touch controls | pad positions and sizes | (none) | Input GDD |
 | Audio & voice-over | (none) | hint shown (post-slice: voice prompt id) | Audio GDD |
 | Content data | `tuning.json` `hint_delay` | (none) | Content contract |
@@ -133,7 +134,7 @@ hides them, and the timer restarts.
 | System | Direction | Hard/Soft | Interface |
 |---|---|---|---|
 | Mission flow & beat types | this depends on it | Hard | Beat start, new buttons, card or caption closed |
-| Side-scroll movement & combat | this depends on it | Hard | Combat events, stall timer |
+| Side-scroll movement & combat | this depends on it | Hard | Combat events |
 | Input & touch controls | this depends on it | Hard | Pad positions |
 | Audio & voice-over | this depends on it (post-slice voice prompts) | Soft | Prompt ids |
 | Content data | this depends on it | Hard | `hint_delay` |
@@ -162,7 +163,7 @@ dependent.
 | This doc references | Where | What |
 |---|---|---|
 | Mission flow | `design/gdd/mission-flow.md` Core Rules 2, 4, 5 | New buttons per beat; cards and captions |
-| Combat | `design/gdd/side-scroll-combat.md` frame order, Interactions | Events; stall resets on a hit and on a caption closing |
+| Combat | `design/gdd/side-scroll-combat.md` frame order, Interactions | Events only; this system owns the no-progress timer and its resets |
 | Content | `content/data/tuning.json` `hint_delay` | 5 s |
 | Prototype | `203d73e` `index.html` (`hand`, `arrowDown`, `tut`, `stall`, `idle`) | Behaviour |
 | QC | `qa/TASK-003-android` (O2) | Hints count from the caption closing |

@@ -28,3 +28,6 @@ Awaiting game-dev-android confirmation.
 
 ## Peer re-review — 2026-11-14 — game-dev-android: APPROVE @ f23c70c
 All findings were checked as fixed; the quiz-shuffle fixture is done in data/TASK-005d @ e5c1f07. Status set to Approved.
+
+## Cross-GDD review fixes — 2026-11-14 (TASK-010, gdd-cross-review-2026-11-14.md)
+Consistency fixes C1–C5, S2 (pause releases held pads; the windup restarts on resume), stale "proposed" labels and D-09 done, plus alignment with Luan's D-08 (B) and D-10 (B, no special in combat). Status stays Approved; these are consistency edits, not design changes, except S2, which is new behaviour for both apps.
