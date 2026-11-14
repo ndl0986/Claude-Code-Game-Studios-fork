@@ -244,7 +244,8 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             if ("special" in vis) pad("special", special.first, special.second, 80f, Action.SPECIAL, false, r.pulseSpecial, g.uiOrNull(UiIds.SPECIAL), t) { rr -> bannerGlyph(rr) }
             when (r.hand) {
                 HandHint.MOVE -> fig.hand(330f, 540f, t)
-                HandHint.ATTACK -> fig.hand(1150f, 510f, t)
+                // QC r2 B3: with the flag pad above attack, a hand from above would seem to point at the flag; come from the left
+                HandHint.ATTACK -> if ("special" in vis) fig.hand(1150f - 92 - 30, 590f, t, -90f) else fig.hand(1150f, 510f, t)
                 HandHint.DEFEND -> fig.hand(950f, 555f, t)
                 HandHint.SPECIAL_TAP, HandHint.SPECIAL_HOLD -> fig.hand(special.first, special.second - 70, if (r.hand == HandHint.SPECIAL_HOLD) 0.0 else t)
                 HandHint.NONE -> Unit

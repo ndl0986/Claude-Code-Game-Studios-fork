@@ -136,13 +136,15 @@ class Figures(private val d: Draw) {
         }
     }
 
-    /** A straw training dummy on a post; knocked over (rotated) once hit. */
+    /** A straw training dummy on a post: a hit makes it wobble and spring back (asset spec: never breaks). */
     fun dummy(x: Float, ground: Float, down: Boolean, t: Double) {
         c.save(); c.translate(x, ground)
-        if (down) c.rotate(-80f * minOf(1f, (t * 4).toFloat()))
+        if (down && t < 1.5) c.rotate((-22 * sin(t * 14) * kotlin.math.exp(-t * 3)).toFloat())
+        val old = d.alpha; if (down && t >= 1.5) d.alpha = 0.6 // a done dummy stands, slightly faded
         d.rr(-6f, -150f, 12f, 150f, 6f, 0xFF8A5A2B.toInt())
         d.ellipse(0f, -110f, 34f, 46f, 0xFFE3C46B.toInt()); d.circle(0f, -175f, 26f, 0xFFE3C46B.toInt(), 0xFFB8963A.toInt(), 3f)
         d.rr(-40f, -128f, 80f, 10f, 5f, 0xFFB8963A.toInt())
+        d.alpha = old
         c.restore()
     }
 
@@ -169,9 +171,10 @@ class Figures(private val d: Draw) {
         c.restore(); d.alpha = old
     }
 
-    fun hand(x: Float, y: Float, t: Double) {
+    /** The teach hand; [rot] in degrees (0 points down, -90 points right). */
+    fun hand(x: Float, y: Float, t: Double, rot: Float = 0f) {
         val b = (sin(t * 6) * 12).toFloat()
-        c.save(); c.translate(x, y - 70 - b)
+        c.save(); c.translate(x, y); c.rotate(rot); c.translate(0f, -70 - b)
         d.rr(-8f, -10f, 16f, 44f, 8f, C.WHITE, C.INK); d.rr(-26f, -48f, 52f, 48f, 18f, C.WHITE, C.INK)
         d.rr(-30f, -42f, 14f, 30f, 7f, C.WHITE, C.INK); d.rr(-22f, -66f, 44f, 20f, 8f, C.RED)
         c.restore()

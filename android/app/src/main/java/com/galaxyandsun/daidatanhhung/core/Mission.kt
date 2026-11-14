@@ -95,6 +95,8 @@ class MissionRun(
     private val tuning: Tuning,
     private val rng: Mulberry32,
     private val sfx: (Sfx) -> Unit,
+    /** G2 proposal (game-art-content), off until agreed: fight-zone bounds + attack auto-face. Used to measure. */
+    private val g2: Boolean = false,
 ) {
     val ground get() = tuning["ground_y"]
     val hero = Hero(tuning["hero_start_x"])
@@ -398,18 +400,26 @@ class MissionRun(
             if (h.atk >= tuning["attack_hit_at"] && !h.hitDone) { heroAttack(); h.hitDone = true }
             if (h.atk >= 1) { h.atk = -1.0; h.cool = tuning["attack_cooldown"] }
         }
-        if (canAct && !h.def && h.atk < 0 && h.cool <= 0 && Action.ATTACK in tapped) { h.atk = 0.0; h.hitDone = false }
+        if (canAct && !h.def && h.atk < 0 && h.cool <= 0 && Action.ATTACK in tapped) {
+            h.atk = 0.0; h.hitDone = false
+            if (g2) enemies.filter { it.state != EnemyState.FLEE }.minByOrNull { abs(it.x - h.x) }?.let { n -> // G2 rule 2: auto-face
+                val d = n.x - h.x; if (d != 0.0) h.face = d.sign.toInt() }
+        }
         var mv = 0
         if (canAct && !h.def) { if (Action.LEFT in held) mv -= 1; if (Action.RIGHT in held) mv += 1 }
         h.walk = mv != 0
         if (mv != 0) {
-            h.face = mv; h.x += mv * tuning["hero_speed"] * dt * (if (h.atk >= 0) tuning["attack_move_mul"] else 1.0)
+            if (!(g2 && h.atk >= 0)) h.face = mv // G2 rule 2b: the swing keeps the auto-faced direction
+            h.x += mv * tuning["hero_speed"] * dt * (if (h.atk >= 0) tuning["attack_move_mul"] else 1.0)
             if (mv > 0) tut.moved = true; idle = 0.0
         } else idle += dt
         // Camera: locked during a fight or encounter (and the fight's caption), else it follows right.
         val edge = tuning["hero_edge_margin"]
         val lock = lockX
-        if (lock != null) { h.x = h.x.coerceIn(lock + edge, lock + WORLD_W - edge); cam = lock }
+        if (lock != null) {
+            val m = if (g2) edge + tuning["enemy_reach"] else edge // G2 rule 1: fight-zone bounds
+            h.x = h.x.coerceIn(lock + m, lock + WORLD_W - m); cam = lock
+        }
         else { h.x = maxOf(cam + edge, h.x); cam = maxOf(cam, h.x - tuning["camera_follow_offset"]) }
         if (phase == Phase.WALK && beat < beats.size && h.x >= beatX(beat)) arriveAtBeat(beat)
         if (phase == Phase.PLAY) playStep(dt, held, tapped)
@@ -588,6 +598,18 @@ class MissionRun(
     fun debugEncounter() {
         if (beatType != BeatType.REACH) return
         hero.x = xStart + encounterAt(beat).first() * WORLD_W; cam = maxOf(cam, hero.x - tuning["camera_follow_offset"])
+    }
+
+    /** Debug (QC: measure the leader's 1.32 s): the encounter with a leader, the leader already in windup. */
+    fun debugLeaderWindup() {
+        if (beatType != BeatType.REACH) return
+        val all = encounters(beat); val i = all.indexOfFirst { "leader" in it.second.enemies }.takeIf { it >= 0 } ?: return
+        encounterNext = i; inEncounter = true
+        val trigger = xStart + all[i].first * WORLD_W
+        hero.x = trigger; startGroup(trigger - tuning["lock_offset"], all[i].second)
+        queue.clear(); tut.windupSeen = true; tut.blocked = false
+        enemies += Enemy(98, "leader", hero.x + tuning["enemy_reach"], -1).also { it.state = EnemyState.WINDUP; it.moving = false }
+        spawnT = 99.0
     }
 
     companion object {

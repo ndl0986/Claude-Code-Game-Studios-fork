@@ -225,10 +225,38 @@ class BeatTypesTest {
         val q = g.quiz!!
         assertEquals(PickResult.WRONG, g.answer((q.current.correctIndex + 1) % 3))
         idle(g, 24) // 0.4 s into the shake
-        assertFalse(g.pressAllowed("card0"))
+        assertFalse(g.pressAllowed("card0")) // a press now can't fire on its release (B4)
+        assertEquals(PickResult.IGNORED, g.answer((q.current.correctIndex + 2) % 3)) // and a direct pick is ignored
+        assertEquals(1, q.retries)
         idle(g, 7) // the shake has ended
         assertTrue(g.pressAllowed("card0"))
         assertEquals(1, q.retries)
+    }
+
+    /** QC r2 B3: at training start in a real run, the teach hand is attack (dummies), never the flag. */
+    @Test fun b3TrainingStartsWithTheAttackHand() {
+        val g = TestContent.fullGame()
+        g.start()
+        var n = 0
+        while (!(g.screen == Screen.PLAY && g.run.beatType == BeatType.TRAINING && g.run.phase == Phase.PLAY) && n++ < 60 * 300) {
+            val r = g.run; val i = InputFrame()
+            when {
+                g.onStoryBox -> if (n % 20 == 0) g.next()
+                r.phase == Phase.PLAY && r.beatType == BeatType.HOLD -> i.held += Action.SPECIAL
+                else -> i.held += Action.RIGHT
+            }
+            g.step(dt, i)
+        }
+        assertEquals(TrainingStep.DUMMIES, g.run.trainingStep)
+        assertEquals(HandHint.ATTACK, g.run.hand)
+    }
+
+    @Test fun leaderDebugStageStartsAWindupOf132() {
+        val g = TestContent.fullGame()
+        g.debugJump("play", beat = 4, stage = "leader")
+        val e = g.run.enemies.first { it.kind == "leader" }
+        assertEquals(EnemyState.WINDUP, e.state)
+        assertEquals(1.32, g.run.windupTime("leader"), 1e-9)
     }
 
     /** AC10: pause (the app going to the background) freezes the meter and the enemies. */
