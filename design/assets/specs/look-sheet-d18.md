@@ -55,6 +55,13 @@ are all proposals; approve them as a whole or change a row.
 | ending haze | `#9FB8C8` | Calm-ending sky haze | Soft, cool, respectful (§2 "calm ending") |
 | medal bronze | `#B9802A` | Medal ring detail | A darker bronze so the medal reads as metal, not a star |
 
+**Sky bands** (code-drawn above each background, `content/data/themes.json`, ADR-0002):
+| Theme | Top → bottom | Matches |
+|---|---|---|
+| river | `#9CCBEA` → `#BFE0F2` | Clear morning sky (ASSET-307) |
+| village (and the unused bamboo) | `#A9D3EC` → `#CDE6EE` | Warm late-morning sky (ASSET-313) |
+| camp | `#2E3156` → `#3B3F6B` | Storm-indigo battle sky (ASSET-318) |
+
 **Skin, hair and people:**
 | Hex | Used for |
 |---|---|
