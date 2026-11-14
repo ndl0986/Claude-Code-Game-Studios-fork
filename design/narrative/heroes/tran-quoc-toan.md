@@ -57,7 +57,7 @@ Labels: **fact** · **interpretation** · **legend** (popular tradition, D2) · 
 | C13 | Năm diễn ra hội nghị Bình Than (1282), Trần Quốc Toản mới 15 tuổi (sinh năm 1267; 16 tuổi theo tuổi mụ). | In the year of the Bình Than meeting (1282), Trần Quốc Toản was 15 (born 1267; 16 by the traditional count). | fact (derived: birth year 1267 + meeting in the 10th month of 1282). **Luan chooses 15 or 16 (tuổi mụ)** | S3, S5, S7 (data); S5/S7 secondary, ⟨to confirm⟩ | ⟨placeholder⟩ |
 | C14 | Truyện kể rằng Quốc Toản đến bến Bình Than, xin được gặp vua để xin đánh giặc; lính canh không cho vào vì cậu còn nhỏ. | The story says Quốc Toản came to Bình Than and asked to see the king to ask to fight; the guards would not let him in because he was young. | **legend** | S4, S2 ⟨to confirm⟩; S6 | ⟨placeholder⟩ |
 | C15 | Truyện kể rằng vua khen Quốc Toản còn trẻ mà đã biết lo việc nước, và ban cho cậu một quả cam. | The story says the king praised Quốc Toản for caring for the country while so young, and gave him an orange. | **legend**; becomes fact (as the chronicle records it) if the S3 1282 passage records the king giving the orange | S4, S2 ⟨to confirm⟩; S3 1282 ⟨to confirm⟩ | ⟨placeholder⟩ |
-| C16 | Trong truyện, Quốc Toản nói: "Xin Quan gia cho đánh! Cho giặc mượn đường là mất nước!" | In the story, Quốc Toản says: "Let us fight, Your Majesty! Letting the enemy pass means losing our country!" | **legend** (words from the literary telling; not quoted from the chronicle) | S4, S2 ⟨to confirm⟩ | ⟨placeholder⟩ |
+| C16 | Trong truyện, Quốc Toản nói: "Xin Quan gia cho đánh! Cho giặc mượn đường là mất nước!" (in the game: "Xin nhà vua cho đánh!", Luan 2026-11-14) | In the story, Quốc Toản says: "Let us fight, Your Majesty! Letting the enemy pass means losing our country!" | **legend** (words from the literary telling; not quoted from the chronicle) | S4, S2 ⟨to confirm⟩ | ⟨placeholder⟩ |
 
 > **C06 and C08: relabel condition (Luan, 2026-11-14).** Both stay **legend** for now.
 > They become **fact (as the chronicle records it)** only once the S3 passage for 1282 is
@@ -105,7 +105,10 @@ year (C13) → the king's meeting at Bình Than (C04). Then beat 1 says why he g
 
 ### Beat 1b: Xin gặp vua / Asking to see the king (TASK-016, plan approved by Luan 2026-11-14)
 
-**Script status: DRAFT for Luan's approval.** Nothing is built until he approves it.
+**Script status: APPROVED by Luan (2026-11-14)**, with two changes he made: the king calls Quốc
+Toản **"cháu"** (a young prince of the royal family), and **"nhà vua"** replaces "Quan gia"
+(simpler for children; the literary telling's "Quan gia" is adapted). EN is unchanged. The
+claims stay pending (history sign-off is per claim).
 
 - **Story moment:** at the closed meeting gate, Quốc Toản asks to see the king to ask to fight.
   The guards kindly refuse because he is young. The noise brings the king out. Quốc Toản pleads,
@@ -130,20 +133,20 @@ year (C13) → the king's meeting at Bình Than (C04). Then beat 1 says why he g
 | 1 | Narrator | Truyện kể rằng Quốc Toản đến bến Bình Than, xin được gặp vua. | The story says Quốc Toản came to Bình Than and asked to see the king. | C14 |
 | 2 | Guard | Cậu còn nhỏ quá, chưa được vào họp đâu. | You are too young to join the meeting. | C05, C14 |
 | — | *(child taps "Xin vào! / Let me in!")* | | | |
-| 3 | Quốc Toản | Xin cho tôi gặp Quan gia! | Please let me see the King! | C14 |
+| 3 | Quốc Toản | Xin cho tôi gặp nhà vua! | Please let me see the King! | C14 |
 | 4 | Guard | Không được đâu, vua đang bàn việc nước. | You can't. The king is planning for the country. | C04, C12 |
 | — | *(child taps "Xin vào!" again)* | | | |
 | 5 | Narrator | Nghe ồn ào, vua bước ra. | Hearing the noise, the king came out. | C14 |
-| 6 | Quốc Toản | Xin Quan gia cho đánh! | Let us fight, Your Majesty! | C16 |
+| 6 | Quốc Toản | Xin nhà vua cho đánh! | Let us fight, Your Majesty! | C16 |
 | 7 | Quốc Toản | Cho giặc mượn đường là mất nước! | Letting the enemy pass means losing our country! | C16 |
-| 8 | King | Em còn trẻ mà đã biết lo cho đất nước, ta khen em. | You are young, yet you already care for our country. I praise you. | C15 |
+| 8 | King | Cháu còn trẻ mà đã biết lo cho đất nước, ta khen cháu. | You are young, yet you already care for our country. I praise you. | C15 |
 | 9 | Narrator | Vua ban cho Quốc Toản một quả cam, rồi bảo cậu về. | The king gave Quốc Toản an orange and told him to go home. | C15 |
 
 **Checks done:**
 - Every line fits the scene box (R8c at 38 px, weight 600) in VI and EN, ≤ 2 lines.
 - One sentence per box: the famous plea is split into lines 6 and 7.
-- D-17: no line addresses the child player. "Cậu", "em" and "ta" are characters speaking to
-  each other.
+- D-17: no line addresses the child player. "Cậu", "cháu" and "ta" are characters speaking
+  to each other.
 
 ### Beat 2: Quả cam / The orange
 
