@@ -171,3 +171,4 @@ test-setup, smoke-check), those checks report NOT ASSESSED by design (ADR-0001).
 - Android targetSdk 35 → 36 before any Play upload.
 - D-22 platform backup decision before a Kids-category submission (Android manifest change if "allow").
 **Android QC r6 (2026-11-14):** frozen 7790ee9 (107 tests), APK sha256 2fed0ba2…9181. D-27 title card, full-bleed story, pad_min buttons, AC13 contact, outlines, line pitch 1.35 em. Quiz small-k spec merged → r7.
+**iOS QC r6 (2026-11-14):** frozen fa163d3 (GameCore 105, app 4, UI 5), app fingerprint 9a3b1bd8…, folder 47303622…. First run of the XCUITest touch harness (tools/qa/ios-touch-tests.sh). Release byte-identical with/without debug harness code.
