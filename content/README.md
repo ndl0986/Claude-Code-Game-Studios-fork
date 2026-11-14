@@ -50,6 +50,15 @@ A schema change needs both devs and game-art-content to agree. A breaking change
   - Retries are wrong picks before the right one, counted as a **total across the whole quiz**: 0 earns 3★, 2 or fewer earns 2★, more earns 1★.
   - Finishing always unlocks the next hero.
 - **Tuning** (`tuning.json`): the prototype's `config.js` values in snake_case. Each entry is `{value, min, max, unit}`, in a 1280×720 world.
+  - It also holds the numbers the prototype hard-coded in `index.html` (TASK-005b), so neither app
+    copies them by hand: `first_spawn_delay`, `hurt_recover`, `leader_telegraph_mul`,
+    `enter_to_approach_dist`, `approach_min_time`, `windup_reach_extra`, `strike_reach_extra`,
+    `block_knock`, `rest_speed_mul`, `attack_hit_at`, `attack_close_range`, `attack_move_mul`,
+    `flee_remove_margin`, `hero_edge_margin`, `camera_follow_offset`, `ground_y`, `beat_start_x`,
+    `beat_gap`, `hero_start_x`.
+  - Fight rules that are logic, not numbers (prototype `updateEnemies`): only one enemy is in
+    windup or strike at a time; only the nearest enemy on each side may start a windup; an enemy
+    stands at `enemy_reach - stand_gap + rank * queue_spacing` from the hero (rank 0 = nearest).
 - **Assets** (`assets.json`) map each id to a file under `data/` with its size in bytes.
   - Pictures are png or webp. Sounds are m4a (AAC) or wav, never OGG (iOS). Fonts are ttf or otf.
   - Files are lowercase. **No text inside pictures.**
