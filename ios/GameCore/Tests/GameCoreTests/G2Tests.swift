@@ -3,23 +3,29 @@ import XCTest
 
 /// G2 (slice blocker): reach-the-flag encounters must be finishable by simple touch strategies.
 final class G2Tests: XCTestCase {
+    /// combat AC23's strategies: 0 hold ▶ and tap 2/s; 1 alternate ▶ for ½ s and a tap; 2 stand still and tap 2/s
+    /// (▶ is held only while no fight holds the camera, so the hero reaches each encounter).
     func run(_ strat: Int) throws -> Double {
         let c = try ContentSet.load(dataRoot: Repo.data)
         var p = PlayState(tuning: c.tuning, beats: realHero(c).mission.beats, seed: 1)
         p.debugJump(beat: 3, stage: nil)
         var steps = 0
         while p.phase == .beatPlay && steps < 60 * 900 {
-            var i = StepInput(held: [.right], tapped: steps % 12 == 0 ? [.attack] : [])
-            if strat == 1 { i = StepInput(tapped: steps % 12 == 0 ? [.attack] : []); if !p.locked { i.held = [.right] } }
-            if strat == 2 && p.enemies.contains(where: { $0.state == .windup }) { i = StepInput(held: [.defend]) }
+            let tap: Set<PadAction> = steps % 30 == 0 ? [.attack] : []
+            var i: StepInput
+            switch strat {
+            case 0: i = StepInput(held: [.right], tapped: tap)
+            case 1: i = (steps / 30) % 2 == 0 ? StepInput(held: [.right]) : StepInput(tapped: steps % 30 == 0 ? [.attack] : [])
+            default: i = StepInput(held: p.locked ? [] : [.right], tapped: tap)
+            }
             p.update(1.0 / 60, i); steps += 1
         }
         XCTAssertNotEqual(p.phase, .beatPlay, "strategy \(strat) finishes")
         return Double(steps) / 60
     }
 
-    func test_three_touch_strategies_finish_the_tqt_reach_beat() throws {
-        for s in 0..<3 { let t = try run(s); print("G2 strategy \(s): \(t) s"); XCTAssertLessThan(t, 120) }
+    func test_combat_AC23_three_touch_strategies_finish_the_tqt_reach_beat_within_60s() throws {
+        for s in 0..<3 { let t = try run(s); print("G2 strategy \(s): \(t) s"); XCTAssertLessThanOrEqual(t, 60) }
     }
 
     func test_rule1_hero_clamped_inside_the_lock_by_enemy_reach() throws {
