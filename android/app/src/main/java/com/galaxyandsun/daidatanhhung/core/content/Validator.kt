@@ -67,6 +67,9 @@ object Validator {
         return out
     }
 
+    /** R8 budget type of a strings.json entry: its `field` if set (D-21), else the id-suffix rule (TASK-005e). */
+    fun uiFieldType(u: UiText): String = u.field ?: uiFieldType(u.id)
+
     /** R8 budget type of a strings.json id (content/README.md R8, TASK-005e). */
     fun uiFieldType(id: String): String = when {
         id.startsWith("ui.btn.") || id.startsWith("ui.pad.") || id.startsWith("ui.lang.") ||
@@ -139,6 +142,29 @@ object Validator {
     fun warnings(c: Content): List<String> =
         telegraphWarnings(c.tuning.values.mapValues { it.value.value }) +
             c.assets.assets.filter { it.kind == "picture" && it.width != null && it.height != null }.flatMap { sizeLimits(it.id, it.width!!, it.height!!) }
+
+    /** R8b (D-21): VI fits `vi_budget` for its field type (skipped on rules.json without vi_budget). */
+    fun viBudget(id: String, fieldType: String, vi: String, limits: TextLimits): List<String> {
+        val b = limits.viBudget?.get(fieldType) ?: return emptyList()
+        return if (vi.length > b) listOf("R8b $id: VI ${vi.length} > $fieldType budget $b") else emptyList()
+    }
+
+    /** R8c (D-21): VI and EN each fit their field's box in max_lines, measured with the real advances. */
+    fun lineFit(id: String, fieldType: String, vi: String, en: String, limits: TextLimits, fit: LineFit?): List<String> {
+        val f = limits.fit ?: return emptyList(); val lf = fit ?: return emptyList()
+        val field = f.fields[fieldType] ?: return listOf("R8c $id: no fit entry for $fieldType")
+        return listOf("vi" to vi, "en" to en).mapNotNull { (lang, s) ->
+            val r = lf.lines(s, field, f.allowance)
+            if (r.fails) "R8c $id: $lang takes ${r.lines} line(s) of ${field.boxWidth}px at ${field.fontPx}px (max ${field.maxLines})" else null
+        }
+    }
+
+    /** R8c over the whole bundle (UI strings and every story Text). */
+    fun lineFits(c: Content, fit: LineFit): List<String> {
+        val l = c.rules.textLimits
+        return c.strings.strings.flatMap { lineFit(it.id, uiFieldType(it), it.vi, it.en, l, fit) } +
+            c.heroes.values.flatMap { h -> texts(h).flatMap { (type, t) -> lineFit(t.id, type, t.vi, t.en, l, fit) } }
+    }
 
     /** R9: Text ids are unique. */
     fun duplicateIds(ids: List<String>): List<String> =
@@ -233,7 +259,8 @@ object Validator {
         val allIds = mutableListOf<String>()
         for (s in c.strings.strings) {
             out += nfc(s.id, s.vi, s.en); allIds += s.id
-            out += enBudget(s.id, uiFieldType(s.id), s.en, s.vi, c.rules.textLimits)
+            out += enBudget(s.id, uiFieldType(s), s.en, s.vi, c.rules.textLimits)
+            out += viBudget(s.id, uiFieldType(s), s.vi, c.rules.textLimits)
         }
         for ((heroId, hero) in c.heroes) {
             val claims = hero.claims.claims.associateBy { it.id }
@@ -250,6 +277,7 @@ object Validator {
                 allIds += t.id
                 out += nfc(t.id, t.vi, t.en)
                 out += enBudget(t.id, type, t.en, t.vi, c.rules.textLimits)
+                out += viBudget(t.id, type, t.vi, c.rules.textLimits)
                 out += legend(type, t, labels, c.markers, choiceScope[t.id] ?: missionSentences)
                 t.claims.filterNot { it in claims }.forEach { out += "R2 ${t.id}: unknown claim $it" }
             }

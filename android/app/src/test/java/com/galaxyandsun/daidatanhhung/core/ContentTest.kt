@@ -47,6 +47,15 @@ class ContentTest {
         println("warnings: ${Validator.warnings(content)}")
     }
 
+    /** R8c over the real bundle and the drafts, with Nunito's rendered advances. */
+    @Test fun everyTextFitsItsBox() {
+        val fit = content.rules.textLimits.fit ?: run { println("rules.json without fit: R8c not applicable yet"); return }
+        val table = ContentLoader.JSON.decodeFromString<com.galaxyandsun.daidatanhhung.core.content.AdvanceTable>(File(TestContent.root.parentFile, fit.metrics).readText())
+        val problems = Validator.lineFits(content, com.galaxyandsun.daidatanhhung.core.content.LineFit(table))
+        problems.forEach { println(it) }
+        assertEquals(emptyList<String>(), problems)
+    }
+
     @Test fun everyTuningKeyTheAppReadsExists() {
         val missing = Tuning.Keys.ALL.filterNot { it in content.tuning.values }
         assertEquals(emptyList<String>(), missing)

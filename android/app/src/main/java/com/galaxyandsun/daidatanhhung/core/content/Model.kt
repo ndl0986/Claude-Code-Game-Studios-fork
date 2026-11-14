@@ -15,7 +15,7 @@ data class Text(val id: String, val vi: String, val en: String, val claims: List
 
 /** A UI string (strings.json only): no claims. */
 @Serializable
-data class UiText(val id: String, val vi: String, val en: String)
+data class UiText(val id: String, val vi: String, val en: String, val field: String? = null)
 
 enum class Lang(val code: String) { VI("vi"), EN("en");
     companion object { fun of(code: String?): Lang = entries.firstOrNull { it.code == code } ?: VI }
@@ -131,6 +131,29 @@ data class QuizStars(
 data class TextLimits(
     @SerialName("max_chars") val maxChars: Int,
     @SerialName("en_budget") val enBudget: Map<String, Int>,
+    /** R8b (D-21): VI characters per field type; null on a rules.json from before TASK-005h. */
+    @SerialName("vi_budget") val viBudget: Map<String, Int>? = null,
+    /** R8c (D-21): box and font per field type for the line-fit check. */
+    val fit: TextFit? = null,
+)
+
+@Serializable
+data class FitField(
+    @SerialName("box_width") val boxWidth: Int,
+    @SerialName("font_px") val fontPx: Int,
+    @SerialName("max_lines") val maxLines: Int,
+    val weight: Int,
+)
+
+@Serializable
+data class TextFit(val allowance: Double, val metrics: String, val fields: Map<String, FitField>)
+
+/** content/metrics/nunito-advances.json: advance per code point (hex) at each rendered weight, per 1000 em. */
+@Serializable
+data class AdvanceTable(
+    @SerialName("units_per_em") val unitsPerEm: Int,
+    val source: String,
+    val weights: Map<String, Map<String, Int>>,
 )
 
 @Serializable

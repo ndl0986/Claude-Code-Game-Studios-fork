@@ -3,5 +3,7 @@
     <application>
         <!-- Debug only: ADR-0002 measurement (decode memory, frame time with a 2048² atlas). -->
         <activity android:name=".AtlasBenchActivity" android:exported="true" android:screenOrientation="sensorLandscape" />
+            <!-- Debug only: Nunito advance widths at the rendered weight (TASK-005h R8c). -->
+        <activity android:name=".FontMetricsActivity" android:exported="true" />
     </application>
 </manifest>

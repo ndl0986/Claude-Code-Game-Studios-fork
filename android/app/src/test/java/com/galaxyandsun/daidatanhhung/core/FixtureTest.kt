@@ -102,6 +102,12 @@ class FixtureTest {
                 "R17", "R18" -> Validator.timeline(c["heroes"]!!.jsonArray.map { h -> val o = h.jsonObject
                     Triple(o["id"]!!.jsonPrimitive.content, o["timeline_order"]!!.jsonPrimitive.int, o["next_hero"]!!.jsonPrimitive.let { if (it is kotlinx.serialization.json.JsonNull) null else it.content }) })
                     .filter { it.startsWith(rule + " ") }
+                "R8b" -> Validator.viBudget("case", c["field_type"]!!.jsonPrimitive.content, c["vi"]!!.jsonPrimitive.content, content.rules.textLimits)
+                "R8c" -> { val fit = content.rules.textLimits.fit!!
+                    val table = ContentLoader.JSON.decodeFromString<com.galaxyandsun.daidatanhhung.core.content.AdvanceTable>(java.io.File(TestContent.root.parentFile, fit.metrics).readText())
+                    val r = com.galaxyandsun.daidatanhhung.core.content.LineFit(table).lines(c["text"]!!.jsonPrimitive.content, fit.fields.getValue(c["field_type"]!!.jsonPrimitive.content), fit.allowance)
+                    assertEquals("${c["name"]} lines", c["expected_lines"]!!.jsonPrimitive.int, r.lines)
+                    if (r.fails) listOf("R8c") else emptyList() }
                 "R19a" -> { val d = c["declared"]!!.jsonObject; val a = c["actual"]!!.jsonObject
                     Validator.sizeMatches("case", d["width"]!!.jsonPrimitive.int to d["height"]!!.jsonPrimitive.int, a["width"]!!.jsonPrimitive.int to a["height"]!!.jsonPrimitive.int) }
                 "R19b" -> Validator.sizeLimits(c["id"]!!.jsonPrimitive.content, c["width"]!!.jsonPrimitive.int, c["height"]!!.jsonPrimitive.int)
