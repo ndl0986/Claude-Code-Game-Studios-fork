@@ -11,6 +11,25 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-20 A language choice screen on first launch?
+
+- **Flow:** concept ("first-launch choice + a toggle") → Language & text GDD rule 3 → new screen in
+  both apps → `/ux-design`.
+- **Options:** A. a picture-only first-launch screen: two big buttons, "Tiếng Việt" (lotus) and
+  "English" (book), VI pre-selected so one tap keeps it · B. keep the slice rule: VI by default,
+  switch on the title and pause.
+- **Recommendation:** B for the slice, A before the first release (it mostly helps English-speaking
+  families).
+- **Status:** Open.
+
+### D-21 Vietnamese length limits and max lines (for the devs + art)
+
+- **Finding:** only English text has length limits today; Vietnamese runs 0.4–1.7× English and short
+  UI words are often longer in Vietnamese ("Màn hình chính" vs "Home").
+- **Change:** a Vietnamese limit per field (1.6 × the English one) and max lines per field in
+  rules.json, a new check R8b, and the "read it all for a medal" line retyped as a dialog.
+- **Status:** Open (devs + game-art-content agree; Luan only if they disagree).
+
 ### D-18 How Trần Quốc Toản and the invaders look (portrayal + palette), before final art
 
 - **Flow:** art bible → asset specs (TASK-014, 87 assets) → **Luan's look sign-off** → final art
