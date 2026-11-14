@@ -129,8 +129,8 @@
       ],
       "goal": {
         "id": "tqt.f2.goal",
-        "vi": "Giữ nút đặc biệt!",
-        "en": "Hold the special button!",
+        "vi": "Giữ chặt nút lá cờ!",
+        "en": "Hold down the flag button!",
         "claims": [
           "C12"
         ]
