@@ -152,7 +152,7 @@ that would fail today is `ui.medal.missing` (VI 39). It is a sentence, so it sho
 | System | Direction | Hard/Soft | Interface |
 |---|---|---|---|
 | Content data & claims | this depends on it | Hard | Text, budgets, font file |
-| Save & progress | this depends on it (lang) | Hard | `lang` |
+| Save & progress | this depends on it (lang) | Hard | `lang` (`design/gdd/save-and-progress.md`) |
 | Mission flow & beat types | depends on this | Hard | Rendering, switch on pause (Rule 12 there) |
 | Quiz & stars | depends on this | Hard | Rendering; the switch keeps quiz state |
 | Hero progression & unlock | depends on this | Hard | Hero names, unlock and results text |
