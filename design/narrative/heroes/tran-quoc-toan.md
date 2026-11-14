@@ -135,10 +135,17 @@ A calm still picture: the banner on a riverbank at dawn. Two lines:
 
 Five picture-supported, three-choice questions. **Invented details (C12) are never quizzed.**
 Each **legend** question starts "Truyện kể rằng… / The story says…".
-- A wrong answer shows the right one with the beat's picture and the "why" line.
+- **Retry until right (Luan, 2026-11-14).** A wrong answer makes its card shake gently
+  and turn soft lavender-grey (art bible § 4, "Try again", never red), and the child tries
+  again. When the child picks the right answer, the game shows the "why" line with the
+  beat's picture.
 - No time limit.
-- Stars: 5 correct = 3★, 3–4 = 2★, 0–2 = 1★ ⟨tuning: belongs to the quiz system spec⟩.
-- Finishing the quiz always unlocks the next hero; stars reward mastery, never gate it.
+- **Stars** are counted over the whole quiz (Luan, 2026-11-14):
+  - 3★: every question right on the first try;
+  - 2★: up to 2 retries in total;
+  - 1★: finished.
+  ⟨tuning: the thresholds belong to the quiz system spec⟩.
+- Finishing the quiz always unlocks the next hero. Stars reward mastery; they never gate it.
 
 | # | Question (VI / EN) | Choices (correct first here; shuffled in game) | Claim | Why line (VI / EN) |
 |---|---|---|---|---|
@@ -158,15 +165,18 @@ on). These go to `/asset-spec` after Luan's sign-off.
 - [ ] C06 and C08: keep as **legend** (D2), or relabel as fact if S3 records them (see the note in § 2).
 - [ ] The four beats: story order and choice of moments.
 - [ ] The ending lines (D3 wording).
-- [ ] Quiz Q1 to Q5 and the star thresholds.
+- [ ] Quiz Q1 to Q5. The star rule is decided (retry until right, Luan 2026-11-14).
 - [ ] Portrayal: the orange beat shows anger without shaming; the battle shows knock-back only.
 
 When signed, change each row's status to `signed (Luan, <date>)` and remove ⟨placeholder⟩.
 
-## 6. Note for game-dev-002 (TASK-003 prototype)
+## 6. Beat structure: proposed for TASK-003b, awaiting Luan's sign-off
 
-This beat structure is the contract; the text is still ⟨placeholder⟩, so keep strings in
-data, not code.
+**Status: proposed for TASK-003b, awaiting Luan's sign-off.** TASK-003 ships as approved
+(Luan, 2026-11-14): 4 combat beats with move, attack and defend. The special button, the
+non-combat beats (the orange, training) and the arrows below become TASK-003b once Luan
+signs off this structure. The text is still ⟨placeholder⟩, so keep strings in data, not
+code.
 
 | Beat | Buttons used | New button taught | Enemies | Ends when |
 |---|---|---|---|---|
@@ -177,4 +187,4 @@ data, not code.
 
 Rules for every beat: no lives or game over, getting hit means a small knock-back, defeated
 enemies drop their weapons and run, and the banner's words are a text layer. Then show the
-ending still and two lines, and then the five-question quiz.
+ending still and two lines, and then the five-question quiz (retry until right, stars as in § 4).
