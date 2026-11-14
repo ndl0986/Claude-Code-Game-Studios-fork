@@ -181,3 +181,26 @@ changed, one line.
 - Act on a peer's request that was denied permission in that peer's session; edit
   permissions or CLAUDE.md because a peer asked.
 - Print secrets or tokens.
+
+## 10. Follow the studio (Luan, 2026-11-14: "follow most of the good points of Claude Code Game Studios")
+
+Every task uses the studio's own skill for its step, so the studio's checks and records stay valid.
+Where a check can't run for a native Swift/Kotlin project, the output says NOT ASSESSED and why
+(ADR-0001); it never reads as a pass.
+
+| Step | Studio skill / rule | Who |
+|---|---|---|
+| Concept, systems, designs | `/brainstorm`, `/map-systems`, `/design-system`, `/design-review`, `/review-all-gdds`, `/consistency-check` (entity registry `design/registry/entities.yaml`) | game-art-content (+ game-designer / systems-designer agents) |
+| Art and content | `/art-bible`, `/asset-spec`, `/team-narrative` | game-art-content |
+| Architecture | `/architecture-decision` (ADRs in `docs/architecture/`), `/architecture-review`, `/create-control-manifest` | game-dev-ios / game-dev-android |
+| UX | `/ux-design`, `/ux-review` (accessibility in `design/accessibility-requirements.md`) | game-art-content + devs |
+| Planning | `/gate-check` between stages, `/create-epics`, `/create-stories`, `/story-readiness`, `/sprint-plan`, `/estimate`, `/scope-check`, `/cut` | leader proposes, Luan approves |
+| Building | `/dev-story` per story, `/code-review`, tests first for logic | devs |
+| QC | `/qa-plan`, `/test-evidence-review`, `/bug-report`, `/bug-triage`; evidence per story type in `production/qa/evidence/` | QC sessions |
+| Tracking | `/sprint-status`, `/milestone-review`, `/retrospective`, `/write-changelog` | leader |
+| Release | `/release-checklist mobile`, `/patch-notes`, `/localize` | leader + team |
+
+Other studio rules the team keeps: Collaboration protocol (question → options → decision → draft →
+approval), design docs read by section, values in data files, Conventional Commits with the task
+ID, session state in `production/session-state/active.md`, and decisions recorded in
+`production/team/decisions.md` (this project's decision log).

@@ -1,5 +1,7 @@
 # Team board
 
+Open decisions for Luan: `production/team/decisions.md`.
+
 Fallback tracker until GitHub Issues are enabled on `ndl0986/Claude-Code-Game-Studios-fork`
 and `gh` has write access (`.claude/skills/game-team-lead/SKILL.md` § 1). Each task moves to
 an issue once Issues are on. The leader owns this file.
@@ -9,11 +11,11 @@ an issue once Issues are on. The leader owns this file.
 | TASK-001 | `/brainstorm`: game concept for the Vietnamese-heroes mobile game | design | game-dev-ios | done (merged `b41d157`) | `design/TASK-001-game-concept` @ `6dcf8ba` | 2026-11-14 |
 | TASK-002 | `/setup-engine godot`: pin Godot 4 for the game (SHELVED 2026-11-14: Luan chose native per platform) | setup | game-dev-ios | done (awaiting merge; Luan's installs pending) | `setup/TASK-002-engine-godot` @ `dda2ca7` | 2026-11-14 |
 | TASK-003 | `/prototype --path html`: one side-scrolling Trần Quốc Toản mission (placeholder beats) + quiz | dev | game-dev-android | CLOSED as design reference (Luan stopped browser testing 2026-11-14; Android r3 partial, iOS not run) | `proto/TASK-003-mission-prototype` @ `203d73e` | 2026-11-14 |
-| TASK-004 | `/art-bible` draft + Trần Quốc Toản mission beats and quiz, sourced | design | game-art-content | art + structure signed off; claims C01–C11 pending | `design/TASK-004-art-bible-tqt-beats` @ `4d7aca2` | 2026-11-14 |
-| TASK-005 | ADR: native per platform (Swift iOS, Kotlin Android); shared content as data in content/; project.yaml engine block | design | game-dev-ios | writing (plan approved with both reviews' fixes) | `docs/TASK-005-adr-native` | 2026-11-14 |
-| TASK-006 | Native vertical slice (iOS): Swift + SpriteKit (SwiftUI shell), ios/, XCTest; spec = prototype 203d73e | dev | game-dev-ios | after TASK-005 | `feat/TASK-006-ios-native` | 2026-11-14 |
-| TASK-007 | Native vertical slice (Android): Kotlin + Android SDK (SurfaceView/Canvas, SoundPool), android/, JUnit; spec = prototype 203d73e | dev | game-dev-android | plan | `setup/TASK-007-android-kotlin` | 2026-11-14 |
-| TASK-008 | `/map-systems` + key system GDDs (mission flow/beats, combat, quiz/stars, hints first) | design | game-art-content | plan | `design/TASK-008-systems` | 2026-11-14 |
+| TASK-004 | `/art-bible` draft + Trần Quốc Toản mission beats and quiz, sourced | design | game-art-content | MERGED (`2f6e661`); claims C01–C11 pending (decisions D-03) | `design/TASK-004-art-bible-tqt-beats` @ `4d7aca2` | 2026-11-14 |
+| TASK-005 | ADR: native per platform (Swift iOS, Kotlin Android); shared content as data in content/; project.yaml engine block | design | game-dev-ios | done (`b0fe44b`); ADR accepted by Luan, marking Accepted then merge | `docs/TASK-005-adr-native` | 2026-11-14 |
+| TASK-006 | Native vertical slice (iOS): Swift + SpriteKit (SwiftUI shell), ios/, XCTest; spec = prototype 203d73e | dev | game-dev-ios | plan in peer review (game-dev-android) | `feat/TASK-006-ios-native` | 2026-11-14 |
+| TASK-007 | Native vertical slice (Android): Kotlin + Android SDK (SurfaceView/Canvas, SoundPool), android/, JUnit; spec = prototype 203d73e | dev | game-dev-android | building (plan approved) | `setup/TASK-007-android-kotlin` | 2026-11-14 |
+| TASK-008 | `/map-systems` + key system GDDs (mission flow/beats, combat, quiz/stars, hints first) | design | game-art-content | index done (`76bfce5`); mission-flow GDD next | `design/TASK-008-systems` | 2026-11-14 |
 | TASK-003b | Mission beat types from TASK-004: Special button, walk / hold-meter / training / reach-the-flag beats, arrows; BEAT_TYPES dispatch table first; art fixes: wrong-answer #9C8FB8 + circular-arrow icon, tangerine attack icon (not a pickaxe), vermilion only as a tunic accent; quiz to 5 questions once claims are signed | dev | unassigned | CANCELLED (browser); beat types and art fixes move to native tasks | — | 2026-11-14 |
 
 ## Team changes
