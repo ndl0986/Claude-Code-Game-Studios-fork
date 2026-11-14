@@ -27,7 +27,7 @@ data class Content(
  * Reads content through [read] (a path relative to content/data, e.g. "tuning.json"), so the
  * same code reads Android assets in the app and plain files in JVM unit tests.
  */
-class ContentLoader(private val read: (String) -> String?, private val strict: Boolean = false) {
+class ContentLoader(private val strict: Boolean = false, private val read: (String) -> String?) {
     fun load(extraHeroes: List<String> = emptyList()): Content {
         val index: IndexFile = decode("index.json")
         val heroIds = (index.heroes + extraHeroes).distinct()
