@@ -1,0 +1,22 @@
+# O1/B4: one real kernel touch on 'Bắt đầu' per fresh reload (sendevent down, hold, up). sceneAtUp = game scene when pointerup reached the canvas.
+# fs = document.fullscreenElement set 2.5 s later. Fullscreen only requested when the scene is still 'title' at pointerup.
+hold=0.06 {"sceneAtUp":["intro"],"fs":false}
+hold=0.1 {"sceneAtUp":["title"],"fs":true}
+hold=0.15 {"sceneAtUp":["title"],"fs":true}
+hold=0.2 {"sceneAtUp":["intro"],"fs":false}
+hold=0.3 {"sceneAtUp":["intro"],"fs":false}
+hold=0.06 {"sceneAtUp":["title"],"fs":true}
+hold=0.1 {"sceneAtUp":["title"],"fs":true}
+hold=0.15 {"sceneAtUp":["title"],"fs":true}
+hold=0.2 {"sceneAtUp":[],"fs":false}
+hold=0.3 {"sceneAtUp":["intro"],"fs":false}
+
+# earlier single runs: hold 0.09 s -> fullscreen; hold 0.3 s -> fullscreen; hold 0.15 s -> NOT fullscreen (sceneAtUp intro); regression run 0.1 s -> fullscreen; EN run 0.1 s -> NOT fullscreen
+
+# Pads with the toolbar shown (fullscreen not entered), viewport 863x304, viewScale 0.4222:
+{"fs":false,"vw":[863,304],"scale":0.4222222222222222,"pads":[["left","72css visible","82.8css hit"],["right","72css visible","82.8css hit"],["defend","72css visible","82.8css hit"],["attack","77.7css visible","89.3css hit"]]}
+# Pads in fullscreen (915x412): left/right/defend 91.6 CSS px, attack 105.3 CSS px
+# Fullscreen insets: safe-area left 52 CSS px (cutout), bottom 0; Android mandatorySystemGestures zone y 996-1080 device px overlaps the lower ~24% of the pads
+
+# Multi-touch regression (toolbar mode), hero x / held / swing, deduplicated samples:
+[[300,"",""],[377,"right",""],[597,"left",""],[390,"left+attack","S"],[362,"left","S"],[345,"left",""],[213,"",""],[213,"",""]]
