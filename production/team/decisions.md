@@ -11,6 +11,17 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-16 Saved progress keys: work out unlocks instead of storing them
+
+- **Flow:** Hero progression GDD (`89afd10`) → D-04 save ADR → both apps' save code.
+- **Change:** instead of P-04's stored `unlocked` list, save `completed.<hero>` (quiz finished) and
+  `seen_open.<hero>` (never re-locks), plus `stars.<hero>` (best, never lowered),
+  `medal.<hero>` (never cleared) and `lang`. Unlocks are worked out from those.
+- **Why:** with timed content updates, a stored list can't open a hero added later for a child who
+  already finished the previous one, and a hero inserted earlier in history breaks the chain.
+- **Status:** Proposed. The leader applied it to the slice so both apps write it once; the devs' D-04
+  save ADR formalises it. Luan can overturn it.
+
 ### D-13 Does combat need a mastery reason to block?
 
 - **Flow:** combat GDD → slice playtest → hero 2+ difficulty.

@@ -138,8 +138,8 @@
     },
     {
       "id": "ui.story.skip_warning",
-      "vi": "Bỏ qua thì câu chuyện chưa xong, nên chưa nhận được huy hiệu nhé.",
-      "en": "Skip means no medal yet"
+      "vi": "Nếu bỏ qua, bạn sẽ chưa nhận được huy hiệu của câu chuyện này nhé.",
+      "en": "If you skip, you won't get this story's medal yet."
     },
     {
       "id": "ui.story.skip_confirm",
