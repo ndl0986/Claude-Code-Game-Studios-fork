@@ -21,6 +21,10 @@ public struct TouchPads: Sendable {
     }
 
     public mutating func up(_ id: Int) { holds[id] = nil }
+
+    /// Releases every hold whose touch is no longer live (iOS-R2-03: an end event that never
+    /// arrived for a moved touch must not leave a pad held).
+    public mutating func reconcile(live: Set<Int>) { holds = holds.filter { live.contains($0.key) } }
     public mutating func clearAll() { holds = [:]; taps = [] }
 
     /// This step's input; taps are consumed.

@@ -20,12 +20,16 @@ final class GameScene: SKScene {
     private struct Button { let rect: CGRect; let id: String }
     private var buttons: [Button] = []
     private var menuTouches: [Int: String] = [:]
+    /// The UITouch behind each pad hold: holds whose touch has ended are released every frame.
+    private var padTouches: [Int: UITouch] = [:]
     private var uiKey = ""
     private var padNodes: [PadAction: SKNode] = [:]
     private var handNode: SKNode?
     private var cardNodes: [SKNode] = []
 
     private var last: TimeInterval = 0, acc = 0.0, clock = 0.0
+    /// The screen and play phase last frame: any change releases every held pad (TASK-019).
+    private var lastPlace = "" 
     private let step = 1.0 / 60
 
     init(game: Game, audio: Audio) {
@@ -54,12 +58,24 @@ final class GameScene: SKScene {
     }
 
     /// No stuck input: every held pad is released when the app loses focus or pauses.
-    func appWillResignActive() { pads.clearAll(); menuTouches = [:]; game.backgrounded(); uiKey = "" }
+    func appWillResignActive() { releaseAllInput(); game.backgrounded(); uiKey = "" }
+
+    /// Every held pad is released on cancel, pause, background and an audio route change (TASK-019).
+    func releaseAllInput() { pads.clearAll(); padTouches = [:]; menuTouches = [:] }
+
+    /// iOS-R2-03: a moved touch's end may never reach the scene; drop holds whose touch is over.
+    private func reconcileTouches() {
+        padTouches = padTouches.filter { $0.value.phase != .ended && $0.value.phase != .cancelled }
+        pads.reconcile(live: Set(padTouches.keys))
+    }
 
     // MARK: loop
 
     override func update(_ currentTime: TimeInterval) {
         relayout()
+        reconcileTouches()
+        let place = "\(game.screen)|\(game.play.phase)|\(game.skipWarning)"
+        if place != lastPlace { if !lastPlace.isEmpty { releaseAllInput() }; lastPlace = place }
         let dt = last == 0 ? 0 : min(currentTime - last, 0.25)
         last = currentTime; acc += dt; clock += dt
         while acc >= step {
@@ -93,7 +109,7 @@ final class GameScene: SKScene {
         let p = game.play, q = game.quiz
         return [game.screen.rawValue, game.lang.rawValue, "\(game.storyLine)", "\(p.phase)", "\(p.captionLine)", "\(p.beat)",
                 "\(q?.index ?? -1)", "\(q?.okIndex ?? -1)", "\(q?.wrong.sorted() ?? [])", "\(game.muted)", "\(game.stars)", "\(layout.scale)",
-                "\(p.cardLine)", "\(p.trainingStage)", "\(p.lineIndex)", "\(p.askShowing)", "\(p.askHint)", "\(p.visiblePads.map(\.rawValue).sorted())", "\(game.skipWarning)", "\(p.goArrow)"].joined(separator: "|")
+                "\(p.cardLine)", "\(p.trainingStage)", "\(p.lineIndex)", "\(p.askShowing)", "\(p.askHint)", "\(p.visiblePads.map(\.rawValue).sorted())", "\(game.skipWarning)", "\(p.goArrow)", "\(game.quizCanAdvance)", "\(game.pausedFrom)"].joined(separator: "|")
     }
 
     // MARK: touches
@@ -105,7 +121,7 @@ final class GameScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
             let p = ydown(t)
-            if padsLive, let a = layout.action(at: p.x, p.y, visible: game.play.visiblePads) { pads.down(tid(t), a); continue } // pads fire on touch-down
+            if padsLive, let a = layout.action(at: p.x, p.y, visible: game.play.visiblePads) { pads.down(tid(t), a); padTouches[tid(t)] = t; continue } // pads fire on touch-down
             if let b = buttons.last(where: { $0.rect.contains(p) }) { menuTouches[tid(t)] = b.id }
         }
     }
@@ -117,7 +133,7 @@ final class GameScene: SKScene {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         var fired = false // two fingers: the first release in a frame wins (P-05)
         for t in touches {
-            pads.up(tid(t))
+            pads.up(tid(t)); padTouches[tid(t)] = nil
             guard let id = menuTouches.removeValue(forKey: tid(t)) else { continue }
             let p = ydown(t)
             if !fired, buttons.contains(where: { $0.id == id && $0.rect.contains(p) }) { fire(id); fired = true } // menus fire on touch-up inside
@@ -125,7 +141,7 @@ final class GameScene: SKScene {
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { pads.up(tid(t)); menuTouches[tid(t)] = nil }
+        for t in touches { pads.up(tid(t)); padTouches[tid(t)] = nil; menuTouches[tid(t)] = nil }
     }
 
     private func fire(_ id: String) {
@@ -135,7 +151,7 @@ final class GameScene: SKScene {
         case "next": game.next()
         case "lang": game.toggleLang()
         case "mute": game.toggleMute(); audio.muted = game.muted
-        case "pause": pads.clearAll(); game.pause()
+        case "pause": releaseAllInput(); game.pause()
         case "resume": game.resume()
         case "home", "toMap": game.home()
         case "replay": game.replay()
@@ -151,7 +167,7 @@ final class GameScene: SKScene {
     // MARK: world (play)
 
     private func drawWorld() {
-        let showWorld = game.screen == .play || game.screen == .pause
+        let showWorld = game.screen == .play || (game.screen == .pause && game.pausedFrom == .play)
         world.isHidden = !showWorld
         skyNode?.isHidden = !showWorld
         guard showWorld else { return }
@@ -505,6 +521,7 @@ final class GameScene: SKScene {
     }
 
     private func buildPause() {
+        if game.pausedFrom == .quiz { buildQuiz(); buttons = [] } // P-06: the quiz behind the overlay, its cards inert
         add(D.rr(0, 0, 1280, 720, 0, SKColor(red: 42 / 255, green: 36 / 255, blue: 64 / 255, alpha: 0.7)), 0, 0)
         add(Font.label(game.ui("ui.pause.title"), 64, .white), 640, 200)
         button(game.ui("ui.btn.resume"), 440, 290, 400, 120, "resume", pulse: true)
@@ -543,7 +560,7 @@ final class GameScene: SKScene {
             ui.addChild(card); cardNodes.append(card)
             if q.okIndex == nil && !wrong { buttons.append(Button(rect: CGRect(x: x0 + Double(slot) * (cw + gap), y: y0, width: cw, height: ch), id: "card\(slot)")) }
         }
-        if q.okIndex != nil {
+        if q.okIndex != nil && game.quizCanAdvance {
             // the why strip sits below the cards (cards end at y 580)
             // the why strip below the cards (they end at y 550): 3 lines at 37 with 1.35 line height
             add(D.rr(-620, -80, 1240, 160, 24, C.panel), 640, 635)
@@ -551,6 +568,8 @@ final class GameScene: SKScene {
             add(Font.label(cur.why.text(game.lang), 37, .white, width: 820, weight: 600), 640, 635)
             button(game.ui("ui.btn.next"), 1060, 593, 190, 84, "next", pulse: true)
             badge(cur.why, 0, 0)
+        } else if q.okIndex != nil {
+            add(Font.label(game.ui("ui.quiz.correct"), 37, C.glow), 640, 620) // the why line and Tiếp follow after feedback_time
         } else if !q.wrong.isEmpty {
             add(Font.label(game.ui("ui.quiz.retry"), 37, SKColor(hex: 0xffd0c8)), 640, 620)
         }

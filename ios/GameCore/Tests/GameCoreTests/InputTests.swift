@@ -41,3 +41,38 @@ final class InputTests: XCTestCase {
         XCTAssertNil(l.action(at: l.special.cx, l.special.cy, visible: [.left, .right]), "hidden pads never fire")
     }
 }
+
+/// iOS-R2-03: press → move → release leaves nothing held, even if the end event is lost.
+final class StuckInputTests: XCTestCase {
+    func test_press_move_release_leaves_nothing_held() {
+        var t = TouchPads()
+        t.down(7, .right); t.moved(7, .right); t.moved(7, .right)
+        XCTAssertEqual(t.take().held, [.right])
+        t.up(7)
+        XCTAssertTrue(t.take().held.isEmpty)
+        t.down(8, .defend); t.moved(8, nil)
+        t.up(8)
+        XCTAssertTrue(t.take().held.isEmpty, "a defend touch that wandered off the pad still releases")
+    }
+
+    func test_reconcile_drops_a_hold_whose_end_event_never_arrived() {
+        var t = TouchPads()
+        t.down(1, .right); t.down(2, .attack)
+        t.reconcile(live: [2]) // touch 1 ended without touchesEnded reaching the scene
+        XCTAssertEqual(t.take().held, [.attack])
+        t.reconcile(live: [])
+        XCTAssertTrue(t.take().held.isEmpty)
+    }
+
+    func test_quiz_next_appears_only_after_feedback_time() throws {
+        let c = try Repo.contentSet()
+        let g = Game(content: c, hero: Repo.sampleHero(c), store: MemoryStore(), isDebug: true)
+        g.startQuiz()
+        let q = g.quiz!
+        g.answer(q.order.firstIndex(of: q.current.correctIndex)!)
+        for _ in 0..<Int(c.tuning["feedback_time"] * 60) - 1 { g.step(1.0 / 60, StepInput()) }
+        XCTAssertFalse(g.quizCanAdvance, "QS AC5: not before feedback_time")
+        for _ in 0..<2 { g.step(1.0 / 60, StepInput()) }
+        XCTAssertTrue(g.quizCanAdvance)
+    }
+}

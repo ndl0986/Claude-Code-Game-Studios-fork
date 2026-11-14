@@ -174,7 +174,7 @@ public final class Game {
             switch play.phase { case .caption: play.captionNext(); case .beatCard: play.cardNext(); default: play.dialogueNext() }
             if play.finished { storyLine = 0; go(.ending) }
         case .quiz:
-            guard let q = quiz, q.okIndex != nil, q.okTime >= tuning["feedback_time"], !debounced() else { return }
+            guard quizCanAdvance, !debounced() else { return }
             tap()
             if quiz!.advance() { finishQuiz() }
         case .results:
@@ -233,6 +233,9 @@ public final class Game {
         quiz = QuizSession(quiz: hero.quiz, count: Int(tuning["quiz_count"]), seed: tuning.seed)
         go(.quiz)
     }
+
+    /// The quiz "Tiếp" shows and works only once the right card's feedback_time has passed (QS AC5, iOS-R2-04).
+    public var quizCanAdvance: Bool { guard let q = quiz, q.okIndex != nil else { return false }; return q.okTime >= tuning["feedback_time"] }
 
     /// A quiz card tapped (fires on touch-up inside), by display slot.
     public func answer(_ slot: Int) {
