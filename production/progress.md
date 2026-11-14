@@ -44,9 +44,9 @@ Where the project stands, so work can resume from the repo. Newest entry first.
 
 ### Resume here (after the Orca restart)
 
-1. Start the leader: `tools/team/start-leader.sh` (it opens at the repo root as `game-leader` and runs `/game-team-lead`).
+1. Start the leader: `tools/team/start-leader.sh`. It resumes the saved leader conversation (id in the gitignored `production/session-state/leader-session.txt`) under the fixed name `game-leader`; `--fresh` starts a new one.
 2. Check permissions: `orca computer permissions --json` → `accessibility` and `screenshots` both `granted`.
-3. `ListAgents`; start any missing member with its script above (each script prompts the member to reply "ready" to `game-leader`). Close old duplicates (`game-dev-001-1e`, `game-dev-002-46`). Tell game-dev-001 to resume the TASK-002 leftovers.
+3. `ListAgents`; start any missing member with its script above: add `--resume` to continue its last conversation under the same name, or omit it for a fresh session that replies "ready" to `game-leader`. Close old duplicates (`game-dev-001-1e`, `game-dev-002-46`). Tell game-dev-001 to resume the TASK-002 leftovers.
 4. (Superseded: browser testing stopped.) Next QC is on the native builds from TASK-006/007 (iPhone Duo, safe-area caveat). Android QC must first restart its web server, adb reverse/forward and the DevTools watcher; the emulator runs `-gpu host`. Each QC branch already holds its earlier evidence.
 5. When both platforms pass, ask Luan's go to merge TASK-003 into `docs/vn-history-game-plan`, then hand out TASK-003b.
 

@@ -2,7 +2,8 @@
 # Start one game-team member as a Claude Code session in its own Orca worktree,
 # with bypass permissions. Rules: .claude/skills/game-team-lead/SKILL.md
 #
-# Usage: tools/team/start-member.sh <game-dev-001|game-dev-002|game-qc-android|game-qc-ios|game-art-content>
+# Usage: tools/team/start-member.sh <game-dev-001|game-dev-002|game-qc-android|game-qc-ios|game-art-content> [--resume]
+#        --resume continues the member's last conversation (same name); without it, a fresh session with its role prompt.
 # Env:   WORKSPACES  worktree parent dir (default ~/orca/workspaces/Claude-Code-Game-Studios-fork)
 #        LEADER      leader session name (default game-leader; start it with tools/team/start-leader.sh)
 set -euo pipefail
@@ -36,4 +37,8 @@ if [ ! -d "$dir" ]; then
 fi
 
 cd "$dir"
+# --resume: continue this member's most recent conversation in its worktree, same name.
+if [ "${2:-}" = "--resume" ]; then
+  exec claude --permission-mode bypassPermissions --name "$member" --continue
+fi
 exec claude --permission-mode bypassPermissions --name "$member" "$prompt"
