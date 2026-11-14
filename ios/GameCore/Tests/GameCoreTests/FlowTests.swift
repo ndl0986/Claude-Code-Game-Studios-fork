@@ -42,6 +42,20 @@ final class FlowTests: XCTestCase {
         wait(g, 0.3); g.next(); XCTAssertEqual(g.screen, .title, "more heroes are coming → title")
     }
 
+    /// Input Rule 3 / W7: pause is top-left on every screen that has it; it pauses and resumes story,
+    /// quiz, results and unlock screens in place. The title has sound only, so pause does nothing there.
+    func test_pause_works_on_every_screen_but_the_title() throws {
+        for name in ["intro", "ending", "quiz", "results", "unlock", "play"] {
+            let g = try game()
+            g.debugStart(screen: name, q: nil, beat: name == "play" ? 1 : nil, stage: nil, stars: nil)
+            let screen = g.screen, line = g.storyLine
+            g.pause(); XCTAssertEqual(g.screen, .pause, name)
+            g.resume(); XCTAssertEqual(g.screen, screen, "\(name): resume returns"); XCTAssertEqual(g.storyLine, line)
+        }
+        let g = try game()
+        g.pause(); XCTAssertEqual(g.screen, .title, "no pause on the title")
+    }
+
     func test_story_next_is_debounced() throws {
         let g = try game()
         g.start(); wait(g, 0.3)

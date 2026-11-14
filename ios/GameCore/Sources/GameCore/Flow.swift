@@ -154,7 +154,8 @@ public final class Game {
     /// Debug screenshots: set the language anywhere.
     public func forceLang(_ l: Language) { progress.lang = l; progress.saveLang(store) }
     public func toggleMute() { muted.toggle(); tap() }
-    public func pause() { guard screen == .play || screen == .quiz else { return }; tap(); pausedFrom = screen; screen = .pause; skipWarning = false }
+    /// Input Rule 3 / W7: every screen but the title (sound only) and pause itself can pause.
+    public func pause() { guard screen != .title && screen != .pause else { return }; tap(); pausedFrom = screen; screen = .pause; skipWarning = false }
     /// Resume: play's hint timers and windups restart (Hints GDD rule 5, AC19).
     public func resume() { guard screen == .pause else { return }; tap(); screen = pausedFrom; if pausedFrom == .play { play.resetHintTimers() } }
     public func home() { tap(); reset(); go(.title) }

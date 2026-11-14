@@ -308,6 +308,13 @@ final class GameScene: SKScene {
         buttons.append(Button(rect: CGRect(x: l.x, y: l.y, width: l.w, height: l.h), id: "lang"))
     }
 
+    /// Input Rule 3 / W7: pause and sound top-left on every screen that has them; the title has sound only,
+    /// in the pause slot (clear of the title panel).
+    private func topLeftButtons(pause: Bool = true) {
+        if pause { roundIcon(layout.pause, "pause", pauseIcon(layout.pause.r)); roundIcon(layout.mute, "mute", speakerIcon(layout.mute.r)) }
+        else { roundIcon(layout.pause, "mute", speakerIcon(layout.pause.r)) }
+    }
+
     private func roundIcon(_ c: Circle, _ id: String, _ draw: SKNode) {
         let n = SKNode()
         n.addChild(D.circle(0, 0, c.r, SKColor(white: 1, alpha: 0.85), C.gold, 4)); n.addChild(draw)
@@ -390,6 +397,7 @@ final class GameScene: SKScene {
         if title.frame.width > 600 { title.setScale(600 / title.frame.width) }
         add(title, 640, 140)
         if game.isDebug { add(Font.label(game.ui("ui.debug.subtitle"), 36, .white), 640, 220) }
+        topLeftButtons(pause: false)
         let h = HeroNode(scale: 0.8); h.update(face: 1, walk: false, defend: false, attack: nil, hurt: false, t: 0); add(h, 260, game.tuning["ground_y"])
         if game.isPlayable { button(game.ui("ui.btn.start"), 640 - 190, 330, 380, 130, "start", pulse: true, size: 44) }
         // the slice title shows the map-stub line (UX title spec); the controls are taught in play by the hints
@@ -424,6 +432,7 @@ final class GameScene: SKScene {
         let line = lines[min(game.storyLine, lines.count - 1)]
         textBox(line, 640, 500, 1000, 38, .white) // 2 lines fit between the picture (ends y 430) and Tiếp (iOS-R3-03)
         button(game.ui("ui.btn.next"), 640 - 150, 595, 300, 100, "next", pulse: true)
+        topLeftButtons()
     }
 
     private func padIcon(_ kind: String, _ r: Double) -> SKNode {
@@ -568,8 +577,9 @@ final class GameScene: SKScene {
             let lit = i < q.index || (i == q.index && q.okIndex != nil)
             add(D.circle(0, 0, 16, lit ? C.gold : SKColor(white: 1, alpha: 0.3), C.goldDark, 3), 640 - Double(n - 1) * 30 + Double(i) * 60, 50)
         }
-        add(Font.label("\(game.ui("ui.quiz.question")) \(q.index + 1)/\(n)", 28, C.gold, align: .left), layout.pause.cx + layout.pause.r + 24, layout.pause.cy)
-        roundIcon(layout.pause, "pause", pauseIcon(layout.pause.r))
+        // the "Câu n/N" counter top-centre beside the dots (Input Rule 3 table), so sound can sit top-left by pause (W7)
+        add(Font.label("\(game.ui("ui.quiz.question")) \(q.index + 1)/\(n)", 28, C.gold, align: .left), 640 + Double(n - 1) * 30 + 40, 50)
+        topLeftButtons()
         textBox(cur.prompt, 640, 172, 980, 40, .white)
         let cw = 390.0, ch = 300.0, gap = 20.0, x0 = (1280 - 3 * cw - 2 * gap) / 2, y0 = 245.0 // the prompt keeps 120–230 (iOS-R3-02)
         for slot in 0..<3 {
@@ -615,6 +625,7 @@ final class GameScene: SKScene {
         backgroundColor = C.night
         add(D.drum(260, SKColor(hex: 0xf2b632, alpha: 0.15)), 640, 300)
         add(Font.label(game.ui("ui.results.done"), 64, C.gold), 640, 110)
+        topLeftButtons()
         for i in 0..<3 {
             let got = i < game.stars
             let s = D.star(i == 1 ? 90 : 75, got ? C.gold : SKColor(white: 1, alpha: 0.18), got ? .white : SKColor(white: 1, alpha: 0.35))
@@ -635,6 +646,7 @@ final class GameScene: SKScene {
     private func buildUnlock() {
         backgroundColor = C.night
         add(D.rr(300, -5, 680, 10, 5, C.gold), 0, 300)
+        topLeftButtons()
         for (x, lit) in [(300.0, true), (980, true)] {
             add(D.circle(0, 0, 120, lit ? C.gold : SKColor(hex: 0x5a5370), .white, 6), x, 300)
             add(D.circle(0, 0, 110, C.cream), x, 300)
