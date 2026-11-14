@@ -1,0 +1,6 @@
+r6-23-title-card-tap-nothing: script='down 0 450 260; wait 0.08; up 0' kernel: down0@0.000, up0@0.053
+r6-40-B1-intro-box1-dbl: script='down 0 1112 628; wait 0.04; up 0; wait 0.10; down 0 1112 628; wait 0.04; up 0' kernel: down0@0.000, up0@0.004, down0@0.143, up0@0.143
+r6-41-B1-card-f1-dbl: script='down 0 1112 628; wait 0.04; up 0; wait 0.10; down 0 1112 628; wait 0.04; up 0' kernel: down0@0.000, up0@0.046, down0@0.150, up0@0.182
+r6-42-B1-ask-dbl-line2: script='down 0 1092 628; wait 0.04; up 0; wait 0.10; down 0 1092 628; wait 0.04; up 0' kernel: down0@0.000, up0@0.027, down0@0.129, up0@0.168
+r6-53-15b-hold-right-5s: script='down 0 330 610; wait 5.0; up 0' kernel: down0@0.000, up0@5.001
+r6-55-B4-tap-during-shake: script='down 0 231 420; wait 0.05; up 0; wait 0.2; down 0 642 420; wait 0.05; up 0' kernel: down0@0.000, up0@0.072, down0@0.264, up0@0.301
