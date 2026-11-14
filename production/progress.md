@@ -29,6 +29,8 @@ Where the project stands, so work can resume from the repo. Newest entry first.
 | TASK-003b beat types, Special button, arrows, art fixes | — | Ready; starts after TASK-003 (likely dev-ios) |
 | TASK-004 art bible + Trần Quốc Toản content | `design/TASK-004-art-bible-tqt-beats` @ `4d7aca2` | Art + structure signed off; claims C01–C11 and source pages not signed; not merged |
 
+**Process (Luan, 2026-11-14):** TASK-006/007 = native vertical slice; TASK-008 = /map-systems + key GDDs (game-art-content), then /gate-check → epics/stories/sprints for the full build. Android: pure Android SDK (SurfaceView/Canvas, SoundPool) + kotlinx.serialization; targetSdk 35 now, 36 before Play.
+
 **Browser testing stopped (Luan, 2026-11-14):** TASK-003 closed as the design reference at `203d73e` (Android r3 partial, iOS not run); TASK-003b cancelled. QC waits for the native builds.
 
 **Engine decision (Luan, 2026-11-14):** native per platform. iOS: Swift + SpriteKit (game-dev-ios). Android: Kotlin (game-dev-android), 2D approach to be picked by Luan in TASK-007. Godot shelved (TASK-002 branch kept, not merged; local tip `82c016e`). New tasks: TASK-005 ADR + shared `content/`, TASK-006 iOS setup, TASK-007 Android setup.

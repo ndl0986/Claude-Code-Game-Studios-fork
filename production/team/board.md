@@ -11,8 +11,9 @@ an issue once Issues are on. The leader owns this file.
 | TASK-003 | `/prototype --path html`: one side-scrolling Trần Quốc Toản mission (placeholder beats) + quiz | dev | game-dev-android | CLOSED as design reference (Luan stopped browser testing 2026-11-14; Android r3 partial, iOS not run) | `proto/TASK-003-mission-prototype` @ `203d73e` | 2026-11-14 |
 | TASK-004 | `/art-bible` draft + Trần Quốc Toản mission beats and quiz, sourced | design | game-art-content | art + structure signed off; claims C01–C11 pending | `design/TASK-004-art-bible-tqt-beats` @ `4d7aca2` | 2026-11-14 |
 | TASK-005 | ADR: native per platform (Swift iOS, Kotlin Android); shared content as data in content/; project.yaml engine block | design | game-dev-ios | writing (plan approved with both reviews' fixes) | `docs/TASK-005-adr-native` | 2026-11-14 |
-| TASK-006 | Full first mission, native iOS: Swift + SpriteKit (SwiftUI shell), ios/, XCTest; spec = prototype 203d73e | dev | game-dev-ios | after TASK-005 | `feat/TASK-006-ios-native` | 2026-11-14 |
-| TASK-007 | Full first mission, native Android: Kotlin + Android SDK (SurfaceView/Canvas, SoundPool), android/, JUnit; spec = prototype 203d73e | dev | game-dev-android | plan | `setup/TASK-007-android-kotlin` | 2026-11-14 |
+| TASK-006 | Native vertical slice (iOS): Swift + SpriteKit (SwiftUI shell), ios/, XCTest; spec = prototype 203d73e | dev | game-dev-ios | after TASK-005 | `feat/TASK-006-ios-native` | 2026-11-14 |
+| TASK-007 | Native vertical slice (Android): Kotlin + Android SDK (SurfaceView/Canvas, SoundPool), android/, JUnit; spec = prototype 203d73e | dev | game-dev-android | plan | `setup/TASK-007-android-kotlin` | 2026-11-14 |
+| TASK-008 | `/map-systems` + key system GDDs (mission flow/beats, combat, quiz/stars, hints first) | design | game-art-content | plan | `design/TASK-008-systems` | 2026-11-14 |
 | TASK-003b | Mission beat types from TASK-004: Special button, walk / hold-meter / training / reach-the-flag beats, arrows; BEAT_TYPES dispatch table first; art fixes: wrong-answer #9C8FB8 + circular-arrow icon, tangerine attack icon (not a pickaxe), vermilion only as a tunic accent; quiz to 5 questions once claims are signed | dev | unassigned | CANCELLED (browser); beat types and art fixes move to native tasks | — | 2026-11-14 |
 
 ## Team changes
@@ -110,3 +111,9 @@ mission natively on each platform, then QC tests the native builds. Android draw
 (Kotlin + Android SDK: SurfaceView/Canvas game loop, SoundPool), no game framework.
 
 **Decided (Luan, 2026-11-14):** Android compileSdk/targetSdk 35 for now; **pre-release item:** raise to 36 (Play requires it for new apps and updates since 2026-08-31) and install `platforms;android-36` + `build-tools;36.0.0` before any Play upload. kotlinx.serialization approved as the Android app's one dependency. Emulator mp17863 is owned by game-qc-android (start/stop/wipe); devs only install, launch, log and screenshot. It was stopped from outside 3 times on 2026-11-14 (not by the game team): watch for another team's cleanup.
+
+**Decided (Luan, 2026-11-14): follow the studio pipeline.** TASK-006/007 are a **native vertical slice**
+of one mission (not yet the production codebase). In parallel TASK-008 runs `/map-systems` + the key
+GDDs. Then `/gate-check`, and the full build goes through `/create-epics`, `/create-stories` and
+`/sprint-plan`. Where the template has no native-engine support (setup-engine, engine specialists,
+test-setup, smoke-check), those checks report NOT ASSESSED by design (ADR-0001).
