@@ -1,0 +1,21 @@
+; Engine configuration file.
+; Written by /setup-engine (TASK-002, 2026-11-14) for Godot 4.7.2.
+; NOT VERIFIED — the Godot editor is not installed yet, so no headless import has run.
+; run/main_scene is unset on purpose: /dev-story or the user sets it once a scene exists.
+
+config_version=5
+
+[application]
+
+config/name="Dải Đất Anh Hùng"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+
+[display]
+
+; Sensor landscape (either way up). NOT VERIFIED: key and value 4 come from Godot 4.x
+; knowledge, not a page fetched this run; confirm on the first import or in Project Settings.
+window/handheld/orientation=4
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
