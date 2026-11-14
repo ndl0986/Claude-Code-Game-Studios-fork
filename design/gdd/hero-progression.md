@@ -172,9 +172,10 @@ but the counts never do, so show counts ("★ 7 · 🏅 2") rather than percenta
 |---|---|---|---|
 | Quiz & stars | this depends on it | Hard | Quiz finished with stars |
 | Mission flow & beat types | this depends on it (medal), and it depends on this (open state, medal known) | Hard | `medal_earned`; open and medal state |
-| Save & progress | this depends on it | Hard | The saved keys (Rule 11) |
+| Save & progress | this depends on it | Hard | The saved keys (Rule 11); storage rules in `design/gdd/save-and-progress.md` |
 | Content data & claims | this depends on it | Hard | `timeline_order`, `next_hero`, R12 |
 | Map & timeline | depends on this | Hard (Alpha) | Per-hero state, stars, medal |
+| Language & text | this depends on it | Hard | Hero names, results, unlock and medal text (`design/gdd/language-and-text.md`) |
 
 Quiz & stars and Mission flow both list Hero progression as a dependent (bidirectional).
 

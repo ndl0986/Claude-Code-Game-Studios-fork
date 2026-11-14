@@ -11,6 +11,17 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-29 Download size as heroes are added (revisit before hero 4)
+
+- **Flow:** ADR-0002 (≤ 60 MB download) + Audio GDD (music, sound, voice-over) → each timed content
+  update adds a hero.
+- **Finding:** at about 6.5 MB of shared music and sound plus about 18 MB per hero (art + voice-over),
+  60 MB fits about 3 heroes.
+- **Options (later):** A. raise the cap per update (simplest; app stores allow much larger apps) ·
+  B. lighter art and voice-over per hero · C. optional downloadable hero packs (breaks "fully offline,
+  no server" unless bundled through the stores' own asset delivery).
+- **Status:** Open; not needed until hero 3–4.
+
 ### D-27 Show progress on the slice's title screen before the map exists? (QC G5)
 
 - **Flow:** QC G5 ("the title shows no progress") → Map & timeline GDD → the slice title screen.
