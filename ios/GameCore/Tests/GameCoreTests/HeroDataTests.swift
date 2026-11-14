@@ -38,7 +38,7 @@ final class DraftsTests: XCTestCase {
                 let mission = try ContentJSON.decode(Mission.self, from: Data(contentsOf: url))
                 let swapped = HeroContent(mission: mission, quiz: hero.quiz, claims: hero.claims)
                 let set = ContentSet(index: content.index, strings: content.strings, sources: content.sources, markers: content.markers,
-                                     rules: content.rules, tuning: content.tuning, assets: content.assets, heroes: [swapped])
+                                     rules: content.rules, tuning: content.tuning, assets: content.assets, themes: content.themes, heroes: [swapped])
                 XCTAssertEqual(ContentValidator(content: set, checkPictures: true).validate().filter { !$0.isWarning }, [], "\(id)/\(f)")
             }
         }

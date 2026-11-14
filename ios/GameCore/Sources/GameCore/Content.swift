@@ -116,9 +116,19 @@ public struct AssetsFile: Codable, Sendable {
         public let kind: String
         public let file: String
         public let bytes: Int
+        /// Pictures only (schema 1.2): the file's pixel size (R19a/R19b).
+        public let width: Int?
+        public let height: Int?
     }
     public let schemaVersion: String
     public let assets: [Asset]
+}
+
+/// `themes.json` (ADR-0002): the sky band above the background tiles, a gradient per theme.
+public struct ThemesFile: Codable, Sendable {
+    public struct Theme: Codable, Sendable { public struct Band: Codable, Sendable { public let top: String; public let bottom: String }; public let skyBand: Band }
+    public let schemaVersion: String
+    public let themes: [String: Theme]
 }
 
 /// A fight beat's walk-in list and limits (the prototype's MISSION.beats).
@@ -240,6 +250,8 @@ public struct ContentSet: Sendable {
     public let rules: RulesFile
     public let tuning: Tuning
     public let assets: AssetsFile
+    /// Optional until data/TASK-005g merges into every base (parity with Android).
+    public let themes: ThemesFile?
     public let heroes: [HeroContent]
 
     /// The schema MAJOR this app reads (rule R11).
@@ -267,6 +279,7 @@ public struct ContentSet: Sendable {
             rules: try file("rules.json", RulesFile.self),
             tuning: try Tuning(data: Data(contentsOf: dataRoot.appendingPathComponent("tuning.json"))),
             assets: try file("assets.json", AssetsFile.self),
+            themes: FileManager.default.fileExists(atPath: dataRoot.appendingPathComponent("themes.json").path) ? try file("themes.json", ThemesFile.self) : nil,
             heroes: heroes)
     }
 

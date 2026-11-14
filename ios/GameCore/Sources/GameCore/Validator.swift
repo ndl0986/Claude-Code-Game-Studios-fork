@@ -15,7 +15,10 @@ public struct ContentValidator {
     /// R10 applies to `data/` only (P-04 item 5); the debug sample's pictures are drawn in code.
     public let checkPictures: Bool
 
-    public init(content: ContentSet, checkPictures: Bool) { self.content = content; self.checkPictures = checkPictures }
+    /// `dataRoot`: content/data on disk, so R19a can read each picture's header.
+    public let dataRoot: URL?
+
+    public init(content: ContentSet, checkPictures: Bool, dataRoot: URL? = nil) { self.content = content; self.checkPictures = checkPictures; self.dataRoot = dataRoot }
 
     public func validate() -> [Finding] {
         var out: [Finding] = []
@@ -33,6 +36,17 @@ public struct ContentValidator {
         out += Self.schemaMajor(file: content.index.schemaVersion, app: ContentSet.supportedSchema)
         out += Self.tuningRules(content.tuning.values.mapValues(\.value))
         out += Self.starOrder(content.rules.quizStars.thresholds)
+        // R19a/R19b apply to schema 1.2 assets, which declare width/height
+        for a in content.assets.assets where a.kind == "picture" {
+            guard let w = a.width, let h = a.height else { continue }
+            out += Self.pictureLimits(id: a.id, width: w, height: h)
+            if let root = dataRoot, let d = try? Data(contentsOf: root.appendingPathComponent(a.file)), let real = Self.imageSize(d) {
+                out += Self.declaredSize(id: a.id, declared: (w, h), actual: real)
+            }
+        }
+        if let themes = content.themes {
+            out += Self.themesCovered(themes: Array(themes.themes.keys), beatThemes: content.heroes.flatMap { $0.mission.beats.map(\.theme) })
+        }
         let indexed = content.heroes.filter { content.index.heroes.contains($0.mission.hero.id) }
         out += Self.timeline(indexed.map { (id: $0.mission.hero.id, order: $0.mission.hero.timelineOrder, next: $0.mission.nextHero) })
 
@@ -187,6 +201,41 @@ public struct ContentValidator {
             if h.next != want { out.append(.init(rule: "R18", message: "\(h.id) next_hero \(h.next ?? "null") should be \(want ?? "null")")) }
         }
         return out
+    }
+
+    /// R19a (error): the declared size matches the file header.
+    public static func declaredSize(id: String, declared: (Int, Int), actual: (Int, Int)) -> [Finding] {
+        declared == actual ? [] : [.init(rule: "R19a", message: "\(id) declares \(declared.0)×\(declared.1), file is \(actual.0)×\(actual.1)")]
+    }
+
+    /// R19b (warning, ADR-0002): ≤ 2048 per side; quiz pictures ≤ 512²; scene tiles ≤ 1440×1320.
+    public static func pictureLimits(id: String, width w: Int, height h: Int) -> [Finding] {
+        var limit = (2048, 2048)
+        if id.hasPrefix("pic.quiz_") { limit = (512, 512) } else if id.hasPrefix("pic.scene_") { limit = (1440, 1320) }
+        return w > limit.0 || h > limit.1 ? [.init(rule: "R19b", message: "\(id) is \(w)×\(h), limit \(limit.0)×\(limit.1)", isWarning: true)] : []
+    }
+
+    /// R20: every theme a beat uses has a sky band; themes outside the mission enum are invalid.
+    public static func themesCovered(themes: [String], beatThemes: [String]) -> [Finding] {
+        let known: Set = ["village", "bamboo", "river", "camp"]
+        return Set(beatThemes).sorted().compactMap { t in
+            !known.contains(t) ? .init(rule: "R20", message: "unknown theme \(t)")
+                : !themes.contains(t) ? .init(rule: "R20", message: "theme \(t) has no sky_band") : nil
+        }
+    }
+
+    /// The pixel size from a PNG or WebP header (VP8, VP8L, VP8X), or nil.
+    public static func imageSize(_ d: Data) -> (Int, Int)? {
+        let b = [UInt8](d.prefix(32))
+        func u32be(_ i: Int) -> Int { Int(b[i]) << 24 | Int(b[i + 1]) << 16 | Int(b[i + 2]) << 8 | Int(b[i + 3]) }
+        if b.count >= 24, b[0..<8].elementsEqual([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]) { return (u32be(16), u32be(20)) }
+        guard b.count >= 30, String(bytes: b[0..<4], encoding: .ascii) == "RIFF", String(bytes: b[8..<12], encoding: .ascii) == "WEBP" else { return nil }
+        switch String(bytes: b[12..<16], encoding: .ascii) {
+        case "VP8 ": return (Int(b[26]) | Int(b[27] & 0x3F) << 8, Int(b[28]) | Int(b[29] & 0x3F) << 8)
+        case "VP8L": let v = Int(b[21]) | Int(b[22]) << 8 | Int(b[23]) << 16 | Int(b[24]) << 24; return ((v & 0x3FFF) + 1, ((v >> 14) & 0x3FFF) + 1)
+        case "VP8X": return ((Int(b[24]) | Int(b[25]) << 8 | Int(b[26]) << 16) + 1, (Int(b[27]) | Int(b[28]) << 8 | Int(b[29]) << 16) + 1)
+        default: return nil
+        }
     }
 
     /// R16: a lower star's max_retries is ≥ the higher star's; nil means no limit.

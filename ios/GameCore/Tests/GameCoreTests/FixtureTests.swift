@@ -102,6 +102,11 @@ final class FixtureTests: XCTestCase {
             case "R17", "R18":
                 let hs = (c["heroes"] as! [[String: Any]]).map { (id: $0["id"] as! String, order: $0["timeline_order"] as! Int, next: $0["next_hero"] as? String) }
                 findings = ContentValidator.timeline(hs).filter { $0.rule == rule }
+            case "R19a":
+                let d = c["declared"] as! [String: Int], a = c["actual"] as! [String: Int]
+                findings = ContentValidator.declaredSize(id: "x", declared: (d["width"]!, d["height"]!), actual: (a["width"]!, a["height"]!))
+            case "R19b": findings = ContentValidator.pictureLimits(id: c["id"] as! String, width: c["width"] as! Int, height: c["height"] as! Int)
+            case "R20": findings = ContentValidator.themesCovered(themes: c["themes"] as! [String], beatThemes: c["beat_themes"] as! [String])
             case "R16":
                 let th = (c["thresholds"] as! [[String: Any]]).map { RulesFile.StarThreshold(stars: $0["stars"] as! Int, maxRetries: $0["max_retries"] as? Int) }
                 findings = ContentValidator.starOrder(th)

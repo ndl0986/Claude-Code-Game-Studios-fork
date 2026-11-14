@@ -8,10 +8,10 @@ final class ContentTests: XCTestCase {
         let files: [(String, String)] = [
             ("data/index.json", "index"), ("data/strings.json", "strings"), ("data/sources.json", "sources"),
             ("data/markers.json", "markers"), ("data/rules.json", "rules"), ("data/tuning.json", "tuning"),
-            ("data/assets.json", "assets"), ("samples/heroes/sample/mission.json", "mission"),
+            ("data/assets.json", "assets"), ("data/themes.json", "themes"), ("samples/heroes/sample/mission.json", "mission"),
             ("samples/heroes/sample/quiz.json", "quiz"), ("samples/heroes/sample/claims.json", "claims"),
         ]
-        for (path, s) in files {
+        for (path, s) in files where FileManager.default.fileExists(atPath: Repo.content.appendingPathComponent(path).path) {
             XCTAssertEqual(schema.validate(try Repo.json(path), file: "\(s).schema.json"), [], path)
         }
     }
@@ -36,7 +36,7 @@ final class ContentTests: XCTestCase {
 
     func test_data_folder_pictures_resolve_and_files_exist() throws {
         let content = try ContentSet.load(dataRoot: Repo.data)
-        XCTAssertEqual(ContentValidator(content: content, checkPictures: true).validate().filter { !$0.isWarning }, [])
+        XCTAssertEqual(ContentValidator(content: content, checkPictures: true, dataRoot: Repo.data).validate().filter { !$0.isWarning }, [], "incl. R19a headers")
         for a in content.assets.assets {
             let url = Repo.data.appendingPathComponent(a.file)
             let size = try FileManager.default.attributesOfItem(atPath: url.path)[.size] as? Int
@@ -68,5 +68,24 @@ final class ContentTests: XCTestCase {
         for v in [c.index.schemaVersion, c.strings.schemaVersion, c.rules.schemaVersion, c.tuning.schemaVersion] + c.heroes.map(\.mission.schemaVersion) {
             XCTAssertEqual(ContentValidator.schemaMajor(file: v, app: ContentSet.supportedSchema), [], v)
         }
+    }
+}
+
+/// R19a header parsing: PNG and the three WebP kinds (VP8X carries lossy WebP with alpha).
+final class ImageHeaderTests: XCTestCase {
+    func test_png_and_webp_vp8x_vp8l_vp8_sizes() {
+        var png = Data([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0, 0, 0, 13, 0x49, 0x48, 0x44, 0x52])
+        png += Data([0, 0, 1, 0, 0, 0, 0, 0xC8]) + Data(count: 8)
+        XCTAssertTrue(ContentValidator.imageSize(png)! == (256, 200))
+        func riff(_ fourcc: String, _ body: [UInt8]) -> Data {
+            Data("RIFF".utf8) + Data([100, 0, 0, 0]) + Data("WEBP".utf8) + Data(fourcc.utf8) + Data([10, 0, 0, 0]) + Data(body) + Data(count: 16)
+        }
+        // VP8X: flags(4) then canvas width-1, height-1 as 24-bit little endian
+        XCTAssertTrue(ContentValidator.imageSize(riff("VP8X", [0x10, 0, 0, 0, 0x2B, 0x01, 0x00, 0xC7, 0x00, 0x00]))! == (300, 200))
+        // VP8L: signature 0x2f, then 14-bit width-1 and height-1
+        let w = 300 - 1, h = 200 - 1, v = w | (h << 14)
+        XCTAssertTrue(ContentValidator.imageSize(riff("VP8L", [0x2F, UInt8(v & 0xFF), UInt8((v >> 8) & 0xFF), UInt8((v >> 16) & 0xFF), UInt8((v >> 24) & 0xFF), 0, 0, 0, 0, 0]))! == (300, 200))
+        // VP8 (lossy): frame tag(3) + start code 9d 01 2a + 14-bit width, height
+        XCTAssertTrue(ContentValidator.imageSize(riff("VP8 ", [0, 0, 0, 0x9D, 0x01, 0x2A, 0x2C, 0x01, 0xC8, 0x00]))! == (300, 200))
     }
 }
