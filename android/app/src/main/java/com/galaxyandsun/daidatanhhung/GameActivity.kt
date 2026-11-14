@@ -4,6 +4,7 @@ import android.app.Activity
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.View
 import android.view.WindowInsets
@@ -47,7 +48,7 @@ class GameActivity : Activity() {
             (BuildConfig.DEBUG || gate.runtimeShow).also { ok -> if (!ok) Log.w(TAG, "hiding mission $id: unsigned ${gate.debugBadges}") }
         }
         val font = { w: Int -> Typeface.Builder(assets, "fonts/nunito.ttf").setFontVariationSettings("'wght' $w").build() }
-        val game = heroId?.let { Game(content, it, PrefsStore(this)) { s -> app.audio.play(s) } }
+        val game = heroId?.let { Game(content, it, PrefsStore(this), { SystemClock.uptimeMillis() / 1000.0 }) { s -> app.audio.play(s) } }
         app.audio.volume = (content.tuning.values["volume"]?.value ?: 0.5).toFloat()
         // Pictures from assets.json (png/webp under content/data), decoded once on first use.
         val files = content.assets.assets.filter { it.kind == "picture" }.associate { it.id to it.file }

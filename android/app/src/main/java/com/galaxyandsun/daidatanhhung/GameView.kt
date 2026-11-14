@@ -33,11 +33,12 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
     SurfaceView(context), SurfaceHolder.Callback, Choreographer.FrameCallback {
 
     private sealed interface Ev
-    private data class Down(val id: Int, val x: Float, val y: Float) : Ev
+    /** [at]: the press's own time, uptime s (MotionEvent.eventTime): the debounce clock (QC r3 B1). */
+    private data class Down(val id: Int, val x: Float, val y: Float, val at: Double) : Ev
     private data class Move(val id: Int, val x: Float, val y: Float) : Ev
     private data class Up(val id: Int, val x: Float, val y: Float) : Ev
     private data object CancelAll : Ev
-    private data class Key(val code: Int, val down: Boolean) : Ev
+    private data class Key(val code: Int, val down: Boolean, val at: Double) : Ev
     private data object AutoPause : Ev
 
     private val events = ConcurrentLinkedQueue<Ev>()
@@ -53,6 +54,8 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
     private val padHolds = com.galaxyandsun.daidatanhhung.core.PadHolds()
     private val keyHolds = HashSet<Action>()
     private val pressedButton = HashMap<Int, String>()
+    /** The press time of each pointer's pressed menu button (fires on release, debounced by press). */
+    private val pressedAt = HashMap<Int, Double>()
     @Volatile private var safe = IntArray(4)
     /** Debug screenshots: draw but don't step (`--ez freeze true`), so a 1.1 s telegraph can be captured. */
     @Volatile var frozen = false
@@ -128,20 +131,23 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
                     val r = renderer.hit(e.x, e.y) ?: continue
                     val a = r.pad
                     if (a != null) { padHolds.down(e.id, a); input.tapped += a }
-                    else if (g == null || g.pressAllowed(r.key)) pressedButton[e.id] = r.key // QC r2: gate at press time
+                    else if (g == null || g.pressAllowed(r.key, e.at)) { pressedButton[e.id] = r.key; pressedAt[e.id] = e.at } // gate at press time (QC r2, r3 B1)
                 }
                 is Move -> padHolds.move(e.id, renderer.hit(e.x, e.y)?.pad)
                 is Up -> {
                     padHolds.up(e.id)
+                    val at = pressedAt.remove(e.id)
                     val key = pressedButton.remove(e.id) ?: continue
                     val r = renderer.hit(e.x, e.y)
                     if (r != null && r.key == key && r.onTap != null && !(firedThisFrame && key.startsWith("card"))) {
                         // Audio GDD Rule 6: one tone per press; a quiz card's own right/wrong sound is its tone.
-                        if (r.onTap.invoke()) { if (!key.startsWith("card")) audio.play(Sfx.TAP); firedThisFrame = true }
+                        g?.pressAt = at // the action is debounced by this press's down time (Input Rule 12)
+                        val fired = try { r.onTap.invoke() } finally { g?.pressAt = null }
+                        if (fired) { if (!key.startsWith("card")) audio.play(Sfx.TAP); firedThisFrame = true }
                     }
                 }
-                CancelAll -> { padHolds.clear(); pressedButton.clear(); keyHolds.clear() }
-                is Key -> if (g != null) key(g, e.code, e.down)
+                CancelAll -> { padHolds.clear(); pressedButton.clear(); pressedAt.clear(); keyHolds.clear() }
+                is Key -> if (g != null) { g.pressAt = e.at; try { key(g, e.code, e.down) } finally { g.pressAt = null } }
                 AutoPause -> g?.pause()
             }
         }
@@ -178,16 +184,16 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        if (event.repeatCount == 0) events += Key(keyCode, true)
+        if (event.repeatCount == 0) events += Key(keyCode, true, event.eventTime / 1000.0)
         return keyCode != KeyEvent.KEYCODE_BACK || super.onKeyDown(keyCode, event)
     }
 
-    override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean { events += Key(keyCode, false); return keyCode != KeyEvent.KEYCODE_BACK || super.onKeyUp(keyCode, event) }
+    override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean { events += Key(keyCode, false, event.eventTime / 1000.0); return keyCode != KeyEvent.KEYCODE_BACK || super.onKeyUp(keyCode, event) }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(e: MotionEvent): Boolean {
         when (e.actionMasked) {
-            MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> { val i = e.actionIndex; events += Down(e.getPointerId(i), e.getX(i), e.getY(i)) }
+            MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> { val i = e.actionIndex; events += Down(e.getPointerId(i), e.getX(i), e.getY(i), e.eventTime / 1000.0) }
             MotionEvent.ACTION_MOVE -> for (i in 0 until e.pointerCount) events += Move(e.getPointerId(i), e.getX(i), e.getY(i))
             MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> { val i = e.actionIndex; events += Up(e.getPointerId(i), e.getX(i), e.getY(i)) }
             MotionEvent.ACTION_CANCEL -> events += CancelAll

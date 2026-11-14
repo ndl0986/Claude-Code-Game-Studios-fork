@@ -47,6 +47,12 @@ class Game(
     val content: Content,
     val heroId: String,
     private val store: Store,
+    /**
+     * The platform's monotonic clock in seconds (Android: uptime), the same clock as the press
+     * timestamps it passes. Null: the sim clock (unit tests). Input Rule 12 debounces on press
+     * time, so a slow frame can't let a second press through (QC r3 B1).
+     */
+    private val now: (() -> Double)? = null,
     private val sfx: (Sfx) -> Unit,
 ) {
     val tuning = Tuning.from(content.tuning)
@@ -72,9 +78,16 @@ class Game(
     var medalThisRun = false; private set
     /** The hero that opened at quiz finish, shown on the unlock screen (null: no unlock screen). */
     var newlyOpen: String? = null; private set
-    /** Seconds since start (story-box debounce, AC9). */
+    /** Sim seconds since start (animation; also the press clock when [now] is null). */
     private var clock = 0.0
+    /** Press time of the last press that advanced (Input F3), on the press clock. */
     private var lastAdvance = -1e9
+    /**
+     * The press time of the menu press being fired, set by the platform around the button's
+     * action (a press fires on release, but is debounced by when it went down). Null: now.
+     */
+    var pressAt: Double? = null
+    private fun pressTime() = pressAt ?: now?.invoke() ?: clock
 
     init { reset(); Progression.markSeen(content, store) } // the title loading counts as "seen open"
 
@@ -113,8 +126,9 @@ class Game(
     fun next(): Boolean {
         if (skipWarning) return false
         // AC9 / QC B1: every Next (intro, card, caption, ending, quiz Tiếp, results) advances once per 0.25 s.
-        if (clock - lastAdvance < tuning["advance_debounce"]) return false
-        return advance().also { if (it) lastAdvance = clock }
+        val at = pressTime()
+        if (at - lastAdvance < tuning["advance_debounce"]) return false
+        return advance().also { if (it) lastAdvance = at }
     }
 
     /**
@@ -122,8 +136,8 @@ class Game(
      * QC r2: a press that begins inside the Next debounce, or on a quiz card during the wrong-card
      * shake, is ignored even if it is released after the window ends (B1 on beat cards, quiz AC6).
      */
-    fun pressAllowed(key: String): Boolean = when {
-        key == "next" || key == "ask" -> clock - lastAdvance >= tuning["advance_debounce"]
+    fun pressAllowed(key: String, at: Double = pressTime()): Boolean = when {
+        key == "next" || key == "ask" -> at - lastAdvance >= tuning["advance_debounce"]
         key.startsWith("card") -> (quiz?.shakeT ?: 0.0) <= 0.0
         else -> true
     }
@@ -150,8 +164,9 @@ class Game(
     /** The dialogue's ask button: debounced like every Next (QC r2 B1). */
     fun ask(): Boolean {
         if (skipWarning || screen != Screen.PLAY || run.phase != Phase.DIALOGUE) return false
-        if (clock - lastAdvance < tuning["advance_debounce"]) return false
-        return run.dialogueAsk().also { if (it) lastAdvance = clock }
+        val at = pressTime()
+        if (at - lastAdvance < tuning["advance_debounce"]) return false
+        return run.dialogueAsk().also { if (it) lastAdvance = at }
     }
 
     // ---- D-07: skip a story section. The kind warning shows on every Skip until the child chooses
