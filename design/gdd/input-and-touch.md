@@ -208,19 +208,25 @@ screen scale). Language Rule 6 and Map F2 use these names.
 | k_px | float (screen px per world px) | device | calculated | Drawing scale |
 | k | float (pt/dp per world px) | device | calculated | Touch scale |
 
-**Reference phones** (examples in every GDD use these):
-- **Android: the QC phone**, 1080×2400 @ 420 dpi (density 2.625), landscape full screen with
-  the mandatory gesture inset, safe height 996 px (F2). k_px = 996 / 720 = **1.383**;
-  k = 1.383 / 2.625 = **0.527 dp per world px**.
+**Reference phones** (the test devices; "the reference phones" in any AC means these, r8e):
+- **Android: the QC and dev AVDs** (pixel_7, devandroid002 and mp17863), 1080×2400 @ 2.625,
+  measured **k ≈ 0.488** (confirmed by game-dev-android, r8): `pad_min` 72 → ≈ **148** world px.
+- **Geometry example (k 0.527, no test device):** the same 1080×2400 @ 420 dpi (density 2.625)
+  panel with only the mandatory gesture inset, safe height 996 px (F2): k_px = 996 / 720 =
+  **1.383**; k = 1.383 / 2.625 = **0.527 dp per world px**. Worked numbers labelled "k 0.527"
+  across the GDDs and UX specs use it; they are geometry, not a device. No Android test device
+  runs at 0.527.
 - **iOS: a 6.1" Dynamic Island iPhone**, 852×393 pt landscape (scale 3), safe rect ≈ 734 × 372
   pt after the side and home-indicator insets. k = min(734/1280, 372/720) = **0.517 pt per
-  world px**; k_px = 1.55. Re-check against the iOS QC device's real insets.
+  world px**; k_px = 1.55. Re-checked: the iOS QC iPhone 18 Pro measures **k 0.517**; the
+  dev-ios phone **0.529**.
 
-**Output Range:** `pad_world` ≈ 137–140 world px on the reference phones. A smaller k (a smaller
+**Output Range:** `pad_world` ≈ 136–148 world px on the reference phones (148 Android, 139
+iOS QC, 136 dev-ios). A smaller k (a smaller
 phone) makes pads bigger in world px. The same formula sizes the map pins (Map F2).
-**Example:** Android reference: `pad_min` 72 → `pad_world` = 72 / 0.527 ≈ **137** (what Android's
+**Example** (the geometry example, k 0.527): `pad_min` 72 → `pad_world` = 72 / 0.527 ≈ **137** (what Android's
 `ScreenFit` draws); `pad_gap` 12 → ≈ **23** world px. Two pads plus a gap take ≈ 297 of the
-720 world px height. iOS reference: 72 / 0.517 ≈ 139; 12 / 0.517 ≈ 23.
+720 world px height. Android AVDs (k 0.488): 72 / 0.488 ≈ 148; 12 / 0.488 ≈ 25. iOS QC: 72 / 0.517 ≈ 139; 12 / 0.517 ≈ 23.
 
 The F2 (safe-anchored position) formula is defined as:
 
