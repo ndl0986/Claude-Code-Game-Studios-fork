@@ -1,0 +1,5 @@
+r5-21-15b-after-hold-right-5s: script='down 0 330 610; wait 5.0; up 0' kernel: down0@0.000, up0@4.999
+r5-40-B1-intro-box1-dbl: script='down 0 560 645; wait 0.04; up 0; wait 0.10; down 0 560 645; wait 0.04; up 0' kernel: down0@0.000, up0@0.041, down0@0.139, up0@0.183
+r5-41-B1-card-f1-dbl: script='down 0 560 525; wait 0.04; up 0; wait 0.10; down 0 560 525; wait 0.04; up 0' kernel: down0@0.000, up0@0.047, down0@0.139, up0@0.181
+r5-42-B1-ask-dbl-line2: script='down 0 560 645; wait 0.04; up 0; wait 0.10; down 0 560 645; wait 0.04; up 0' kernel: down0@0.000, up0@0.043, down0@0.170, up0@0.186
+r5-51-B4-tap-during-shake: script='down 0 240 433; wait 0.05; up 0; wait 0.2; down 0 640 433; wait 0.05; up 0' kernel: down0@0.000, up0@0.052, down0@0.251, up0@0.300
