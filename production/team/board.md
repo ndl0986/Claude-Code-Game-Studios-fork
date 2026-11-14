@@ -139,4 +139,4 @@ GDDs. Then `/gate-check`, and the full build goes through `/create-epics`, `/cre
 test-setup, smoke-check), those checks report NOT ASSESSED by design (ADR-0001).
 
 **After Android QC r3 (dev-android):** first-owner tie-break in PadHolds; 4% press squash; noisy/route clear; pad_gap (TASK-005k); rounded-corner insets (TASK-013); merge b661802 so TraceTest runs.
-**iOS QC r3 (2026-11-14):** frozen 9b0470a (72 tests), app fingerprint 544279664aaa…; game-qc-ios on iPhone 18 Pro. dev-ios next: trace replay, TASK-019 touch-rule check.
+**iOS QC r3 (2026-11-14):** frozen 9b0470a (72 tests), app fingerprint 544279664aaa…; game-qc-ios on iPhone 18 Pro. Trace replay: iOS matches Android on all 149 snapshots (GameCore 73). After iOS r3: second-pointer-ignored fix in TouchPads (TASK-019 Rule 6).
