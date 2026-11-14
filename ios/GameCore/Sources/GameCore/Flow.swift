@@ -197,8 +197,7 @@ public final class Game {
         guard let p = press, let e = enteredAt, let until = lockUntil, lockContext != nil else { return false }
         if p < e { return true }
         guard p < until else { return false }
-        // the cap: 1.5 s (TASK-005q); until that key lands in tuning.json the lock doesn't roll past the fixed window
-        let cap = e + (tuning.values["screen_enter_lock_max"]?.value ?? tuning["screen_enter_lock"])
+        let cap = e + tuning["screen_enter_lock_max"] // TASK-005q (1.5 s)
         lockUntil = min(max(until, p + tuning["screen_enter_lock"]), cap)
         return true
     }

@@ -6,16 +6,8 @@ import XCTest
 /// The press clock (uptime) is injected; the sim advances 1/60 s per step in step with it.
 final class EntryLockTests: XCTestCase {
     var now = 100.0
-    /// The content with TASK-005q's screen_enter_lock_max (1.5) when the data doesn't carry it yet.
-    func contentWithCap() throws -> ContentSet {
-        let c = try ContentSet.load(dataRoot: Repo.data)
-        guard c.tuning.values["screen_enter_lock_max"] == nil else { return c }
-        var values = c.tuning.values.mapValues(\.value); values["screen_enter_lock_max"] = 1.5
-        return ContentSet(index: c.index, strings: c.strings, sources: c.sources, markers: c.markers, rules: c.rules,
-                          tuning: Tuning(values: values, seed: c.tuning.seed), assets: c.assets, themes: c.themes, heroes: c.heroes)
-    }
     func game() throws -> Game {
-        let c = try contentWithCap()
+        let c = try ContentSet.load(dataRoot: Repo.data)
         let g = Game(content: c, hero: realHero(c), store: MemoryStore(), isDebug: true)
         g.uptime = { [unowned self] in self.now }
         return g
