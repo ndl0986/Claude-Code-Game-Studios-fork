@@ -18,3 +18,14 @@ Reviewed-Content-Hash: .claude/skills/design-review/SKILL.md 4dcc8b81162613c7571
 Reviewed-Content-Hash: design/gdd/game-concept.md 2ee5801590b66b9404c289645f337bc459690eba
 Reviewed-Content-Hash: design/narrative/heroes/tran-quoc-toan.md 1df517e7bd3a99bde277d54f0c9aafefb8678275
 Reviewed-Content-Hash: design/art/art-bible.md 851eadc6ddd3c5341d202cf8cbde728d12884163
+
+## Peer review — 2026-11-14 — game-dev-ios: REVISE (minor), fixes applied
+Findings and fixes:
+- Story text order: fight beats keep the prototype order (play → caption, P-04); non-fight beats get a beat card before play. Rationale in Core Rule 2.
+- No map in the slice: "the map" means the title screen until Map & timeline ships.
+- R13 minimum buttons per type added (Core Rule 7b, AC15), matching schema 1.1. Defend is optional in a fight.
+- Untyped tuning values: advance_debounce and bump_stop proposed for the D-09 batch; the page slide and meter pulses are feel constants; T_box, walk_gap and T_special are estimates only.
+- AC12 (voice-over) deferred until `vo` exists.
+- F2 and AC4: the walk start and end are defined (x_start, + length_screens × 1280).
+- VI|EN only on the title and pause screens (P-04); the HUD toggle is removed.
+Awaiting game-dev-ios confirmation.
