@@ -19,3 +19,6 @@ Reviewed-Content-Hash: design/gdd/game-concept.md 2ee5801590b66b9404c289645f337b
 
 ## Peer review — 2026-11-14 — game-dev-ios: REVISE (minor), fixes applied
 Layout: map box x 40–700, y 20–700; timeline as a vertical column on the right (x 740–1240, y 140–700; the leader's call). Pins closer than pin_world (= pad_min / k) merge into a cluster pin that opens the multi-hero picker (F2, AC11). Region is data (hero.map.region). A drag past ~10 pt never taps (AC12). Schema 1.5 agreed: hero.map {x, y, region} plus an optional hero.era; the modern location uses place. Awaiting confirmation.
+
+## Peer re-review — 2026-11-14 — game-dev-ios: APPROVE @ 742b810, two notes applied
+The clustering procedure is named (walk in timeline_order, join the first cluster with any member within pin_world, average position; a fixture can pin it). New edge case: clusters depend on device k. Status Approved.

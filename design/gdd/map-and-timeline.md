@@ -1,6 +1,6 @@
 # Map & Timeline
 
-> **Status**: In Review
+> **Status**: Approved (peer review: game-dev-ios, 2026-11-14)
 > **Author**: game-art-content (Luan decides)
 > **Last Updated**: 2026-11-14
 > **Last Verified**: 2026-11-14
@@ -143,7 +143,7 @@ map art fitted inside it keeping its aspect) → pin at (40 + 0.42 × 660, 20 + 
 
 The F2 (pin size, clusters and labels) formula is defined as:
 
-`pin_world = pad_min / k`, where k is the fitted points per world px on the device. Pins whose centres are closer than `pin_world` merge into **one cluster pin** at their average position, with a count badge (an icon); tapping it opens the **multi-hero picker**. Labels of the remaining pins shift by `label_offset` when they overlap, and if they still overlap, the lower-priority label hides (priority: open > completed > locked).
+`pin_world = pad_min / k`, where k is the fitted points per world px on the device. Pins whose centres are closer than `pin_world` merge into **one cluster pin** at their average position, built by this **exact procedure**, so both apps build identical clusters (pairwise closeness isn't transitive): walk the pins in `timeline_order`; a pin joins the **first** existing cluster that has **any** member within `pin_world` of it, otherwise it starts a new cluster; each cluster's position is the average of its members. A shared fixture (pins, k → clusters) can pin this down for both apps. Each cluster with a count badge (an icon); tapping it opens the **multi-hero picker**. Labels of the remaining pins shift by `label_offset` when they overlap, and if they still overlap, the lower-priority label hides (priority: open > completed > locked).
 
 **Variables:**
 | Variable | Type | Range | Source | Description |
@@ -181,6 +181,9 @@ The F3 (region glow) formula is defined as:
 - **If two or more pins fall within `pin_world` of each other** (including the same place): they
   merge into a cluster pin (F2) with a count badge (an icon plus a text-layer number, never a
   number in the art). Tapping it opens the multi-hero picker.
+- **If the same data clusters differently on different devices**: expected. Clusters depend on
+  the device's k (`pin_world = pad_min / k`), so pins that merge on a small phone may stay
+  separate on a tablet. Each device is consistent with itself, and the fixture fixes k per case.
 - **If the column has more heroes than fit**: it scrolls vertically (Rule 5) and auto-scrolls to
   the highlighted card. The map itself never scrolls. A drag past `drag_threshold` never taps a
   card.
