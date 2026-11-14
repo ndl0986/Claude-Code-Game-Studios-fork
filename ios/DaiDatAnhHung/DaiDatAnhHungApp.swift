@@ -2,24 +2,61 @@ import SwiftUI
 import SpriteKit
 import GameCore
 
-/// The SwiftUI shell (ADR-0001): hosts one SpriteKit scene that draws every screen.
+/// The SwiftUI shell (ADR-0001): loads content/data from the bundle, hosts one SpriteKit scene.
 @main
 struct DaiDatAnhHungApp: App {
+    @Environment(\.scenePhase) private var phase
+    @State private var scene = Boot.makeScene()
+
     var body: some Scene {
         WindowGroup {
-            GameView()
-                .ignoresSafeArea()
-                .statusBarHidden(true)
-                .persistentSystemOverlays(.hidden)
+            Group {
+                if let scene { SpriteView(scene: scene, options: [.ignoresSiblingOrder]) }
+                else { Color.black } // content failed to load (logged); never a crash in front of a child
+            }
+            .ignoresSafeArea()
+            .statusBarHidden(true)
+            .persistentSystemOverlays(.hidden)
+            .onChange(of: phase) { _, p in if p != .active { scene?.appWillResignActive() } }
         }
     }
 }
 
-/// Wraps the game scene; the scene reads the safe area itself to place the pads.
-struct GameView: View {
-    @State private var scene = GameScene(content: ContentBundle.main)
+extension UserDefaults: KeyValueStore {}
 
-    var body: some View {
-        SpriteView(scene: scene, options: [.ignoresSiblingOrder])
+enum Boot {
+    #if DEBUG
+    static let isDebug = true
+    #else
+    static let isDebug = false
+    #endif
+
+    /// Debug launch arguments (same names as Android): -startScreen quiz -q 2 -beat 3 -stage telegraph
+    /// -stars 2 -wrong 1 -hero sample -lang en. UserDefaults reads `-key value` arguments.
+    static func makeScene() -> GameScene? {
+        let bundle = Bundle.main.bundleURL
+        let data = bundle.appendingPathComponent("data")
+        Font.register(data.appendingPathComponent("fonts/nunito.ttf"))
+        let samples = bundle.appendingPathComponent("samples/heroes/sample")
+        let extra = isDebug && FileManager.default.fileExists(atPath: samples.path) ? [samples] : []
+        do {
+            let content = try ContentSet.load(dataRoot: data, extraHeroDirs: extra)
+            for a in content.assets.assets where a.kind == "picture" { Pictures.files[a.id] = data.appendingPathComponent(a.file) }
+            let d = UserDefaults.standard
+            let wanted = isDebug ? d.string(forKey: "hero") : nil
+            guard let hero = content.heroes.first(where: { $0.mission.hero.id == wanted }) ?? content.heroes.first else {
+                NSLog("[content] no hero bundled"); return nil
+            }
+            let game = Game(content: content, hero: hero, store: d, isDebug: isDebug)
+            if isDebug, let s = d.string(forKey: "startScreen") {
+                func int(_ k: String) -> Int? { d.object(forKey: k) == nil ? nil : d.integer(forKey: k) }
+                game.debugStart(screen: s, q: int("q"), beat: int("beat"), stage: d.string(forKey: "stage"), stars: int("stars"), wrong: int("wrong"))
+            }
+            let audio = Audio(volume: content.tuning["volume"])
+            return GameScene(game: game, audio: audio)
+        } catch {
+            NSLog("[content] failed to load: \(error)")
+            return nil
+        }
     }
 }

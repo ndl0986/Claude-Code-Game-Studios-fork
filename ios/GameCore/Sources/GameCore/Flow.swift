@@ -78,6 +78,8 @@ public final class Game {
 
     /// The one tap tone of a menu press, at most once per 80 ms (P-04 item 4).
     func tap() { if lastTap < 0 || clock - lastTap >= 0.08 { uiSounds.append(.tap); lastTap = clock } }
+    /// Drains the play events (sounds) raised since the last call.
+    public func takePlayEvents() -> [PlayEvent] { play.takeEvents() }
     public func takeUiSounds() -> [UiSound] { defer { uiSounds = [] }; return uiSounds }
 
     func go(_ s: Screen) { screen = s; t = 0 }

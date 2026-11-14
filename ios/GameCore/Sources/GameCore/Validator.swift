@@ -26,7 +26,10 @@ public struct ContentValidator {
             for t in texts where !ids.insert(t.id).inserted { out.append(.init(rule: "R9", message: "duplicate Text id \(t.id)")) }
         }
         for s in content.strings.strings where !ids.insert(s.id).inserted { out.append(.init(rule: "R9", message: "duplicate id \(s.id)")) }
-        for s in content.strings.strings { out += Self.nfc([s.vi, s.en], id: s.id) }
+        for s in content.strings.strings {
+            out += Self.nfc([s.vi, s.en], id: s.id)
+            out += Self.enBudget(s.en, fieldType: Self.uiBudgetType(s.id), budgets: content.rules.textLimits.enBudget)
+        }
         out += Self.schemaMajor(file: content.index.schemaVersion, app: ContentSet.supportedSchema)
         out += Self.tuningRules(content.tuning.values.mapValues(\.value))
         out += Self.starOrder(content.rules.quizStars.thresholds)
@@ -115,6 +118,13 @@ public struct ContentValidator {
         return [.init(rule: "R8", message: "EN \(fieldType) is \(en.count) chars, budget \(max)")]
     }
 
+    /// R8 for strings.json: the budget type comes from the id (TASK-005e README).
+    public static func uiBudgetType(_ id: String) -> String {
+        if id.hasPrefix("ui.btn.") || id.hasPrefix("ui.pad.") || id.hasPrefix("ui.lang.") || id.hasSuffix("_confirm") || id.hasSuffix("_keep_reading") { return "button" }
+        if id.hasSuffix("_warning") { return "dialog" }
+        return "ui"
+    }
+
     /// R11: a newer MAJOR fails (at build time); a newer MINOR passes.
     public static func schemaMajor(file: String, app: String) -> [Finding] {
         let f = Int(file.split(separator: ".").first ?? "") ?? Int.max
@@ -135,7 +145,7 @@ public struct ContentValidator {
             if (params.blocks ?? 0) > 0 { need.insert("defend") }
             if params.finishSpecial == true { need.insert("special"); specialOK = true }
         case "reach-the-flag":
-            need = ["move"]; specialOK = true
+            need = ["move"] // D-10 B: no special on reach-the-flag in the slice
             if !(params.encounters ?? []).isEmpty { need.insert("attack") }
         default: return [.init(rule: "R13", message: "unknown beat type \(type)")]
         }

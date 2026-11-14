@@ -80,6 +80,8 @@
 				79FCEBECF126806217B3AA21 /* Sources */,
 				6EC1D7B481B39851B9845571 /* Frameworks */,
 				C011F5B81D00A215FE6EEA84 /* Resources */,
+				3BE08C5F78AC487492C277A8 /* Bundle debug sample */,
+				7490062A39BC7BF0D3D1075A /* Content gate (Release) */,
 			);
 			buildRules = (
 			);
@@ -174,6 +176,47 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3BE08C5F78AC487492C277A8 /* Bundle debug sample */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Bundle debug sample";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Debug builds only: the placeholder sample hero (content/samples) for testing; never in Release.\nDEST=\"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/samples\"\nrm -rf \"$DEST\"\nif [ \"$CONFIGURATION\" = \"Debug\" ]; then\n  mkdir -p \"$DEST\"\n  cp -R \"$SRCROOT/../content/samples/\" \"$DEST/\"\nfi\n";
+		};
+		7490062A39BC7BF0D3D1075A /* Content gate (Release) */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Content gate (Release)";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# ADR-0001 R11 + R12: a Release build fails on a pending claim or a newer schema MAJOR.\nif [ \"$CONFIGURATION\" = \"Release\" ]; then\n  xcrun --sdk macosx swift \"$SRCROOT/Scripts/ContentGate.swift\" \"$SRCROOT/../content/data\" 1 || exit 1\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		79FCEBECF126806217B3AA21 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -255,6 +298,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 0.1;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -274,6 +318,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 0.1;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
