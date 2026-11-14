@@ -96,8 +96,8 @@ class Draw(val bold: Typeface, val semi: Typeface) {
     }
 
     /** Wrapped text centred on (x, y), at most [maxLines] lines (Android's own shaping: full diacritics). */
-    fun textBox(s: String, x: Float, y: Float, maxW: Float, size: Float, color: Int, maxLines: Int = 2) {
-        textP.typeface = bold; textP.textSize = size; textP.color = color; textP.textAlign = Paint.Align.LEFT
+    fun textBox(s: String, x: Float, y: Float, maxW: Float, size: Float, color: Int, maxLines: Int = 2, semiBold: Boolean = false) {
+        textP.typeface = if (semiBold) semi else bold; textP.textSize = size; textP.color = color; textP.textAlign = Paint.Align.LEFT
         textP.alpha = (Color.alphaOf(color) * alpha).toInt()
         val l = StaticLayout.Builder.obtain(s, 0, s.length, textP, maxW.toInt()).setAlignment(Layout.Alignment.ALIGN_CENTER)
             .setMaxLines(maxLines).setEllipsize(TextUtils.TruncateAt.END).setLineSpacing(0f, LINE_HEIGHT).build()

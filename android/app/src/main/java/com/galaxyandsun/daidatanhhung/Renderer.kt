@@ -179,7 +179,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         d.rr(240f, 110f, 800f, 360f, 30f, null, C.GOLD, 8f)
         val lines = if (intro) g.bundle.mission.intro else g.bundle.mission.ending.lines
         val line = lines[g.line.coerceIn(0, lines.size - 1)]
-        d.textBox(line.get(g.lang), W / 2, 530f, 1000f, 38f, C.WHITE, 2)
+        d.textBox(line.get(g.lang), W / 2, 530f, 1000f, 38f, C.WHITE, 2, semiBold = true) // fit.intro/ending 1000 @ 38, weight 600
         badge(g, line, 1010f, 132f) // debug badge in the picture's corner, never over the text (QC r1)
         button("next", g.ui(UiIds.NEXT), W / 2 - 150, 590f, 300f, 110f, t, pulse = true) { g.next() }
         skipButton(g)
@@ -224,10 +224,11 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         }
         if (r.phase == Phase.PLAY || r.phase == Phase.END) { // the goal under the medallions; its badge clear of the "!" bubble
             // goal: body text, box 1040 @ 37 px, 1 line (rules.json fit.goal)
-            d.rr(W / 2 - 530, 108f, 1060f, 58f, 22f, C.a(C.CREAM, 0.88))
-            d.textBox(beat.goal.get(g.lang), W / 2, 137f, 1040f, 37f, C.INK, 1); badge(g, beat.goal, W / 2 + 430, 108f)
+            // below the HUD row (pause/sound/medallions), as iOS: the 1040 box never meets the round buttons
+            d.rr(W / 2 - 530, 168f, 1060f, 58f, 22f, C.a(C.CREAM, 0.88))
+            d.textBox(beat.goal.get(g.lang), W / 2, 197f, 1040f, 37f, C.INK, 1); badge(g, beat.goal, W / 2 + 430, 168f)
             if (beat.usesBanner) g.bundle.mission.banner?.let { b ->
-                d.rr(W / 2 - 450, 174f, 900f, 84f, 18f, C.a(C.RED, 0.9)); d.textBox(b.get(g.lang), W / 2, 216f, 880f, 28f, C.GOLD, 2); badge(g, b, W / 2 + 380, 174f) // fit.banner 880 @ 28, 2 lines
+                d.rr(W / 2 - 450, 234f, 900f, 84f, 18f, C.a(C.RED, 0.9)); d.textBox(b.get(g.lang), W / 2, 276f, 880f, 28f, C.GOLD, 2); badge(g, b, W / 2 + 380, 234f) // fit.banner 880 @ 28, 2 lines
             }
         }
         val vis = r.visibleButtons()
@@ -261,8 +262,8 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
     private fun storyPanel(head: String, line: Text, g: Game, t: Double, badgeFor: Text? = null) {
         d.rr(160f, 140f, 960f, 300f, 36f, C.PANEL, C.GOLD, 6f)
         d.drum(230f, 210f, 44f, C.a(C.GOLD, 0.8)); d.drum(1050f, 210f, 44f, C.a(C.GOLD, 0.8))
-        d.textBox(head, W / 2, 190f, 700f, 30f, C.GOLD, 1); badgeFor?.let { badge(g, it, W / 2, 222f) }
-        d.textBox(line.get(g.lang), W / 2, 300f, 880f, 38f, C.WHITE, 2); badge(g, line, W / 2, 415f) // fit.scene 880 @ 38
+        d.textBox(head, W / 2, 196f, 880f, 44f, C.GOLD, 1); badgeFor?.let { badge(g, it, W / 2 + 380, 160f) } // fit.beat_title 880 @ 44
+        d.textBox(line.get(g.lang), W / 2, 310f, 880f, 38f, C.WHITE, 2, semiBold = true); badge(g, line, W / 2, 415f) // fit.scene 880 @ 38, weight 600
         button("next", g.ui(UiIds.NEXT), W / 2 - 150, 470f, 300f, 110f, t, pulse = true) { g.next() }
         skipButton(g)
     }
@@ -280,7 +281,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         d.rr(0f, 0f, W, H, 0f, C.a(0xFF2A2440.toInt(), 0.75))
         d.rr(200f, 150f, 880f, 420f, 36f, C.CREAM, C.GOLD, 6f)
         medal(W / 2, 250f, 56f, false)
-        d.textBox(g.ui(UiIds.SKIP_WARNING), W / 2, 365f, 780f, 37f, C.INK, 3) // fit.dialog 780 @ 37, 3 lines
+        d.textBox(g.ui(UiIds.SKIP_WARNING), W / 2, 365f, 780f, 37f, C.INK, 3, semiBold = true) // fit.dialog 780 @ 37, 3 lines, weight 600
         button("keep", g.ui(UiIds.KEEP_READING), 260f, 450f, 360f, 96f, g.t, pulse = true) { g.keepReading() }
         button("skipok", g.ui(UiIds.SKIP_CONFIRM), 660f, 450f, 360f, 96f, g.t, fill = C.a(C.WHITE, 0.9), shade = 0xFFC8B89A.toInt()) { g.confirmSkip() }
     }
@@ -331,7 +332,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         for (i in 0 until n) d.circle(W / 2 - (n - 1) * 30 + i * 60, 50f, 16f, if (i < q.index || (i == q.index && q.rightShown >= 0)) C.GOLD else C.a(C.WHITE, 0.3), C.GOLD_DARK, 3f)
         d.text("${g.ui(UiIds.QUESTION)} ${min(q.index + 1, n)}/$n", 120f, 50f, 28f, C.GOLD, Paint.Align.LEFT)
         val cur = q.current
-        d.textBox(cur.prompt.get(g.lang), W / 2, 140f, 980f, 40f, C.WHITE, 2); badge(g, cur.prompt, W / 2, 222f)
+        d.textBox(cur.prompt.get(g.lang), W / 2, 150f, 980f, 40f, C.WHITE, 2, semiBold = true); badge(g, cur.prompt, W / 2 + 420, 214f) // fit.quiz_prompt 980 @ 40, weight 600
         val cw = 390f; val ch = 330f; val gap = 20f; val x0 = (W - 3 * cw - 2 * gap) / 2; val y0 = 228f
         q.order.forEachIndexed { slot, j ->
             val a = cur.choices[j]
@@ -353,7 +354,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         if (q.rightShown >= 0) {
             // the why line: fit.quiz_why 820 @ 37, up to 3 lines; "Đúng rồi!" sits above Next
             d.rr(30f, 566f, 860f, 150f, 24f, C.a(C.RIGHT, 0.92))
-            d.textBox(cur.why.get(g.lang), 460f, 641f, 820f, 37f, C.WHITE, 3); badge(g, cur.why, 460f, 566f)
+            d.textBox(cur.why.get(g.lang), 460f, 641f, 820f, 37f, C.WHITE, 3, semiBold = true); badge(g, cur.why, 460f, 566f)
             d.textBox(g.ui(UiIds.CORRECT), 1080f, 590f, 330f, 30f, C.GLOW, 1)
             if (q.canAdvance) button("next", g.ui(UiIds.NEXT), 930f, 626f, 300f, 88f, t, pulse = true) { g.next() }
         } else if (q.shakeT > 0 || q.wrongPicked.isNotEmpty()) d.text(g.ui(UiIds.RETRY), W / 2, 640f, 36f, 0xFFE6E0F5.toInt())
@@ -374,7 +375,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         medal(1100f, 290f, 60f, g.medalThisRun || g.medalEarned)
         // Gold if earned in this or any run; the "earned" line only in the run that earns it (progression GDD rule 10).
         val medalLine = if (g.medalThisRun) UiIds.MEDAL_EARNED else if (!g.medalEarned) UiIds.MEDAL_MISSING else null
-        medalLine?.let { d.textBox(g.ui(it), W / 2, 440f, 780f, 37f, C.a(C.WHITE, 0.9), 3) } // fit.dialog 780 @ 37
+        medalLine?.let { d.textBox(g.ui(it), W / 2, 440f, 780f, 37f, C.a(C.WHITE, 0.9), 3, semiBold = true) } // fit.dialog 780 @ 37, weight 600
         if (g.newlyOpen == null) d.textBox(g.ui(UiIds.MORE_HEROES), W / 2, 525f, 700f, 30f, C.a(C.WHITE, 0.8), 1)
         button("next", g.ui(UiIds.NEXT), W / 2 - 150, 580f, 300f, 110f, t, pulse = true) { g.next() }
     }
@@ -392,7 +393,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         d.c.save(); d.path.reset(); d.path.addCircle(300f, 300f, 110f, android.graphics.Path.Direction.CW); d.c.clipPath(d.path)
         fig.hero(300f, 470f, 1, false, false, null, t, 0.75f); d.c.restore()
         val name = g.bundle.mission.hero.name
-        d.textBox(name.get(g.lang), 300f, 450f, 400f, 30f, C.WHITE, 1); badge(g, name, 300f, 490f) // fit.hero_name 400 @ 30
+        d.textBox(name.get(g.lang), 300f, 456f, 560f, 44f, C.WHITE, 1); badge(g, name, 300f, 500f) // fit.hero_name 560 @ 44
         medallion(980f, 300f, 110f, open >= 1)
         d.c.save(); d.c.translate(980f, 300f); val old = d.alpha; d.alpha = 1.0 - open * 0.85
         d.arc(0f, -30 - open * 40, 34f, Math.PI.toFloat(), (2 * Math.PI).toFloat(), C.STEEL, 14f); d.rr(-50f, -30f, 100f, 80f, 14f, C.STEEL); d.circle(0f, 4f, 10f, 0xFF3E3856.toInt())
