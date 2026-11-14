@@ -104,8 +104,8 @@ final class PlayTests: XCTestCase {
     func test_combat_AC7_hit_test_boundaries() {
         for (dx, hit) in [(175.0, true), (-49.0, true), (-51.0, false)] {
             var p = oneEnemy(.rest, dx: dx)
-            p.hero.face = 1
             p.update(dt, StepInput(tapped: [.attack]))
+            p.hero.face = 1 // F5 boundaries with a fixed facing (G2 rule 2 would turn toward the enemy)
             // keep it in place until the hit check
             for _ in 0..<12 { p.enemies[0].x = p.hero.x + dx; p.update(dt, StepInput()) }
             XCTAssertEqual(p.enemies[0].hits == 1, hit, "dx \(dx)")

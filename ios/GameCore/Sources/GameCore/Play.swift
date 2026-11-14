@@ -268,6 +268,11 @@ public struct PlayState: Sendable {
         // 4. a new swing (a tap that can't start one is dropped)
         if canAct && !hero.def && hero.atk < 0 && hero.cool <= 0 && input.tapped.contains(.attack) {
             hero.atk = 0; hero.hitDone = false
+            // G2 rule 2: a swing faces the nearest non-fleeing enemy (a tie keeps the facing)
+            let live = enemies.filter { $0.state != .flee }.sorted { abs($0.x - hero.x) < abs($1.x - hero.x) }
+            if let n = live.first, live.count < 2 || abs(live[1].x - hero.x) != abs(n.x - hero.x), n.x != hero.x {
+                hero.face = Self.sign(n.x - hero.x)
+            }
         }
         // 5. move
         var mv = 0.0
@@ -277,7 +282,7 @@ public struct PlayState: Sendable {
         }
         hero.walk = mv != 0
         if mv != 0 {
-            hero.face = mv
+            if hero.atk < 0 { hero.face = mv } // G2 rule 2b: moving doesn't turn the hero mid-swing
             hero.x += mv * tuning["hero_speed"] * dt * (hero.atk >= 0 ? tuning["attack_move_mul"] : 1)
             if mv > 0 { tut.moved = true }
             idle = 0
@@ -285,7 +290,9 @@ public struct PlayState: Sendable {
         // 6. camera and bounds
         let edge = tuning["hero_edge_margin"]
         if locked {
-            hero.x = max(lockX + edge, min(lockX + 1280 - edge, hero.x)); cam = lockX
+            // G2 rule 1: in a locked fight the hero keeps enemy_reach from each edge, so enemies can stand in view
+            let inner = tuning["enemy_reach"] + edge
+            hero.x = max(lockX + inner, min(lockX + 1280 - inner, hero.x)); cam = lockX
         } else {
             hero.x = max(cam + edge, hero.x); cam = max(cam, hero.x - tuning["camera_follow_offset"])
         }
