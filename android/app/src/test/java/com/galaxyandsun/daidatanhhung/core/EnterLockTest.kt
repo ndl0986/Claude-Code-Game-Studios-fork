@@ -104,4 +104,17 @@ class EnterLockTest {
         val g = tqt(); g.debugJump("ending")
         repeat(3) { g.frames(0.35); assertFalse(g.tap("next") { next() }); assertTrue(g.pressAllowed("pause", now)) }
     }
+
+    /** QC r6 (cost a medal): a ◀ tap landing on Bỏ qua as a card appears must not open the skip warning or skip. */
+    @Test fun aLeftPadTapOnBoQuaAsACardAppearsDoesNothing() {
+        val g = tqt()
+        g.debugJump("play", beat = 1) // walk_to the first beat: walking on enters its card
+        var n = 0
+        while (g.run.phase != Phase.CARD && n++ < 900) g.frames(dt) { InputFrame().apply { held += Action.RIGHT } }
+        assertEquals(Phase.CARD, g.run.phase)
+        g.frames(0.2)
+        assertFalse("Bỏ qua inside the lock", g.tap("skip") { skip() })
+        assertFalse(g.skipWarning); assertEquals(Phase.CARD, g.run.phase); assertEquals(0, g.run.cardLine)
+        assertFalse(g.medalEarned)
+    }
 }
