@@ -48,7 +48,7 @@ Dải Đất Anh Hùng is a small, story-first game, and its systems are few.
 | 6 | Mission flow & beat types | Narrative | Vertical Slice | Approved | `design/gdd/mission-flow.md` | 5, 1, 2, 3 |
 | 7 | Quiz & stars | Gameplay | Vertical Slice | Approved | `design/gdd/quiz-and-stars.md` | 1, 2, 4 |
 | 8 | Hints & onboarding | Meta | Vertical Slice | Approved | `design/gdd/hints-and-onboarding.md` | 6, 5, 3, 10, 1 |
-| 9 | Hero progression & unlock | Progression | Vertical Slice (unlock screen) / Alpha (full) | Not Started | — | 7, 4, 1 |
+| 9 | Hero progression & unlock | Progression | Vertical Slice (unlock screen) / Alpha (full) | In Review | `design/gdd/hero-progression.md` | 7, 4, 1 |
 | 10 | Audio & voice-over | Audio | Vertical Slice | Not Started | — | 1, 2 |
 | 11 | Map & timeline | UI | Alpha (stub in VS) | Not Started | — | 9, 1 |
 | 12 | Settings & parent area (inferred: sources and credits page) | UI | Full Vision (first release) | Not Started | — | 2, 1 |
@@ -186,7 +186,7 @@ in a GDD cites its source, or is marked ⟨tuning⟩.
 | Metric | Count |
 |--------|-------|
 | Total systems identified | 13 |
-| Design docs started | 4 |
+| Design docs started | 5 |
 | Design docs reviewed | 4 (lean self-reviews; peer reviews in progress) |
 | Design docs approved | 5 (Content data & claims via TASK-005; Mission flow; Combat; Quiz & stars; Hints & onboarding) |
 | MVP systems designed | n/a (folded into the Vertical Slice) |

@@ -35,3 +35,9 @@ All peer findings were checked as fixed. Status set to Approved.
 
 ## Cross-GDD review fixes — 2026-11-14 (TASK-010, gdd-cross-review-2026-11-14.md)
 Consistency fixes C1–C5, S2 (pause releases held pads; the windup restarts on resume), stale "proposed" labels and D-09 done, plus alignment with Luan's D-08 (B) and D-10 (B, no special in combat). Status stays Approved; these are consistency edits, not design changes, except S2, which is new behaviour for both apps.
+
+## Update — 2026-11-14 — D-07 (Luan): skip and medal
+Core Rule 15 (skip on every story screen, a one-time kind warning per run, "Skip anyway" ends only that story section, no warning once the medal is earned, the medal is reported at quiz end), a skip_warning state, edge cases, UI, AC16–19, and the walk-props open question. Needs a peer re-review of Rule 15.
+
+## Update — 2026-11-14 — devs' parity review additions
+F5 beat positions (with the beat extent per type); the warning returns after "Keep reading" and only "Skip anyway" stops it (leader's call); pads by phase; end_pause for every type; Rule 7c training partner, dummies and hold-meter cap; the F4 walk_gap estimate from dummy_spacing; AC20–21.
