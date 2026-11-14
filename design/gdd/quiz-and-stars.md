@@ -36,15 +36,21 @@ The quiz turns "I played it" into "I remember it".
 
 1. **Start.** Mission flow starts the quiz after the ending. The quiz asks the questions in
    `content/data/heroes/<hero>/quiz.json`, in file order (3–5, schema). Question count is
-   decided by content; `tuning.json` `quiz_count` is only an upper cap (D-10).
+   decided by content; `tuning.json` `quiz_count` is only an upper cap, set to 5 (D-11, done in data/TASK-005d @ f94f463).
 2. **A question screen** shows:
    - the progress dots and "Câu n/N / Question n/N";
    - the `prompt`, with its optional `picture_id`;
    - three large choice cards, each with a picture (`picture_id`) and a short `text`;
    - the pause button. VI|EN is switched from the pause menu (P-04; in the vertical slice it is on the title and pause screens only).
-3. **Choice order.** The three cards are shuffled once when the question appears, using the
-   game's seeded random. The right answer is tracked by identity, not position, so it isn't
-   always in the same place on a replay.
+3. **Choice order** (new: the prototype didn't shuffle). The three cards are shuffled once
+   when the question appears, and the right answer is tracked by identity, not position. The
+   shuffle uses **its own RNG per question**, never the game's play stream: the fight's
+   particles use that stream, so the order would depend on play and differ between apps.
+   - RNG: Mulberry32, seeded with `seed + question_index` (`seed` from `tuning.json`;
+     `question_index` 0-based).
+   - Fisher–Yates: from the last index down to 1, swap `i` with `j = floor(rng() × (i + 1))`.
+   - Both apps must give the orders in the shared fixture `content/fixtures/quiz-shuffle.json`
+     (seed, question index → order).
 4. **Wrong pick.** The card:
    - shakes for 0.5 s;
    - turns soft lavender-grey (art bible §4 "Try again", `#9C8FB8`, with a circular-arrow
@@ -52,11 +58,13 @@ The quiz turns "I played it" into "I remember it".
    - plays a soft sound and shows "Thử lại nhé! / Try again!".
 
    The card then stays greyed and **can't be picked again**. The question stays open.
-   `retries` goes up by 1.
+   `retries` goes up by 1. During the 0.5 s shake, taps on any card are ignored (P-05, AC6).
 5. **Right pick.** The card glows rice-green with a tick, "Đúng rồi! / That's right!" plays,
    and then the `why` line shows (with voice) beside the beat's picture. After at least
    `feedback_time`, a "Tiếp / Next" button appears. The child taps it to go on. The game never
-   auto-advances past a `why` line, because the child must be able to hear it.
+   auto-advances past a `why` line, because the child must be able to hear it. **This is the
+   vertical-slice rule too** (P-05: the slice follows this GDD rather than the prototype's
+   0.9 s auto-advance).
 6. **Retry limit per question.** With the greyed card disabled, a question costs at most 2
    retries, and the third pick is always right. So the quiz always ends, and
    `retries ≤ 2 × N`.
@@ -162,9 +170,10 @@ The F3 (quiz time) formula is defined as:
 
 - **If the child taps a greyed (wrong) card again**: nothing happens. It does not count as a
   retry (Rule 4). Note: `content/fixtures/quiz-scoring.json` case "same wrong twice counts
-  twice" contradicts this and the prototype; see D-10.
-- **If the child taps two cards at once** (two fingers): only the first touch released counts.
-  The second is ignored until the state returns to `question_open`.
+  twice" contradicted this and the prototype. Fixed in D-11 (data/TASK-005d @ f94f463): the
+  repeat tap is ignored.
+- **If the child taps two cards at once** (two fingers): the first release in a frame wins.
+  Every other release is ignored until the state returns to `question_open`.
 - **If the child taps a card during the 0.5 s shake**: the tap is ignored, so a frantic
   double-tap doesn't cost two retries.
 - **If the language switches mid-question** (from the pause menu): prompt, choices and `why` re-render in the new
@@ -174,8 +183,8 @@ The F3 (quiz time) formula is defined as:
 - **If the app is killed during the quiz**: nothing is saved (Mission flow rule 14), and the
   next start begins the mission at its intro. Accepted, because a mission is 3–5 min.
 - **If `quiz.json` has fewer questions than `quiz_count`**: all of them are asked. If it has
-  more (only possible up to 5), the first `quiz_count` are asked. D-10 recommends making
-  `quiz_count` 5, so content decides.
+  more (only possible up to 5), the first `quiz_count` are asked. `quiz_count` is 5 (D-11), so
+  content decides.
 - **If a question cites a pending claim in a release build**: the whole mission is hidden by
   the claim gate (R12), so the quiz can't start. In a debug build, it shows `UNSIGNED Cxx`.
 - **If R is greater than 2N**: impossible with Rule 4. If it happens, it's a bug, logged in
@@ -244,7 +253,7 @@ writing epics.
 | Mission flow | `design/gdd/mission-flow.md` | Start and finish, no mid-mission save |
 | Hero content | `design/narrative/heroes/tran-quoc-toan.md` §4 | The 5 draft questions, the D5 decision |
 | Art bible | `design/art/art-bible.md` §2, §4 | Quiz mood, wrong-answer colour, star states |
-| Decisions | `production/team/decisions.md` (stars: decided 2026-11-14), D-10 (new), P-01 | Star rule, fixture and count fixes, tap on release |
+| Decisions | `production/team/decisions.md` (stars: decided 2026-11-14), D-11, P-01, P-05 | Star rule, fixture and count fixes, tap on release, slice follows Rule 5 and the pause button |
 | Prototype | `203d73e` `index.html` `answer()`, `finishQuiz()` | Greyed card ignored, retry count |
 
 ## Acceptance Criteria
@@ -266,9 +275,9 @@ or a playtest.
    ignored.
 7. **GIVEN** a quiz finished with 1★ and a saved best of 3★, **WHEN** results show, **THEN**
    the saved value stays 3★ and the next hero is unlocked.
-8. **GIVEN** the same seed and question, **WHEN** the question is shown twice, **THEN** the card
-   order is the same; **GIVEN** a different seed, **THEN** the right answer's position can
-   differ.
+8. **GIVEN** each case in `content/fixtures/quiz-shuffle.json` (seed, question index),
+   **WHEN** the shuffle runs (Mulberry32 + Fisher–Yates, Rule 3), **THEN** both apps return
+   exactly the expected order, whatever happened in the fight before the quiz.
 9. **GIVEN** a wrong pick, **WHEN** captured, **THEN** the card is lavender-grey with a
    circular-arrow icon, and no red appears anywhere on screen (screenshot per platform).
 10. **GIVEN** the language switched to EN after one wrong pick, **WHEN** the screen re-renders,
@@ -282,6 +291,7 @@ or a playtest.
 
 | # | Question | Owner | By |
 |---|---|---|---|
-| D-10 | (a) `quiz-scoring.json` "same wrong twice counts twice" contradicts the prototype and Rule 4 (a greyed card can't be picked again). Change that case to expect the repeat tap to be ignored. (b) Set `quiz_count` to 5 so content decides the count (3–5), as F2 favours 5 questions. (c) Add a validation rule: fail if t2 < t3 in `rules.json` | game-dev-ios + game-dev-android | Before the slice quiz story closes |
+| D-11 | Done in data/TASK-005d @ f94f463: the `quiz-scoring.json` repeat-tap case now ignores the tap; `quiz_count` 5; validation R16 fails if t2 < t3 | game-dev-android (game-dev-ios reviews) | Done; merge with schema 1.1 |
+| — | `content/fixtures/quiz-shuffle.json` (new fixture for Rule 3 and AC8) | game-dev-android | Before the slice quiz story closes |
 | — | Should results show "best" stars beside this run's? (Rule 9 and the edge case assume yes) | Luan | With the `/ux-design` results screen |
 | — | The prototype auto-advanced after 0.9 s; Rule 5 waits for "Tiếp" so the `why` line can be heard. Check in the playtest that children don't find it slow | game-art-content, after the slice playtest | Playtest |

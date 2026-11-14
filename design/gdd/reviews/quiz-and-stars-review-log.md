@@ -18,3 +18,10 @@ Reviewed-Content-Hash: design/narrative/heroes/tran-quoc-toan.md 1df517e7bd3a99b
 Reviewed-Content-Hash: content/data/rules.json c6c7cb1092c825a73222e945c60f467c70a2e468
 Reviewed-Content-Hash: content/fixtures/quiz-stars.json 5ba6fb65939ea3230e6c1e9a8c3607b910479082
 Reviewed-Content-Hash: content/fixtures/quiz-scoring.json be04034063760252d0ea8bfa695219fe73b5880c
+
+## Peer review — 2026-11-14 — game-dev-android: REVISE (3 fixes), fixes applied
+- Rule 3 and AC8: the shuffle now uses its own RNG per question (Mulberry32(seed + question_index), Fisher–Yates from the last index down) with a shared fixture quiz-shuffle.json. Marked as new versus the prototype.
+- Decision IDs: the quiz data fixes are D-11, already done in data/TASK-005d @ f94f463. References updated.
+- Rule 5 is the slice rule too (P-05: "Tiếp" after why, no auto-advance, pause on the quiz screen). Card taps are ignored during the 0.5 s shake.
+- Minor: for two fingers, the first release in a frame wins.
+Awaiting game-dev-android confirmation.
