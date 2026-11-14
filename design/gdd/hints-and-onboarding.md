@@ -63,12 +63,12 @@ flags, `stall`/`idle`), plan reviews 1–2, and QC O2 (hints count from the capt
 | training | The current step advanced (dummy hit, block, special tap) | Pulse on the pad for the current step |
 | hold-meter | The meter rose | Hand on special again |
 | reach-the-flag (path clear, no encounter active) | Any movement, left or right | An arrow over the flag, if it is on screen; otherwise ▶ pulses |
+| dialogue (ask button showing, Mission flow Rule 7d) | An ask tap or "Tiếp" | Hand on the ask button (the button also pulses) |
+| map: first view (Map Rule 8) | The open pin is tapped | Hand on the only open pin, shown at once on the first map view (not after `hint_delay`) and kept until that tap |
 
 The stuck arrow (ASSET-034) is gold with an ink outline, never red. On banner beats it never enters
 the motto bar's band; where it can't bounce above its target below the bar, it points from the side
 (`design/ux/hud.md` §3.3).
-| dialogue (ask button showing, Mission flow Rule 7d) | An ask tap or "Tiếp" | Hand on the ask button (the button also pulses) |
-| map: first view (Map Rule 8) | The open pin is tapped | Hand on the only open pin, shown at once on the first map view (not after `hint_delay`) and kept until that tap |
 
 5. **This system owns the no-progress timer** (`progress_timer`, called `stall`/`idle` in the
    prototype) and `hint_delay`. Mission flow and Combat only send events. **Timers reset** on progress, when a caption or beat card closes (QC O2: hints count from the

@@ -56,6 +56,14 @@ world px on every supported phone (Android clamps it with `min(720, ·)`).
 - **Corner block** (pause + sound, Input Rule 3): x 18 … `corner_right`, y 18 … `corner_bottom`,
   with `corner_bottom` = 18 + `pad_min / k` (155 at the Android reference, k 0.527) and
   `corner_right` = 18 + 2 × `pad_min / k` + `pad_gap / k` (≈ 315), as in `design/ux/hud.md` §3.3.
+- **No top stack on story screens** (game-dev-ios r8 review; leader's call). Story screens are not
+  play: the beat progress dots, the goal plate and the banner bar are **hidden** on the intro, beat
+  cards, captions and the ending (and on dialogue screens). Only the pause/sound corner block shows
+  (`hud.md` §5, "story, dialogue screens"). *Today iOS draws the beat dots at y 30–90 on story
+  screens: a dev ticket (r8).*
+- **Part label** ("Phần n / Part n", as both apps draw it): a 28–30 px label centred above the
+  panel, its box ≈ panel top − 38 … panel top − 10 (at the floor: y 241–269 over a beat card,
+  309–337 over the other boxes).
 - **The story picture is full-bleed** (P-06: the step's background fills the screen behind
   everything), so it has no frame corner to collide with.
 - **Story screens show the background only, no play sprites** (QC r6, for r8). Behind a story
@@ -67,12 +75,16 @@ world px on every supported phone (Android clamps it with `min(720, ·)`).
   screen has its real still (per-box pictures, content schema 1.2), it shows a **placeholder
   still**: the hero's portrait (`pic.portrait_<hero_id>_hero_determined`, ASSET-327; a beat may
   name its own portrait later) in a round drum-ring frame, on the scene background, **centred on
-  x 640** and wholly in the safe zone:
-  - **intro and caption:** 256 × 256, **bottom ≤ 340** (ref and floor), so ≈ y 84–340;
-  - **beat card:** 240 × 240, **bottom ≤ 270**, so ≈ y 30–270 (the beat-card panel starts at 279
-    at the floor);
-  - it never enters the pause/sound block: centred, its left edge (≈ 512 or 520) stays right of
-    `corner_right` + 8 (≈ 416 at k 0.40);
+  x 640**, wholly in the safe zone and **clear of the part label: bottom ≤ label top − 8**
+  (= panel top − 46, taken at the floor, so the same world position at every k):
+  - **intro and caption:** 256 × 256, **bottom ≤ 301**, so y 45–301 (label 309–337, panel 347);
+  - **beat card:** **208 × 208**, **bottom ≤ 233**, so y 25–233 (label 241–269, panel 279). 240
+    no longer fits under the label and above the top margin (y ≥ 18);
+  - **minimum size 192 × 192** (≈ 77 dp at k 0.40, a face still reads). If a later layout leaves
+    less room than that, the placeholder is dropped and the background alone shows, rather than
+    overlap the label or panel;
+  - it never enters the pause/sound block: centred, its left edge (512 or 536) stays right of
+    `corner_right` + 8 (≈ 416 at k 0.40); with the top stack hidden, nothing else is above it;
   - the **ending** keeps its own still (ASSET-016), so it gets no placeholder.
   The placeholder is replaced 1:1 by the real still when it exists (same safe zone).
 - **Picture safe zone:** in any picture shown behind a story panel (a background set on a story
@@ -80,8 +92,9 @@ world px on every supported phone (Android clamps it with `min(720, ·)`).
   above the panel's top at the floor (k 0.40)**: above **y 340** world px for intro, caption and
   ending (panel top 347), and above **y 270** for pictures behind a beat card (panel top 279; at
   the reference the tops are 390 and 322). Below that line goes only ground, water, grass or
-  background, which the panel may cover. Asset specs carry the rule in their own pixel sizes. An app that draws the picture inside
-  a frame starts that frame at **y ≥ `corner_bottom` + 8** (ref ≥ 163), never under the block.
+  background, which the panel may cover. Asset specs carry the rule in their own pixel sizes.
+- **Framed pictures:** an app that draws the picture inside a frame starts that frame at
+  **y ≥ `corner_bottom` + 8** (ref ≥ 163), never under the block.
 - **Bottom row:** "Tiếp" (right) and "Bỏ qua" (left) sit on `safe_bottom` − 18 and are **both
   ≥ `pad_min` tall** (Input Rule 4), on the same row (ref y 565–702). "Bỏ qua" is smaller only
   in **width** and weight (a cream pill, ASSET-323), never in height: at the reference it is
@@ -180,4 +193,4 @@ either app).*
 9. **GIVEN** the Android (k 0.527) and iOS (k 0.517) reference phones and a k 0.40 phone or emulator, with pause and sound at `pad_min`, **WHEN** a beat card, an intro box, a caption and the ending are captured in VI and EN, **THEN** no pixel of the paper frame, the beat-card panel or a framed picture lies inside the pause/sound block (x ≤ `corner_right`, y ≤ `corner_bottom`); the panel's top is ≥ `corner_bottom` + 8 and its bottom ≤ Tiếp's top − 8.
 10. **GIVEN** any story screen on the reference phones and at k 0.40, **WHEN** captured, **THEN** "Bỏ qua" is ≥ `pad_min` tall (≥ 137 world px at k 0.527, ≥ 180 at k 0.40), its top and bottom match Tiếp's, and it stays left of Tiếp with ≥ `pad_gap` between them.
 11. **GIVEN** any story screen (intro, a beat card, a caption, the ending) and a press every 0.35 s that keeps going, **WHEN** it plays, **THEN** every box holds ≥ 1.5 s (`screen_enter_lock_max`) or until the presses pause for 0.6 s, none is skipped silently, and the next screen starts only after each box was advanced once (Input AC17, AC21).
-12. **GIVEN** the intro, a beat card, a caption and the ending at the reference phones and at k 0.40, **WHEN** captured, **THEN** no hero, enemy, partner or dummy sprite is drawn behind the panel; **no story screen shows only background**: the intro and captions show the placeholder portrait still (256, bottom ≤ 340), beat cards show it at 240 with bottom ≤ 270, centred and clear of the pause/sound block, and the ending shows ASSET-016 with the banner cloth and the warm light above the panel's top.
+12. **GIVEN** the intro, a beat card, a caption and the ending at the reference phones and at k 0.40, **WHEN** captured, **THEN** no hero, enemy, partner or dummy sprite is drawn behind the panel; **no story screen shows only background**: no beat dots, goal plate or banner bar show (only the pause/sound corner); the intro and captions show the placeholder portrait still (256, bottom ≤ 301), beat cards show it at 208 with bottom ≤ 233, centred, clear of the pause/sound block and ≥ 8 px above the "Phần n / Part n" label, and the ending shows ASSET-016 with the banner cloth and the warm light above the panel's top.

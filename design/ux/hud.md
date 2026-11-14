@@ -132,7 +132,9 @@ the king's meeting at Bình Than!", 688 px).
     it stays above the helmet as before.
   - **Stuck arrow:** it bounces above its target when its whole shape plus the bounce fits below
     the bar (target top ≥ bar bottom + 8 + 64 + 12 ≈ 352). Otherwise it is **rotated 90° and
-    points at the target from the side** away from the hero, at the target's mid-height.
+    points at the target from the side** away from the hero, at the target's mid-height. If that
+    side is within 8 px of the screen edge, it points from the hero's side (inward) instead, as the
+    "!" does. *(A flag or dummy with no hero beside it uses the side nearer the screen centre.)*
   - **Arrow colour:** star gold `#FFC531` with an **ink `#3A2A20` outline ≥ 3 px**, never red
     (ASSET-034; red is the banner's and the hero's). Gold vs ink 8.67:1; the ink edge reads
     ≥ 3.18:1 even against vermilion, and ≥ 7.9:1 against every light sky band. *Today both apps
@@ -188,7 +190,7 @@ iOS's home-indicator inset (QC r3 O5: pad bottoms clear of the gesture zone).
 | training | **per step** (Mission flow Rule 7c): dummies ◀ ▶ + attack; blocks + defend; finish + special (banner icon). *Today both apps show all four from the start; a dev ticket (TASK-020 W12)* | Checklist icons; hints in step order (B3); **camera capped** at `xStart − hero_edge_margin` until `beat_end` (Combat Rule 15b) |
 | fight / encounter | ◀ ▶, attack, defend | Telegraph |
 | reach-the-flag (no encounter) | ◀ ▶ (attack, defend if listed) | Flag goal |
-| story, dialogue screens | **none** | Pause and sound, top-left (Input Rule 3). A pad held when the screen opened gives no input and is not released (Input Rule 14) |
+| story, dialogue screens | **none** | Pause and sound, top-left (Input Rule 3), **and nothing else of the HUD**: no beat dots, goal line or banner bar (story screens are not play; `story-screens.md` §5.2). A pad held when the screen opened gives no input and is not released (Input Rule 14) |
 | paused | none (the pause menu) | All pads released (Input Rule 11) |
 
 ## 6. Information Hierarchy
