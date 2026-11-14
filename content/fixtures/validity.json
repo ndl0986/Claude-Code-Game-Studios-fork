@@ -1,0 +1,127 @@
+{
+  "schema_version": "1.0",
+  "rule": "cross-file rules the JSON Schema cannot express; each case names the rule its input breaks (content/README.md, Validation rules)",
+  "cases": [
+    {
+      "name": "legend text without a marker",
+      "rule": "R4",
+      "claims": {
+        "C02": {
+          "label": "legend"
+        }
+      },
+      "text": {
+        "id": "x.t.1",
+        "vi": "C\u1eadu b\u00f3p n\u00e1t qu\u1ea3 cam.",
+        "en": "He crushed the orange.",
+        "claims": [
+          "C02"
+        ]
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "legend text with markers",
+      "rule": "R4",
+      "claims": {
+        "C02": {
+          "label": "legend"
+        }
+      },
+      "text": {
+        "id": "x.t.1",
+        "vi": "Truy\u1ec7n k\u1ec3 r\u1eb1ng c\u1eadu b\u00f3p n\u00e1t qu\u1ea3 cam.",
+        "en": "The story says he crushed the orange.",
+        "claims": [
+          "C02"
+        ]
+      },
+      "expected": "valid"
+    },
+    {
+      "name": "fact approved while its source is to_confirm",
+      "rule": "R5",
+      "claim": {
+        "id": "C01",
+        "label": "fact",
+        "sources": [
+          "S1"
+        ],
+        "signoff": {
+          "status": "approved",
+          "by": "Luan",
+          "date": "2026-11-14"
+        }
+      },
+      "sources": {
+        "S1": "to_confirm"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "invented claim in a quiz",
+      "rule": "R6",
+      "claims": {
+        "C12": {
+          "label": "invented"
+        }
+      },
+      "quiz_claims": [
+        "C12"
+      ],
+      "expected": "invalid"
+    },
+    {
+      "name": "decomposed Vietnamese (NFD)",
+      "rule": "R7",
+      "text": {
+        "id": "x.t.2",
+        "vi": "Tra\u0302\u0300n Quo\u0302\u0301c Toa\u0309n",
+        "en": "Tran Quoc Toan",
+        "claims": [
+          "C01"
+        ]
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "EN over the button budget",
+      "rule": "R8",
+      "field_type": "button",
+      "en": "Defend yourself now",
+      "expected": "invalid"
+    },
+    {
+      "name": "duplicate Text id",
+      "rule": "R9",
+      "ids": [
+        "x.t.1",
+        "x.t.1"
+      ],
+      "expected": "invalid"
+    },
+    {
+      "name": "unknown picture id",
+      "rule": "R10",
+      "picture_id": "pic.missing",
+      "asset_ids": [
+        "pic.present"
+      ],
+      "expected": "invalid"
+    },
+    {
+      "name": "newer major schema",
+      "rule": "R11",
+      "app_supports": "1.3",
+      "file_version": "2.0",
+      "expected": "build_fails"
+    },
+    {
+      "name": "newer minor schema",
+      "rule": "R11",
+      "app_supports": "1.3",
+      "file_version": "1.4",
+      "expected": "build_passes"
+    }
+  ]
+}

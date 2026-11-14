@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0",
+  "strings": [
+    {
+      "id": "ui.app.title",
+      "vi": "Dải Đất Anh Hùng",
+      "en": "Land of Heroes"
+    }
+  ]
+}

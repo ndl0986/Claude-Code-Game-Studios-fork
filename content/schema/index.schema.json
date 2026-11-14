@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://galaxyandsun.com/daidatanhhung/content/index.schema.json",
+  "title": "Entry point: content version and the heroes bundled, each a folder under heroes/.",
+  "type": "object",
+  "required": ["schema_version", "content_version", "heroes"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "$ref": "common.schema.json#/$defs/SchemaVersion" },
+    "content_version": { "description": "Bumped with each content-calendar update.", "type": "integer", "minimum": 1 },
+    "heroes": { "type": "array", "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/HeroId" } }
+  }
+}

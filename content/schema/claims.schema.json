@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://galaxyandsun.com/daidatanhhung/content/claims.schema.json",
+  "title": "Claim register for one hero. Written by game-art-content; history sign-off by Luan.",
+  "type": "object",
+  "required": ["schema_version", "hero_id", "claims"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "$ref": "common.schema.json#/$defs/SchemaVersion" },
+    "hero_id": { "$ref": "common.schema.json#/$defs/HeroId" },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "vi", "en", "label", "sources", "signoff"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "common.schema.json#/$defs/ClaimId" },
+          "vi": { "type": "string", "minLength": 1 },
+          "en": { "type": "string", "minLength": 1 },
+          "label": { "enum": ["fact", "fact_as_recorded", "interpretation", "legend", "invented"] },
+          "sources": {
+            "description": "Empty only for an invented claim (rule R5b).",
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "$ref": "common.schema.json#/$defs/SourceId" }
+          },
+          "relabel_condition": {
+            "description": "e.g. C06/C08: becomes fact_as_recorded once the S3 1282 passage is confirmed.",
+            "type": "object",
+            "required": ["to", "when"],
+            "additionalProperties": false,
+            "properties": {
+              "to": { "enum": ["fact", "fact_as_recorded", "interpretation", "legend"] },
+              "when": { "type": "string", "minLength": 1 }
+            }
+          },
+          "signoff": {
+            "type": "object",
+            "required": ["status"],
+            "additionalProperties": false,
+            "properties": {
+              "status": { "enum": ["pending", "approved"] },
+              "by": { "type": "string", "minLength": 1 },
+              "date": { "type": "string", "format": "date" }
+            },
+            "if": { "properties": { "status": { "const": "approved" } } },
+            "then": { "required": ["by", "date"] }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://galaxyandsun.com/daidatanhhung/content/rules.schema.json",
+  "title": "Data rules both apps apply: quiz stars and text limits.",
+  "type": "object",
+  "required": ["schema_version", "quiz_stars", "text_limits"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "$ref": "common.schema.json#/$defs/SchemaVersion" },
+    "quiz_stars": {
+      "type": "object",
+      "required": ["retries_counted", "thresholds", "finishing_unlocks_next_hero"],
+      "additionalProperties": false,
+      "properties": {
+        "retries_counted": {
+          "description": "A retry is one wrong pick before the right one. total_across_quiz: summed over every question of the quiz.",
+          "const": "total_across_quiz"
+        },
+        "thresholds": {
+          "description": "First row whose max_retries >= the total wins; null means no limit.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["stars", "max_retries"],
+            "additionalProperties": false,
+            "properties": {
+              "stars": { "type": "integer", "minimum": 1, "maximum": 3 },
+              "max_retries": { "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }] }
+            }
+          }
+        },
+        "finishing_unlocks_next_hero": { "const": true }
+      }
+    },
+    "text_limits": {
+      "type": "object",
+      "required": ["max_chars", "en_budget"],
+      "additionalProperties": false,
+      "properties": {
+        "max_chars": { "type": "integer", "const": 120 },
+        "en_budget": {
+          "description": "Max EN characters per field type (rule R8). VI is held to max_chars.",
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 1, "maximum": 120 }
+        }
+      }
+    }
+  }
+}

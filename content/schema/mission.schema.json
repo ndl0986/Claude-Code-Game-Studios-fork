@@ -1,0 +1,323 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://galaxyandsun.com/daidatanhhung/content/mission.schema.json",
+  "title": "One hero's mission: intro, beats, ending.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "hero",
+    "next_hero",
+    "intro",
+    "beats",
+    "ending"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "$ref": "common.schema.json#/$defs/SchemaVersion"
+    },
+    "hero": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "timeline_order",
+        "place"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "common.schema.json#/$defs/HeroId"
+        },
+        "name": {
+          "$ref": "common.schema.json#/$defs/Text"
+        },
+        "timeline_order": {
+          "description": "Heroes unlock in historical order.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "place": {
+          "description": "Where the story happened, shown on the map.",
+          "$ref": "common.schema.json#/$defs/Text"
+        }
+      }
+    },
+    "next_hero": {
+      "description": "Hero unlocked by finishing the quiz; null for the last hero shipped.",
+      "oneOf": [
+        {
+          "$ref": "common.schema.json#/$defs/HeroId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "intro": {
+      "$ref": "common.schema.json#/$defs/TextList"
+    },
+    "banner": {
+      "description": "Defined once; beats with uses_banner show it. A text layer, never baked into art.",
+      "$ref": "common.schema.json#/$defs/Text"
+    },
+    "beats": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/Beat"
+      }
+    },
+    "ending": {
+      "type": "object",
+      "required": [
+        "lines",
+        "picture_id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "lines": {
+          "$ref": "common.schema.json#/$defs/TextList"
+        },
+        "picture_id": {
+          "$ref": "common.schema.json#/$defs/Id"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "Button": {
+      "enum": [
+        "move",
+        "attack",
+        "defend",
+        "special"
+      ]
+    },
+    "Beat": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "buttons",
+        "title",
+        "scene",
+        "goal",
+        "params",
+        "theme"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "common.schema.json#/$defs/Id"
+        },
+        "type": {
+          "enum": [
+            "fight",
+            "walk",
+            "hold-meter",
+            "training",
+            "reach-the-flag"
+          ]
+        },
+        "buttons": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/Button"
+          }
+        },
+        "title": {
+          "$ref": "common.schema.json#/$defs/Text"
+        },
+        "scene": {
+          "$ref": "common.schema.json#/$defs/TextList"
+        },
+        "goal": {
+          "$ref": "common.schema.json#/$defs/Text"
+        },
+        "uses_banner": {
+          "type": "boolean",
+          "default": false
+        },
+        "params": {
+          "type": "object"
+        },
+        "theme": {
+          "description": "Background set; a stand-in place, no history claim.",
+          "enum": [
+            "village",
+            "bamboo",
+            "river",
+            "camp"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "fight"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "params": {
+                "$ref": "#/$defs/FightParams"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "walk"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "params": {
+                "$ref": "#/$defs/DistanceParams"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "reach-the-flag"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "params": {
+                "$ref": "#/$defs/DistanceParams"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "hold-meter"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "params": {
+                "$ref": "#/$defs/HoldParams"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "training"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "params": {
+                "$ref": "#/$defs/TrainingParams"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "FightParams": {
+      "type": "object",
+      "required": [
+        "enemies",
+        "max_active",
+        "from_left"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "enemies": {
+          "description": "Walk-in order.",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": {
+            "enum": [
+              "spear",
+              "shield",
+              "leader"
+            ]
+          }
+        },
+        "max_active": {
+          "description": "How many may be on screen at once.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "from_left": {
+          "description": "Indexes in enemies[] that walk in from behind.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "DistanceParams": {
+      "type": "object",
+      "required": [
+        "length_screens"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "length_screens": {
+          "description": "Level length in screen widths.",
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 10
+        }
+      }
+    },
+    "HoldParams": {
+      "type": "object",
+      "required": [
+        "hold_seconds"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "hold_seconds": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 10
+        }
+      }
+    },
+    "TrainingParams": {
+      "type": "object",
+      "required": [
+        "dummies"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "dummies": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "rule": "release: every claim cited by bundled Text must be approved, else the release build fails and, at run time, the mission is hidden and logged; debug: the mission plays and each Text with a pending claim shows an `UNSIGNED Cxx` badge",
+  "cases": [
+    {
+      "name": "all approved",
+      "claims": {
+        "C01": "approved",
+        "C02": "approved"
+      },
+      "text_claims": [
+        [
+          "C01"
+        ],
+        [
+          "C01",
+          "C02"
+        ]
+      ],
+      "expected": {
+        "release_build": "pass",
+        "runtime_release": "show",
+        "debug_badges": []
+      }
+    },
+    {
+      "name": "one pending",
+      "claims": {
+        "C01": "approved",
+        "C02": "pending"
+      },
+      "text_claims": [
+        [
+          "C01"
+        ],
+        [
+          "C01",
+          "C02"
+        ]
+      ],
+      "expected": {
+        "release_build": "fail",
+        "runtime_release": "hide_and_log",
+        "debug_badges": [
+          "C02"
+        ]
+      }
+    },
+    {
+      "name": "unknown claim id",
+      "claims": {
+        "C01": "approved"
+      },
+      "text_claims": [
+        [
+          "C09"
+        ]
+      ],
+      "expected": {
+        "release_build": "fail",
+        "runtime_release": "hide_and_log",
+        "debug_badges": [
+          "C09"
+        ]
+      }
+    },
+    {
+      "name": "pending but uncited",
+      "claims": {
+        "C01": "approved",
+        "C03": "pending"
+      },
+      "text_claims": [
+        [
+          "C01"
+        ]
+      ],
+      "expected": {
+        "release_build": "pass",
+        "runtime_release": "show",
+        "debug_badges": []
+      }
+    }
+  ]
+}

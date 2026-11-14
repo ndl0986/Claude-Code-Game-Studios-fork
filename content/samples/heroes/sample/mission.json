@@ -1,0 +1,250 @@
+{
+  "schema_version": "1.0",
+  "hero": {
+    "id": "sample",
+    "name": {
+      "id": "sample.hero.name",
+      "vi": "⟨placeholder⟩ Anh hùng",
+      "en": "Hero",
+      "claims": [
+        "C01"
+      ]
+    },
+    "timeline_order": 1,
+    "place": {
+      "id": "sample.hero.place",
+      "vi": "⟨placeholder⟩ Nơi chốn",
+      "en": "Place",
+      "claims": [
+        "C01"
+      ]
+    }
+  },
+  "next_hero": "sample2",
+  "intro": [
+    {
+      "id": "sample.intro.1",
+      "vi": "⟨placeholder⟩ Lời mở đầu.",
+      "en": "⟨placeholder⟩ Intro line.",
+      "claims": [
+        "C01"
+      ]
+    }
+  ],
+  "banner": {
+    "id": "sample.banner",
+    "vi": "⟨placeholder⟩ Truyện kể rằng: sáu chữ",
+    "en": "⟨placeholder⟩ The story says: six words",
+    "claims": [
+      "C02"
+    ]
+  },
+  "beats": [
+    {
+      "id": "sample.b1",
+      "type": "fight",
+      "buttons": [
+        "move",
+        "attack",
+        "defend"
+      ],
+      "title": {
+        "id": "sample.b1.title",
+        "vi": "⟨placeholder⟩ Đoạn 1",
+        "en": "⟨placeholder⟩ Beat 1",
+        "claims": [
+          "C12"
+        ]
+      },
+      "scene": [
+        {
+          "id": "sample.b1.scene.1",
+          "vi": "⟨placeholder⟩ Cảnh 1, câu 1.",
+          "en": "⟨placeholder⟩ Scene 1, line 1.",
+          "claims": [
+            "C01"
+          ]
+        }
+      ],
+      "goal": {
+        "id": "sample.b1.goal",
+        "vi": "⟨placeholder⟩ Mục tiêu 1",
+        "en": "⟨placeholder⟩ Goal 1",
+        "claims": [
+          "C12"
+        ]
+      },
+      "params": {
+        "enemies": [
+          "spear",
+          "spear"
+        ],
+        "max_active": 1,
+        "from_left": []
+      },
+      "theme": "village"
+    },
+    {
+      "id": "sample.b2",
+      "type": "fight",
+      "buttons": [
+        "move",
+        "attack",
+        "defend"
+      ],
+      "title": {
+        "id": "sample.b2.title",
+        "vi": "⟨placeholder⟩ Đoạn 2",
+        "en": "⟨placeholder⟩ Beat 2",
+        "claims": [
+          "C12"
+        ]
+      },
+      "scene": [
+        {
+          "id": "sample.b2.scene.1",
+          "vi": "⟨placeholder⟩ Cảnh 2, câu 1.",
+          "en": "⟨placeholder⟩ Scene 2, line 1.",
+          "claims": [
+            "C01"
+          ]
+        },
+        {
+          "id": "sample.b2.scene.2",
+          "vi": "⟨placeholder⟩ Truyện kể rằng có một chi tiết.",
+          "en": "⟨placeholder⟩ The story says there was a detail.",
+          "claims": [
+            "C02"
+          ]
+        }
+      ],
+      "goal": {
+        "id": "sample.b2.goal",
+        "vi": "⟨placeholder⟩ Mục tiêu 2",
+        "en": "⟨placeholder⟩ Goal 2",
+        "claims": [
+          "C12"
+        ]
+      },
+      "params": {
+        "enemies": [
+          "spear",
+          "shield",
+          "spear"
+        ],
+        "max_active": 2,
+        "from_left": []
+      },
+      "theme": "bamboo"
+    },
+    {
+      "id": "sample.b3",
+      "type": "fight",
+      "buttons": [
+        "move",
+        "attack",
+        "defend"
+      ],
+      "title": {
+        "id": "sample.b3.title",
+        "vi": "⟨placeholder⟩ Đoạn 3",
+        "en": "⟨placeholder⟩ Beat 3",
+        "claims": [
+          "C12"
+        ]
+      },
+      "scene": [
+        {
+          "id": "sample.b3.scene.1",
+          "vi": "⟨placeholder⟩ Cảnh 3, câu 1.",
+          "en": "⟨placeholder⟩ Scene 3, line 1.",
+          "claims": [
+            "C01"
+          ]
+        }
+      ],
+      "goal": {
+        "id": "sample.b3.goal",
+        "vi": "⟨placeholder⟩ Mục tiêu 3",
+        "en": "⟨placeholder⟩ Goal 3",
+        "claims": [
+          "C12"
+        ]
+      },
+      "params": {
+        "enemies": [
+          "shield",
+          "spear",
+          "shield",
+          "spear"
+        ],
+        "max_active": 2,
+        "from_left": [
+          3
+        ]
+      },
+      "theme": "river"
+    },
+    {
+      "id": "sample.b4",
+      "type": "fight",
+      "buttons": [
+        "move",
+        "attack",
+        "defend"
+      ],
+      "title": {
+        "id": "sample.b4.title",
+        "vi": "⟨placeholder⟩ Đoạn 4",
+        "en": "⟨placeholder⟩ Beat 4",
+        "claims": [
+          "C12"
+        ]
+      },
+      "scene": [
+        {
+          "id": "sample.b4.scene.1",
+          "vi": "⟨placeholder⟩ Cảnh 4, câu 1.",
+          "en": "⟨placeholder⟩ Scene 4, line 1.",
+          "claims": [
+            "C01"
+          ]
+        }
+      ],
+      "goal": {
+        "id": "sample.b4.goal",
+        "vi": "⟨placeholder⟩ Mục tiêu 4",
+        "en": "⟨placeholder⟩ Goal 4",
+        "claims": [
+          "C12"
+        ]
+      },
+      "params": {
+        "enemies": [
+          "spear",
+          "leader",
+          "spear"
+        ],
+        "max_active": 2,
+        "from_left": [
+          2
+        ]
+      },
+      "uses_banner": true,
+      "theme": "camp"
+    }
+  ],
+  "ending": {
+    "lines": [
+      {
+        "id": "sample.ending.1",
+        "vi": "⟨placeholder⟩ Lời kết.",
+        "en": "⟨placeholder⟩ Ending line.",
+        "claims": [
+          "C01"
+        ]
+      }
+    ],
+    "picture_id": "pic.sample.ending"
+  }
+}

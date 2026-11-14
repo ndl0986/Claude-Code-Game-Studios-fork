@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://galaxyandsun.com/daidatanhhung/content/assets.schema.json",
+  "title": "Asset map: id -> file under content/data/. No text inside pictures.",
+  "type": "object",
+  "required": ["schema_version", "assets"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "$ref": "common.schema.json#/$defs/SchemaVersion" },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "file", "bytes"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "common.schema.json#/$defs/Id" },
+          "kind": { "enum": ["picture", "sound", "font"] },
+          "file": { "description": "Path relative to content/data/, with /.", "type": "string", "pattern": "^[a-z0-9_./-]+\\.[a-z0-9]+$", "not": { "pattern": "\\.\\." } },
+          "bytes": { "type": "integer", "minimum": 1 }
+        },
+        "allOf": [
+          { "if": { "properties": { "kind": { "const": "picture" } } }, "then": { "properties": { "file": { "pattern": "\\.(png|webp)$" } } } },
+          { "if": { "properties": { "kind": { "const": "sound" } } }, "then": { "properties": { "file": { "pattern": "\\.(m4a|wav)$" } } } },
+          { "if": { "properties": { "kind": { "const": "font" } } }, "then": { "properties": { "file": { "pattern": "\\.(ttf|otf)$" } } } }
+        ]
+      }
+    }
+  }
+}

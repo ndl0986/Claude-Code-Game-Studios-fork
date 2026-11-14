@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "assets": [
+    {
+      "id": "font.nunito",
+      "kind": "font",
+      "file": "fonts/nunito.ttf",
+      "bytes": 276932
+    }
+  ]
+}

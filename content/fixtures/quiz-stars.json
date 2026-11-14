@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0",
+  "rule": "content/data/rules.json quiz_stars; retries = wrong picks before the right one, summed across the whole quiz",
+  "cases": [
+    {
+      "name": "all first try",
+      "wrong_picks_per_question": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "expected": {
+        "total_retries": 0,
+        "stars": 3,
+        "unlocks_next_hero": true
+      }
+    },
+    {
+      "name": "one retry",
+      "wrong_picks_per_question": [
+        0,
+        1,
+        0,
+        0
+      ],
+      "expected": {
+        "total_retries": 1,
+        "stars": 2,
+        "unlocks_next_hero": true
+      }
+    },
+    {
+      "name": "two retries on two questions",
+      "wrong_picks_per_question": [
+        1,
+        0,
+        1,
+        0
+      ],
+      "expected": {
+        "total_retries": 2,
+        "stars": 2,
+        "unlocks_next_hero": true
+      }
+    },
+    {
+      "name": "two retries on one question",
+      "wrong_picks_per_question": [
+        0,
+        0,
+        2,
+        0
+      ],
+      "expected": {
+        "total_retries": 2,
+        "stars": 2,
+        "unlocks_next_hero": true
+      }
+    },
+    {
+      "name": "three retries",
+      "wrong_picks_per_question": [
+        1,
+        1,
+        1,
+        0
+      ],
+      "expected": {
+        "total_retries": 3,
+        "stars": 1,
+        "unlocks_next_hero": true
+      }
+    },
+    {
+      "name": "worst case, 3 questions",
+      "wrong_picks_per_question": [
+        2,
+        2,
+        2
+      ],
+      "expected": {
+        "total_retries": 6,
+        "stars": 1,
+        "unlocks_next_hero": true
+      }
+    },
+    {
+      "name": "five questions, all first try",
+      "wrong_picks_per_question": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "expected": {
+        "total_retries": 0,
+        "stars": 3,
+        "unlocks_next_hero": true
+      }
+    }
+  ]
+}
