@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "hero_id": "sample",
+  "claims": [
+    {
+      "id": "C01",
+      "vi": "⟨placeholder⟩ sự kiện có thật",
+      "en": "⟨placeholder⟩ a fact",
+      "label": "fact",
+      "sources": [
+        "S1"
+      ],
+      "signoff": {
+        "status": "pending"
+      }
+    },
+    {
+      "id": "C02",
+      "vi": "⟨placeholder⟩ chi tiết truyền thuyết",
+      "en": "⟨placeholder⟩ a legend detail",
+      "label": "legend",
+      "sources": [
+        "S4"
+      ],
+      "relabel_condition": {
+        "to": "fact_as_recorded",
+        "when": "S3 passage confirmed"
+      },
+      "signoff": {
+        "status": "pending"
+      }
+    },
+    {
+      "id": "C12",
+      "vi": "⟨placeholder⟩ chi tiết thêm cho trò chơi",
+      "en": "⟨placeholder⟩ a detail added for play",
+      "label": "invented",
+      "sources": [],
+      "signoff": {
+        "status": "pending"
+      }
+    }
+  ]
+}

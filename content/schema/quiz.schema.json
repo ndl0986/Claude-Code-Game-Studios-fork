@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://galaxyandsun.com/daidatanhhung/content/quiz.schema.json",
+  "title": "One hero's quiz: 3-5 picture-supported, three-choice questions. Star rule lives in rules.json.",
+  "type": "object",
+  "required": ["schema_version", "hero_id", "questions"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "$ref": "common.schema.json#/$defs/SchemaVersion" },
+    "hero_id": { "$ref": "common.schema.json#/$defs/HeroId" },
+    "questions": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["id", "prompt", "choices", "correct_index", "why"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "common.schema.json#/$defs/Id" },
+          "prompt": { "$ref": "common.schema.json#/$defs/Text" },
+          "picture_id": { "$ref": "common.schema.json#/$defs/Id" },
+          "choices": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "object",
+              "required": ["text", "picture_id"],
+              "additionalProperties": false,
+              "properties": {
+                "text": { "$ref": "common.schema.json#/$defs/Text" },
+                "picture_id": { "$ref": "common.schema.json#/$defs/Id" }
+              }
+            }
+          },
+          "correct_index": { "type": "integer", "minimum": 0, "maximum": 2 },
+          "why": { "description": "Shown after the right answer.", "$ref": "common.schema.json#/$defs/Text" }
+        }
+      }
+    }
+  }
+}

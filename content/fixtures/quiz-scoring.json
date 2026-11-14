@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "rule": "a wrong pick shows the retry state and keeps the question; the right pick shows `why`, then the next question; the quiz ends after the last right pick",
+  "cases": [
+    {
+      "name": "right first",
+      "correct_index": 0,
+      "picks": [
+        0
+      ],
+      "expected": [
+        "right"
+      ]
+    },
+    {
+      "name": "wrong then right",
+      "correct_index": 2,
+      "picks": [
+        0,
+        2
+      ],
+      "expected": [
+        "wrong",
+        "right"
+      ]
+    },
+    {
+      "name": "same wrong twice counts twice",
+      "correct_index": 1,
+      "picks": [
+        0,
+        0,
+        1
+      ],
+      "expected": [
+        "wrong",
+        "wrong",
+        "right"
+      ]
+    }
+  ]
+}

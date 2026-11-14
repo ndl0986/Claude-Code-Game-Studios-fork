@@ -33,3 +33,26 @@ project:
 modes:
   rigor: standard
   automation: collaborative
+
+# Engine: native per platform (ADR-0001, TASK-005). NOT SOURCEABLE in this template:
+# engine.name accepts only Godot | Unity | Unreal | Web, engines.tsv has no Swift or Kotlin
+# row, and docs/engine-reference/ has no SpriteKit or Android SDK folder. engine.name and
+# engine.code_root therefore stay UNSET on purpose; engine-dependent checks report NOT ASSESSED.
+# Code roots: ios/ and android/ (never src/). Every task brief names its root.
+#
+# engine:
+#   ios:
+#     language: Swift
+#     frameworks: SpriteKit (game scene) + SwiftUI (app shell)
+#     build: Xcode
+#     tests: XCTest
+#     code_root: ios
+#     simulator: iPhone Duo, iOS 27.1
+#   android:
+#     language: Kotlin
+#     frameworks: Android SDK only (SurfaceView + Canvas loop, SoundPool); no game framework
+#     build: Gradle
+#     tests: JUnit + androidTest
+#     code_root: android
+#     target_sdk: 35 (36 before the Play release)
+#   shared_content: content/data (bundled); content/schema, samples, fixtures (tests only)
