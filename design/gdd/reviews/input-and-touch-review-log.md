@@ -18,3 +18,6 @@ Reviewed-Content-Hash: design/gdd/quiz-and-stars.md 222777502ac1a4a3282b72098010
 
 ## Update — 2026-11-14 — iOS QC r2 (iOS-R2-03, S2)
 Rule 5b: pointers are tracked by identity; a release or cancel always releases the owned pad, wherever the pointer moved. AC13 (small moves then release → nothing held within one frame) and AC14 (a flag tap with a small move under drag_threshold still counts).
+
+## Peer review — 2026-11-14 — game-dev-android: REVISE (4), applied (leader agreed)
+1. Rule 6 / AC3: a second pointer on an owned pad is ignored until it lifts. 2. Rule 9: a pointer keeps its pad from down to up or cancel; only the ◀↔▶ slide changes it; drift is forgiven (new edge case). 3. AC14: the flag counts at press; the drag_threshold key is used by Rule 16 only. 4. Rule 2: Android mandatory gesture insets; iOS home-indicator inset.

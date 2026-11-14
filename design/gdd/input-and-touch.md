@@ -41,8 +41,10 @@ rounds: TASK-003 r3 O5/O6, TASK-007 r2 B1/B4, and the TASK-006 iOS rounds.
    (aspect kept). The backdrop and HUD extend to the real screen edges, so there are no
    letterbox bars on 20:9 phones.
 2. **Safe anchoring.** Pads and HUD buttons anchor to the **true safe rect**: the screen minus
-   the notch or Dynamic Island, the rounded corners, **and** the system gesture insets (the
-   Android bottom swipe zone, the iOS home indicator). They don't anchor to the 1280×720 box
+   the notch or Dynamic Island, the rounded corners, **and** the system gesture inset: on
+   Android the **mandatory** system gesture insets (the bottom swipe zone), not the full
+   system-gesture insets with the side back zones; on iOS the home-indicator inset. They don't
+   anchor to the 1280×720 box
    (QC r3 O5: pads clear of the gesture zone).
 3. **Positions.** ◀ ▶ sit bottom-left. Defend and attack sit bottom-right, with the flag pad
    above attack (only on hold-meter and training, D-10). Pause and sound sit top-left. The
@@ -60,15 +62,17 @@ rounds: TASK-003 r3 O5/O6, TASK-007 r2 B1/B4, and the TASK-006 iOS rounds.
     releases its pad, wherever the pointer has moved (inside the pad, onto another, or off every
     pad). A pad is never released or kept held by hit-testing the release position.
 6. **Tie-break.** If two pointers land on the **same** pad, the **first** one owns it. The
-   second is ignored until it moves onto **another** pad, which it then owns as if it had
-   pressed there.
+   second is **ignored until it lifts**. It never takes over the pad, and it doesn't activate
+   another pad by sliding onto it (play pads fire only on press, Rule 7).
 7. **Play pads fire on press** (P-01): move, attack, defend and flag act on pointer-down
    inside the pad.
 8. **Menus fire on release inside** (P-01): "Tiếp", "Bỏ qua", the skip-warning buttons, quiz
    cards, the dialogue ask button, results, pause-menu items, the VI|EN chip and map pins act
    when the pointer lifts **inside** the same button it went down on. Lifting outside cancels.
-9. **Slide between ◀ and ▶.** A pointer may slide from ◀ to ▶ (or back) without lifting; the
-   move direction switches as it crosses. Sliding off any **other** pad releases that pad.
+9. **A pointer keeps its pad from down to up (or cancel).** The only change while it's down is
+   the **◀ ↔ ▶ slide**: sliding from ◀ to ▶ (or back) switches the move direction as it crosses.
+   Sliding off a pad, or ◀/▶ drifting into empty space, does **not** release it, because thumb
+   drift is forgiven. Release comes only from up or cancel (Rule 5b) or clear-all (Rule 11).
 10. **Hold.** Defend and the flag (on hold-meter) act for as long as their pointer stays down
     on them.
 11. **Clear-all.** Every held pad is released, and every pressed menu cancelled, on any of:
@@ -177,6 +181,9 @@ both advance.
   nothing. Held pads are unaffected.
 - **If a pointer goes down outside any pad and slides onto one**: play pads don't activate (they
   fire on press, Rule 7). Only the ◀ ▶ slide between move pads counts.
+- **If a thumb holding ◀ or ▶ drifts into empty space**: the move stays held, in the same
+  direction, until the thumb lifts (Rule 9). Drifting onto the other move pad switches the
+  direction.
 - **If a menu button is pressed and the screen changes before release** (e.g. the arrival
   animation ends): the press is cancelled; nothing fires.
 - **If the child rests a palm on the screen** (many pointers at once on the bottom edge): each
@@ -235,8 +242,8 @@ Criteria 1–9 and 13–14 are logic (unit tests on the input layer); 10–12 ne
    and a swing starts (multi-touch).
 2. **GIVEN** pointer A on ◀, **WHEN** it slides onto ▶ without lifting, **THEN** the move direction
    switches at the crossing and no other pad fires.
-3. **GIVEN** pointer A owns defend, **WHEN** pointer B lands on defend too, **THEN** B is ignored;
-   **WHEN** B then moves onto attack, **THEN** B owns attack (Rule 6).
+3. **GIVEN** pointer A holds defend, **WHEN** pointer B lands on defend too, **THEN** nothing
+   changes. **WHEN** A lifts, **THEN** defend releases, even though B is still down (Rule 6).
 4. **GIVEN** a pointer down on "Tiếp", **WHEN** it lifts outside the button, **THEN** nothing
    advances (release-inside).
 5. **GIVEN** a beat card on line 1, **WHEN** "Tiếp" is tapped twice 0.17 s apart, **THEN** only line
@@ -258,8 +265,9 @@ Criteria 1–9 and 13–14 are logic (unit tests on the input layer); 10–12 ne
 13. **GIVEN** a pointer pressed on defend, **WHEN** it sends a few small move events (inside or
     outside the pad) and then releases anywhere, **THEN** no pad is held within one frame of the
     release (identity tracking, iOS-R2-03; unit test).
-14. **GIVEN** a tap on the flag pad (training finish) with a small move under `drag_threshold`,
-    **WHEN** it releases, **THEN** it counts as a tap and the banner rises.
+14. **GIVEN** the training finish step, **WHEN** the flag pad is pressed, **THEN** it counts at
+    the press and the banner rises. Moving afterwards, or releasing outside the pad, doesn't
+    undo it (Rule 7).
 
 ## Open Questions
 
@@ -273,5 +281,5 @@ Criteria 1–9 and 13–14 are logic (unit tests on the input layer); 10–12 ne
 | Key | Value | Range | Unit | Used by |
 |---|---|---|---|---|
 | `pad_gap` | 12 | 8–24 | pt_dp | F1: minimum gap between neighbouring pads (Rule 4) |
-| `drag_threshold` | 10 | 6–20 | pt_dp | Rule 16: tap vs drag on the map and timeline; AC14 |
+| `drag_threshold` | 10 | 6–20 | pt_dp | Rule 16 (map, timeline) |
 
