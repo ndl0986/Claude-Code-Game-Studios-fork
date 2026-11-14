@@ -303,6 +303,8 @@ from damage, fire on people, or bodies.
 - **Icons:** filled, rounded and illustrated, matching the characters; no thin outline icons.
 - **UI animation:** bouncy and short (0.15–0.3 s), with stars that pop and buttons that
   squash when pressed. Nothing flashes.
+- **Player text voice** (D-17): see `design/narrative/writing-guide.md`. Vietnamese uses no pronoun
+  for the child where possible, and "em" when one is needed.
 - **No text in art** (concept rule): every word, including the banner's six words and quiz
   answers, is a live VI/EN text layer over the art.
 
