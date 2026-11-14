@@ -13,6 +13,7 @@ final class GameScene: SKScene {
     private let world = SKNode(), fx = SKNode(), ui = SKNode(), worldHints = SKNode()
     private var backdropTheme = ""
     private var backdrop: SKNode?
+    private var skyNode: SKNode?
     private let hero = HeroNode()
     private var enemyNodes: [Int: EnemyNode] = [:]
 
@@ -151,6 +152,7 @@ final class GameScene: SKScene {
     private func drawWorld() {
         let showWorld = game.screen == .play || game.screen == .pause
         world.isHidden = !showWorld
+        skyNode?.isHidden = !showWorld
         guard showWorld else { return }
         let p = game.play, ground = game.tuning["ground_y"]
         let beatIdx = min(p.beat, max(0, p.beats.count - 1))
@@ -163,6 +165,10 @@ final class GameScene: SKScene {
             b.position = CGPoint(x: 0, y: 720); b.zPosition = -10
             world.addChild(b); backdrop = b
             backgroundColor = Backdrop.sky(theme)
+            skyNode?.removeFromParent()
+            let sk = Backdrop.skyNode(theme, width: 1280, height: game.tuning["ground_y"])
+            sk.position = CGPoint(x: 0, y: 720); sk.zPosition = -20
+            addChild(sk); skyNode = sk
         }
         world.position.x = -p.cam
         let t = p.t
@@ -341,7 +347,8 @@ final class GameScene: SKScene {
 
     private func buildTitle() {
         backgroundColor = Backdrop.sky("village")
-        let b = Backdrop.world(theme: "village", from: -100, to: 1400, ground: game.tuning["ground_y"]); b.position = CGPoint(x: 0, y: 720); ui.addChild(b)
+        add(Backdrop.skyNode("village", width: 1280, height: game.tuning["ground_y"]), 0, 0)
+        let b = Backdrop.world(theme: "village", from: -100, to: 1400, ground: game.tuning["ground_y"]); b.position = CGPoint(x: 0, y: 720); uiZ += 1; b.zPosition = uiZ; ui.addChild(b)
         add(D.rr(-490, -105, 980, 210, 40, C.panel, C.gold, 6), 640, 165)
         for x in [240.0, 1040] { add(D.drum(70, SKColor(hex: 0xf2b632, alpha: 0.8)), x, 165) }
         add(Font.label(game.ui("ui.app.title"), 76, C.gold), 640, 140)
@@ -364,7 +371,7 @@ final class GameScene: SKScene {
         if ending, Pictures.files[game.hero.mission.ending.pictureId] != nil {
             let pic = Pictures.node(game.hero.mission.ending.pictureId, size: 500); pic.position = CGPoint(x: 400, y: -180); inner.addChild(pic)
         } else {
-            inner.addChild(D.rr(0, 0, 800, 360, 0, Backdrop.sky(ending ? "river" : "village")))
+            inner.addChild(Backdrop.skyNode(ending ? "river" : "village", width: 800, height: 360))
             let b = Backdrop.world(theme: ending ? "river" : "village", from: -240, to: 1100, ground: 360); b.position = CGPoint(x: -240, y: 0); inner.addChild(b)
             if ending { inner.addChild(D.rr(0, 0, 800, 360, 0, SKColor(red: 1, green: 0.59, blue: 0.35, alpha: 0.3))) }
             let h = HeroNode(scale: 0.9); h.update(face: 1, walk: false, defend: false, attack: nil, hurt: false, t: 0); h.position = CGPoint(x: ending ? 400 : 320, y: -340); inner.addChild(h)

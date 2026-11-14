@@ -44,6 +44,7 @@ enum Boot {
         do {
             let content = try ContentSet.load(dataRoot: data, extraHeroDirs: extra)
             for a in content.assets.assets where a.kind == "picture" { Pictures.files[a.id] = data.appendingPathComponent(a.file) }
+            for (id, t) in content.themes?.themes ?? [:] { Backdrop.bands[id] = (Backdrop.hex(t.skyBand.top), Backdrop.hex(t.skyBand.bottom)) }
             let d = UserDefaults.standard
             let wanted = isDebug ? d.string(forKey: "hero") : nil
             guard let hero = content.heroes.first(where: { $0.mission.hero.id == wanted }) ?? content.heroes.first else {

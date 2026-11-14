@@ -231,8 +231,29 @@ enum Pictures {
 
 /// A beat theme's backdrop: stand-in places (no history claim), drawn along the whole mission.
 enum Backdrop {
-    static func sky(_ theme: String) -> SKColor {
-        switch theme { case "bamboo": SKColor(hex: 0xcfe8c0); case "river": SKColor(hex: 0xbfe3ef); case "camp": SKColor(hex: 0xf3d9b0); default: SKColor(hex: 0xcfe7f5) }
+    /// Sky colours per theme from content/data/themes.json (ADR-0002); set at boot. No colour is hard-coded.
+    static var bands: [String: (top: SKColor, bottom: SKColor)] = [:]
+
+    static func hex(_ s: String) -> SKColor { SKColor(hex: UInt32(s.dropFirst(), radix: 16) ?? 0) }
+
+    /// The flat fallback (the band's bottom colour) behind everything.
+    static func sky(_ theme: String) -> SKColor { bands[theme]?.bottom ?? .black }
+
+    /// A vertical gradient from the band's top colour to its bottom colour (ADR-0002 sky band), cached per theme.
+    private static var gradients: [String: SKTexture] = [:]
+    static func skyNode(_ theme: String, width: Double, height: Double) -> SKNode {
+        let tex = gradients[theme] ?? {
+            let band = bands[theme] ?? (top: .black, bottom: .black)
+            let size = CGSize(width: 4, height: 256)
+            let img = UIGraphicsImageRenderer(size: size).image { ctx in
+                let g = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: [band.top.cgColor, band.bottom.cgColor] as CFArray, locations: [0, 1])!
+                ctx.cgContext.drawLinearGradient(g, start: .zero, end: CGPoint(x: 0, y: size.height), options: [])
+            }
+            let t = SKTexture(image: img); gradients[theme] = t; return t
+        }()
+        let n = SKSpriteNode(texture: tex, size: CGSize(width: width, height: height))
+        n.anchorPoint = CGPoint(x: 0, y: 1)
+        return n
     }
 
     /// World-space props from x0 to x1 (prototype ground_y).
