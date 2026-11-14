@@ -15,6 +15,10 @@ the warmest thing on screen. He is never goofy, and his "angry" face is puffed c
 - **Headwear** ⟨placeholder⟩: a topknot and a vermilion headband whose two tails are his signature shape.
 - **Weapon** ⟨placeholder⟩: a staff `#A8743F` with padded ends; a round rattan shield `#C9A15E` with one gold ring.
 - **Followers:** 3 smaller youths in muted vermilion `#B9705C` sashes on straw-beige tunics.
+  **The training partner is a follower** (leader's call, r11; slice placeholder pending this
+  sheet's sign-off): straw-beige tunic `#D8C9A3`, muted-vermilion sash `#B9705C`, a plain
+  topknot, skin `#F1C9A0`, drawn at **0.62 × the hero's height**. **No headband and no tails**:
+  those are the hero's signature, so the partner never reads as a second hero.
 
 **Luan, please answer:**
 1. Red tunic (today's stand-in) or a cream tunic with vermilion accents only? *Recommended: accents only (§4 budget).*

@@ -147,8 +147,14 @@ world px on every supported phone (Android clamps it with `min(720, ·)`).
   past the world's edges. So the subject must sit inside **both**: below the top **13%** of the
   picture's height and above the panel line (for a 640 × 360 still: **png y ≈ 47–170**, i.e.
   world ≈ 0–333 on iOS after the crop and ≤ 340 on Android), and clear of the outer **5%** of its
-  width on each side. The TQT ending placeholder passes: pole top at png y 60, banner cloth
-  66–128, sun 64–144, all at x 200–510 (of 640).
+  width on each side. **Clear of the pause/sound block** (r11; iOS r8 shot 08 had the pole top
+  under it): no part of the subject (a pole top included) lies inside the corner block in either
+  framing. It sits **right of `corner_right` + 8 or below `corner_bottom` + 8**, checked at the
+  floor (k 0.40: right of world x 416 or below 206) for Android's × 2 fit and on the iOS phones'
+  cover-crop (world x = png x × s − crop, e.g. × 2.7 − 224 on the QC phone). For a 640 × 360 still
+  that means **png x ≥ 237** for anything above png y ≈ 123 (iOS: (206 + 126) / 2.7; Android × 2 only needs 103). The TQT ending placeholder passes:
+  pole x 250–258 (world 500 on Android, ≈ 451 on iOS QC), top at png y 60; banner cloth 258–350 ×
+  66–128; sun 460–540 × 64–144.
 - **Framed pictures:** an app that draws the picture inside a frame starts that frame at
   **y ≥ `corner_bottom` + 8** (ref ≥ 163), never under the block.
 - **Bottom row:** "Tiếp" (right) and "Bỏ qua" (left) sit on `safe_bottom` − 18 and are **both
@@ -247,7 +253,7 @@ either app).*
 7. **GIVEN** the skip warning, **WHEN** captured in VI and EN, **THEN** "Đọc tiếp" shows the open-book icon and "Vẫn bỏ qua" the skip-arrow icon.
 8. **GIVEN** a beat card, **WHEN** captured, **THEN** the title has no emblem on either side, and pause and sound sit top-left.
 9. **GIVEN** an Android AVD (k ≈ 0.488) and the iOS QC phone (k 0.517) and a k 0.40 phone or emulator, with pause and sound at `pad_min`, **WHEN** a beat card, an intro box, a caption and the ending are captured in VI and EN, **THEN** no pixel of the paper frame, the beat-card panel or a framed picture lies inside the pause/sound block (x ≤ `corner_right`, y ≤ `corner_bottom`); the panel's top is ≥ `corner_bottom` + 8 and its bottom ≤ Tiếp's top − 8.
-10. **GIVEN** any story screen on the reference phones and at k 0.40, **WHEN** captured, **THEN** "Bỏ qua" is ≥ `pad_min` tall (≥ `pad_min`: ≈ 147.5 world px at k 0.488; ≈ 139.3 at 0.517; 180 at k 0.40), its top and bottom match Tiếp's, and it stays left of Tiếp with ≥ `pad_gap` between them.
+10. **GIVEN** any story screen on the reference phones and at k 0.40, **WHEN** captured, **THEN** "Bỏ qua" is ≥ `pad_min` tall (≥ `pad_min`: ≈ 147.5 world px at k 0.488; ≈ 139.3 at 0.517; 180 at k 0.40), its top and bottom match Tiếp's (both measured at rest; any idle pulse, rim or shadow stays ≤ `safe_bottom` 720), and it stays left of Tiếp with ≥ `pad_gap` between them.
 11. **GIVEN** any story screen (intro, a beat card, a caption, the ending) and a press every 0.35 s that keeps going, **WHEN** it plays, **THEN** every box holds ≥ 1.5 s (`screen_enter_lock_max`) or until the presses pause for 0.6 s, none is skipped silently, and the next screen starts only after each box was advanced once (Input AC17, AC21).
 12. **GIVEN** the intro, a beat card, a caption and the ending at the reference phones and at k 0.40, **WHEN** captured, **THEN** no hero, enemy, partner, dummy or flag sprite, fx, pop or hint is drawn; **no story screen shows only background**: no beat dots, goal plate or banner bar show (only the pause/sound corner); the intro and captions show the placeholder portrait still (256, bottom ≤ 301), beat cards show it at 208 with bottom ≤ 233, centred, clear of the pause/sound block and ≥ 8 px above the "Phần n / Part n" label, and the ending shows `pic.scene_tqt_ending` (ASSET-016, the placeholder until the real art) with the banner cloth and the warm light above the panel's top.
 13. **GIVEN** each TQT beat card and caption in VI and EN, at the reference phones and at k 0.40, **WHEN** captured, **THEN** the label reads "Phần n" / "Part n" with n the beat's 1-based mission index (the same as its beat dot), 28 px, gold `#FFC531` with an ink outline ≥ 2 px, its box at panel top − 38 … − 10 (241–269 over a card, 309–337 over a caption at k 0.40); the intro, the ending, dialogue and the quiz show no label; and on the river, village and camp backgrounds the label's edge is visible in greyscale.
