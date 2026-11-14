@@ -1,0 +1,148 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+      "deviceName" : "iPhone 18 Pro",
+      "modelName" : "iPhone 18 Pro",
+      "osBuildNumber" : "24A434",
+      "osVersion" : "27.0",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "5m 8s",
+                  "durationInSeconds" : 308.1853129863739,
+                  "name" : "test_a_tap_on_the_title_card_does_nothing()",
+                  "nodeIdentifier" : "MoreCasesUITests/test_a_tap_on_the_title_card_does_nothing()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/MoreCasesUITests/test_a_tap_on_the_title_card_does_nothing",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "5m 13s",
+                  "durationInSeconds" : 313.5402389764786,
+                  "name" : "test_an_attack_mash_through_the_beat_end_keeps_the_first_ending_box()",
+                  "nodeIdentifier" : "MoreCasesUITests/test_an_attack_mash_through_the_beat_end_keeps_the_first_ending_box()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/MoreCasesUITests/test_an_attack_mash_through_the_beat_end_keeps_the_first_ending_box",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "name" : "Test skipped - not exercised: the first tap came 0.70 s after the card (≥ the lock)",
+                      "nodeType" : "Skip Message"
+                    }
+                  ],
+                  "duration" : "5m 9s",
+                  "durationInSeconds" : 309.8945540189743,
+                  "name" : "test_left_taps_as_the_training_card_appears_open_no_skip_warning()",
+                  "nodeIdentifier" : "MoreCasesUITests/test_left_taps_as_the_training_card_appears_open_no_skip_warning()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/MoreCasesUITests/test_left_taps_as_the_training_card_appears_open_no_skip_warning",
+                  "nodeType" : "Test Case",
+                  "result" : "Skipped"
+                },
+                {
+                  "duration" : "5m 19s",
+                  "durationInSeconds" : 319.26685297489166,
+                  "name" : "test_one_landed_hit_in_slow_motion_for_contact_and_pop_screenshots()",
+                  "nodeIdentifier" : "MoreCasesUITests/test_one_landed_hit_in_slow_motion_for_contact_and_pop_screenshots()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/MoreCasesUITests/test_one_landed_hit_in_slow_motion_for_contact_and_pop_screenshots",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "5m 33s",
+                  "durationInSeconds" : 333.0073529481888,
+                  "name" : "test_skip_warning_keep_reading_then_stars_survive_a_relaunch()",
+                  "nodeIdentifier" : "MoreCasesUITests/test_skip_warning_keep_reading_then_stars_survive_a_relaunch()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/MoreCasesUITests/test_skip_warning_keep_reading_then_stars_survive_a_relaunch",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "MoreCasesUITests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/MoreCasesUITests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "5m 12s",
+                  "durationInSeconds" : 312.4585199356079,
+                  "name" : "test_15b_holding_right_in_training_stops_at_the_cap()",
+                  "nodeIdentifier" : "TouchCasesUITests/test_15b_holding_right_in_training_stops_at_the_cap()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/TouchCasesUITests/test_15b_holding_right_in_training_stops_at_the_cap",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "5m 7s",
+                  "durationInSeconds" : 307.6491450071335,
+                  "name" : "test_B1_two_fast_taps_on_next_advance_one_box()",
+                  "nodeIdentifier" : "TouchCasesUITests/test_B1_two_fast_taps_on_next_advance_one_box()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/TouchCasesUITests/test_B1_two_fast_taps_on_next_advance_one_box",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "5m 19s",
+                  "durationInSeconds" : 319.4945379495621,
+                  "name" : "test_holding_right_across_a_beat_change_leaves_nothing_held()",
+                  "nodeIdentifier" : "TouchCasesUITests/test_holding_right_across_a_beat_change_leaves_nothing_held()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/TouchCasesUITests/test_holding_right_across_a_beat_change_leaves_nothing_held",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "5m 11s",
+                  "durationInSeconds" : 311.6681430339813,
+                  "name" : "test_R2_03_press_move_release_on_each_pad_leaves_nothing_held()",
+                  "nodeIdentifier" : "TouchCasesUITests/test_R2_03_press_move_release_on_each_pad_leaves_nothing_held()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/TouchCasesUITests/test_R2_03_press_move_release_on_each_pad_leaves_nothing_held",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "5m 9s",
+                  "durationInSeconds" : 309.1882220506668,
+                  "name" : "test_slide_from_left_to_right_walks_right_then_releases()",
+                  "nodeIdentifier" : "TouchCasesUITests/test_slide_from_left_to_right_walks_right_then_releases()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/TouchCasesUITests/test_slide_from_left_to_right_walks_right_then_releases",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "TouchCasesUITests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/TouchCasesUITests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            }
+          ],
+          "name" : "DaiDatAnhHungUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Passed"
+        }
+      ],
+      "name" : "DaiDatAnhHung",
+      "nodeType" : "Test Plan",
+      "result" : "Passed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ]
+}

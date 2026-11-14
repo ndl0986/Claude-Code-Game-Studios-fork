@@ -1,0 +1,1 @@
+quiz reached by a debug jump: the medal is not asserted (D-07)
