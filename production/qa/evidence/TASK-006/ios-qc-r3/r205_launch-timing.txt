@@ -1,0 +1,9 @@
+R2-05 fresh-install launch timing, build 9b0470a, iPhone 18 Pro iOS 27.0, 2026-11-14
+uninstall + install, then `simctl launch` at t=0; screenshots back to back (each ~0.5-1.1 s).
+frame  capture window (s)  colour sampled (4 points)
+f00    0.00-1.23           home screen (before the app drew)
+f01-f06 1.23-4.82          393153 everywhere = launch colour (dark navy)
+f07    4.82-5.92           373151 = launch colour
+f08    5.92-6.46           title (first title frame)
+f09-f22 6.46-14.17         title
+No grey frame in 23 captures. First non-launch-colour frame = the title, at <= 6.46 s.
