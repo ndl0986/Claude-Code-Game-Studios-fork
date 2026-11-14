@@ -41,7 +41,7 @@ Dải Đất Anh Hùng is a small, story-first game, and its systems are few.
 | # | System Name | Category | Priority | Status | Design Doc | Depends On |
 |---|-------------|----------|----------|--------|------------|------------|
 | 1 | Content data & claims | Core | Vertical Slice | Approved (data contract) | `content/README.md` + `content/schema/` (no GDD) | none |
-| 2 | Language & text (VI/EN) | Core | Vertical Slice | Not Started | — | 1 |
+| 2 | Language & text (VI/EN) | Core | Vertical Slice | In Review | `design/gdd/language-and-text.md` | 1, 4 |
 | 3 | Input & touch controls (inferred) | Core | Vertical Slice | Not Started | — | none |
 | 4 | Save & progress (inferred) | Persistence | Vertical Slice | Not Started | — | none |
 | 5 | Side-scroll movement & combat | Gameplay | Vertical Slice | Approved | `design/gdd/side-scroll-combat.md` | 3, 1 |
@@ -109,7 +109,7 @@ No economy, no social and no analytics, by pillar (*An toàn cho trẻ / Safe fo
 1. Content data & claims: every line and number the apps show comes from here, and every history line traces to a signed-off claim.
 2. Input & touch controls: every action a child takes goes through the same big landscape thumb pads.
 3. Save & progress: stars and unlocks must survive app restarts, offline, with no child data.
-4. Language & text: depends on 1. Every string is `{vi, en}` and can switch at any moment.
+4. Language & text: depends on 1 and Save & progress (`lang`). Every string is `{vi, en}` and can switch at any moment.
 
 ### Core Layer (depends on foundation)
 
@@ -186,7 +186,7 @@ in a GDD cites its source, or is marked ⟨tuning⟩.
 | Metric | Count |
 |--------|-------|
 | Total systems identified | 13 |
-| Design docs started | 5 |
+| Design docs started | 6 |
 | Design docs reviewed | 4 (lean self-reviews; peer reviews in progress) |
 | Design docs approved | 5 (Content data & claims via TASK-005; Mission flow; Combat; Quiz & stars; Hints & onboarding) |
 | MVP systems designed | n/a (folded into the Vertical Slice) |
