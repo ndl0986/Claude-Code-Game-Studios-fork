@@ -21,7 +21,7 @@ score, no timer. The story is the screen; the HUD frames it.
 | Goal line | During play, under the progress dots | Mission flow Rule 2 |
 | Beat progress dots | During play | Where the child is in the story |
 | Pause, sound | Always | Input Rule 3 |
-| Hold-meter ring | Hold-meter beats, around the flag pad | Mission flow UI |
+| Hold-meter ring | Hold-meter beats, around the special pad | Mission flow UI |
 | Training checklist | Training beats (3 icons) | Mission flow UI |
 | Text pops ("Ối!", "Đỡ được!") | On the event, over the hero | Combat V/A |
 | Hints (hand, pulse, arrow) | When triggered | Hints GDD |
@@ -64,7 +64,7 @@ iOS's home-indicator inset (QC r3 O5: pad bottoms clear of the gesture zone).
 | ◀ ▶ | ≥ 72 pt, gap 12 pt | ASSET-024 | Fire on press; the ◀↔▶ slide; drift forgiven (Input Rules 7, 9) |
 | Attack | ≥ 72 pt | ASSET-025 (tangerine, staff icon) | Press starts a swing (auto-face, combat Rule 2) |
 | Defend | ≥ 72 pt | ASSET-026 (shield, one drum-ring accent) | Held = shield up |
-| Flag | ≥ 72 pt | ASSET-027 + the meter ring ASSET-028 (ASSET-326 pulse) | Hold-meter: hold; training finish: press |
+| Special | ≥ 72 pt | ASSET-027 + the meter ring ASSET-028 (ASSET-326 pulse); icon per beat type: **fist** (ASSET-335) on hold-meter, **banner** on training | Hold-meter: hold; training finish: press (Mission flow Rule 7c) |
 | Pause, sound | ≥ 72 pt | ASSET-029–030 | Release-inside (P-01) |
 | Progress dots | ~24 px each | ASSET-032 | Filled when the beat is done |
 | Goal line | `goal` field (box 1040, 37 px) | text layer | Hidden on dialogue beats (no goal) |
@@ -76,11 +76,11 @@ iOS's home-indicator inset (QC r3 O5: pad bottoms clear of the gesture zone).
 |---|---|---|
 | `walk_to` | ◀ ▶ only | Dots, goal hidden |
 | walk beat | ◀ ▶ | Goal |
-| hold-meter | flag (with ring) | Goal; the hold hand on first view |
-| training | ◀ ▶, attack, defend, flag (flag shown from the start, active at the finish step) | Checklist icons; hints in step order (B3) |
+| hold-meter | special, fist icon (with ring) | Goal; the hold hand on first view |
+| training | **per step** (Mission flow Rule 7c): dummies ◀ ▶ + attack; blocks + defend; finish + special (banner icon). *Today both apps show all four from the start; a dev ticket (TASK-020 W12)* | Checklist icons; hints in step order (B3); **camera locked** over the training area until `beat_end` (Combat Rule 15b) |
 | fight / encounter | ◀ ▶, attack, defend | Telegraph |
 | reach-the-flag (no encounter) | ◀ ▶ (attack, defend if listed) | Flag goal |
-| story, dialogue screens | **none** | Pause only |
+| story, dialogue screens | **none** | Pause and sound, top-left (Input Rule 3). A pad held when the screen opened gives no input and is not released (Input Rule 14) |
 | paused | none (the pause menu) | All pads released (Input Rule 11) |
 
 ## 6. Information Hierarchy
@@ -140,3 +140,5 @@ insets; iOS home indicator, notch or Dynamic Island. Rounded corners wait for TA
 4. **GIVEN** a dialogue beat, **WHEN** shown, **THEN** no pads and no goal line show.
 5. **GIVEN** the lowest target Android phone, **WHEN** a pad is pressed, **THEN** its action starts in the next frame (combat AC12).
 6. **GIVEN** the narrowest supported phone, **WHEN** captured, **THEN** the pads keep ≥ 12 pt gaps and never overlap the goal line.
+7. **GIVEN** the training beat, **WHEN** each step is current, **THEN** only that step's pads show (dummies: ◀ ▶ + attack; blocks: + defend; finish: + special with the banner icon).
+8. **GIVEN** the hold-meter beat, **WHEN** captured, **THEN** the special pad shows the fist icon, not the banner.

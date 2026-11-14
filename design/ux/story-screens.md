@@ -51,11 +51,11 @@ gently told that skipping costs this story's medal.
 | Component | Spec | Source |
 |---|---|---|
 | Text box | `intro`/`scene`/`ending` field: box 880–1000, 38 px, weight 600, ≤ 2 lines (R8c) | Language F1 |
-| Beat-card title | `beat_title` heading, 44 px, 1 line | 005h |
+| Beat-card title | `beat_title` heading, 44 px, 1 line, centred at the top of the paper frame. **No emblems or ornaments beside it**: the frame's drum-ring border (ASSET-035) is the only motif (Luan's rule 4: one motif). An app that draws emblems either side of the title is off-spec | 005h |
 | Goal (the beat card's last box) | `goal` field | Mission flow Rule 2 |
 | Tiếp | gold pill, ≥ 72 pt (ASSET-323), release-inside, **0.25 s press-time debounce** | Input Rules 8, 12 (B1) |
 | Bỏ qua | cream pill, smaller, bottom-left, away from Tiếp (ASSET-323) | Mission flow UI |
-| Skip warning card | ASSET-324: cream card, outline medal at the top, one line (`ui.story.skip_warning`, dialog field), "Đọc tiếp" (gold, big, right, default) and "Vẫn bỏ qua" (cream, small, left). No red, no warning sign | Mission flow Rule 15 |
+| Skip warning card | ASSET-324: cream card, outline medal at the top, one line (`ui.story.skip_warning`, dialog field), "Đọc tiếp" (gold, big, right, default, **open-book icon**) and "Vẫn bỏ qua" (cream, small, left, **skip-arrow icon**) (ASSET-333; TASK-020 W20). The icons let a pre-reader tell the buttons apart; the line is voiced once VO exists (Audio Rule 17). No red, no warning sign | Mission flow Rule 15 |
 | Legend marker | Sentences citing a legend start "Truyện kể rằng… / The story says…" | R4, R4b |
 
 ## 6. States & Variants
@@ -111,3 +111,5 @@ either app).*
    within its box, with no red anywhere on the warning card.
 5. **GIVEN** the last caption box, **WHEN** Tiếp is double-tapped across the screen change, **THEN** the next screen's first line is not skipped.
 6. **GIVEN** the lowest target Android phone, **WHEN** Tiếp is tapped, **THEN** the next box shows within 150 ms; checked on the narrowest phone and a 20:9 phone.
+7. **GIVEN** the skip warning, **WHEN** captured in VI and EN, **THEN** "Đọc tiếp" shows the open-book icon and "Vẫn bỏ qua" the skip-arrow icon.
+8. **GIVEN** a beat card, **WHEN** captured, **THEN** the title has no emblem on either side, and pause and sound sit top-left.

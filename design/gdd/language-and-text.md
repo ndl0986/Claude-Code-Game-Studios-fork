@@ -37,7 +37,8 @@ on a screen (each UX spec), or voice-over (Audio & voice-over).
    non-empty `vi` and `en` (content contract). A missing language **fails validation**: there is
    no silent fallback to the other language.
 2. **Default and switching (vertical-slice rule).** The game starts in **Vietnamese**. The
-   child switches with the VI|EN chip on the **title screen** and in the **pause menu** (P-04).
+   child switches with the VI|EN chip on the **title screen**, on the **map** (Alpha) and in the
+   **pause menu** (P-04; Input Rule 3).
    The choice is saved as `lang` (Save & progress) and restored on the next launch.
 3. **First-launch choice (proposed, D-20).** The concept asks for a "first-launch choice". The
    proposal: on the very first launch only, a picture-only screen with two big buttons ("Tiếng
@@ -50,12 +51,31 @@ on a screen (each UX spec), or voice-over (Audio & voice-over).
    weights (regular, bold). It must render every Vietnamese character, including stacked marks
    (Ặ Ỗ Ữ ẫ ợ ệ ằ) and both tone-mark placements (khoá/khóa), with no clipped diacritics.
 6. **Sizes** (art bible §7, three sizes: title, body, button), in **world px at the fitted
-   scale** (k ≈ 1.28 on a 20:9 phone):
-   - **Body text** is never below `text_min_body` = **37 world px** (about 18 dp). It covers story
-     boxes, goal, dialog, quiz prompt, quiz why and **quiz choices**.
+   scale**. The fit is `k_px` screen px per world px (Input F1): 1.383 on the Android reference
+   phone, where 1 world px = 0.527 dp, so 37 world px ≈ 19.5 dp.
+   - **Every R8c field type belongs to one size class**, and its `font_px` is never below the
+     class minimum (TASK-020 W9):
+
+     | Class | Minimum | Field types (`rules.json` `text_limits.fit.fields`) |
+     |---|---|---|
+     | heading | 44 | `hero_name`, `beat_title` |
+     | body | 37 (`text_min_body`) | `intro`, `scene`, `ending`, `goal`, `dialog`, `dialogue_line`, `dialogue_narrator`, `quiz_prompt`, `quiz_why`, `quiz_choice`, **`banner`** |
+     | button | 34 | `button` (including the dialogue ask button, which is story text) |
+     | label | 28 (`text_min_label`) | `ui`, `place` |
+
+   - **Body text** is read text: story boxes, goal, dialog, dialogue lines, quiz prompt, quiz why
+     and **quiz choices**.
+   - **The banner is body, not label.** Its six words are history text the child reads, and quiz
+     Q4 asks about them. Its `font_px` rises **28 → 37**. Measured with F1: "Phá cường địch, báo
+     hoàng ân" is 1 line and the EN line is 2 lines in the 880 box, within max 2. The banner prop
+     must hold 2 lines at 37 (data and art ticket). The motto's words don't change.
    - **Labels that sit under or beside an icon or picture** are never below
-     `text_min_label` = **28 world px**. They cover pad labels, counters ("Câu 2/5") and the
-     map-stub line. The icon carries the meaning, so the label is a secondary cue.
+     `text_min_label` = **28 world px**. They cover pad labels, counters ("Câu 2/5"), place names
+     and the map-stub line. The icon carries the meaning, so the label is a secondary cue.
+   - **Enforced by data, not prose** (proposed contract rule **R8d**, a dev ticket): `rules.json`
+     gains `text_limits.min_px` {heading 44, body 37, button 34, label 28} and a `class` per fit
+     field; both apps' content tests and the content checker fail a field whose `font_px` is
+     below its class minimum.
    - Today's sizes that must rise: quiz choices 32 → 37, pad labels 24 → 28, map-stub 26 → 28
      (the quiz counter at 28 is fine). The body rule also catches the **goal bar** and the **quiz
      why** line, which grow to 37 with taller boxes (box values in game-dev-android's 005h branch). `/ux-design` sets the exact size per screen, at or above
@@ -69,7 +89,7 @@ on a screen (each UX spec), or voice-over (Audio & voice-over).
    line above.
 8. **Length limits, both languages.**
    - EN: `rules.json` `text_limits.en_budget` per field type (R8).
-   - **VI (proposed, D-21):** a matching `vi_budget` = `en_budget` × 1.6, rounded down. In
+   - **VI (D-21, R8b):** a matching `vi_budget` = `en_budget` × 1.6, rounded down. In
      today's data, VI runs 0.38–1.7× EN (median 0.9), and short UI words are often longer in VI
      ("Màn hình chính" vs "Home").
    - Each field also has a **maximum line count** (Formula F1): button 1, ui 1, goal 1, beat
@@ -81,7 +101,10 @@ on a screen (each UX spec), or voice-over (Audio & voice-over).
     marked):
     - Vietnamese uses **no pronoun** for the child where possible, and **"em"** when one is
       needed (D-17). Never "bạn", "con" or "cháu". Story narration about a hero ("cậu", "ông")
-      is not covered by this rule.
+      is not covered by this rule. **Speaker lines are exempt** (TASK-020 A9): a dialogue line
+      whose `speaker` isn't `narrator` is one character talking to another (e.g. the king calling
+      the hero "cháu" in `tqt.d1`), not the game talking to the child. The check covers
+      narrator lines, story boxes, goals, quiz text and UI strings.
     - No designer words on screen ("special", "beat", "level", "meter").
     - One sentence per story box, at most 120 characters (R8).
     - NFC, full diacritics (R7).
@@ -164,7 +187,7 @@ that would fail today is `ui.medal.missing` (VI 39). It is a sentence, so it sho
   fails. A shared fixture string covers every Vietnamese letter with every tone mark (Rule 5).
 - **If text would overflow at run time** (an unforeseen font or screen): it is cut with "…" as a
   safety net (Rule 6). That is a bug to fix in content or layout, never a shipped behaviour.
-- **If a screen is narrower than designed**: the world is fitted by scale k, so world-px boxes
+- **If a screen is narrower than designed**: the world is fitted by scale `k_px`, so world-px boxes
   keep their line breaks. Layouts are tested on the narrowest supported phone (QC).
 
 ## Dependencies
@@ -178,6 +201,7 @@ that would fail today is `ui.medal.missing` (VI 39). It is a sentence, so it sho
 | Hero progression & unlock | depends on this | Hard | Hero names, unlock and results text |
 | Audio & voice-over | depends on this | Soft | Current language for VO |
 | Hints & onboarding | (none) | — | Hints use no text |
+| Map & timeline | depends on this | Hard | Hero names, places and eras as text layers (`hero_name`, `place`); the VI\|EN chip on the map |
 
 ## Visual/Audio Requirements
 
@@ -227,7 +251,11 @@ Criteria 1–5 and 9 are logic and need unit tests or validation; 6–8 need QC 
    **THEN** no text overflows its box and none is shrunk below its size.
 8. **GIVEN** any picture asset, **WHEN** reviewed, **THEN** it contains no letters or numerals.
 9. **GIVEN** the Vietnamese player text, **WHEN** scanned, **THEN** no line addresses the child as
-   "bạn", "con" or "cháu" (D-17; a review check, optionally a lint).
+   "bạn", "con" or "cháu" (D-17; a review check, optionally a lint). Dialogue lines with a
+   non-narrator `speaker` are skipped (Rule 10).
+10. **GIVEN** `rules.json`, **WHEN** content is validated, **THEN** every `fit.fields` entry has a
+    class and a `font_px` at or above that class's minimum (R8d, once it lands); `banner` is 37
+    and the TQT banner passes R8c.
 
 ## Open Questions
 
@@ -237,3 +265,4 @@ Criteria 1–5 and 9 are logic and need unit tests or validation; 6–8 need QC 
 | D-21 | VI budgets (`vi_budget` = 1.6 × EN, R8b) + `max_lines` per field in `rules.json`; retype `ui.medal.missing` as `dialog` | game-dev-ios + game-dev-android, game-art-content | Before the UX specs |
 | — | `box_width`, `font_px` and `max_lines` per field type in `rules.json`, plus R8c in both apps' content tests (with D-21) | game-dev-android (data branch), game-dev-ios reviews | Before the UX specs |
 | — | `/ux-design` sets per-screen sizes at or above `text_min_body` 37 and `text_min_label` 28 world px | game-art-content + ux | UX pass |
+| — | R8d (size class per field) and `banner` 28 → 37 in `rules.json`, plus the banner prop holding 2 lines (TASK-020 W9) | game-dev-android (data), game-dev-ios reviews | Dev ticket, after r3 |

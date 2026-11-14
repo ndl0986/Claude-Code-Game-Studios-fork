@@ -37,8 +37,9 @@ rounds: TASK-003 r3 O5/O6, TASK-007 r2 B1/B4, and the TASK-006 iOS rounds.
 
 **Layout (TASK-013 full screen)**
 
-1. **World and screen.** Gameplay is the 1280×720 world, fitted to the screen at scale k
-   (aspect kept). The backdrop and HUD extend to the real screen edges, so there are no
+1. **World and screen.** Gameplay is the 1280×720 world, fitted to the safe rect (aspect kept).
+   The fit has two names, defined once in F1: **`k`** (pt/dp per world px, for touch sizes) and
+   **`k_px`** (screen px per world px, for drawing and text). Every GDD uses these two names. The backdrop and HUD extend to the real screen edges, so there are no
    letterbox bars on 20:9 phones.
 2. **Safe anchoring.** Pads and HUD buttons anchor to the **true safe rect**: the screen minus
    the notch or Dynamic Island, the rounded corners, **and** the system gesture inset: on
@@ -46,10 +47,20 @@ rounds: TASK-003 r3 O5/O6, TASK-007 r2 B1/B4, and the TASK-006 iOS rounds.
    system-gesture insets with the side back zones; on iOS the home-indicator inset. They don't
    anchor to the 1280×720 box
    (QC r3 O5: pads clear of the gesture zone).
-3. **Positions.** ◀ ▶ sit bottom-left. Defend and attack sit bottom-right, with the flag pad
-   above attack (only on hold-meter and training, D-10). Pause and sound sit top-left. The
-   VI|EN chip is on the title and pause screens only (P-04). Story and dialogue buttons ("Tiếp",
-   "Bỏ qua", ask) sit bottom-right and bottom-left as their GDDs set.
+3. **Positions.** ◀ ▶ sit bottom-left. Defend and attack sit bottom-right, with the special pad
+   above attack (only on hold-meter and training, D-10). **Pause and sound sit top-left on every
+   screen that has them**, so a child always looks in one place (TASK-020 W7). The VI|EN chip
+   sits top-right on the title and the map, and inside the pause menu; nowhere else (P-04).
+
+   | Screen | Pause + sound | VI\|EN chip | Other corners |
+   |---|---|---|---|
+   | Mission HUD (play, `walk_to`) | top-left | — | progress dots and goal top-centre; pads bottom |
+   | Story screens and dialogue | top-left | — | "Tiếp" / ask bottom-right, "Bỏ qua" bottom-left |
+   | Quiz and results | top-left | — | the "Câu n/N" counter top-centre; "Tiếp" bottom-right |
+   | Map (Alpha) | top-left | top-right | the timeline column as Map Rule 1 sets |
+   | Title | sound top-left (no pause) | top-right | Start centre |
+   | Pause menu | — (it is the menu) | inside the menu | — |
+   | Unlock | none | — | one button bottom-centre |
 4. **Sizes and gaps.** Every pad and button is ≥ `pad_min` (72 pt/dp) across (F1), with a
    minimum gap of `pad_gap` between neighbouring pads, so a small thumb can't press two at once.
 
@@ -64,7 +75,7 @@ rounds: TASK-003 r3 O5/O6, TASK-007 r2 B1/B4, and the TASK-006 iOS rounds.
 6. **Tie-break.** If two pointers land on the **same** pad, the **first** one owns it. The
    second is **ignored until it lifts**. It never takes over the pad, and it doesn't activate
    another pad by sliding onto it (play pads fire only on press, Rule 7).
-7. **Play pads fire on press** (P-01): move, attack, defend and flag act on pointer-down
+7. **Play pads fire on press** (P-01): move, attack, defend and special act on pointer-down
    inside the pad.
 8. **Menus fire on release inside** (P-01): "Tiếp", "Bỏ qua", the skip-warning buttons, quiz
    cards, the dialogue ask button, results, pause-menu items, the VI|EN chip and map pins act
@@ -73,7 +84,7 @@ rounds: TASK-003 r3 O5/O6, TASK-007 r2 B1/B4, and the TASK-006 iOS rounds.
    the **◀ ↔ ▶ slide**: sliding from ◀ to ▶ (or back) switches the move direction as it crosses.
    Sliding off a pad, or ◀/▶ drifting into empty space, does **not** release it, because thumb
    drift is forgiven. Release comes only from up or cancel (Rule 5b) or clear-all (Rule 11).
-10. **Hold.** Defend and the flag (on hold-meter) act for as long as their pointer stays down
+10. **Hold.** Defend and special (on hold-meter) act for as long as their pointer stays down
     on them.
 11. **Clear-all.** Every held pad is released, and every pressed menu cancelled, on any of:
     - a pointer cancel;
@@ -100,7 +111,11 @@ rounds: TASK-003 r3 O5/O6, TASK-007 r2 B1/B4, and the TASK-006 iOS rounds.
 
 14. **Pads per beat.** Only the pads in the beat's `buttons` are shown (R13). Others are
     **hidden**, not greyed (Mission flow Rule 4). `walk_to` shows move only; story and dialogue
-    screens show no pads.
+    screens show no pads; training shows the pads of its current step (Mission flow Rule 7c).
+    **Hiding is not releasing.** A hidden pad produces no input, but a pointer that owns it keeps
+    it (Rule 9). If that pointer is still down when the pad shows again, the hold continues.
+    Release comes only from up, cancel (Rule 5b) or a Rule 11 trigger. A phase change is not a
+    Rule 11 trigger.
 15. **Press feedback.** Every pad and button shows a pressed state (a 4% squash) on the next
     frame. Menu presses play exactly one tone; play pads play no tap tone, only their action
     sounds (O6, Audio Rule 6).
@@ -132,18 +147,35 @@ Clear-all (Rule 11) forces every pad to `released` and every pointer to `cancell
 
 The F1 (pad size in world px) formula is defined as:
 
-`pad_world = pad_min / k`; `gap_world = pad_gap / k`, where k is the fitted points (dp) per world px.
+`k_px = min(safe_w / 1280, safe_h / 720)`; `k = k_px / density`; `pad_world = pad_min / k`; `gap_world = pad_gap / k`.
+
+This is the **one definition** of the fit scale. `k` is pt (iOS) or dp (Android) per world px;
+`k_px` is screen px per world px; `density` is screen px per pt/dp (Android dpi / 160, iOS the
+screen scale). Language Rule 6 and Map F2 use these names.
 
 **Variables:**
 | Variable | Type | Range | Source | Description |
 |----------|------|-------|--------|-------------|
 | pad_min | float (pt/dp) | 44–120 | data file (`tuning.json`, 72) | Minimum touch size |
 | pad_gap | float (pt/dp) | 8–24 | data file (proposed key, 12) | Minimum gap between pads |
-| k | float (pt per world px) | device | calculated (fit scale) | Device scale |
+| safe_w, safe_h | screen px | device | platform (safe rect, Rule 2) | Safe rect size |
+| density | float | device | platform | Screen px per pt/dp |
+| k_px | float (screen px per world px) | device | calculated | Drawing scale |
+| k | float (pt/dp per world px) | device | calculated | Touch scale |
 
-**Output Range:** ≈ 106 world px at k ≈ 0.68 (a 20:9 phone). The same formula sizes the map
-pins (Map F2).
-**Example:** `pad_min` 72, k 0.68 → `pad_world` ≈ 105.9; `pad_gap` 12 → ≈ 17.6 world px.
+**Reference phones** (examples in every GDD use these):
+- **Android: the QC phone**, 1080×2400 @ 420 dpi (density 2.625), landscape full screen with
+  the mandatory gesture inset, safe height 996 px (F2). k_px = 996 / 720 = **1.383**;
+  k = 1.383 / 2.625 = **0.527 dp per world px**.
+- **iOS: a 6.1" Dynamic Island iPhone**, 852×393 pt landscape (scale 3), safe rect ≈ 734 × 372
+  pt after the side and home-indicator insets. k = min(734/1280, 372/720) = **0.517 pt per
+  world px**; k_px = 1.55. Re-check against the iOS QC device's real insets.
+
+**Output Range:** `pad_world` ≈ 137–140 world px on the reference phones. A smaller k (a smaller
+phone) makes pads bigger in world px. The same formula sizes the map pins (Map F2).
+**Example:** Android reference: `pad_min` 72 → `pad_world` = 72 / 0.527 ≈ **137** (what Android's
+`ScreenFit` draws); `pad_gap` 12 → ≈ **23** world px. Two pads plus a gap take ≈ 297 of the
+720 world px height. iOS reference: 72 / 0.517 ≈ 139; 12 / 0.517 ≈ 23.
 
 The F2 (safe-anchored position) formula is defined as:
 
@@ -195,6 +227,12 @@ both advance.
   line.
 - **If the device has no gesture insets or notch**: the safe rect is the screen; same rules.
 - **If haptics are unavailable**: no haptics; nothing else changes.
+- **If a thumb stays on a pad while a story or dialogue screen hides it** (e.g. ▶ through the
+  Bình Than dialogue): the pad gives no input while hidden. When `walk_to` shows it again and the
+  same pointer is still down, the hold continues and the hero walks on (Rule 14). Thumb drift is
+  forgiven, so this is intended. It is released only by up, cancel or Rule 11.
+- **If a training step reveals a new pad under a thumb that's already down**: the pad does not
+  fire. Play pads fire on press (Rule 7), so the child must press it.
 
 ## Dependencies
 
@@ -236,7 +274,7 @@ Combat, Mission flow and Hints already list Input as a dependency.
 
 ## Acceptance Criteria
 
-Criteria 1–9 and 13–14 are logic (unit tests on the input layer); 10–12 need QC on devices.
+Criteria 1–9 and 13–15 are logic (unit tests on the input layer); 10–12 and 16 need QC on devices.
 
 1. **GIVEN** ▶ held by pointer A, **WHEN** pointer B taps attack, **THEN** the hero keeps moving
    and a swing starts (multi-touch).
@@ -265,9 +303,15 @@ Criteria 1–9 and 13–14 are logic (unit tests on the input layer); 10–12 ne
 13. **GIVEN** a pointer pressed on defend, **WHEN** it sends a few small move events (inside or
     outside the pad) and then releases anywhere, **THEN** no pad is held within one frame of the
     release (identity tracking, iOS-R2-03; unit test).
-14. **GIVEN** the training finish step, **WHEN** the flag pad is pressed, **THEN** it counts at
+14. **GIVEN** the training finish step, **WHEN** the special pad is pressed, **THEN** it counts at
     the press and the banner rises. Moving afterwards, or releasing outside the pad, doesn't
     undo it (Rule 7).
+15. **GIVEN** ▶ held by pointer A when a dialogue screen opens, **WHEN** A stays down through the
+    dialogue and the next `walk_to` starts, **THEN** no move input happens while the dialogue
+    shows, and the hero moves right as soon as ▶ is visible again, with no new press (Rule 14).
+16. **GIVEN** the reference phones, **WHEN** each screen in the Rule 3 table is captured, **THEN**
+    pause and sound are top-left on every screen that has them, and the VI|EN chip shows only on
+    the title, the map and in pause.
 
 ## Open Questions
 

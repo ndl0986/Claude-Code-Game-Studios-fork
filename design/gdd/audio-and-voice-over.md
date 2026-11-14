@@ -59,11 +59,11 @@ slice ships with text only.
 | State (mission flow) | Mood (art bible §2) | Tempo | Instruments | Loop |
 |---|---|---|---|---|
 | Title (and map) | Welcoming, "my country" | 96 BPM | Piano/marimba, light strings, hero motif on sáo answered by đàn bầu | 40 s |
-| Story screens (intro, beat card, caption) | Hushed, "sit close" | 72 BPM | Pad, felt piano, sparse đàn tranh; no drums | 53 s |
+| Story screens (intro, beat card, caption, **dialogue beats**) | Hushed, "sit close" | 72 BPM | Pad, felt piano, sparse đàn tranh; no drums | 53 s |
 | Walk, training | Breezy journey | 108 BPM | Marimba ostinato, pizzicato, hand percussion, sáo melody | 71 s |
 | Hold-meter (the orange) | Building determination, not anger | follows walk | A **layer** over the walk bed: a sáo sustain plus đàn tranh tremolo rising with the meter; a pluck at 25/50/75%; at 100% one trống đồng hit; holds its level on release (no drain) | 18 s layer |
 | Fight, reach-the-flag | Windswept, heroic | 124 BPM | Trống đồng plus toms (mid-range attack), strings, pad, sáo melody. Base layer always; top layer only while enemies are active | 62 s |
-| Beat end | Small win | — | 1.5 s cheer sting | one-shot |
+| Beat end | Small win | — | 1.5 s cheer sting; none when the beat has `cheer: false` (Mission flow Rule 2) | one-shot |
 | Calm ending | Still, reverent, gentle | free or 60 | Đàn bầu solo over a soft pad, one soft bronze-drum "bell". Major-leaning, no percussion pattern | 60 s (intro, then loop) |
 | Quiz | Calm focus | 88 BPM | Sparse marimba and pad, nothing in the 1–4 kHz voice band | 44 s |
 | Results, medal, unlock | Golden peak, warm hold | 88 BPM | 3–4 s fanfare, star plucks rising, soft bronze drum for the medal, calm unlock chime | 44 s |
@@ -89,7 +89,7 @@ ending **3.0 s** (never a hard cut); ending → quiz 2.0 s; quiz → results 0.3
 | `sfx_meter_fill_loop` / `sfx_meter_pulse` / `sfx_meter_done` | Hold-meter rising / at 25/50/75% / full | Rising shimmer / stepped bronze "ting" / warm "ta-da" | 2 / 2 / 1 |
 | `sfx_dummy_hit` / `sfx_training_step_done` / `sfx_banner_raise` | A dummy hit / a training part done / the banner raised | Straw "fwump" / small rising "tick-ding" / cloth flap plus a drum | 2 / 1 / 1 |
 | `sfx_flag_reached` | Flag touched (reach-the-flag goal) | Flag flap plus a bright 3-note rise | 1 |
-| `sfx_beat_end_cheer` | Every beat end, after `end_pause` | Short small-group "yay" plus sparkle | 2 |
+| `sfx_beat_end_cheer` | Every non-fight beat end, after `end_pause`, unless the beat has `cheer: false` (then `sfx_ui_next`, the page turn, plays instead) | Short small-group "yay" plus sparkle | 2 |
 | `sfx_ui_next` / `sfx_ui_skip` / `sfx_skip_warning_open` / `sfx_ui_tap` | Tiếp / a Skip that skips / a Skip that opens the warning / other menu buttons | Page turn / quick riffle / gentle card slide plus a soft bell (no "uh-oh") / soft tap | 1 |
 | `sfx_quiz_wrong` / `sfx_quiz_right` / `sfx_quiz_why` | `wrong_feedback` / `right_feedback` / `why_shown` (quiz) | Soft low "boop-boo" (−12 dB UI) / bright rising chime (−6 dB) / paper unfold | 1 / 1 / 2 |
 | `sfx_star_pop` ×3 / `sfx_star_empty` | Results stars | Rising plucks (do, mi, sol) / a neutral wooden "tuk" | 1 |
@@ -110,7 +110,10 @@ ending **3.0 s** (never a hard cut); ending → quiz 2.0 s; quiz → results 0.3
    - Audio is started and every SFX preloaded **before the first sound can play**. Native apps
      do this **at launch**, with no gesture needed. A platform that needs a user gesture
      (the browser prototype) does it at that gesture, before the gesture's own sound.
-   - Input that would play a sound isn't accepted until the preload is done.
+   - Input that would play a sound isn't accepted until the preload is done. **Every button that
+     would be dropped shows as disabled** (50% alpha, no press tone) until then, so a child never
+     taps a button that looks ready and gets nothing (TASK-020 W19). Android's Start already
+     does this; the rule covers every button on the title.
    - Audio resumes after backgrounding or a route change before the next sound.
 8. **Anti-spam.**
    - The swing sound plays only when a swing starts, so at most one per 0.40 s (combat).
@@ -153,9 +156,12 @@ ending **3.0 s** (never a hard cut); ending → quiz 2.0 s; quiz → results 0.3
 
 **Voice-over** (planned; optional until the vertical slice is signed off)
 
-17. **What is voiced:** every story box (intro, beat card, caption, ending), the quiz prompt and
-    the quiz `why`. Not voiced: buttons, HUD and quiz choices (choices are pictures with
-    labels).
+17. **What is voiced:** every story box (intro, beat card, caption, ending), **every dialogue
+    line, narrator and speaker** (TASK-016), **the dialogue ask button** (`ask.button`, story text:
+    the hero's own words), **the skip-warning line** (`ui.story.skip_warning`), the quiz prompt
+    and the quiz `why`. Not voiced: other buttons, HUD and quiz choices (choices are pictures
+    with labels). Speaker lines may use the narrator's voice in the slice; character voices are
+    a later choice.
 18. **Narrators:**
     - **One per language**, voicing every line: warm, "kind teacher or older relative", never
       baby talk or cartoonish, reverent in the ending, never scary in fights.
@@ -202,6 +208,8 @@ A voice line is `idle` → `playing` (box shown) → `idle` (it ends, "Tiếp", 
 | Language & text | current `lang` (VO choice) | (none) | Language GDD |
 | Save & progress | the saved `sound` | the new `sound` on a toggle | Save GDD |
 | Content data & claims | `vo` ids (planned), `assets.json` sound entries | (none) | Content contract |
+| Input & touch controls | menu press (one tone) | route change or interruption → clear-all | Input GDD |
+| Map & timeline | pin tap, unlock reveal, star and medal settle | (none) | Map GDD |
 
 ## Formulas
 
@@ -252,7 +260,8 @@ The F2 (audio size per hero) formula is defined as:
 - **If audio focus is lost** (a call): the game pauses (Rule 16), and audio resumes only when the
   child taps "Chơi tiếp".
 - **If the device is very slow to start audio**: input waits for the preload (O8). The title
-  screen shows normally while it loads.
+  screen shows normally while it loads, with its buttons shown disabled until the preload ends
+  (Rule 7).
 
 ## Dependencies
 
@@ -263,6 +272,8 @@ The F2 (audio size per hero) formula is defined as:
 | Save & progress | this depends on it | Soft | `sound` |
 | Mission flow, Combat, Quiz & stars, Hero progression | they send events to this | Soft (for them) | Events per the table in Rule 5 |
 | Hints & onboarding | (post-slice voice prompts) | Soft | Prompt ids |
+| Input & touch controls | they send events to this | Soft | Menu press (one tone, Rule 6); audio route change → Input clear-all (Rule 16) |
+| Map & timeline | they send events to this (Alpha) | Soft | Pin tap, unlock reveal, star and medal settle |
 
 ## Visual/Audio Requirements
 
@@ -311,6 +322,13 @@ Criteria 1–6 are logic (unit tests on the audio event layer); 7–10 are QC on
    "Chơi tiếp", and the enemy telegraph restarts on resume.
 10. **GIVEN** every cue and effect, **WHEN** reviewed by the content reviewer, **THEN** none contains
     a scream, a pain sound, a blade or flesh impact, or a frightening sting (Rule 2).
+11. **GIVEN** a fresh launch on the lowest target Android phone, **WHEN** the title shows before the
+    preload ends, **THEN** every title button is drawn disabled, and a tap on one plays nothing
+    and does nothing; once the preload ends, they show enabled.
+12. **GIVEN** a dialogue beat, **WHEN** it plays, **THEN** the music is the story-screens cue, and
+    (once VO exists) each line and the ask button play their voice line.
+13. **GIVEN** a non-fight beat with `cheer: false`, **WHEN** it ends, **THEN** no
+    `sfx_beat_end_cheer` plays and `sfx_ui_next` plays once.
 
 ## Open Questions
 

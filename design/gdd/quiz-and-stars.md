@@ -70,10 +70,12 @@ The quiz turns "I played it" into "I remember it".
    `retries ≤ 2 × N`.
 7. **Stars.** When the last question is answered right, stars come from the **total** retries
    (F1, `rules.json`): 0 gives 3★, 1–2 gives 2★, 3 or more gives 1★.
-8. **Unlock.** Finishing the quiz always reports "mission completed" with its stars to Hero
-   progression, which unlocks `next_hero`. Stars never gate the unlock.
+8. **Unlock.** Finishing the quiz always reports completion: "quiz finished {stars}" goes to
+   Mission flow, which sends the one "mission completed {hero, stars, medal_earned}" to Hero
+   progression (Mission flow Rule 15). Hero progression derives the unlock. Stars never gate it.
 9. **Replays.** A replayed quiz can raise a hero's saved stars but never lower them (best of).
-   Save & progress owns storage; this system reports only the result of the run.
+   Hero progression applies best-of (its Rule 8); Save & progress stores the value. This system
+   reports only the result of the run.
 10. **No timers.** No question has a time limit, and nothing changes if the child waits.
 
 **Question-writing rules** (for game-art-content, who writes `quiz.json`; validation enforces the
@@ -105,11 +107,12 @@ ones marked R):
 
 | System | In | Out | Owner |
 |---|---|---|---|
-| Mission flow & beat types | "start quiz for hero X" | "quiz finished", stars | Mission flow GDD |
+| Mission flow & beat types | "start quiz for hero X" | "quiz finished {stars}" (the only completion report this system sends) | Mission flow GDD |
 | Content data & claims | `quiz.json`, `rules.json` `quiz_stars`, `markers.json`, claim status | (none) | Content contract |
 | Language & text | current language, language-changed event | Text ids | Language GDD |
-| Hero progression & unlock | (none) | "mission completed (hero, stars)" | Progression GDD |
-| Save & progress | the previous best stars, for display | the run's stars (best-of applied by Save) | Save GDD |
+| Hero progression & unlock | the best stars, for display | (none: completion goes through Mission flow) | Progression GDD |
+| Save & progress | (none: read through Hero progression) | (none) | Save GDD |
+| Input & touch controls | card taps (on release); the lock during the shake | (none) | Input GDD |
 | Audio & voice-over | (none) | line ids (prompt, why), sounds for right and wrong | Audio GDD |
 
 ## Formulas
@@ -200,9 +203,10 @@ The F3 (quiz time) formula is defined as:
 |---|---|---|---|
 | Content data & claims | this depends on it | Hard | `quiz.json`, `rules.json`, `markers.json`; R4, R6, R12 |
 | Language & text | this depends on it | Hard | Text rendering, language-changed event |
-| Save & progress | this depends on it | Hard | Best-stars storage |
-| Mission flow & beat types | depends on this (it starts it) | Hard | Start; "quiz finished + stars" |
-| Hero progression & unlock | depends on this | Hard | "mission completed (hero, stars)" |
+| Save & progress | this depends on it (through Hero progression) | Hard | Best-stars storage |
+| Input & touch controls | this depends on it | Hard | Card taps on release, the shake lock (Input Rules 8, 13) |
+| Mission flow & beat types | both ways (it starts this; this reports to it) | Hard | Start; "quiz finished {stars}" |
+| Hero progression & unlock | depends on this, through Mission flow | Hard | Stars, inside Mission flow's one completion report |
 | Audio & voice-over | depends on this | Soft | VO line ids, sounds |
 
 Mission flow lists Quiz & stars in its Dependencies (`design/gdd/mission-flow.md`).
@@ -237,7 +241,8 @@ icons, choice pictures, star states and the results screen.
 
 - Three cards in one row (landscape), each at least `pad_min` and in practice about a third of
   the width. The prompt sits above them, and "Tiếp" bottom-right after a right pick.
-- Progress dots and "Câu n/N" top-left, pause top-right (VI|EN lives in the pause menu).
+- Pause and sound top-left, as on every screen (Input Rule 3); progress dots and "Câu n/N"
+  top-centre (VI|EN lives in the pause menu).
 - Results: stars, this run's and the best, plus "Tiếp".
 - Strings: `ui.quiz.retry`, `ui.quiz.correct`, `ui.quiz.question`, `ui.results.done`
   (`content/data/strings.json`).

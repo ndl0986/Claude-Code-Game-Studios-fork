@@ -23,8 +23,8 @@ the title. Pause is available (P-05).
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│ Câu 2/5  ● ● ○ ○ ○                                        [⏸]    │
-│        Prompt (quiz_prompt: 980, 40 px, ≤ 2 lines)               │
+│ [⏸][🔊]              Câu 2/5  ● ● ○ ○ ○                          │
+│   Prompt (quiz_prompt: 980, 40 px, weight 600, ≤ 2 lines)        │
 │  ┌──────────┐   ┌──────────┐   ┌──────────┐                      │
 │  │ picture  │   │ picture  │   │ picture  │   cards ≥ 72 pt,      │
 │  │  choice  │   │  choice  │   │  choice  │   choices 360 / 37 px │
@@ -49,7 +49,9 @@ the title. Pause is available (P-05).
 | Answer card | cream default (ASSET-017); **wrong:** a pale lavender fill `#E6E1F0` with a `#9C8FB8` 10 px border (ASSET-018), the circular-arrow icon (ASSET-020), an ink label (10.7:1) and a 0.5 s shake. *Today: Android draws the wrong card at 50% alpha; iOS a solid lavender. Both change after QC r3.* **right:** a pale green fill `#D9F2D0` with a `#3FA34D` 10 px **border** and a drawn **tick** (ASSET-019, ASSET-021), ink label (11.5:1), and a green "Đúng rồi!" bar (as Android draws it). The leader's "#3FA34D plus a tick" means the border and the tick, not a solid fill. The tick is the colour-blind-safe signal. **Rule:** card labels are ink on a pale or mid fill; colour, border and icon carry the meaning (`design/accessibility-requirements.md`). Icons carry a thick ink outline. Fallback for any label on a saturated fill: deep ink `#1A120C`. iOS's solid green with white text changes after QC r3 | Quiz Rules 4–5; Luan's rule 3 |
 | Card order | shuffled per question (Mulberry32, Fisher–Yates) | Quiz Rule 3 |
 | Why line | shown after the right pick; Tiếp appears after `feedback_time` (0.9 s) and never auto-advances | Quiz Rule 5 (P-05) |
-| Counter | "Câu n/N" label, ≥ 28 px | Language Rule 11 |
+| Prompt | `quiz_prompt`: box 980, 40 px, **weight 600** (semi-bold, the body weight), ≤ 2 lines. The content contract (005h, `rules.json` `fit.fields.quiz_prompt`) sets the weight; 600 is right, not 800 | Language F1; 005h |
+| Pause, sound | top-left, as on every screen (Input Rule 3; TASK-020 W7). *An app that draws it elsewhere today moves it (dev ticket, after r3)* | Input Rule 3 |
+| Counter | "Câu n/N" label, ≥ 28 px, top-centre with the progress dots | Language Rule 11 |
 | Results stars | filled (ASSET-022) / outline (ASSET-023), popping in one by one; "best" shown if higher | Quiz Rule 9; Hero progression Rule 10 |
 | Medal | earned: gold (ASSET-036) plus `ui.medal.earned` only in the run that earns it; otherwise outline (ASSET-037) plus `ui.medal.missing` | Hero progression Rule 10 |
 
@@ -71,11 +73,13 @@ greyed cards and retries.
 
 ## 8. Data Requirements
 
-`quiz.json`; retries (in memory); best stars and medal (Save).
+`quiz.json`; retries (in memory); best stars and medal (Hero progression, stored by Save).
 
 ## 9. Events Fired
 
-"answer right/wrong", "quiz finished (stars)", "medal_earned" (if no skip), "mission completed".
+"answer right/wrong", and "quiz finished {stars}" to Mission flow, which sends the one "mission
+completed {hero, stars, medal_earned}" to Hero progression before results show (Mission flow
+Rule 15; TASK-020 W4). Results show what Hero progression returns.
 
 ## 10. Transitions
 

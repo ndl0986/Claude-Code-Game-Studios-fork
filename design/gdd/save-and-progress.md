@@ -28,7 +28,8 @@ was played on.
 
 ### Core Rules
 
-1. **Saved keys** (D-16, Hero progression Rule 11), with nothing else:
+1. **Saved keys** (D-16), with nothing else. **This table is the one list**; Hero progression
+   Rule 11 and Hints Rule 7 point here:
 
 | Key | Type | Written when | Meaning |
 |---|---|---|---|
@@ -85,9 +86,10 @@ counts as `absent` (Rule 9). A `newer-version` file is read-only for this app (R
 
 | System | In | Out | Owner |
 |---|---|---|---|
-| Hero progression & unlock | completed, seen_open, stars, medal to write | stored values at launch | Hero progression GDD (rules); this GDD (storage rules) |
-| Quiz & stars | (via Hero progression) the run's stars | the best stars for the results screen | Quiz GDD |
-| Mission flow | `medal_earned` (via progression) | whether the medal is already earned (for the skip warning) | Mission flow GDD |
+| Hero progression & unlock | completed, seen_open, stars (best-of already applied), medal, as **one** write at quiz finish | stored values at launch | Hero progression GDD (rules, best-of); this GDD (storage rules, F1 clamp as a guard) |
+| Quiz & stars | (none: stars reach this system only through Mission flow's one completion report and Hero progression) | the best stars for the results screen | Quiz GDD |
+| Mission flow | (none: `medal_earned` reaches this system only through Hero progression) | whether the medal is already earned (for the skip warning) | Mission flow GDD |
+| Map & timeline (Alpha) | (none) | best stars and medal per hero | Map GDD |
 | Language & text | `lang` on a switch | `lang` at launch | Language GDD |
 | Audio & voice-over | `sound` on a toggle | `sound` at launch | Audio GDD |
 | D-04 save ADR | (none) | these requirements | game-dev-ios |
@@ -147,6 +149,7 @@ The F2 (save size) formula is defined as:
 | Mission flow & beat types | depends on this (indirect) | Soft | Medal-known for the skip warning |
 | Language & text | depends on this | Hard | `lang` |
 | Audio & voice-over | depends on this | Soft | `sound` |
+| Map & timeline | depends on this (Alpha) | Hard | Best stars and medal per hero |
 
 ## Visual/Audio Requirements
 
