@@ -170,3 +170,4 @@ test-setup, smoke-check), those checks report NOT ASSESSED by design (ADR-0001).
 - Minimum supported landscape height ≈ 288 dp after insets (k 0.40; ≥ 512 dp wide); QC's narrowest phone ≥ k 0.40.
 - Android targetSdk 35 → 36 before any Play upload.
 - D-22 platform backup decision before a Kids-category submission (Android manifest change if "allow").
+**Android QC r6 (2026-11-14):** frozen 7790ee9 (107 tests), APK sha256 2fed0ba2…9181. D-27 title card, full-bleed story, pad_min buttons, AC13 contact, outlines, line pitch 1.35 em. Quiz small-k spec merged → r7.
