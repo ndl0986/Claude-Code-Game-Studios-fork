@@ -599,6 +599,12 @@ public struct PlayState: Sendable {
             let k = queue.isEmpty ? FightParams.Kind.spear : queue.removeFirst().kind
             enemies.append(Enemy(id: 99, kind: k, x: hero.x + tuning["enemy_reach"], face: -1, state: .windup, t: 0, hits: 0, kb: 0, moving: false))
             spawnT = 99
+        } else if stage == "blocks" && beats[beat].type == "training" {
+            for i in dummies.indices { dummies[i].hit = true }
+            tut.windupSeen = false; tut.blocked = false
+            advanceTraining()
+        } else if stage == "encounter", let e = beats[beat].params.encounters?.first {
+            hero.x = xStart + e.atScreen * 1280
         } else if stage == "caption" && beats[beat].type == "fight" {
             queue = []; phase = .caption; captionLine = 0
         }

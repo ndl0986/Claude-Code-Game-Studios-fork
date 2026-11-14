@@ -177,9 +177,10 @@ public final class Game {
             tap()
             if quiz!.advance() { finishQuiz() }
         case .results:
+            guard !debounced() else { return }
             tap()
             if unlockedHero != nil { go(.unlock); uiSounds.append(.chime) } else { reset(); go(.title) }
-        case .unlock: home()
+        case .unlock: guard !debounced() else { return }; home()
         default: break
         }
     }

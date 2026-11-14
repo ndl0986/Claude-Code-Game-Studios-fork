@@ -79,6 +79,7 @@ final class GameScene: SKScene {
             case .drum: audio.play(.drum)
             case .clang: audio.play(.clang)
             case .bonk: audio.play(.bonk)
+            case .cheer: audio.play(.chime)
             default: break
             }
         }
@@ -90,25 +91,26 @@ final class GameScene: SKScene {
     private func uiKeyNow() -> String {
         let p = game.play, q = game.quiz
         return [game.screen.rawValue, game.lang.rawValue, "\(game.storyLine)", "\(p.phase)", "\(p.captionLine)", "\(p.beat)",
-                "\(q?.index ?? -1)", "\(q?.okIndex ?? -1)", "\(q?.wrong.sorted() ?? [])", "\(game.muted)", "\(game.stars)", "\(layout.scale)"].joined(separator: "|")
+                "\(q?.index ?? -1)", "\(q?.okIndex ?? -1)", "\(q?.wrong.sorted() ?? [])", "\(game.muted)", "\(game.stars)", "\(layout.scale)",
+                "\(p.cardLine)", "\(p.trainingStage)", "\(p.visiblePads.map(\.rawValue).sorted())", "\(game.skipWarning)", "\(p.goArrow)"].joined(separator: "|")
     }
 
     // MARK: touches
 
     private func ydown(_ t: UITouch) -> CGPoint { let p = t.location(in: self); return CGPoint(x: p.x, y: 720 - p.y) }
     private func tid(_ t: UITouch) -> Int { ObjectIdentifier(t).hashValue }
-    private var padsLive: Bool { game.screen == .play && game.play.phase != .caption }
+    private var padsLive: Bool { game.screen == .play && !game.skipWarning && !game.play.visiblePads.isEmpty }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
             let p = ydown(t)
-            if padsLive, let a = layout.action(at: p.x, p.y) { pads.down(tid(t), a); continue } // pads fire on touch-down
+            if padsLive, let a = layout.action(at: p.x, p.y, visible: game.play.visiblePads) { pads.down(tid(t), a); continue } // pads fire on touch-down
             if let b = buttons.last(where: { $0.rect.contains(p) }) { menuTouches[tid(t)] = b.id }
         }
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { let p = ydown(t); pads.moved(tid(t), layout.action(at: p.x, p.y)) }
+        for t in touches { let p = ydown(t); pads.moved(tid(t), layout.action(at: p.x, p.y, visible: game.play.visiblePads)) }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -136,6 +138,9 @@ final class GameScene: SKScene {
         case "resume": game.resume()
         case "home", "toMap": game.home()
         case "replay": game.replay()
+        case "skip": game.skip()
+        case "skipAnyway": game.skipAnyway()
+        case "keepReading": game.keepReading()
         default: if id.hasPrefix("card"), let j = Int(id.dropFirst(4)) { game.answer(j) }
         }
         uiKey = ""
@@ -171,6 +176,30 @@ final class GameScene: SKScene {
         }
         for (id, n) in enemyNodes where !seen.contains(id) { n.removeFromParent(); enemyNodes[id] = nil }
         fx.removeAllChildren()
+        // training: straw dummies wobble and spring back (never break); the friendly partner in the hero's colours
+        for d in p.dummies {
+            let n = SKNode(); n.position = D.p(d.x, ground); n.zRotation = -sin(t * 20) * 0.25 * d.wobble
+            n.addChild(D.rr(-6, -170, 12, 170, 6, C.wood))
+            n.addChild(D.ellipse(0, -110, 34, 56, d.hit ? SKColor(hex: 0xe8cf7a) : SKColor(hex: 0xd9b26a)))
+            n.addChild(D.circle(0, -180, 26, SKColor(hex: 0xe8cf7a)))
+            n.addChild(D.rr(-40, -130, 80, 10, 5, SKColor(hex: 0xb8902f)))
+            fx.addChild(n)
+        }
+        if let pt = p.partner {
+            let n = HeroNode(scale: 0.95)
+            n.update(face: pt.face, walk: false, defend: false, attack: pt.state == .strike ? 0.6 : (pt.state == .windup ? 0.05 : nil), hurt: false, t: t)
+            n.position = D.p(pt.x, ground); fx.addChild(n)
+            if pt.state == .windup {
+                let b = SKNode(); b.addChild(D.circle(0, 0, 30, C.glow, C.goldDark, 4)); b.addChild(D.rr(-5, -18, 10, 24, 5, C.ink)); b.addChild(D.circle(0, 14, 5.5, C.ink))
+                b.position = D.p(pt.x, ground - 300); fx.addChild(b)
+            }
+        }
+        if let fxX = p.flagX {
+            let f = SKNode(); f.position = D.p(fxX, ground)
+            f.addChild(D.rr(-5, -300, 10, 300, 5, SKColor(hex: 0x6a4a2a)))
+            f.addChild(D.poly([(5, -295), (120, -270), (5, -220)], C.gold))
+            fx.addChild(f)
+        }
         for d in p.dropped {
             let n = SKNode(); n.position = D.p(d.x, ground - 8); n.zRotation = -d.rot; n.alpha = min(1, d.life)
             switch d.kind {
@@ -188,6 +217,7 @@ final class GameScene: SKScene {
         }
         worldHints.removeAllChildren()
         if let e = p.stallTarget { let a = arrowDown(); a.position = D.p(e.x, ground - 330 + sin(t * 8) * 10); worldHints.addChild(a) }
+        if p.flagArrow, let fx = p.flagX { let a = arrowDown(); a.position = D.p(fx, ground - 360 + sin(t * 8) * 10); worldHints.addChild(a) }
     }
 
     private func color(_ c: FxColor) -> SKColor {
@@ -254,7 +284,7 @@ final class GameScene: SKScene {
     /// A text box for a Text line; in a debug build a pending claim adds an `UNSIGNED Cxx` badge.
     private func textBox(_ t: Text, _ x: Double, _ y: Double, _ w: Double, _ size: Double, _ c: SKColor) {
         add(Font.label(t.text(game.lang), size, c, width: w), x, y)
-        badge(t, x, y - size * 1.4)
+        badge(t, 640, 16) // debug only, a strip at the top edge: never over the text (Android QC r1)
     }
     private func badge(_ t: Text, _ x: Double, _ y: Double) {
         guard game.isDebug else { return }
@@ -265,6 +295,22 @@ final class GameScene: SKScene {
         n.addChild(D.rr(-l.frame.width / 2 - 10, -14, l.frame.width + 20, 28, 10, SKColor(hex: 0xb4541e)))
         n.addChild(l)
         add(n, x, y)
+    }
+
+    /// D-07: the Skip button on story screens, and the kind warning over everything.
+    private func skipButton() {
+        guard game.canSkip else { return }
+        button(game.ui("ui.story.skip"), 1280 - 230, 640, 190, 70, "skip", fill: C.cream, size: 26)
+    }
+    private func skipWarningOverlay() {
+        guard game.skipWarning else { return }
+        buttons = []
+        add(D.rr(0, 0, 1280, 720, 0, SKColor(red: 42 / 255, green: 36 / 255, blue: 64 / 255, alpha: 0.75)), 0, 0)
+        add(D.rr(-420, -170, 840, 340, 36, C.cream, C.gold, 6), 640, 330)
+        add(D.drum(50, SKColor(hex: 0xc98a12, alpha: 0.5)), 640, 210)
+        add(Font.label(game.ui("ui.story.skip_warning"), 34, C.ink, width: 720), 640, 300)
+        button(game.ui("ui.story.keep_reading"), 250 + 70, 400, 300, 100, "keepReading", pulse: true)
+        button(game.ui("ui.story.skip_confirm"), 660, 400, 300, 100, "skipAnyway", fill: C.cream)
     }
 
     private func buildUI() {
@@ -279,6 +325,8 @@ final class GameScene: SKScene {
         case .results: buildResults()
         case .unlock: buildUnlock()
         }
+        skipButton()
+        skipWarningOverlay()
     }
 
     private func buildTitle() {
@@ -322,7 +370,6 @@ final class GameScene: SKScene {
         let line = lines[min(game.storyLine, lines.count - 1)]
         textBox(line, 640, 530, 1000, 38, .white)
         button(game.ui("ui.btn.next"), 640 - 150, 590, 300, 110, "next", pulse: true)
-        langButton()
     }
 
     private func padIcon(_ kind: String, _ r: Double) -> SKNode {
@@ -335,6 +382,9 @@ final class GameScene: SKScene {
             for d in [-1.0, 1] { n.addChild(D.poly([(d * 12 + d * r * 0.3, 0), (d * 12 - d * r * 0.18, -r * 0.28), (d * 12 - d * r * 0.18, r * 0.28)], C.ink)) }
         case "defend":
             n.addChild(D.circle(0, -4, r * 0.55, SKColor(hex: 0xd8a657), C.goldDark, 4)); n.addChild(D.circle(0, -4, r * 0.14, C.gold, C.goldDark, 3))
+        case "special": // the banner: plain cloth on a pole, never text (art bible §3)
+            n.addChild(D.rr(-r * 0.35, -r * 0.55, 6, r * 1.1, 3, SKColor(hex: 0x6a4a2a)))
+            n.addChild(D.poly([(-r * 0.3, -r * 0.5), (r * 0.45, -r * 0.4), (r * 0.45, r * 0.05), (-r * 0.3, -r * 0.05)], C.red))
         default: // attack: a staff and a swoosh, tangerine accent (TASK-004 art fix: not a pickaxe)
             let s = D.rr(-6, -r * 0.6, 12, r * 1.1, 6, C.wood); s.zRotation = 0.8; n.addChild(s)
             let p = CGMutablePath(); p.addArc(center: .zero, radius: r * 0.5, startAngle: 1.2, endAngle: 2.6, clockwise: false)
@@ -354,6 +404,15 @@ final class GameScene: SKScene {
             add(D.circle(0, 0, 30, done ? C.gold : SKColor(white: 1, alpha: 0.75), C.goldDark, 4), x, 60)
             add(D.drum(22, done ? C.ink : SKColor(red: 58 / 255, green: 42 / 255, blue: 31 / 255, alpha: 0.35)), x, 60)
         }
+        if p.phase == .beatCard {
+            let texts = p.cardTexts
+            add(D.rr(-480, -150, 960, 300, 36, C.panel, C.gold, 6), 640, 290)
+            for x in [230.0, 1050] { add(D.drum(44, SKColor(hex: 0xf2b632, alpha: 0.8)), x, 210) }
+            add(Font.label("\(game.ui("ui.play.beat")) \(p.beat + 1)", 30, C.gold), 640, 190)
+            textBox(texts[min(p.cardLine, texts.count - 1)], 640, 285, 760, 40, .white)
+            button(game.ui("ui.btn.next"), 640 - 150, 470, 300, 110, "next", pulse: true)
+            return
+        }
         if p.phase == .caption {
             let beat = p.beats[p.beat]
             add(D.rr(-480, -150, 960, 300, 36, C.panel, C.gold, 6), 640, 290)
@@ -363,18 +422,23 @@ final class GameScene: SKScene {
             button(game.ui("ui.btn.next"), 640 - 150, 470, 300, 110, "next", pulse: true)
             return
         }
-        if p.phase == .fight, p.beat < p.beats.count {
+        if p.phase == .beatPlay || p.phase == .beatEnd, p.beat < p.beats.count {
             let goal = p.beats[p.beat].goal
             add(Font.label(goal.text(game.lang), 26, C.ink, width: 600), 640, 120)
         }
         for (a, c, kind, label) in [(PadAction.left, layout.left, "left", nil), (.right, layout.right, "right", nil),
-                                    (.defend, layout.defend, "defend", "ui.pad.defend"), (.attack, layout.attack, "attack", "ui.pad.attack")] as [(PadAction, Circle, String, String?)] {
+                                    (.defend, layout.defend, "defend", "ui.pad.defend"), (.attack, layout.attack, "attack", "ui.pad.attack"),
+                                    (.special, layout.special, "special", "ui.pad.special")] as [(PadAction, Circle, String, String?)] where p.visiblePads.contains(a) {
             let pad = SKNode()
             let halo = D.circle(0, 0, c.r + 14, SKColor(red: 1, green: 226 / 255, blue: 74 / 255, alpha: 0.55)); halo.name = "halo"; pad.addChild(halo)
             pad.addChild(D.circle(0, -6, c.r, SKColor(red: 58 / 255, green: 42 / 255, blue: 31 / 255, alpha: 0.35)))
             let face = D.circle(0, 0, c.r, SKColor(hex: 0xfff6e3, alpha: 0.88), C.gold, 6); face.name = "face"; pad.addChild(face)
             let ic = padIcon(kind, c.r); if label != nil { ic.position.y = c.r * 0.14 }; pad.addChild(ic)
             if let label { let l = Font.label(game.ui(label), 24, C.ink); l.position.y = -c.r * 0.62; pad.addChild(l) }
+            if a == .special {
+                let ring = SKShapeNode(); ring.name = "meter"; ring.strokeColor = C.gold; ring.lineWidth = 12; ring.lineCap = .round; ring.zPosition = 2
+                pad.addChild(ring)
+            }
             add(pad, c.cx, c.cy)
             padNodes[a] = pad
         }
@@ -399,14 +463,13 @@ final class GameScene: SKScene {
         backgroundColor = C.night
         guard let q = game.quiz, !q.isFinished else { return }
         let cur = q.current, n = q.questions.count
-        add(D.drum(70, SKColor(hex: 0xf2b632, alpha: 0.25)), 120, 120)
         for i in 0..<n {
             let lit = i < q.index || (i == q.index && q.okIndex != nil)
             add(D.circle(0, 0, 16, lit ? C.gold : SKColor(white: 1, alpha: 0.3), C.goldDark, 3), 640 - Double(n - 1) * 30 + Double(i) * 60, 50)
         }
-        add(Font.label("\(game.ui("ui.quiz.question")) \(q.index + 1)/\(n)", 28, C.gold, align: .left), max(120, layout.pause.cx + layout.pause.r + 20), 50)
+        add(Font.label("\(game.ui("ui.quiz.question")) \(q.index + 1)/\(n)", 28, C.gold, align: .left), layout.pause.cx + layout.pause.r + 24, layout.pause.cy)
         roundIcon(layout.pause, "pause", pauseIcon(layout.pause.r))
-        textBox(cur.prompt, 640, 150, 980, 42, .white)
+        textBox(cur.prompt, 640, 175, 900, 40, .white)
         let cw = 360.0, ch = 380.0, gap = 40.0, x0 = (1280 - 3 * cw - 2 * gap) / 2, y0 = 250.0
         for slot in 0..<3 {
             let j = q.order[slot], choice = cur.choices[j]
@@ -446,9 +509,15 @@ final class GameScene: SKScene {
             add(s, 640 + Double(i - 1) * 200, i == 1 ? 270 : 300)
             if got { s.setScale(0.6); s.run(.sequence([.wait(forDuration: 0.3 + Double(i) * 0.35), .scale(to: 1, duration: 0.3)])) }
         }
-        if game.hero.mission.nextHero == nil { add(Font.label(game.ui("ui.results.more_heroes"), 30, SKColor(white: 1, alpha: 0.8), width: 900), 640, 450) }
+        // the medal: gold if ever earned; "earned" only in the run that earns it; "missing" only if never earned
+        let medal = SKNode()
+        medal.addChild(D.circle(0, 0, 44, game.medalEarned ? C.gold : nil, game.medalEarned ? .white : SKColor(white: 1, alpha: 0.5), 5))
+        medal.addChild(D.drum(32, game.medalEarned ? C.goldDark : SKColor(white: 1, alpha: 0.4)))
+        add(medal, 1060, 300)
+        if game.medalNew { add(Font.label(game.ui("ui.medal.earned"), 26, C.glow, width: 300), 1060, 380) }
+        else if !game.medalEarned { add(Font.label(game.ui("ui.medal.missing"), 22, SKColor(white: 1, alpha: 0.7), width: 300), 1060, 380) }
+        if game.unlockedHero == nil { add(Font.label(game.ui("ui.results.more_heroes"), 30, SKColor(white: 1, alpha: 0.8), width: 900), 640, 450) }
         button(game.ui("ui.btn.next"), 490, 520, 300, 110, "next", pulse: true)
-        langButton()
     }
 
     private func buildUnlock() {
@@ -462,20 +531,21 @@ final class GameScene: SKScene {
         let h = HeroNode(scale: 0.6); h.update(face: 1, walk: false, defend: false, attack: nil, hurt: false, t: 0); add(h, 300, 380)
         add(Font.label(game.hero.mission.hero.name.text(game.lang), 30, .white), 300, 450)
         add(Font.label("?", 110, C.goldDark), 980, 300)
+        if let next = game.unlockedHero { add(Font.label(next.mission.hero.name.text(game.lang), 30, .white), 980, 450) }
         add(Font.label(game.ui("ui.unlock.title"), 52, C.gold, width: 1100), 640, 100)
         add(Font.label(game.ui("ui.unlock.map_stub"), 26, SKColor(white: 1, alpha: 0.6)), 640, 530)
         button(game.ui("ui.btn.replay"), 260, 580, 340, 110, "replay", fill: C.cream)
         button(game.ui("ui.btn.to_map"), 680, 580, 340, 110, "toMap", pulse: true)
-        langButton()
     }
 
     // MARK: per-frame UI animation (hint pulses, hands, quiz shake)
 
     private func animateUI() {
         let t = clock
-        if game.screen == .play, game.play.phase != .caption {
+        if game.screen == .play, !game.play.visiblePads.isEmpty {
             let p = game.play
-            let pulse: [PadAction: Bool] = [.right: p.rightPulse, .attack: p.stalled]
+            var pulse: [PadAction: Bool] = [.right: p.rightPulse]
+            if let sp = p.stuckPad { pulse[sp] = true }
             for (a, node) in padNodes {
                 let on = pads.holds.values.contains(a)
                 let pl = pulse[a] ?? false
@@ -484,11 +554,18 @@ final class GameScene: SKScene {
                 node.setScale(pl ? 1 + 0.08 * sin(t * 10) : 1)
             }
             if let hand = handNode {
-                let target: Circle? = switch p.hand { case .right: layout.right; case .attack: layout.attack; case .defend: layout.defend; case nil: nil }
+                let target: Circle? = switch p.hand { case .right: layout.right; case .attack: layout.attack; case .defend: layout.defend; case .special, .holdSpecial: layout.special; case nil: nil }
                 hand.isHidden = target == nil
                 if let c = target { hand.position = D.p(c.cx, c.cy - 70 - sin(t * 6) * 12) }
             }
             if let go = ui.childNode(withName: "go") { go.position = D.p(1060 + sin(t * 6) * 10, 300) }
+            if let ring = padNodes[.special]?.childNode(withName: "meter") as? SKShapeNode {
+                let m = p.meter
+                if p.currentBeat?.type == "hold-meter", m > 0 {
+                    let path = CGMutablePath(); path.addArc(center: .zero, radius: layout.special.r + 10, startAngle: .pi / 2, endAngle: .pi / 2 - 2 * .pi * m, clockwise: true)
+                    ring.path = path; ring.isHidden = false
+                } else { ring.isHidden = true }
+            }
         }
         if game.screen == .quiz, let q = game.quiz {
             let x0 = (1280 - 3 * 360.0 - 2 * 40) / 2

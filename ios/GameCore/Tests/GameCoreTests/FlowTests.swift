@@ -39,7 +39,7 @@ final class FlowTests: XCTestCase {
         XCTAssertEqual(g.stars, 3)
         XCTAssertTrue(g.medalEarned && g.medalNew, "no skips: the medal")
         XCTAssertNil(g.unlockedHero, "the sample is the last hero: no unlock screen")
-        g.next(); XCTAssertEqual(g.screen, .title, "more heroes are coming → title")
+        wait(g, 0.3); g.next(); XCTAssertEqual(g.screen, .title, "more heroes are coming → title")
     }
 
     func test_story_next_is_debounced() throws {

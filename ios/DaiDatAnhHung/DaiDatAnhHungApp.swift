@@ -38,7 +38,9 @@ enum Boot {
         let data = bundle.appendingPathComponent("data")
         Font.register(data.appendingPathComponent("fonts/nunito.ttf"))
         let samples = bundle.appendingPathComponent("samples/heroes/sample")
-        let extra = isDebug && FileManager.default.fileExists(atPath: samples.path) ? [samples] : []
+        // the debug sample hero loads only when asked (`-hero sample`), as on Android: debug and QC play the real progression
+        let askedSample = isDebug && UserDefaults.standard.string(forKey: "hero") == "sample"
+        let extra = askedSample && FileManager.default.fileExists(atPath: samples.path) ? [samples] : []
         do {
             let content = try ContentSet.load(dataRoot: data, extraHeroDirs: extra)
             for a in content.assets.assets where a.kind == "picture" { Pictures.files[a.id] = data.appendingPathComponent(a.file) }
@@ -50,7 +52,7 @@ enum Boot {
             let game = Game(content: content, hero: hero, store: d, isDebug: isDebug)
             if isDebug, let s = d.string(forKey: "startScreen") {
                 func int(_ k: String) -> Int? { d.object(forKey: k) == nil ? nil : d.integer(forKey: k) }
-                game.debugStart(screen: s, q: int("q"), beat: int("beat"), stage: d.string(forKey: "stage"), stars: int("stars"), wrong: int("wrong"))
+                game.debugStart(screen: s, q: int("q"), beat: int("beat"), stage: d.string(forKey: "stage"), stars: int("stars"))
             }
             let audio = Audio(volume: content.tuning["volume"])
             return GameScene(game: game, audio: audio)

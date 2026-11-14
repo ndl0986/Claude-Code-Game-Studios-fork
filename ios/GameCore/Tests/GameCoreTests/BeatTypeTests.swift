@@ -185,7 +185,7 @@ final class SkipAndProgressTests: XCTestCase {
         XCTAssertEqual(store.values["completed.tran-quoc-toan"] as? Bool, true)
         XCTAssertEqual(store.values["stars.tran-quoc-toan"] as? Int, 3)
         XCTAssertNil(g.unlockedHero, "no next hero: more heroes are coming")
-        g.next(); XCTAssertEqual(g.screen, .title)
+        wait(g, 0.3); g.next(); XCTAssertEqual(g.screen, .title)
     }
 
     func test_progression_open_rules() throws {

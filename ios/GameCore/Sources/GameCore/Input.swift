@@ -37,13 +37,13 @@ public struct Circle: Equatable, Sendable { public var cx, cy, r: Double
 /// Where the pads and HUD buttons go: the prototype's positions, pads at least `pad_min` points
 /// across, and everything inside the safe area (Dynamic Island, home indicator).
 public struct PadLayout: Equatable, Sendable {
-    public var left, right, defend, attack, pause, mute: Circle
+    public var left, right, defend, attack, special, pause, mute: Circle
     public var lang: (x: Double, y: Double, w: Double, h: Double)
     /// Points per scene unit.
     public let scale: Double
 
     public static func == (a: PadLayout, b: PadLayout) -> Bool {
-        a.left == b.left && a.right == b.right && a.defend == b.defend && a.attack == b.attack && a.scale == b.scale
+        a.left == b.left && a.right == b.right && a.defend == b.defend && a.attack == b.attack && a.special == b.special && a.scale == b.scale
     }
 
     /// `view` and `insets` (top, left, bottom, right) are in points; the scene is aspect-fit
@@ -63,6 +63,8 @@ public struct PadLayout: Equatable, Sendable {
         if right.cx - right.r < left.cx + left.r + 10 { right.cx = left.cx + left.r + 10 + right.r }
         defend = pad(950, 625, 80); attack = pad(1150, 590, 92)
         if defend.cx + defend.r > attack.cx - attack.r - 10 { defend.cx = attack.cx - attack.r - 10 - defend.r }
+        // special sits above attack (hold-meter and training only)
+        special = pad(attack.cx, attack.cy - attack.r - 14 - max(80, padMin / 2 / s), 80)
         pause = pad(66, 66, 48); mute = pad(176, 66, 48)
         if mute.cx - mute.r < pause.cx + pause.r + 10 { mute.cx = pause.cx + pause.r + 10 + mute.r }
         let lw = 160.0, lh = 96.0
@@ -70,8 +72,13 @@ public struct PadLayout: Equatable, Sendable {
     }
 
     /// The pad under a point (scene units, y down), with the prototype's 15% slop.
-    public func action(at x: Double, _ y: Double) -> PadAction? {
-        for (c, a) in [(attack, PadAction.attack), (defend, .defend), (right, .right), (left, .left)] where c.contains(x, y) { return a }
+    public func action(at x: Double, _ y: Double, visible: Set<PadAction> = Set(PadAction.allCases)) -> PadAction? {
+        for (c, a) in [(attack, PadAction.attack), (special, .special), (defend, .defend), (right, .right), (left, .left)] where visible.contains(a) && c.contains(x, y) { return a }
+        return nil
+    }
+
+    func anyAction(at x: Double, _ y: Double) -> PadAction? {
+        for (c, a) in [(attack, PadAction.attack), (special, .special), (defend, .defend), (right, .right), (left, .left)] where c.contains(x, y) { return a }
         return nil
     }
 }

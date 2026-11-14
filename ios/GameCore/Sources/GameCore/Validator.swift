@@ -33,6 +33,8 @@ public struct ContentValidator {
         out += Self.schemaMajor(file: content.index.schemaVersion, app: ContentSet.supportedSchema)
         out += Self.tuningRules(content.tuning.values.mapValues(\.value))
         out += Self.starOrder(content.rules.quizStars.thresholds)
+        let indexed = content.heroes.filter { content.index.heroes.contains($0.mission.hero.id) }
+        out += Self.timeline(indexed.map { (id: $0.mission.hero.id, order: $0.mission.hero.timelineOrder, next: $0.mission.nextHero) })
 
         for hero in content.heroes {
             let claims = Dictionary(hero.claims.claims.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
@@ -170,6 +172,20 @@ public struct ContentValidator {
             out.append(.init(rule: "R14", message: "attack_range \(a) < enemy_reach − stand_gap \(r - g)"))
         }
         if let t = v["telegraph"], t < 0.8 { out.append(.init(rule: "R15", message: "telegraph \(t) s < 0.8 s", isWarning: true)) }
+        return out
+    }
+
+    /// R17: timeline_order is unique across indexed heroes; R18: next_hero is the next indexed hero
+    /// by timeline_order, or null for the last (claim status ignored; samples are not indexed).
+    public static func timeline(_ heroes: [(id: String, order: Int, next: String?)]) -> [Finding] {
+        var out: [Finding] = []
+        let orders = heroes.map(\.order)
+        if Set(orders).count != orders.count { out.append(.init(rule: "R17", message: "timeline_order not unique")) }
+        let sorted = heroes.sorted { $0.order < $1.order }
+        for (i, h) in sorted.enumerated() {
+            let want = i + 1 < sorted.count ? sorted[i + 1].id : nil
+            if h.next != want { out.append(.init(rule: "R18", message: "\(h.id) next_hero \(h.next ?? "null") should be \(want ?? "null")")) }
+        }
         return out
     }
 

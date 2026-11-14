@@ -99,6 +99,9 @@ final class FixtureTests: XCTestCase {
                 let params = try ContentJSON.decode(BeatParams.self, from: JSONSerialization.data(withJSONObject: b["params"]!))
                 findings = ContentValidator.beatButtons(type: b["type"] as! String, buttons: b["buttons"] as! [String], params: params)
             case "R14", "R15": findings = ContentValidator.tuningRules((c["tuning"] as! [String: NSNumber]).mapValues(\.doubleValue))
+            case "R17", "R18":
+                let hs = (c["heroes"] as! [[String: Any]]).map { (id: $0["id"] as! String, order: $0["timeline_order"] as! Int, next: $0["next_hero"] as? String) }
+                findings = ContentValidator.timeline(hs).filter { $0.rule == rule }
             case "R16":
                 let th = (c["thresholds"] as! [[String: Any]]).map { RulesFile.StarThreshold(stars: $0["stars"] as! Int, maxRetries: $0["max_retries"] as? Int) }
                 findings = ContentValidator.starOrder(th)
