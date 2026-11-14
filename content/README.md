@@ -34,7 +34,7 @@ Schema **1.1** (D-06, a MINOR bump): optional training `blocks` / `finish_specia
 
 Mission schema **1.5** (TASK-005l, MINOR): an optional beat `cheer` (default `true`). With `false`, beat_end has no cheer pose and no `sfx_beat_end_cheer`; `sfx_ui_next` (the page turn) plays once, and the progress dots still fill (Mission flow Rule 2, TASK-020 W21). It's ignored on fight beats, which end on their caption (R21 warns). Which beats set it is a content decision. 1.4 files stay valid.
 
-`rules.json` schema **1.2** (TASK-005l, MINOR): `text_limits.min_px` {heading 44, body 37, button 34, label 28} and a `class` on every `fit.fields` entry (Language & text Rule 6): **heading** = hero_name, beat_title; **body** = dialog, goal, scene, intro, ending, banner, quiz_prompt, quiz_choice, quiz_why, dialogue_line, dialogue_narrator; **button** = button; **label** = ui, place. The banner is body text, so its `font_px` is 37 (was 28): VI fits 1 line and EN 2 lines in its 880 box.
+`rules.json` schema **1.2** (TASK-005l, MINOR): `text_limits.min_px` {heading 44, body 37, button 34, label 28} and a `class` on every `fit.fields` entry (Language & text Rule 6): **heading** = hero_name, beat_title; **body** = dialog, goal, scene, intro, ending, banner, quiz_prompt, quiz_choice, quiz_why, dialogue_line, dialogue_narrator; **button** = button; **label** = ui, place. The banner is body text, so its `font_px` is 37 (was 28): VI fits 1 line and EN 2 lines in its 880 box. The `goal` box is **880** (was 1040; TASK-005n), so the goal plate and the banner bar share the top stack's band x 330–1250 to the right of pause and sound (hud.md §3.3); every current goal still fits 1 line.
 
 
 - **Text** `{id, vi, en, claims[]}` is every story, scene, intro, ending, banner and quiz line.

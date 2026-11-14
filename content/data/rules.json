@@ -103,7 +103,7 @@
           "class": "heading"
         },
         "goal": {
-          "box_width": 1040,
+          "box_width": 880,
           "font_px": 37,
           "max_lines": 1,
           "weight": 800,
