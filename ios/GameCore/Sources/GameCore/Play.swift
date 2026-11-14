@@ -54,7 +54,14 @@ public struct Pop: Sendable { public let key: String; public var x, y, life: Dou
 public struct Dropped: Sendable { public let x: Double; public let kind: FightParams.Kind; public let rot: Double; public var life: Double }
 
 /// First-use flags for the hand hints.
-public struct Tutorial: Sendable { public var moved = false, hit = false, blocked = false, windupSeen = false, enemySeen = false }
+public struct Tutorial: Sendable {
+    public var moved = false, hit = false, blocked = false, windupSeen = false, enemySeen = false
+    /// The flag pad's two teach flags (Hints GDD): held past 25% in hold-meter; tapped in training.
+    public var holdPast25 = false, specialTapped = false
+    public init(moved: Bool = false, hit: Bool = false, blocked: Bool = false, windupSeen: Bool = false, enemySeen: Bool = false) {
+        self.moved = moved; self.hit = hit; self.blocked = blocked; self.windupSeen = windupSeen; self.enemySeen = enemySeen
+    }
+}
 
 /// A training dummy (mission-flow: wobbles and springs back, never breaks).
 public struct Dummy: Sendable { public let x: Double; public var hit = false; public var wobble = 0.0 }
@@ -108,8 +115,6 @@ public struct PlayState: Sendable {
     /// True once the last beat's end (or caption) closes: the flow moves to the ending.
     public private(set) var finished = false
     public private(set) var events: [PlayEvent] = []
-    /// Special was tapped or held at least once this run (teach hint).
-    public var specialUsed = false
 
     public init(tuning: Tuning, beats: [Beat], seed: Int) {
         self.tuning = tuning; self.beats = beats
@@ -134,7 +139,7 @@ public struct PlayState: Sendable {
         default: 0
         }
     }
-    var dummySpacing: Double { tuning.values["dummy_spacing"]?.value ?? 300 }
+    var dummySpacing: Double { tuning["dummy_spacing"] }
     func hp(_ k: FightParams.Kind) -> Int {
         switch k { case .spear: Int(tuning["hp_spear"]); case .shield: Int(tuning["hp_shield"]); case .leader: Int(tuning["hp_leader"]) }
     }
@@ -300,14 +305,15 @@ public struct PlayState: Sendable {
             case "hold-meter":
                 stall += dt
                 if input.held.contains(.special) {
-                    specialUsed = true
                     let before = heldTotal
                     heldTotal = min(b.params.holdSeconds ?? 0, heldTotal + dt)
                     if heldTotal > before { stall = 0 }
+                    if meter > 0.25 { tut.holdPast25 = true }
                 }
                 if heldTotal >= (b.params.holdSeconds ?? 0) { phase = .beatEnd; endT = 0 }
             case "training":
                 stall += dt
+                if input.tapped.contains(.special) { tut.specialTapped = true }
                 trainingStep(dt, input)
                 if trainingStage == .done { phase = .beatEnd; endT = 0 }
             case "reach-the-flag":
@@ -398,7 +404,7 @@ public struct PlayState: Sendable {
             partner = p
             if blocksDone >= (currentBeat?.params.blocks ?? 0) { advanceTraining() }
         case .special:
-            if input.tapped.contains(.special) { specialUsed = true; advanceTraining() }
+            if input.tapped.contains(.special) { advanceTraining() }
         case .done: break
         }
     }
@@ -536,6 +542,8 @@ public struct PlayState: Sendable {
                 burst(dummies[i].x, ground - 160, 8, .glow); events.append(.drum)
                 stall = 0; tut.hit = true
             }
+            // the last dummy moves training on in the same frame as the hit (parity with Android)
+            if dummies.allSatisfy(\.hit) { advanceTraining() }
         }
         return any
     }
@@ -580,8 +588,8 @@ public struct PlayState: Sendable {
         if tut.enemySeen && !tut.hit && phase == .beatPlay && (locked || trainingStage == .dummies) { return .attack }
         let windup = enemies.contains { $0.state == .windup } || partner?.state == .windup
         if tut.windupSeen && !tut.blocked && windup { return .defend }
-        if phase == .beatPlay, currentBeat?.type == "hold-meter", meter <= 0.25 || stalled { return .holdSpecial } // and again when stuck
-        if phase == .beatPlay, trainingStage == .special, !specialUsed { return .special }
+        if phase == .beatPlay, currentBeat?.type == "hold-meter", !tut.holdPast25 || stalled { return .holdSpecial } // and again when stuck
+        if phase == .beatPlay, trainingStage == .special, !tut.specialTapped { return .special }
         return nil
     }
     /// The "go on" arrow after a caption or a beat's end.

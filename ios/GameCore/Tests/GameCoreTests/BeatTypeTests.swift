@@ -224,3 +224,32 @@ final class ParityTests: XCTestCase {
         XCTAssertEqual(r.lockX, trigger - c.tuning["lock_offset"])
     }
 }
+
+extension ParityTests {
+    func test_holding_the_flag_in_hold_meter_does_not_suppress_trainings_tap_hand() throws {
+        let c = try ContentSet.load(dataRoot: Repo.data)
+        var p = PlayState(tuning: c.tuning, beats: realHero(c).mission.beats, seed: 1)
+        p.debugJump(beat: 1, stage: nil)
+        while p.phase == .beatPlay { p.update(dt, StepInput(held: [.special])) }
+        XCTAssertTrue(p.tut.holdPast25); XCTAssertFalse(p.tut.specialTapped)
+        let t = p.tut
+        p.debugJump(beat: 2, stage: "blocks")
+        p.tut.holdPast25 = t.holdPast25; p.tut.specialTapped = false; p.tut.blocked = true
+        while p.trainingStage == .blocks { p.update(dt, StepInput(held: [.defend])) }
+        XCTAssertEqual(p.hand, .special, "the tap hand still teaches training's finish")
+    }
+
+    func test_the_last_dummy_moves_training_to_blocks_in_the_same_frame() throws {
+        let c = try ContentSet.load(dataRoot: Repo.data)
+        var p = PlayState(tuning: c.tuning, beats: realHero(c).mission.beats, seed: 1)
+        p.debugJump(beat: 2, stage: nil)
+        var step = 0
+        while p.trainingStage == .dummies && step < 6000 {
+            let before = p.dummies.filter(\.hit).count
+            p.update(dt, botInput(p, step: step)); step += 1
+            if p.dummies.filter(\.hit).count == p.dummies.count && before < p.dummies.count {
+                XCTAssertEqual(p.trainingStage, .blocks, "same frame as the last hit")
+            }
+        }
+    }
+}

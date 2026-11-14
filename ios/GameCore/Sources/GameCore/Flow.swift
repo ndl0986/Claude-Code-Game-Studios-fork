@@ -135,7 +135,7 @@ public final class Game {
 
     /// Story boxes ignore a second "Next" within `advance_debounce` of an advance (mission-flow AC9).
     func debounced() -> Bool {
-        let d = tuning.values["advance_debounce"]?.value ?? 0.25
+        let d = tuning["advance_debounce"]
         if lastAdvance >= 0 && clock - lastAdvance < d { return true }
         lastAdvance = clock; return false
     }
