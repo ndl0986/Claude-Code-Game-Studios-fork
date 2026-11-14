@@ -149,7 +149,7 @@ final class GameScene: SKScene {
             pads.apply(.ended, id: tid(t), action: nil, live: lv); padTouches[tid(t)] = nil
             guard let id = menuTouches.removeValue(forKey: tid(t)) else { continue }
             let p = ydown(t)
-            if !fired, buttons.contains(where: { $0.id == id && $0.rect.contains(p) }) { fire(id); fired = true } // menus fire on touch-up inside
+            if !fired, buttons.contains(where: { $0.id == id && $0.rect.contains(p) }) { fire(id, at: t.timestamp); fired = true } // menus fire on touch-up inside
         }
     }
 
@@ -158,18 +158,20 @@ final class GameScene: SKScene {
         for t in touches { pads.apply(.ended, id: tid(t), action: nil, live: lv); padTouches[tid(t)] = nil; menuTouches[tid(t)] = nil }
     }
 
-    private func fire(_ id: String) {
+    /// `press` is the activating touch's own time (Input GDD Rule 12): the advance debounce compares it,
+    /// not the frame clock, which jumps when loading the next box stalls a frame.
+    private func fire(_ id: String, at press: TimeInterval) {
         audio.volume = Float(game.tuning["volume"])
         switch id {
         case "start": game.start()
-        case "next": game.next()
+        case "next": game.next(at: press)
         case "lang": game.toggleLang()
         case "mute": game.toggleMute(); audio.muted = game.muted
         case "pause": releaseAllInput(); game.pause()
         case "resume": game.resume()
         case "home", "toMap": game.home()
         case "replay": game.replay()
-        case "ask": game.ask()
+        case "ask": game.ask(at: press)
         case "skip": game.skip()
         case "skipAnyway": game.skipAnyway()
         case "keepReading": game.keepReading()

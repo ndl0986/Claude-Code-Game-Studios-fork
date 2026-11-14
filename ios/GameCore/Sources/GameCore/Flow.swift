@@ -98,7 +98,7 @@ public final class Game {
     public enum UiSound: Sendable { case tap, chime, soft }
     var lastTap = -1.0
     var clock = 0.0
-    var lastAdvance = -1.0
+    var lastAdvance: Double?
     public private(set) var pausedFrom: Screen = .play
 
     /// `hero` is the mission to play. In a release build a hero whose claims aren't all approved
@@ -133,11 +133,14 @@ public final class Game {
         quiz = nil; stars = 0; skipped = false; warningAccepted = false; skipWarning = false; unlockedHero = nil
     }
 
-    /// Story boxes ignore a second "Next" within `advance_debounce` of an advance (mission-flow AC9).
-    func debounced() -> Bool {
-        let d = tuning["advance_debounce"]
-        if lastAdvance >= 0 && clock - lastAdvance < d { return true }
-        lastAdvance = clock; return false
+    /// Input GDD Rule 12 / F3: an advance button ignores a press within `advance_debounce` of the last
+    /// press that advanced. `press` is the press's own time (`UITouch.timestamp` in the app), never the
+    /// sim clock: loading the next box stalls a frame and the clock jumps, which let a second tap through
+    /// (Android B1). Without a press time (tests, debug) the sim clock stands in.
+    func debounced(_ press: Double?) -> Bool {
+        let t = press ?? clock
+        if let last = lastAdvance, t - last < tuning["advance_debounce"] { return true }
+        lastAdvance = t; return false
     }
 
     // MARK: actions (menus and cards fire on touch-up inside)
@@ -157,38 +160,39 @@ public final class Game {
     public func home() { tap(); reset(); go(.title) }
     public func replay() { tap(); reset(); storyLine = 0; go(.intro) }
 
-    /// "Tiếp / Next" on any story box, card, caption, quiz why, results or unlock.
-    public func next() {
+    /// "Tiếp / Next" on any story box, card, caption, quiz why, results or unlock; `press` is the
+    /// press time (`UITouch.timestamp`), for the debounce.
+    public func next(at press: Double? = nil) {
         guard !skipWarning else { return }
         switch screen {
         case .intro, .ending:
-            guard !debounced() else { return }
+            guard !debounced(press) else { return }
             tap()
             let lines = screen == .intro ? hero.mission.intro : hero.mission.ending.lines
             if storyLine + 1 < lines.count { storyLine += 1; return }
             if screen == .intro { go(.play) } else { startQuiz() }
         case .play where play.phase == .caption || play.phase == .beatCard || play.phase == .dialogueLine:
             // while the ask button shows, "Tiếp" isn't on screen: ignore it without using up the debounce
-            guard !(play.phase == .dialogueLine && play.askShowing), !debounced() else { return }
+            guard !(play.phase == .dialogueLine && play.askShowing), !debounced(press) else { return }
             tap()
             switch play.phase { case .caption: play.captionNext(); case .beatCard: play.cardNext(); default: play.dialogueNext() }
             if play.finished { storyLine = 0; go(.ending) }
         case .quiz:
-            guard quizCanAdvance, !debounced() else { return }
+            guard quizCanAdvance, !debounced(press) else { return }
             tap()
             if quiz!.advance() { finishQuiz() }
         case .results:
-            guard !debounced() else { return }
+            guard !debounced(press) else { return }
             tap()
             if unlockedHero != nil { go(.unlock); uiSounds.append(.chime) } else { reset(); go(.title) }
-        case .unlock: guard !debounced() else { return }; home()
+        case .unlock: guard !debounced(press) else { return }; home()
         default: break
         }
     }
 
     /// The ask button in a dialogue beat (fires on touch-up inside, debounced like Next).
-    public func ask() {
-        guard screen == .play, play.askShowing, !skipWarning, !debounced() else { return }
+    public func ask(at press: Double? = nil) {
+        guard screen == .play, play.askShowing, !skipWarning, !debounced(press) else { return }
         tap(); play.dialogueAsk()
     }
 
