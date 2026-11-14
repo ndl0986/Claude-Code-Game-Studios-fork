@@ -99,6 +99,12 @@ public final class Game {
     var lastTap = -1.0
     var clock = 0.0
     var lastAdvance: Double?
+    /// Input Rule 13 entry lock (QC r6 B7, TASK-005p): the press clock (system uptime, the base of
+    /// UITouch.timestamp); the app's default, injectable for tests.
+    public var uptime: () -> Double = { ProcessInfo.processInfo.systemUptime }
+    /// The lock context last seen, and when it was entered (press clock).
+    var lockContext: String?
+    var enteredAt: Double?
     public private(set) var pausedFrom: Screen = .play
 
     /// `hero` is the mission to play. In a release build a hero whose claims aren't all approved
@@ -149,9 +155,41 @@ public final class Game {
     /// sim clock: loading the next box stalls a frame and the clock jumps, which let a second tap through
     /// (Android B1). Without a press time (tests, debug) the sim clock stands in.
     func debounced(_ press: Double?) -> Bool {
+        if entryLocked(press) { return true } // dropped without using up the debounce
         let t = press ?? clock
         if let last = lastAdvance, t - last < tuning["advance_debounce"] { return true }
         lastAdvance = t; return false
+    }
+
+    /// The context a story/menu screen is in, for the entry lock: intro, ending, quiz, results, unlock, and in
+    /// play the beat card, the caption and the dialogue (its lines are box-to-box). nil elsewhere; pause keeps
+    /// the context it came from (pause and sound are exempt from the lock).
+    func currentLockContext() -> String? {
+        switch screen {
+        case .intro, .ending, .quiz, .results, .unlock: return "\(screen)"
+        case .play:
+            switch play.phase {
+            case .beatCard: return "card\(play.beat)"
+            case .caption: return "caption\(play.beat)"
+            case .dialogueLine: return "dialogue\(play.beat)"
+            default: return nil
+            }
+        case .pause: return lockContext
+        default: return nil
+        }
+    }
+
+    /// Stamps the entry time when the lock context changes (called after every step and action).
+    func noteContext() {
+        let c = currentLockContext()
+        if c != lockContext { lockContext = c; enteredAt = c == nil ? nil : uptime() }
+    }
+
+    /// Input Rule 13 / TASK-005p: within screen_enter_lock of entering a context, a press is dropped. Only real
+    /// presses (with a press time) are locked; a press stamped before the entry (a finger already down) too.
+    func entryLocked(_ press: Double?) -> Bool {
+        guard let p = press, let e = enteredAt, lockContext != nil else { return false }
+        return p - e < tuning["screen_enter_lock"]
     }
 
     // MARK: actions (menus and cards fire on touch-up inside)
@@ -175,6 +213,7 @@ public final class Game {
     /// "Tiếp / Next" on any story box, card, caption, quiz why, results or unlock; `press` is the
     /// press time (`UITouch.timestamp`), for the debounce.
     public func next(at press: Double? = nil) {
+        defer { noteContext() }
         guard !skipWarning else { return }
         switch screen {
         case .intro, .ending:
@@ -204,6 +243,7 @@ public final class Game {
 
     /// The ask button in a dialogue beat (fires on touch-up inside, debounced like Next).
     public func ask(at press: Double? = nil) {
+        defer { noteContext() }
         guard screen == .play, play.askShowing, !skipWarning, !debounced(press) else { return }
         tap(); play.dialogueAsk()
     }
@@ -222,8 +262,9 @@ public final class Game {
 
     /// "Bỏ qua / Skip": shows the kind warning, unless the child already chose "Skip anyway"
     /// this run or the medal is already earned; "Keep reading" closes it and it comes back next time.
-    public func skip() {
-        guard canSkip, !skipWarning else { return }
+    public func skip(at press: Double? = nil) {
+        defer { noteContext() }
+        guard canSkip, !skipWarning, !entryLocked(press) else { return }
         tap()
         if warningAccepted || medalAlready { skipSection() } else { skipWarning = true }
     }
@@ -254,8 +295,9 @@ public final class Game {
     public var quizCanAdvance: Bool { guard let q = quiz, q.okIndex != nil else { return false }; return q.okTime >= tuning["feedback_time"] }
 
     /// A quiz card tapped (fires on touch-up inside), by display slot.
-    public func answer(_ slot: Int) {
-        guard screen == .quiz, quiz != nil else { return }
+    public func answer(_ slot: Int, at press: Double? = nil) {
+        defer { noteContext() }
+        guard screen == .quiz, quiz != nil, !entryLocked(press) else { return }
         switch quiz!.pick(slot: slot) {
         case .right: uiSounds.append(.chime)
         case .wrong: uiSounds.append(.soft)
@@ -293,7 +335,11 @@ public final class Game {
         case .pause: break
         default: t += dt
         }
+        noteContext()
     }
+
+    /// The unlock screen's "to the map" button: locked on entry like every story/menu press (Input Rule 13).
+    public func toMap(at press: Double? = nil) { guard !entryLocked(press) else { return }; home() }
 
     /// The app went to the background: play and quiz pause (mission-flow edge case, AC10).
     public func backgrounded() { if screen == .play || screen == .quiz { pausedFrom = screen; screen = .pause; skipWarning = false } }

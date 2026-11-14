@@ -208,13 +208,14 @@ final class GameScene: SKScene {
         case "mute": game.toggleMute(); audio.muted = game.muted
         case "pause": releaseAllInput(); game.pause()
         case "resume": game.resume()
-        case "home", "toMap": game.home()
+        case "home": game.home()
+        case "toMap": game.toMap(at: press) // the entry lock applies (Input Rule 13); pause's Home is exempt
         case "replay": game.replay()
         case "ask": game.ask(at: press)
-        case "skip": game.skip()
+        case "skip": game.skip(at: press)
         case "skipAnyway": game.skipAnyway()
         case "keepReading": game.keepReading()
-        default: if id.hasPrefix("card"), let j = Int(id.dropFirst(4)) { game.answer(j) }
+        default: if id.hasPrefix("card"), let j = Int(id.dropFirst(4)) { game.answer(j, at: press) }
         }
         uiKey = ""
     }
@@ -674,55 +675,74 @@ final class GameScene: SKScene {
         langButton()
     }
 
+    /// §5.2 small-k: the question whose right pick has already played its fade-and-glide (so a rebuild
+    /// draws the end state instead of replaying it).
+    private var quizAnimated = -1
+
     private func buildQuiz() {
         backgroundColor = C.night
         guard let q = game.quiz, !q.isFinished else { return }
-        let cur = q.current, n = q.questions.count
+        let cur = q.current, n = q.questions.count, ql = QuizLayout(pad: layout)
+        // dots and the "Câu n/N" counter top-centre in the free band right of the corner block (W7, §5.1)
         for i in 0..<n {
             let lit = i < q.index || (i == q.index && q.okIndex != nil)
-            add(D.circle(0, 0, 16, lit ? C.gold : SKColor(white: 1, alpha: 0.3), C.goldDark, 3), 640 - Double(n - 1) * 30 + Double(i) * 60, 50)
+            add(D.circle(0, 0, 16, lit ? C.gold : SKColor(white: 1, alpha: 0.3), C.goldDark, 3), ql.topCentre - Double(n - 1) * 30 + Double(i) * 60 - 60, 50)
         }
-        // the "Câu n/N" counter top-centre beside the dots (Input Rule 3 table), so sound can sit top-left by pause (W7)
-        add(Font.label("\(game.ui("ui.quiz.question")) \(q.index + 1)/\(n)", 28, C.gold, align: .left), 640 + Double(n - 1) * 30 + 40, 50)
+        add(Font.label("\(game.ui("ui.quiz.question")) \(q.index + 1)/\(n)", 28, C.gold, align: .left), ql.topCentre + Double(n - 1) * 30 - 20, 50)
         topLeftButtons()
-        textBox(cur.prompt, 640, 172, 980, 40, .white)
-        let cw = 390.0, ch = 300.0, gap = 20.0, x0 = (1280 - 3 * cw - 2 * gap) / 2, y0 = 245.0 // the prompt keeps 120–230 (iOS-R3-02)
+        // the prompt starts at corner_bottom + 8, never beside the pause/sound block (iOS-R6-02)
+        textBox(cur.prompt, ql.prompt.midX, ql.prompt.midY, ql.prompt.w, 40, .white)
+        let picked = q.okIndex != nil
+        let animate = picked && ql.small && quizAnimated != q.index
         for slot in 0..<3 {
             let j = q.order[slot], choice = cur.choices[j]
             let wrong = q.wrong.contains(j), ok = q.okIndex == j
+            // §5.2: after the right pick on a small-k phone only the right card stays (wrong cards fade first)
+            if picked && ql.small && !ok && !animate { continue }
+            let b = ql.slots[slot], cw = b.w, ch = b.h
             let card = SKNode()
             card.addChild(D.rr(0, 8, cw, ch, 30, SKColor(white: 0, alpha: 0.3)))
-            // right: pale green #D9F2D0, a #3FA34D border (10) and a green tick, ink label (contrast; matches
-            // Android and the UX quiz spec); wrong: lavender #9C8FB8 border with a circular arrow
-            // wrong: pale lavender #E6E1F0 with a #9C8FB8 border (10); both icons carry a thick ink outline (contrast)
+            // right: pale green #D9F2D0, a #3FA34D border (10) and a green tick, ink label; wrong: pale lavender
+            // #E6E1F0 with a #9C8FB8 border (10) and an ink-outlined circular arrow (contrast; the UX quiz spec)
             card.addChild(D.rr(0, 0, cw, ch, 30, ok ? SKColor(hex: 0xD9F2D0) : wrong ? SKColor(hex: 0xE6E1F0) : C.cream,
                                ok ? SKColor(hex: 0x3FA34D) : wrong ? C.wrong : C.gold, ok || wrong ? 10 : 5))
-            if ok { card.addChild(D.poly([(cw - 64, 40), (cw - 52, 28), (cw - 42, 40), (cw - 22, 16), (cw - 10, 28), (cw - 42, 60)], SKColor(hex: 0x3FA34D), C.ink, 4)) }
+            if ok {
+                card.addChild(D.poly([(cw - 64, 40), (cw - 52, 28), (cw - 42, 40), (cw - 22, 16), (cw - 10, 28), (cw - 42, 60)], SKColor(hex: 0x3FA34D), C.ink, 4))
+                // the "Đúng rồi!" bar on the right card, so it travels with it
+                let bar = SKNode(); bar.addChild(D.rr(0, 0, 170, 40, 20, SKColor(hex: 0x3FA34D)))
+                let l = Font.label(game.ui("ui.quiz.correct"), 26, .white); l.position = CGPoint(x: 85, y: -20); bar.addChild(l)
+                bar.position = CGPoint(x: 14, y: -14); card.addChild(bar)
+            }
             let pic = Pictures.node(choice.pictureId, size: 110); pic.position = CGPoint(x: cw / 2, y: -105); pic.alpha = wrong ? 0.45 : 1; card.addChild(pic)
             if wrong { // the "try again" mark: a circular arrow, never a red cross (TASK-004 art fix), ink-outlined
                 let p = CGMutablePath(); p.addArc(center: CGPoint(x: cw - 40, y: -40), radius: 18, startAngle: 0.3, endAngle: 5.6, clockwise: false)
                 let outline = D.shape(p, nil, C.ink, 12); outline.lineCap = .round; card.addChild(outline)
                 let arc = D.shape(p, nil, C.wrong, 6); arc.lineCap = .round; card.addChild(arc)
             }
-            let l = Font.label(choice.text.text(game.lang), 37, C.ink, width: cw - 30); l.position = CGPoint(x: cw / 2, y: -242); card.addChild(l) // ink on every card state
+            let l = Font.label(choice.text.text(game.lang), 37, C.ink, width: cw - 30); l.position = CGPoint(x: cw / 2, y: -236); card.addChild(l) // ink on every card state
             for (z, child) in card.children.enumerated() { child.zPosition = CGFloat(z) } // shadow, fill, icons, picture, label in that order
-            card.position = D.p(x0 + Double(slot) * (cw + gap), y0); card.name = "\(j)"
+            let at = ok && picked && ql.small && !animate ? ql.rightCard(slot: slot) : b
+            card.position = D.p(at.x, at.y); card.name = "\(j)"; card.userData = ["x": at.x]
             uiZ += 1; card.zPosition = uiZ
             ui.addChild(card); cardNodes.append(card)
-            if q.okIndex == nil && !wrong { buttons.append(Button(rect: CGRect(x: x0 + Double(slot) * (cw + gap), y: y0, width: cw, height: ch), id: "card\(slot)")) }
+            if animate {
+                // §5.2: the wrong cards fade out over 0.2 s, then the right card glides to the left slot over 0.3 s,
+                // all inside feedback_time (0.9 s), before Tiếp appears
+                if ok { card.userData = ["x": ql.slots[0].x]; card.run(.sequence([.wait(forDuration: 0.2), .move(to: D.p(ql.slots[0].x, ql.slots[0].y), duration: 0.3)])) }
+                else { card.run(.sequence([.fadeOut(withDuration: 0.2), .removeFromParent()])) }
+            }
+            if !picked && !wrong { buttons.append(Button(rect: CGRect(x: b.x, y: b.y, width: cw, height: ch), id: "card\(slot)")) }
         }
-        if q.okIndex != nil && game.quizCanAdvance {
-            // the why strip sits below the cards (cards end at y 580)
-            // the why strip below the cards (they end at y 550): 3 lines at 37 with 1.35 line height
-            add(D.rr(-620, -80, 1240, 160, 24, C.panel), 640, 635)
-            add(Font.label(game.ui("ui.quiz.correct"), 30, C.glow, width: 180), 130, 635)
-            add(Font.label(cur.why.text(game.lang), 37, .white, width: 820, weight: 600), 640, 635)
-            button(game.ui("ui.btn.next"), 1060, 593, 190, 84, "next", pulse: true)
+        if animate { quizAnimated = q.index }
+        if picked && game.quizCanAdvance {
+            let w = ql.why
+            add(D.rr(0, 0, w.w, w.h, 24, C.panel), w.x, w.y)
+            add(Font.label(cur.why.text(game.lang), 37, .white, width: w.w - 40, weight: 600), w.midX, w.midY)
+            button(game.ui("ui.btn.next"), ql.next.x, ql.next.y, ql.next.w, ql.next.h, "next", pulse: true, size: 34)
             badge(cur.why, 0, 0)
-        } else if q.okIndex != nil {
-            add(Font.label(game.ui("ui.quiz.correct"), 37, C.glow), 640, 620) // the why line and Tiếp follow after feedback_time
-        } else if !q.wrong.isEmpty {
-            add(Font.label(game.ui("ui.quiz.retry"), 37, SKColor(hex: 0xffd0c8)), 640, 620)
+        } else if !picked && !q.wrong.isEmpty {
+            // under the cards: on a small-k phone the cards use Tiếp's row, so the line sits just below them
+            add(Font.label(game.ui("ui.quiz.retry"), 37, SKColor(hex: 0xffd0c8)), 640, min(700, ql.slots[0].bottom + 32))
         }
     }
 
@@ -796,9 +816,9 @@ final class GameScene: SKScene {
             }
         }
         if game.screen == .quiz, let q = game.quiz {
-            let x0 = (1280 - 3 * 390.0 - 2 * 20) / 2
-            for (slot, card) in cardNodes.enumerated() {
-                var x = x0 + Double(slot) * 410
+            for card in cardNodes where !card.hasActions() { // the wrong-pick shake around the card's own slot
+                guard let base = card.userData?["x"] as? Double else { continue }
+                var x = base
                 if let s = q.shakeIndex, Int(card.name ?? "") == s, q.shakeTime > 0 { x += sin(q.shakeTime * 60) * 14 * q.shakeTime * 2 }
                 card.position.x = x
             }

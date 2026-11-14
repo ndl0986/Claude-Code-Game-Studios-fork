@@ -18,6 +18,7 @@ final class AdvanceDebounceTests: XCTestCase {
         let c = try Repo.contentSet()
         let hero = path == .caption ? Repo.sampleHero(c) : realHero(c)
         let g = Game(content: c, hero: hero, store: MemoryStore(), isDebug: true)
+        g.uptime = { 0 } // the press clock's base: these presses are at 1–10.3 s, after every entry lock (TASK-005p)
         let tqtDialogue = path == .caption ? 0 : beatIndex(hero, "dialogue") + 1
         switch path {
         case .intro: g.debugStart(screen: "intro", q: nil, beat: nil, stage: nil, stars: nil)          // 4 lines
