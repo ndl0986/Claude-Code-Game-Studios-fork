@@ -134,6 +134,46 @@
       "bytes": 1873,
       "width": 640,
       "height": 360
+    },
+    {
+      "id": "pic.portrait_tran-quoc-toan_hero_pleading",
+      "kind": "picture",
+      "file": "pictures/portrait_tqt_hero_pleading.png",
+      "bytes": 1942,
+      "width": 384,
+      "height": 384
+    },
+    {
+      "id": "pic.portrait_tran-quoc-toan_hero_determined",
+      "kind": "picture",
+      "file": "pictures/portrait_tqt_hero_determined.png",
+      "bytes": 1966,
+      "width": 384,
+      "height": 384
+    },
+    {
+      "id": "pic.portrait_tran-quoc-toan_guard",
+      "kind": "picture",
+      "file": "pictures/portrait_tqt_guard.png",
+      "bytes": 1940,
+      "width": 384,
+      "height": 384
+    },
+    {
+      "id": "pic.portrait_tran-quoc-toan_king",
+      "kind": "picture",
+      "file": "pictures/portrait_tqt_king.png",
+      "bytes": 2123,
+      "width": 384,
+      "height": 384
+    },
+    {
+      "id": "pic.portrait_tran-quoc-toan_king_smiling",
+      "kind": "picture",
+      "file": "pictures/portrait_tqt_king_smiling.png",
+      "bytes": 2209,
+      "width": 384,
+      "height": 384
     }
   ]
 }
