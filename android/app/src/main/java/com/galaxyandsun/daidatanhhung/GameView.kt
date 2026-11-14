@@ -130,7 +130,7 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
                 is Down -> {
                     val r = renderer.hit(e.x, e.y) ?: continue
                     val a = r.pad
-                    if (a != null) { padHolds.down(e.id, a); input.tapped += a }
+                    if (a != null) { if (padHolds.down(e.id, a)) input.tapped += a } // Rule 6: a second pointer on an owned pad does nothing
                     else if (g == null || g.pressAllowed(r.key, e.at)) { pressedButton[e.id] = r.key; pressedAt[e.id] = e.at } // gate at press time (QC r2, r3 B1)
                 }
                 is Move -> padHolds.move(e.id, renderer.hit(e.x, e.y)?.pad)

@@ -9,11 +9,23 @@ import kotlin.math.min
  */
 class PadHolds {
     private val holds = HashMap<Int, Action>()
-    fun down(id: Int, a: Action) { holds[id] = a }
-    /** A move: only a held ◀/▶ follows the finger onto the other arrow. */
+    private fun ownedByOther(id: Int, a: Action) = holds.any { (k, v) -> k != id && v == a }
+    /**
+     * A pointer lands on pad [a]. Input GDD Rule 6: if another pointer already owns it, this one is
+     * ignored until it lifts (it never takes the pad over). Returns true when it now owns the pad
+     * (only then does the press fire).
+     */
+    fun down(id: Int, a: Action): Boolean {
+        if (ownedByOther(id, a)) return false
+        holds[id] = a; return true
+    }
+    /**
+     * A move (Rule 9): a pointer keeps its pad from down to up; the only change is a held ◀/▶
+     * following the finger onto the other arrow (unless another pointer owns that arrow).
+     */
     fun move(id: Int, over: Action?) {
         val a = holds[id] ?: return
-        if ((a == Action.LEFT || a == Action.RIGHT) && (over == Action.LEFT || over == Action.RIGHT)) holds[id] = over
+        if ((a == Action.LEFT || a == Action.RIGHT) && (over == Action.LEFT || over == Action.RIGHT) && !ownedByOther(id, over)) holds[id] = over
     }
     fun up(id: Int) { holds.remove(id) }
     fun clear() = holds.clear()

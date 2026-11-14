@@ -1,6 +1,7 @@
 package com.galaxyandsun.daidatanhhung.core
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -56,5 +57,20 @@ class TouchAndLayoutTest {
         p.move(1, null); p.move(0, null); p.up(1)
         assertEquals(setOf(Action.RIGHT), p.held())
         p.up(0); assertTrue(p.held().isEmpty())
+    }
+    /** Input GDD Rule 6 / AC3: a second pointer on an owned pad is ignored until it lifts; it never takes it over. */
+    @Test fun aSecondPointerOnAnOwnedPadIsIgnoredUntilItLifts() {
+        val p = PadHolds()
+        assertTrue(p.down(0, Action.DEFEND))
+        assertFalse("B lands on defend too: ignored", p.down(1, Action.DEFEND))
+        p.move(1, Action.ATTACK) // sliding onto another pad never activates it (Rule 7)
+        assertEquals(setOf(Action.DEFEND), p.held())
+        p.up(0); assertTrue("A lifts: defend releases although B is still down", p.held().isEmpty())
+        p.up(1); assertTrue(p.held().isEmpty())
+        // ◀/▶ slide never steals the arrow another pointer holds
+        val q = PadHolds()
+        q.down(0, Action.RIGHT); q.down(1, Action.LEFT)
+        q.move(1, Action.RIGHT); assertEquals(setOf(Action.RIGHT, Action.LEFT), q.held())
+        q.up(0); q.move(1, Action.RIGHT); assertEquals(setOf(Action.RIGHT), q.held())
     }
 }
