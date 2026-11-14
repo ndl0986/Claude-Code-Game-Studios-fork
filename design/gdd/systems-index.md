@@ -194,8 +194,8 @@ the GDD.
 |--------|-------|
 | Total systems identified | 13 |
 | Design docs started | 10 |
-| Design docs reviewed | 11 (lean self-review plus a dev peer review each) |
-| Design docs approved | 11 (Content data & claims via TASK-005; Mission flow; Combat; Quiz & stars; Hints & onboarding; Hero progression; Language & text; Save & progress; Audio & voice-over; Map & timeline; Input & touch controls) |
+| Design docs reviewed | 10 GDDs (lean self-review plus a dev peer review each) |
+| Design docs approved | 10 GDDs, plus the Content data & claims contract (TASK-005); Mission flow; Combat; Quiz & stars; Hints & onboarding; Hero progression; Language & text; Save & progress; Audio & voice-over; Map & timeline; Input & touch controls) |
 | MVP systems designed | n/a (folded into the Vertical Slice) |
 | Vertical Slice systems designed | 10/10 (all approved) |
 
