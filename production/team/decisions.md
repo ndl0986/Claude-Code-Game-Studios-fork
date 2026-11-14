@@ -11,6 +11,51 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-08 Vertical-slice beat set for Trần Quốc Toản
+
+- **Flow:** TASK-008 mission-flow GDD defines 5 beat types → content `mission.json` → TASK-006/007
+  native slice → playtest on real phones.
+- **Steps it affects:** which beat types the iOS and Android slices must build now, and which
+  `mission.json` the slice bundles.
+- **Options:**
+  - A. **Keep 4 fight beats** (the TASK-003 prototype, P-02). Least new code; the story is told
+    only by captions, so the orange and the banner are not played.
+  - B. **The approved structure:** walk (riverbank) → hold-meter (orange) → training (banner) →
+    reach-the-flag with encounters (battle). It tests *Live the story* properly, but means 3 more
+    beat types in both apps.
+  - C. **A + one new type:** fights, but beat 2 is a hold-meter (the orange). It tests the
+    riskiest idea, a non-combat story beat, for the cost of one type.
+- **Recommendation:** C for the slice, then B before Alpha. The slice should prove that a
+  non-fight story moment is fun, which A cannot show.
+- **Status:** Open. Raised by game-art-content (TASK-008, `design/gdd/mission-flow.md`).
+
+### D-07 Skipping story boxes on a replay
+
+- **Flow:** mission → intro / beat cards / ending (story boxes, one sentence each, tap "Tiếp").
+- **Steps it affects:** the story screen UI; replays for a missing star.
+- **Options:**
+  - A. **No skip ever:** the child taps through every box (each tap advances one box).
+  - B. **Skip on replay only:** after a hero's mission has been finished once, a "Bỏ qua / Skip
+    story" button appears on story screens.
+  - C. Skip always.
+- **Recommendation:** B. A first play keeps the story, which is pillar 1. A replay for stars
+  shouldn't make a child sit through it again, and the quiz still checks what they remember.
+- **Status:** Open. Raised by game-art-content (TASK-008).
+
+### D-06 Content schema: params for training and reach-the-flag
+
+- **Flow:** mission-flow GDD → `content/schema/mission.schema.json` (schema change needs both devs
+  + game-art-content) → `mission.json`.
+- **What's missing:**
+  - `training` has only `dummies`. The approved beat 3 also needs `blocks` (practice strikes to
+    block, 1–5) and `finish_special` (bool: special tap ends it).
+  - `reach-the-flag` has only `length_screens`. Beat 4 needs optional `encounters[]`, each
+    `{at_screen, enemies, max_active, from_left}`, where enemy groups lock the camera on the way.
+- **Options:** A. add both, as a MINOR schema bump (optional fields) · B. make beat 4 two beats
+  (a fight, then a reach-the-flag), so only training changes.
+- **Recommendation:** A. It keeps one beat per story moment, as in the hero doc.
+- **Status:** Open (for the devs and game-art-content to agree; Luan only if they disagree).
+
 ### D-01 Monetization
 
 - **Flow:** concept → first release → store listing. It decides store category, privacy forms and
@@ -73,6 +118,21 @@ it) · **Decided** (Luan's call, with the date).
 ---
 
 ## Proposed (applied by the team; Luan can overturn)
+
+### P-04 Both apps behave identically: parity rules (TASK-006/007)
+
+- **Flow:** prototype spec (203d73e) → shared `content/` data → iOS and Android read the same values
+  and rules → shared fixtures test both.
+- **What the team applied:**
+  1. 17 numbers the prototype hard-coded (enemy timings and distances, camera, ground, beat spacing,
+     first spawn delay) move into `content/data/tuning.json`, owned by game-dev-android's one edit.
+  2. The prototype's **results** screen (stars, then Next) stays: title → intro → play → caption →
+     ending → quiz → results → unlock.
+  3. Saved on the device only: `lang`, `stars.<hero>` (best ever, never lowered), `unlocked` heroes.
+  4. Firing rules as in P-01, with quiz answer cards firing on release; one tap tone per menu press.
+  5. Sample pictures are drawn in code in debug builds; the picture-id check applies to real data.
+  6. Quiz shows 3–5 questions (the first N available); the stall hint resets on a hit or caption close.
+- **Status:** Proposed. The combat, mission-flow and quiz GDDs (TASK-008) formalise them.
 
 ### P-01 Menu buttons fire on release, gameplay pads on press
 
