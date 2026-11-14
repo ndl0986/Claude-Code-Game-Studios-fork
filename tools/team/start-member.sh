@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Start one game-team member as a Claude Code session in its own Orca worktree,
+# Start one game-team member as a Claude Code session in its own git worktree (not an Orca workspace),
 # with bypass permissions. Rules: .claude/skills/game-team-lead/SKILL.md
 #
 # Usage: tools/team/start-member.sh <game-dev-ios|game-dev-android|game-qc-android|game-qc-ios|game-art-content> [--resume]
@@ -9,6 +9,7 @@
 set -euo pipefail
 
 member="${1:-}"
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"   # repo root, resolved before any cd
 WORKSPACES="${WORKSPACES:-$HOME/orca/workspaces/Claude-Code-Game-Studios-fork}"
 LEADER="${LEADER:-game-leader}"
 # Worktree folders keep their original names (renaming Orca-managed worktrees is risky).
@@ -36,14 +37,21 @@ esac
 
 if [ ! -d "$dir" ]; then
   echo "Worktree not found: $dir" >&2
-  echo "Create it from the repo root with:" >&2
-  echo "  orca worktree create --name $member --no-parent --base-branch docs/vn-history-game-plan --json" >&2
+  echo "Create it (a plain git worktree, no Orca workspace) from the repo root with:" >&2
+  echo "  git worktree add \"$dir\" <the member's branch>" >&2
   exit 1
 fi
 
 cd "$dir"
-# --resume: continue this member's most recent conversation in its worktree, same name.
+# --resume: resume this member's saved Claude session (id in the gitignored
+# production/session-state/team-sessions.tsv), same name. Falls back to the most
+# recent conversation in its folder when no id is saved.
 if [ "${2:-}" = "--resume" ]; then
+  ids="$ROOT/production/session-state/team-sessions.tsv"
+  sid="$(awk -v m="$member" -F'\t' '$1==m {print $2}' "$ids" 2>/dev/null || true)"
+  if [ -n "$sid" ]; then
+    exec claude --permission-mode bypassPermissions --name "$member" --resume "$sid"
+  fi
   exec claude --permission-mode bypassPermissions --name "$member" --continue
 fi
 exec claude --permission-mode bypassPermissions --name "$member" "$prompt"
