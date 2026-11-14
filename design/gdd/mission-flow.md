@@ -119,6 +119,24 @@ it always ends at the quiz and then the map.
     - In a debug build, the mission runs and pending lines show `UNSIGNED Cxx`.
 14. **Saving.** Nothing is saved mid-mission. Results are saved only when the quiz finishes
     (Quiz & stars, Save & progress). A mission is short (Formula F1), so a restart costs little.
+15. **Skipping the story and the medal** (D-07, Luan's decision 2026-11-14):
+    - Every story screen (`intro`, `beat_card`, `caption`, `ending`) shows **"Bỏ qua / Skip"**
+      on **every** play, first play included. Not on the quiz `why` line, which belongs to the quiz.
+    - The first Skip tap in a run opens a short, kind **warning**: skipping means this story's
+      medal isn't earned this time. It offers "Đọc tiếp / Keep reading" (the bigger, default
+      button) and "Vẫn bỏ qua / Skip anyway". Nothing is shamed and nothing else is lost.
+    - "Skip anyway" jumps past the remaining boxes **of that story screen only** (e.g. the rest
+      of the intro) and marks the run `story_skipped = true`. Later Skip taps in the same run
+      skip at once, with no second warning, because the medal is already out of reach for this
+      run.
+    - If the hero's medal is **already earned**, Skip never warns. It just skips, because the
+      medal can't be lost.
+    - Play, the quiz, stars and the unlock are **unaffected** by skipping. The medal is separate
+      from the stars: stars measure the quiz, the medal rewards hearing the whole story.
+    - **Medal rule:** when the quiz finishes, if `story_skipped` is false (every box was advanced
+      with "Tiếp"), Mission flow reports `medal_earned` to Hero progression, which saves
+      `medal.<hero_id>` once, never lost (Hero progression GDD). A box counts as read when
+      advanced by "Tiếp"; reading speed is not checked.
 
 ### States and Transitions
 
@@ -136,11 +154,12 @@ it always ends at the quiz and then the map.
 | `results` | `quiz` | `unlock` / `map` | "Tiếp / Next"; `unlock` only if `next_hero` is not null |
 | `unlock` | `results` | `map` | "Về bản đồ / To the map" |
 | `paused` | any state above | the same state / `map` | "Chơi tiếp / Keep playing" / "Về bản đồ" |
+| `skip_warning` | any story screen (first Skip in a run, medal not yet earned) | the same box / the next non-story state | "Đọc tiếp / Keep reading" / "Vẫn bỏ qua / Skip anyway" (sets `story_skipped`) |
 
 In the vertical slice, every `map` in this table is the **title screen**.
 
-Story boxes (`intro`, `beat_card`, `caption`, `ending`) advance only on a tap on "Tiếp / Next", which fires
-on release (P-01). They never advance on a timer, because a child reads or listens at their
+Story boxes (`intro`, `beat_card`, `caption`, `ending`) advance only on a tap on "Tiếp / Next", or
+past the whole screen with "Bỏ qua / Skip" (Core Rule 15). Both fire on release (P-01). They never advance on a timer, because a child reads or listens at their
 own pace.
 
 ### Interactions with Other Systems
@@ -154,7 +173,7 @@ own pace.
 | Language & text | current language, language-changed event | Text ids to render | Language GDD |
 | Audio & voice-over | (none) | line id to voice, state changes for music | Audio GDD |
 | Quiz & stars | quiz finished + stars | "start quiz for hero X" | Quiz GDD |
-| Hero progression & unlock | `next_hero` from content | "mission completed" after the quiz | Progression GDD |
+| Hero progression & unlock | `next_hero` from content; whether the medal is already earned | "mission completed" after the quiz, plus `medal_earned` when no story screen was skipped | Progression GDD |
 
 ## Formulas
 
@@ -260,6 +279,16 @@ Fight and reach-the-flag encounter times come from the Side-scroll movement & co
   hidden. This is never a crash or an error screen in front of a child (R12).
 - **If a mission has 1 or 2 beats**: it is allowed (schema minItems 1). The design target stays
   3–4 beats per hero.
+- **If the child taps Skip, then "Keep reading"**: they return to the same box. `story_skipped`
+  stays false, and the next Skip tap warns again.
+- **If the child skips only the ending**: `story_skipped` is true, so no medal this run. The
+  quiz runs as normal.
+- **If the app is killed after "Skip anyway"**: nothing is saved (Rule 14). The next run starts
+  with `story_skipped` false.
+- **If the medal was earned on an earlier play and the child skips now**: no warning, and the
+  saved medal stays (never lost).
+- **If the language is switched mid-story**: no effect on `story_skipped`. Boxes already
+  advanced still count.
 - **If a story box line is over the EN budget**: the build fails validation (R8). Text never
   shrinks to fit.
 
@@ -329,6 +358,13 @@ sparkle.
 - **Hold-meter ring** around the special pad, and a training checklist of three icons
   (dummies, shield, banner) that fill as each part is done. Icons only, no words.
 - **Pause menu:** keep playing, sound, VI|EN, back to the map (the title screen in the slice).
+- **Skip:** a small "Bỏ qua / Skip" button on every story screen, smaller than "Tiếp" and away
+  from it (bottom-left vs bottom-right), so a child doesn't tap it by accident.
+- **Skip warning:** a small card over the story with the medal picture, one short line
+  (`ui.story.skip_warning`), "Đọc tiếp / Keep reading" (big, default, right) and "Vẫn bỏ qua / Skip
+  anyway" (smaller, left). There is no red and no warning sign; the tone is gentle.
+- **Medal on results:** earned shows the gold medal and `ui.medal.earned`. Not earned shows an
+  outline medal and `ui.medal.missing`, which is encouraging, never a scold.
 
 📌 **UX Flag — Mission Flow**: this system has UI requirements. In Pre-Production, run
 `/ux-design` for the story screen, the mission HUD and the pause menu before writing epics.
@@ -398,12 +434,25 @@ sparkle.
 15. **GIVEN** content where a `hold-meter` beat's `buttons` lacks `special` (or any R13 minimum),
     **WHEN** content is validated, **THEN** validation fails with R13 (`content/fixtures/validity.json`).
 
+16. **GIVEN** a first play, **WHEN** the child taps Skip on the intro, **THEN** the warning shows
+    with "Keep reading" as the default. **WHEN** they tap "Keep reading", **THEN** the same box
+    shows and `story_skipped` is false.
+17. **GIVEN** the warning, **WHEN** "Skip anyway" is tapped, **THEN** the rest of that story
+    screen is skipped and `story_skipped` is true. **WHEN** Skip is tapped on a later caption,
+    **THEN** it skips with no warning.
+18. **GIVEN** a run where every story box was advanced with "Tiếp", **WHEN** the quiz finishes
+    (any stars), **THEN** `medal_earned` is reported and results show the gold medal. **GIVEN**
+    one skipped screen, **THEN** no medal is reported, and stars and the unlock are unchanged.
+19. **GIVEN** the medal already earned for this hero, **WHEN** Skip is tapped, **THEN** no
+    warning shows and the saved medal stays earned after the run.
+
 ## Open Questions
 
 | # | Question | Owner | By |
 |---|---|---|---|
 | D-06 | Done: schema 1.1 merged (TASK-005d, 3074d43) | — | Closed |
-| D-07 | Story skip: on the first play every box is tapped through; on a replay, offer a "Bỏ qua / Skip story" button? | Luan | Before the vertical-slice playtest |
+| D-07 | **Decided (Luan, 2026-11-14):** skip is allowed on any play, with a warning; skipping means no medal for that mission this run (Core Rule 15) | — | Closed |
+| — | Walk-beat props (`bump_stop`): who places them and where? Proposal: a `props` list in walk params (`at_screen`, kind), authored by game-art-content per story, with a schema change by the devs. The slice ships with no props, so F2's bump term is 0 | game-art-content + devs | Before Alpha content |
 | D-08 | **Decided (Luan, 2026-11-14): B**, the full structure (walk, hold-meter, training, reach-the-flag) in the slice | — | Closed |
 | — | T_box: measure real voice-over length per box once the first VO is recorded, then re-check F1 | audio-director / game-art-content | First VO recording |
 | — | Done (D-09): `advance_debounce` 0.25 s and `bump_stop` 0.5 s are in `tuning.json`. Feel constants that are not data: page slide 0.1–0.15 s, meter pulse points. Estimates that are not runtime values: T_box, walk_gap, T_special | — | Closed |
