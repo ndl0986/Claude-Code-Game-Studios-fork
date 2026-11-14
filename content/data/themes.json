@@ -3,25 +3,25 @@
   "themes": {
     "village": {
       "sky_band": {
-        "top": "#FFD59A",
-        "bottom": "#CFEEF2"
+        "top": "#A9D3EC",
+        "bottom": "#CDE6EE"
       }
     },
     "bamboo": {
       "sky_band": {
-        "top": "#FFD59A",
-        "bottom": "#CFEEF2"
+        "top": "#A9D3EC",
+        "bottom": "#CDE6EE"
       }
     },
     "river": {
       "sky_band": {
-        "top": "#FFD59A",
-        "bottom": "#CFEEF2"
+        "top": "#9CCBEA",
+        "bottom": "#BFE0F2"
       }
     },
     "camp": {
       "sky_band": {
-        "top": "#3B3F6B",
+        "top": "#2E3156",
         "bottom": "#3B3F6B"
       }
     }
