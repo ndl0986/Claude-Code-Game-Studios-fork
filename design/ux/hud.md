@@ -130,9 +130,11 @@ the king's meeting at Bình Than!", 688 px).
   - Render-only: the flag's x, the reach trigger and the training finish don't change.
 - **Z-order** (bottom to top): play layers (background, fighters, props) → **banner bar** →
   pops → hints, the telegraph "!" bubble and the hurt swirl (ASSET-212) → HUD buttons.
-- **Nothing straddles the bar** (QC r6, for r8). On a banner beat, the "!" bubble (ASSET-208)
-  and the stuck arrow (ASSET-034) are each **fully below the bar**: every pixel at y ≥ bar
-  bottom + 8 (≈ 276).
+- **Nothing straddles the bar** (QC r6, for r8; hints r9). On a banner beat, the "!" bubble
+  (ASSET-208), the stuck arrow (ASSET-034) **and every hint (hand, pulse)** are each **fully
+  below the bar**: every pixel at y ≥ bar bottom + 8 (≈ 276). A teach hand that doesn't fit
+  above its pad sits beside it, away from the screen edge, never over a touch rect (Hints
+  Rule 6).
   - **"!" bubble:** it sits above the helmet when it fits there entirely below the bar. With an
     enemy at spec height (top ≈ 300) it doesn't, so on banner beats it sits **beside the head**,
     at head height, on the side away from the hero, with its tail pointing sideways at the
@@ -158,11 +160,19 @@ the king's meeting at Bình Than!", 688 px).
   (`themes.json`):
   - **light skies** (village, bamboo, river): **ink `#3A2A20`** outline. Red fill vs ink
     **3.68:1**; ink vs the sky bands **7.9–10.5:1**; ink vs the mint mountains ≈ **8.5:1**;
-  - **dark skies** (camp): **cream `#FFF6E3`** outline. Red fill vs cream **3.47:1**; cream vs
-    the camp sky **9.3–11.6:1**.
-  So every pop reaches ≥ 3:1 at both edges, the fill against its outline and the outline
-  against whatever is behind it. The rule: use the outline with the higher contrast against
-  the theme's `sky_band.bottom`.
+  - **dark skies** (camp): a **double outline** (r9, leader's call): **cream `#FFF6E3` ≥ 3 px
+    inside, ink `#3A2A20` ≥ 2 px outside**. Red fill vs cream **3.47:1**. Against the dark sky
+    the ink ring all but vanishes and the cream ring carries the edge (cream vs the camp sky
+    **9.3–11.6:1**); against light mid-layer hills in front of that sky (the mint mountains,
+    about `#9ED8B8`–`#B5E3CB`, where cream alone is only 1.3–1.7:1 and the red fill 2.1–2.6:1)
+    the ink ring carries it (≈ **7.6–9.7:1**). So one fixed style covers every pixel behind the
+    pop, with no per-frame sampling of what's behind it.
+  **How a theme is decided** (not by its name): both apps already compute **SkyContrast**, the
+  outline with the higher contrast against the theme's `sky_band.bottom`. **If ink wins → the
+  ink-only outline; if cream wins → the double outline** (cream inside, ink outside). Today
+  that gives ink for village, bamboo and river, and the double outline for camp. So every pop
+  reaches ≥ 3:1 at both edges, the fill against its outline and the outline against whatever is
+  behind it.
 - **Colour:** vermilion `#D64A2E` bar with gold text `#FFC531`, as built; one motif at most
   (Luan's rule 4). **The gold text carries an ink `#3A2A20` outline ≥ 2 px at 37 px** (QC r5):
   gold on vermilion alone is **2.72:1** (QC measured ≈ 2.6), below 3:1. With the outline, gold
@@ -268,7 +278,7 @@ insets; iOS home indicator, notch or Dynamic Island. Rounded corners wait for TA
 12. **GIVEN** a push, a block and a hit during an encounter at its closest, **WHEN** captured, **THEN** each pop sits beside the fighter's head at head height and no pop pixel overlaps the banner bar.
 13. **GIVEN** a hit and a strike that land at spec height, **WHEN** frame-stepped, **THEN** the hero's swing arc reaches 175 world px in front of him and the enemy's weapon tip 140, so contact is visible; on a landed strike, the padded tip touches the hero's chest for ≥ 2 frames (≈ 33 ms) before the hero's pushed pose (Combat V/A, render-only).
 14. **GIVEN** a phone or emulator with k = 0.40 (the floor; e.g. a small phone with a left gesture inset), **WHEN** a training beat is captured in VI and EN, **THEN** the stack starts at `corner_right` + 8, the goal plate and the banner bar narrow to `1270 − start` (≥ 760), nothing overlaps pause or sound, and the EN banner is ≤ 2 lines with no text cut.
-15. **GIVEN** each theme (village, bamboo, river, camp), **WHEN** "Ối!/Oof!", "Đỡ được!/Blocked!" and a hit pop are captured over the sky band and over the mid layer (e.g. the mint mountains), **THEN** each pop has an outline (ink on light skies, cream on the camp) and measures ≥ 3:1 fill-to-outline and outline-to-background.
+15. **GIVEN** each theme (village, bamboo, river, camp), **WHEN** "Ối!/Oof!", "Đỡ được!/Blocked!" and a hit pop are captured over the sky band and over the mid layer (e.g. the mint mountains), **THEN** each pop has an outline chosen by SkyContrast (ink-only where ink wins: village, bamboo, river; the double outline, cream ≥ 3 px inside and ink ≥ 2 px outside, where cream wins: camp) and measures ≥ 3:1 fill-to-outline and, at its outermost visible edge, outline-to-background: on the camp, ≥ 3:1 both over the navy sky (by the cream ring) and over the mint mid layer (by the ink ring).
 16. **GIVEN** the banner bar in VI and EN, **WHEN** captured, **THEN** the gold text has an ink outline ≥ 2 px and the measured contrast is ≥ 3:1 at the text edge (target 3.18:1 outline-to-vermilion, 8.67:1 gold-to-outline).
 17. **GIVEN** a training beat and a reach-the-flag encounter (banner beats), **WHEN** an enemy winds up and, separately, the stuck arrow shows over a dummy, an enemy and the flag, **THEN** no pixel of the "!" bubble or the arrow is in the bar's band or straddles its edge (all at y ≥ bar bottom + 8); the "!" sits beside the head, away from the hero (or on the hero's side at a screen edge); the arrow is gold with an ink outline, never red.
 18. **GIVEN** each reach-the-flag beat (banner beat) in VI and EN, on the iOS QC phone (k 0.517), an Android AVD (k 0.488) and at k 0.40, **WHEN** the flag is on screen (walking up to it, the stuck arrow pointing at it, and the frame the reach triggers), **THEN** every pixel of the flag (pole top and cloth) is at y ≥ 276 (bar bottom + 8) and its box is y 290–470 (foot on `ground_y` 470). **GIVEN** a training beat, **WHEN** the hero raises the banner at the finish and the frames are stepped through, **THEN** the banner is held beside the hero, 110 tall, and every pixel of it is at y ≥ 276 in every frame. **GIVEN** a beat without the bar, **WHEN** the flag shows, **THEN** it keeps its normal size.
