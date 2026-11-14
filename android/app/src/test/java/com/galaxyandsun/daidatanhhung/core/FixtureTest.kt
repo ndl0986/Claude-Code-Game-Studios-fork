@@ -99,6 +99,9 @@ class FixtureTest {
                         "id" to kotlinx.serialization.json.JsonPrimitive("x.b"), "theme" to kotlinx.serialization.json.JsonPrimitive("village"),
                         "title" to tj(), "goal" to tj(), "scene" to kotlinx.serialization.json.JsonArray(listOf(tj()))))))
                     .filter { it.startsWith(rule + " ") }
+                "R17", "R18" -> Validator.timeline(c["heroes"]!!.jsonArray.map { h -> val o = h.jsonObject
+                    Triple(o["id"]!!.jsonPrimitive.content, o["timeline_order"]!!.jsonPrimitive.int, o["next_hero"]!!.jsonPrimitive.let { if (it is kotlinx.serialization.json.JsonNull) null else it.content }) })
+                    .filter { it.startsWith(rule + " ") }
                 "R14" -> Validator.attackReaches(c["tuning"]!!.jsonObject.mapValues { it.value.jsonPrimitive.content.toDouble() })
                 "R15" -> Validator.telegraphWarnings(c["tuning"]!!.jsonObject.mapValues { it.value.jsonPrimitive.content.toDouble() })
                 "R16" -> Validator.starThresholds(ContentLoader.JSON.decodeFromJsonElement<List<com.galaxyandsun.daidatanhhung.core.content.Threshold>>(c["thresholds"]!!))

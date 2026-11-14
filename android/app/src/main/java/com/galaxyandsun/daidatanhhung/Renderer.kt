@@ -179,7 +179,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         val lines = if (intro) g.bundle.mission.intro else g.bundle.mission.ending.lines
         val line = lines[g.line.coerceIn(0, lines.size - 1)]
         d.textBox(line.get(g.lang), W / 2, 530f, 1000f, 38f, C.WHITE, 2)
-        badge(g, line, W / 2, 492f)
+        badge(g, line, 1010f, 132f) // debug badge in the picture's corner, never over the text (QC r1)
         button("next", g.ui(UiIds.NEXT), W / 2 - 150, 590f, 300f, 110f, t, pulse = true) { g.next() }
         skipButton(g)
         skipWarning(g)

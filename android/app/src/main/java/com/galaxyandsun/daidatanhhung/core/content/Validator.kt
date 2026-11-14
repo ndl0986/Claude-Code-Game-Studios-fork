@@ -75,6 +75,18 @@ object Validator {
         else -> "ui"
     }
 
+    /** R17 / R18: a hero's place on the timeline (Hero progression GDD Rules 1 and 6). id → (timeline_order, next_hero). */
+    fun timeline(heroes: List<Triple<String, Int, String?>>): List<String> {
+        val out = mutableListOf<String>()
+        heroes.groupBy { it.second }.filter { it.value.size > 1 }.forEach { (o, hs) -> out += "R17 timeline_order $o shared by ${hs.map { it.first }}" }
+        val sorted = heroes.sortedBy { it.second }
+        sorted.forEachIndexed { i, h ->
+            val expected = sorted.getOrNull(i + 1)?.first
+            if (h.third != expected) out += "R18 ${h.first}: next_hero ${h.third} should be $expected"
+        }
+        return out
+    }
+
     /** R9: Text ids are unique. */
     fun duplicateIds(ids: List<String>): List<String> =
         ids.groupingBy { it }.eachCount().filter { it.value > 1 }.keys.map { "R9 duplicate id $it" }
@@ -200,6 +212,8 @@ object Validator {
             if (next != null && next.isBlank()) out += "R2 heroes/$heroId: blank next_hero"
         }
         for (hero in c.heroes.values) for (b in hero.mission.beats) out += beatButtons(b)
+        // R17/R18 over the indexed heroes only (samples are excluded).
+        out += timeline(c.heroes.filterKeys { it in c.index.heroes }.values.map { Triple(it.mission.hero.id, it.mission.hero.timelineOrder, it.mission.nextHero) })
         out += attackReaches(c.tuning.values.mapValues { it.value.value })
         out += starThresholds(c.rules.quizStars.thresholds)
         out += duplicateIds(allIds)
