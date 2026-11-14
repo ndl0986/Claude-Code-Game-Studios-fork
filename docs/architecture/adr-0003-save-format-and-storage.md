@@ -168,7 +168,8 @@ anyone outside the team has a save.
 
 ## Migration Plan
 On first launch with ADR-0003 code: if `save.json` is absent but slice keys exist in UserDefaults /
-SharedPreferences (`lang`, `stars.<id>`, `completed.<id>`, `seen_open.<id>`, `medal.<id>`), build the
+SharedPreferences (`lang`, `sound`, `stars.<id>`, `completed.<id>`, `seen_open.<id>`, `medal.<id>`; a
+missing `sound` imports as `true`, since the iOS slice never saved it), build the
 document from them, write it, and leave the old keys untouched (never deleted automatically). Then
 write an `imported_from_prefs: true` marker in the document, so the import never runs twice (for
 example after the player resets progress in a later parent area).
