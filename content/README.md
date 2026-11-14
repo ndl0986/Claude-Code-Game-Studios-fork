@@ -86,7 +86,7 @@ them against `data/` and `samples/`. `fixtures/validity.json` has one case per r
 | R5 | A fact or fact_as_recorded claim can't be `approved` while any of its sources is `to_confirm`. R5b: only an invented claim may have no sources. |
 | R6 | An invented claim is never cited by quiz text. |
 | R7 | All text is Unicode NFC. |
-| R8 | No vi or en line is over 120 characters (schema), and EN fits `rules.json` `text_limits.en_budget` for its field type. |
+| R8 | No vi or en line is over 120 characters (schema), and EN fits `rules.json` `text_limits.en_budget` for its field type. For `strings.json` the type comes from the id: `ui.btn.*`, `ui.pad.*`, `ui.lang.*` and `*_confirm` / `*_keep_reading` are `button`; ids ending in `_warning` are `dialog` (60, TASK-005e); every other `ui.*` id is `ui`. |
 | R9 | Text ids are unique across the bundle. |
 | R10 | Every `picture_id` and asset id resolves in `assets.json` and the file exists. |
 | R11 | An app refuses a `schema_version` with a newer MAJOR number at **build** time. A newer MINOR number is fine. |
