@@ -38,3 +38,6 @@ All peer findings were checked as fixed. Status set to Approved.
 
 ## Cross-GDD review fixes — 2026-11-14 (TASK-010, gdd-cross-review-2026-11-14.md)
 Consistency fixes C1–C5, S2 (pause releases held pads; the windup restarts on resume), stale "proposed" labels and D-09 done, plus alignment with Luan's D-08 (B) and D-10 (B, no special in combat). Status stays Approved; these are consistency edits, not design changes, except S2, which is new behaviour for both apps.
+
+## Update — 2026-11-14 — G2 (Android QC r2): fight-zone bounds, auto-face, facing locked during a swing
+Rules agreed by game-dev-android and game-dev-ios with measurements (unfinishable before; 31–47 s after). Combat Rules 2 and 15 and the frame order (steps 4–6); AC20–23. Mission flow reach-the-flag row; AC22.

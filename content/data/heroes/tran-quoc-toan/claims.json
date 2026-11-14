@@ -42,11 +42,12 @@
     },
     {
       "id": "C04",
-      "vi": "Vua Trần họp các vương hầu ở Bình Than để bàn việc đánh giặc.",
-      "en": "The Trần king gathered the princes and lords at Bình Than to plan the defence.",
+      "vi": "Vua Trần họp các vương hầu và trăm quan ở Bình Than để bàn việc đánh giặc (năm 1282).",
+      "en": "The Trần king gathered the princes, lords and officials at Bình Than to plan the defence (1282).",
       "label": "fact",
       "sources": [
-        "S3"
+        "S3",
+        "S6"
       ],
       "signoff": {
         "status": "pending"
@@ -154,6 +155,65 @@
       "en": "A busy riverbank, straw training dummies, enemies dropping weapons and running away…",
       "label": "invented",
       "sources": [],
+      "signoff": {
+        "status": "pending"
+      }
+    },
+    {
+      "id": "C13",
+      "vi": "Năm diễn ra hội nghị Bình Than (1282), Trần Quốc Toản mới 15 tuổi (sinh năm 1267; 16 tuổi theo tuổi mụ).",
+      "en": "In the year of the Bình Than meeting (1282), Trần Quốc Toản was 15 (born 1267; 16 by the traditional count).",
+      "label": "fact",
+      "sources": [
+        "S3",
+        "S5",
+        "S7"
+      ],
+      "signoff": {
+        "status": "pending"
+      }
+    },
+    {
+      "id": "C14",
+      "vi": "Truyện kể rằng Quốc Toản đến bến Bình Than, xin được gặp vua để xin đánh giặc; lính canh không cho vào vì cậu còn nhỏ.",
+      "en": "The story says Quốc Toản came to Bình Than and asked to see the king to ask to fight; the guards would not let him in because he was young.",
+      "label": "legend",
+      "sources": [
+        "S4",
+        "S2",
+        "S6"
+      ],
+      "signoff": {
+        "status": "pending"
+      }
+    },
+    {
+      "id": "C15",
+      "vi": "Truyện kể rằng vua khen Quốc Toản còn trẻ mà đã biết lo việc nước, và ban cho cậu một quả cam.",
+      "en": "The story says the king praised Quốc Toản for caring for the country while so young, and gave him an orange.",
+      "label": "legend",
+      "sources": [
+        "S4",
+        "S2",
+        "S3"
+      ],
+      "signoff": {
+        "status": "pending"
+      },
+      "relabel_condition": {
+        "to": "fact_as_recorded",
+        "when": "The S3 1282 (Nhâm Ngọ) passage is confirmed to record the king giving the orange, with edition and page"
+      }
+    },
+    {
+      "id": "C16",
+      "vi": "Trong truyện, Quốc Toản nói: \"Xin Quan gia cho đánh! Cho giặc mượn đường là mất nước!\" (trong trò chơi: \"Xin nhà vua cho đánh!\").",
+      "en": "In the story, Quốc Toản says: \"Let us fight, Your Majesty! Letting the enemy pass means losing our country!\"",
+      "label": "legend",
+      "sources": [
+        "S4",
+        "S2"
+      ],
       "signoff": {
         "status": "pending"
       }

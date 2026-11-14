@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "strings": [
     {
       "id": "ui.app.title",
@@ -164,7 +164,8 @@
     {
       "id": "ui.medal.missing",
       "vi": "Đọc hết câu chuyện để nhận huy hiệu nhé",
-      "en": "Read it all for a medal"
+      "en": "Read it all for a medal",
+      "field": "dialog"
     }
   ]
 }
