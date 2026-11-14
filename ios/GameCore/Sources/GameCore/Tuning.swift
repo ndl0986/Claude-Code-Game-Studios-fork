@@ -23,6 +23,7 @@ public struct Tuning: Sendable {
         "rest_speed_mul", "attack_hit_at", "attack_close_range", "attack_move_mul", "flee_remove_margin",
         "hero_edge_margin", "camera_follow_offset", "ground_y", "beat_start_x", "beat_gap", "hero_start_x",
         "dummy_spacing", "advance_debounce", "pad_gap", "screen_enter_lock", "screen_enter_lock_max",
+        "finish_hold", // Mission flow Rule 7c (TASK-005r)
     ]
 
     public init(data: Data) throws {

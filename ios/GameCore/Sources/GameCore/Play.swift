@@ -114,6 +114,8 @@ public struct PlayState: Sendable {
     public private(set) var dummies: [Dummy] = []
     public private(set) var blocksDone = 0
     public var partner: Enemy?
+    /// Mission flow Rule 7c: the training finish's banner moment (beat_end lasts finish_hold); nil otherwise.
+    public private(set) var finishHold: FinishHold?
     // reach-the-flag
     public private(set) var encounterIndex = 0
     // dialogue (schema 1.4): the 0-based line showing, and ask taps made
@@ -167,6 +169,7 @@ public struct PlayState: Sendable {
         switch phase {
         case .walkTo: return [.left, .right]
         case .beatCard, .caption, .dialogueLine: return []
+        case .beatEnd where finishHold != nil: return [] // Rule 7c: all play pads hide at the Cờ tap
         case .beatPlay, .beatEnd:
             var out: Set<PadAction> = []
             var buttons = Set(currentBeat?.buttons ?? [])
@@ -192,7 +195,7 @@ public struct PlayState: Sendable {
     /// beat_play starts: x_start is the hero's x now.
     public mutating func startPlay(_ i: Int) {
         let b = beats[i]
-        phase = .beatPlay; xStart = hero.x; stall = 0; endT = 0
+        phase = .beatPlay; xStart = hero.x; stall = 0; endT = 0; finishHold = nil
         switch b.type {
         case "fight":
             let p = b.fight ?? FightParams(enemies: [.spear], maxActive: 1, fromLeft: [])
@@ -240,6 +243,51 @@ public struct PlayState: Sendable {
         partner = Enemy(id: -1, kind: .spear, x: x, face: -hero.face, state: .rest, t: tuning["enemy_rest"] - tuning["approach_min_time"], hits: 0, kb: 0, moving: false)
     }
 
+    /// Rule 7c's partner: where it stands, where it starts, which way it faces, and whether it fades in.
+    public struct FinishHold: Equatable, Sendable {
+        public let stand, spawn, face: Double
+        public let fadeIn: Bool
+    }
+
+    /// The rise of the banner (the slice placeholder for ASSET-108's 8 × 83 ms).
+    public static let finishRise = 0.67
+
+    /// Rule 7c placement (r11, AC33; trace 1.3, Android CueLayout.finishPartner): the banner is 125 behind the hero
+    /// (its cloth bx − 55 … bx + 77); the partner stands on the front, 110 from the hero, when its box (± 32) fits on
+    /// screen with 8 to spare, else beyond the banner, 8 clear of the cloth; it starts 1.2 × enemy_reach further out,
+    /// faces the cloth's centre, and fades in only if it starts on screen.
+    public static func finishPartner(heroX h: Double, face f: Double, cam: Double, enemyReach: Double) -> FinishHold {
+        let bx = h - f * 125, cl = bx - 55, cr = bx + 77
+        let lo = cam + 8 + 32, hi = cam + 1280 - 8 - 32
+        let front = h + f * 110
+        let stand = (lo...hi).contains(front) ? front : (f > 0 ? cl - 8 - 32 : cr + 8 + 32)
+        let outward: Double = stand > h ? 1 : -1
+        let spawn = stand + outward * 1.2 * enemyReach
+        return FinishHold(stand: stand, spawn: spawn, face: (cl + cr) / 2 > stand ? 1 : -1, fadeIn: spawn >= cam && spawn <= cam + 1280)
+    }
+
+    /// The goal frame of a training beat with finish_special: the partner (re-)enters at its start point.
+    mutating func startFinishHold() {
+        let fh = Self.finishPartner(heroX: hero.x, face: hero.face, cam: cam, enemyReach: tuning["enemy_reach"])
+        finishHold = fh
+        partner = Enemy(id: -1, kind: .spear, x: fh.spawn, face: fh.face, state: .rest, t: 0, hits: 0, kb: 0, moving: true)
+    }
+
+    /// Each hold update: the linear walk-in over the rise; the face and the rest state never change.
+    mutating func placeFinishPartner(_ fh: FinishHold) {
+        guard var pt = partner else { return }
+        let k = min(1, endT / Self.finishRise)
+        pt.x = fh.spawn + (fh.stand - fh.spawn) * k; pt.face = fh.face; pt.moving = k < 1
+        partner = pt
+    }
+
+    /// Rule 7c: every resume during the hold restarts it to "rise done" (the banner up, the partner in place).
+    public mutating func restartFinishHold() {
+        guard phase == .beatEnd, let fh = finishHold else { return }
+        endT = Self.finishRise
+        placeFinishPartner(fh)
+    }
+
     mutating func spawn(_ q: (kind: FightParams.Kind, left: Bool)) {
         let x = q.left ? lockX - tuning["spawn_offset"] : lockX + 1280 + tuning["spawn_offset"]
         enemies.append(Enemy(id: nextId, kind: q.kind, x: x, face: q.left ? 1 : -1))
@@ -261,7 +309,9 @@ public struct PlayState: Sendable {
 
     /// Story boxes, beat_end's cheer, then the next beat (or the end of the mission).
     mutating func nextBeat() {
-        locked = false; partner = nil; dummies = []; trainCap = nil
+        locked = false; partner = nil; dummies = []; trainCap = nil; finishHold = nil // AC34: the props go with the beat
+        // the camera catches up in this update (Android r12): the next theme and the new view land on the same frame
+        cam = max(cam, hero.x - tuning["camera_follow_offset"])
         idle = 0; stall = 0
         beat += 1
         phase = .walkTo // after the last beat too: beat = count, phase walk_to (agreed with Android in the shared trace)
@@ -349,7 +399,10 @@ public struct PlayState: Sendable {
                 stall += dt
                 if input.tapped.contains(.special) { tut.specialTapped = true }
                 trainingStep(dt, input)
-                if trainingStage == .done { phase = .beatEnd; endT = 0 }
+                if trainingStage == .done {
+                    phase = .beatEnd; endT = 0
+                    if b.params.finishSpecial == true { startFinishHold() } // after this update's move and camera step
+                }
             case "reach-the-flag":
                 if !locked, let enc = b.params.encounters, encounterIndex < enc.count,
                    hero.x >= xStart + enc[encounterIndex].atScreen * 1280 {
@@ -369,7 +422,8 @@ public struct PlayState: Sendable {
         } else if phase == .beatEnd, let b = currentBeat {
             updateEnemies(dt)
             endT += dt
-            if endT >= tuning["end_pause"] {
+            if let fh = finishHold { placeFinishPartner(fh) }
+            if endT >= (finishHold != nil ? tuning["finish_hold"] : tuning["end_pause"]) {
                 if b.type == "fight" { phase = .caption; captionLine = 0; events.append(.caption(beat + 1)) }
                 else { events.append(b.cheers ? .cheer : .quietEnd); nextBeat() }
             }
@@ -663,7 +717,7 @@ public struct PlayState: Sendable {
 
     /// Starts at beat `i` (`stage`: telegraph, caption, card) with the hints already learned.
     public mutating func debugJump(beat i: Int, stage: String?) {
-        beat = max(0, min(beats.count - 1, i))
+        beat = max(0, min(beats.count - 1, i)); finishHold = nil
         tut = Tutorial(moved: true, hit: true, blocked: true, windupSeen: true, enemySeen: true)
         hero.x = beatX(beat) + 10
         cam = hero.x - tuning["camera_follow_offset"]

@@ -80,4 +80,49 @@ public enum HintPlacement {
         }
         return Placed(x: r.midX, y: y, angle: Double(side) * .pi / 2, side: side, rect: r)
     }
+
+    // MARK: the hint hand (Hints Rule 6, r9; AC12)
+
+    /// The hand placed for a pad: `side` 0 above it, −1 left of it, +1 right of it; `pointing` the direction it
+    /// points (0 down, +1 right, −1 left); `anchor` where its rotation centre goes; `rect` its whole box, bounce in.
+    public struct Hand: Equatable, Sendable {
+        public var side, pointing: Int
+        public var anchorX, anchorY: Double
+        public var rect: Box
+    }
+
+    /// The gap between the hand's tip box and its pad.
+    public static let handGap = 6.0
+
+    /// The hand's box beside or above a pad (the same art box as Android: 56 × 100 plus the ±12 bounce; its anchor is
+    /// 24 inside the gap so the tip box ends `handGap` from the pad).
+    public static func handBox(pad c: Circle, side: Int) -> Box {
+        let a = handAnchor(pad: c, side: side)
+        switch side {
+        case 0: return Box(a.x - 30, a.y - 148, 56, 124)
+        case -1: return Box(a.x - 148, a.y - 26, 124, 56)
+        default: return Box(a.x + 24, a.y - 30, 124, 56)
+        }
+    }
+
+    static func handAnchor(pad c: Circle, side: Int) -> (x: Double, y: Double) {
+        switch side {
+        case 0: return (c.cx, c.cy - c.r - handGap + 24)
+        case -1: return (c.cx - c.r - handGap + 24, c.cy)
+        default: return (c.cx + c.r + handGap - 24, c.cy)
+        }
+    }
+
+    /// Above the pad when it fits (on a banner beat wholly at y ≥ 276), else beside it on the side away from the
+    /// screen edge, else the other side; never over any of `avoid` (the visible pads' squares) and inside x 8…1272.
+    public static func hand(pad c: Circle, avoid: [Box], banner: Bool) -> Hand {
+        let away = c.cx >= 640 ? -1 : 1
+        for side in [0, away, -away] {
+            let b = handBox(pad: c, side: side)
+            let ok = (!banner || b.y >= clearY) && b.y >= 0 && b.x >= edge && b.right <= 1280 - edge && !avoid.contains { $0.overlaps(b) }
+            if ok { let a = handAnchor(pad: c, side: side); return Hand(side: side, pointing: -side, anchorX: a.x, anchorY: a.y, rect: b) }
+        }
+        let a = handAnchor(pad: c, side: 0)
+        return Hand(side: 0, pointing: 0, anchorX: a.x, anchorY: a.y, rect: handBox(pad: c, side: 0))
+    }
 }
