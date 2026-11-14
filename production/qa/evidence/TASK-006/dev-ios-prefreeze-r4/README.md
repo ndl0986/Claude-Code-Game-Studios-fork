@@ -4,8 +4,8 @@ game-dev-ios's own run-and-observe check before freezing r4, on its own Simulato
 "iPhone 18 Pro – dev-ios" (iOS 27.0, UDID FB836E51-D39E-42C3-A60E-96159EE6516C), headless, captured
 with `xcrun simctl io FB836E51-… screenshot`. QC's device (E9F515E9) was not used.
 
-Build: feat/TASK-006-ios-native at the commit before the r4 base merge (the merge brought no
-content or iOS code changes). Every screen in VI and EN, reached with debug launch arguments:
+Build: feat/TASK-006-ios-native at the commit before the r4 base merge (the merge added only the
+`pad_gap` and `drag_threshold` tuning keys, which iOS does not read yet, and no iOS code). Every screen in VI and EN, reached with debug launch arguments:
 `-startScreen title|intro|play|ending|quiz|results|unlock|skipwarn|pause -beat N -stage card|ask|blocks|telegraph|wrong|right|newmedal -q N -stars N -lang vi|en`.
 
 Checked against the r3 bugs: R3-02 (quiz prompt clear of the cards), R3-03 (intro text clear of
