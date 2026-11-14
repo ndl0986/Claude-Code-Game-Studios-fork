@@ -44,7 +44,11 @@ a new hero is added after a child has already finished the previous one.
 ### Core Rules
 
 1. **Order.** Heroes are ordered by `hero.timeline_order` in their `mission.json` (ascending,
-   unique). The order in `index.json` doesn't matter.
+   unique; validation R17). It is an **integer numbered in gaps of 10** (10, 20, 30…), so a
+   hero who lived in between can be inserted (e.g. 15) without renumbering. There is no year
+   field: legends have none, and heroes can share a year. If the map needs an era, it is a
+   Text. The order in `index.json` doesn't matter. Trần Quốc Toản is 10. The test-only
+   sample hero is 999, and samples are excluded from the uniqueness check.
 2. **First hero.** The hero with the lowest `timeline_order` among playable heroes (Rule 7) is
    always open.
 3. **Completed.** A hero is **completed** once its quiz finishes in any run (Quiz Rule 8). Saved
@@ -56,12 +60,15 @@ a new hero is added after a child has already finished the previous one.
      hero.
    - **A hero added in the middle** of the timeline (a hero who lived earlier) opens when the hero
      before it is completed. Heroes already open stay open (Rule 5).
-5. **Never locked again.** Once a hero has been open, it stays open: `seen_open.<hero_id>` = true
-   is saved the first time it is open, and a hero is open if `seen_open` is set **or** Rule 4
-   holds. A content update never takes a hero away from a child.
-6. **`next_hero` in content.** `mission.json` `next_hero` must equal the next playable hero by
-   `timeline_order`, or null for the last one. Validation checks it. It is used to name the
-   unlocked hero on the results screen; Rule 4 decides unlocking.
+5. **Never locked again.** Once a hero has been open, it stays open: a hero is open if
+   `seen_open.<hero_id>` is set **or** Rule 4 holds. A content update never takes a hero away
+   from a child. **When `seen_open` is written:** for **every** open hero, (a) whenever the
+   title screen (the map after Alpha) loads, and (b) at quiz finish, together with
+   `completed`, `stars` and `medal`.
+6. **`next_hero` in content.** Validation (R18, at build time, claims ignored) checks that
+   `next_hero` equals the next hero **in `index.json`** by `timeline_order`, or null for the
+   last one. At run time, Rule 4 decides unlocking, and the unlock screen names the hero that
+   **actually opened**, which can differ from `next_hero` if that hero isn't playable (Rule 7).
 7. **Playable.** A hero is playable if its folder is in `index.json` and, in a release build, all
    its cited claims are approved (R12). Unplayable heroes are skipped in Rules 2 and 4, as if
    they weren't there. Debug builds treat every bundled hero as playable.
@@ -72,7 +79,9 @@ a new hero is added after a child has already finished the previous one.
    Rule 15).
 10. **Results and unlock screens** (after the quiz):
     1. **Results:** this run's stars, the best stars (if higher), and the medal: gold if earned in
-       this or any run (`ui.medal.earned`), otherwise an outline and `ui.medal.missing`.
+       this or any run, otherwise an outline and `ui.medal.missing`. `ui.medal.earned` ("Nhận được
+       huy hiệu! / You earned the medal!") shows **only in the run that earns it**, first play or
+       replay. The same string is reused; there's no separate "new medal" string.
     2. **Unlock**, only when this finish opened a hero that wasn't open before: "Mở khoá anh hùng
        tiếp theo! / Next hero unlocked!" plus the hero's name.
     3. If no next playable hero exists: `ui.results.more_heroes`, then the title screen (the map
@@ -118,9 +127,8 @@ The F1 (open heroes) formula is defined as:
 
 **Output Range:** boolean per hero. With N playable heroes, between 1 and N are open. At least
 the first is always open, so a child can always play.
-**Example:** heroes A(1), B(2), C(3). A is completed, so A and B are open and C is locked. An
-update adds A2(1.5)… `timeline_order` is an integer, so the content writer renumbers: A(1),
-A2(2), B(3), C(4). A2 opens (A completed), and B stays open (`seen_open`).
+**Example:** heroes A(10), B(20), C(30). A is completed, so A and B are open and C is locked.
+An update adds A2(15) between them. A2 opens (A is completed), and B stays open (`seen_open`).
 
 The F2 (collection progress) formula is defined as:
 
@@ -151,8 +159,8 @@ but the counts never do, so show counts ("★ 7 · 🏅 2") rather than percenta
   playable hero before it (Rule 7).
 - **If the quiz finishes on a replay of an already completed hero**: no unlock screen (nothing new
   opened). Results show best stars and the medal state.
-- **If the medal is earned on a replay**: results celebrate it ("Nhận được huy hiệu! / You earned
-  the medal!") even though the hero was already completed.
+- **If the medal is earned on a replay**: results celebrate it with `ui.medal.earned`, even though
+  the hero was already completed (Rule 10).
 - **If the app is killed between the quiz finishing and the results screen**: Save writes
   `completed`, `stars` and `medal` at quiz finish (before results), so nothing is lost.
 - **If saved data is missing or unreadable**: start fresh (the first hero open, no stars). Never
@@ -202,29 +210,34 @@ Quiz & stars and Mission flow both list Hero progression as a dependent (bidirec
 
 ## Acceptance Criteria
 
-Criteria 1–8 are logic and need unit tests (shared fixtures recommended); 9–10 need QC
-screenshots.
+Criteria 1–8 and 11–12 are logic and need unit tests (shared fixtures recommended); 9–10 need
+QC screenshots.
 
-1. **GIVEN** a fresh install with heroes A(1), B(2), **WHEN** the title loads, **THEN** A is open
+1. **GIVEN** a fresh install with heroes A(10), B(20), **WHEN** the title loads, **THEN** A is open
    and B is locked.
 2. **GIVEN** A's quiz finished with 1★, **WHEN** progression updates, **THEN** B is open and the
    unlock screen names B.
-3. **GIVEN** A completed and a content update adds C(3) after B, **WHEN** B is not completed,
+3. **GIVEN** A completed and a content update adds C(30) after B(20), **WHEN** B is not completed,
    **THEN** C is locked. **WHEN** B is then completed, **THEN** C opens.
-4. **GIVEN** A completed and B open, **WHEN** an update inserts A2 between them (renumbered A(1),
-   A2(2), B(3)), **THEN** A2 is open and B stays open.
+4. **GIVEN** A(10) completed and B(20) open (the title loaded once, so `seen_open.B` is set),
+   **WHEN** an update inserts A2(15) between them, **THEN** A2 is open and B stays open.
 5. **GIVEN** saved best 3★ for A, **WHEN** a replay finishes with 1★, **THEN** `stars.A` stays 3
    and no unlock screen shows.
 6. **GIVEN** `medal.A` = true, **WHEN** a replay skips a story screen, **THEN** `medal.A` stays
    true.
 7. **GIVEN** a release build where B has a pending claim, **WHEN** A is completed, **THEN** B is
    not shown, and the results show `ui.results.more_heroes` if no later playable hero exists.
-8. **GIVEN** two heroes with the same `timeline_order`, or a `next_hero` that isn't the next by
-   timeline, **WHEN** content is validated, **THEN** validation fails.
+8. **GIVEN** two bundled heroes with the same `timeline_order`, or a `next_hero` that isn't the
+   next hero in `index.json` by `timeline_order`, **WHEN** content is validated, **THEN**
+   validation fails (R17 / R18). Samples are excluded.
 9. **GIVEN** results after a full-story run, **WHEN** captured, **THEN** the gold medal shows. After
    a skipped run, the outline medal and `ui.medal.missing` show, with no red (screenshot).
 10. **GIVEN** the app killed right after the last quiz answer, **WHEN** it relaunches, **THEN** the
     hero is completed, its stars are saved, and the next hero is open.
+11. **GIVEN** A(10) open but not completed (the title loaded once), **WHEN** an update inserts
+    Z(5) before A, **THEN** Z is open (the first hero) **and A stays open** (`seen_open.A`).
+12. **GIVEN** any title-screen load, **WHEN** it finishes, **THEN** `seen_open` is saved for
+    every hero shown as open.
 
 ## Open Questions
 
@@ -232,4 +245,4 @@ screenshots.
 |---|---|---|---|
 | D-16 | Saved keys: replace P-04 (3)'s `unlocked` list with `completed.<id>` + `seen_open.<id>` (+ `medal.<id>`), so unlocks are derived and survive content updates (Rules 4–5) | game-dev-ios + game-dev-android (D-04 ADR) | Before the save ADR |
 | — | Should a hero's medal give anything beyond the badge, e.g. open its "Did you know?" fact page (linked to D-14, what stars measure)? | Luan | With D-14 |
-| — | `timeline_order` is an integer, so inserting a hero means renumbering later heroes in content. Acceptable, or switch to a decimal or year field? | game-art-content + devs | Before hero 2 |
+| — | ~~`timeline_order` type~~ **Decided (devs and leader, 2026-11-14):** an integer in gaps of 10, with no year field. R17 and R18 come on a data branch after approval | game-dev-android | Closed |
