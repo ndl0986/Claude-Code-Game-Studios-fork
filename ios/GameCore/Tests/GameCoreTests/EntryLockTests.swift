@@ -63,6 +63,34 @@ final class EntryLockTests: XCTestCase {
         XCTAssertEqual(try XCTUnwrap(advancedAt), e + 5 * 0.35, accuracy: 1e-9, "presses at 0.35…1.40 roll the lock to the 1.5 s cap; 1.75 advances")
     }
 
+    /// B7 follow-up: every ending box takes the rolling lock. A 4 s mash at 0.35 s: box 1 and box 2 each hold
+    /// ≥ screen_enter_lock_max (1.5 s; a test tuning until TASK-005q merges).
+    func test_every_ending_box_takes_the_rolling_lock() throws {
+        let c = try ContentSet.load(dataRoot: Repo.data)
+        var values = c.tuning.values.mapValues(\.value); values["screen_enter_lock_max"] = 1.5
+        let content = ContentSet(index: c.index, strings: c.strings, sources: c.sources, markers: c.markers, rules: c.rules,
+                                 tuning: Tuning(values: values, seed: c.tuning.seed), assets: c.assets, themes: c.themes, heroes: c.heroes)
+        let g = Game(content: content, hero: realHero(content), store: MemoryStore(), isDebug: true)
+        g.uptime = { [unowned self] in self.now }
+        g.debugStart(screen: "ending", q: nil, beat: nil, stage: nil, stars: nil)
+        step(g)
+        var shownAt = [0: try XCTUnwrap(g.enteredAt)], leftAt: [Int: Double] = [:]
+        let start = now
+        while now - start < 4 {
+            now += 0.35
+            let line = g.storyLine, screen = g.screen
+            g.next(at: now)
+            if screen == .ending && (g.screen != .ending || g.storyLine != line) {
+                leftAt[line] = now
+                if g.screen == .ending { shownAt[g.storyLine] = now }
+            }
+        }
+        for box in [0, 1] {
+            let shown = try XCTUnwrap(shownAt[box], "box \(box + 1) shown"), left = try XCTUnwrap(leftAt[box], "box \(box + 1) left")
+            XCTAssertGreaterThanOrEqual(left - shown, 1.5 - 1e-9, "ending box \(box + 1) held ≥ 1.5 s under the mash")
+        }
+    }
+
     func test_pause_is_exempt_and_quiz_cards_are_locked() throws {
         let g = try game()
         g.debugStart(screen: "quiz", q: nil, beat: nil, stage: nil, stars: nil)

@@ -168,7 +168,9 @@ public final class Game {
     /// the context it came from (pause and sound are exempt from the lock).
     func currentLockContext() -> String? {
         switch screen {
-        case .intro, .ending, .quiz, .results, .unlock: return "\(screen)"
+        // every ending box is its own context (B7 follow-up): the hero's last lines can't flash past under a mash
+        case .ending: return "ending\(storyLine)"
+        case .intro, .quiz, .results, .unlock: return "\(screen)"
         case .play:
             switch play.phase {
             case .beatCard: return "card\(play.beat)"
