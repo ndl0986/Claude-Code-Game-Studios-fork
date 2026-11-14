@@ -31,6 +31,20 @@ class G2MeasureTest {
         for ((name, s) in strategies) { val t = timeBeat(s); println("G2 $name: ${"%.1f".format(t)} s"); assertTrue("$name took $t s", t <= 60.0) }
     }
 
+    /** Rule 2 parity: a tie between two sides, or an enemy at exactly hero.x, keeps the facing. */
+    @Test fun autoFaceTieKeepsFacing() {
+        val r = run(); val h = r.hero
+        r.enemies.clear()
+        r.enemies += Enemy(70, "spear", h.x - 100, 1).also { it.state = EnemyState.APPROACH }
+        r.enemies += Enemy(71, "spear", h.x + 100, -1).also { it.state = EnemyState.APPROACH }
+        h.face = 1
+        r.update(dt, InputFrame().apply { tapped += Action.ATTACK })
+        assertTrue(h.face == 1)
+        r.enemies.removeAt(1); h.face = 1; h.atk = -1.0; h.cool = 0.0
+        r.update(dt, InputFrame().apply { tapped += Action.ATTACK })
+        assertTrue(h.face == -1)
+    }
+
     /** Holding ▶ through an encounter keeps the front enemy on screen, and an attack lands within 2 swings. */
     @Test fun holdingRightKeepsTheEnemyOnScreenAndHitsWithin2Swings() {
         val r = run()

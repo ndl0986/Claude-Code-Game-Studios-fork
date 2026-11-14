@@ -401,8 +401,14 @@ class MissionRun(
         if (canAct && !h.def && h.atk < 0 && h.cool <= 0 && Action.ATTACK in tapped) {
             h.atk = 0.0; h.hitDone = false
             // G2 rule 2 (combat Rule 15): the swing auto-faces the nearest non-fleeing enemy (a tie keeps the facing)
-            enemies.filter { it.state != EnemyState.FLEE }.minByOrNull { abs(it.x - h.x) }?.let { n ->
-                val d = n.x - h.x; if (d != 0.0) h.face = d.sign.toInt() }
+            // Only enemies count (never dummies or the training partner). A tie between sides, or an enemy at
+            // exactly hero.x, keeps the current facing (parity with iOS).
+            val live = enemies.filter { it.state != EnemyState.FLEE }
+            val best = live.minOfOrNull { abs(it.x - h.x) }
+            if (best != null) {
+                val sides = live.filter { abs(it.x - h.x) == best }.map { (it.x - h.x).sign.toInt() }.toSet()
+                if (sides.size == 1 && 0 !in sides) h.face = sides.first()
+            }
         }
         var mv = 0
         if (canAct && !h.def) { if (Action.LEFT in held) mv -= 1; if (Action.RIGHT in held) mv += 1 }
