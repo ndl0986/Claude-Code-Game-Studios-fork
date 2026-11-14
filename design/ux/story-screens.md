@@ -50,7 +50,8 @@ gently told that skipping costs this story's medal.
 
 QC r5 (both apps): the top-left pause/sound block, at `pad_min`, covered the top-left corner of
 the story picture's frame and of the beat-card panel. Boxes are world px in the 1280×720 world
-fitted to the safe rect (Input F1), so `safe_bottom` = 720 on the reference phones.
+fitted inside the safe rect (Input Rule 1; both apps, iOS from r6), so **`safe_bottom` = 720** in
+world px on every supported phone (Android clamps it with `min(720, ·)`).
 
 - **Corner block** (pause + sound, Input Rule 3): x 18 … `corner_right`, y 18 … `corner_bottom`,
   with `corner_bottom` = 18 + `pad_min / k` (155 at the Android reference, k 0.527) and
@@ -70,10 +71,9 @@ fitted to the safe rect (Input F1), so `safe_bottom` = 720 on the reference phon
     card, **167** for intro, caption and ending;
   - **top ≥ `corner_bottom` + 8 is required.** At the reference: beat card y 322–557, other boxes
     y 390–557, all clear of the block (which ends at y 155).
-- **Fit condition:** `2 × pad_min / k + 52 + H ≤ safe_bottom`. For a beat card (H 235) that holds
-  down to k ≈ 0.33 with `safe_bottom` 720, and k ≈ 0.40 with a large bottom inset
-  (`safe_bottom` ≈ 646). This sets the **shared supported floor, k ≥ 0.40**, for every screen (`hud.md` §3.3,
-  `title.md`). The text box can't narrow to buy room: at 720 wide, 6 TQT story lines overflow
+- **Fit condition:** `2 × pad_min / k + 52 + H ≤ 720`. For a beat card (H 235) it holds down to
+  k ≈ 0.33; at the **shared supported floor, k ≥ 0.40** (`hud.md` §3.3, `title.md`), it is 647 ≤
+  720, with 73 px to spare (the dialogue panel, H 286: 698 ≤ 720, `dialogue.md` §5.2). The text box can't narrow to buy room: at 720 wide, 6 TQT story lines overflow
   2 lines (F1, measured), so the panel never slides beside the block.
 - **Dialogue screens** follow the same rule: the portrait and the box start below
   `corner_bottom` + 8 (`dialogue.md`).
