@@ -19,7 +19,7 @@ it) · **Decided** (Luan's call, with the date).
 - **Options:** A. **allow** the parent's normal iCloud / Google backup, so progress and medals survive
   a new phone · B. **exclude** the save from backups, so nothing leaves the device even in the
   parent's backup, but progress is lost on a new phone.
-- **Recommendation:** A (non-personal flags; losing a child's medals on a new phone feels unkind).
+- **Recommendation:** A (non-personal flags; losing a child's medals on a new phone feels unkind). Both devs agree; on iOS A is the default (no code).
 - **Status:** Open (privacy: your call).
 
 ### D-20 A language choice screen on first launch?
@@ -39,7 +39,7 @@ it) · **Decided** (Luan's call, with the date).
   UI words are often longer in Vietnamese ("Màn hình chính" vs "Home").
 - **Change:** a Vietnamese limit per field (1.6 × the English one) and max lines per field in
   rules.json, a new check R8b, and the "read it all for a medal" line retyped as a dialog.
-- **Status:** Open (devs + game-art-content agree; Luan only if they disagree).
+- **Status:** AGREED by both devs (+ a `field` override on UI strings); game-dev-android writes data/TASK-005h-text-budgets.
 
 ### D-18 How Trần Quốc Toản and the invaders look (portrayal + palette), before final art
 
