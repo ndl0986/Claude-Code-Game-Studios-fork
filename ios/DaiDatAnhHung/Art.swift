@@ -277,7 +277,7 @@ enum Backdrop {
     /// World-space props from x0 to x1 (prototype ground_y).
     static func world(theme: String, from x0: Double, to x1: Double, ground: Double) -> SKNode {
         let n = SKNode()
-        n.addChild(D.rr(x0, ground - 4, x1 - x0, 720 - ground + 4, 0, C.earth))
+        n.addChild(D.rr(x0, ground - 4, x1 - x0, 720 - ground + 4 + 600, 0, C.earth)) // runs below the world (Rule 1 outside area)
         n.addChild(D.rr(x0, ground - 4, x1 - x0, 14, 0, C.earthDark))
         var x = x0
         var i = 0

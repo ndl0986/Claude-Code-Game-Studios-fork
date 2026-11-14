@@ -89,17 +89,16 @@ enum Font {
     /// (Language & text GDD F1). Buttons, titles, goal and choices stay 800.
     static func body(_ size: Double) -> UIFont { UIFont(name: "Nunito-SemiBold", size: size) ?? .systemFont(ofSize: size, weight: .semibold) }
 
-    /// Text with a double outline, ink outside and cream inside, so it reads on every sky band from the
-    /// pale village to the navy camp (≥ 3:1 either way; iOS QC r5 N1): two stroked copies under the fill.
-    static func outlined(_ s: String, _ size: Double, _ c: SKColor) -> SKNode {
+    /// Text with an outline `px` wide outside the glyphs (hud §3.3, QC r5 contrast): 8 copies in the outline
+    /// colour, offset by px in 8 directions, under the fill. (An attributed-string stroke rendered as a hatched,
+    /// offset smear in SKLabelNode.)
+    static func outlined(_ s: String, _ size: Double, _ c: SKColor, outline: SKColor, px: Double = 3.5, width: Double? = nil) -> SKNode {
         let n = SKNode()
-        for (stroke, w) in [(C.ink, 34.0), (C.cream, 16.0)] {
-            let l = label(s, size, .clear)
-            let a = NSMutableAttributedString(attributedString: l.attributedText!)
-            a.addAttributes([.strokeColor: stroke, .strokeWidth: w], range: NSRange(location: 0, length: a.length))
-            l.attributedText = a; n.addChild(l)
+        for i in 0..<8 {
+            let a = Double(i) * .pi / 4, back = label(s, size, outline, width: width)
+            back.position = CGPoint(x: cos(a) * px, y: sin(a) * px); n.addChild(back)
         }
-        n.addChild(label(s, size, c))
+        let front = label(s, size, c, width: width); front.zPosition = 0.1; n.addChild(front)
         return n
     }
 

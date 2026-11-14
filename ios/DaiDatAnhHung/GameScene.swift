@@ -11,6 +11,10 @@ final class GameScene: SKScene {
     private var lastInsets = UIEdgeInsets.zero, lastSize = CGSize.zero
 
     private let world = SKNode(), fx = SKNode(), ui = SKNode(), worldHints = SKNode()
+    /// The world's frame: scaled by k and placed in the safe rect (Input Rule 1). Everything draws under it.
+    private let root = SKNode()
+    /// The world's top-left in view points, and k (points per world px), for the debug state's mapping.
+    private var worldOrigin = CGPoint.zero
     /// The banner motto bar (HUD spec §3.3): above the fighters (z 4–5), under pops (fx 10), hints (12) and the HUD (100).
     private let bannerLayer = SKNode()
     private var backdropTheme = ""
@@ -34,17 +38,23 @@ final class GameScene: SKScene {
     /// The screen and play phase last frame: a change cancels a pressed menu button (Input GDD).
     private var lastPlace = "" 
     private let step = 1.0 / 60
+    /// How far (world px) backdrops and dimming run past the world on each side, to cover the outside area.
+    static let bleed = 600.0
 
     init(game: Game, audio: Audio) {
         self.game = game; self.audio = audio
         hero = HeroNode(scale: 180 / HeroNode.unitHeight, reach: game.tuning["attack_range"])
         super.init(size: CGSize(width: 1280, height: 720))
-        scaleMode = .aspectFit
+        // Input Rule 1: the 1280×720 world is fitted to the SAFE rect. The scene fills the whole view
+        // (resizeFill, 1 unit = 1 pt) and `root` carries the world, scaled by k and placed in the safe rect;
+        // outside it the backdrop (sky band, ground) runs on to the screen edges, never flat bars.
+        scaleMode = .resizeFill
         backgroundColor = C.night
-        addChild(world); world.addChild(hero); world.addChild(fx); world.addChild(worldHints)
+        addChild(root)
+        root.addChild(world); world.addChild(hero); world.addChild(fx); world.addChild(worldHints)
         hero.zPosition = 5; fx.zPosition = 10; worldHints.zPosition = 12
-        addChild(ui); ui.zPosition = 100
-        addChild(bannerLayer); bannerLayer.zPosition = 8
+        root.addChild(ui); ui.zPosition = 100
+        root.addChild(bannerLayer); bannerLayer.zPosition = 8
     }
     @available(*, unavailable) required init?(coder: NSCoder) { fatalError() }
 
@@ -61,7 +71,13 @@ final class GameScene: SKScene {
         let ins = v.safeAreaInsets
         guard ins != lastInsets || v.bounds.size != lastSize else { return }
         lastInsets = ins; lastSize = v.bounds.size
-        layout = PadLayout(view: (w: v.bounds.width, h: v.bounds.height), insets: (ins.top, ins.left, ins.bottom, ins.right), padMin: game.tuning["pad_min"], padGap: game.tuning["pad_gap"])
+        let sw = v.bounds.width - ins.left - ins.right, sh = v.bounds.height - ins.top - ins.bottom
+        let k = min(sw / 1280, sh / 720)
+        worldOrigin = CGPoint(x: ins.left + (sw - 1280 * k) / 2, y: ins.top + (sh - 720 * k) / 2)
+        root.setScale(k)
+        root.position = CGPoint(x: worldOrigin.x, y: v.bounds.height - worldOrigin.y - 720 * k)
+        // the world already sits in the safe rect, so the pad layout sees a 1280k × 720k view with no insets
+        layout = PadLayout(view: (w: 1280 * k, h: 720 * k), insets: (0, 0, 0, 0), padMin: game.tuning["pad_min"], padGap: game.tuning["pad_gap"])
         uiKey = ""
     }
 
@@ -133,7 +149,7 @@ final class GameScene: SKScene {
 
     // MARK: touches
 
-    private func ydown(_ t: UITouch) -> CGPoint { let p = t.location(in: self); return CGPoint(x: p.x, y: 720 - p.y) }
+    private func ydown(_ t: UITouch) -> CGPoint { let p = t.location(in: root); return CGPoint(x: p.x, y: 720 - p.y) }
     private func tid(_ t: UITouch) -> Int { ObjectIdentifier(t).hashValue }
     private var padsLive: Bool { game.screen == .play && !game.skipWarning && !game.play.visiblePads.isEmpty }
 
@@ -222,13 +238,24 @@ final class GameScene: SKScene {
             world.addChild(b); backdrop = b
             backgroundColor = Backdrop.sky(theme)
             skyNode?.removeFromParent()
-            let sk = Backdrop.skyNode(theme, width: 1280, height: game.tuning["ground_y"])
-            sk.position = CGPoint(x: 0, y: 720); sk.zPosition = -20
-            addChild(sk); skyNode = sk
+            // the sky band runs past the world's sides and top to the screen edges (Rule 1 outside area)
+            let sk = Backdrop.skyNode(theme, width: Self.bleed * 2 + 1280, height: game.tuning["ground_y"] + Self.bleed)
+            sk.position = CGPoint(x: -Self.bleed, y: 720 + Self.bleed); sk.zPosition = -20
+            root.addChild(sk); skyNode = sk
         }
         world.position.x = -p.cam
         let t = p.t
-        hero.position = D.p(p.hero.x, ground)
+        // Combat V/A strike contact (QC r5, render-only; parity with Android): the sim pushes the hero back
+        // hero_pushback in the step a strike lands, so for the strike's first 0.05 s (≈ 3 frames) the hero is
+        // drawn where he was hit, the padded tip on his chest, then slides to the sim position
+        var contact = 0.0
+        if p.hero.hurt > game.tuning["hurt_time"] - 0.06 {
+            for e in p.enemies + (p.partner.map { [$0] } ?? []) where e.state == .strike && e.t < 0.05 {
+                let side: Double = e.x >= p.hero.x ? 1 : -1
+                contact = side * game.tuning["hero_pushback"] * max(0, 1 - e.t / 0.05)
+            }
+        }
+        hero.position = D.p(p.hero.x + contact, ground)
         hero.update(face: p.hero.face, walk: p.hero.walk, defend: p.hero.def, attack: p.hero.atk >= 0 ? p.hero.atk : nil, hurt: p.hero.hurt > 0, t: t)
         var seen = Set<Int>()
         for e in p.enemies {
@@ -279,7 +306,8 @@ final class GameScene: SKScene {
             // Ối! / Đỡ được! are the hero's pops: beside the head on the side away from the striker (the hero faces
             // it), at head height, so they never sit on the head (iOS QC r4 N1) and stay under the goal plate and
             // the HUD row. Render only: the core's pop position (shared with Android, not in the trace) is unchanged.
-            let l = Font.outlined(game.ui(q.key), 40, color(q.color)) // ink + cream outline (QC r5 N1)
+            // hud §3.3 pop contrast: an outline ≥ 3 px, ink on light skies, cream on the camp's dark sky
+            let l = Font.outlined(game.ui(q.key), 40, color(q.color), outline: backdropTheme == "camp" ? C.cream : C.ink)
             let sx = max(p.cam + 120, min(p.cam + 1280 - 120, q.x - p.hero.face * 150))
             l.position = D.p(sx, ground - 135); l.alpha = min(1, q.life * 2); fx.addChild(l)
         }
@@ -384,14 +412,22 @@ final class GameScene: SKScene {
     }
 
     /// D-07: the Skip button on story screens, and the kind warning over everything.
+    /// "Bỏ qua": bottom-left on Tiếp's row, as tall as Tiếp (≥ pad_min, Input Rule 4); smaller only in width
+    /// and weight (story-screens §5.2, QC r5 AC10).
     private func skipButton() {
         guard game.canSkip else { return }
-        button(game.ui("ui.story.skip"), 1280 - 230, 640, 190, 70, "skip", fill: C.cream, size: 26)
+        let b = StoryLayout(pad: layout).skip
+        button(game.ui("ui.story.skip"), b.x, b.y, b.w, b.h, "skip", fill: C.cream, size: 30)
+    }
+
+    /// "Tiếp" (or the ask button in its slot): bottom-right, ≥ pad_min tall (story-screens §5.2).
+    private func nextButton(_ sl: StoryLayout, label: String? = nil, id: String = "next") {
+        button(label ?? game.ui("ui.btn.next"), sl.next.x, sl.next.y, sl.next.w, sl.next.h, id, pulse: true, size: 34)
     }
     private func skipWarningOverlay() {
         guard game.skipWarning else { return }
         buttons = []
-        add(D.rr(0, 0, 1280, 720, 0, SKColor(red: 42 / 255, green: 36 / 255, blue: 64 / 255, alpha: 0.75)), 0, 0)
+        add(D.rr(-Self.bleed, -Self.bleed, 1280 + 2 * Self.bleed, 720 + 2 * Self.bleed, 0, SKColor(red: 42 / 255, green: 36 / 255, blue: 64 / 255, alpha: 0.75)), 0, 0)
         add(D.rr(-420, -170, 840, 340, 36, C.cream, C.gold, 6), 640, 330)
         add(D.drum(50, SKColor(hex: 0xc98a12, alpha: 0.5)), 640, 210)
         add(Font.label(game.ui("ui.story.skip_warning"), 37, C.ink, width: 780, weight: 600), 640, 300)
@@ -418,8 +454,8 @@ final class GameScene: SKScene {
 
     private func buildTitle() {
         backgroundColor = Backdrop.sky("village")
-        add(Backdrop.skyNode("village", width: 1280, height: game.tuning["ground_y"]), 0, 0)
-        let b = Backdrop.world(theme: "village", from: -100, to: 1400, ground: game.tuning["ground_y"]); b.position = CGPoint(x: 0, y: 720); uiZ += 1; b.zPosition = uiZ; ui.addChild(b)
+        add(Backdrop.skyNode("village", width: 1280 + 2 * Self.bleed, height: game.tuning["ground_y"] + Self.bleed), -Self.bleed, -Self.bleed)
+        let b = Backdrop.world(theme: "village", from: -Self.bleed, to: 1280 + Self.bleed, ground: game.tuning["ground_y"]); b.position = CGPoint(x: 0, y: 720); uiZ += 1; b.zPosition = uiZ; ui.addChild(b)
         // title.md §5.2 (D-27, D-27b): every box from GameCore's TitleLayout; no drum emblems, no standing hero
         let tl = TitleLayout(pad: layout, debug: game.isDebug)
         let row = tl.titleRow
@@ -472,26 +508,33 @@ final class GameScene: SKScene {
         if ending, Pictures.files[game.hero.mission.ending.pictureId] != nil {
             let pic = Pictures.node(game.hero.mission.ending.pictureId, size: 480); pic.position = CGPoint(x: 400, y: -ph / 2); layer(pic, 1)
         } else {
+            // full-bleed (×2.25): the picture's ground sits at y 175 of 320, just above the text panel on screen,
+            // so the village and the hero (scale 0.5) show above it
+            let gy = 175.0
             layer(Backdrop.skyNode(ending ? "river" : "village", width: 800, height: ph), -1)
-            let b = Backdrop.world(theme: ending ? "river" : "village", from: -240, to: 1100, ground: ph); b.position = CGPoint(x: -240, y: 0); layer(b, 1)
+            let b = Backdrop.world(theme: ending ? "river" : "village", from: -240, to: 1100, ground: gy); b.position = CGPoint(x: -240, y: 0); layer(b, 1)
             if ending { layer(D.rr(0, 0, 800, ph, 0, SKColor(red: 1, green: 0.59, blue: 0.35, alpha: 0.3)), 2) }
-            let h = HeroNode(scale: 0.9); h.update(face: 1, walk: false, defend: false, attack: nil, hurt: false, t: 0); h.position = CGPoint(x: ending ? 400 : 320, y: -(ph - 20)); layer(h, 3)
+            let h = HeroNode(scale: 0.5); h.update(face: 1, walk: false, defend: false, attack: nil, hurt: false, t: 0); h.position = CGPoint(x: ending ? 400 : 320, y: -gy); layer(h, 3)
         }
         crop.addChild(inner)
-        // QC r5 N2: the picture keeps 800:320 but starts below the pause/sound corner block (+ 8), so the
-        // frame never meets it; it ends at y 430 above the text as before (iOS-R3-03)
-        let top = max(110, layout.pause.cy + layout.pause.r + 8), f = (430 - top) / ph
-        let pic = SKNode(); pic.addChild(crop); pic.addChild(D.rr(0, 0, 800, ph, 30, nil, C.gold, 8 / f))
-        pic.setScale(f)
-        add(pic, 640 - 400 * f, top)
+        // P-06 / story-screens §5.2: full-bleed, the 800:320 picture scaled to cover the screen (and the outside
+        // area of Input Rule 1), so there is no frame corner under the pause/sound block
+        crop.maskNode = D.rr(0, 0, 800, ph, 0, .white)
+        let f = max(1280 / 800, 720 / ph) // 2.25: covers the world; the outside area keeps the night colour
+        let pic = SKNode(); pic.addChild(crop); pic.setScale(f)
+        add(pic, 640 - 400 * f, 360 - ph / 2 * f)
     }
 
     private func buildStory(_ lines: [Text], ending: Bool) {
         backgroundColor = C.night
         storyPicture(ending: ending)
+        // story-screens §5.2 (QC r5): the picture is full-bleed behind everything (P-06); the text sits on a
+        // panel (box 1000, H 167) bottom-anchored above Tiếp
+        let sl = StoryLayout(pad: layout), pb = sl.panel(box: 1000, height: StoryLayout.storyHeight)
+        add(D.rr(0, 0, pb.w, pb.h, 36, SKColor(red: 42 / 255, green: 36 / 255, blue: 64 / 255, alpha: 0.82), C.gold, 5), pb.x, pb.y)
         let line = lines[min(game.storyLine, lines.count - 1)]
-        textBox(line, 640, 500, 1000, 38, .white) // 2 lines fit between the picture (ends y 430) and Tiếp (iOS-R3-03)
-        button(game.ui("ui.btn.next"), 640 - 150, 595, 300, 100, "next", pulse: true)
+        textBox(line, 640, pb.midY, 1000, 38, .white)
+        nextButton(sl)
         topLeftButtons()
     }
 
@@ -528,25 +571,27 @@ final class GameScene: SKScene {
             add(D.drum(22, done ? C.ink : SKColor(red: 58 / 255, green: 42 / 255, blue: 31 / 255, alpha: 0.35)), x, 60)
         }
         if p.phase == .dialogueLine { buildDialogue(p); return }
+        let sl = StoryLayout(pad: layout)
         if p.phase == .beatCard {
-            let texts = p.cardTexts
-            add(D.rr(-480, -150, 960, 300, 36, C.panel, C.gold, 6), 640, 290)
-            // "Phần N" small, then the beat title as a heading: 44 in the 880 beat_title box (R8c)
-            add(Font.label("\(game.ui("ui.play.beat")) \(p.beat + 1)", 28, C.gold), 640, 168)
-            add(Font.label(p.beats[p.beat].title.text(game.lang), 44, C.gold, width: 880), 640, 212)
-            let box = texts[min(p.cardLine, texts.count - 1)]
+            // story-screens §5.2 (QC r5): the card panel (box 880, H 235) bottom-anchored above Tiếp, below the
+            // pause/sound corner; the title row (60 + 8) inside its top, then 2 body lines
+            let texts = p.cardTexts, pb = sl.panel(box: 880, height: StoryLayout.cardHeight)
+            add(D.rr(0, 0, pb.w, pb.h, 36, C.panel, C.gold, 6), pb.x, pb.y)
+            add(Font.label("\(game.ui("ui.play.beat")) \(p.beat + 1)", 28, C.gold), 640, max(sl.minTop + 16, pb.y - 24))
+            add(Font.label(p.beats[p.beat].title.text(game.lang), 44, C.gold, width: 880), 640, pb.y + 32 + 30)
+            let box = texts[min(p.cardLine, texts.count - 1)], by = pb.y + 32 + 68 + 103 / 2
             if p.cardLine >= texts.count - 1 { // the goal box: weight 800 like the goal line
-                add(Font.label(box.text(game.lang), 38, .white, width: 880), 640, 300); badge(box, 0, 0)
-            } else { textBox(box, 640, 300, 880, 38, .white) }
-            button(game.ui("ui.btn.next"), 640 - 150, 470, 300, 110, "next", pulse: true)
+                add(Font.label(box.text(game.lang), 38, .white, width: 880), 640, by); badge(box, 0, 0)
+            } else { textBox(box, 640, by, 880, 38, .white) }
+            nextButton(sl)
             return
         }
         if p.phase == .caption {
-            let beat = p.beats[p.beat]
-            add(D.rr(-480, -150, 960, 300, 36, C.panel, C.gold, 6), 640, 290)
-            add(Font.label("\(game.ui("ui.play.beat")) \(p.beat + 1)", 30, C.gold), 640, 190)
-            if !beat.scene.isEmpty { textBox(beat.scene[min(p.captionLine, beat.scene.count - 1)], 640, 285, 880, 38, .white) }
-            button(game.ui("ui.btn.next"), 640 - 150, 470, 300, 110, "next", pulse: true)
+            let beat = p.beats[p.beat], pb = sl.panel(box: 880, height: StoryLayout.storyHeight)
+            add(D.rr(0, 0, pb.w, pb.h, 36, C.panel, C.gold, 6), pb.x, pb.y)
+            add(Font.label("\(game.ui("ui.play.beat")) \(p.beat + 1)", 30, C.gold), 640, max(sl.minTop + 16, pb.y - 24))
+            if !beat.scene.isEmpty { textBox(beat.scene[min(p.captionLine, beat.scene.count - 1)], 640, pb.midY, 880, 38, .white) }
+            nextButton(sl)
             return
         }
         if p.phase == .beatPlay || p.phase == .beatEnd, p.beat < p.beats.count, let goal = p.beats[p.beat].goal {
@@ -563,7 +608,8 @@ final class GameScene: SKScene {
             let bar = SKNode(); bar.position = D.p(sx, 212)
             let bw = layout.topStackWidth
             bar.addChild(D.rr(-bw / 2, -56, bw, 112, 18, SKColor(hex: 0xD64A2E), C.ink, 4))
-            let l = Font.label(b.text(game.lang), 37, SKColor(hex: 0xFFC531), width: bw - 40); l.zPosition = 1; bar.addChild(l)
+            // gold text with an ink outline ≥ 2 px (hud §3.3, QC r5: gold on vermilion alone is 2.72:1)
+            let l = Font.outlined(b.text(game.lang), 37, SKColor(hex: 0xFFC531), outline: C.ink, px: 2.5, width: bw - 40); l.zPosition = 1; bar.addChild(l)
             bannerLayer.addChild(bar)
             badge(b, sx + bw / 2 - 60, 156)
         }
@@ -598,30 +644,29 @@ final class GameScene: SKScene {
         let lines = p.dialogueLines
         guard !lines.isEmpty else { return }
         let line = lines[min(p.lineIndex, lines.count - 1)]
-        add(D.rr(-600, -170, 1200, 340, 36, C.panel, C.gold, 6), 640, 470)
-        if p.lineIndex == 0 { add(Font.label(p.beats[p.beat].title.text(game.lang), 44, C.gold, width: 880), 640, 335) } // inside the panel's top, clear of the hero (iOS-R3-04)
-        switch line.speaker {
-        case "narrator":
-            textBox(line.text, 640, 455, 880, 38, .white)
-        case "hero":
-            let pic = Pictures.node(ContentValidator.portraitId(hero: game.heroId, line), size: 150); add(pic, 190, 450)
-            textBox(line.text, 690, 455, 720, 38, .white)
-        default:
-            let pic = Pictures.node(ContentValidator.portraitId(hero: game.heroId, line), size: 150); add(pic, 1090, 450)
-            textBox(line.text, 590, 455, 720, 38, .white)
+        // dialogue.md §5.2 (QC r5): the panel (speaker 286 / narrator 235) bottom-anchored above Tiếp with the
+        // title row reserved inside its top on every line (the title shows on line 1); the portrait 256,
+        // bottom-aligned with the panel on the speaker's side; everything below the pause/sound corner
+        let sl = StoryLayout(pad: layout), d = sl.dialogue(speaker: line.speaker), pb = d.panel
+        add(D.rr(0, 0, pb.w, pb.h, 36, C.panel, C.gold, 6), pb.x, pb.y)
+        if p.lineIndex == 0 { add(Font.label(p.beats[p.beat].title.text(game.lang), 44, C.gold, width: pb.w - 64), pb.midX, pb.y + 32 + 30) }
+        if let pt = d.portrait {
+            let pic = Pictures.node(ContentValidator.portraitId(hero: game.heroId, line), size: pt.w / 1.6); add(pic, pt.midX, pt.midY)
         }
+        let bodyH = line.speaker == "narrator" ? 103.0 : 154.0
+        textBox(line.text, pb.midX, pb.y + 32 + 68 + bodyH / 2, pb.w - 64, 38, .white)
         if p.askShowing, let a = p.currentBeat?.params.ask {
-            button(a.button.text(game.lang), 640 - 170, 570, 340, 110, "ask", pulse: true, size: 34)
+            nextButton(sl, label: a.button.text(game.lang), id: "ask")
             badge(a.button, 0, 0)
-            if p.askHint { let h = handHint(); add(h, 640, 560) }
+            if p.askHint { let h = handHint(); add(h, sl.next.right - 40, sl.next.y + 24) } // at the button's corner, off its label
         } else {
-            button(game.ui("ui.btn.next"), 640 - 150, 580, 300, 100, "next", pulse: true)
+            nextButton(sl)
         }
     }
 
     private func buildPause() {
         if game.pausedFrom == .quiz { buildQuiz(); buttons = [] } // P-06: the quiz behind the overlay, its cards inert
-        add(D.rr(0, 0, 1280, 720, 0, SKColor(red: 42 / 255, green: 36 / 255, blue: 64 / 255, alpha: 0.7)), 0, 0)
+        add(D.rr(-Self.bleed, -Self.bleed, 1280 + 2 * Self.bleed, 720 + 2 * Self.bleed, 0, SKColor(red: 42 / 255, green: 36 / 255, blue: 64 / 255, alpha: 0.7)), 0, 0)
         add(Font.label(game.ui("ui.pause.title"), 64, .white), 640, 200)
         button(game.ui("ui.btn.resume"), 440, 290, 400, 120, "resume", pulse: true)
         button(game.ui("ui.btn.home"), 440, 450, 400, 110, "home", fill: C.cream)
@@ -784,8 +829,8 @@ final class GameScene: SKScene {
     /// Scene point (y down) → normalized view coordinates (0…1), the aspect-fit mapping the scene uses.
     private func debugNorm(_ x: Double, _ y: Double) -> [Double] {
         guard let v = view else { return [0, 0] }
-        let w = v.bounds.width, h = v.bounds.height, s = min(w / 1280, h / 720)
-        return [((w - 1280 * s) / 2 + x * s) / w, ((h - 720 * s) / 2 + y * s) / h]
+        let k = root.xScale // the world fitted to the safe rect (Input Rule 1)
+        return [(worldOrigin.x + x * k) / v.bounds.width, (worldOrigin.y + y * k) / v.bounds.height]
     }
 
     private func debugPublish() {
