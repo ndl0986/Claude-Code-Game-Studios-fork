@@ -1,0 +1,358 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C6094464ADCAF52AEB8B3480 /* data in Resources */ = {isa = PBXBuildFile; fileRef = 1B223FD7412F0D8B499B9B1C /* data */; };
+		1F70B0CD4EE5CEAA1702B9B4 /* GameCore in Frameworks */ = {isa = PBXBuildFile; productRef = 66AA32B373A926E8BC9353D4 /* GameCore */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BA510923769B82EDC76A7AA3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A6F5FA37AD230077E57AFE7F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D15B9AC453575360E6725EF3;
+			remoteInfo = DaiDatAnhHung;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		535EBCE13BF0BA11AC460A2A /* DaiDatAnhHung.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DaiDatAnhHung.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		65870F37DD6335D281D7F398 /* DaiDatAnhHungTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaiDatAnhHungTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1B223FD7412F0D8B499B9B1C /* data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = data; path = ../content/data; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		8451645A97E4C6D90D327BFE /* DaiDatAnhHung */ = {isa = PBXFileSystemSynchronizedRootGroup; path = DaiDatAnhHung; sourceTree = "<group>"; };
+		5C06B189621E064F8EA62D86 /* DaiDatAnhHungTests */ = {isa = PBXFileSystemSynchronizedRootGroup; path = DaiDatAnhHungTests; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6EC1D7B481B39851B9845571 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1F70B0CD4EE5CEAA1702B9B4 /* GameCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AFED48EE269E3EFC24D8F9B2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		436B89B6F614A0E7B2F54DEF = {
+			isa = PBXGroup;
+			children = (
+				8451645A97E4C6D90D327BFE /* DaiDatAnhHung */,
+				5C06B189621E064F8EA62D86 /* DaiDatAnhHungTests */,
+				1B223FD7412F0D8B499B9B1C /* data */,
+				EB0CF27F910E4E396E0CDB8D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EB0CF27F910E4E396E0CDB8D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				535EBCE13BF0BA11AC460A2A /* DaiDatAnhHung.app */,
+				65870F37DD6335D281D7F398 /* DaiDatAnhHungTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D15B9AC453575360E6725EF3 /* DaiDatAnhHung */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4B9A10A170F7A3DA296B08CB;
+			buildPhases = (
+				79FCEBECF126806217B3AA21 /* Sources */,
+				6EC1D7B481B39851B9845571 /* Frameworks */,
+				C011F5B81D00A215FE6EEA84 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				8451645A97E4C6D90D327BFE /* DaiDatAnhHung */,
+			);
+			name = DaiDatAnhHung;
+			packageProductDependencies = (
+				66AA32B373A926E8BC9353D4 /* GameCore */,
+			);
+			productName = DaiDatAnhHung;
+			productReference = 535EBCE13BF0BA11AC460A2A /* DaiDatAnhHung.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7E69340D638E710740E386C7 /* DaiDatAnhHungTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 347FF137334865B53B5473AD;
+			buildPhases = (
+				3E32E09375436347CF282BDC /* Sources */,
+				AFED48EE269E3EFC24D8F9B2 /* Frameworks */,
+				0B42C9155094E24955AA0FD1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				013EAE19425FC8FC3F23A73F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				5C06B189621E064F8EA62D86 /* DaiDatAnhHungTests */,
+			);
+			name = DaiDatAnhHungTests;
+			productName = DaiDatAnhHungTests;
+			productReference = 65870F37DD6335D281D7F398 /* DaiDatAnhHungTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A6F5FA37AD230077E57AFE7F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2710;
+				LastUpgradeCheck = 2710;
+				TargetAttributes = {
+					7E69340D638E710740E386C7 = {
+						TestTargetID = D15B9AC453575360E6725EF3;
+					};
+				};
+			};
+			buildConfigurationList = 27F9A7F3E1E512E3D54BF9CF;
+			developmentRegion = vi;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				vi,
+				en,
+				Base,
+			);
+			mainGroup = 436B89B6F614A0E7B2F54DEF;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				2A70B8310732147B0F94B652 /* XCLocalSwiftPackageReference "GameCore" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = EB0CF27F910E4E396E0CDB8D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D15B9AC453575360E6725EF3 /* DaiDatAnhHung */,
+				7E69340D638E710740E386C7 /* DaiDatAnhHungTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C011F5B81D00A215FE6EEA84 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C6094464ADCAF52AEB8B3480 /* data in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0B42C9155094E24955AA0FD1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		79FCEBECF126806217B3AA21 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3E32E09375436347CF282BDC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		013EAE19425FC8FC3F23A73F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D15B9AC453575360E6725EF3 /* DaiDatAnhHung */;
+			targetProxy = BA510923769B82EDC76A7AA3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		43D414A56741CDB8330000C8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		980AA67F1D9CA063EE9E1313 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		165878DF126C47EFC31DE978 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Dải Đất Anh Hùng";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+			};
+			name = Debug;
+		};
+		CE2CEEE4C574A165B6AC9765 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Dải Đất Anh Hùng";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+			};
+			name = Release;
+		};
+		13965053179E8B5B6571EC50 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DaiDatAnhHung.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)DaiDatAnhHung";
+			};
+			name = Debug;
+		};
+		B0DC4B85D56F3244F7A81D78 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DaiDatAnhHung.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)DaiDatAnhHung";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		27F9A7F3E1E512E3D54BF9CF = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43D414A56741CDB8330000C8 /* Debug */,
+				980AA67F1D9CA063EE9E1313 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4B9A10A170F7A3DA296B08CB = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				165878DF126C47EFC31DE978 /* Debug */,
+				CE2CEEE4C574A165B6AC9765 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		347FF137334865B53B5473AD = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				13965053179E8B5B6571EC50 /* Debug */,
+				B0DC4B85D56F3244F7A81D78 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		2A70B8310732147B0F94B652 /* XCLocalSwiftPackageReference "GameCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = GameCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		66AA32B373A926E8BC9353D4 /* GameCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GameCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = A6F5FA37AD230077E57AFE7F /* Project object */;
+}
