@@ -527,7 +527,11 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
                 for ((col, w) in listOf(C.INK to 18f, C.RIGHT to 10f)) { // d.stroke is one shared Paint: set it per pass
                     val s0 = d.stroke(col, w); d.c.drawLine(x + cw - 64, y0 + 44, x + cw - 50, y0 + 60, s0); d.c.drawLine(x + cw - 50, y0 + 60, x + cw - 24, y0 + 28, s0)
                 }
-                d.rr(x + cw / 2 - 110, y0 + 8, 220f, 40f, 20f, C.RIGHT); d.textBox(g.ui(UiIds.CORRECT), x + cw / 2, y0 + 28, 200f, 30f, C.WHITE, 1) // rides with the card
+                // 220×40 pill centred on the card's top row, drawn over the picture; deep-ink label (accessibility-requirements,
+                // quiz card labels: white on #3FA34D is 3.2:1), sized down to the 28 px label floor so "That's right!" never clips
+                val okLabel = g.ui(UiIds.CORRECT); var okSize = 30f
+                while (okSize > 28f && d.measure(okLabel, okSize) > 204f) okSize -= 0.5f
+                d.rr(x + cw / 2 - 110, y0 + 8, 220f, 40f, 20f, C.RIGHT); d.textBox(okLabel, x + cw / 2, y0 + 28, 208f, okSize, C.DEEP_INK, 1) // rides with the card
             }
             d.textBox(a.text.get(g.lang), x + cw / 2, y0 + 232, cw - 30, 37f, C.INK, 2) // fit.quiz_choice 360 @ 37
             badge(g, a.text, x + cw / 2, y0 + 282)

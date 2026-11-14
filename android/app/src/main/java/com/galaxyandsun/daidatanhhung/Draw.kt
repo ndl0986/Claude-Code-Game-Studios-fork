@@ -18,6 +18,7 @@ import kotlin.math.sin
 object C {
     const val RED = 0xFFD9342B.toInt(); const val GOLD = 0xFFF2B632.toInt(); const val GOLD_DARK = 0xFFC98A12.toInt()
     const val CREAM = 0xFFFFF6E3.toInt(); const val INK = 0xFF3A2A1F.toInt(); const val SKIN = 0xFFF5C9A0.toInt()
+    const val DEEP_INK = 0xFF1A120C.toInt() // labels on #3FA34D (white there is 3.2:1)
     const val HAIR = 0xFF231A16.toInt(); const val INDIGO = 0xFF2B4C8C.toInt(); const val LEAF = 0xFF6CBF4F.toInt()
     const val LEAF_DARK = 0xFF3F8A3A.toInt(); const val RIVER = 0xFF5AB4D6.toInt(); const val EARTH = 0xFFC99A5B.toInt()
     const val EARTH_DARK = 0xFFA87A45.toInt(); const val ENEMY = 0xFF6B5B95.toInt(); const val ENEMY_DARK = 0xFF4B3F6E.toInt()
