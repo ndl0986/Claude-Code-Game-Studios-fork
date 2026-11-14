@@ -1,0 +1,22 @@
+# B4 r3 trials (build c7f1173), emulator mp17863 API 36, Chrome 133, -gpu host. tone660 = calls to tone(660) (sfx.tap) after the tap, with audio.ac.currentTime or 'none' if no AudioContext yet.
+# start button centre 1267,656 device px; each trial: exit fullscreen, reload, wait 11 s + preDelay, one tap
+trial=1 hold=0.03 preDelay=0 at=1237,656 chromeFocused=1 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,0],[660,0],[660,0],[660,0]]}
+trial=2 hold=0.06 preDelay=1 at=1267,676 chromeFocused=1 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"none"],[660,"none"]]}
+trial=3 hold=0.1 preDelay=0.3 at=1297,636 chromeFocused=1 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"none"],[660,"none"]]}
+trial=4 hold=0.15 preDelay=2 at=1327,656 chromeFocused=1 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"none"],[660,"none"]]}
+trial=5 hold=0.2 preDelay=0 at=1207,676 chromeFocused=1 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"none"],[660,"none"]]}
+trial=6 hold=0.3 preDelay=1.2 at=1237,636 chromeFocused=1 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"none"],[660,"none"]]}
+trial=7 hold=0.4 preDelay=0.5 at=1267,656 chromeFocused=1 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"none"],[660,"none"]]}
+trial=8 hold=0.5 preDelay=0 at=1297,676 chromeFocused=1 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"none"],[660,"none"]]}
+trial=9 hold=input preDelay=0 at=1327,636 chromeFocused=1 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,0],[660,0]]}
+trial=10 hold=input preDelay=1 at=1207,656 chromeFocused=1 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"none"],[660,"none"]]}
+trial=11 hold=0.08 preDelay=3 at=1237,676 chromeFocused=1 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"none"],[660,"none"]]}
+trial=12 hold=0.12 preDelay=0 at=1267,636 chromeFocused=1 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"none"],[660,"none"]]}
+trial=13 hold=0.25 preDelay=0.7 at=1297,656 chromeFocused=1 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"none"],[660,"none"]]}
+trial=14 hold=0.35 preDelay=2 at=1327,676 chromeFocused=1 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"none"],[660,"none"]]}
+trial=15 hold=0.05 preDelay=0.2 at=1207,636 chromeFocused=1 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"none"],[660,"none"]]}
+trial=16 hold=0.18 preDelay=1.5 at=1237,656 chromeFocused=1 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"none"],[660,"none"]]}
+trial=17 hold=input preDelay=0.4 at=1267,676 chromeFocused=1 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,0],[660,0]]}
+trial=18 hold=0.45 preDelay=0 at=1297,636 chromeFocused=1 before=title/false {"sc":"intro","fs":true,"ori":"landscape-primary","tone660":[[660,"none"],[660,"none"]]}
+
+# An earlier batch (software GPU) was invalidated: the emulator's system process ANR dialog took focus and swallowed taps from trial 2 on (env-system-anr-dialog-invalidated-trials.png). Its trial 1 (hold 0.03 s) went fullscreen.
