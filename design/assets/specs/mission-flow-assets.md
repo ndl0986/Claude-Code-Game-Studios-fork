@@ -18,7 +18,7 @@
 | Field | Value |
 |-------|-------|
 | Category | Sprite |
-| Dimensions | 9 frames, 512×512 cells at 2×; dummy about 260 px tall at 2× (≈ 72% of the hero) |
+| Dimensions | 9 frames, 512×512 cells at 2×; dummy about 260 px tall at 2× (≈ 72% of the hero); **it is a body, not a prop: cap 170 world px (340 at 2×)**, placeholders included (`design/ux/hud.md` §3.3) |
 | Format | PNG (sRGB, alpha) |
 | Naming | `prop_dummy_idle_01.png`; `prop_dummy_wobble_01…08.png` (one-shot on each hit, 8 × 60 ms, ends back on idle); placed at `dummy_spacing` 300 px |
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |
@@ -41,7 +41,7 @@ Negative: text, letters, watermark, blood, gore, injury, weapons pointed at view
 | Field | Value |
 |-------|-------|
 | Category | Sprite |
-| Dimensions | 25 frames, 512×512 cells at 2×; sheet 4096×3072 at 2×; figure about 320 px tall (shorter than the hero) |
+| Dimensions | 25 frames, 512×512 cells at 2×; sheet 4096×3072 at 2×; figure about 320 px tall (shorter than the hero); **body cap 180 world px (360 at 2×)**, placeholders included (`design/ux/hud.md` §3.3); the practice stick reaches `enemy_reach − stand_gap` = 140 world px in front, like an enemy weapon |
 | Format | PNG (sRGB, alpha) |
 | Naming | `char_partner_sheet.png` + `char_partner_[state]_[nn].png`: idle 01–04 (loop 150 ms) · windup 01–05 (as combat: 3 build + 2 hold for `telegraph` 1.1 s) · strike 01–03 (`strike_time` 0.25 s) · rest 01–04 · blocked 01–03 (a small hop back on `block_knock`, smiling) · cheer 01–06. Authored facing **left** (toward the hero) |
 | Replaces | "new" (no placeholder exists; the apps draw these in code today) |

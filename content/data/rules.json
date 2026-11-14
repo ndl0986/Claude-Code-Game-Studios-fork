@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "quiz_stars": {
     "retries_counted": "total_across_quiz",
     "thresholds": [
@@ -64,99 +64,121 @@
           "box_width": 270,
           "font_px": 34,
           "max_lines": 1,
-          "weight": 800
+          "weight": 800,
+          "class": "button"
         },
         "ui": {
           "box_width": 700,
           "font_px": 30,
           "max_lines": 1,
-          "weight": 800
+          "weight": 800,
+          "class": "label"
         },
         "dialog": {
           "box_width": 780,
           "font_px": 37,
           "max_lines": 3,
-          "weight": 600
+          "weight": 600,
+          "class": "body"
         },
         "hero_name": {
           "box_width": 560,
           "font_px": 44,
           "max_lines": 1,
-          "weight": 800
+          "weight": 800,
+          "class": "heading"
         },
         "place": {
           "box_width": 600,
           "font_px": 30,
           "max_lines": 1,
-          "weight": 800
+          "weight": 800,
+          "class": "label"
         },
         "beat_title": {
           "box_width": 880,
           "font_px": 44,
           "max_lines": 1,
-          "weight": 800
+          "weight": 800,
+          "class": "heading"
         },
         "goal": {
-          "box_width": 1040,
+          "box_width": 880,
           "font_px": 37,
           "max_lines": 1,
-          "weight": 800
+          "weight": 800,
+          "class": "body"
         },
         "scene": {
           "box_width": 880,
           "font_px": 38,
           "max_lines": 2,
-          "weight": 600
+          "weight": 600,
+          "class": "body"
         },
         "intro": {
           "box_width": 1000,
           "font_px": 38,
           "max_lines": 2,
-          "weight": 600
+          "weight": 600,
+          "class": "body"
         },
         "ending": {
           "box_width": 1000,
           "font_px": 38,
           "max_lines": 2,
-          "weight": 600
+          "weight": 600,
+          "class": "body"
         },
         "banner": {
           "box_width": 880,
-          "font_px": 28,
+          "font_px": 37,
           "max_lines": 2,
-          "weight": 800
+          "weight": 800,
+          "class": "body"
         },
         "quiz_prompt": {
           "box_width": 980,
           "font_px": 40,
           "max_lines": 2,
-          "weight": 600
+          "weight": 600,
+          "class": "body"
         },
         "quiz_choice": {
           "box_width": 360,
           "font_px": 37,
           "max_lines": 2,
-          "weight": 800
+          "weight": 800,
+          "class": "body"
         },
         "quiz_why": {
           "box_width": 820,
           "font_px": 37,
           "max_lines": 3,
-          "weight": 600
+          "weight": 600,
+          "class": "body"
         },
         "dialogue_line": {
           "box_width": 720,
           "font_px": 38,
           "max_lines": 3,
-          "weight": 600
+          "weight": 600,
+          "class": "body"
         },
         "dialogue_narrator": {
           "box_width": 880,
           "font_px": 38,
           "max_lines": 2,
-          "weight": 600
+          "weight": 600,
+          "class": "body"
         }
       }
+    },
+    "min_px": {
+      "heading": 44,
+      "body": 37,
+      "button": 34,
+      "label": 28
     }
   }
 }
