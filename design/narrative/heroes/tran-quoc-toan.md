@@ -17,6 +17,7 @@
 | D5 | **Quiz stars, retry until right:** 3★ every question right first try, 2★ up to 2 retries, 1★ finished. A wrong answer is soft lavender-grey. Finishing always unlocks the next hero. |
 | D6 | **C06 and C08** stay legend until the S3 1282 passage is confirmed, then become fact (as the chronicle records it). |
 | D7 | **Beat structure (§ 3, § 6) approved** for TASK-003b. Claims C01–C11 and the source locations are **not yet signed off**. |
+| D8 | **Luan signed off (2026-11-14):** C04's wording "Vua Trần họp các vương hầu và trăm quan ở bến Bình Than để bàn việc đánh giặc" (chronicle 1282), and C13 = **15** (born 1267). In the data their `signoff` stays `pending` until their sources are confirmed, because R5 refuses an approved fact with a `to_confirm` source. See § 5. |
 
 ## 1. Sources
 
@@ -78,7 +79,7 @@ read aloud. **Each sentence is its own dialogue box**, at most 120 characters
 **Canon level (`.claude/rules/narrative.md`):** the whole file is **Under Review**. A
 claim becomes **Established** only when Luan signs it off.
 
-### Beat 1: Đến hội nghị Bình Than / To the Bình Than meeting
+### Beat 1: Khi các vương hầu họp bàn ở Bình Than / When the lords met at Bình Than
 
 **Corrected (Luan, 2026-11-14):** the old card ("Giặc Nguyên sắp sang xâm lược." on a card titled
 "Đến bến Bình Than") could be read as "he went to Bình Than and met the enemy". The context now
@@ -90,7 +91,7 @@ year (C13) → the king's meeting at Bình Than (C04). Then beat 1 says why he g
   2. "Năm ấy, quân Mông–Nguyên chuẩn bị sang xâm lược Đại Việt." / "That year, the Mông–Nguyên army was getting ready to invade Đại Việt." (C03)
   3. "Năm ấy, Trần Quốc Toản mới 15 tuổi." / "That year, Trần Quốc Toản was only 15 years old." (C13; 15 from birth year 1267, or 16 by tuổi mụ if Luan prefers)
   4. "Vua Trần họp các vương hầu và trăm quan ở bến Bình Than để bàn việc đánh giặc." / "The Trần king called his lords and officials to Bình Than to plan the defence." (C04)
-- **Beat card title:** "Đến hội nghị Bình Than" / "To the Bình Than meeting" (C04).
+- **Beat card title (Luan, 2026-11-14):** "Khi các vương hầu họp bàn ở Bình Than" / "When the lords met at Bình Than" (C04). It's a context title, not "Đến…", which could also mislead. Luan's full wording, "Khi các vương hầu họp bàn ở **hội nghị** Bình Than", wraps to 2 lines in the 1-line heading box (1000 px against 854 px at 44 px bold, R8c). The shortest faithful form drops "hội nghị" and keeps "các" and "họp bàn" (820 px, 1 line). Luan may prefer the full title with a 2-line heading box instead.
 - **Scene:** "Quốc Toản muốn xin vua cho cùng đi đánh giặc." / "Quốc Toản wants to ask the king to let him fight too." (C05) · "Cậu vội đến bến Bình Than, nơi vua đang họp." / "He hurries to Bình Than, where the king is holding the meeting." (C04)
 - **Goal:** "Đến chỗ vua họp ở Bình Than!" / "Get to the king's meeting at Bình Than!" (C12)
 - **Play:** **move**. A busy riverbank, with no enemies anywhere in this beat. At the end, the
@@ -176,7 +177,8 @@ on). These go to `/asset-spec` after Luan's sign-off.
 ## 5. Sign-off checklist for Luan
 
 - [ ] S1 to S4: confirm the grade, lesson and page for S1 and S2 (does the Kết nối tri thức *Tiếng Việt* have the reading?) and the S3 translation edition.
-- [ ] C01 to C11 and **C13** (his age that year, number to confirm): sign each claim, or correct it.
+- [x] **C04** (wording) and **C13** (15): signed off by Luan, 2026-11-14 (D8). The data flips to `approved` once S3 (and the birth-year source) are `confirmed` (R5).
+- [ ] C01 to C03, C05 to C11: sign each claim, or correct it.
 - [x] C06 and C08: the rule is decided (Luan, 2026-11-14). They stay legend until the S3 1282 passage is confirmed (see § 2).
 - [x] The four beats: the structure is approved (Luan, 2026-11-14). The claims inside them still need sign-off.
 - [ ] The ending lines (D3 wording).
