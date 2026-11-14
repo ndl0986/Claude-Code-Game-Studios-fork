@@ -205,7 +205,8 @@ final class GameScene: SKScene {
     /// not the frame clock, which jumps when loading the next box stalls a frame.
     private func fire(_ id: String, at press: TimeInterval) {
         #if DEBUG
-        debugLog.append(("fire:\(id)", press)); debugLog = Array(debugLog.suffix(24))
+        debugLog.append(("fire:\(id)", press)); debugLog = Array(debugLog.suffix(120))
+        debugFires.append((id, press, game.isLocked(at: press))); debugFires = Array(debugFires.suffix(16))
         #endif
         audio.volume = Float(game.tuning["volume"])
         switch id {
@@ -312,10 +313,16 @@ final class GameScene: SKScene {
             }
         }
         if let fxX = p.flagX {
+            // r8 leader call (parity with Android): on a banner beat the whole goal flag sits fully below the bar
+            // (top ≥ bar bottom + 8 = 276), foot on the ground; under the bar's layer as well
+            // leader call (parity with Android): a 180 pole (top y 290), the cloth sized on its own, 92 × 60 at the pole
+            // top (y 295–355; ≈ 37 × 24 pt at k 0.40), not shrunk with the pole
+            let h = flagHeight, (cw, ch) = h < 300 ? (Self.flagCloth.w, Self.flagCloth.h) : (115.0, 75.0)
             let f = SKNode(); f.position = D.p(fxX, ground)
-            f.addChild(D.rr(-5, -300, 10, 300, 5, SKColor(hex: 0x6a4a2a)))
-            f.addChild(D.poly([(5, -295), (120, -270), (5, -220)], C.gold))
-            props.addChild(f) // under the bar (scene z 8), never over the motto (r8)
+            f.addChild(D.rr(-5, -h, 10, h, 5, SKColor(hex: 0x6a4a2a)))
+            f.addChild(D.poly([(5, -h + 5), (5 + cw, -h + 5 + ch / 3), (5, -h + 5 + ch)], C.gold))
+            props.addChild(f)
+            placedHints["flag"] = Box(fxX - 5, ground - h, 10 + cw, h)
         }
         for d in p.dropped {
             let n = SKNode(); n.position = D.p(d.x, ground - 8); n.zRotation = -d.rot; n.alpha = min(1, d.life)
@@ -334,7 +341,7 @@ final class GameScene: SKScene {
             // it), at head height, so they never sit on the head (iOS QC r4 N1) and stay under the goal plate and
             // the HUD row. Render only: the core's pop position (shared with Android, not in the trace) is unchanged.
             // hud §3.3 pop contrast: an outline ≥ 3 px, ink on light skies, cream on the camp's dark sky
-            let l = Font.outlined(game.ui(q.key), 40, color(q.color), outline: backdropTheme == "camp" ? C.cream : C.ink)
+            let l = Font.outlined(game.ui(q.key), 40, color(q.color), outline: popOutline == .cream ? C.cream : C.ink)
             let sx = max(p.cam + 120, min(p.cam + 1280 - 120, q.x - p.hero.face * 150))
             l.position = D.p(sx, ground - 135); l.alpha = min(1, q.life * 2); fx.addChild(l)
         }
@@ -344,7 +351,8 @@ final class GameScene: SKScene {
         var arrows: [(String, HintPlacement.Target, Double?)] = []
         if let e = p.stallTarget { arrows.append(("arrow_enemy", .init(x: e.x, top: ground - 170, halfWidth: 40, bottom: ground), p.hero.x)) }
         if let dx = p.stallDummyX { arrows.append(("arrow_dummy", .init(x: dx, top: ground - 130, halfWidth: 24, bottom: ground), p.hero.x)) }
-        if p.flagArrow, let fx = p.flagX { arrows.append(("arrow_flag", .init(x: fx, top: ground - 300, halfWidth: 8, bottom: ground), nil)) }
+        if p.flagArrow, let fx = p.flagX { let cw = flagHeight < 300 ? Self.flagCloth.w : 115 // the pole + cloth box: x −5 … 5 + cw
+            arrows.append(("arrow_flag", .init(x: fx + cw / 2, top: ground - flagHeight, halfWidth: cw / 2 + 5, bottom: ground), nil)) }
         let bounce = (0.5 + 0.5 * sin(t * 8)) * HintPlacement.arrowBounce
         for (id, target, heroX) in arrows {
             let pl = HintPlacement.arrow(target: target, heroX: heroX, cam: p.cam, banner: bannerShown)
@@ -354,10 +362,25 @@ final class GameScene: SKScene {
         }
     }
 
+    /// The banner-beat goal flag's cloth (r8): 92 × 60 at the pole top.
+    static let flagCloth = (w: 92.0, h: 60.0)
+    /// The goal flag's height: 180 on a banner beat (pole top y 290, fully below the bar; r8), else the full 300.
+    private var flagHeight: Double {
+        let p = game.play
+        return p.beat < p.beats.count && p.beats[p.beat].usesBanner == true ? 180 : 300
+    }
+
     /// The motto bar shows (Mission flow Rule 6): a banner beat while it plays.
     private var bannerShown: Bool {
         let p = game.play
         return (p.phase == .beatPlay || p.phase == .beatEnd) && p.beat < p.beats.count && p.beats[p.beat].usesBanner == true && game.hero.mission.banner != nil
+    }
+
+    /// hud §3.3 pop outline (QC r5 N1): chosen by the current sky band's own colours (SkyContrast), never by the
+    /// theme's name: ink on light skies, cream on dark ones.
+    private var popOutline: SkyContrast.Outline {
+        guard let t = game.content.themes?.themes[backdropTheme] else { return .ink }
+        return SkyContrast.popOutline(skyTop: t.skyBand.top, skyBottom: t.skyBand.bottom)
     }
 
     private func color(_ c: FxColor) -> SKColor {
@@ -928,6 +951,8 @@ final class GameScene: SKScene {
     /// Context changes (screen / story line / phase / beat / line) with the press-clock time they were first drawn.
     private var debugLog: [(String, TimeInterval)] = []
     private var debugLastPlace = ""
+    /// Every button press: id, press time, and whether the entry lock was closed at that time (pause/sound exempt).
+    private var debugFires: [(String, TimeInterval, Bool)] = []
 
     private func debugAttach(_ v: SKView) {
         let l = UILabel(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
@@ -949,7 +974,7 @@ final class GameScene: SKScene {
 
     private func debugPublish() {
         let place = debugPlace()
-        if place != debugLastPlace { debugLastPlace = place; debugLog.append((place, ProcessInfo.processInfo.systemUptime)); debugLog = Array(debugLog.suffix(24)) }
+        if place != debugLastPlace { debugLastPlace = place; debugLog.append((place, ProcessInfo.processInfo.systemUptime)); debugLog = Array(debugLog.suffix(120)) }
         debugFrame += 1
         guard debugFrame % 6 == 0, let l = debugLabel else { return }
         let p = game.play
@@ -986,6 +1011,8 @@ final class GameScene: SKScene {
         extra["placeholder"] = shownPlaceholder.map { [$0.x, $0.y, $0.w, $0.h] } ?? NSNull()
         extra["hints"] = placedHints.mapValues { [$0.x, $0.y, $0.w, $0.h] } // world px (y down), relative to the world
         extra["lock_context"] = game.lockContextForDebug ?? NSNull()
+        extra["fires"] = debugFires.map { ["id": $0.0, "t": $0.1, "locked": $0.2] }
+        extra["muted"] = game.muted
         let state = base.merging(extra) { a, _ in a }
         if let d = try? JSONSerialization.data(withJSONObject: state, options: [.sortedKeys]) { l.accessibilityValue = String(data: d, encoding: .utf8) }
     }

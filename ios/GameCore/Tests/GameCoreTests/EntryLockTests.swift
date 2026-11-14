@@ -225,3 +225,52 @@ final class EveryBoxLockTests: XCTestCase {
         }
     }
 }
+
+/// QC r7 NOT ASSESSED: the medal under a mash in a real full run (no debug jump). From the title: Start, then a press
+/// on Tiếp's spot every 0.35 s through every story box, card, caption and dialogue line (ask taps when the ask button
+/// shows) and through the ending; the bot plays each beat; the quiz is answered right. The mash never counts as a
+/// skip (only Bỏ qua does), so the medal is earned, and every story box held ≥ 1.5 s.
+final class FullRunMashTests: XCTestCase {
+    var now = 100.0
+    func test_mashing_through_a_full_run_still_earns_the_medal() throws {
+        let c = try ContentSet.load(dataRoot: Repo.data)
+        let store = MemoryStore()
+        let g = Game(content: c, hero: realHero(c), store: store, isDebug: true) // debug: the claims are unsigned (R12)
+        g.uptime = { [unowned self] in self.now }
+        let dt = 1.0 / 60
+        g.start()
+        XCTAssertEqual(g.screen, .intro)
+        var step = 0, lastMash = now, shownAt = now, lastBox = "", held: [(String, Double)] = []
+        func box() -> String { "\(g.screen) \(g.storyLine) \(g.play.phase) \(g.play.beat) \(g.play.cardLine) \(g.play.captionLine) \(g.play.lineIndex)" }
+        while g.screen != .results && step < 60 * 900 {
+            now += dt; step += 1
+            g.step(dt, g.screen == .play && !GameScene_storyPhases.contains(g.play.phase) ? botInput(g.play, step: step) : StepInput())
+            if now - lastMash >= 0.35 {
+                lastMash = now
+                switch g.screen {
+                case .quiz:
+                    if let q = g.quiz, q.okIndex == nil, let slot = q.order.firstIndex(of: q.current.correctIndex) { g.answer(slot, at: now) }
+                    else { g.next(at: now) }
+                case .play where g.play.askShowing: g.ask(at: now)
+                default: g.next(at: now)
+                }
+            }
+            let b = box()
+            if b != lastBox {
+                // a story box (intro, ending, beat card, caption, dialogue line) left: how long it was on screen
+                let story = lastBox.hasPrefix("intro") || lastBox.hasPrefix("ending") || ["beatCard", "caption", "dialogueLine"].contains { lastBox.contains(" \($0) ") }
+                if story { held.append((lastBox, now - shownAt)) }
+                lastBox = b; shownAt = now
+            }
+        }
+        XCTAssertEqual(g.screen, .results, "the run reached the results")
+        XCTAssertTrue(g.medalEarned, "mashing Tiếp is not skipping: the medal is earned")
+        XCTAssertTrue(g.progress.medal.contains(g.heroId), "and saved")
+        XCTAssertEqual(g.stars, 3)
+        XCTAssertGreaterThanOrEqual(held.count, 10, "story boxes were mashed through")
+        for (b, t) in held { XCTAssertGreaterThanOrEqual(t, 1.5 - 1e-6, "\(b) held \(t) s") }
+    }
+}
+
+/// The play phases drawn as story screens (the app's GameScene.storyPhases).
+let GameScene_storyPhases: Set<PlayState.Phase> = [.beatCard, .caption, .dialogueLine]

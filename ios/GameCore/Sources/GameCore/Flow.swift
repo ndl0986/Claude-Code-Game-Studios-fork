@@ -201,6 +201,12 @@ public final class Game {
     /// dropped press restarts the window (a rolling lock), capped at screen_enter_lock_max from the entry; then the
     /// normal debounce applies. Only real presses (with a press time) are locked; one stamped before the entry
     /// (a finger already down) is dropped without extending the lock.
+    /// Whether a press at `p` would be dropped by the entry lock, without rolling it (for the app's debug state).
+    public func isLocked(at p: Double) -> Bool {
+        guard let e = enteredAt, let until = lockUntil, lockContext != nil else { return false }
+        return p < e || p < until
+    }
+
     func entryLocked(_ press: Double?) -> Bool {
         guard let p = press, let e = enteredAt, let until = lockUntil, lockContext != nil else { return false }
         if p < e { return true }

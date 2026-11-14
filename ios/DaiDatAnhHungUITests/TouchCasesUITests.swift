@@ -157,6 +157,13 @@ final class MoreCasesUITests: UITestBase {
         Thread.sleep(forTimeInterval: 0.6); shot("after contact: pushed pose")
         Thread.sleep(forTimeInterval: 1.5); shot("Ối! pop on the camp sky")
         note("hit", "slow motion ×0.1; strike landed at uptime \(s["now"] ?? "?")")
+        // QC r5 N1 / r7 NOT ASSESSED: a pop on a light (day) sky gets the ink outline: the partner's strike in the
+        // training blocks step on the village sky, in slow motion
+        quit()
+        launch(["-startScreen", "play", "-beat", "4", "-stage", "blocks", "-timeScale", "0.1"])
+        let d = waitFor(90) { $0["hero_hurt"] as? Bool == true }
+        XCTAssertEqual(d["hero_hurt"] as? Bool, true, "the partner's strike landed (no block held)")
+        Thread.sleep(forTimeInterval: 1.5); shot("Ối! pop on the day village sky (ink outline)")
     }
 
     /// B7 (Input Rule 13): Attack mashed through the end of reach-the-flag keeps the first ending box ≥ 0.6 s.
@@ -215,24 +222,30 @@ final class MoreCasesUITests: UITestBase {
     /// Android QC r6: the training card appears while ◀ is being tapped (Bỏ qua sits on ◀'s spot): the entry lock
     /// drops those taps, so no skip warning opens. Debug start `-stage walkto` (the hero just short of the beat).
     func test_left_taps_as_the_training_card_appears_open_no_skip_warning() throws {
-        launch(["-startScreen", "play", "-beat", "4", "-stage", "walkto"])
-        let left = pad("left"), right = pad("right")
-        right.press(forDuration: 0.6) // arrive: the card appears during this press
-        // tap ◀ only while the rolling lock can hold (its cap is 1.5 s from the card's entry); past the cap a
-        // tap on the Bỏ qua spot is a real press and may open the warning, which is correct
-        let cardAt = log(state()).first { $0.0.contains("beatCard") }?.1 ?? (state()["now"] as? Double ?? 0)
-        while (state()["now"] as? Double ?? .infinity) - cardAt < 1.2 { left.tap() }
-        let s = state(), entries = log(s)
-        note("card mash", entries.map { String(format: "%@ @ %.3f", $0.0, $0.1) }.joined(separator: "\n"))
-        let card = try XCTUnwrap(entries.first { $0.0.contains("beatCard") }, "the training card appeared")
-        guard let firstSkip = entries.first(where: { $0.0 == "fire:skip" }) else {
-            throw XCTSkip("no tap reached the Bỏ qua spot while the card showed")
+        // QC r7: XCUITest's tap latency can land the first ◀ tap after the lock (0.695 s once), and then the case
+        // can't tell anything. Each attempt checks, from the app's own press log, that the first Bỏ qua press came
+        // while the lock was closed; up to 4 launches before it reports "not exercised".
+        var misses: [String] = []
+        for attempt in 1...4 {
+            launch(["-startScreen", "play", "-beat", "4", "-stage", "walkto"])
+            let left = pad("left"), right = pad("right")
+            right.press(forDuration: 0.5) // arrive: the card appears near the end of this press
+            // tap ◀ only while the rolling lock can hold (its cap is 1.5 s from the card's entry); past the cap a
+            // tap on the Bỏ qua spot is a real press and may open the warning, which is correct
+            let cardAt = log(state()).first { $0.0.contains("beatCard") }?.1 ?? (state()["now"] as? Double ?? 0)
+            while (state()["now"] as? Double ?? .infinity) - cardAt < 1.2 { left.tap() }
+            let s = state(), entries = log(s)
+            note("card mash, attempt \(attempt)", entries.map { String(format: "%@ @ %.3f", $0.0, $0.1) }.joined(separator: "\n"))
+            let fires = (s["fires"] as? [[String: Any]] ?? []).filter { $0["id"] as? String == "skip" }
+            if let first = fires.first, first["locked"] as? Bool == true {
+                XCTAssertEqual(s["skip_warning"] as? Bool, false, "no skip warning opened under the taps (attempt \(attempt))")
+                shot("training card after the ◀ taps")
+                return
+            }
+            misses.append(fires.first.map { String(format: "first Bỏ qua press %.2f s after the card, lock open", ($0["t"] as? Double ?? 0) - cardAt) } ?? "no tap reached Bỏ qua")
+            quit()
         }
-        guard firstSkip.1 - card.1 < 0.6 else {
-            throw XCTSkip(String(format: "not exercised: the first tap came %.2f s after the card (≥ the lock)", firstSkip.1 - card.1))
-        }
-        XCTAssertEqual(s["skip_warning"] as? Bool, false, "no skip warning opened under the taps")
-        shot("training card after the ◀ taps")
+        throw XCTSkip("not exercised in 4 launches: " + misses.joined(separator: "; "))
     }
 }
 
@@ -253,8 +266,10 @@ final class R8CasesUITests: UITestBase {
     /// The boxes in the debug log whose place starts with `prefix`, in order, with how long each stayed (to the next
     /// logged place). The log times are when a place was first drawn, so a hold is measured to ±1 frame.
     func holds(_ entries: [(String, Double)], _ prefix: String) -> [(String, Double)] {
+        // only place changes count: the "fire:<id>" press entries in the same log are skipped
+        let places = entries.filter { !$0.0.hasPrefix("fire:") }
         var out: [(String, Double)] = []
-        for (i, e) in entries.enumerated() where e.0.hasPrefix(prefix) && i + 1 < entries.count { out.append((e.0, entries[i + 1].1 - e.1)) }
+        for (i, e) in places.enumerated() where e.0.hasPrefix(prefix) && i + 1 < places.count { out.append((e.0, places[i + 1].1 - e.1)) }
         return out
     }
 
@@ -284,6 +299,33 @@ final class R8CasesUITests: UITestBase {
         let boxes = holds(entries, "intro|")
         XCTAssertGreaterThanOrEqual(boxes.count, 4, "every intro box shown")
         for (place, held) in boxes { XCTAssertGreaterThanOrEqual(held, 1.5 - 0.05, "\(place) held \(held) s under the mash") }
+    }
+
+    /// Input Rule 13 (QC r7 NOT ASSESSED): pause and sound are exempt from the entry lock. On an intro box, a Tiếp
+    /// press advances (box 2 starts its lock), then sound and pause are tapped at once: the app's press log shows
+    /// they came while the lock was closed, and both took effect (muted toggled, the pause screen open).
+    func test_pause_and_sound_respond_inside_the_lock() throws {
+        var misses: [String] = []
+        for attempt in 1...4 {
+            launch(["-startScreen", "intro"])
+            Thread.sleep(forTimeInterval: 1.6) // box 1's lock is over
+            let next = try XCTUnwrap(button("next")), mute = try XCTUnwrap(button("mute")), pause = try XCTUnwrap(button("pause"))
+            let muted0 = state()["muted"] as? Bool ?? false
+            next.tap(); mute.tap(); next.tap(); pause.tap() // the second Tiếp rolls box 2's lock (or opens box 3's)
+            let s = waitFor(3) { $0["screen"] as? String == "pause" }
+            let fires = s["fires"] as? [[String: Any]] ?? []
+            func lockedPress(_ id: String) -> Bool? { fires.last { $0["id"] as? String == id }?["locked"] as? Bool }
+            note("presses, attempt \(attempt)", fires.map { "\($0["id"] ?? "?") @ \($0["t"] ?? "?") locked \($0["locked"] ?? "?")" }.joined(separator: "\n"))
+            if lockedPress("mute") == true && lockedPress("pause") == true {
+                XCTAssertEqual(s["muted"] as? Bool, !muted0, "sound toggled inside the lock")
+                XCTAssertEqual(s["screen"] as? String, "pause", "pause opened inside the lock")
+                shot("pause opened during a locked story box")
+                return
+            }
+            misses.append("mute locked \(lockedPress("mute").map(String.init) ?? "-"), pause locked \(lockedPress("pause").map(String.init) ?? "-")")
+            quit()
+        }
+        throw XCTSkip("not exercised in 4 launches: " + misses.joined(separator: "; "))
     }
 
     /// Story AC12 / hud §5: the placeholder still where the spec puts it, no play sprites and no top stack on the
