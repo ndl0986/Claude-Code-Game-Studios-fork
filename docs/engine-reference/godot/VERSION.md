@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | **Engine Version** | Godot 4.7 |
-| **Installed at pin time** | NOT DETERMINED — probed 2026-11-14 (TASK-002): `godot` not on PATH, no `/Applications/Godot*.app`. The editor is to be installed by Luan; record the exact 4.7.x patch here once installed. |
+| **Installed at pin time** | Godot 4.7.2.stable.official.ed1daf0bf (standard, not .NET), installed 2026-11-14 at `~/Applications/Godot.app` via Homebrew cask; matches the pin. Export templates 4.7.2.stable: download in progress, NOT YET INSTALLED. |
 | **Release Date** | June 2026 (latest patch: 4.7.2, August 2026) |
 | **Project Pinned** | 2026-10-17 |
 | **Last Docs Verified** | 2026-10-21 (Windows driver default and Compositor, against Godot source); 2026-10-17 (release timeline and 4.7 changes); 2026-02-12 (4.4-4.6 content) |
