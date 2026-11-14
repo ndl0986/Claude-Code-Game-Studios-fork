@@ -41,4 +41,20 @@ class TouchAndLayoutTest {
         p.move(1, Action.RIGHT); assertEquals(setOf(Action.RIGHT, Action.ATTACK), p.held()) // attack never slides
         p.up(1); assertEquals(setOf(Action.RIGHT), p.held())
     }
+    /** Input GDD Rule 5b / AC13 (iOS-R2-03): a pointer's moves never keep its pad held after its up. */
+    @Test fun pressSmallMovesAndUpLeavesNothingHeld() {
+        for (pad in listOf(Action.DEFEND, Action.SPECIAL, Action.LEFT, Action.ATTACK)) {
+            val p = PadHolds()
+            p.down(7, pad)
+            p.move(7, pad); p.move(7, null); p.move(7, Action.ATTACK); p.move(7, pad) // inside, off every pad, onto another
+            p.up(7)
+            assertTrue("$pad still held", p.held().isEmpty())
+        }
+        // Two pointers: only the one that lifts is released, whatever the other did.
+        val p = PadHolds()
+        p.down(0, Action.RIGHT); p.down(1, Action.DEFEND)
+        p.move(1, null); p.move(0, null); p.up(1)
+        assertEquals(setOf(Action.RIGHT), p.held())
+        p.up(0); assertTrue(p.held().isEmpty())
+    }
 }
