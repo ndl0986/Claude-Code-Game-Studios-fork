@@ -174,6 +174,13 @@ object Validator {
         ids.groupingBy { it }.eachCount().filter { it.value > 1 }.keys.map { "R9 duplicate id $it" }
 
     /** R10: a picture id resolves in assets.json. */
+    /**
+     * R10b (r8d, story AC14): every picture in assets.json has its file in the bundle ([fileExists] takes the path
+     * relative to content/data, the Android assets root). R10 only checks that the id is registered.
+     */
+    fun picturesBundled(assets: List<Asset>, fileExists: (String) -> Boolean): List<String> =
+        assets.filter { it.kind == "picture" && !fileExists(it.file) }.map { "R10b picture ${it.id}: file ${it.file} is not bundled" }
+
     fun pictureResolves(id: String, assetIds: Set<String>): List<String> =
         if (id in assetIds) emptyList() else listOf("R10 unknown picture id $id")
 
@@ -305,8 +312,9 @@ object Validator {
      * Runs R2 and R4–R11 over the whole bundle. [checkPictures] is false for samples/ in debug
      * builds, whose pictures are drawn in code (parity item 5).
      */
-    fun validate(c: Content, checkPictures: Boolean = true): List<String> {
+    fun validate(c: Content, checkPictures: Boolean = true, fileExists: ((String) -> Boolean)? = null): List<String> {
         val out = mutableListOf<String>()
+        if (checkPictures && fileExists != null) out += picturesBundled(c.assets.assets, fileExists)
         val sourceStatus = c.sources.sources.associate { it.id to it.status }
         val assetIds = c.assets.assets.map { it.id }.toSet()
         val versions = listOf(c.index.schemaVersion, c.strings.schemaVersion, c.rules.schemaVersion,

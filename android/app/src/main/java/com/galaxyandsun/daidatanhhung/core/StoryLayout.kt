@@ -42,4 +42,14 @@ object StoryLayout {
         if (size < MIN_STILL) return null
         return Box(CENTRE_X - size / 2, bottom - size, CENTRE_X + size / 2, bottom)
     }
+
+    /**
+     * The source rectangle that fills a [dw] × [dh] box from a [sw] × [sh] picture without stretching: the whole
+     * picture when the aspects match, else centre-cropped on the long axis (story pictures, r8d).
+     */
+    fun coverCrop(sw: Double, sh: Double, dw: Double, dh: Double): Box {
+        val scale = max(dw / sw, dh / sh)
+        val cw = dw / scale; val ch = dh / scale
+        return Box((sw - cw) / 2, (sh - ch) / 2, (sw + cw) / 2, (sh + ch) / 2)
+    }
 }

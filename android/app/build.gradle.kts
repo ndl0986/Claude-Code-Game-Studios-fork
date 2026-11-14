@@ -60,6 +60,11 @@ abstract class ContentGateTask : DefaultTask() {
             val v = (slurper.parse(f) as Map<*, *>)["schema_version"] as? String ?: return@forEach
             if (v.substringBefore('.').toInt() > supportedMajor.get()) problems += "R11 ${f.relativeTo(dir)}: schema_version $v is newer than ${supportedMajor.get()}.x"
         }
+        // R10b (r8d): every assets.json picture file is in the bundle (content/data is the assets root)
+        ((slurper.parse(File(dir, "assets.json")) as Map<*, *>)["assets"] as List<*>).forEach { a ->
+            val m = a as Map<*, *>
+            if (m["kind"] == "picture" && !File(dir, m["file"].toString()).isFile) problems += "R10b picture ${m["id"]}: file ${m["file"]} is not bundled"
+        }
         @Suppress("UNCHECKED_CAST")
         val heroes = (slurper.parse(File(dir, "index.json")) as Map<String, Any?>)["heroes"] as List<String>
         fun cited(node: Any?, out: MutableSet<String>) {

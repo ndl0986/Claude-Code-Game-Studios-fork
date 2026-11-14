@@ -204,8 +204,8 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
     private fun story(g: Game, intro: Boolean) {
         val t = g.t
         // story-screens.md §5.2: the picture is full-bleed (no frame corner under pause/sound)
-        fig.background(if (intro) 0.0 else 5200.0, if (intro) "village" else "river", GROUND)
-        if (!intro) d.rr(0f, 0f, W, H, 0f, C.a(0xFFFF965A.toInt(), 0.3))
+        if (intro) fig.background(0.0, "village", GROUND)
+        else if (!endingStill(g)) fig.background(5200.0, "river", GROUND) // r8d: a missing ending still → the scene only, no face
         if (intro) storyStill(g, card = false, labelTop = null) // the ending keeps its own still (ASSET-016): no placeholder
         val lines = if (intro) g.bundle.mission.intro else g.bundle.mission.ending.lines
         val line = lines[g.line.coerceIn(0, lines.size - 1)]
@@ -401,6 +401,25 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         skipButton(g)
     }
 
+
+    private var loggedMissing = mutableSetOf<String>()
+
+    /**
+     * story-screens §5.2 (r8d): the ending draws its own still (`ending.picture_id`) full-bleed over the 1280 × 720
+     * world, centre-cropped to fill when the file isn't 16:9 (never stretched). False when it's missing or doesn't
+     * decode: the caller then shows the scene background only, and a debug build logs it once.
+     */
+    private fun endingStill(g: Game): Boolean {
+        val id = g.bundle.mission.ending.pictureId
+        val b = pictures(id)
+        if (b == null) { if (debug && loggedMissing.add(id)) android.util.Log.w("DDAH", "missing picture $id on the ending: scene background only"); return false }
+        val src = StoryLayout.coverCrop(b.width.toDouble(), b.height.toDouble(), W.toDouble(), H.toDouble())
+        srcRect.set(src.left.toInt(), src.top.toInt(), src.right.toInt(), src.bottom.toInt())
+        dst.set(0f, 0f, W, H); bmpPaint.alpha = 255; bmpPaint.isFilterBitmap = true
+        d.c.drawBitmap(b, srcRect, dst, bmpPaint)
+        return true
+    }
+    private val srcRect = android.graphics.Rect()
 
     /** A dialogue portrait from assets.json; false when the id has no picture yet (debug placeholder). */
     private fun portrait(id: String, x: Float, y: Float, r: Float): Boolean {
