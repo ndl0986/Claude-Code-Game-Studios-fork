@@ -697,6 +697,11 @@ public struct PlayState: Sendable {
             // ends on the next step; tests that use it report it (it is never a real run)
             encounterIndex = beats[beat].params.encounters?.count ?? 0
             hero.x = xStart + (beats[beat].params.lengthScreens ?? 0) * 1280
+        } else if stage == "flagnear" && beats[beat].type == "reach-the-flag" {
+            // debug (r8 evidence): the encounters cleared and the hero 500 px short of the flag, so the flag is on
+            // screen and, after hint_delay with no movement, the stuck arrow points at it
+            encounterIndex = beats[beat].params.encounters?.count ?? 0
+            hero.x = xStart + (beats[beat].params.lengthScreens ?? 0) * 1280 - 500
         } else if stage == "encounter", let e = beats[beat].params.encounters?.first {
             hero.x = xStart + e.atScreen * 1280
         } else if stage == "caption" && beats[beat].type == "fight" {

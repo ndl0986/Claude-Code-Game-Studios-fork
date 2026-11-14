@@ -97,6 +97,10 @@ public struct PadLayout: Equatable, Sendable {
         // special sits above attack (hold-meter and training only)
         special = pad(attack.cx, attack.cy - attack.r - 14 - max(80, padMin / 2 / s), 80)
         pause = pad(66, 66, 48); mute = pad(176, 66, 48)
+        // hud §3.3 (r8 leader call, r8c): the block keeps 18 from the top and left edges (corner_bottom = 18 + P,
+        // corner_right = 18 + 2P + pad_gap/k), as Android draws it; 8 is only the safe-rect gap for the pads
+        let top = max(18, tp), side = max(18, l)
+        pause.cx = max(pause.cx, side + pause.r); pause.cy = max(pause.cy, top + pause.r); mute.cy = pause.cy
         if mute.cx - mute.r < pause.cx + pause.r + gap { mute.cx = pause.cx + pause.r + gap + mute.r }
         // the VI|EN chip (title.md 5.2): height ≥ pad_min, width ≤ 1.6 × height, its left edge kept ≥ 1028 so it
         // clears the hero card (x ≤ 1020) at every supported k

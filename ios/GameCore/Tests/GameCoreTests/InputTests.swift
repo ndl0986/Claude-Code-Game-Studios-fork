@@ -51,9 +51,9 @@ final class InputTests: XCTestCase {
     /// HUD spec §3.3: a wide corner (small k, a left inset) moves the stack right: start = corner + 8. While
     /// 920 fits, the centre is clamped to 790–810; past that the plates narrow to 1270 − start, never over the corner.
     func test_a_wide_corner_moves_the_top_stack_right_and_never_over_the_corner() {
-        // a 59 pt left inset down to k 0.46; no side inset below (at k 0.32 the corner alone reaches ≈ 495, so the
-        // 760 floor leaves ≈ 7 px: the spec's supported floor assumes no left inset there)
-        for (k, inset) in [(0.52, 59.0), (0.50, 59), (0.49, 59), (0.46, 59), (0.40, 0), (0.36, 0), (0.32, 0)] {
+        // a 59 pt left inset down to k 0.46; no side inset below. Down to k 0.36 (under the 0.40 floor); 0.32 left the
+        // sweep in r8 when the corner moved to 18 + P (r8c): its 7 px of room went to the 10 px move
+        for (k, inset) in [(0.52, 59.0), (0.50, 59), (0.49, 59), (0.46, 59), (0.40, 0), (0.36, 0)] {
             let l = PadLayout(view: (w: 1280 * k, h: 720 * k), insets: (0, inset, 21, 0), padMin: 72, padGap: 12)
             let left = l.topStackCentre - l.topStackWidth / 2, right = l.topStackCentre + l.topStackWidth / 2
             XCTAssertGreaterThanOrEqual(left, l.mute.cx + l.mute.r + 8 - 1e-9, "k \(k): clear of sound")
@@ -157,5 +157,23 @@ final class R3StuckSequenceTests: XCTestCase {
         t.apply(.began, id: 1, action: .special, live: [1])
         t.apply(.began, id: 4, action: .attack, live: [4])    // touch 1 is no longer in allTouches
         XCTAssertEqual(t.take().held, [.attack])
+    }
+}
+
+/// hud §3.3 (r8 leader call, r8c): the pause/sound block sits 18 from the top and left edges, as on Android:
+/// corner_bottom = 18 + P and corner_right = 18 + 2P + pad_gap/k (P = pad_min/k): 155 / 315 at the reference k 0.527.
+final class CornerBlockTests: XCTestCase {
+    func test_the_corner_block_matches_the_spec_formula() {
+        for k in [0.529, 0.527, 0.517, 0.488, 0.44, 0.40] {
+            let l = PadLayout(view: (w: 1280 * k, h: 720 * k), insets: (0, 0, 0, 0), padMin: 72, padGap: 12), P = 72 / k
+            XCTAssertEqual(l.pause.cy - l.pause.r, 18, accuracy: 1e-9, "k \(k): 18 from the top")
+            XCTAssertEqual(l.pause.cx - l.pause.r, 18, accuracy: 1e-9, "k \(k): 18 from the left")
+            XCTAssertEqual(l.pause.cy + l.pause.r, 18 + P, accuracy: 1e-9, "k \(k): corner_bottom")
+            XCTAssertEqual(l.mute.cy, l.pause.cy, accuracy: 1e-9)
+            XCTAssertEqual(l.mute.cx + l.mute.r, 18 + 2 * P + 12 / k, accuracy: 1e-9, "k \(k): corner_right")
+        }
+        let ref = PadLayout(view: (w: 1280 * 0.527, h: 720 * 0.527), insets: (0, 0, 0, 0), padMin: 72, padGap: 12)
+        XCTAssertEqual(ref.pause.cy + ref.pause.r, 154.6, accuracy: 0.1)
+        XCTAssertEqual(ref.mute.cx + ref.mute.r, 314.0, accuracy: 0.1)
     }
 }

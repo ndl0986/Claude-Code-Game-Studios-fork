@@ -235,3 +235,76 @@ final class MoreCasesUITests: UITestBase {
         shot("training card after the ◀ taps")
     }
 }
+
+/// r8 cases: Input Rule 13b (every story box and dialogue line takes the rolling lock) and story-screens §5.2 /
+/// hud §5 (placeholder still, no play sprites, no top stack on story and dialogue screens).
+final class R8CasesUITests: UITestBase {
+    /// Taps the Tiếp/ask spot every ~0.35 s while `inside` holds (or `limit` s pass); returns the tap count.
+    func mash(_ spot: XCUICoordinate, limit: Double, while inside: ([String: Any]) -> Bool) -> Int {
+        var taps = 0
+        let end = Date().addingTimeInterval(limit)
+        while Date() < end && inside(state()) {
+            let t0 = Date(); spot.tap(); taps += 1
+            let left = 0.35 - Date().timeIntervalSince(t0); if left > 0 { Thread.sleep(forTimeInterval: left) }
+        }
+        return taps
+    }
+
+    /// The boxes in the debug log whose place starts with `prefix`, in order, with how long each stayed (to the next
+    /// logged place). The log times are when a place was first drawn, so a hold is measured to ±1 frame.
+    func holds(_ entries: [(String, Double)], _ prefix: String) -> [(String, Double)] {
+        var out: [(String, Double)] = []
+        for (i, e) in entries.enumerated() where e.0.hasPrefix(prefix) && i + 1 < entries.count { out.append((e.0, entries[i + 1].1 - e.1)) }
+        return out
+    }
+
+    /// Input AC22 / dialogue AC8: the Bình Than dialogue's 9 lines (the ask lines included) under a tap every 0.35 s on
+    /// the button's spot (Tiếp and the ask button share it): every line holds ≥ 1.5 s and none is skipped.
+    func test_a_mash_through_the_dialogue_holds_every_line() throws {
+        launch(["-startScreen", "play", "-beat", "2"])
+        let spot = try XCTUnwrap(button("next"))
+        let taps = mash(spot, limit: 40) { s in
+            let ph = s["phase"] as? String ?? ""; return s["screen"] as? String == "play" && (ph == "dialogueLine")
+        }
+        let entries = log(state())
+        note("dialogue mash log", entries.map { String(format: "%@ @ %.3f", $0.0, $0.1) }.joined(separator: "\n") + "\ntaps \(taps)")
+        let lines = holds(entries, "play|0|dialogueLine|")
+        XCTAssertEqual(lines.map { $0.0.split(separator: "|").last.map(String.init) ?? "" }, (0..<9).map(String.init), "all 9 lines, in order, none skipped")
+        for (place, held) in lines { XCTAssertGreaterThanOrEqual(held, 1.5 - 0.05, "\(place) held \(held) s under the mash") }
+        shot("after the dialogue mash")
+    }
+
+    /// Story AC11 / Input AC21: the intro under a tap every 0.35 s: every box holds ≥ 1.5 s.
+    func test_a_mash_through_the_intro_holds_every_box() throws {
+        launch(["-startScreen", "intro"])
+        let spot = try XCTUnwrap(button("next"))
+        let taps = mash(spot, limit: 20) { $0["screen"] as? String == "intro" }
+        let entries = log(state())
+        note("intro mash log", entries.map { String(format: "%@ @ %.3f", $0.0, $0.1) }.joined(separator: "\n") + "\ntaps \(taps)")
+        let boxes = holds(entries, "intro|")
+        XCTAssertGreaterThanOrEqual(boxes.count, 4, "every intro box shown")
+        for (place, held) in boxes { XCTAssertGreaterThanOrEqual(held, 1.5 - 0.05, "\(place) held \(held) s under the mash") }
+    }
+
+    /// Story AC12 / hud §5: the placeholder still where the spec puts it, no play sprites and no top stack on the
+    /// intro, a beat card, a caption and the dialogue; play itself still draws both.
+    func test_story_screens_show_the_placeholder_and_no_sprites_or_top_stack() throws {
+        func check(_ args: [String], _ name: String, placeholder: [Double]?, story: Bool = true) {
+            launch(args)
+            let s = waitFor(5) { _ in false } // let a few frames publish
+            if let p = placeholder { XCTAssertEqual(s["placeholder"] as? [Double], p, "\(name): the placeholder box") }
+            else { XCTAssertTrue(s["placeholder"] is NSNull, "\(name): no placeholder") }
+            if s["screen"] as? String == "play" {
+                XCTAssertEqual(s["sprites_visible"] as? Bool, !story, "\(name): play sprites")
+                XCTAssertEqual(s["dots_visible"] as? Bool, !story, "\(name): the beat dots")
+            }
+            shot(name); quit()
+        }
+        check(["-startScreen", "intro"], "intro", placeholder: [512, 45, 256, 256])
+        check(["-startScreen", "play", "-beat", "1", "-stage", "card"], "beat card", placeholder: [536, 25, 208, 208])
+        check(["-hero", "sample", "-startScreen", "play", "-beat", "2", "-stage", "caption"], "caption", placeholder: [512, 45, 256, 256])
+        check(["-startScreen", "play", "-beat", "2", "-stage", "ask"], "dialogue", placeholder: nil)
+        check(["-startScreen", "ending"], "ending", placeholder: nil)
+        check(["-startScreen", "play", "-beat", "4"], "training (play)", placeholder: nil, story: false)
+    }
+}

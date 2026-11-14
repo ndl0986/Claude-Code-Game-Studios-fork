@@ -11,6 +11,8 @@ final class GameScene: SKScene {
     private var lastInsets = UIEdgeInsets.zero, lastSize = CGSize.zero
 
     private let world = SKNode(), fx = SKNode(), ui = SKNode(), worldHints = SKNode()
+    /// Props under the motto bar (hud §3.3: the banner pole and pennant may pass behind the bar, never over it).
+    private let props = SKNode()
     /// The world's frame: scaled by k and placed in the safe rect (Input Rule 1). Everything draws under it.
     private let root = SKNode()
     /// The world's top-left in view points, and k (points per world px), for the debug state's mapping.
@@ -40,6 +42,11 @@ final class GameScene: SKScene {
     private let step = 1.0 / 60
     /// How far (world px) backdrops and dimming run past the world on each side, to cover the outside area.
     static let bleed = 600.0
+    /// The play phases drawn as story screens: no play sprites, no top stack (story-screens §5.2, hud §5; r8).
+    static let storyPhases: Set<PlayState.Phase> = [.beatCard, .caption, .dialogueLine]
+    /// What the last frame drew, for the debug state: play sprites, the beat dots, the placeholder still, the hints.
+    private var spritesVisible = true, dotsVisible = false, shownPlaceholder: Box?
+    private var placedHints: [String: Box] = [:]
 
     init(game: Game, audio: Audio) {
         self.game = game; self.audio = audio
@@ -51,8 +58,8 @@ final class GameScene: SKScene {
         scaleMode = .resizeFill
         backgroundColor = C.night
         addChild(root)
-        root.addChild(world); world.addChild(hero); world.addChild(fx); world.addChild(worldHints)
-        hero.zPosition = 5; fx.zPosition = 10; worldHints.zPosition = 12
+        root.addChild(world); world.addChild(hero); world.addChild(fx); world.addChild(worldHints); world.addChild(props)
+        hero.zPosition = 5; fx.zPosition = 10; worldHints.zPosition = 12; props.zPosition = 3
         root.addChild(ui); ui.zPosition = 100
         root.addChild(bannerLayer); bannerLayer.zPosition = 8
     }
@@ -78,6 +85,7 @@ final class GameScene: SKScene {
         root.position = CGPoint(x: worldOrigin.x, y: v.bounds.height - worldOrigin.y - 720 * k)
         // the world already sits in the safe rect, so the pad layout sees a 1280k × 720k view with no insets
         layout = PadLayout(view: (w: 1280 * k, h: 720 * k), insets: (0, 0, 0, 0), padMin: game.tuning["pad_min"], padGap: game.tuning["pad_gap"])
+        game.quizLocksPerQuestion = QuizLayout(pad: layout).small // quiz §5.2: each question takes the lock at small k
         uiKey = ""
     }
 
@@ -251,6 +259,13 @@ final class GameScene: SKScene {
             root.addChild(sk); skyNode = sk
         }
         world.position.x = -p.cam
+        // story-screens §5.2 (r8, r8b): beat cards, captions and dialogue show the background only, no play sprites
+        // (hero, enemies, partner, dummies, the flag, pops, hints); the stills and portraits carry the characters
+        spritesVisible = !Self.storyPhases.contains(p.phase)
+        hero.isHidden = !spritesVisible
+        for n in enemyNodes.values { n.isHidden = !spritesVisible }
+        guard spritesVisible else { fx.removeAllChildren(); props.removeAllChildren(); worldHints.removeAllChildren(); placedHints = [:]; return }
+        placedHints = [:]
         let t = p.t
         // Combat V/A strike contact (QC r5, render-only; parity with Android): the sim pushes the hero back
         // hero_pushback in the step a strike lands, so for the strike's first 0.05 s (≈ 3 frames) the hero is
@@ -269,9 +284,13 @@ final class GameScene: SKScene {
             seen.insert(e.id)
             let n = enemyNodes[e.id] ?? { let n = EnemyNode(kind: e.kind); n.zPosition = 4; world.addChild(n); enemyNodes[e.id] = n; return n }()
             n.position = D.p(e.x, ground); n.update(e, t: t)
+            if e.state == .windup { // hud §3.3 (r8): the "!" never straddles the motto bar
+                let b = HintPlacement.bang(.init(x: e.x, top: ground - 170, headY: ground - 142, headHalfWidth: 30), heroX: p.hero.x, cam: p.cam, banner: bannerShown)
+                n.placeBubble(dx: b.x - e.x, dy: b.y - ground, side: b.side); placedHints["bang\(e.id)"] = b.rect
+            }
         }
         for (id, n) in enemyNodes where !seen.contains(id) { n.removeFromParent(); enemyNodes[id] = nil }
-        fx.removeAllChildren()
+        fx.removeAllChildren(); props.removeAllChildren()
         // training: straw dummies wobble and spring back (never break); the friendly partner in the hero's colours
         for d in p.dummies {
             let n = SKNode(); n.position = D.p(d.x, ground); n.zRotation = -sin(t * 20) * 0.25 * d.wobble
@@ -287,15 +306,16 @@ final class GameScene: SKScene {
             n.update(face: pt.face, walk: false, defend: false, attack: pt.state == .strike ? 0.6 : (pt.state == .windup ? 0.05 : nil), hurt: false, t: t)
             n.position = D.p(pt.x, ground); fx.addChild(n)
             if pt.state == .windup {
-                let b = SKNode(); b.addChild(D.circle(0, 0, 30, C.glow, C.goldDark, 4)); b.addChild(D.rr(-5, -18, 10, 24, 5, C.ink)); b.addChild(D.circle(0, 14, 5.5, C.ink))
-                b.position = D.p(pt.x, ground - 200); fx.addChild(b) // just above the partner's head (160)
+                // the partner's "!" follows the same rule as an enemy's (hud §3.3, r8): above the head (160) or beside it
+                let pl = HintPlacement.bang(.init(x: pt.x, top: ground - 160, headY: ground - 134, headHalfWidth: 28), heroX: p.hero.x, cam: p.cam, banner: bannerShown)
+                let b = Art.bangBubble(side: pl.side); b.position = D.p(pl.x, pl.y); fx.addChild(b); placedHints["bang_partner"] = pl.rect
             }
         }
         if let fxX = p.flagX {
             let f = SKNode(); f.position = D.p(fxX, ground)
             f.addChild(D.rr(-5, -300, 10, 300, 5, SKColor(hex: 0x6a4a2a)))
             f.addChild(D.poly([(5, -295), (120, -270), (5, -220)], C.gold))
-            fx.addChild(f)
+            props.addChild(f) // under the bar (scene z 8), never over the motto (r8)
         }
         for d in p.dropped {
             let n = SKNode(); n.position = D.p(d.x, ground - 8); n.zRotation = -d.rot; n.alpha = min(1, d.life)
@@ -319,11 +339,25 @@ final class GameScene: SKScene {
             l.position = D.p(sx, ground - 135); l.alpha = min(1, q.life * 2); fx.addChild(l)
         }
         worldHints.removeAllChildren()
-        // hint arrows (§3.3: drawn over the bar) sit just above their target's spec-height top: dummy 130 → clear of
-        // the bar; enemy 170 → its tail may cross the bar's bottom edge; the flag arrow points at the pole below the bar
-        if let e = p.stallTarget { let a = arrowDown(); a.position = D.p(e.x, ground - 205 + sin(t * 8) * 10); worldHints.addChild(a) }
-        if let dx = p.stallDummyX { let a = arrowDown(); a.position = D.p(dx, ground - 140 + sin(t * 8) * 10); worldHints.addChild(a) }
-        if p.flagArrow, let fx = p.flagX { let a = arrowDown(); a.position = D.p(fx, ground - 165 + sin(t * 8) * 10); worldHints.addChild(a) }
+        // the stuck arrow (hints Rule 4, hud §3.3, r8): star gold with an ink outline, never red; on a banner beat it is
+        // fully below the bar, above its target only when it fits there, else from the side (HintPlacement)
+        var arrows: [(String, HintPlacement.Target, Double?)] = []
+        if let e = p.stallTarget { arrows.append(("arrow_enemy", .init(x: e.x, top: ground - 170, halfWidth: 40, bottom: ground), p.hero.x)) }
+        if let dx = p.stallDummyX { arrows.append(("arrow_dummy", .init(x: dx, top: ground - 130, halfWidth: 24, bottom: ground), p.hero.x)) }
+        if p.flagArrow, let fx = p.flagX { arrows.append(("arrow_flag", .init(x: fx, top: ground - 300, halfWidth: 8, bottom: ground), nil)) }
+        let bounce = (0.5 + 0.5 * sin(t * 8)) * HintPlacement.arrowBounce
+        for (id, target, heroX) in arrows {
+            let pl = HintPlacement.arrow(target: target, heroX: heroX, cam: p.cam, banner: bannerShown)
+            let a = arrowDown(); a.zRotation = -pl.angle // SpriteKit turns counter-clockwise: on the right it points left
+            a.position = pl.side == 0 ? D.p(pl.x, pl.y - bounce) : D.p(pl.x + Double(pl.side) * bounce, pl.y)
+            worldHints.addChild(a); placedHints[id] = pl.rect
+        }
+    }
+
+    /// The motto bar shows (Mission flow Rule 6): a banner beat while it plays.
+    private var bannerShown: Bool {
+        let p = game.play
+        return (p.phase == .beatPlay || p.phase == .beatEnd) && p.beat < p.beats.count && p.beats[p.beat].usesBanner == true && game.hero.mission.banner != nil
     }
 
     private func color(_ c: FxColor) -> SKColor {
@@ -331,7 +365,8 @@ final class GameScene: SKScene {
     }
 
     private func arrowDown() -> SKNode {
-        D.poly([(-14, -40), (14, -40), (14, -10), (30, -10), (0, 22), (-30, -10), (-14, -10)], C.glow, C.ink, 4)
+        // ASSET-034 placeholder: 64 tall, 60 wide, centred; star gold #FFC531 with an ink #3A2A20 outline ≥ 3 px (r8)
+        D.poly([(-14, -32), (14, -32), (14, 2), (30, 2), (0, 32), (-30, 2), (-14, 2)], SKColor(hex: 0xFFC531), SKColor(hex: 0x3A2A20), 4)
     }
 
     private func handHint() -> SKNode {
@@ -524,13 +559,12 @@ final class GameScene: SKScene {
         if ending, Pictures.files[game.hero.mission.ending.pictureId] != nil {
             let pic = Pictures.node(game.hero.mission.ending.pictureId, size: 480); pic.position = CGPoint(x: 400, y: -ph / 2); layer(pic, 1)
         } else {
-            // full-bleed (×2.25): the picture's ground sits at y 175 of 320, just above the text panel on screen,
-            // so the village and the hero (scale 0.5) show above it
+            // full-bleed (×2.25): the picture's ground sits at y 175 of 320, just above the text panel on screen
             let gy = 175.0
             layer(Backdrop.skyNode(ending ? "river" : "village", width: 800, height: ph), -1)
             let b = Backdrop.world(theme: ending ? "river" : "village", from: -240, to: 1100, ground: gy); b.position = CGPoint(x: -240, y: 0); layer(b, 1)
             if ending { layer(D.rr(0, 0, 800, ph, 0, SKColor(red: 1, green: 0.59, blue: 0.35, alpha: 0.3)), 2) }
-            let h = HeroNode(scale: 0.5); h.update(face: 1, walk: false, defend: false, attack: nil, hurt: false, t: 0); h.position = CGPoint(x: ending ? 400 : 320, y: -gy); layer(h, 3)
+            // r8 (story-screens §5.2): no play sprite behind the panel; the intro's placeholder still carries the hero
         }
         crop.addChild(inner)
         // P-06 / story-screens §5.2: full-bleed, the 800:320 picture scaled to cover the screen (and the outside
@@ -548,6 +582,8 @@ final class GameScene: SKScene {
     private func buildStory(_ lines: [Text], ending: Bool) {
         backgroundColor = C.night
         storyPicture(ending: ending)
+        shownPlaceholder = nil
+        if !ending { placeholderStill(.story) } // the ending keeps its own still (ASSET-016), no placeholder
         // story-screens §5.2 (QC r5): the picture is full-bleed behind everything (P-06); the text sits on a
         // panel (box 1000, H 167) bottom-anchored above Tiếp
         let sl = StoryLayout(pad: layout), pb = sl.panel(box: 1000, height: StoryLayout.storyHeight)
@@ -579,12 +615,37 @@ final class GameScene: SKScene {
         return n
     }
 
+    /// "Phần n / Part n" (story-screens §5.2, r8b): `ui.play.beat` + the 1-based beat index, on beat cards and captions;
+    /// Nunito 800 28 px, star gold #FFC531 with an ink #3A2A20 outline ≥ 2 px, centred at max(minTop + 16, panel top − 24).
+    private func partLabel(_ sl: StoryLayout, _ pb: Box) {
+        let l = Font.outlined("\(game.ui("ui.play.beat")) \(game.play.beat + 1)", 28, SKColor(hex: 0xFFC531), outline: SKColor(hex: 0x3A2A20), px: 2.5)
+        add(l, 640, max(sl.minTop + 16, pb.y - 24))
+    }
+
+    /// The placeholder still (story-screens §5.2, r8; AC12 "never only background"): the hero's determined portrait in
+    /// a round drum-ring frame, in the box GameCore gives (intro/caption 256, beat card 208), or nothing when dropped.
+    private func placeholderStill(_ kind: StoryLayout.Placeholder) {
+        guard let b = StoryLayout.placeholder(kind) else { shownPlaceholder = nil; return }
+        let r = b.w / 2, ring = r - 6, face = r - 11
+        let still = SKNode()
+        still.addChild(D.circle(0, 0, face, C.cream))
+        let crop = SKCropNode(); crop.maskNode = D.circle(0, 0, face, .white)
+        crop.addChild(Pictures.node("pic.portrait_\(game.heroId)_hero_determined", size: 2 * face / 1.6)); still.addChild(crop)
+        still.addChild(D.circle(0, 0, ring, nil, C.goldDark, 9)); still.addChild(D.circle(0, 0, r - 1.5, nil, SKColor(hex: 0x3A2A20), 3))
+        for (z, c) in still.children.enumerated() { c.zPosition = CGFloat(z) }
+        add(still, b.midX, b.midY); shownPlaceholder = b
+    }
+
     private func buildPlayHUD() {
         let p = game.play
         roundIcon(layout.pause, "pause", pauseIcon(layout.pause.r))
         roundIcon(layout.mute, "mute", speakerIcon(layout.mute.r))
         let n = p.beats.count, sx = layout.topStackCentre // 790 unless the pause/sound corner is wide
-        for i in 0..<n {
+        // hud §5 / story-screens §5.2 (r8): story and dialogue screens show nothing of the top stack (no beat dots,
+        // goal plate or banner bar), only the pause/sound corner
+        dotsVisible = !Self.storyPhases.contains(p.phase)
+        shownPlaceholder = nil
+        for i in 0..<n where dotsVisible {
             let x = sx - Double(n - 1) * 45 + Double(i) * 90 // the top stack, centred at layout.topStackCentre (§3.3)
             let done = i < p.beat || (i == p.beat && p.phase == .caption)
             add(D.circle(0, 0, 30, done ? C.gold : SKColor(white: 1, alpha: 0.75), C.goldDark, 4), x, 60)
@@ -596,8 +657,9 @@ final class GameScene: SKScene {
             // story-screens §5.2 (QC r5): the card panel (box 880, H 235) bottom-anchored above Tiếp, below the
             // pause/sound corner; the title row (60 + 8) inside its top, then 2 body lines
             let texts = p.cardTexts, pb = sl.panel(box: 880, height: StoryLayout.cardHeight)
+            placeholderStill(.card)
             add(D.rr(0, 0, pb.w, pb.h, 36, C.panel, C.gold, 6), pb.x, pb.y)
-            add(Font.label("\(game.ui("ui.play.beat")) \(p.beat + 1)", 28, C.gold), 640, max(sl.minTop + 16, pb.y - 24))
+            partLabel(sl, pb)
             add(Font.label(p.beats[p.beat].title.text(game.lang), 44, C.gold, width: 880), 640, pb.y + 32 + 30)
             let box = texts[min(p.cardLine, texts.count - 1)], by = pb.y + 32 + 68 + 103 / 2
             if p.cardLine >= texts.count - 1 { // the goal box: weight 800 like the goal line
@@ -608,8 +670,9 @@ final class GameScene: SKScene {
         }
         if p.phase == .caption {
             let beat = p.beats[p.beat], pb = sl.panel(box: 880, height: StoryLayout.storyHeight)
+            placeholderStill(.story)
             add(D.rr(0, 0, pb.w, pb.h, 36, C.panel, C.gold, 6), pb.x, pb.y)
-            add(Font.label("\(game.ui("ui.play.beat")) \(p.beat + 1)", 30, C.gold), 640, max(sl.minTop + 16, pb.y - 24))
+            partLabel(sl, pb)
             if !beat.scene.isEmpty { textBox(beat.scene[min(p.captionLine, beat.scene.count - 1)], 640, pb.midY, 880, 38, .white) }
             nextButton(sl)
             return
@@ -668,6 +731,10 @@ final class GameScene: SKScene {
         // title row reserved inside its top on every line (the title shows on line 1); the portrait 256,
         // bottom-aligned with the panel on the speaker's side; everything below the pause/sound corner
         let sl = StoryLayout(pad: layout), d = sl.dialogue(speaker: line.speaker), pb = d.panel
+        // dialogue §5.2: the background dimmed by black at 0.30, full-bleed (outside area too), under everything else
+        // (r8: parity with Android); the pause/sound corner is drawn after it by topLeft order (z)
+        let scrim = D.rr(-Self.bleed, -Self.bleed, 1280 + 2 * Self.bleed, 720 + 2 * Self.bleed, 0, SKColor(white: 0, alpha: 0.3))
+        add(scrim, 0, 0); scrim.zPosition = 0.5
         add(D.rr(0, 0, pb.w, pb.h, 36, C.panel, C.gold, 6), pb.x, pb.y)
         if p.lineIndex == 0 { add(Font.label(p.beats[p.beat].title.text(game.lang), 44, C.gold, width: pb.w - 64), pb.midX, pb.y + 32 + 30) }
         if let pt = d.portrait {
@@ -915,6 +982,10 @@ final class GameScene: SKScene {
             extra["title_card_box"] = debugNorm(tl.card.midX, tl.card.midY)
             if let c = game.titleCard { extra["title_card"] = ["stars": c.stars, "medal": c.medal] }
         }
+        extra["sprites_visible"] = spritesVisible; extra["dots_visible"] = dotsVisible
+        extra["placeholder"] = shownPlaceholder.map { [$0.x, $0.y, $0.w, $0.h] } ?? NSNull()
+        extra["hints"] = placedHints.mapValues { [$0.x, $0.y, $0.w, $0.h] } // world px (y down), relative to the world
+        extra["lock_context"] = game.lockContextForDebug ?? NSNull()
         let state = base.merging(extra) { a, _ in a }
         if let d = try? JSONSerialization.data(withJSONObject: state, options: [.sortedKeys]) { l.accessibilityValue = String(data: d, encoding: .utf8) }
     }

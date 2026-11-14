@@ -20,11 +20,15 @@ public struct QuizLayout: Equatable, Sendable {
 
     public init(pad: PadLayout) {
         let story = StoryLayout(pad: pad)
-        next = story.next
+        let row = story.next
         prompt = Box(150, story.minTop, 980, 108)
         let y = prompt.bottom + 8
         slots = [40.0, 450, 860].map { Box($0, y, 380, 290) }
-        small = pad.scale < 0.48 || slots[0].bottom > next.y
+        // r8c: the small layout is the geometric test, the reference cards' bottom (432 + P) past Tiếp's top
+        // (702 − P), strict, no margin: k < 72/135 ≈ 0.533 at pad_min 72 (the QC iPhone 18 Pro, k 0.517, is small)
+        small = slots[0].bottom > row.y
+        // Tiếp on the story row: 340 wide in the reference layout, 450 (x 812–1262) in the small one (r8c)
+        next = small ? Box(row.right - 450, row.y, 450, row.h) : row
         why = small ? Box(slots[1].x, y, slots[2].right - slots[1].x, 135)
                     : Box(40, next.y, next.x - 16 - 40, next.h)
         topCentre = pad.topStackCentre

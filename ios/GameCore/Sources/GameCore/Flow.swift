@@ -104,6 +104,8 @@ public final class Game {
     public var uptime: () -> Double = { ProcessInfo.processInfo.systemUptime }
     /// The lock context last seen, and when it was entered (press clock).
     var lockContext: String?
+    /// The current lock context, for the app's debug state (the UI touch cases log it).
+    public var lockContextForDebug: String? { lockContext }
     public private(set) var enteredAt: Double?
     /// The rolling lock's end (press clock): each press dropped inside it restarts the window, up to the cap.
     var lockUntil: Double?

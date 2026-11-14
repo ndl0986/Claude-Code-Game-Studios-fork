@@ -144,8 +144,7 @@ final class EnemyNode: SKNode {
         }
         lean.addChild(weapon); lean.addChild(handsUp)
         // telegraph: a drawn "!" bubble, gold, never red (combat GDD visuals)
-        bubble.addChild(D.circle(0, 0, 30, C.glow, C.goldDark, 4))
-        bubble.addChild(D.rr(-5, -18, 10, 24, 5, C.ink)); bubble.addChild(D.circle(0, 14, 5.5, C.ink))
+        bubble.addChild(Art.bangBubble(side: 0))
         bubble.position = CGPoint(x: 0, y: topY + 20)
         addChild(bubble)
         for i in 0..<3 { let s = D.star(9, C.glow, C.goldDark); s.name = "\(i)"; dizzy.addChild(s) }
@@ -174,11 +173,34 @@ final class EnemyNode: SKNode {
         glow.isHidden = e.state != .windup; bubble.isHidden = e.state != .windup
         if e.state == .windup { let p = 0.5 + 0.5 * sin(t * 16); glow.alpha = 0.3 + 0.25 * p }
     }
+    /// hud §3.3 (r8): the scene places the "!" (HintPlacement.bang) at a world offset from the feet (y down), with its
+    /// tail towards the head: above it (side 0) or beside it (±1).
+    func placeBubble(dx: Double, dy: Double, side: Int) {
+        let s = xScale == 0 ? 1 : abs(xScale)
+        bubble.position = CGPoint(x: dx / s, y: -dy / s)
+        bubble.removeAllChildren(); bubble.addChild(Art.bangBubble(side: side))
+    }
     private func xScaleFace(_ f: Double) { for c in [legL, legR, lean] { c.xScale = f } ; glow.xScale = 1 }
 }
 
 /// Quiz and story pictures. A picture id resolves through data/assets.json to a PNG; the debug
 /// sample's `pic.icon.<name>` ids are drawn in code from the prototype's icon list (P-04 item 5).
+/// Small shared drawings.
+enum Art {
+    /// The telegraph "!" bubble (ASSET-208 placeholder): gold #FFD54F-ish glow disc, ink-brown outline, a drawn "!"
+    /// (bar over dot, not a glyph) and a short tail pointing at the head: down when above it (side 0), sideways when
+    /// beside it (side +1: right of the head, tail pointing left). 64 × 64 plus the tail.
+    static func bangBubble(side: Int) -> SKNode {
+        let b = SKNode()
+        let tail = D.poly([(-11, 22), (11, 22), (0, 40)], C.glow, C.goldDark, 4); tail.zRotation = -Double(side) * .pi / 2
+        b.addChild(tail)
+        b.addChild(D.circle(0, 0, 30, C.glow, C.goldDark, 4))
+        b.addChild(D.rr(-5, -18, 10, 24, 5, C.ink)); b.addChild(D.circle(0, 14, 5.5, C.ink))
+        for (z, c) in b.children.enumerated() { c.zPosition = CGFloat(z) }
+        return b
+    }
+}
+
 enum Pictures {
     static var files: [String: URL] = [:]
 
