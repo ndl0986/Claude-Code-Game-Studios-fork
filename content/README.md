@@ -103,7 +103,7 @@ them against `data/` and `samples/`. `fixtures/validity.json` has one case per r
 
 ## Shared fixtures
 
-`fixtures/quiz-stars.json`, `quiz-scoring.json`, `claim-gate.json` and `validity.json` are
+`fixtures/quiz-stars.json`, `quiz-scoring.json`, `quiz-shuffle.json` (P-05 card order), `rng.json` (mulberry32), `claim-gate.json` and `validity.json` are
 input plus expected output, and both apps' unit tests run every case. Feel (timing on screen,
 knock-back, button size and touch) is not a fixture; it is checked by per-platform QC.
 
