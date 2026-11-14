@@ -50,6 +50,7 @@ Labels: **fact** · **interpretation** · **legend** (popular tradition, D2) · 
 | C10 | Trần Quốc Toản hy sinh khi còn rất trẻ, vì đất nước. | Trần Quốc Toản gave his life for his country while he was still very young. | fact (D3 wording) | S3 (1285) ⟨to confirm⟩ | ⟨placeholder⟩ |
 | C11 | Nhà Trần đánh thắng quân Mông–Nguyên. | The Trần dynasty defeated the Mông–Nguyên army. | fact | S1, S3 | ⟨placeholder⟩ |
 | C12 | Bến sông đông thuyền, rơm tập đánh, giặc rơi vũ khí rồi bỏ chạy… | A busy riverbank, straw training dummies, enemies dropping weapons and running away… | **invented** | none (game play) | ⟨placeholder⟩ |
+| C13 | Năm diễn ra hội nghị Bình Than, Trần Quốc Toản mới ⟨?⟩ tuổi. | In the year of the Bình Than meeting, Trần Quốc Toản was only ⟨?⟩ years old. | fact (number **to confirm**; tradition says about 15–16, but no source is checked) | S3 ⟨to confirm⟩ | ⟨placeholder⟩ |
 
 > **C06 and C08: relabel condition (Luan, 2026-11-14).** Both stay **legend** for now.
 > They become **fact (as the chronicle records it)** only once the S3 passage for 1282 is
@@ -74,16 +75,27 @@ read aloud. **Each sentence is its own dialogue box**, at most 120 characters
 **Canon level (`.claude/rules/narrative.md`):** the whole file is **Under Review**. A
 claim becomes **Established** only when Luan signs it off.
 
-### Beat 1: Đến bến Bình Than / To the Bình Than riverbank
+### Beat 1: Đến hội nghị Bình Than / To the Bình Than meeting
 
-- **Story moment:** the invaders are coming, and young Quốc Toản hurries to the king's
-  meeting. Claims: C01, C02, C03, C04.
-- **Play:** **move** (taught here). He runs along a busy riverbank and stops for passing
-  carts and geese. No enemies. The beat ends at the meeting's gate, where guards kindly
-  raise a hand to stop him. Gate, crowd and carts: C12 invented.
-- **Goal:** reach the gate. It can't be failed; a bump just slows him down.
-- **Scene (VI):** "Giặc Nguyên sắp sang xâm lược. Vua họp các tướng ở bến Bình Than. Quốc Toản muốn được góp sức!"
-- **Scene (EN):** "The Nguyên army is coming. The king is meeting his generals at Bình Than. Quốc Toản wants to help!"
+**Corrected (Luan, 2026-11-14):** the old card ("Giặc Nguyên sắp sang xâm lược." on a card titled
+"Đến bến Bình Than") could be read as "he went to Bình Than and met the enemy". The context now
+comes first, in the **intro**, in order: the invasion is coming that year (C03) → his age that
+year (C13) → the king's meeting at Bình Than (C04). Then beat 1 says why he goes.
+
+- **Intro (VI / EN):**
+  1. "Ngày xưa, thời nhà Trần, có một cậu bé tên là Trần Quốc Toản." / "Long ago, in the time of the Trần dynasty, there was a boy named Trần Quốc Toản." (C01)
+  2. "Năm ấy, quân Mông–Nguyên chuẩn bị sang xâm lược Đại Việt." / "That year, the Mông–Nguyên army was getting ready to invade Đại Việt." (C03)
+  3. "Năm ấy, Trần Quốc Toản mới ⟨?⟩ tuổi." / "That year, Trần Quốc Toản was only ⟨?⟩ years old." (C13; the number is filled in once a source confirms it)
+  4. "Vua Trần họp các vương hầu ở bến Bình Than để bàn việc đánh giặc." / "The Trần king called his lords to a meeting at Bình Than to plan the defence." (C04)
+- **Beat card title:** "Đến hội nghị Bình Than" / "To the Bình Than meeting" (C04).
+- **Scene:** "Quốc Toản muốn xin vua cho cùng đi đánh giặc." / "Quốc Toản wants to ask the king to let him fight too." (C05) · "Cậu vội đến bến Bình Than, nơi vua đang họp." / "He hurries to Bình Than, where the king is holding the meeting." (C04)
+- **Goal:** "Đến chỗ vua họp ở Bình Than!" / "Get to the king's meeting at Bình Than!" (C12)
+- **Play:** **move**. A busy riverbank, with no enemies anywhere in this beat. At the end, the
+  guards kindly raise a hand at the meeting's gate. Gate, crowd and carts: C12 invented.
+- **Open question for Luan (who met):** Luan's note says "các bô lão họp ở bến Bình Than". The
+  register (C04, from the chronicle) has **the king meeting the vương hầu** at Bình Than (1282).
+  The meeting of the **bô lão** is **Diên Hồng** (1284), a different event. The draft keeps C04
+  until Luan confirms.
 
 ### Beat 2: Quả cam / The orange
 
@@ -162,7 +174,7 @@ on). These go to `/asset-spec` after Luan's sign-off.
 ## 5. Sign-off checklist for Luan
 
 - [ ] S1 to S4: confirm the grade, lesson and page for S1 and S2 (does the Kết nối tri thức *Tiếng Việt* have the reading?) and the S3 translation edition.
-- [ ] C01 to C11: sign each claim, or correct it.
+- [ ] C01 to C11 and **C13** (his age that year, number to confirm): sign each claim, or correct it.
 - [x] C06 and C08: the rule is decided (Luan, 2026-11-14). They stay legend until the S3 1282 passage is confirmed (see § 2).
 - [x] The four beats: the structure is approved (Luan, 2026-11-14). The claims inside them still need sign-off.
 - [ ] The ending lines (D3 wording).

@@ -157,6 +157,18 @@
       "signoff": {
         "status": "pending"
       }
+    },
+    {
+      "id": "C13",
+      "vi": "Năm diễn ra hội nghị Bình Than, Trần Quốc Toản mới ⟨?⟩ tuổi.",
+      "en": "In the year of the Bình Than meeting, Trần Quốc Toản was only ⟨?⟩ years old.",
+      "label": "fact",
+      "sources": [
+        "S3"
+      ],
+      "signoff": {
+        "status": "pending"
+      }
     }
   ]
 }
