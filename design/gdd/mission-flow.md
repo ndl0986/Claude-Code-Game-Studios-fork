@@ -56,10 +56,13 @@ it always ends at the quiz and then the map.
      card** comes **before** play. It shows the `title`, then the `scene` lines one per box,
      then the `goal`, which stays on the HUD. These beats are story moments that make no sense
      without their set-up: a child can't know why to hold the orange unless the story says so
-     first. After play comes `end_pause` and a cheer, then the next beat.
+     first.
+   - **Beat end, every type:** `end_pause`, then a fight goes to its caption, and every other
+     type gets a cheer and the hero walks on.
    - After a fight's caption (or a non-fight beat's end), the hero walks right to the next beat's
-     start, `beat_start_x + i × beat_gap` (`tuning.json`, layout keys owned by this system).
-     After the last beat comes the ending.
+     start `beatX(i+1)` (F5). After the last beat comes the ending.
+   - **Pads by phase:** during `walk_to` only move is shown; in play and beat end, the beat's
+     `buttons`; on story screens, no pads.
 3. **No failure.** No beat type has lives, health, a timer that ends it, or a lose screen.
    Mistakes cost time and give a small knock-back only (combat GDD). A beat ends only when its
    goal is met.
@@ -93,6 +96,16 @@ it always ends at the quiz and then the map.
 
     `special` is allowed only on hold-meter and training with `finish_special` (D-10: B, Luan
     2026-11-14). R13 in `content/README.md` must match: no special on reach-the-flag.
+7c. **Training and hold-meter details** (devs' parity review):
+    - **Training dummies** stand at `x_start + (k + 1) × dummy_spacing` for k = 0 … dummies−1
+      (`dummy_spacing` in `tuning.json`, 300 px).
+    - **Training partner** (for `blocks`): it stands at `enemy_reach − stand_gap` in front of the
+      hero. Its first windup starts after `approach_min_time`, with the normal `telegraph`, and
+      the strike resolves as in combat. **A block counts only if defend is held when the strike
+      resolves** (combat F6). An unblocked practice strike is a small push, as in combat, and
+      doesn't count.
+    - **Hold-meter:** `held_total` is capped at `hold_seconds` (F3). Hints' no-progress timer
+      resets on every frame the meter rises.
 8. **No special in combat beats** (D-10: B, Luan 2026-11-14). Fights and reach-the-flag
    encounters use move, attack and defend only. The banner pad appears only in hold-meter and
    training. A banner wave in combat may come later (combat GDD Rule 16).
@@ -122,13 +135,15 @@ it always ends at the quiz and then the map.
 15. **Skipping the story and the medal** (D-07, Luan's decision 2026-11-14):
     - Every story screen (`intro`, `beat_card`, `caption`, `ending`) shows **"Bỏ qua / Skip"**
       on **every** play, first play included. Not on the quiz `why` line, which belongs to the quiz.
-    - The first Skip tap in a run opens a short, kind **warning**: skipping means this story's
-      medal isn't earned this time. It offers "Đọc tiếp / Keep reading" (the bigger, default
-      button) and "Vẫn bỏ qua / Skip anyway". Nothing is shamed and nothing else is lost.
+    - A Skip tap opens a short, kind **warning**: skipping means this story's medal isn't
+      earned this time. It offers "Đọc tiếp / Keep reading" (the bigger, default button) and
+      "Vẫn bỏ qua / Skip anyway". Nothing is shamed and nothing else is lost.
+    - "Keep reading" closes the warning and returns to the same box. The warning **comes back
+      on the next Skip tap**.
     - "Skip anyway" jumps past the remaining boxes **of that story screen only** (e.g. the rest
-      of the intro) and marks the run `story_skipped = true`. Later Skip taps in the same run
-      skip at once, with no second warning, because the medal is already out of reach for this
-      run.
+      of the intro) and marks the run `story_skipped = true`. Only "Skip anyway" stops the
+      warnings: later Skip taps in the same run skip at once, because the medal is already out
+      of reach for this run.
     - If the hero's medal is **already earned**, Skip never warns. It just skips, because the
       medal can't be lost.
     - Play, the quiz, stars and the unlock are **unaffected** by skipping. The medal is separate
@@ -154,7 +169,7 @@ it always ends at the quiz and then the map.
 | `results` | `quiz` | `unlock` / `map` | "Tiếp / Next"; `unlock` only if `next_hero` is not null |
 | `unlock` | `results` | `map` | "Về bản đồ / To the map" |
 | `paused` | any state above | the same state / `map` | "Chơi tiếp / Keep playing" / "Về bản đồ" |
-| `skip_warning` | any story screen (first Skip in a run, medal not yet earned) | the same box / the next non-story state | "Đọc tiếp / Keep reading" / "Vẫn bỏ qua / Skip anyway" (sets `story_skipped`) |
+| `skip_warning` | any story screen (Skip tapped, medal not yet earned, no "Skip anyway" yet this run) | the same box / the next non-story state | "Đọc tiếp / Keep reading" / "Vẫn bỏ qua / Skip anyway" (sets `story_skipped`) |
 
 In the vertical slice, every `map` in this table is the **title screen**.
 
@@ -238,15 +253,36 @@ The F4 (training time estimate) formula is defined as:
 | dummies | int | 1–10 (schema); use 3 | data file (beat params) | Straw dummies to hit |
 | blocks | int | 0–5 (schema 1.1); use 3 | data file (beat params, D-06) | Practice strikes to block |
 | attack_time, attack_cooldown | float (s) | see tuning | `tuning.json` (0.28, 0.12) | One swing and its gap |
-| walk_gap | float (s) | 1–3 | estimate only, not a runtime value | Walking to the next dummy |
+| walk_gap | float (s) | ≈ 0.9 | estimate: `dummy_spacing` / `hero_speed` = 300 / 330 | Walking to the next dummy |
 | telegraph, strike_time, enemy_rest | float (s) | see tuning | `tuning.json` (1.1, 0.25, 1.6) | The partner's practice strike cycle |
 | T_special | float (s) | 1–3 | estimate only, not a runtime value | Tapping special and the banner rising |
 
 **Output Range:** 15–40 s with the suggested values.
-**Example:** 3 × (0.28 + 0.12 + 2) + 3 × (1.1 + 0.25 + 1.6) + 2 = 7.2 + 8.85 + 2 ≈ 18 s, plus
+**Example:** 3 × (0.28 + 0.12 + 0.9) + 3 × (1.1 + 0.25 + 1.6) + 2 = 3.9 + 8.85 + 2 ≈ 15 s, plus
 first-time hint pauses.
 
 Fight and reach-the-flag encounter times come from the Side-scroll movement & combat GDD.
+
+The F5 (beat positions) formula is defined as:
+
+`beatX(0) = beat_start_x`; `beatX(i+1) = beatX(i) + extent(i) + beat_gap`, where
+`extent(i) = length_screens × world_width` (walk, reach-the-flag), `(dummies + 1) × dummy_spacing` (training), or `0` (fight, hold-meter).
+
+**Variables:**
+| Variable | Type | Range | Source | Description |
+|----------|------|-------|--------|-------------|
+| beat_start_x | float (px) | see tuning | data file (`tuning.json`, 900) | Where beat 0 starts |
+| beat_gap | float (px) | see tuning | data file (`tuning.json`, 1600) | Walk between beats |
+| length_screens | float | 0–10 | data file (beat params) | Walk / flag beat length |
+| world_width | int (px) | 1280 | constant (`tuning.json` world) | One screen |
+| dummies | int | 1–10 | data file (beat params) | Training dummies |
+| dummy_spacing | float (px) | see tuning | data file (`tuning.json`, 300) | Gap between dummies |
+
+**Output Range:** strictly increasing, since every term is ≥ 0 and `beat_gap` > 0. Beats never
+overlap, and a multi-screen beat pushes the next one along.
+**Example:** the Trần Quốc Toản slice (walk 3, hold-meter, training 3 dummies, flag 4):
+beatX(0) = 900; beatX(1) = 900 + 3840 + 1600 = 6340; beatX(2) = 6340 + 0 + 1600 = 7940;
+beatX(3) = 7940 + 1200 + 1600 = 10740. The flag beat then spans to 10740 + 5120 = 15860.
 
 ## Edge Cases
 
@@ -445,6 +481,12 @@ sparkle.
     one skipped screen, **THEN** no medal is reported, and stars and the unlock are unchanged.
 19. **GIVEN** the medal already earned for this hero, **WHEN** Skip is tapped, **THEN** no
     warning shows and the saved medal stays earned after the run.
+
+20. **GIVEN** the Trần Quốc Toản slice with `tuning.json` defaults, **WHEN** the mission loads,
+    **THEN** the beat starts are at x = 900, 6340, 7940, 10740 (F5).
+21. **GIVEN** a training beat with blocks 3, **WHEN** the child presses and releases defend during
+    the partner's windup and isn't holding it when the strike resolves, **THEN** that block does
+    not count.
 
 ## Open Questions
 
