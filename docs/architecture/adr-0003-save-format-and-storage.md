@@ -85,13 +85,16 @@ anyone outside the team has a save.
    ```
    Absent hero fields mean false / no stars. Unknown top-level keys and unknown heroes are preserved
    on rewrite (read into a pass-through map), so a newer app's extra data survives an older app's load.
-3. **Atomic, durable writes.** Serialise the whole document, write it to `save.json.tmp`, flush, then
-   rename over `save.json` (iOS `Data.write(to:options: .atomic)`; Android `AtomicFile`). A crash
-   mid-write leaves the previous file intact (AC3).
-4. **When it writes:** quiz finish (all its keys together, before results), title/map load (only if
-   `seen_open` changed), and a settings change. Writes run on a serial background queue; the app
-   flushes the queue when it moves to the background, so an immediate force-quit keeps the last change
-   (AC9).
+3. **Atomic, durable writes.** Serialise the whole document and replace the file atomically; the
+   temp naming is per platform: iOS `Data.write(to:options: .atomic)` (a temp file renamed over
+   `save.json`); Android `AtomicFile` (its `.new` / `.bak` files, read back through `openRead()`). A
+   crash mid-write leaves the previous file intact (AC3).
+4. **When it writes, and durability.** Each write **starts at the change**: quiz finish (all its keys
+   together, before results), title/map load (only if `seen_open` changed), and a `lang` / `sound`
+   change. A ~2 KB atomic write is fast enough to run synchronously at that moment (or on a serial
+   queue that the caller waits on). Force-stop and an out-of-memory kill skip the lifecycle callbacks,
+   so durability never depends on onPause/onStop or a background flush; the background hook only waits
+   for a write already in flight (AC9).
 5. **Load once at launch**, before the first screen:
    - parse; on failure, start fresh (`lang vi`, `sound true`, no progress) and log in debug only;
    - **salvage per key**: each field is checked on its own (a type error or `stars` outside 1–3 drops
@@ -106,8 +109,12 @@ anyone outside the team has a save.
    store with a batch commit drives the tests.
 8. **Backup (open, D-22, Luan decides):** recommendation **allow** the platform backup (iCloud /
    Google backup). The file holds only game flags (~2 KB, no personal data), and a child moving to a
-   new or hand-me-down device keeps their heroes. Allow is the platform default on both (no code);
-   excluding would mean `isExcludedFromBackup` on iOS and a backup rule on Android.
+   new or hand-me-down device keeps their heroes. The cost per platform:
+   - **iOS:** allowing is the default (Application Support is backed up); no code. Excluding would set
+     `isExcludedFromBackup` on the file.
+   - **Android:** today's manifest has `allowBackup="false"`, so allowing **is a change**: set
+     `allowBackup="true"` and add backup rules that include **only** `files/save.json`:
+     `dataExtractionRules` (Android 12+) and `fullBackupContent` (Android 11 and below).
 
 ## Alternatives Considered
 
@@ -162,7 +169,9 @@ anyone outside the team has a save.
 ## Migration Plan
 On first launch with ADR-0003 code: if `save.json` is absent but slice keys exist in UserDefaults /
 SharedPreferences (`lang`, `stars.<id>`, `completed.<id>`, `seen_open.<id>`, `medal.<id>`), build the
-document from them, write it, and leave the old keys untouched (never deleted automatically).
+document from them, write it, and leave the old keys untouched (never deleted automatically). Then
+write an `imported_from_prefs: true` marker in the document, so the import never runs twice (for
+example after the player resets progress in a later parent area).
 
 ## Validation Criteria
 - Unit tests on both apps (fake store with batch commit): AC1–AC7 and AC9 (simulated interrupt and

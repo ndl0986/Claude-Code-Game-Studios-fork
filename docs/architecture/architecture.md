@@ -58,7 +58,7 @@ or goes to disk.
 
 | Module | Layer | iOS | Android | Implements | Tests |
 |---|---|---|---|---|---|
-| Content models + loader | Foundation | `GameCore/Content.swift`, `Tuning.swift` | `core/content/Model.kt`, `ContentLoader.kt` | content contract | content + schema tests (strict) |
+| Content models + loader | Foundation | `GameCore/Content.swift`, `Tuning.swift` | `core/content/Model.kt`, `ContentLoader.kt`, `core/Tuning.kt`, `core/UiIds.kt` | content contract | content + schema tests (strict) |
 | Validator (R1–R20, R8c wrap fit) | Foundation | `GameCore/Validator.swift` | `core/content/Validator.kt`, `LineFit.kt` | content README rules | `fixtures/validity.json` |
 | Release build gate (R11, R12) | Foundation | `ios/Scripts/ContentGate.swift` (Release build phase) | `ContentGateTask` (Gradle, before preReleaseBuild) | ADR-0001 | release build fails on a pending claim |
 | Save store | Foundation | `Progress` + `KeyValueStore` (UserDefaults today) | `Store` + `PrefsStore` (SharedPreferences today) | save-and-progress | flow and progress tests; **ADR-0003 replaces the store** |
@@ -69,8 +69,9 @@ or goes to disk.
 | RNG | Core | `GameCore/Rng.swift` | `core/Rng.kt` | (determinism) | rng fixture, trace rng_draws |
 | Touch → pads | Core (rules) / Presentation (plumbing) | `TouchPads`, `PadLayout` in `Input.swift`; `GameScene` touches | `core/Touch.kt`; `GameView` | input-and-touch | stuck-input, second-pointer, pad layout tests |
 | Screen flow, skip, medal | Feature | `Game` in `Flow.swift` | `core/Game.kt` | mission-flow, hero-progression | flow and D-07 tests |
-| Renderer, layout, art | Presentation | `GameScene.swift`, `Art.swift`, `Draw.swift` | `Renderer.kt`, `Figures.kt`, `Draw.kt` | art bible, UX | screenshots (QC evidence) |
+| Renderer, layout, art | Presentation | `GameScene.swift`, `Art.swift`, `Draw.swift` | `Renderer.kt`, `Figures.kt`, `Draw.kt`, `GameView.kt` (loop and input plumbing) | art bible, UX | screenshots (QC evidence) |
 | Audio | Presentation | `Audio.swift` (AVAudioEngine, synthesised placeholders) | `Audio.kt` (SoundPool) | audio-and-voice-over | QC (feel), not fixtures |
+| Debug tools (not shipped) | Foundation | `TraceTests`, the Simulator screenshot jumps | `FontMetricsActivity` (generates `content/metrics/nunito-advances.json` for R8c), `AtlasBenchActivity` (ADR-0002 measurements), `TraceTest` (`TRACE_WRITE` regenerates the trace) | content contract, ADR-0002 | — |
 | App shell | Foundation | `DaiDatAnhHungApp.swift` (SwiftUI + plain SKView, async boot) | `GameActivity.kt`, `GameApp.kt` | lifecycle, AC10 auto-pause | QC |
 
 **Owners.** game-dev-ios owns the iOS column; game-dev-android owns the Android column; both devs own
@@ -117,7 +118,7 @@ content/data (bundled) ──load at launch──▶ ContentSet ──▶ Game (
 
 ## API Boundaries
 
-- **Core in:** `StepInput {held, tapped, confirm}` per step; flow actions (`start`, `next`, `skip`,
+- **Core in:** one input frame per step, `{held, tapped}` (per-platform names: iOS `StepInput`, Android `InputFrame`); flow actions (`start`, `next`, `skip`,
   `skipAnyway`, `keepReading`, `ask`, `answer(slot)`, `pause`, `resume`, `home`, `replay`,
   `toggleLang`, `toggleMute`); `backgrounded()`.
 - **Core out:** read-only state (screen, phase, hero, enemies, partner, dummies, quiz, hints, visible
@@ -136,7 +137,10 @@ content/data (bundled) ──load at launch──▶ ContentSet ──▶ Game (
 - Every player-facing word **must** come from content; no text inside pictures.
 - Both apps **must** pass every shared fixture, including the trace, before a merge.
 - A release build **must** fail on a pending claim or a newer schema MAJOR.
-- Input **must** clear every held pad on any screen or phase change, pause, background or cancel.
+- Input **must** clear every held pad on the Input GDD Rule 11 triggers: pointer cancel, focus loss,
+  pause, backgrounding and an audio route change or interruption. A pad stays held from down to up
+  (Rule 9); a hidden pad is filtered by the beat's buttons, not released; a screen change only cancels
+  a pressed menu button.
 
 ## Save Format (summary; the decision lands in ADR-0003)
 
