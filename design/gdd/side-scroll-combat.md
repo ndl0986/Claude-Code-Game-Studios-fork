@@ -111,8 +111,9 @@ Combat is how a child takes part in the story's battle moments.
 15. **Locked fight.** A `fight` beat, and each encounter in `reach-the-flag` (D-06), locks the
     camera with the hero at `lock_offset` px from the left edge. The hero is kept within
     `hero_edge_margin` of both screen edges until the fight ends.
-16. **Special in combat** (reach-the-flag only; proposed, not in the prototype; **waits for
-    Luan's decision**, raised with D-08):
+16. **Special in combat: not now** (D-10: B, Luan 2026-11-14). Fights and reach-the-flag
+    encounters have no special pad. The rules below are kept for a later version, so the design
+    isn't lost; `special_push` and `special_cooldown` stay in `tuning.json` unused:
     - Tapping special waves the banner: followers cheer, and every non-fleeing enemy on screen
       is pushed by `special_push` **away from the hero**, on both sides.
     - It does **not** count as a hit, so special never ends a fight by itself.
@@ -139,7 +140,8 @@ same-frame edge cases below depend on it.
 6. Clamp the hero and set the camera (locked during a fight and a caption; otherwise
    `camera = max(camera, hero.x − camera_follow_offset)`).
 7. Start the beat once the hero passes `beat_start_x + i × beat_gap`.
-8. In a fight: the stall timer and the spawn timer advance by dt. Spawn at most one enemy if the
+8. In a fight: the spawn timer advances by dt (the stall timer is Hints' `progress_timer`; see
+   below). Spawn at most one enemy if the
    queue isn't empty, active (non-fleeing) < `max_active` and the spawn timer ≤ 0. The timer
    then resets to `spawn_gap`.
 9. For each enemy, in list order:
@@ -153,7 +155,9 @@ same-frame edge cases below depend on it.
     `end_pause`, Mission flow shows the caption.
 12. Effects: particles, floating words, dropped weapons.
 
-A hit resets the stall timer, and a caption closing resets the idle and stall timers.
+Combat only **reports events** (hit, block, pushed, windup, flee). The no-progress timer, its
+resets (on progress, caption or card close, and resume) and `hint_delay` belong to Hints
+(`design/gdd/hints-and-onboarding.md`, Rule 5 and F1).
 
 ### States and Transitions
 
@@ -179,7 +183,7 @@ A hit resets the stall timer, and a caption closing resets the idle and stall ti
 | Mission flow & beat types | beat type, fight params (`enemies`, `max_active`, `from_left`), encounters (D-06), the visible pads | goal met (fight cleared, flag touched, walk end reached) | Mission flow GDD |
 | Input & touch controls | press, hold and release of move, attack, defend, special | (none) | Input GDD (P-01: pads fire on press) |
 | Content data | `content/data/tuning.json` values; enemy kinds from `mission.schema.json` | (none) | Content contract |
-| Hints & onboarding | (none) | events: `hit`, `block`, `pushed`, `flee`, `windup_started`, `no_progress` (no hit within `hint_delay` while enemies are present) | Hints GDD |
+| Hints & onboarding | (none) | events: `hit`, `block`, `pushed`, `flee`, `windup_started`, hero moved. Hints computes "no progress" itself | Hints GDD |
 | Audio & voice-over | (none) | events for SFX: swing, hit drum, clang, bonk, flee | Audio GDD |
 
 ## Formulas
@@ -321,11 +325,12 @@ blocks, and defend pressed and released earlier in the windup does not. The habi
 - **If knock-back pushes an enemy off-screen** (not fleeing): it walks back from where it is.
   It is not removed.
 - **If two enemies overlap the hero** (close range): one swing hits both (F5).
-- **If the app is paused mid-windup**: all timers freeze, and the telegraph resumes with its
-  remaining time.
+- **If the app is paused mid-windup**: all timers freeze, and pause releases every held pad
+  (Mission flow Rule 11). On resume, the windup's telegraph **restarts from 0**, so the child
+  always gets the full warning to press defend again. This is new versus the prototype.
 - **If `max_active` is larger than the enemy count**: everyone spawns, one per `spawn_gap`.
-- **If special is tapped during cooldown**: nothing happens, and a soft sound plays with the
-  draining ring on the pad. There is no text. Special never breaks the one-strike-at-a-time rule.
+- **If special is tapped during cooldown** (later version only, Rule 16): nothing happens, and a
+  soft sound plays with the draining ring on the pad. There is no text.
 
 ## Dependencies
 
@@ -334,7 +339,7 @@ blocks, and defend pressed and released earlier in the windup does not. The habi
 | Input & touch controls | this depends on it | Hard | Pad press, hold and release (P-01: on press) |
 | Content data & claims | this depends on it | Hard | `tuning.json`; enemy kinds in `mission.schema.json` |
 | Mission flow & beat types | depends on this | Hard | Runs fights and encounters; goal-met events |
-| Hints & onboarding | depends on this | Soft | Combat events (hit, block, pushed, windup, no progress) |
+| Hints & onboarding | depends on this | Soft | Combat events (hit, block, pushed, windup, flee, hero moved) |
 | Audio & voice-over | depends on this | Soft | SFX events |
 
 Mission flow lists this system as a hard dependency (`design/gdd/mission-flow.md`, bidirectional).
@@ -373,7 +378,7 @@ and dropped weapons.
 
 ## UI Requirements
 
-- Pads: ◀ ▶ bottom-left; defend and attack bottom-right; special above attack when the beat
+- Pads: ◀ ▶ bottom-left; defend and attack bottom-right. No special pad in combat (D-10); in the later version, special goes above attack when the beat
   uses it. At least `pad_min` (72 pt/dp), clear of the system gesture zones (QC r3 O5).
 - Text pops ("Ối!", "Đỡ được!") come from `strings.json` (VI/EN), never from art.
 - No health bar and no enemy health bars. Progress is the enemies running away.
@@ -390,7 +395,7 @@ Mission flow's screens.
 | Art bible | `design/art/art-bible.md` §§3–5 | Enemy shapes, no injury, leader width, telegraph colour |
 | Prototype | `203d73e` `prototypes/tqt-mission/index.html` (`updateEnemies`, `heroAttack`, `updatePlay`) | State machine, hidden literals, behaviour |
 | QC evidence | `qa/TASK-003-android` r3 (O5 pads clear of the gesture zone, O6 one tone per press) | Pad placement, input |
-| Decisions | `production/team/decisions.md` P-01, P-03, D-06; D-09 (new) | Press timing, hurt 0.35 s, encounters, new tuning keys |
+| Decisions | `production/team/decisions.md` P-01, P-03, D-06, D-09, D-10 | Press timing, hurt 0.35 s, encounters, tuning keys, no special in combat |
 
 ## Acceptance Criteria
 
@@ -428,7 +433,8 @@ Mission flow's screens.
     shows injury, blood, or a figure lying down (content reviewer sign-off, evidence in
     `production/qa/evidence/`).
 14. **GIVEN** the Trần Quốc Toản slice fights, **WHEN** an adult plays without blocking, **THEN**
-    each fight still ends (no fail state), within 2 minutes per fight.
+    each fight still ends (no fail state), within 60 s per fight (combat F3; it keeps Mission
+    flow AC14's 3–5 min mission total).
 15. **GIVEN** an enemy in `windup`, **WHEN** defend is pressed and released 0.5 s into it and
     not held when the strike resolves, **THEN** the strike is **not** blocked and the hero is
     pushed 90 px.
@@ -439,14 +445,17 @@ Mission flow's screens.
     push happens on frame N (frame order steps 3 → 9).
 18. **GIVEN** the hero is defending, **WHEN** attack is tapped and defend released on the next
     frame, **THEN** no swing starts (the tap was dropped, not queued).
+19. **GIVEN** an enemy 0.8 s into a 1.1 s windup with defend held, **WHEN** the game is paused
+    and resumed, **THEN** defend is no longer held, and the windup lasts another full 1.1 s
+    before the strike (the telegraph restarts from 0).
 
-Logic criteria 1–11 and 15–18 need automated unit tests that follow the frame order. Feel
+Logic criteria 1–11 and 15–19 need automated unit tests that follow the frame order. Feel
 criteria 12–14 need a QC recording or screenshot on each platform.
 
 ## Open Questions
 
 | # | Question | Owner | By |
 |---|---|---|---|
-| D-09 | Two new `tuning.json` keys for special in combat (rule 16): `special_push` 170 px, `special_cooldown` 6 s. Two validation rules: fail if `attack_range` < `enemy_reach − stand_gap`; warn if `telegraph` < 0.8 s. All other combat values already exist in `tuning.json` (TASK-005b, 012114c) under the names this GDD uses | game-dev-ios + game-dev-android | Before the slice's combat story is closed |
+| D-09 | Done: `special_push` and `special_cooldown` are in `tuning.json` (unused until Rule 16 returns); R14 and R15 are in `content/README.md` (schema 1.1) | — | Closed |
 | — | Hit-stop: add a short freeze (e.g. 0.05 s) if playtests find hits weak? | Luan, after the vertical-slice playtest | Playtest |
-| — | Special in combat (rule 16) is new design, not prototyped. Confirm it in the slice, or drop it until TASK-003b | Luan | With D-08 |
+| D-10 | **Decided (Luan, 2026-11-14): B, later.** No special in combat now; Rule 16 kept for a future version | — | Closed |

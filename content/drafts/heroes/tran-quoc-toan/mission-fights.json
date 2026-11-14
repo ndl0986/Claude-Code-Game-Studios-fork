@@ -1,0 +1,302 @@
+{
+  "schema_version": "1.1",
+  "hero": {
+    "id": "tran-quoc-toan",
+    "name": {
+      "id": "tqt.hero.name",
+      "vi": "Trần Quốc Toản",
+      "en": "Trần Quốc Toản",
+      "claims": [
+        "C01",
+        "C02"
+      ]
+    },
+    "timeline_order": 1,
+    "place": {
+      "id": "tqt.hero.place",
+      "vi": "Bến Bình Than",
+      "en": "Bình Than riverbank",
+      "claims": [
+        "C04"
+      ]
+    }
+  },
+  "next_hero": null,
+  "intro": [
+    {
+      "id": "tqt.intro.1",
+      "vi": "Ngày xưa, thời nhà Trần, có một cậu bé tên là Trần Quốc Toản.",
+      "en": "Long ago, in the time of the Trần dynasty, there was a boy named Trần Quốc Toản.",
+      "claims": [
+        "C01"
+      ]
+    },
+    {
+      "id": "tqt.intro.2",
+      "vi": "Quân Mông–Nguyên chuẩn bị sang xâm lược Đại Việt.",
+      "en": "The Mông–Nguyên army was getting ready to invade Đại Việt.",
+      "claims": [
+        "C03"
+      ]
+    },
+    {
+      "id": "tqt.intro.3",
+      "vi": "Vua Trần họp các vương hầu ở bến Bình Than để bàn việc đánh giặc.",
+      "en": "The Trần king gathered his lords at Bình Than to plan the defence.",
+      "claims": [
+        "C04"
+      ]
+    },
+    {
+      "id": "tqt.intro.4",
+      "vi": "Quốc Toản còn nhỏ tuổi nên không được vào dự bàn.",
+      "en": "Quốc Toản was too young, so he was not allowed into the meeting.",
+      "claims": [
+        "C05"
+      ]
+    },
+    {
+      "id": "tqt.intro.5",
+      "vi": "Truyện kể rằng cậu tức quá, bóp nát quả cam vua ban lúc nào không biết.",
+      "en": "The story says he was so upset that he crushed the king's orange without noticing.",
+      "claims": [
+        "C06"
+      ]
+    },
+    {
+      "id": "tqt.intro.6",
+      "vi": "Quốc Toản về nhà, tập hợp người thân và gia nhân cùng luyện võ.",
+      "en": "Quốc Toản went home and trained his family and helpers to fight.",
+      "claims": [
+        "C07"
+      ]
+    },
+    {
+      "id": "tqt.intro.7",
+      "vi": "Truyện kể rằng cậu may một lá cờ thêu sáu chữ vàng.",
+      "en": "The story says he made a banner with six golden words.",
+      "claims": [
+        "C08"
+      ]
+    }
+  ],
+  "banner": {
+    "id": "tqt.banner",
+    "vi": "Phá cường địch, báo hoàng ân",
+    "en": "Defeat the strong enemy, repay the king's kindness",
+    "claims": [
+      "C08"
+    ]
+  },
+  "beats": [
+    {
+      "id": "tqt.b1",
+      "type": "fight",
+      "theme": "village",
+      "buttons": [
+        "move",
+        "attack",
+        "defend"
+      ],
+      "title": {
+        "id": "tqt.b1.title",
+        "vi": "Lên đường",
+        "en": "Setting off",
+        "claims": [
+          "C09"
+        ]
+      },
+      "scene": [
+        {
+          "id": "tqt.b1.scene.1",
+          "vi": "Đội quân nhỏ của Quốc Toản lên đường đánh giặc.",
+          "en": "Quốc Toản's small band set off to fight the invaders.",
+          "claims": [
+            "C09"
+          ]
+        }
+      ],
+      "goal": {
+        "id": "tqt.b1.goal",
+        "vi": "Đẩy lùi quân giặc!",
+        "en": "Push the invaders back!",
+        "claims": [
+          "C12"
+        ]
+      },
+      "params": {
+        "enemies": [
+          "spear",
+          "spear"
+        ],
+        "max_active": 1,
+        "from_left": []
+      }
+    },
+    {
+      "id": "tqt.b2",
+      "type": "fight",
+      "theme": "bamboo",
+      "buttons": [
+        "move",
+        "attack",
+        "defend"
+      ],
+      "title": {
+        "id": "tqt.b2.title",
+        "vi": "Qua rừng tre",
+        "en": "Through the bamboo",
+        "claims": [
+          "C12"
+        ]
+      },
+      "scene": [
+        {
+          "id": "tqt.b2.scene.1",
+          "vi": "Đi qua rừng tre, họ đẩy lùi những toán giặc đầu tiên.",
+          "en": "Passing the bamboo, they pushed back the first groups of invaders.",
+          "claims": [
+            "C09",
+            "C12"
+          ]
+        }
+      ],
+      "goal": {
+        "id": "tqt.b2.goal",
+        "vi": "Đẩy lùi quân giặc!",
+        "en": "Push the invaders back!",
+        "claims": [
+          "C12"
+        ]
+      },
+      "params": {
+        "enemies": [
+          "spear",
+          "shield",
+          "spear"
+        ],
+        "max_active": 2,
+        "from_left": []
+      }
+    },
+    {
+      "id": "tqt.b3",
+      "type": "fight",
+      "theme": "river",
+      "buttons": [
+        "move",
+        "attack",
+        "defend"
+      ],
+      "uses_banner": true,
+      "title": {
+        "id": "tqt.b3.title",
+        "vi": "Bên bờ sông",
+        "en": "By the river",
+        "claims": [
+          "C12"
+        ]
+      },
+      "scene": [
+        {
+          "id": "tqt.b3.scene.1",
+          "vi": "Truyện kể rằng lá cờ sáu chữ vàng bay phía trước, ai cũng thêm dũng cảm.",
+          "en": "The story says the six-word banner flew in front, and everyone felt braver.",
+          "claims": [
+            "C08",
+            "C12"
+          ]
+        }
+      ],
+      "goal": {
+        "id": "tqt.b3.goal",
+        "vi": "Đẩy lùi quân giặc!",
+        "en": "Push the invaders back!",
+        "claims": [
+          "C12"
+        ]
+      },
+      "params": {
+        "enemies": [
+          "shield",
+          "spear",
+          "shield",
+          "spear"
+        ],
+        "max_active": 2,
+        "from_left": [
+          3
+        ]
+      }
+    },
+    {
+      "id": "tqt.b4",
+      "type": "fight",
+      "theme": "camp",
+      "buttons": [
+        "move",
+        "attack",
+        "defend"
+      ],
+      "uses_banner": true,
+      "title": {
+        "id": "tqt.b4.title",
+        "vi": "Cùng quân nhà Trần",
+        "en": "With the Trần army",
+        "claims": [
+          "C09"
+        ]
+      },
+      "scene": [
+        {
+          "id": "tqt.b4.scene.1",
+          "vi": "Đội quân của Quốc Toản cùng quân nhà Trần đánh giặc Nguyên.",
+          "en": "Quốc Toản's band fought the Nguyên invaders alongside the Trần army.",
+          "claims": [
+            "C09"
+          ]
+        }
+      ],
+      "goal": {
+        "id": "tqt.b4.goal",
+        "vi": "Đẩy lùi quân giặc!",
+        "en": "Push the invaders back!",
+        "claims": [
+          "C12"
+        ]
+      },
+      "params": {
+        "enemies": [
+          "spear",
+          "leader",
+          "spear"
+        ],
+        "max_active": 2,
+        "from_left": [
+          2
+        ]
+      }
+    }
+  ],
+  "ending": {
+    "lines": [
+      {
+        "id": "tqt.ending.1",
+        "vi": "Nhà Trần đã đánh thắng quân Mông–Nguyên.",
+        "en": "The Trần dynasty defeated the Mông–Nguyên army.",
+        "claims": [
+          "C11"
+        ]
+      },
+      {
+        "id": "tqt.ending.2",
+        "vi": "Trần Quốc Toản đã hy sinh khi còn rất trẻ, vì đất nước.",
+        "en": "Trần Quốc Toản gave his life for his country while he was still very young.",
+        "claims": [
+          "C10"
+        ]
+      }
+    ],
+    "picture_id": "pic.scene_tqt_ending"
+  }
+}
