@@ -17,7 +17,8 @@ game-art-content (asks for the budgets; agrees the follow-up schema change); the
 Both native apps scale one 1280×720 world, so art ships as **one resolution set at 1.5× (a 1920×1080
 world)**, authored at 2×. No texture is larger than **2048×2048**. Sprites are split into atlases by
 what is on screen together. Sprites use lossless WebP and backgrounds lossy WebP (PNG still allowed).
-Each mission keeps **≤ 64 MB of decoded textures** alive. The iOS minimum is **iOS 17**. The numbers
+**At most 64 MB of decoded textures are alive at any moment**: the hero, enemies and UI stay
+resident; backgrounds and theme props load per beat, with the next beat prefetched. The iOS minimum is **iOS 17**. The numbers
 are proposals until both apps measure them (Validation Criteria).
 
 ## Engine Compatibility
@@ -77,20 +78,29 @@ low-end Android phones and primary-school children's hand-me-down devices. Witho
      into ≤ 2048² atlases. At 1.5× a 512² 2× cell becomes 384², so 25 frames fit in 2048² (5 × 5).
    - **Backgrounds:** 3840×2160 at 2× becomes 2880×1620 at 1.5×, split into **two tiles** of
      1440×1620 (or layer-by-layer parallax strips ≤ 2048 wide).
-3. **Atlases by what is on screen together:** hero; enemies (all three kinds); one props atlas per
-   theme (village, bamboo, river, camp); UI and icons; quiz pictures per hero. Backgrounds are
-   standalone images. A mission's atlases load when the mission starts and are released when it
-   ends. Title, HUD and UI stay resident.
+3. **Atlases by what is on screen together, loaded per beat:** hero; enemies (all three kinds); one
+   props atlas per theme (village, bamboo, river, camp); UI and icons; quiz pictures per hero.
+   Backgrounds are standalone images (tiles).
+   - **Resident** for the whole mission: hero, enemies, UI/HUD.
+   - **Per beat:** that beat's theme background tiles and props. The next beat's set is prefetched
+     during `walk_to` and the beat card, and the previous beat's set is released once the new beat plays.
+   - **Quiz pictures** load when the quiz starts; play art is released then.
+   Why per beat: TQT's mission uses 3 themes, and their backgrounds alone are about 53 MB decoded
+   (2 tiles × 3 themes × 8.9 MB), so loading the whole mission at start cannot fit 64 MB.
 4. **Formats:** lossless **WebP** for sprites with alpha; lossy WebP (quality ≈ 85) for opaque
    backgrounds; **PNG stays allowed** (`assets.json` already accepts png|webp). Both apps decode WebP
    (Android natively, iOS through ImageIO). Audio stays m4a/AAC or wav (ADR-0001); voice-over budgets
-   are a later ADR. Android may decode opaque backgrounds as RGB_565, a platform-only memory knob that
-   doesn't change the files.
+   are a later ADR. Android decodes with `Bitmap.Config.HARDWARE` (pixels in GPU memory only; RGB_565
+   was measured but only halves WebP, not PNG, and HARDWARE makes it unnecessary). On iOS, SpriteKit
+   textures count toward the app's memory footprint (unified memory), so the 64 MB limit applies to them
+   in full.
 5. **Budgets** (proposed for the low-end Android target; iOS is held to the same so the apps match):
    | Budget | Limit |
    |---|---|
    | Largest texture / atlas | 2048 × 2048 |
-   | Decoded textures alive during one mission | ≤ 64 MB |
+   | Decoded textures alive **at any moment**, prefetch included | ≤ 64 MB |
+   | of which resident (hero, enemies, UI) | ≤ 32 MB (two 2048² atlases' worth) |
+   | of which current + next beat (backgrounds + props) | ≤ 32 MB |
    | One mission's art + data, compressed | ≤ 15 MB |
    | App download (font + art + 2 languages of voice, later) | ≤ 60 MB |
 6. **Minimum iOS version: iOS 17.** That's the project's current deployment target (TASK-006). It's
@@ -192,9 +202,15 @@ first export; `assets.json` gets width/height in the follow-up data branch.
 
 ## Validation Criteria
 To be filled before acceptance (the leader logs this ADR as D-19):
-- [ ] Android (game-dev-android): decode memory and frame time with a 2048² test atlas, WebP and PNG, on the low-end target.
+- [x] Android decode memory (game-dev-android, AVD devandroid002 API 36 arm64, debug AtlasBenchActivity @ 2852a4e):
+  2048² atlas = 16.0 MB decoded; a 1440×1620 tile = 8.9 MB (RGB_565: 4.45 MB, WebP only);
+  `Bitmap.Config.HARDWARE` heap +0.005 MB (GPU memory only).
+- [x] Android decode time (ARGB / HARDWARE, Apple-silicon host CPU; expect 3–5× slower on a low-end phone):
+  atlas: WebP lossless 33 / 67 ms, WebP q85 28 / 35 ms, PNG 21 / 29 ms; tile: WebP lossless 13 / 19 ms, q85 6 / 11 ms, PNG 14 / 16 ms.
+  File sizes on synthetic art (ratios only): atlas 981 KB lossless WebP / 318 KB q85 / 791 KB PNG; tile 173 / 36 / 160 KB.
+- [ ] Android frame time: **NOT ASSESSED**. The AVD renders through SwiftShader (a software GPU), so its p50 33 ms / p95 50 ms is not a valid number. It needs a real low-end phone.
 - [ ] iOS (game-dev-ios): the same on the iPhone Duo Simulator (Instruments: allocations, frame time), after iOS QC round 1 frees the device; a real iPhone when available.
-- [ ] One mission's planned atlases add up to ≤ 64 MB decoded (a spreadsheet from the asset manifest at 1.5×).
+- [ ] At every beat of the TQT mission, resident + current + next-beat textures add up to ≤ 64 MB decoded (a spreadsheet from the asset manifest at 1.5×).
 
 ## Related
 - ADR-0001 (depends on). TASK-013 (full-screen backdrop uses the background tiling rule). TASK-014 asset specs.
