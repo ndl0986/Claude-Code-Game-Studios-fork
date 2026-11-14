@@ -34,12 +34,36 @@ the title. Pause is available (P-05).
 └──────────────────────────────────────────────────────────────────┘
 ```
 
-### 5.2 Small-k quiz layout (0.40 ≤ k < 0.48)
+### 5.2 Small-k quiz layout (when the reference cards would reach Tiếp's row)
 
-**The reference layout stays as it is** for k ≥ 0.48 (cards ≈ y 270–560, the why line under
-them, Tiếp on the bottom row). Below k ≈ 0.48 the tall corner block (pause/sound at `pad_min`)
-and the tall Tiếp row leave only ≈ 197 px for the cards, which need a picture plus a 2-line label
-(≈ 100 + 103). Of the three options, this spec takes **(c), Tiếp over spent cards, with two
+**The switch is geometric, not a fixed k** (r8c; both apps test exactly this). With
+P = `pad_min / k` (world px) and the reference layout stacked from the corner block down:
+
+- prompt top = `corner_bottom` + 8, prompt height 108 (2 × 40 × 1.35, no padding);
+- cards top = prompt bottom + 8, card height 290, so **cards_bottom = `corner_bottom` + 414**;
+- **Tiếp top = 702 − P** (bottom 702 = `safe_bottom` − 18, height `pad_min` = P, on the story row).
+  **Width, fixed world px on both apps** (leader's call, r8c): **340** in the reference layout
+  (x 922–1262), **450** in the small layout (x 812–1262, the ASSET-323 pill). This is the quiz's
+  Tiếp only; the story-screen Tiếp is unchanged.
+
+**small = cards_bottom > tiep_top** (strict; at equality the cards touch Tiếp's top with a 0 gap
+and the reference layout stays). With **`corner_bottom` = 18 + P** (the spec value, `hud.md`
+§3.3, the symmetric 18 margin; leader's call, r8c: Android draws it, iOS moves its corner block
+down 10 px in r8) that is 432 + P > 702 − P ⇔ **P > 135 ⇔ k < 72/135 ≈ 0.5333**.
+
+- **Both reference phones use the small layout:** iOS k 0.517 (cards' bottom 571.3 vs Tiếp's
+  top 562.7) and Android k 0.527 (568.6 vs 565.4). So do the Android dev phone (k 0.488) and the
+  floor (0.40).
+- **The reference layout is for k ≥ ≈ 0.534** (bigger screens, e.g. tablets and large-display
+  phones). It is covered by the unit sweep (AC10), not by a reference-phone capture.
+- The old "k < 0.48" bound was too low: between 0.48 and 0.533 the reference cards ran into
+  Tiếp's row (Android at 0.488 pushed Tiếp ≈ 13 px past 720). An app may keep a `k < 0.48`
+  clause ORed in; it is redundant.
+
+**The reference layout** (not small): prompt, cards (y `corner_bottom` + 124 … + 414, e.g.
+≈ 277–567 at k 0.534), the why line under them, Tiếp (340 wide) on the bottom row. **When small**, the tall
+corner block and the tall Tiếp row leave too little room for cards that need a picture plus a
+2-line label (≈ 100 + 103) above Tiếp. Of the three options, this spec takes **(c), Tiếp over spent cards, with two
 guards for young children**: Tiếp never appears while a child can still choose, and the right
 card is never covered. Card pictures and 2-line labels keep their reference size (options a and
 b would shrink the picture or cut Luan's text to one line).
@@ -58,18 +82,24 @@ row's height, and they keep the reference card size.
 3. The why line appears to the right of it, and Tiếp appears bottom-right after `feedback_time`.
    Both sit where the wrong cards were, never over the right card.
 
-**Worked numbers at k 0.40** (world px; `pad_min` 180; corner block x 18–408, y 18–198;
-`safe_bottom` 720):
+**In the small layout nothing moves vertically:** the prompt and the cards keep their
+reference y. Only the wrong cards go, the right card glides sideways to the left slot (same y),
+and the why line and Tiếp take the freed area to its right.
 
-| Element | Box |
-|---|---|
-| Prompt (980 box, ≤ 2 lines, 40 px) | x 150–1130, y 206–322 (starts at `corner_bottom` + 8) |
-| Cards while choosing (reference size, 380 × 290) | y 330–620; slots x 40–420, 450–830, 860–1240 |
-| Right card after the pick | left slot x 40–420, y 330–620 |
-| Why line (box 750, ≤ 3 lines, 37 px; every TQT why fits 2 lines even at 600, F1) | x 450–1240, y 330–465 |
-| Tiếp (`pad_min` tall, the ASSET-323 2.5:1 pill) | x 812–1262, y 522–702 |
+**Worked numbers** (world px; `corner_bottom` = 18 + P; `safe_bottom` 720; geometry as in
+GameCore `QuizLayout`, checked with game-dev-ios, approved by game-dev-android):
 
-The right card is ≥ 30 px clear of the why line and ≥ 390 px clear of Tiếp. Counter and dots
+| Element | k 0.40 (P 180, corner_bottom 198) | k 0.488 (P 147.5, corner_bottom 165.5) | k 0.527 Android ref (P 136.6, corner_bottom 154.6) |
+|---|---|---|---|
+| Prompt (980 box, x 150–1130, ≤ 2 lines, 40 px) | y 206–314 | y 173.5–281.5 | y 162.6–270.6 |
+| Cards while choosing (380 × 290; slots x 40–420, 450–830, 860–1240) | y 322–612 | y 289.5–579.5 | y 278.6–568.6 |
+| Tiếp top (702 − P) vs reference cards' bottom | 522 < 612 → **small** | 554.5 < 579.5 → **small** | 565.4 < 568.6 → **small** |
+| Right card after the pick | left slot x 40–420, y 322–612 | x 40–420, y 289.5–579.5 | x 40–420, y 278.6–568.6 |
+| Why line (box 750, region x 450–1240, ≤ 3 lines, 37 px, height 135; every TQT why fits 2 lines even at 600, F1) | y 322–457 | y 289.5–424.5 | y 278.6–413.6 |
+| Tiếp (`pad_min` tall, 450 wide, x 812–1262) | y 522–702 | y 554.5–702 | y 565.4–702 |
+
+The right card is 30 px clear of the why line and 392 px left of Tiếp; the why line ends
+≥ 65 px above Tiếp's top (65 at 0.40, 130 at 0.488, 152 at 0.527). Nothing goes below y 702. Counter and dots
 stay top-centre in the free band right of the corner block.
 
 ### 5.1b Results wireframe
@@ -100,7 +130,7 @@ stay top-centre in the free band right of the corner block.
 | `question_open` | Cards active |
 | `wrong_feedback` (0.5 s shake) | **All card taps dropped, not queued** (B4) |
 | Greyed card | Can't be picked again; a tap does nothing and isn't a retry (D-11) |
-| `why_shown` | Tiếp appears after 0.9 s. **At 0.40 ≤ k < 0.48:** the wrong cards have faded out and the right card sits in the left slot first (§5.2) |
+| `why_shown` | Tiếp appears after 0.9 s. **In the small layout** (§5.2, k < ≈ 0.533, including both reference phones): the wrong cards have faded out and the right card sits in the left slot first (§5.2) |
 | Results: no next hero | `ui.results.more_heroes`, then the title |
 
 ## 7. Interaction Map
@@ -109,8 +139,10 @@ Cards fire on release inside (P-01); Tiếp is debounced (B1); **the quiz (enter
 and unlock take the screen-entry lock** (rolling: `screen_enter_lock` 0.6 s of no pressing, capped at `screen_enter_lock_max` 1.5 s; Input Rule 13b; QC r6 B7):
 cards and Tiếp show at once but take no input during it, so a tap carried over from the ending
 never picks a card and a fast double tap on the last Tiếp never skips results. Question to
-question within the quiz keeps only the debounce, **except at 0.40 ≤ k < 0.48**, where Tiếp lies
-over the third card slot (§5.2) and each new question takes the lock too; one tone per card press (the
+question within the quiz keeps only the debounce, **except in the small layout** (§5.2: reference cards' bottom > Tiếp's
+top, k < ≈ 0.533, so on both reference phones too), where Tiếp lies over the third card slot and each new question takes the lock
+too. **The lock follows the same flag** as the layout (iOS `quizLocksPerQuestion = QuizLayout.small`),
+never a separate k test; one tone per card press (the
 right/wrong sound is its tone; O6 and the Android fix). Language switch through pause keeps the
 greyed cards and retries.
 
@@ -147,6 +179,7 @@ fill vs outline. No timers.
 5. **GIVEN** a replay scoring lower than the best, **WHEN** results show, **THEN** this run's stars
    and "best" with the higher value; the saved stars stay.
 6. **GIVEN** the lowest target Android phone, **WHEN** a card is tapped, **THEN** its feedback starts within 100 ms; layouts checked on the narrowest phone and a 20:9 phone.
-7. **GIVEN** a phone or emulator at k 0.40, **WHEN** each TQT question is captured in VI and EN (a) while choosing, (b) after a wrong pick and (c) 1 s after the right pick, with the right answer in each of the three slots, **THEN** (a)–(b) no Tiếp is on screen and the cards are 380 × 290 with the full picture and a 2-line label; (c) only the right card remains, in the left slot, with its tick; the why line and Tiếp don't overlap it or each other; nothing is above `corner_bottom` + 8 or below y 720.
-8. **GIVEN** k 0.40 and the right pick, **WHEN** frame-stepped, **THEN** the wrong cards are fully gone before Tiếp's first frame, and a tap where a wrong card was does nothing until Tiếp shows.
-9. **GIVEN** the ending's last Tiếp tapped twice 0.3 s apart, **WHEN** the quiz appears, **THEN** the second tap picks no card. **GIVEN** k 0.40, **WHEN** Tiếp is tapped twice 0.3 s apart on a question, **THEN** the second tap picks no card on the next question; **GIVEN** the reference phones, question to question has no lock (only the debounce).
+7. **GIVEN** a phone or emulator at k 0.40, one at k 0.488 and the reference phones (all small layout), **WHEN** each TQT question is captured in VI and EN (a) while choosing, (b) after a wrong pick and (c) 1 s after the right pick, with the right answer in each of the three slots, **THEN** (a)–(b) no Tiếp is on screen and the cards are 380 × 290 with the full picture and a 2-line label; (c) only the right card remains, in the left slot, with its tick; the why line and Tiếp don't overlap it or each other; nothing is above `corner_bottom` + 8 or below y 702 (Tiếp's bottom). **The reference phones (k 0.517 iOS, 0.527 Android) are expected to show the small layout too** and are captured under this AC the same way; the reference layout (k ≥ ≈ 0.534) is covered by the unit sweep in AC10, not by a capture. In the small layout Tiếp is 450 wide (x 812–1262).
+10. **GIVEN** the layout test, **WHEN** run for P = `pad_min / k` from k 0.40 to 0.75, **THEN** the small layout is chosen exactly when the reference cards' bottom > Tiếp's top (with `corner_bottom` = 18 + P: P > 135, k < 72/135 ≈ 0.5333), the per-question lock is on exactly when the small layout is, at P = 135 (gap 0) the reference layout stays, both reference phones (k 0.517, 0.527) come out small, and the reference layout's Tiếp is 340 wide (x 922–1262) and the small layout's 450 (x 812–1262), both `pad_min` tall.
+8. **GIVEN** k 0.40, 0.488 or a reference phone (small layout) and the right pick, **WHEN** frame-stepped, **THEN** the wrong cards are fully gone before Tiếp's first frame, and a tap where a wrong card was does nothing until Tiếp shows.
+9. **GIVEN** the ending's last Tiếp tapped twice 0.3 s apart, **WHEN** the quiz appears, **THEN** the second tap picks no card. **GIVEN** k 0.40, 0.488 or a reference phone (all small layout), **WHEN** Tiếp is tapped twice 0.3 s apart on a question, **THEN** the second tap picks no card on the next question. The no-lock case (reference layout, k ≥ ≈ 0.534: question to question only the debounce) is covered by the unit sweep in AC10.
