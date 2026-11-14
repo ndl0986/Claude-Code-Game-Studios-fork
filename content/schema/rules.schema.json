@@ -142,9 +142,51 @@
                       600,
                       800
                     ]
+                  },
+                  "class": {
+                    "description": "R8d: the field's size class (Language Rule 6).",
+                    "enum": [
+                      "heading",
+                      "body",
+                      "button",
+                      "label"
+                    ]
                   }
                 }
               }
+            }
+          }
+        },
+        "min_px": {
+          "description": "R8d (rules 1.2, Language Rule 6): the minimum font_px per size class.",
+          "type": "object",
+          "required": [
+            "heading",
+            "body",
+            "button",
+            "label"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "heading": {
+              "type": "integer",
+              "minimum": 12,
+              "maximum": 96
+            },
+            "body": {
+              "type": "integer",
+              "minimum": 12,
+              "maximum": 96
+            },
+            "button": {
+              "type": "integer",
+              "minimum": 12,
+              "maximum": 96
+            },
+            "label": {
+              "type": "integer",
+              "minimum": 12,
+              "maximum": 96
             }
           }
         }
