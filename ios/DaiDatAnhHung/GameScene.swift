@@ -70,6 +70,7 @@ final class GameScene: SKScene {
         relayout()
         #if DEBUG
         debugAttach(view)
+        ui.speed = CGFloat(debugTimeScale) // `-timeScale`: the UI's actions (quiz fade/glide) slow down with the sim (r9 case A)
         #endif
     }
 
@@ -117,8 +118,13 @@ final class GameScene: SKScene {
         #endif
         last = currentTime; acc += dt; clock += dt
         while acc >= step {
-            let input = pads.take()
+            var input = pads.take()
             #if DEBUG
+            // `-autoplay YES` (r9 UI case D): the GameCore bot plays the play beats, only while no story box or
+            // warning is up; every story, ask and quiz press stays a real touch. Debug builds only.
+            if debugAutoplay, game.screen == .play, !game.skipWarning, !Self.storyPhases.contains(game.play.phase) {
+                debugBotStep += 1; input = botInput(game.play, step: debugBotStep)
+            }
             debugHeld = input.held
             #endif
             game.step(step, input)
@@ -176,6 +182,9 @@ final class GameScene: SKScene {
             let p = ydown(t)
             if padsLive, let a = layout.action(at: p.x, p.y, visible: game.play.visiblePads) { pads.apply(.began, id: tid(t), action: a, live: lv); padTouches[tid(t)] = t; continue } // pads fire on touch-down
             if let b = buttons.last(where: { $0.rect.contains(p) }) { menuTouches[tid(t)] = b.id }
+            #if DEBUG
+            debugLog.append((String(format: "touch:%.0f,%.0f:%@", p.x, p.y, buttons.last(where: { $0.rect.contains(p) })?.id ?? "-"), t.timestamp)); debugLog = Array(debugLog.suffix(120))
+            #endif
         }
         pads.reconcile(live: lv)
     }
@@ -994,6 +1003,22 @@ final class GameScene: SKScene {
     /// "Tiếp" presses: the activating touch's UITouch.timestamp and whether the press advanced (B1).
     private var debugPresses: [(TimeInterval, Bool)] = []
     private var debugFrame = 0
+    private lazy var debugAutoplay = UserDefaults.standard.bool(forKey: "autoplay")
+    private var debugBotStep = 0
+    /// r9 UI case A: the quiz pick animation sampled every frame after the actions ran (fade + glide), per
+    /// question: frames with a card moving, the lowest bottom edge (world px, y down) of every quiz node, and the
+    /// right card's distinct positions.
+    private var quizMotion: (q: Int, frames: Int, maxBottom: Double, glide: [[Double]]) = (-1, 0, 0, [])
+    override func didFinishUpdate() {
+        guard game.screen == .quiz, let q = game.quiz, !q.isFinished, cardNodes.contains(where: { $0.hasActions() }) else { return }
+        if quizMotion.q != q.index { quizMotion = (q.index, 0, 0, []) }
+        quizMotion.frames += 1
+        quizMotion.maxBottom = max(quizMotion.maxBottom, 720 - Double(ui.calculateAccumulatedFrame().minY))
+        if let ok = q.okIndex, let c = cardNodes.first(where: { $0.name == "\(ok)" }) {
+            let at = [Double(c.position.x).rounded(), (720 - Double(c.position.y)).rounded()]
+            if quizMotion.glide.last != at { quizMotion.glide.append(at) }
+        }
+    }
     private lazy var debugTimeScale: Double = { let v = UserDefaults.standard.double(forKey: "timeScale"); return v > 0 ? v : 1 }()
     /// Context changes (screen / story line / phase / beat / line) with the press-clock time they were first drawn.
     private var debugLog: [(String, TimeInterval)] = []
@@ -1045,9 +1070,14 @@ final class GameScene: SKScene {
             "log": debugLog.map { ["place": $0.0, "t": $0.1] },
         ]
         var extra: [String: Any] = [:]
+        if game.screen == .quiz { // r9 case B: where Tiếp lies over the third card slot (small layout), the per-question lock's spot
+            let ql = QuizLayout(pad: layout), n = ql.next, c = ql.slots[2]
+            let x0 = max(n.x, c.x), x1 = min(n.right, c.right), y0 = max(n.y, c.y), y1 = min(n.bottom, c.bottom)
+            extra["quiz_overlap"] = ql.small && x1 > x0 && y1 > y0 ? debugNorm((x0 + x1) / 2, (y0 + y1) / 2) + [y1 - y0] : NSNull()
+        }
         if let q = game.quiz, !q.isFinished {
             extra["quiz"] = ["index": q.index, "correct_slot": q.order.firstIndex(of: q.current.correctIndex) ?? -1,
-                             "picked": q.okIndex != nil, "can_advance": game.quizCanAdvance]
+                             "picked": q.okIndex != nil, "can_advance": game.quizCanAdvance, "wrong": q.wrong.count]
         }
         if game.screen == .title {
             let tl = TitleLayout(pad: layout, debug: game.isDebug)
@@ -1061,6 +1091,8 @@ final class GameScene: SKScene {
         extra["lock_until"] = game.lockUntilForDebug ?? NSNull() // the rolling lock's end, for the UI touch cases (iOS-R8-01)
         extra["fires"] = debugFires.map { ["id": $0.0, "t": $0.1, "locked": $0.2] }
         extra["muted"] = game.muted
+        extra["quiz_motion"] = ["q": quizMotion.q, "frames": quizMotion.frames, "max_bottom": quizMotion.maxBottom, "glide": quizMotion.glide]
+        extra["debug_jumped"] = game.debugJumped
         let state = base.merging(extra) { a, _ in a }
         if let d = try? JSONSerialization.data(withJSONObject: state, options: [.sortedKeys]) { l.accessibilityValue = String(data: d, encoding: .utf8) }
     }

@@ -49,8 +49,9 @@ class UITestBase: XCTestCase {
     func note(_ name: String, _ text: String) {
         let a = XCTAttachment(string: text); a.name = name; a.lifetime = .keepAlways; add(a)
     }
-    func log(_ s: [String: Any]) -> [(String, Double)] {
-        (s["log"] as? [[String: Any]] ?? []).map { ($0["place"] as? String ?? "", $0["t"] as? Double ?? 0) }
+    /// The app's place log (and fires); its touch-down entries ("touch:x,y:button", r9) only when `touches`.
+    func log(_ s: [String: Any], touches: Bool = false) -> [(String, Double)] {
+        (s["log"] as? [[String: Any]] ?? []).map { ($0["place"] as? String ?? "", $0["t"] as? Double ?? 0) }.filter { touches || !$0.0.hasPrefix("touch:") }
     }
 }
 
@@ -185,10 +186,9 @@ final class MoreCasesUITests: UITestBase {
         shot("B7 after the mash")
     }
 
-    /// A short run: Bỏ qua → the skip warning → Keep reading; the quiz answered right ×5; results 3★; a
-    /// relaunch keeps the stars on the title card. The quiz is reached by a debug jump, so the medal (D-07: a
-    /// fully read and played run) is NOT asserted here.
-    func test_skip_warning_keep_reading_then_stars_survive_a_relaunch() throws {
+    /// A short run: Bỏ qua → the skip warning → Keep reading; the quiz answered right ×5; results 3★. The quiz is
+    /// reached by a debug jump, so (r9) nothing is saved: after a relaunch the title shows 0★ and no medal.
+    func test_skip_warning_keep_reading_then_a_jumped_quiz_saves_nothing() throws {
         launch(["-startScreen", "intro", "-resetProgress", "YES"])
         Thread.sleep(forTimeInterval: 0.8) // past the entry lock
         try XCTUnwrap(button("skip")).tap()
@@ -214,8 +214,12 @@ final class MoreCasesUITests: UITestBase {
         quit()
         launch([])
         let t = waitFor(5) { $0["title_card"] != nil }
-        XCTAssertEqual((t["title_card"] as? [String: Any])?["stars"] as? Int, 3, "the saved best survives a relaunch")
-        note("run", "quiz reached by a debug jump: the medal is not asserted (D-07)")
+        // r9 (iOS QC r8 medal finding): a debug-jumped run never writes progress, so the title shows no stars and no
+        // medal; a real run's save surviving a relaunch is R9CasesUITests.test_D (Start, no jumps)
+        let card = t["title_card"] as? [String: Any]
+        XCTAssertEqual(card?["stars"] as? Int, 0, "the jumped quiz saved no stars")
+        XCTAssertEqual(card?["medal"] as? Bool, false, "and no medal")
+        note("run", "quiz reached by a debug jump: nothing saved (r9)")
         shot("title after relaunch")
     }
 
@@ -420,5 +424,221 @@ final class R9CasesUITests: UITestBase {
         let resumed = try XCTUnwrap(fires.last { $0["id"] as? String == "resume" }?["t"] as? Double, "resume pressed")
         let walk = try XCTUnwrap(at(entries, "walkTo", beat: 4, after: resumed), "the walk started")
         XCTAssertGreaterThanOrEqual(walk - resumed, 0.8 - 0.05, "≥ 0.8 s of banner-up after the resume")
+    }
+
+    /// r9 screen pass (evidence, game-dev-ios pre-freeze): the Cờ hint hand, the banner rise frames and the partner's
+    /// placement cases (mission-flow 7c): (a) facing right, front spot; (b) near the left edge facing left, beyond the
+    /// banner; (c) at the right cap facing right; (d) after a resume, full opacity. Screenshots only, plus the hold log.
+    func test_r9_screens_banner_partner_and_hand() throws {
+        func hx(_ s: [String: Any]) -> String { String(format: "hero_x %.0f cam %.0f (screen x %.0f)", s["hero_x"] as? Double ?? 0, s["cam"] as? Double ?? 0, (s["hero_x"] as? Double ?? 0) - (s["cam"] as? Double ?? 0)) }
+        // the Cờ hand (Hints Rule 6): after hint_delay with no tap
+        launch(["-startScreen", "play", "-beat", "4", "-stage", "finish"])
+        Thread.sleep(forTimeInterval: 5); shot("r9 Cờ hint hand"); note("hand", "\(state()["hints"] ?? "?")"); quit()
+        // (a) facing right, front spot; the rise frames at ×0.1
+        launch(["-startScreen", "play", "-beat", "4", "-stage", "finish", "-timeScale", "0.1"])
+        note("(a) start", hx(state())); pad("special").tap()
+        for (wait, name) in [(0.6, "0.06 s: partner fading in, banner low"), (2.0, "0.26 s: fade done, banner rising"), (2.5, "0.51 s"), (2.5, "0.76 s: banner up, partner in place")] {
+            Thread.sleep(forTimeInterval: wait); shot("r9 (a) rise \(name)")
+        }
+        quit()
+        // (b) near the left edge facing left: the partner beyond the banner
+        launch(["-startScreen", "play", "-beat", "4", "-stage", "finish", "-timeScale", "0.25"])
+        pad("left").press(forDuration: 9); note("(b) start", hx(state())); pad("special").tap()
+        Thread.sleep(forTimeInterval: 0.5); shot("r9 (b) left edge facing left, 0.1 s")
+        Thread.sleep(forTimeInterval: 2.3); shot("r9 (b) left edge facing left, banner up")
+        quit()
+        // (c) at the right cap facing right
+        launch(["-startScreen", "play", "-beat", "4", "-stage", "finish", "-timeScale", "0.25"])
+        pad("right").press(forDuration: 9); note("(c) start", hx(state())); pad("special").tap()
+        Thread.sleep(forTimeInterval: 0.5); shot("r9 (c) right cap facing right, 0.1 s")
+        Thread.sleep(forTimeInterval: 2.3); shot("r9 (c) right cap facing right, banner up")
+        quit()
+        // (d) pause in the hold, resume: banner up, partner at full opacity
+        launch(["-startScreen", "play", "-beat", "4", "-stage", "finish"])
+        let pause = try XCTUnwrap(button("pause"))
+        pad("special").tap(); Thread.sleep(forTimeInterval: 0.1); pause.tap()
+        _ = waitFor(3) { $0["screen"] as? String == "pause" }
+        try XCTUnwrap(button("resume")).tap(); shot("r9 (d) just after resume")
+    }
+
+    // MARK: r9 cases for the iOS QC r8 NOT ASSESSED items (no touch path on QC's Device Hub)
+
+    func quiz(_ s: [String: Any]) -> [String: Any] { s["quiz"] as? [String: Any] ?? [:] }
+    func fires(_ s: [String: Any]) -> [(id: String, t: Double, locked: Bool)] {
+        (s["fires"] as? [[String: Any]] ?? []).map { ($0["id"] as? String ?? "", $0["t"] as? Double ?? 0, $0["locked"] as? Bool ?? false) }
+    }
+    var uptime: Double { ProcessInfo.processInfo.systemUptime } // the simulator's processes share the press clock
+    func waitUntil(_ t: Double) { let d = t - uptime; if d > 0 { Thread.sleep(forTimeInterval: d) } }
+
+    /// Answers the current question right (after the lock) and waits for Tiếp.
+    func answerRight() throws -> [String: Any] {
+        let s = waitFor(5) { self.quiz($0)["picked"] as? Bool == false }
+        let slot = try XCTUnwrap(quiz(s)["correct_slot"] as? Int)
+        Thread.sleep(forTimeInterval: 0.7) // past the entry lock
+        try XCTUnwrap(button("card\(slot)")).tap()
+        return waitFor(5) { self.quiz($0)["can_advance"] as? Bool == true }
+    }
+
+    /// A (quiz §5.2, small layout): a real right pick fades the wrong cards and glides the right card to the left
+    /// slot, and every frame of the motion stays ≤ 720 (sampled by the app every frame, after the actions ran).
+    /// A question whose right card is already in the left slot has no glide, so the case moves on to one that does.
+    func test_A_quiz_fade_and_glide_stay_inside_720() throws {
+        try quizMotion(slowMotion: false)
+    }
+
+    /// A, slow motion ×0.1: three screenshots mid-animation for QC (the fade, the glide, the end).
+    func test_A_quiz_fade_and_glide_in_slow_motion_for_screenshots() throws {
+        try quizMotion(slowMotion: true)
+    }
+
+    func quizMotion(slowMotion: Bool) throws {
+        launch(["-startScreen", "quiz"] + (slowMotion ? ["-timeScale", "0.1"] : []))
+        for _ in 0..<5 {
+            var s = waitFor(5) { self.quiz($0)["picked"] as? Bool == false }
+            let q = quiz(s), slot = try XCTUnwrap(q["correct_slot"] as? Int), index = q["index"] as? Int ?? -1
+            if slot == 0 { // no glide on this one: answer and go on
+                _ = try answerRight(); try XCTUnwrap(button("next")).tap()
+                _ = waitFor(5) { self.quiz($0)["index"] as? Int != index }
+                continue
+            }
+            Thread.sleep(forTimeInterval: slowMotion ? 6.5 : 0.7) // past the entry lock (sim time slowed ×0.1)
+            try XCTUnwrap(button("card\(slot)")).tap()
+            if slowMotion { // fade 0.2 s, glide 0.3 s → 2 s and 3 s at ×0.1
+                Thread.sleep(forTimeInterval: 1.0); shot("quiz pick, slow motion: wrong cards fading")
+                Thread.sleep(forTimeInterval: 2.5); shot("quiz pick, slow motion: right card gliding")
+            }
+            s = waitFor(slowMotion ? 20 : 5) { self.quiz($0)["can_advance"] as? Bool == true }
+            if slowMotion { shot("quiz pick, slow motion: end (Tiếp)") }
+            let m = try XCTUnwrap(s["quiz_motion"] as? [String: Any])
+            let glide = m["glide"] as? [[Double]] ?? [], bottom = m["max_bottom"] as? Double ?? .infinity
+            note("quiz motion, question \(index + 1)", "right slot \(slot); frames moving \(m["frames"] ?? "?"); max bottom \(bottom) (≤ 720); "
+                 + "glide \(glide.count) positions: " + glide.map { "(\(Int($0[0])), \(Int($0[1])))" }.joined(separator: " "))
+            XCTAssertEqual(m["q"] as? Int, index, "the motion was sampled on this question")
+            XCTAssertGreaterThanOrEqual(glide.count, 5, "the right card glided (≥ 5 distinct positions)")
+            XCTAssertLessThanOrEqual(bottom, 720, "every pixel of the motion ≤ 720")
+            if !slowMotion { shot("quiz after the glide") }
+            return
+        }
+        throw XCTSkip("no question in 5 had its right card outside the left slot")
+    }
+
+    /// B (Input Rule 13b, quiz §5.2 at small k): two quick Tiếp taps advance one question; the second tap lands on
+    /// the next question's card where it overlaps Tiếp's spot, and the per-question lock drops it (no pick, no wrong
+    /// mark). The taps go to the overlap band (Tiếp's top edge over the card's bottom), exported by the app.
+    func test_B_two_quick_next_taps_advance_one_question_and_pick_nothing() throws {
+        var misses: [String] = []
+        for attempt in 1...3 {
+            launch(["-startScreen", "quiz"])
+            let s0 = try answerRight()
+            let index = quiz(s0)["index"] as? Int ?? -1
+            // the spot where Tiếp overlaps the next question's third card (small layout); Tiếp's centre lies below
+            // the cards, so a tap there can never reach one
+            guard (s0["buttons"] as? [String: Any])?["next"] != nil, let o = s0["quiz_overlap"] as? [Double] else {
+                misses.append("no Tiếp / no overlap (small layout?)"); quit(); continue
+            }
+            let spot = point([o[0], o[1]])
+            Thread.sleep(forTimeInterval: 0.3)
+            spot.doubleTap() // two taps in one synthesized event (two tap() calls wait for idle: 1.46 s apart in r9)
+            Thread.sleep(forTimeInterval: 0.8)
+            let s = state(), q = quiz(s), f = fires(s).filter { $0.id == "next" || $0.id.hasPrefix("card") }.suffix(2)
+            note("double Tiếp, attempt \(attempt)", f.map { String(format: "%@ t %.3f locked %@", $0.id, $0.t, "\($0.locked)") }.joined(separator: "\n")
+                 + "\nindex \(index) → \(q["index"] ?? "?"); picked \(q["picked"] ?? "?"); wrong \(q["wrong"] ?? "?"); overlap \(o)\n"
+                 + log(s, touches: true).suffix(12).map { String(format: "%@ @ %.3f", $0.0, $0.1) }.joined(separator: "\n"))
+            // the second touch-down, from the app's touch log: within 0.6 s of the Tiếp press that advanced
+            let adv = try XCTUnwrap(f.last { $0.id == "next" }, "Tiếp fired")
+            let touches = log(s, touches: true).filter { $0.0.hasPrefix("touch:") && $0.1 >= adv.t - 0.3 }
+            guard touches.count >= 2, let second = touches.last, second.1 - adv.t < 0.6 else {
+                misses.append("\(touches.count) touches near Tiếp"); quit(); continue
+            }
+            // r9 finding: on this phone the band where Tiếp overlaps the next question's third card is ~1.4 world px
+            // tall, and XCUITest's doubleTap lands the second touch-down in the same event batch as the first
+            // release, before the next frame rebuilds the screen; that touch is on the old Tiếp, which is gone at
+            // its release, so nothing fires. Either way the child-visible rule holds: one advance, no pick. The
+            // per-question lock itself (a press on the new card inside 0.6 s) is covered by GameCore EveryBoxLockTests.
+            note("second tap", "\(second.0) at +\(String(format: "%.3f", second.1 - adv.t)) s after Tiếp; lock reached: \(f.contains { $0.id.hasPrefix("card") && $0.t > adv.t && $0.locked })")
+            XCTAssertEqual(q["index"] as? Int, index + 1, "one advance")
+            XCTAssertEqual(q["picked"] as? Bool, false, "the second tap picked no card")
+            XCTAssertEqual(q["wrong"] as? Int, 0, "and marked none wrong")
+            XCTAssertFalse(f.contains { $0.id.hasPrefix("card") && $0.t > adv.t && !$0.locked }, "no unlocked card press after Tiếp")
+            shot("next question after a double Tiếp")
+            return
+        }
+        throw XCTSkip("not exercised in 3 launches: " + misses.joined(separator: "; "))
+    }
+
+    /// C (Input Rule 13, the deliberate tap at 0.6 s): on an intro box, a tap just before the rolling lock's end is
+    /// dropped and one just after it advances. The case replays the rule (0.6 s, cap 1.5 s from the entry) on the
+    /// logged press times and checks every press against it.
+    func test_C_a_tap_just_before_the_lock_end_drops_and_just_after_advances() throws {
+        var misses: [String] = []
+        for attempt in 1...4 {
+            launch(["-startScreen", "intro"])
+            Thread.sleep(forTimeInterval: 1.7) // past box 0's cap
+            let next = try XCTUnwrap(button("next"))
+            next.tap() // → box 1: a new entry
+            let s1 = waitFor(3) { $0["story_line"] as? Int == 1 }
+            let e = try XCTUnwrap(s1["entered_at"] as? Double)
+            let sent1 = uptime; next.tap() // tap 1: inside the lock
+            let f1 = try XCTUnwrap(fires(waitFor(2) { s in self.fires(s).contains { $0.t > e && $0.id == "next" } }).last { $0.id == "next" })
+            let latency = max(0, f1.t - sent1)
+            var until = min(max(e + 0.6, f1.t + 0.6), e + 1.5)
+            waitUntil(until - 0.1 - latency); next.tap() // tap 2: aimed 0.1 s before the lock's end
+            let f2 = fires(waitFor(2) { s in self.fires(s).filter { $0.t > e && $0.id == "next" }.count >= 2 }).filter { $0.t > e && $0.id == "next" }
+            if let t2 = f2.dropFirst().first, t2.locked { until = min(max(until, t2.t + 0.6), e + 1.5) }
+            waitUntil(until + 0.1 - latency); next.tap() // tap 3: aimed 0.1 s after it
+            let s = waitFor(3) { $0["story_line"] as? Int == 2 }
+            let presses = fires(s).filter { $0.t > e && $0.id == "next" }
+            // replay the rule on the logged times
+            var end = e + 0.6, nearBefore = false, nearAfter = false, lines: [String] = []
+            for p in presses {
+                let expect = p.t < end
+                lines.append(String(format: "next t %+.3f s, lock end %+.3f, locked %@ (rule: %@)", p.t - e, end - e, "\(p.locked)", "\(expect)"))
+                XCTAssertEqual(p.locked, expect, String(format: "press at +%.3f s against the rule (attempt %d)", p.t - e, attempt))
+                if expect { if end - p.t <= 0.2 { nearBefore = true }; end = min(max(end, p.t + 0.6), e + 1.5) }
+                else { if p.t - end <= 0.25 { nearAfter = true }; break }
+            }
+            note("deliberate tap, attempt \(attempt)", String(format: "entered_at %.3f; tap latency %.3f s\n", e, latency) + lines.joined(separator: "\n"))
+            XCTAssertEqual(s["story_line"] as? Int, 2, "the press after the lock advanced (attempt \(attempt))")
+            if nearBefore && nearAfter { shot("intro box 3 after the deliberate tap"); return }
+            misses.append("before \(nearBefore), after \(nearAfter)"); quit()
+        }
+        throw XCTSkip("not exercised in 4 launches (no press within 0.2 s before and 0.25 s after the lock end): " + misses.joined(separator: "; "))
+    }
+
+    /// D (D-07 medal, Input Rule 13): a real run from a fresh install's Start, no debug jumps. Every story box,
+    /// card, caption, dialogue line and ask is tapped every ~0.35 s (a mash) and the quiz is answered by real
+    /// taps; `-autoplay` plays only the play beats. The medal is earned and, after a relaunch, the title shows 3★
+    /// and the medal.
+    func test_D_a_mashed_real_run_keeps_the_medal_and_saves_it() throws {
+        launch(["-resetProgress", "YES", "-autoplay", "YES"])
+        _ = waitFor(5) { ($0["buttons"] as? [String: Any])?["start"] != nil }
+        try XCTUnwrap(button("start")).tap()
+        let end = Date().addingTimeInterval(400)
+        var s = state(), taps = 0, warnings = 0
+        while Date() < end {
+            s = state()
+            let screen = s["screen"] as? String ?? "", btns = s["buttons"] as? [String: Any] ?? [:]
+            if screen == "results" { break }
+            if s["skip_warning"] as? Bool == true { warnings += 1 }
+            if screen == "quiz", quiz(s)["picked"] as? Bool == false, let slot = quiz(s)["correct_slot"] as? Int, btns["card\(slot)"] != nil {
+                button("card\(slot)")?.tap(); taps += 1
+            } else if btns["ask"] != nil { button("ask")?.tap(); taps += 1 }
+            else if btns["next"] != nil { button("next")?.tap(); taps += 1 }
+            Thread.sleep(forTimeInterval: 0.35)
+        }
+        note("real run", "taps \(taps); skip warning seen \(warnings) times; debug_jumped \(s["debug_jumped"] ?? "?")\n"
+             + log(s).map { String(format: "%@ @ %.3f", $0.0, $0.1) }.joined(separator: "\n"))
+        XCTAssertEqual(s["screen"] as? String, "results", "the run reached the results")
+        XCTAssertEqual(s["debug_jumped"] as? Bool, false, "no debug jump")
+        XCTAssertEqual(warnings, 0, "the mash never opened the skip warning")
+        XCTAssertEqual(s["medal_earned"] as? Bool, true, "mashing is not skipping: the medal is earned")
+        XCTAssertEqual(s["stars"] as? Int, 3)
+        shot("results after a mashed real run")
+        quit()
+        launch([])
+        let t = waitFor(5) { $0["title_card"] != nil }, card = t["title_card"] as? [String: Any]
+        XCTAssertEqual(card?["stars"] as? Int, 3, "3★ saved")
+        XCTAssertEqual(card?["medal"] as? Bool, true, "the medal saved")
+        shot("title after relaunch: 3★ + medal")
     }
 }

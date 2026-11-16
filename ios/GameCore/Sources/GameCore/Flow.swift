@@ -6,6 +6,13 @@ public protocol KeyValueStore: AnyObject {
     func set(_ value: Any?, forKey: String)
 }
 
+/// A store that keeps nothing (a debug-jumped run's progress writes).
+final class DiscardStore: KeyValueStore, @unchecked Sendable {
+    static let shared = DiscardStore()
+    func object(forKey: String) -> Any? { nil }
+    func set(_ value: Any?, forKey: String) {}
+}
+
 /// Saved data, the same keys and meaning on both apps (D-16, Hero progression GDD rule 11):
 /// `lang`, `completed.<id>`, `seen_open.<id>`, `stars.<id>` (best, never lowered),
 /// `medal.<id>` (never cleared). Nothing else is saved.
@@ -74,6 +81,12 @@ public final class Game {
     public let isDebug: Bool
     public let progression: Progression
     let store: KeyValueStore
+    /// A debug screen jump (`-startScreen`, any `debugStart`) happened in this launch. Such a run is not a real run
+    /// (D-07: nothing was read or played to get there), so it never writes progress (stars, medal, completed,
+    /// seen_open) to the device's store; the VI|EN setting is still saved. Leader rule, iOS QC r8 medal finding.
+    public private(set) var debugJumped = false
+    /// Where progress is written: the device's store, or nowhere after a debug jump.
+    var progressStore: KeyValueStore { debugJumped ? DiscardStore.shared : store }
 
     public private(set) var screen: Screen = .title
     public private(set) var progress: Progress
@@ -153,7 +166,7 @@ public final class Game {
 
     func go(_ s: Screen) { screen = s; t = 0; skipWarning = false; if s == .title { titleLoaded() } }
     /// Title (the map in the slice) loads: every open hero is saved as seen open (never re-locks).
-    func titleLoaded() { progress.markSeenOpen(progression.openHeroes(progress), store: store) }
+    func titleLoaded() { progress.markSeenOpen(progression.openHeroes(progress), store: progressStore) }
     func reset() {
         play = PlayState(tuning: tuning, beats: hero.mission.beats, seed: tuning.seed)
         quiz = nil; stars = 0; skipped = false; warningAccepted = false; skipWarning = false; unlockedHero = nil
@@ -338,8 +351,8 @@ public final class Game {
         let next = progression.next(after: heroId)
         let wasOpen = next.map { progression.isOpen($0, progress) } ?? true
         let hadMedal = medalAlready
-        progress.recordQuiz(hero: heroId, stars: stars, medalEarned: !skipped, store: store)
-        progress.markSeenOpen(progression.openHeroes(progress), store: store)
+        progress.recordQuiz(hero: heroId, stars: stars, medalEarned: !skipped, store: progressStore)
+        progress.markSeenOpen(progression.openHeroes(progress), store: progressStore)
         medalEarned = progress.medal.contains(heroId)
         medalNew = medalEarned && !hadMedal
         unlockedHero = (!wasOpen ? next : nil).flatMap { id in content.heroes.first { $0.mission.hero.id == id } }
@@ -375,6 +388,7 @@ public final class Game {
     public func debugStart(screen name: String, q: Int?, beat: Int?, stage: String?, stars s: Int?) {
         if name == "skipwarn" { debugStart(screen: "intro", q: q, beat: beat, stage: "skipwarning", stars: s); return } // Android's name
         guard isDebug, let target = Screen(rawValue: name) ?? (name == "caption" ? .play : nil) else { return }
+        debugJumped = true // never cleared in this launch: a replay after a jump is still not a real run
         reset()
         switch target {
         case .quiz:
