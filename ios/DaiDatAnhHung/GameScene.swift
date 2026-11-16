@@ -50,7 +50,7 @@ final class GameScene: SKScene {
 
     init(game: Game, audio: Audio) {
         self.game = game; self.audio = audio
-        hero = HeroNode(scale: 180 / HeroNode.unitHeight, reach: game.tuning["attack_range"])
+        hero = HeroNode(scale: HeroNode.heroScale, reach: game.tuning["attack_range"])
         super.init(size: CGSize(width: 1280, height: 720))
         // Input Rule 1: the 1280×720 world is fitted to the SAFE rect. The scene fills the whole view
         // (resizeFill, 1 unit = 1 pt) and `root` carries the world, scaled by k and placed in the safe rect;
@@ -303,9 +303,10 @@ final class GameScene: SKScene {
             fx.addChild(n)
         }
         if let pt = p.partner {
-            // the follower look at 0.62 (r9 leader call, parity: never a second hero); in the finish hold (Rule 7c) it
-            // walks in with its staff upright and fades in over 0.2 s when it starts on screen
-            let n = HeroNode(scale: 0.62, reach: game.tuning["enemy_reach"] - game.tuning["stand_gap"], look: .follower)
+            // the follower look at 0.62 × the hero's height (look sheet D-18, r11 leader call: never a second hero; the
+            // stick keeps its world reach); in the finish hold (Rule 7c) it walks in with its staff upright and fades in
+            // over 0.2 s when it starts on screen
+            let n = HeroNode(scale: 0.62 * HeroNode.heroScale, reach: game.tuning["enemy_reach"] - game.tuning["stand_gap"], look: .follower)
             let hold = p.finishHold
             n.update(face: pt.face, walk: hold != nil && pt.moving, defend: false,
                      attack: hold != nil ? nil : (pt.state == .strike ? 0.6 : (pt.state == .windup ? 0.05 : nil)), hurt: false, t: t, staffUp: hold != nil)

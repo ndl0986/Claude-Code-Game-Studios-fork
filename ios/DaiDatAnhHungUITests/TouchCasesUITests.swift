@@ -353,23 +353,27 @@ final class R8CasesUITests: UITestBase {
 
 /// r9 cases: Mission flow Rule 7c (AC32), the training finish's banner moment, with real touches.
 final class R9CasesUITests: UITestBase {
-    /// The place log's time for the first entry with `prefix` after `t`.
-    func at(_ entries: [(String, Double)], _ prefix: String, after t: Double = 0) -> Double? {
-        entries.first { !$0.0.hasPrefix("fire:") && $0.0.hasPrefix(prefix) && $0.1 >= t }?.1
+    /// The place log's time for the first entry (not a fire) on `screen` in `phase` of beat `beat` at or after `t`
+    /// (a place is "screen|storyLine|phase|beat|cardLine|captionLine|lineIndex").
+    func at(_ entries: [(String, Double)], screen: String = "play", _ phase: String, beat: Int, after t: Double = 0) -> Double? {
+        entries.first {
+            let f = $0.0.split(separator: "|", omittingEmptySubsequences: false).map(String.init)
+            return !$0.0.hasPrefix("fire:") && f.count >= 4 && f[0] == screen && f[2] == phase && f[3] == "\(beat)" && $0.1 >= t
+        }?.1
     }
 
-    /// AC32: Cờ tapped, then the Cờ spot tapped every 0.2 s: the walk starts ≥ 1.5 s after the Cờ tap and no tap
-    /// carries into it.
+    /// AC32: Cờ tapped, then the Cờ spot tapped every 0.2 s through the hold: the walk starts ≥ 1.5 s after the
+    /// Cờ tap and no tap carries into it.
     func test_the_finish_hold_lasts_and_drops_taps() throws {
         launch(["-startScreen", "play", "-beat", "4", "-stage", "finish"])
         let flag = pad("special")
         flag.tap()
-        let end = Date().addingTimeInterval(2.4)
+        let end = Date().addingTimeInterval(1.7) // past finish_hold (1.5)
         while Date() < end { let t0 = Date(); flag.tap(); let left = 0.2 - Date().timeIntervalSince(t0); if left > 0 { Thread.sleep(forTimeInterval: left) } }
-        let s = state(), entries = log(s)
+        let s = waitFor(3) { $0["phase"] as? String == "walkTo" }, entries = log(s)
         note("finish hold log", entries.map { String(format: "%@ @ %.3f", $0.0, $0.1) }.joined(separator: "\n"))
-        let hold = try XCTUnwrap(at(entries, "play|0|beatEnd|3|"), "the hold started")
-        let walk = try XCTUnwrap(at(entries, "play|0|walkTo|4|", after: hold), "the walk started")
+        let hold = try XCTUnwrap(at(entries, "beatEnd", beat: 3), "the hold started")
+        let walk = try XCTUnwrap(at(entries, "walkTo", beat: 4, after: hold), "the walk started")
         XCTAssertGreaterThanOrEqual(walk - hold, 1.5 - 0.05, "the banner moment held finish_hold")
         XCTAssertEqual(s["held"] as? [String], [], "nothing held into the walk")
         shot("after the finish hold")
@@ -378,17 +382,19 @@ final class R9CasesUITests: UITestBase {
     /// AC32: pause 0.3 s into the hold, then resume: the banner-up still lasts ≥ 0.8 s after the resume.
     func test_a_resume_restarts_the_hold_to_rise_done() throws {
         launch(["-startScreen", "play", "-beat", "4", "-stage", "finish"])
-        pad("special").tap()
+        let flag = pad("special"), pause = try XCTUnwrap(button("pause")) // looked up first, so the pause lands 0.3 s in
+        flag.tap()
         Thread.sleep(forTimeInterval: 0.3)
-        try XCTUnwrap(button("pause")).tap()
+        pause.tap()
         _ = waitFor(3) { $0["screen"] as? String == "pause" }
         shot("paused in the hold")
         try XCTUnwrap(button("resume")).tap()
         let s = waitFor(4) { $0["phase"] as? String == "walkTo" }
         let entries = log(s), fires = s["fires"] as? [[String: Any]] ?? []
         note("resume log", entries.map { String(format: "%@ @ %.3f", $0.0, $0.1) }.joined(separator: "\n"))
+        XCTAssertNotNil(at(entries, screen: "pause", "beatEnd", beat: 3), "the pause opened inside the hold")
         let resumed = try XCTUnwrap(fires.last { $0["id"] as? String == "resume" }?["t"] as? Double, "resume pressed")
-        let walk = try XCTUnwrap(at(entries, "play|0|walkTo|4|", after: resumed), "the walk started")
+        let walk = try XCTUnwrap(at(entries, "walkTo", beat: 4, after: resumed), "the walk started")
         XCTAssertGreaterThanOrEqual(walk - resumed, 0.8 - 0.05, "≥ 0.8 s of banner-up after the resume")
     }
 }

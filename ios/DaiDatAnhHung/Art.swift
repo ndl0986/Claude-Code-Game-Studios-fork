@@ -14,6 +14,8 @@ final class HeroNode: SKNode {
     /// (`specHeight`, HUD spec §3.3) with `reach`: the staff and swing arc keep that world length
     /// (attack_range for the hero), so a strike that lands looks like it lands. Render only.
     static let unitHeight = 261.0
+    /// The hero is drawn 180 world px tall (HUD spec §3.3); the training partner at 0.62 × that (look sheet D-18).
+    static let heroScale = 180 / unitHeight
 
     /// The figure's palette (look sheet d18). The training partner wears the follower look so a child never sees two
     /// heroes (r9 leader call, parity with Android): straw tunic, muted sash, plain topknot, no headband or tails.
