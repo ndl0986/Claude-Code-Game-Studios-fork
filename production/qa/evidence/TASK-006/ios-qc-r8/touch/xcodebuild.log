@@ -1,0 +1,2043 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test-without-building -xctestrun /Users/luannguyend/orca/workspaces/Claude-Code-Game-Studios-fork/game-dev-001/production/qa/builds/TASK-006-ios-c388736/DaiDatAnhHung_iphonesimulator27.1-arm64.xctestrun -destination id=E9F515E9-58F2-4A92-ABEF-C5CD59CE8183 "-only-testing:DaiDatAnhHungUITests" -test-timeouts-enabled YES -default-test-execution-time-allowance 420 -maximum-test-execution-time-allowance 480 -resultBundlePath /Users/luannguyend/orca/workspaces/Claude-Code-Game-Studios-fork/game-qc-ios/production/qa/evidence/TASK-006/ios-qc-r8/touch/result.xcresult
+
+Writing result bundle at path:
+	/Users/luannguyend/orca/workspaces/Claude-Code-Game-Studios-fork/game-qc-ios/production/qa/evidence/TASK-006/ios-qc-r8/touch/result.xcresult
+
+2026-11-16 09:21:57.662 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:22:00.786554+0700 DaiDatAnhHungUITests-Runner[39010:1899735] [Default] Running tests...
+    t =      nans Interface orientation changed to Portrait
+Test Suite 'All tests' started at 2026-11-16 09:22:05.938.
+Test Suite 'DaiDatAnhHungUITests.xctest' started at 2026-11-16 09:22:05.939.
+Test Suite 'MoreCasesUITests' started at 2026-11-16 09:22:05.939.
+Test Case '-[DaiDatAnhHungUITests.MoreCasesUITests test_a_tap_on_the_title_card_does_nothing]' started.
+    t =     0.01s Start Test at 2026-11-16 09:22:05.951
+objc[39010]: Class UIAccessibilityLoaderWebShared is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_24A434/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x103384398) and /Library/Developer/CoreSimulator/Volumes/iOS_24A434/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x1062e8310). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+    t =     0.29s Set Up
+    t =     0.29s     Setting device orientation to Landscape Left
+    t =     0.30s         Device orientation changed to Landscape Left
+    t =     0.36s         Wait for com.apple.springboard to idle
+    t =     0.44s Open com.galaxyandsun.daidatanhhung
+    t =     0.44s     Launch com.galaxyandsun.daidatanhhung
+2026-11-16 09:22:06.771 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:22:06.771 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:22:06.793 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     1.66s         Interface orientation changed to Landscape Right
+    t =     1.68s         Setting up automation session
+    t =     4.12s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     5.65s Waiting 15.0s for "debugState" Any to exist
+    t =     6.70s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =     6.70s         Checking existence of `"debugState" Any`
+    t =     7.33s Find the "debugState" Any
+    t =     7.52s Find the "debugState" Any
+    t =     7.55s Find the "debugState" Any
+    t =     7.58s Tap Window (First Match)[0.50, 0.35]
+    t =     7.58s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.58s     Find the Window (First Match)
+    t =     7.59s     Check for interrupting elements affecting Window
+    t =     7.63s     Synthesize event
+    t =     7.63s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.64s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.66s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.10s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.91s Find the "debugState" Any
+    t =     9.06s Added attachment named 'title after a card tap'
+    t =     9.06s Tear Down
+Test Case '-[DaiDatAnhHungUITests.MoreCasesUITests test_a_tap_on_the_title_card_does_nothing]' passed (9.365 seconds).
+Test Case '-[DaiDatAnhHungUITests.MoreCasesUITests test_an_attack_mash_through_the_beat_end_keeps_the_first_ending_box]' started.
+    t =     0.00s Start Test at 2026-11-16 09:22:15.317
+    t =     0.02s Set Up
+    t =     0.02s     Setting device orientation to Landscape Left
+    t =     0.03s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     0.04s Open com.galaxyandsun.daidatanhhung
+    t =     0.04s     Launch com.galaxyandsun.daidatanhhung
+    t =     0.04s         Terminate com.galaxyandsun.daidatanhhung:40111
+2026-11-16 09:22:15.366 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:22:15.366 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:22:15.369 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     0.19s             Interface orientation changed to Portrait
+2026-11-16 09:22:16.366 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:22:16.366 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:22:16.369 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     1.20s         Interface orientation changed to Landscape Right
+    t =     1.27s         Setting up automation session
+    t =     3.61s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     4.89s Waiting 15.0s for "debugState" Any to exist
+    t =     5.94s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =     5.95s         Checking existence of `"debugState" Any`
+    t =     6.03s Find the "debugState" Any
+    t =     6.06s Find the "debugState" Any
+    t =     6.09s Tap Window (First Match)[0.81, 0.78]
+    t =     6.09s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.09s     Find the Window (First Match)
+    t =     6.10s     Check for interrupting elements affecting Window
+    t =     6.14s     Synthesize event
+    t =     6.14s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.15s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.17s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.46s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.47s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.81, 0.78]
+    t =     6.47s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.48s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.49s     Check for interrupting elements affecting Window
+    t =     6.52s     Synthesize event
+    t =     6.52s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.55s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.58s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.88s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.89s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.81, 0.78]
+    t =     6.89s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.89s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.91s     Check for interrupting elements affecting Window
+    t =     6.96s     Synthesize event
+    t =     6.96s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.98s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.98s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.28s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.29s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.81, 0.78]
+    t =     7.29s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.30s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.30s     Check for interrupting elements affecting Window
+    t =     7.33s     Synthesize event
+    t =     7.33s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.34s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.35s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.64s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.66s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.81, 0.78]
+    t =     7.66s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.66s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.66s     Check for interrupting elements affecting Window
+    t =     7.70s     Synthesize event
+    t =     7.70s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.72s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.73s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.02s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.03s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.81, 0.78]
+    t =     8.03s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.03s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.04s     Check for interrupting elements affecting Window
+    t =     8.07s     Synthesize event
+    t =     8.07s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.09s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.10s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.38s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.40s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.81, 0.78]
+    t =     8.40s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.40s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.42s     Check for interrupting elements affecting Window
+    t =     8.45s     Synthesize event
+    t =     8.45s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.47s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.48s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.77s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.78s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.81, 0.78]
+    t =     8.78s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.78s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.79s     Check for interrupting elements affecting Window
+    t =     8.83s     Synthesize event
+    t =     8.83s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.85s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.86s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.15s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.16s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.81, 0.78]
+    t =     9.16s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.16s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.18s     Check for interrupting elements affecting Window
+    t =     9.21s     Synthesize event
+    t =     9.21s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.22s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.23s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.52s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.53s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.81, 0.78]
+    t =     9.53s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.54s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.55s     Check for interrupting elements affecting Window
+    t =     9.58s     Synthesize event
+    t =     9.58s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.61s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.64s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.93s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.94s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.81, 0.78]
+    t =     9.94s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.95s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.96s     Check for interrupting elements affecting Window
+    t =     9.98s     Synthesize event
+    t =     9.98s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.99s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.00s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.30s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    10.31s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.81, 0.78]
+    t =    10.31s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    10.31s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.32s     Check for interrupting elements affecting Window
+    t =    10.34s     Synthesize event
+    t =    10.34s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.35s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.36s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.65s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    10.66s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.81, 0.78]
+    t =    10.66s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    10.66s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.67s     Check for interrupting elements affecting Window
+    t =    10.69s     Synthesize event
+    t =    10.69s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.70s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.71s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.99s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    11.00s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.81, 0.78]
+    t =    11.00s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    11.00s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.01s     Check for interrupting elements affecting Window
+    t =    11.03s     Synthesize event
+    t =    11.03s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.04s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.05s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.33s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    11.34s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.81, 0.78]
+    t =    11.34s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    11.34s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.35s     Check for interrupting elements affecting Window
+    t =    11.37s     Synthesize event
+    t =    11.38s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.39s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.40s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.71s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    11.76s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.81, 0.78]
+    t =    11.76s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    11.78s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.79s     Check for interrupting elements affecting Window
+    t =    11.83s     Synthesize event
+    t =    11.83s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.85s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.88s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    12.18s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    12.19s Find the "debugState" Any
+    t =    12.21s Added attachment named 'B7 log (shortcut: -stage flag)'
+    t =    12.29s Added attachment named 'B7 after the mash'
+    t =    12.29s Tear Down
+Test Case '-[DaiDatAnhHungUITests.MoreCasesUITests test_an_attack_mash_through_the_beat_end_keeps_the_first_ending_box]' passed (12.531 seconds).
+Test Case '-[DaiDatAnhHungUITests.MoreCasesUITests test_left_taps_as_the_training_card_appears_open_no_skip_warning]' started.
+    t =     0.00s Start Test at 2026-11-16 09:22:27.848
+    t =     0.02s Set Up
+    t =     0.02s     Setting device orientation to Landscape Left
+    t =     0.03s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     0.04s Open com.galaxyandsun.daidatanhhung
+    t =     0.04s     Launch com.galaxyandsun.daidatanhhung
+    t =     0.05s         Terminate com.galaxyandsun.daidatanhhung:41338
+2026-11-16 09:22:27.911 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:22:27.912 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:22:27.912 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     0.20s             Interface orientation changed to Portrait
+2026-11-16 09:22:28.907 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:22:28.907 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:22:28.914 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     1.16s         Interface orientation changed to Landscape Right
+    t =     1.28s         Setting up automation session
+    t =     3.61s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     5.01s Waiting 15.0s for "debugState" Any to exist
+    t =     6.06s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =     6.06s         Checking existence of `"debugState" Any`
+    t =     6.15s Find the "debugState" Any
+    t =     6.18s Find the "debugState" Any
+    t =     6.21s Find the "debugState" Any
+    t =     6.24s Press Window (First Match)[0.31, 0.81] for 0.5 seconds
+    t =     6.24s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.24s     Find the Window (First Match)
+    t =     6.24s     Check for interrupting elements affecting Window
+    t =     6.28s     Synthesize event
+    t =     6.28s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.30s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.36s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.10s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.11s Find the "debugState" Any
+    t =     7.17s Find the "debugState" Any
+    t =     7.21s Tap Window (First Match)[0.20, 0.81]
+    t =     7.21s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.22s     Find the Window (First Match)
+    t =     7.23s     Check for interrupting elements affecting Window
+    t =     7.26s     Synthesize event
+    t =     7.26s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.29s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.32s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.62s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.63s Find the "debugState" Any
+    t =     7.67s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.20, 0.81]
+    t =     7.67s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.69s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.70s     Check for interrupting elements affecting Window
+    t =     7.79s     Synthesize event
+    t =     7.80s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.88s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.93s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.35s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.36s Find the "debugState" Any
+    t =     8.45s Find the "debugState" Any
+    t =     8.50s Added attachment named 'card mash, attempt 1'
+/Users/luannguyend/orca/workspaces/Claude-Code-Game-Studios-fork/game-dev-001/ios/DaiDatAnhHungUITests/TouchCasesUITests.swift:241: error: -[DaiDatAnhHungUITests.MoreCasesUITests test_left_taps_as_the_training_card_appears_open_no_skip_warning] : XCTAssertEqual failed: ("Optional(true)") is not equal to ("Optional(false)") - no skip warning opened under the taps (attempt 1)
+    t =     8.93s Tear Down
+Test Case '-[DaiDatAnhHungUITests.MoreCasesUITests test_left_taps_as_the_training_card_appears_open_no_skip_warning]' failed (25.641 seconds).
+Test Case '-[DaiDatAnhHungUITests.MoreCasesUITests test_one_landed_hit_in_slow_motion_for_contact_and_pop_screenshots]' started.
+    t =     0.01s Start Test at 2026-11-16 09:22:53.501
+    t =     0.11s Set Up
+    t =     0.11s     Setting device orientation to Landscape Left
+    t =     0.19s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     0.20s Open com.galaxyandsun.daidatanhhung
+    t =     0.20s     Launch com.galaxyandsun.daidatanhhung
+    t =     0.20s         Terminate com.galaxyandsun.daidatanhhung:42990
+2026-11-16 09:22:53.724 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:22:53.732 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:22:53.752 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     0.57s             Interface orientation changed to Portrait
+2026-11-16 09:22:54.790 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:22:54.790 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:22:54.801 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     1.43s         Interface orientation changed to Landscape Right
+    t =     1.53s         Setting up automation session
+    t =     4.82s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.49s Waiting 15.0s for "debugState" Any to exist
+    t =     7.54s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =     7.54s         Checking existence of `"debugState" Any`
+    t =     7.73s Find the "debugState" Any
+    t =     7.78s Find the "debugState" Any
+    t =     7.94s Find the "debugState" Any
+    t =     8.09s Find the "debugState" Any
+    t =     8.23s Find the "debugState" Any
+    t =     8.39s Find the "debugState" Any
+    t =     8.54s Find the "debugState" Any
+    t =     8.69s Find the "debugState" Any
+    t =     8.85s Find the "debugState" Any
+    t =     9.00s Find the "debugState" Any
+    t =     9.14s Find the "debugState" Any
+    t =     9.29s Find the "debugState" Any
+    t =     9.44s Find the "debugState" Any
+    t =     9.64s Find the "debugState" Any
+    t =     9.81s Find the "debugState" Any
+    t =    10.11s Find the "debugState" Any
+    t =    10.25s Find the "debugState" Any
+    t =    10.41s Find the "debugState" Any
+    t =    10.55s Find the "debugState" Any
+    t =    10.71s Find the "debugState" Any
+    t =    10.91s Find the "debugState" Any
+    t =    11.06s Find the "debugState" Any
+    t =    11.20s Find the "debugState" Any
+    t =    11.34s Find the "debugState" Any
+    t =    11.49s Find the "debugState" Any
+    t =    11.63s Find the "debugState" Any
+    t =    11.77s Find the "debugState" Any
+    t =    11.95s Find the "debugState" Any
+    t =    12.10s Find the "debugState" Any
+    t =    12.25s Find the "debugState" Any
+    t =    12.39s Find the "debugState" Any
+    t =    12.54s Find the "debugState" Any
+    t =    12.70s Find the "debugState" Any
+    t =    12.91s Find the "debugState" Any
+    t =    13.06s Find the "debugState" Any
+    t =    13.23s Find the "debugState" Any
+    t =    13.38s Find the "debugState" Any
+    t =    13.52s Find the "debugState" Any
+    t =    13.67s Find the "debugState" Any
+    t =    13.81s Find the "debugState" Any
+    t =    13.97s Find the "debugState" Any
+    t =    14.11s Find the "debugState" Any
+    t =    14.29s Find the "debugState" Any
+    t =    14.53s Find the "debugState" Any
+    t =    14.68s Find the "debugState" Any
+    t =    14.82s Find the "debugState" Any
+    t =    14.97s Find the "debugState" Any
+    t =    15.12s Find the "debugState" Any
+    t =    15.27s Find the "debugState" Any
+    t =    15.44s Find the "debugState" Any
+    t =    15.58s Find the "debugState" Any
+    t =    15.73s Find the "debugState" Any
+    t =    15.92s Find the "debugState" Any
+    t =    16.06s Find the "debugState" Any
+    t =    16.21s Find the "debugState" Any
+    t =    16.36s Find the "debugState" Any
+    t =    16.50s Find the "debugState" Any
+    t =    16.65s Find the "debugState" Any
+    t =    16.83s Find the "debugState" Any
+    t =    16.97s Find the "debugState" Any
+    t =    17.12s Find the "debugState" Any
+    t =    17.29s Added attachment named 'AC13 contact (slow motion)'
+    t =    17.97s Added attachment named 'after contact: pushed pose'
+    t =    19.55s Added attachment named 'Ối! pop on the camp sky'
+    t =    19.63s Added attachment named 'hit'
+    t =    19.63s Terminate com.galaxyandsun.daidatanhhung:45175
+2026-11-16 09:23:13.191 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:23:13.199 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:23:13.210 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =    22.67s Open com.galaxyandsun.daidatanhhung
+    t =    22.67s     Launch com.galaxyandsun.daidatanhhung
+2026-11-16 09:23:16.330 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:23:16.330 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:23:16.344 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =    25.02s         Interface orientation changed to Portrait
+    t =    26.97s         Interface orientation changed to Landscape Right
+    t =    27.80s         Setting up automation session
+    t =    31.73s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    35.63s Waiting 15.0s for "debugState" Any to exist
+    t =    36.67s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =    36.67s         Checking existence of `"debugState" Any`
+    t =    37.13s Find the "debugState" Any
+    t =    37.18s Find the "debugState" Any
+    t =    37.32s Find the "debugState" Any
+    t =    37.47s Find the "debugState" Any
+    t =    37.62s Find the "debugState" Any
+    t =    37.76s Find the "debugState" Any
+    t =    37.90s Find the "debugState" Any
+    t =    38.04s Find the "debugState" Any
+    t =    38.20s Find the "debugState" Any
+    t =    38.35s Find the "debugState" Any
+    t =    38.50s Find the "debugState" Any
+    t =    38.65s Find the "debugState" Any
+    t =    38.79s Find the "debugState" Any
+    t =    38.93s Find the "debugState" Any
+    t =    39.07s Find the "debugState" Any
+    t =    39.24s Find the "debugState" Any
+    t =    39.40s Find the "debugState" Any
+    t =    39.55s Find the "debugState" Any
+    t =    39.70s Find the "debugState" Any
+    t =    39.85s Find the "debugState" Any
+    t =    39.99s Find the "debugState" Any
+    t =    40.15s Find the "debugState" Any
+    t =    40.31s Find the "debugState" Any
+    t =    40.46s Find the "debugState" Any
+    t =    40.61s Find the "debugState" Any
+    t =    40.75s Find the "debugState" Any
+    t =    40.90s Find the "debugState" Any
+    t =    41.05s Find the "debugState" Any
+    t =    41.20s Find the "debugState" Any
+    t =    41.35s Find the "debugState" Any
+    t =    41.50s Find the "debugState" Any
+    t =    41.66s Find the "debugState" Any
+    t =    41.80s Find the "debugState" Any
+    t =    41.95s Find the "debugState" Any
+    t =    42.10s Find the "debugState" Any
+    t =    42.25s Find the "debugState" Any
+    t =    42.41s Find the "debugState" Any
+    t =    42.57s Find the "debugState" Any
+    t =    42.71s Find the "debugState" Any
+    t =    42.85s Find the "debugState" Any
+    t =    43.00s Find the "debugState" Any
+    t =    43.13s Find the "debugState" Any
+    t =    43.27s Find the "debugState" Any
+    t =    43.42s Find the "debugState" Any
+    t =    43.57s Find the "debugState" Any
+    t =    43.75s Find the "debugState" Any
+    t =    43.90s Find the "debugState" Any
+    t =    44.05s Find the "debugState" Any
+    t =    44.20s Find the "debugState" Any
+    t =    44.34s Find the "debugState" Any
+    t =    44.49s Find the "debugState" Any
+    t =    44.65s Find the "debugState" Any
+    t =    44.80s Find the "debugState" Any
+    t =    44.95s Find the "debugState" Any
+    t =    45.11s Find the "debugState" Any
+    t =    45.25s Find the "debugState" Any
+    t =    45.41s Find the "debugState" Any
+    t =    45.55s Find the "debugState" Any
+    t =    45.69s Find the "debugState" Any
+    t =    45.83s Find the "debugState" Any
+    t =    45.99s Find the "debugState" Any
+    t =    46.14s Find the "debugState" Any
+    t =    46.29s Find the "debugState" Any
+    t =    46.43s Find the "debugState" Any
+    t =    46.57s Find the "debugState" Any
+    t =    46.72s Find the "debugState" Any
+    t =    46.87s Find the "debugState" Any
+    t =    47.01s Find the "debugState" Any
+    t =    47.16s Find the "debugState" Any
+    t =    47.30s Find the "debugState" Any
+    t =    47.44s Find the "debugState" Any
+    t =    47.59s Find the "debugState" Any
+    t =    47.75s Find the "debugState" Any
+    t =    47.89s Find the "debugState" Any
+    t =    48.05s Find the "debugState" Any
+    t =    48.20s Find the "debugState" Any
+    t =    48.35s Find the "debugState" Any
+    t =    48.49s Find the "debugState" Any
+    t =    48.65s Find the "debugState" Any
+    t =    48.80s Find the "debugState" Any
+    t =    48.94s Find the "debugState" Any
+    t =    49.08s Find the "debugState" Any
+    t =    49.21s Find the "debugState" Any
+    t =    49.37s Find the "debugState" Any
+    t =    49.50s Find the "debugState" Any
+    t =    49.65s Find the "debugState" Any
+    t =    49.80s Find the "debugState" Any
+    t =    49.95s Find the "debugState" Any
+    t =    50.10s Find the "debugState" Any
+    t =    50.25s Find the "debugState" Any
+    t =    50.38s Find the "debugState" Any
+    t =    50.53s Find the "debugState" Any
+    t =    50.68s Find the "debugState" Any
+    t =    50.83s Find the "debugState" Any
+    t =    50.97s Find the "debugState" Any
+    t =    51.12s Find the "debugState" Any
+    t =    51.26s Find the "debugState" Any
+    t =    51.41s Find the "debugState" Any
+    t =    51.56s Find the "debugState" Any
+    t =    53.20s Added attachment named 'Ối! pop on the day village sky (ink outline)'
+    t =    53.21s Tear Down
+Test Case '-[DaiDatAnhHungUITests.MoreCasesUITests test_one_landed_hit_in_slow_motion_for_contact_and_pop_screenshots]' passed (53.487 seconds).
+Test Case '-[DaiDatAnhHungUITests.MoreCasesUITests test_skip_warning_keep_reading_then_stars_survive_a_relaunch]' started.
+    t =     0.00s Start Test at 2026-11-16 09:23:46.980
+    t =     0.03s Set Up
+    t =     0.04s     Setting device orientation to Landscape Left
+    t =     0.07s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     0.08s Open com.galaxyandsun.daidatanhhung
+    t =     0.08s     Launch com.galaxyandsun.daidatanhhung
+    t =     0.08s         Terminate com.galaxyandsun.daidatanhhung:47740
+2026-11-16 09:23:47.090 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:23:47.095 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:23:47.099 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     0.25s             Interface orientation changed to Portrait
+2026-11-16 09:23:48.081 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:23:48.081 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:23:48.089 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     1.31s         Interface orientation changed to Landscape Right
+    t =     1.32s         Setting up automation session
+    t =     3.71s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     5.01s Waiting 15.0s for "debugState" Any to exist
+    t =     6.06s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =     6.06s         Checking existence of `"debugState" Any`
+    t =     6.12s Find the "debugState" Any
+    t =     6.95s Find the "debugState" Any
+    t =     6.97s Tap Window (First Match)[0.20, 0.84]
+    t =     6.97s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.97s     Find the Window (First Match)
+    t =     6.98s     Check for interrupting elements affecting Window
+    t =     7.00s     Synthesize event
+    t =     7.00s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.01s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.02s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.32s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.32s Find the "debugState" Any
+    t =     7.35s Find the "debugState" Any
+    t =     7.36s Tap Window (First Match)[0.40, 0.59]
+    t =     7.36s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.37s     Find the Window (First Match)
+    t =     7.37s     Check for interrupting elements affecting Window
+    t =     7.40s     Synthesize event
+    t =     7.40s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.41s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.42s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.71s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.71s Find the "debugState" Any
+    t =     7.73s Find the "debugState" Any
+    t =     7.74s Terminate com.galaxyandsun.daidatanhhung:51724
+2026-11-16 09:23:54.728 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:23:54.728 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:23:54.728 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     7.86s     Interface orientation changed to Portrait
+    t =     8.78s Open com.galaxyandsun.daidatanhhung
+    t =     8.78s     Launch com.galaxyandsun.daidatanhhung
+2026-11-16 09:23:55.765 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:23:55.765 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:23:55.767 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     8.94s         Interface orientation changed to Landscape Right
+    t =     9.00s         Setting up automation session
+    t =    11.02s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    12.19s Waiting 15.0s for "debugState" Any to exist
+    t =    13.25s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =    13.25s         Checking existence of `"debugState" Any`
+    t =    13.31s Find the "debugState" Any
+    t =    13.32s Find the "debugState" Any
+    t =    14.04s Find the "debugState" Any
+    t =    14.06s Tap Window (First Match)[0.75, 0.56]
+    t =    14.06s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    14.06s     Find the Window (First Match)
+    t =    14.07s     Check for interrupting elements affecting Window
+    t =    14.09s     Synthesize event
+    t =    14.09s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    14.10s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    14.11s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    14.39s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    14.40s Find the "debugState" Any
+    t =    14.52s Find the "debugState" Any
+    t =    14.65s Find the "debugState" Any
+    t =    14.79s Find the "debugState" Any
+    t =    14.91s Find the "debugState" Any
+    t =    15.04s Find the "debugState" Any
+    t =    15.18s Find the "debugState" Any
+    t =    15.49s Find the "debugState" Any
+    t =    15.51s Tap Window (First Match)[0.74, 0.84]
+    t =    15.51s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    15.51s     Find the Window (First Match)
+    t =    15.52s     Check for interrupting elements affecting Window
+    t =    15.54s     Synthesize event
+    t =    15.54s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    15.54s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    15.55s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    15.84s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    15.84s Find the "debugState" Any
+    t =    15.85s Find the "debugState" Any
+    t =    16.57s Find the "debugState" Any
+    t =    16.59s Tap Window (First Match)[0.50, 0.56]
+    t =    16.59s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    16.60s     Find the Window (First Match)
+    t =    16.60s     Check for interrupting elements affecting Window
+    t =    16.62s     Synthesize event
+    t =    16.62s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    16.63s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    16.64s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    16.92s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    16.93s Find the "debugState" Any
+    t =    17.05s Find the "debugState" Any
+    t =    17.17s Find the "debugState" Any
+    t =    17.30s Find the "debugState" Any
+    t =    17.43s Find the "debugState" Any
+    t =    17.55s Find the "debugState" Any
+    t =    17.66s Find the "debugState" Any
+    t =    17.98s Find the "debugState" Any
+    t =    18.00s Tap Window (First Match)[0.74, 0.84]
+    t =    18.00s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    18.00s     Find the Window (First Match)
+    t =    18.01s     Check for interrupting elements affecting Window
+    t =    18.02s     Synthesize event
+    t =    18.02s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.03s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.04s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.32s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    18.32s Find the "debugState" Any
+    t =    18.34s Find the "debugState" Any
+    t =    19.05s Find the "debugState" Any
+    t =    19.07s Tap Window (First Match)[0.75, 0.56]
+    t =    19.07s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    19.07s     Find the Window (First Match)
+    t =    19.08s     Check for interrupting elements affecting Window
+    t =    19.09s     Synthesize event
+    t =    19.09s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    19.10s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    19.11s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    19.39s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    19.39s Find the "debugState" Any
+    t =    19.51s Find the "debugState" Any
+    t =    19.63s Find the "debugState" Any
+    t =    19.75s Find the "debugState" Any
+    t =    19.88s Find the "debugState" Any
+    t =    20.01s Find the "debugState" Any
+    t =    20.14s Find the "debugState" Any
+    t =    20.47s Find the "debugState" Any
+    t =    20.49s Tap Window (First Match)[0.74, 0.84]
+    t =    20.49s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    20.49s     Find the Window (First Match)
+    t =    20.50s     Check for interrupting elements affecting Window
+    t =    20.51s     Synthesize event
+    t =    20.52s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    20.52s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    20.53s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    20.82s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    20.82s Find the "debugState" Any
+    t =    20.83s Find the "debugState" Any
+    t =    21.55s Find the "debugState" Any
+    t =    21.58s Tap Window (First Match)[0.25, 0.56]
+    t =    21.58s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    21.58s     Find the Window (First Match)
+    t =    21.60s     Check for interrupting elements affecting Window
+    t =    21.61s     Synthesize event
+    t =    21.61s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    21.62s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    21.63s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    21.92s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    21.92s Find the "debugState" Any
+    t =    22.04s Find the "debugState" Any
+    t =    22.16s Find the "debugState" Any
+    t =    22.30s Find the "debugState" Any
+    t =    22.42s Find the "debugState" Any
+    t =    22.54s Find the "debugState" Any
+    t =    22.66s Find the "debugState" Any
+    t =    22.98s Find the "debugState" Any
+    t =    22.99s Tap Window (First Match)[0.74, 0.84]
+    t =    22.99s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    23.00s     Find the Window (First Match)
+    t =    23.01s     Check for interrupting elements affecting Window
+    t =    23.03s     Synthesize event
+    t =    23.03s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    23.04s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    23.05s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    23.33s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    23.33s Find the "debugState" Any
+    t =    23.35s Find the "debugState" Any
+    t =    24.07s Find the "debugState" Any
+    t =    24.09s Tap Window (First Match)[0.25, 0.56]
+    t =    24.09s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    24.09s     Find the Window (First Match)
+    t =    24.10s     Check for interrupting elements affecting Window
+    t =    24.11s     Synthesize event
+    t =    24.11s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    24.12s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    24.13s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    24.42s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    24.42s Find the "debugState" Any
+    t =    24.54s Find the "debugState" Any
+    t =    24.67s Find the "debugState" Any
+    t =    24.80s Find the "debugState" Any
+    t =    24.93s Find the "debugState" Any
+    t =    25.06s Find the "debugState" Any
+    t =    25.18s Find the "debugState" Any
+    t =    25.51s Find the "debugState" Any
+    t =    25.53s Tap Window (First Match)[0.74, 0.84]
+    t =    25.53s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    25.54s     Find the Window (First Match)
+    t =    25.55s     Check for interrupting elements affecting Window
+    t =    25.57s     Synthesize event
+    t =    25.57s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    25.57s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    25.58s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    25.87s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    25.87s Find the "debugState" Any
+    t =    25.89s Find the "debugState" Any
+    t =    25.98s Added attachment named 'results 3★'
+    t =    25.98s Terminate com.galaxyandsun.daidatanhhung:52930
+2026-11-16 09:24:12.968 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:24:12.968 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:24:12.968 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =    26.13s     Interface orientation changed to Portrait
+    t =    27.04s Open com.galaxyandsun.daidatanhhung
+    t =    27.05s     Launch com.galaxyandsun.daidatanhhung
+2026-11-16 09:24:14.027 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:24:14.027 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:24:14.031 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =    27.20s         Interface orientation changed to Landscape Right
+    t =    27.26s         Setting up automation session
+    t =    29.24s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    30.41s Waiting 15.0s for "debugState" Any to exist
+    t =    31.45s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =    31.45s         Checking existence of `"debugState" Any`
+    t =    31.54s Find the "debugState" Any
+    t =    31.55s Find the "debugState" Any
+    t =    31.57s Added attachment named 'run'
+    t =    31.63s Added attachment named 'title after relaunch'
+    t =    31.63s Tear Down
+Test Case '-[DaiDatAnhHungUITests.MoreCasesUITests test_skip_warning_keep_reading_then_stars_survive_a_relaunch]' passed (31.886 seconds).
+Test Suite 'MoreCasesUITests' failed at 2026-11-16 09:24:18.867.
+	 Executed 5 tests, with 1 failure (0 unexpected) in 132.909 (132.928) seconds
+Test Suite 'R8CasesUITests' started at 2026-11-16 09:24:18.870.
+Test Case '-[DaiDatAnhHungUITests.R8CasesUITests test_a_mash_through_the_dialogue_holds_every_line]' started.
+    t =     0.00s Start Test at 2026-11-16 09:24:18.871
+    t =     0.02s Set Up
+    t =     0.02s     Setting device orientation to Landscape Left
+    t =     0.03s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     0.03s Open com.galaxyandsun.daidatanhhung
+    t =     0.03s     Launch com.galaxyandsun.daidatanhhung
+    t =     0.03s         Terminate com.galaxyandsun.daidatanhhung:55889
+2026-11-16 09:24:18.911 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:24:18.911 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:24:18.912 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     0.18s             Interface orientation changed to Portrait
+2026-11-16 09:24:19.997 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:24:19.997 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:24:19.999 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     1.28s         Interface orientation changed to Landscape Right
+    t =     1.34s         Setting up automation session
+    t =     3.29s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     4.44s Waiting 15.0s for "debugState" Any to exist
+    t =     5.49s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =     5.49s         Checking existence of `"debugState" Any`
+    t =     5.57s Find the "debugState" Any
+    t =     5.59s Find the "debugState" Any
+    t =     5.61s Find the "debugState" Any
+    t =     5.63s Tap Window (First Match)[0.77, 0.84]
+    t =     5.63s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     5.63s     Find the Window (First Match)
+    t =     5.64s     Check for interrupting elements affecting Window
+    t =     5.66s     Synthesize event
+    t =     5.66s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     5.66s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     5.67s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     5.96s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     5.99s Find the "debugState" Any
+    t =     6.02s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     6.02s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.02s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.03s     Check for interrupting elements affecting Window
+    t =     6.05s     Synthesize event
+    t =     6.05s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.07s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.07s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.36s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.37s Find the "debugState" Any
+    t =     6.39s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     6.39s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.39s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.40s     Check for interrupting elements affecting Window
+    t =     6.42s     Synthesize event
+    t =     6.42s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.43s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.43s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.73s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.74s Find the "debugState" Any
+    t =     6.77s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     6.77s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.77s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.78s     Check for interrupting elements affecting Window
+    t =     6.80s     Synthesize event
+    t =     6.80s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.81s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.82s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.11s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.12s Find the "debugState" Any
+    t =     7.14s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     7.14s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.14s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.15s     Check for interrupting elements affecting Window
+    t =     7.17s     Synthesize event
+    t =     7.17s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.18s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.19s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.47s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.49s Find the "debugState" Any
+    t =     7.51s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     7.51s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.52s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.53s     Check for interrupting elements affecting Window
+    t =     7.55s     Synthesize event
+    t =     7.55s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.56s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.57s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.86s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.86s Find the "debugState" Any
+    t =     7.88s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     7.88s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.89s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.89s     Check for interrupting elements affecting Window
+    t =     7.91s     Synthesize event
+    t =     7.91s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.92s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.93s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.22s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.23s Find the "debugState" Any
+    t =     8.25s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     8.25s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.26s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.26s     Check for interrupting elements affecting Window
+    t =     8.28s     Synthesize event
+    t =     8.28s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.29s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.30s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.58s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.61s Find the "debugState" Any
+    t =     8.64s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     8.64s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.64s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.65s     Check for interrupting elements affecting Window
+    t =     8.67s     Synthesize event
+    t =     8.67s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.68s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.69s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.97s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.99s Find the "debugState" Any
+    t =     9.01s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     9.01s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.01s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.02s     Check for interrupting elements affecting Window
+    t =     9.04s     Synthesize event
+    t =     9.04s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.05s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.05s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.35s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.36s Find the "debugState" Any
+    t =     9.38s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     9.38s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.39s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.40s     Check for interrupting elements affecting Window
+    t =     9.42s     Synthesize event
+    t =     9.42s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.43s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.44s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.72s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.73s Find the "debugState" Any
+    t =     9.76s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     9.76s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.76s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.76s     Check for interrupting elements affecting Window
+    t =     9.78s     Synthesize event
+    t =     9.78s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.79s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.80s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.09s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    10.10s Find the "debugState" Any
+    t =    10.13s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    10.13s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    10.13s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.13s     Check for interrupting elements affecting Window
+    t =    10.15s     Synthesize event
+    t =    10.15s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.16s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.17s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.46s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    10.48s Find the "debugState" Any
+    t =    10.50s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    10.50s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    10.50s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.50s     Check for interrupting elements affecting Window
+    t =    10.52s     Synthesize event
+    t =    10.52s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.53s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.54s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.83s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    10.85s Find the "debugState" Any
+    t =    10.88s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    10.88s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    10.88s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.88s     Check for interrupting elements affecting Window
+    t =    10.90s     Synthesize event
+    t =    10.90s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.91s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.92s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.21s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    11.22s Find the "debugState" Any
+    t =    11.25s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    11.25s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    11.25s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.25s     Check for interrupting elements affecting Window
+    t =    11.27s     Synthesize event
+    t =    11.28s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.28s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.29s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.59s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    11.59s Find the "debugState" Any
+    t =    11.61s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    11.61s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    11.62s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.62s     Check for interrupting elements affecting Window
+    t =    11.64s     Synthesize event
+    t =    11.64s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.65s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.66s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.95s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    11.96s Find the "debugState" Any
+    t =    11.98s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    11.98s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    11.99s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.99s     Check for interrupting elements affecting Window
+    t =    12.01s     Synthesize event
+    t =    12.01s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    12.02s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    12.03s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    12.31s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    12.33s Find the "debugState" Any
+    t =    12.36s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    12.36s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    12.36s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    12.36s     Check for interrupting elements affecting Window
+    t =    12.38s     Synthesize event
+    t =    12.38s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    12.39s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    12.40s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    12.68s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    12.71s Find the "debugState" Any
+    t =    12.73s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    12.73s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    12.74s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    12.74s     Check for interrupting elements affecting Window
+    t =    12.76s     Synthesize event
+    t =    12.76s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    12.77s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    12.78s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    13.06s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    13.08s Find the "debugState" Any
+    t =    13.11s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    13.11s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    13.11s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    13.11s     Check for interrupting elements affecting Window
+    t =    13.13s     Synthesize event
+    t =    13.13s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    13.14s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    13.15s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    13.44s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    13.46s Find the "debugState" Any
+    t =    13.48s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    13.48s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    13.48s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    13.49s     Check for interrupting elements affecting Window
+    t =    13.51s     Synthesize event
+    t =    13.51s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    13.52s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    13.52s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    13.81s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    13.83s Find the "debugState" Any
+    t =    13.85s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    13.85s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    13.86s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    13.86s     Check for interrupting elements affecting Window
+    t =    13.88s     Synthesize event
+    t =    13.88s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    13.89s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    13.90s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    14.18s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    14.21s Find the "debugState" Any
+    t =    14.24s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    14.24s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    14.24s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    14.25s     Check for interrupting elements affecting Window
+    t =    14.27s     Synthesize event
+    t =    14.27s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    14.28s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    14.29s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    14.57s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    14.59s Find the "debugState" Any
+    t =    14.62s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    14.62s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    14.62s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    14.62s     Check for interrupting elements affecting Window
+    t =    14.64s     Synthesize event
+    t =    14.64s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    14.65s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    14.66s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    14.94s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    14.96s Find the "debugState" Any
+    t =    14.99s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    14.99s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    14.99s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    14.99s     Check for interrupting elements affecting Window
+    t =    15.01s     Synthesize event
+    t =    15.01s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    15.02s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    15.03s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    15.31s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    15.34s Find the "debugState" Any
+    t =    15.37s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    15.37s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    15.37s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    15.38s     Check for interrupting elements affecting Window
+    t =    15.40s     Synthesize event
+    t =    15.40s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    15.41s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    15.42s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    15.71s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    15.72s Find the "debugState" Any
+    t =    15.75s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    15.75s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    15.76s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    15.76s     Check for interrupting elements affecting Window
+    t =    15.78s     Synthesize event
+    t =    15.78s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    15.79s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    15.80s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    16.09s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    16.10s Find the "debugState" Any
+    t =    16.13s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    16.13s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    16.13s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    16.14s     Check for interrupting elements affecting Window
+    t =    16.16s     Synthesize event
+    t =    16.16s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    16.17s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    16.18s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    16.46s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    16.48s Find the "debugState" Any
+    t =    16.52s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    16.52s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    16.52s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    16.53s     Check for interrupting elements affecting Window
+    t =    16.55s     Synthesize event
+    t =    16.55s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    16.56s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    16.57s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    16.86s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    16.86s Find the "debugState" Any
+    t =    16.90s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    16.90s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    16.90s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    16.91s     Check for interrupting elements affecting Window
+    t =    16.93s     Synthesize event
+    t =    16.93s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    16.94s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    16.95s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    17.24s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    17.25s Find the "debugState" Any
+    t =    17.28s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    17.28s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    17.29s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    17.29s     Check for interrupting elements affecting Window
+    t =    17.31s     Synthesize event
+    t =    17.31s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    17.32s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    17.33s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    17.61s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    17.63s Find the "debugState" Any
+    t =    17.66s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    17.66s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    17.67s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    17.67s     Check for interrupting elements affecting Window
+    t =    17.69s     Synthesize event
+    t =    17.69s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    17.70s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    17.71s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.00s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    18.01s Find the "debugState" Any
+    t =    18.05s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    18.05s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    18.05s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.06s     Check for interrupting elements affecting Window
+    t =    18.08s     Synthesize event
+    t =    18.08s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.09s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.10s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.40s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    18.40s Find the "debugState" Any
+    t =    18.43s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    18.43s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    18.44s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.44s     Check for interrupting elements affecting Window
+    t =    18.46s     Synthesize event
+    t =    18.46s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.47s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.48s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.76s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    18.78s Find the "debugState" Any
+    t =    18.81s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    18.81s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    18.81s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.82s     Check for interrupting elements affecting Window
+    t =    18.84s     Synthesize event
+    t =    18.84s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.85s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.86s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    19.14s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    19.16s Find the "debugState" Any
+    t =    19.19s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    19.19s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    19.19s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    19.19s     Check for interrupting elements affecting Window
+    t =    19.21s     Synthesize event
+    t =    19.21s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    19.22s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    19.23s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    19.52s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    19.53s Find the "debugState" Any
+    t =    19.57s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    19.57s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    19.57s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    19.58s     Check for interrupting elements affecting Window
+    t =    19.60s     Synthesize event
+    t =    19.60s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    19.61s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    19.62s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    19.90s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    19.92s Find the "debugState" Any
+    t =    19.96s Find the "debugState" Any
+    t =    20.01s Added attachment named 'dialogue mash log'
+    t =    20.07s Added attachment named 'after the dialogue mash'
+    t =    20.08s Tear Down
+Test Case '-[DaiDatAnhHungUITests.R8CasesUITests test_a_mash_through_the_dialogue_holds_every_line]' passed (20.309 seconds).
+Test Case '-[DaiDatAnhHungUITests.R8CasesUITests test_a_mash_through_the_intro_holds_every_box]' started.
+    t =     0.00s Start Test at 2026-11-16 09:24:39.180
+    t =     0.02s Set Up
+    t =     0.02s     Setting device orientation to Landscape Left
+    t =     0.02s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     0.02s Open com.galaxyandsun.daidatanhhung
+    t =     0.02s     Launch com.galaxyandsun.daidatanhhung
+    t =     0.02s         Terminate com.galaxyandsun.daidatanhhung:56198
+2026-11-16 09:24:39.215 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:24:39.216 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:24:39.216 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     0.16s             Interface orientation changed to Portrait
+2026-11-16 09:24:40.265 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:24:40.265 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:24:40.270 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     1.25s         Interface orientation changed to Landscape Right
+    t =     1.30s         Setting up automation session
+    t =     3.30s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     4.45s Waiting 15.0s for "debugState" Any to exist
+    t =     5.50s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =     5.50s         Checking existence of `"debugState" Any`
+    t =     5.59s Find the "debugState" Any
+    t =     5.60s Find the "debugState" Any
+    t =     5.62s Find the "debugState" Any
+    t =     5.63s Tap Window (First Match)[0.77, 0.84]
+    t =     5.63s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     5.63s     Find the Window (First Match)
+    t =     5.64s     Check for interrupting elements affecting Window
+    t =     5.65s     Synthesize event
+    t =     5.65s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     5.66s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     5.67s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     5.96s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     5.99s Find the "debugState" Any
+    t =     6.01s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     6.01s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.02s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.02s     Check for interrupting elements affecting Window
+    t =     6.04s     Synthesize event
+    t =     6.04s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.05s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.06s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.35s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.36s Find the "debugState" Any
+    t =     6.39s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     6.39s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.39s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.40s     Check for interrupting elements affecting Window
+    t =     6.41s     Synthesize event
+    t =     6.41s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.42s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.43s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.72s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.74s Find the "debugState" Any
+    t =     6.76s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     6.76s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.77s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.77s     Check for interrupting elements affecting Window
+    t =     6.79s     Synthesize event
+    t =     6.79s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.80s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.81s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.10s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.11s Find the "debugState" Any
+    t =     7.14s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     7.14s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.14s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.15s     Check for interrupting elements affecting Window
+    t =     7.17s     Synthesize event
+    t =     7.17s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.18s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.18s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.47s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.49s Find the "debugState" Any
+    t =     7.51s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     7.51s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.51s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.52s     Check for interrupting elements affecting Window
+    t =     7.53s     Synthesize event
+    t =     7.54s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.54s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.55s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.84s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.86s Find the "debugState" Any
+    t =     7.88s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     7.88s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.88s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.89s     Check for interrupting elements affecting Window
+    t =     7.91s     Synthesize event
+    t =     7.91s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.91s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.92s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.20s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.24s Find the "debugState" Any
+    t =     8.25s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     8.25s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.26s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.26s     Check for interrupting elements affecting Window
+    t =     8.28s     Synthesize event
+    t =     8.28s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.29s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.30s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.59s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.61s Find the "debugState" Any
+    t =     8.63s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     8.63s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.63s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.63s     Check for interrupting elements affecting Window
+    t =     8.65s     Synthesize event
+    t =     8.65s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.66s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.66s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.95s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.98s Find the "debugState" Any
+    t =     9.01s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     9.01s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.01s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.01s     Check for interrupting elements affecting Window
+    t =     9.03s     Synthesize event
+    t =     9.03s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.04s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.04s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.33s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.35s Find the "debugState" Any
+    t =     9.39s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     9.39s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.39s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.40s     Check for interrupting elements affecting Window
+    t =     9.42s     Synthesize event
+    t =     9.42s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.43s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.44s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.73s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.74s Find the "debugState" Any
+    t =     9.76s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     9.76s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.77s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.77s     Check for interrupting elements affecting Window
+    t =     9.79s     Synthesize event
+    t =     9.79s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.80s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.80s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.10s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    10.11s Find the "debugState" Any
+    t =    10.14s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    10.14s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    10.15s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.15s     Check for interrupting elements affecting Window
+    t =    10.17s     Synthesize event
+    t =    10.17s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.18s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.19s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.47s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    10.49s Find the "debugState" Any
+    t =    10.52s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    10.52s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    10.53s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.53s     Check for interrupting elements affecting Window
+    t =    10.55s     Synthesize event
+    t =    10.55s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.56s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.57s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.86s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    10.87s Find the "debugState" Any
+    t =    10.90s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    10.90s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    10.90s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.90s     Check for interrupting elements affecting Window
+    t =    10.92s     Synthesize event
+    t =    10.92s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.93s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.94s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.23s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    11.25s Find the "debugState" Any
+    t =    11.27s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    11.27s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    11.27s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.27s     Check for interrupting elements affecting Window
+    t =    11.29s     Synthesize event
+    t =    11.29s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.30s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.30s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    11.59s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    11.62s Find the "debugState" Any
+    t =    11.65s Find the "debugState" Any
+    t =    11.68s Added attachment named 'intro mash log'
+    t =    11.68s Tear Down
+Test Case '-[DaiDatAnhHungUITests.R8CasesUITests test_a_mash_through_the_intro_holds_every_box]' passed (11.935 seconds).
+Test Case '-[DaiDatAnhHungUITests.R8CasesUITests test_pause_and_sound_respond_inside_the_lock]' started.
+    t =     0.00s Start Test at 2026-11-16 09:24:51.116
+    t =     0.03s Set Up
+    t =     0.03s     Setting device orientation to Landscape Left
+    t =     0.03s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     0.04s Open com.galaxyandsun.daidatanhhung
+    t =     0.04s     Launch com.galaxyandsun.daidatanhhung
+    t =     0.04s         Terminate com.galaxyandsun.daidatanhhung:57802
+2026-11-16 09:24:51.169 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:24:51.169 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:24:51.170 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     0.18s             Interface orientation changed to Portrait
+2026-11-16 09:24:52.237 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:24:52.237 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:24:52.244 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     1.19s         Interface orientation changed to Landscape Right
+    t =     1.34s         Setting up automation session
+    t =     3.33s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     4.48s Waiting 15.0s for "debugState" Any to exist
+    t =     5.52s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =     5.52s         Checking existence of `"debugState" Any`
+    t =     5.58s Find the "debugState" Any
+    t =     7.21s Find the "debugState" Any
+    t =     7.25s Find the "debugState" Any
+    t =     7.29s Find the "debugState" Any
+    t =     7.32s Find the "debugState" Any
+    t =     7.36s Tap Window (First Match)[0.77, 0.84]
+    t =     7.36s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.36s     Find the Window (First Match)
+    t =     7.39s     Check for interrupting elements affecting Window
+    t =     7.44s     Synthesize event
+    t =     7.44s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.51s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.56s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.89s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.89s Tap Window (First Match)[0.26, 0.11]
+    t =     7.89s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.90s     Find the Window (First Match)
+    t =     8.13s     Check for interrupting elements affecting Window
+    t =     8.22s     Synthesize event
+    t =     8.22s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.25s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.28s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.61s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.63s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =     8.63s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.64s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.66s     Check for interrupting elements affecting Window
+    t =     8.73s     Synthesize event
+    t =     8.73s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.85s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.88s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.18s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.24s Tap Window (First Match)[0.16, 0.11]
+    t =     9.24s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.25s     Find the Window (First Match)
+    t =     9.29s     Check for interrupting elements affecting Window
+    t =     9.33s     Synthesize event
+    t =     9.33s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.41s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.51s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.85s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.87s Find the "debugState" Any
+    t =     9.92s Added attachment named 'presses, attempt 1'
+    t =     9.92s Terminate com.galaxyandsun.daidatanhhung:58140
+2026-11-16 09:25:01.070 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:25:01.070 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:25:01.070 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =    10.13s     Interface orientation changed to Portrait
+    t =    10.96s Open com.galaxyandsun.daidatanhhung
+    t =    10.96s     Launch com.galaxyandsun.daidatanhhung
+2026-11-16 09:25:02.088 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:25:02.088 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:25:02.097 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =    11.19s         Interface orientation changed to Landscape Right
+    t =    11.31s         Setting up automation session
+    t =    13.74s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    14.90s Waiting 15.0s for "debugState" Any to exist
+    t =    15.98s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =    15.99s         Checking existence of `"debugState" Any`
+    t =    16.11s Find the "debugState" Any
+    t =    17.75s Find the "debugState" Any
+    t =    17.76s Find the "debugState" Any
+    t =    17.78s Find the "debugState" Any
+    t =    17.79s Find the "debugState" Any
+    t =    17.81s Tap Window (First Match)[0.77, 0.84]
+    t =    17.81s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    17.81s     Find the Window (First Match)
+    t =    17.81s     Check for interrupting elements affecting Window
+    t =    17.83s     Synthesize event
+    t =    17.83s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    17.84s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    17.85s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.15s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    18.15s Tap Window (First Match)[0.26, 0.11]
+    t =    18.16s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    18.16s     Find the Window (First Match)
+    t =    18.16s     Check for interrupting elements affecting Window
+    t =    18.18s     Synthesize event
+    t =    18.18s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.19s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.21s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.50s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    18.51s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.77, 0.84]
+    t =    18.51s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    18.52s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.52s     Check for interrupting elements affecting Window
+    t =    18.55s     Synthesize event
+    t =    18.55s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.56s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.58s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.88s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    18.88s Tap Window (First Match)[0.16, 0.11]
+    t =    18.88s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    18.88s     Find the Window (First Match)
+    t =    18.89s     Check for interrupting elements affecting Window
+    t =    18.91s     Synthesize event
+    t =    18.91s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.94s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    18.95s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    19.24s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    19.24s Find the "debugState" Any
+    t =    19.26s Added attachment named 'presses, attempt 2'
+    t =    19.34s Added attachment named 'pause opened during a locked story box'
+    t =    19.34s Tear Down
+Test Case '-[DaiDatAnhHungUITests.R8CasesUITests test_pause_and_sound_respond_inside_the_lock]' passed (19.640 seconds).
+Test Case '-[DaiDatAnhHungUITests.R8CasesUITests test_story_screens_show_the_placeholder_and_no_sprites_or_top_stack]' started.
+    t =     0.00s Start Test at 2026-11-16 09:25:10.762
+    t =     0.05s Set Up
+    t =     0.05s     Setting device orientation to Landscape Left
+    t =     0.05s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     0.05s Open com.galaxyandsun.daidatanhhung
+    t =     0.06s     Launch com.galaxyandsun.daidatanhhung
+    t =     0.06s         Terminate com.galaxyandsun.daidatanhhung:58674
+2026-11-16 09:25:10.835 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:25:10.835 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:25:10.836 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     0.22s             Interface orientation changed to Portrait
+2026-11-16 09:25:11.912 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:25:11.912 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:25:11.916 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     1.24s         Interface orientation changed to Landscape Right
+    t =     1.37s         Setting up automation session
+    t =     3.53s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     4.73s Waiting 15.0s for "debugState" Any to exist
+    t =     5.74s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =     5.74s         Checking existence of `"debugState" Any`
+    t =     5.82s Find the "debugState" Any
+    t =     5.83s Find the "debugState" Any
+    t =     5.95s Find the "debugState" Any
+    t =     6.07s Find the "debugState" Any
+    t =     6.19s Find the "debugState" Any
+    t =     6.31s Find the "debugState" Any
+    t =     6.44s Find the "debugState" Any
+    t =     6.58s Find the "debugState" Any
+    t =     6.70s Find the "debugState" Any
+    t =     6.83s Find the "debugState" Any
+    t =     6.95s Find the "debugState" Any
+    t =     7.07s Find the "debugState" Any
+    t =     7.20s Find the "debugState" Any
+    t =     7.31s Find the "debugState" Any
+    t =     7.43s Find the "debugState" Any
+    t =     7.55s Find the "debugState" Any
+    t =     7.66s Find the "debugState" Any
+    t =     7.78s Find the "debugState" Any
+    t =     7.90s Find the "debugState" Any
+    t =     8.03s Find the "debugState" Any
+    t =     8.14s Find the "debugState" Any
+    t =     8.30s Find the "debugState" Any
+    t =     8.44s Find the "debugState" Any
+    t =     8.56s Find the "debugState" Any
+    t =     8.68s Find the "debugState" Any
+    t =     8.79s Find the "debugState" Any
+    t =     8.92s Find the "debugState" Any
+    t =     9.05s Find the "debugState" Any
+    t =     9.17s Find the "debugState" Any
+    t =     9.29s Find the "debugState" Any
+    t =     9.42s Find the "debugState" Any
+    t =     9.54s Find the "debugState" Any
+    t =     9.67s Find the "debugState" Any
+    t =     9.79s Find the "debugState" Any
+    t =     9.91s Find the "debugState" Any
+    t =    10.04s Find the "debugState" Any
+    t =    10.16s Find the "debugState" Any
+    t =    10.28s Find the "debugState" Any
+    t =    10.41s Find the "debugState" Any
+    t =    10.53s Find the "debugState" Any
+    t =    10.65s Find the "debugState" Any
+    t =    10.78s Find the "debugState" Any
+    t =    10.90s Find the "debugState" Any
+    t =    10.97s Added attachment named 'intro'
+    t =    10.97s Terminate com.galaxyandsun.daidatanhhung:59366
+2026-11-16 09:25:21.743 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:25:21.743 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:25:21.743 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =    11.10s     Interface orientation changed to Portrait
+    t =    12.06s Open com.galaxyandsun.daidatanhhung
+    t =    12.06s     Launch com.galaxyandsun.daidatanhhung
+2026-11-16 09:25:22.815 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:25:22.815 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:25:22.818 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =    12.21s         Interface orientation changed to Landscape Right
+    t =    12.27s         Setting up automation session
+    t =    14.29s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    15.45s Waiting 15.0s for "debugState" Any to exist
+    t =    16.47s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =    16.47s         Checking existence of `"debugState" Any`
+    t =    16.54s Find the "debugState" Any
+    t =    16.56s Find the "debugState" Any
+    t =    16.68s Find the "debugState" Any
+    t =    16.81s Find the "debugState" Any
+    t =    16.94s Find the "debugState" Any
+    t =    17.08s Find the "debugState" Any
+    t =    17.21s Find the "debugState" Any
+    t =    17.34s Find the "debugState" Any
+    t =    17.47s Find the "debugState" Any
+    t =    17.60s Find the "debugState" Any
+    t =    17.74s Find the "debugState" Any
+    t =    17.86s Find the "debugState" Any
+    t =    17.99s Find the "debugState" Any
+    t =    18.12s Find the "debugState" Any
+    t =    18.25s Find the "debugState" Any
+    t =    18.38s Find the "debugState" Any
+    t =    18.51s Find the "debugState" Any
+    t =    18.65s Find the "debugState" Any
+    t =    18.79s Find the "debugState" Any
+    t =    18.93s Find the "debugState" Any
+    t =    19.07s Find the "debugState" Any
+    t =    19.22s Find the "debugState" Any
+    t =    19.36s Find the "debugState" Any
+    t =    19.50s Find the "debugState" Any
+    t =    19.64s Find the "debugState" Any
+    t =    19.79s Find the "debugState" Any
+    t =    19.93s Find the "debugState" Any
+    t =    20.07s Find the "debugState" Any
+    t =    20.19s Find the "debugState" Any
+    t =    20.33s Find the "debugState" Any
+    t =    20.47s Find the "debugState" Any
+    t =    20.61s Find the "debugState" Any
+    t =    20.73s Find the "debugState" Any
+    t =    20.87s Find the "debugState" Any
+    t =    20.99s Find the "debugState" Any
+    t =    21.12s Find the "debugState" Any
+    t =    21.25s Find the "debugState" Any
+    t =    21.38s Find the "debugState" Any
+    t =    21.51s Find the "debugState" Any
+    t =    21.64s Find the "debugState" Any
+    t =    21.74s Added attachment named 'beat card'
+    t =    21.74s Terminate com.galaxyandsun.daidatanhhung:59938
+2026-11-16 09:25:32.506 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:25:32.506 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:25:32.506 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =    21.86s     Interface orientation changed to Portrait
+    t =    22.78s Open com.galaxyandsun.daidatanhhung
+    t =    22.78s     Launch com.galaxyandsun.daidatanhhung
+2026-11-16 09:25:33.540 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:25:33.540 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:25:33.544 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =    22.94s         Interface orientation changed to Landscape Right
+    t =    22.99s         Setting up automation session
+    t =    24.92s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    26.07s Waiting 15.0s for "debugState" Any to exist
+    t =    27.09s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =    27.09s         Checking existence of `"debugState" Any`
+    t =    27.18s Find the "debugState" Any
+    t =    27.20s Find the "debugState" Any
+    t =    27.33s Find the "debugState" Any
+    t =    27.47s Find the "debugState" Any
+    t =    27.62s Find the "debugState" Any
+    t =    27.77s Find the "debugState" Any
+    t =    27.92s Find the "debugState" Any
+    t =    28.07s Find the "debugState" Any
+    t =    28.22s Find the "debugState" Any
+    t =    28.37s Find the "debugState" Any
+    t =    28.52s Find the "debugState" Any
+    t =    28.68s Find the "debugState" Any
+    t =    28.83s Find the "debugState" Any
+    t =    28.98s Find the "debugState" Any
+    t =    29.14s Find the "debugState" Any
+    t =    29.29s Find the "debugState" Any
+    t =    29.44s Find the "debugState" Any
+    t =    29.60s Find the "debugState" Any
+    t =    29.75s Find the "debugState" Any
+    t =    29.90s Find the "debugState" Any
+    t =    30.05s Find the "debugState" Any
+    t =    30.19s Find the "debugState" Any
+    t =    30.32s Find the "debugState" Any
+    t =    30.46s Find the "debugState" Any
+    t =    30.60s Find the "debugState" Any
+    t =    30.75s Find the "debugState" Any
+    t =    30.91s Find the "debugState" Any
+    t =    31.06s Find the "debugState" Any
+    t =    31.20s Find the "debugState" Any
+    t =    31.34s Find the "debugState" Any
+    t =    31.47s Find the "debugState" Any
+    t =    31.61s Find the "debugState" Any
+    t =    31.76s Find the "debugState" Any
+    t =    31.91s Find the "debugState" Any
+    t =    32.07s Find the "debugState" Any
+    t =    32.22s Find the "debugState" Any
+    t =    32.31s Added attachment named 'caption'
+    t =    32.31s Terminate com.galaxyandsun.daidatanhhung:60201
+2026-11-16 09:25:43.082 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:25:43.083 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:25:43.083 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =    32.44s     Interface orientation changed to Portrait
+    t =    33.37s Open com.galaxyandsun.daidatanhhung
+    t =    33.38s     Launch com.galaxyandsun.daidatanhhung
+2026-11-16 09:25:44.137 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:25:44.137 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:25:44.140 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =    33.54s         Interface orientation changed to Landscape Right
+    t =    33.59s         Setting up automation session
+    t =    35.50s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    36.64s Waiting 15.0s for "debugState" Any to exist
+    t =    37.65s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =    37.65s         Checking existence of `"debugState" Any`
+    t =    37.73s Find the "debugState" Any
+    t =    37.75s Find the "debugState" Any
+    t =    37.87s Find the "debugState" Any
+    t =    38.00s Find the "debugState" Any
+    t =    38.14s Find the "debugState" Any
+    t =    38.28s Find the "debugState" Any
+    t =    38.42s Find the "debugState" Any
+    t =    38.55s Find the "debugState" Any
+    t =    38.69s Find the "debugState" Any
+    t =    38.84s Find the "debugState" Any
+    t =    38.98s Find the "debugState" Any
+    t =    39.13s Find the "debugState" Any
+    t =    39.32s Find the "debugState" Any
+    t =    39.45s Find the "debugState" Any
+    t =    39.60s Find the "debugState" Any
+    t =    39.75s Find the "debugState" Any
+    t =    39.90s Find the "debugState" Any
+    t =    40.03s Find the "debugState" Any
+    t =    40.18s Find the "debugState" Any
+    t =    40.33s Find the "debugState" Any
+    t =    40.47s Find the "debugState" Any
+    t =    40.61s Find the "debugState" Any
+    t =    40.75s Find the "debugState" Any
+    t =    40.89s Find the "debugState" Any
+    t =    41.02s Find the "debugState" Any
+    t =    41.16s Find the "debugState" Any
+    t =    41.30s Find the "debugState" Any
+    t =    41.43s Find the "debugState" Any
+    t =    41.56s Find the "debugState" Any
+    t =    41.68s Find the "debugState" Any
+    t =    41.81s Find the "debugState" Any
+    t =    41.94s Find the "debugState" Any
+    t =    42.08s Find the "debugState" Any
+    t =    42.22s Find the "debugState" Any
+    t =    42.36s Find the "debugState" Any
+    t =    42.50s Find the "debugState" Any
+    t =    42.62s Find the "debugState" Any
+    t =    42.75s Find the "debugState" Any
+    t =    42.83s Added attachment named 'dialogue'
+    t =    42.83s Terminate com.galaxyandsun.daidatanhhung:60862
+2026-11-16 09:25:53.599 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:25:53.600 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:25:53.600 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =    42.96s     Interface orientation changed to Portrait
+    t =    43.91s Open com.galaxyandsun.daidatanhhung
+    t =    43.91s     Launch com.galaxyandsun.daidatanhhung
+2026-11-16 09:25:54.670 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:25:54.670 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:25:54.674 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =    44.08s         Interface orientation changed to Landscape Right
+    t =    44.13s         Setting up automation session
+    t =    46.02s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    47.17s Waiting 15.0s for "debugState" Any to exist
+    t =    48.17s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =    48.17s         Checking existence of `"debugState" Any`
+    t =    48.25s Find the "debugState" Any
+    t =    48.26s Find the "debugState" Any
+    t =    48.38s Find the "debugState" Any
+    t =    48.51s Find the "debugState" Any
+    t =    48.64s Find the "debugState" Any
+    t =    48.77s Find the "debugState" Any
+    t =    48.90s Find the "debugState" Any
+    t =    49.03s Find the "debugState" Any
+    t =    49.16s Find the "debugState" Any
+    t =    49.30s Find the "debugState" Any
+    t =    49.43s Find the "debugState" Any
+    t =    49.57s Find the "debugState" Any
+    t =    49.70s Find the "debugState" Any
+    t =    49.84s Find the "debugState" Any
+    t =    49.97s Find the "debugState" Any
+    t =    50.12s Find the "debugState" Any
+    t =    50.24s Find the "debugState" Any
+    t =    50.36s Find the "debugState" Any
+    t =    50.47s Find the "debugState" Any
+    t =    50.59s Find the "debugState" Any
+    t =    50.71s Find the "debugState" Any
+    t =    50.83s Find the "debugState" Any
+    t =    50.96s Find the "debugState" Any
+    t =    51.09s Find the "debugState" Any
+    t =    51.21s Find the "debugState" Any
+    t =    51.35s Find the "debugState" Any
+    t =    51.48s Find the "debugState" Any
+    t =    51.59s Find the "debugState" Any
+    t =    51.72s Find the "debugState" Any
+    t =    51.83s Find the "debugState" Any
+    t =    51.95s Find the "debugState" Any
+    t =    52.08s Find the "debugState" Any
+    t =    52.22s Find the "debugState" Any
+    t =    52.36s Find the "debugState" Any
+    t =    52.49s Find the "debugState" Any
+    t =    52.62s Find the "debugState" Any
+    t =    52.76s Find the "debugState" Any
+    t =    52.87s Find the "debugState" Any
+    t =    52.99s Find the "debugState" Any
+    t =    53.11s Find the "debugState" Any
+    t =    53.24s Find the "debugState" Any
+    t =    53.37s Find the "debugState" Any
+    t =    53.47s Added attachment named 'ending'
+    t =    53.47s Terminate com.galaxyandsun.daidatanhhung:61079
+2026-11-16 09:26:04.233 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:26:04.233 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:26:04.233 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =    53.59s     Interface orientation changed to Portrait
+    t =    54.52s Open com.galaxyandsun.daidatanhhung
+    t =    54.53s     Launch com.galaxyandsun.daidatanhhung
+2026-11-16 09:26:05.288 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:26:05.288 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:26:05.292 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =    54.70s         Interface orientation changed to Landscape Right
+    t =    54.74s         Setting up automation session
+    t =    56.64s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    57.79s Waiting 15.0s for "debugState" Any to exist
+    t =    58.80s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =    58.80s         Checking existence of `"debugState" Any`
+    t =    58.89s Find the "debugState" Any
+    t =    58.92s Find the "debugState" Any
+    t =    59.07s Find the "debugState" Any
+    t =    59.21s Find the "debugState" Any
+    t =    59.36s Find the "debugState" Any
+    t =    59.51s Find the "debugState" Any
+    t =    59.66s Find the "debugState" Any
+    t =    59.81s Find the "debugState" Any
+    t =    59.96s Find the "debugState" Any
+    t =    60.10s Find the "debugState" Any
+    t =    60.25s Find the "debugState" Any
+    t =    60.40s Find the "debugState" Any
+    t =    60.55s Find the "debugState" Any
+    t =    60.71s Find the "debugState" Any
+    t =    60.85s Find the "debugState" Any
+    t =    61.00s Find the "debugState" Any
+    t =    61.14s Find the "debugState" Any
+    t =    61.29s Find the "debugState" Any
+    t =    61.44s Find the "debugState" Any
+    t =    61.59s Find the "debugState" Any
+    t =    61.73s Find the "debugState" Any
+    t =    61.87s Find the "debugState" Any
+    t =    62.02s Find the "debugState" Any
+    t =    62.16s Find the "debugState" Any
+    t =    62.30s Find the "debugState" Any
+    t =    62.45s Find the "debugState" Any
+    t =    62.58s Find the "debugState" Any
+    t =    62.72s Find the "debugState" Any
+    t =    62.87s Find the "debugState" Any
+    t =    63.02s Find the "debugState" Any
+    t =    63.17s Find the "debugState" Any
+    t =    63.31s Find the "debugState" Any
+    t =    63.45s Find the "debugState" Any
+    t =    63.59s Find the "debugState" Any
+    t =    63.74s Find the "debugState" Any
+    t =    63.89s Find the "debugState" Any
+    t =    63.99s Added attachment named 'training (play)'
+    t =    63.99s Terminate com.galaxyandsun.daidatanhhung:61244
+2026-11-16 09:26:14.760 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:26:14.760 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:26:14.760 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =    64.12s     Interface orientation changed to Portrait
+    t =    65.07s Tear Down
+Test Case '-[DaiDatAnhHungUITests.R8CasesUITests test_story_screens_show_the_placeholder_and_no_sprites_or_top_stack]' passed (65.145 seconds).
+Test Suite 'R8CasesUITests' passed at 2026-11-16 09:26:15.903.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 117.029 (117.033) seconds
+Test Suite 'TouchCasesUITests' started at 2026-11-16 09:26:15.906.
+Test Case '-[DaiDatAnhHungUITests.TouchCasesUITests test_15b_holding_right_in_training_stops_at_the_cap]' started.
+    t =     0.00s Start Test at 2026-11-16 09:26:15.908
+    t =     0.02s Set Up
+    t =     0.02s     Setting device orientation to Landscape Left
+    t =     0.02s         Wait for com.apple.springboard to idle
+    t =     0.03s Open com.galaxyandsun.daidatanhhung
+    t =     0.03s     Launch com.galaxyandsun.daidatanhhung
+2026-11-16 09:26:15.934 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:26:15.934 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:26:15.936 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     0.19s         Interface orientation changed to Landscape Right
+    t =     0.24s         Setting up automation session
+    t =     2.12s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     3.25s Waiting 15.0s for "debugState" Any to exist
+    t =     4.27s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =     4.27s         Checking existence of `"debugState" Any`
+    t =     4.35s Find the "debugState" Any
+    t =     4.38s Find the "debugState" Any
+    t =     4.41s Find the "debugState" Any
+    t =     4.44s Press Window (First Match)[0.31, 0.81] for 5.0 seconds
+    t =     4.44s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     4.45s     Find the Window (First Match)
+    t =     4.45s     Check for interrupting elements affecting Window
+    t =     4.48s     Synthesize event
+    t =     4.48s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     4.49s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     4.51s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.74s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.75s Find the "debugState" Any
+    t =     9.78s Added attachment named '15b'
+    t =     9.85s Added attachment named '15b after holding ▶ 5 s'
+    t =     9.85s Tear Down
+Test Case '-[DaiDatAnhHungUITests.TouchCasesUITests test_15b_holding_right_in_training_stops_at_the_cap]' passed (10.100 seconds).
+Test Case '-[DaiDatAnhHungUITests.TouchCasesUITests test_B1_two_fast_taps_on_next_advance_one_box]' started.
+    t =     0.00s Start Test at 2026-11-16 09:26:26.009
+    t =     0.02s Set Up
+    t =     0.02s     Setting device orientation to Landscape Left
+    t =     0.03s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     0.03s Open com.galaxyandsun.daidatanhhung
+    t =     0.03s     Launch com.galaxyandsun.daidatanhhung
+    t =     0.03s         Terminate com.galaxyandsun.daidatanhhung:61362
+2026-11-16 09:26:26.051 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:26:26.051 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:26:26.052 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     0.16s             Interface orientation changed to Portrait
+2026-11-16 09:26:27.100 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:26:27.100 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:26:27.107 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     1.26s         Interface orientation changed to Landscape Right
+    t =     1.31s         Setting up automation session
+    t =     3.27s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     4.43s Waiting 15.0s for "debugState" Any to exist
+    t =     5.45s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =     5.45s         Checking existence of `"debugState" Any`
+    t =     5.53s Find the "debugState" Any
+    t =     5.54s Find the "debugState" Any
+    t =     6.06s Find the "debugState" Any
+    t =     6.10s Double tap Window (First Match)[0.77, 0.84]
+    t =     6.10s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.10s     Find the Window (First Match)
+    t =     6.11s     Check for interrupting elements affecting Window
+    t =     6.13s     Synthesize event
+    t =     6.13s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.13s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.14s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.48s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.48s Find the "debugState" Any
+    t =     6.51s Added attachment named 'B1 measured gap'
+    t =     6.58s Added attachment named 'B1 after two taps'
+    t =     6.58s Tear Down
+Test Case '-[DaiDatAnhHungUITests.TouchCasesUITests test_B1_two_fast_taps_on_next_advance_one_box]' passed (6.814 seconds).
+Test Case '-[DaiDatAnhHungUITests.TouchCasesUITests test_holding_right_across_a_beat_change_leaves_nothing_held]' started.
+    t =     0.00s Start Test at 2026-11-16 09:26:32.823
+    t =     0.02s Set Up
+    t =     0.02s     Setting device orientation to Landscape Left
+    t =     0.02s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     0.02s Open com.galaxyandsun.daidatanhhung
+    t =     0.03s     Launch com.galaxyandsun.daidatanhhung
+    t =     0.03s         Terminate com.galaxyandsun.daidatanhhung:61426
+2026-11-16 09:26:32.857 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:26:32.857 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:26:32.857 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     0.15s             Interface orientation changed to Portrait
+2026-11-16 09:26:33.883 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:26:33.883 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:26:33.888 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     1.22s         Interface orientation changed to Landscape Right
+    t =     1.27s         Setting up automation session
+    t =     3.19s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     4.35s Waiting 15.0s for "debugState" Any to exist
+    t =     5.37s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =     5.37s         Checking existence of `"debugState" Any`
+    t =     5.46s Find the "debugState" Any
+    t =     5.48s Find the "debugState" Any
+    t =     5.50s Find the "debugState" Any
+    t =     5.52s Press Window (First Match)[0.31, 0.81] for 12.0 seconds
+    t =     5.52s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     5.53s     Find the Window (First Match)
+    t =     5.53s     Check for interrupting elements affecting Window
+    t =     5.56s     Synthesize event
+    t =     5.56s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     5.57s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     5.57s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    17.82s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    17.83s Find the "debugState" Any
+    t =    17.94s Added attachment named 'after holding ▶ across the beat change'
+    t =    17.94s Tear Down
+Test Case '-[DaiDatAnhHungUITests.TouchCasesUITests test_holding_right_across_a_beat_change_leaves_nothing_held]' passed (18.199 seconds).
+Test Case '-[DaiDatAnhHungUITests.TouchCasesUITests test_R2_03_press_move_release_on_each_pad_leaves_nothing_held]' started.
+    t =     0.00s Start Test at 2026-11-16 09:26:51.023
+    t =     0.03s Set Up
+    t =     0.03s     Setting device orientation to Landscape Left
+    t =     0.03s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     0.04s Open com.galaxyandsun.daidatanhhung
+    t =     0.04s     Launch com.galaxyandsun.daidatanhhung
+    t =     0.04s         Terminate com.galaxyandsun.daidatanhhung:61647
+2026-11-16 09:26:51.074 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:26:51.074 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:26:51.074 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     0.17s             Interface orientation changed to Portrait
+2026-11-16 09:26:52.158 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:26:52.158 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:26:52.162 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     1.31s         Interface orientation changed to Landscape Right
+    t =     1.34s         Setting up automation session
+    t =     3.29s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     4.43s Waiting 15.0s for "debugState" Any to exist
+    t =     5.45s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =     5.46s         Checking existence of `"debugState" Any`
+    t =     5.53s Find the "debugState" Any
+    t =     5.58s Find the "debugState" Any
+    t =     5.62s Find the "debugState" Any
+    t =     5.66s Press Window (First Match)[0.81, 0.78] for 0.4 seconds, then drag to Window (First Match)[0.81, 0.78] -> (12.0, -10.0) with velocity of 250.00 pixels per second, and then hold for 0.3 seconds 
+    t =     5.66s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     5.66s     Find the Window (First Match)
+    t =     5.67s     Check for interrupting elements affecting Window
+    t =     5.71s     Synthesize event
+    t =     5.71s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     5.72s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     5.73s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     5.75s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     5.75s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.76s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.76s Find the "debugState" Any
+    t =     6.81s Find the "debugState" Any
+    t =     6.85s Press Window (First Match)[0.69, 0.82] for 0.4 seconds, then drag to Window (First Match)[0.69, 0.82] -> (12.0, -10.0) with velocity of 250.00 pixels per second, and then hold for 0.3 seconds 
+    t =     6.85s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.85s     Find the Window (First Match)
+    t =     6.86s     Check for interrupting elements affecting Window
+    t =     6.89s     Synthesize event
+    t =     6.90s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.90s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.92s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.93s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.93s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.94s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.94s Find the "debugState" Any
+    t =     7.98s Find the "debugState" Any
+    t =     8.02s Press Window (First Match)[0.20, 0.81] for 0.4 seconds, then drag to Window (First Match)[0.20, 0.81] -> (12.0, -10.0) with velocity of 250.00 pixels per second, and then hold for 0.3 seconds 
+    t =     8.02s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     8.03s     Find the Window (First Match)
+    t =     8.03s     Check for interrupting elements affecting Window
+    t =     8.06s     Synthesize event
+    t =     8.07s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.08s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.09s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.10s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     8.11s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.12s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.13s Find the "debugState" Any
+    t =     9.17s Find the "debugState" Any
+    t =     9.21s Press Window (First Match)[0.31, 0.81] for 0.4 seconds, then drag to Window (First Match)[0.31, 0.81] -> (12.0, -10.0) with velocity of 250.00 pixels per second, and then hold for 0.3 seconds 
+    t =     9.21s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     9.21s     Find the Window (First Match)
+    t =     9.22s     Check for interrupting elements affecting Window
+    t =     9.26s     Synthesize event
+    t =     9.27s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.28s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.29s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.30s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     9.31s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =    10.32s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =    10.33s Find the "debugState" Any
+    t =    10.43s Added attachment named 'R2-03 after the last release'
+    t =    10.43s Tear Down
+Test Case '-[DaiDatAnhHungUITests.TouchCasesUITests test_R2_03_press_move_release_on_each_pad_leaves_nothing_held]' passed (10.675 seconds).
+Test Case '-[DaiDatAnhHungUITests.TouchCasesUITests test_slide_from_left_to_right_walks_right_then_releases]' started.
+    t =     0.00s Start Test at 2026-11-16 09:27:01.698
+    t =     0.02s Set Up
+    t =     0.02s     Setting device orientation to Landscape Left
+    t =     0.02s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     0.02s Open com.galaxyandsun.daidatanhhung
+    t =     0.03s     Launch com.galaxyandsun.daidatanhhung
+    t =     0.03s         Terminate com.galaxyandsun.daidatanhhung:61995
+2026-11-16 09:27:01.736 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:27:01.737 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:27:01.737 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     0.16s             Interface orientation changed to Portrait
+2026-11-16 09:27:02.788 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 09:27:02.788 xcodebuild[38333:1898153] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 09:27:02.793 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+    t =     1.26s         Interface orientation changed to Landscape Right
+    t =     1.30s         Setting up automation session
+    t =     3.20s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     4.35s Waiting 15.0s for "debugState" Any to exist
+    t =     5.40s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =     5.40s         Checking existence of `"debugState" Any`
+    t =     5.49s Find the "debugState" Any
+    t =     5.51s Find the "debugState" Any
+    t =     5.53s Find the "debugState" Any
+    t =     5.55s Find the "debugState" Any
+    t =     5.58s Press Window (First Match)[0.20, 0.81] for 0.2 seconds, then drag to Window (First Match)[0.31, 0.81] with velocity of 500.00 pixels per second, and then hold for 1.5 seconds 
+    t =     5.58s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     5.58s     Find the Window (First Match)
+    t =     5.58s     Check for interrupting elements affecting Window
+    t =     5.61s     Synthesize event
+    t =     5.61s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     5.62s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     5.62s         Find the Window (First Match)
+    t =     5.63s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     5.64s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.80s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.80s Find the "debugState" Any
+    t =     7.88s Added attachment named 'slide ◀→▶ released'
+    t =     7.89s Tear Down
+Test Case '-[DaiDatAnhHungUITests.TouchCasesUITests test_slide_from_left_to_right_walks_right_then_releases]' passed (8.113 seconds).
+Test Suite 'TouchCasesUITests' passed at 2026-11-16 09:27:09.812.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 53.901 (53.905) seconds
+Test Suite 'DaiDatAnhHungUITests.xctest' failed at 2026-11-16 09:27:09.812.
+	 Executed 14 tests, with 1 failure (0 unexpected) in 303.839 (303.873) seconds
+Test Suite 'All tests' failed at 2026-11-16 09:27:09.812.
+	 Executed 14 tests, with 1 failure (0 unexpected) in 303.839 (303.875) seconds
+2026-11-16 09:27:09.844 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:27:09.844 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:27:09.845 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:27:09.868 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:27:09.868 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:27:09.872 xcodebuild[38333:1898153] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 09:37:10.331 xcodebuild[38333:1962454]  IDETestOperationsObserverDebug: Failure collecting diagnostics from simulator: Timed out after 600.0 seconds while waiting for a response from the invoked process
+2026-11-16 09:37:10.393 xcodebuild[38333:1898153] [MT] IDETestOperationsObserverDebug: 913.625 elapsed -- Testing started completed.
+2026-11-16 09:37:10.393 xcodebuild[38333:1898153] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-11-16 09:37:10.393 xcodebuild[38333:1898153] [MT] IDETestOperationsObserverDebug: 913.626 sec, +913.626 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/luannguyend/orca/workspaces/Claude-Code-Game-Studios-fork/game-qc-ios/production/qa/evidence/TASK-006/ios-qc-r8/touch/result.xcresult
+
+Failing tests:
+	MoreCasesUITests.test_left_taps_as_the_training_card_appears_open_no_skip_warning()
+
+** TEST EXECUTE FAILED **
+
+Testing started

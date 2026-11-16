@@ -1,0 +1,1 @@
+cap 4520.0 cam 4520.0 hero_x 5580.0 x_start 4590

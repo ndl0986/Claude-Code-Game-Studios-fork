@@ -1,12 +1,11 @@
 # TASK-006 iOS QC r8 — c388736
 
-## **r8 QC INCOMPLETE (paused)**
+## **r8 QC IN PROGRESS: suite re-run done, FAIL on 1 case; manual 18 Pro items still open**
 
-The project was paused (Luan, relayed by the leader) while the touch suite was running. The xcodebuild run was
-interrupted (SIGINT, then SIGTERM, exit 143) during `test_B1_two_fast_taps_on_next_advance_one_box`. The
-result bundle was never finalised, so there is no summary.json, tests.json or attachments; per-case results below
-come from `touch/xcodebuild.log`. Both Simulators are shut down. **No verdict for r8.** On resume the suite is
-re-run from the start.
+History: the 2026-11-15 run was paused during B1 and its result bundle was lost (commit eab7678). On 2026-11-16
+the full suite was re-run from the start (09:21–09:37, uninstall + install, re-hashed). That run's bundle is kept
+locally at `touch/result.xcresult` and is not committed. Its summary.json, tests.json, xcodebuild.log, and
+attachments/ are committed. The work paused again for the team restart (leader, Luan's request).
 
 ## Build and fingerprints (re-hashed by QC, match the leader's)
 
@@ -16,30 +15,39 @@ re-run from the start.
 - `ios-touch-tests.sh` sha256 `18c3c0b3d6202980a9f2c3fa68e581e6e538ee5febd51985fd21cd0474c51758` (unchanged since r7)
 - .app tree (sorted file sha256s, hashed) `752834f43b3a24928f421b0156caaa312f93b4d79727e034e400661da3bd23c9`
 
-## UI touch suite (iPhone 18 Pro E9F515E9, 14 UI cases)
+## UI touch suite: re-run 2026-11-16, iPhone 18 Pro E9F515E9, 14 UI cases: 13 passed, 1 FAILED
 
-| Case | Result | Duration |
-|---|---|---|
-| MoreCases `test_a_tap_on_the_title_card_does_nothing` | passed | 313.7 s |
-| MoreCases `test_an_attack_mash_through_the_beat_end_keeps_the_first_ending_box` | passed | 314.1 s |
-| MoreCases `test_left_taps_as_the_training_card_appears_open_no_skip_warning` | passed (not skipped this time) | 309.0 s |
-| MoreCases `test_one_landed_hit_in_slow_motion_for_contact_and_pop_screenshots` | passed | 339.9 s |
-| MoreCases `test_skip_warning_keep_reading_then_stars_survive_a_relaunch` | passed | 332.1 s |
-| R8Cases `test_a_mash_through_the_dialogue_holds_every_line` | passed | 321.4 s |
-| R8Cases `test_a_mash_through_the_intro_holds_every_box` | passed | 312.8 s |
-| R8Cases `test_pause_and_sound_respond_inside_the_lock` | passed | 309.8 s |
-| R8Cases `test_story_screens_show_the_placeholder_and_no_sprites_or_top_stack` | passed | 366.8 s |
-| TouchCases `test_15b_holding_right_in_training_stops_at_the_cap` | passed | 311.1 s |
-| TouchCases `test_B1_two_fast_taps_on_next_advance_one_box` | **interrupted** (paused) | — |
-| TouchCases `test_R2_03_press_move_release_on_each_pad_leaves_nothing_held` | not run | — |
-| TouchCases `test_slide_from_left_to_right_walks_right_then_releases` | not run | — |
-| TouchCases `test_holding_right_across_a_beat_change_leaves_nothing_held` | not run | — |
+| Case | Result | Duration | Evidence |
+|---|---|---|---|
+| MoreCases title card tap does nothing | passed | 9.4 s | |
+| MoreCases B7 attack mash keeps ending box 1 | passed | 12.5 s | log: ending box 1 at 05.835 → quiz at 07.384 = **1.55 s** (≥ 1.5); four Next presses inside it dropped |
+| MoreCases **◀ taps as the training card appears → no skip warning** | **FAILED** | 25.6 s | log: beatCard @ 52318.951, **fire:skip @ 52319.509 (+0.558 s)**, fire:skip @ +1.293 s; `XCTAssertEqual failed: ("Optional(true)") is not equal to ("Optional(false)") - no skip warning opened under the taps (attempt 1)` |
+| MoreCases slow-motion hit (AC13 contact, pops) | passed | 53.5 s | day village sky "Oof!" has an **ink** outline (visual PASS); camp sky shot attached |
+| MoreCases skip warning → Keep reading → 3★ survives relaunch | passed | 31.9 s | medal not asserted (debug jump, D-07) |
+| R8 dialogue mash holds every line | passed | 20.3 s | e.g. line 1 → 2: 28.884 → 30.401 = 1.52 s; 2 → 3: 1.87 s |
+| R8 intro mash holds every box | passed | 11.9 s | boxes 1.88 / 1.88 / ≥ 1.85 s |
+| R8 pause and sound respond inside the lock | passed | 19.6 s | attempt 2: mute "locked 1", pause "locked 1" responded |
+| R8 story screens: placeholder, no sprites, no top stack | passed | 65.1 s | 6 shots |
+| 15b hold ▶ stops at the cap | passed | 10.1 s | cap 4520, cam 4520, hero_x 5580 |
+| B1 two fast taps advance one box | passed | 6.8 s | gap 0.049 s; advanced true / false (0.15–0.25 s rests on AdvanceDebounceTests) |
+| ▶ held across a beat change | passed | 18.2 s | |
+| R2-03 press-move-release on each pad | passed | 10.7 s | |
+| ◀ → ▶ slide | passed | 8.1 s | |
 
-Not inspected because the bundle was lost: the cases' attachments (B7 press log, ◀ press log "locked", slow-motion
-contact/pop frames, mash hold times). A pass here is the test's own assertion only.
+**Teardown check: the ~300 s "Checking for reports…" teardown is gone.** Cases take 6.8–65 s (2026-11-15: 309–367 s).
+The whole run took 914 s (summary start→finish), down from about 80 min. This is after DiagnosticReports was cleared and
+the Mac restarted. The folder now holds 5 reports.
 
-Teardown note (DiagnosticReports cleared ~06:21): only 15b finished after the cleanup and it straddled it
-(311 s, no change). Inconclusive; check the per-case durations on the re-run.
+### Bug (draft, /bug-report format): iOS-R8-01
+
+- **Severity**: S2 (a child tapping ◀ as the card appears lands in the skip warning; this is the Android QC r6 case)
+- **Build**: c388736, iPhone 18 Pro Sim iOS 27.0
+- **Steps**: harness `MoreCasesUITests/test_left_taps_as_the_training_card_appears_open_no_skip_warning`
+  (`-stage walkto`, taps on ◀'s spot, where Bỏ qua sits on the card)
+- **Expected**: the entry lock drops the taps; no skip warning (Input Rule 13 / 13b)
+- **Actual**: the first tap, 0.558 s after the card appeared (inside the 0.6 s lock), **fired skip**, and the skip warning opened
+- **Note**: in r7 the first tap came at +0.695 s (outside the lock), so the case was skipped. On the paused 2026-11-15 run it
+  passed, but that bundle was lost and its log can't be checked. Possible flake: re-run with ONLY= a few times to see if it repeats.
 
 ## Manual checks on the iPhone 17e (9312E6A1, k ≈ 0.515 measured: 1 world = 1.545 px)
 
@@ -57,12 +65,14 @@ Shots in this folder (`e*.png`, full-res 2532×1170). Done:
 | 6 | Cream "Ối!" outline on camp night sky (e13-t2) | PASS (visual) |
 | 4 | Quiz small layout on the 17e: Tiếp ≈ 447 wide at x ≈ 813 (spec 450 at 812), right card left slot + why line beside it, VI/EN (e20–e22) | PASS (17e only) |
 
-Not done (paused):
+Done on 2026-11-16 from the suite: B1, R2-03, ◀→▶ slide, ▶ across a beat change (all PASS); the day-sky ink pop
+(PASS, visual, from the slow-motion attachment); the mash holds ≥ 1.5 s and pause/sound inside the lock (PASS, from the logs).
+
+Still open (next step on resume):
 
 - 4 on the **iPhone 18 Pro (k 0.517)**: small layout, wrong cards fade / right card glide, every animated
-  pixel ≤ 720, pill ink and clip, per-question lock (two quick Tiếp taps).
-- 6 ink pop outline on the **day village sky** (the slow-motion case's frame was lost with the bundle).
-- 7 medal under mash in a real run; reading the ◀ and pause/sound press logs.
-- 8 regression (D-27 title, safe-rect fit, R6-01/02, skip warning → Keep reading, 3★ + medal after relaunch) beyond
-  what the passed cases cover.
-- 1 deliberate tap 0.6 s after the last press, checked by hand / log.
+  pixel ≤ 720, pill ink and clip VI/EN, per-question lock (two quick Tiếp taps).
+- 7 medal under mash in a **real** run (FullRunMashTests covers it in GameCore; not seen on device).
+- 1 deliberate tap 0.6 s after the last press goes through (by hand or from the log).
+- iOS-R8-01 re-runs (`ONLY=MoreCasesUITests/test_left_taps_as_the_training_card_appears_open_no_skip_warning`) to tell a bug from a flake.
+- 8 the rest of the regression list (D-27 title, safe-rect fit, R6-01/02, medal after relaunch) on the 18 Pro.
