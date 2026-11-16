@@ -119,8 +119,10 @@ public final class Game {
     var lockContext: String?
     /// The current lock context, for the app's debug state (the UI touch cases log it).
     public var lockContextForDebug: String? { lockContext }
+    #if DEBUG
     /// The rolling lock's current end (press clock), for the app's debug state only; read-only (iOS-R8-01).
     public var lockUntilForDebug: Double? { lockUntil }
+    #endif
     public private(set) var enteredAt: Double?
     /// The rolling lock's end (press clock): each press dropped inside it restarts the window, up to the cap.
     var lockUntil: Double?
