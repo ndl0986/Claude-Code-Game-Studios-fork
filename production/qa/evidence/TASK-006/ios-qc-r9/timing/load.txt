@@ -1,0 +1,10 @@
+test_the_finish_hold_lasts_and_drops_taps start 7.49 9.93 12.12
+test_the_finish_hold_lasts_and_drops_taps end 7.80 9.88 12.06 exit 0
+test_a_resume_restarts_the_hold_to_rise_done start 7.80 9.88 12.06
+test_a_resume_restarts_the_hold_to_rise_done end 6.75 9.54 11.90 exit 0
+test_C_a_tap_just_before_the_lock_end_drops_and_just_after_advances start 6.75 9.54 11.90
+test_C_a_tap_just_before_the_lock_end_drops_and_just_after_advances end 6.70 9.44 11.84 exit 0
+test_D_a_mashed_real_run_keeps_the_medal_and_saves_it start 6.70 9.44 11.84
+test_D_a_mashed_real_run_keeps_the_medal_and_saves_it end 10.51 9.07 11.29 exit 0
+test_left_taps_as_the_training_card_appears_open_no_skip_warning start 10.51 9.07 11.29
+test_left_taps_as_the_training_card_appears_open_no_skip_warning end 11.29 9.29 11.35 exit 0
