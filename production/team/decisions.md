@@ -11,6 +11,39 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-36 Start screen: Vietnam map with hero hometowns (Luan's direction, 2026-11-16)
+
+- **Luan's direction (decided):** the start screen is the map of Vietnam. Each pin marks a **hero's
+  hometown**. The child taps a place to pick a hero. Several heroes from the same place are listed
+  **vertically**, each with a short description and information to choose from, plus the
+  **medals the child has earned**.
+- **What changes vs today's docs:** `map-and-timeline.md` puts one pin per hero at the place *the
+  story happened*, with a timeline column on the right. Now the pins are per **hometown**, a place can
+  hold several heroes, and a tap opens that place's hero list. Title UX (`design/ux/title.md`, the D-27
+  hero card) becomes a row in that list.
+- **Flow:** game-art-content revises the Map & Timeline GDD and writes a new start-screen UX spec (plan
+  first, leader approves) → hometown and description claims added per hero, `pending` → Luan signs
+  off the wording and claims → devs build both apps → QC.
+- **Sub-questions (the team applies the recommendation unless Luan says otherwise):**
+  - **(a) A hero whose hometown is disputed or unknown** (Trần Quốc Toản's is not clearly recorded).
+    Options: A. use the best-sourced place, labelled "theo [source]" · B. fall back to where the story
+    happened · C. Luan picks per hero. *Recommended: C*, with game-art-content's sourced proposal
+    for each hero.
+  - **(b) The timeline column.** Options: A. **replace it with the place's hero list** (the right column
+    shows the tapped place's heroes, earliest first; on arrival it pre-selects the place of the current
+    open hero, so it's never empty) · B. keep the timeline and open the list as a pop-up. *Recommended: A*
+    (one column, no pop-up, and no scrolling besides the list).
+  - **(c) "Medal history".** Options: A. each hero row shows best stars + the medal (gold or outline),
+    plus a total at the top of the map (e.g. "Huy hiệu 1/12") · B. A, plus the date each was earned (a new
+    save field, ADR-0003 change) · C. a separate "my medals" screen. *Recommended: A* (no new save
+    data; no dates for 6–10-year-olds).
+  - **(d) When to build.** Options: A. spec now, **build right after the vertical-slice gate** (the slice
+    keeps the D-27 hero card; iOS r9 / Android r12 parity is not disturbed) · B. build into the slice
+    now. *Recommended: A.*
+- **Still needed before release (unchanged):** D-28b (which official map to trace) and the map
+  content appraisal (thẩm định).
+- **Status:** Open (direction decided; sub-questions on recommendations).
+
 ### D-31 The slice has too much reading for a 6-year-old, and no voice (TASK-020 W1)
 
 - **Flow:** cross-GDD review (`design/gdd/reviews/gdd-cross-review-TASK-020.md` W1) → mission text
