@@ -19,7 +19,8 @@ class Figures(private val d: Draw) {
     /** Placeholder bodies at spec height (hud.md §3.3): the hero 262 → 180, partner ≤ 180, enemies and dummies ≤ 170. */
     companion object {
         const val HERO_S = 180f / 262f
-        const val PARTNER_S = 0.62f
+        /** The partner (a follower, look sheet d18) is 0.62 × the hero's height (≈ 112 of 180), not 0.62 of the art unit (r12). */
+        const val PARTNER_S = 0.62f * HERO_S
         const val DUMMY_S = 0.75f
         /** Look sheet d18 (slice placeholders until D-18 is signed off). */
         const val FOLLOWER_TUNIC = 0xFFD8C9A3.toInt(); const val FOLLOWER_SASH = 0xFFB9705C.toInt()

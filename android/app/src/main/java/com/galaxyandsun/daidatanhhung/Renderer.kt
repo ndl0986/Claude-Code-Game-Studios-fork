@@ -354,7 +354,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
     /** Spec height: top ≈ 300; the half width covers the body and the held weapon's head (the leader's hammer is wide). */
     private fun enemyTarget(x: Float, ground: Float, kind: String = "spear") =
         CueLayout.Target(x.toDouble(), ground - 170.0, ground - 140.0, when (kind) { "leader" -> 95.0; "shield" -> 55.0; else -> 40.0 })
-    private fun partnerTarget(x: Float, ground: Float) = CueLayout.Target(x.toDouble(), ground - 162.0, ground - 121.0, 30.0) // PARTNER_S 0.62
+    private fun partnerTarget(x: Float, ground: Float) = CueLayout.Target(x.toDouble(), ground - 112.0, ground - 83.0, 22.0) // PARTNER_S = 0.62 × HERO_S: top 261 s, head 196 s, ±44 s + 3
     private fun dummyTarget(x: Float, ground: Float) = CueLayout.Target(x.toDouble(), ground - 151.0, ground - 80.0, 30.0) // DUMMY_S 0.75
     private fun flagTarget(x: Float, ground: Float, banner: Boolean) = CueLayout.goalFlag(ground.toDouble(), banner).let { f ->
         CueLayout.Target(x + 0.1 * f.size, f.top, (f.top + f.foot) / 2, 0.6 * f.size) } // pole at x − 0.5 s, cloth to x + 0.7 s
