@@ -1058,6 +1058,7 @@ final class GameScene: SKScene {
         extra["placeholder"] = shownPlaceholder.map { [$0.x, $0.y, $0.w, $0.h] } ?? NSNull()
         extra["hints"] = placedHints.mapValues { [$0.x, $0.y, $0.w, $0.h] } // world px (y down), relative to the world
         extra["lock_context"] = game.lockContextForDebug ?? NSNull()
+        extra["lock_until"] = game.lockUntilForDebug ?? NSNull() // the rolling lock's end, for the UI touch cases (iOS-R8-01)
         extra["fires"] = debugFires.map { ["id": $0.0, "t": $0.1, "locked": $0.2] }
         extra["muted"] = game.muted
         let state = base.merging(extra) { a, _ in a }

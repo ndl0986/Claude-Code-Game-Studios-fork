@@ -225,6 +225,11 @@ final class MoreCasesUITests: UITestBase {
         // QC r7: XCUITest's tap latency can land the first ◀ tap after the lock (0.695 s once), and then the case
         // can't tell anything. Each attempt checks, from the app's own press log, that the first Bỏ qua press came
         // while the lock was closed; up to 4 launches before it reports "not exercised".
+        // iOS-R8-01 (QC r8, a flake): press 1 at +0.558 was locked and rolled the lock to ≈ +1.158; press 2 landed at
+        // +1.293 under host load, a real press past the lock, and its warning failed the case. So the case stops
+        // tapping once a tap could land past lock_until, and a late press past the rolled lock is not a failure.
+        let latency = 0.2 // XCUITest tap latency margin (≈ 0.13 s seen under load in r8)
+        let minLock = 0.6 - 1.0 / 60 // screen_enter_lock, one frame of slack
         var misses: [String] = []
         for attempt in 1...4 {
             launch(["-startScreen", "play", "-beat", "4", "-stage", "walkto"])
@@ -233,16 +238,35 @@ final class MoreCasesUITests: UITestBase {
             // tap ◀ only while the rolling lock can hold (its cap is 1.5 s from the card's entry); past the cap a
             // tap on the Bỏ qua spot is a real press and may open the warning, which is correct
             let cardAt = log(state()).first { $0.0.contains("beatCard") }?.1 ?? (state()["now"] as? Double ?? 0)
-            while (state()["now"] as? Double ?? .infinity) - cardAt < 1.2 { left.tap() }
+            while true {
+                let s = state(), now = s["now"] as? Double ?? .infinity
+                let lockEnd = s["lock_until"] as? Double ?? (cardAt + 0.6)
+                if now - cardAt >= 1.2 || now + latency >= lockEnd { break }
+                left.tap()
+            }
             let s = state(), entries = log(s)
-            note("card mash, attempt \(attempt)", entries.map { String(format: "%@ @ %.3f", $0.0, $0.1) }.joined(separator: "\n"))
+            let entered = s["entered_at"] as? Double ?? cardAt, lockUntil = s["lock_until"] as? Double
             let fires = (s["fires"] as? [[String: Any]] ?? []).filter { $0["id"] as? String == "skip" }
+            func ms(_ v: Double?) -> String { v.map { String(format: "%+.0f ms", ($0 - entered) * 1000) } ?? "nil" }
+            note("card mash, attempt \(attempt)", (
+                [String(format: "entered_at %.3f; lock_until %@; now %@; card log %@", entered, ms(lockUntil), ms(s["now"] as? Double), ms(cardAt))]
+                + fires.map { f in let t = f["t"] as? Double; return String(format: "fire skip t %.3f (%@) locked %@", t ?? 0, ms(t), "\(f["locked"] ?? "?")") }
+                + entries.map { String(format: "%@ @ %.3f (%@)", $0.0, $0.1, ms($0.1)) }).joined(separator: "\n"))
+            // hard: no press beats the minimum lock, whatever the tap latency
+            for f in fires where f["locked"] as? Bool == false {
+                XCTAssertGreaterThanOrEqual((f["t"] as? Double ?? 0) - entered, minLock, "an unlocked Bỏ qua press came inside the 0.6 s lock (attempt \(attempt))")
+                if let end = lockUntil { XCTAssertGreaterThanOrEqual(f["t"] as? Double ?? 0, end - 1.0 / 60, "an unlocked Bỏ qua press came before the rolled lock's end (attempt \(attempt))") }
+            }
             if let first = fires.first, first["locked"] as? Bool == true {
-                XCTAssertEqual(s["skip_warning"] as? Bool, false, "no skip warning opened under the taps (attempt \(attempt))")
+                if fires.allSatisfy({ $0["locked"] as? Bool == true }) {
+                    XCTAssertEqual(s["skip_warning"] as? Bool, false, "no skip warning opened under the taps (attempt \(attempt))")
+                } else {
+                    note("late press past the lock, attempt \(attempt)", "a press landed after the rolled lock: a real press, so the warning may open (correct)")
+                }
                 shot("training card after the ◀ taps")
                 return
             }
-            misses.append(fires.first.map { String(format: "first Bỏ qua press %.2f s after the card, lock open", ($0["t"] as? Double ?? 0) - cardAt) } ?? "no tap reached Bỏ qua")
+            misses.append(fires.first.map { String(format: "first Bỏ qua press %.2f s after the card, lock open", ($0["t"] as? Double ?? 0) - entered) } ?? "no tap reached Bỏ qua")
             quit()
         }
         throw XCTSkip("not exercised in 4 launches: " + misses.joined(separator: "; "))
