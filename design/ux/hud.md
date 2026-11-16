@@ -133,7 +133,7 @@ the king's meeting at Bình Than!", 688 px).
 - **Nothing straddles the bar** (QC r6, for r8; hints r9). On a banner beat, the "!" bubble
   (ASSET-208), the stuck arrow (ASSET-034) **and every hint (hand, pulse)** are each **fully
   below the bar**: every pixel at y ≥ bar bottom + 8 (≈ 276). A teach hand that doesn't fit
-  above its pad sits beside it, away from the screen edge, never over a touch rect (Hints
+  above its pad sits beside it, away from the screen edge, never over a pad's visible square (Hints
   Rule 6).
   - **"!" bubble:** it sits above the helmet when it fits there entirely below the bar. With an
     enemy at spec height (top ≈ 300) it doesn't, so on banner beats it sits **beside the head**,
