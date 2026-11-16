@@ -322,18 +322,18 @@ class BeatTypesTest {
     @Test fun medalOnlyWithoutSkippingAndNeverLost() {
         val store = MemoryStore()
         val g = TestContent.fullGame(store)
-        g.debugJump("ending"); repeat(g.bundle.mission.ending.lines.size) { idle(g); g.next() }
+        g.jumpKeepingSaveForTest("ending"); repeat(g.bundle.mission.ending.lines.size) { idle(g); g.next() }
         finishQuiz(g)
         assertTrue(g.medalThisRun); assertTrue(store.flag("medal.tran-quoc-toan"))
         assertTrue(store.flag("completed.tran-quoc-toan"))
         // A later full-read replay keeps the gold medal but doesn't announce it again.
         val g1 = TestContent.fullGame(store)
-        g1.debugJump("ending"); repeat(g1.bundle.mission.ending.lines.size) { idle(g1); g1.next() }
+        g1.jumpKeepingSaveForTest("ending"); repeat(g1.bundle.mission.ending.lines.size) { idle(g1); g1.next() }
         finishQuiz(g1)
         assertFalse(g1.medalThisRun); assertTrue(g1.medalEarned)
         // A later run that skips earns no medal this run, but the saved medal stays.
         val g2 = TestContent.fullGame(store)
-        g2.debugJump("ending"); g2.skip() // medal already earned: no warning
+        g2.jumpKeepingSaveForTest("ending"); g2.skip() // medal already earned: no warning
         assertEquals(Screen.QUIZ, g2.screen)
         finishQuiz(g2)
         assertFalse(g2.medalThisRun); assertTrue(store.flag("medal.tran-quoc-toan"))

@@ -34,7 +34,7 @@ class GameFlowTest {
     @Test fun quizRetryUntilRightThenResultsStarsAndUnlock() {
         val store = MemoryStore()
         val g = TestContent.game(store)
-        g.debugJump("ending")
+        g.jumpKeepingSaveForTest("ending") // a real run's saves
         repeat(g.bundle.mission.ending.lines.size) { repeat(20) { g.step(dt, InputFrame()) }; g.next() }
         assertEquals(Screen.QUIZ, g.screen)
         val q = g.quiz!!

@@ -12,6 +12,8 @@ import android.view.WindowInsetsController
 import android.view.WindowManager
 import com.galaxyandsun.daidatanhhung.core.ClaimGate
 import com.galaxyandsun.daidatanhhung.core.Game
+import com.galaxyandsun.daidatanhhung.core.ShadowStore
+import com.galaxyandsun.daidatanhhung.core.Store
 import com.galaxyandsun.daidatanhhung.core.content.ContentLoader
 import com.galaxyandsun.daidatanhhung.core.content.Validator
 
@@ -48,7 +50,10 @@ class GameActivity : Activity() {
             (BuildConfig.DEBUG || gate.runtimeShow).also { ok -> if (!ok) Log.w(TAG, "hiding mission $id: unsigned ${gate.debugBadges}") }
         }
         val font = { w: Int -> Typeface.Builder(assets, "fonts/nunito.ttf").setFontVariationSettings("'wght' $w").build() }
-        val game = heroId?.let { Game(content, it, PrefsStore(this), { SystemClock.uptimeMillis() / 1000.0 }) { s -> app.audio.play(s) } }
+        // Debug: a launch with a `startScreen` jump plays on a shadow of the save, so it never writes the real one (r12).
+        val debugJump = BuildConfig.DEBUG && intent?.getStringExtra("startScreen") != null
+        val store: Store = PrefsStore(this).let { if (debugJump) ShadowStore(it) else it }
+        val game = heroId?.let { Game(content, it, store, { SystemClock.uptimeMillis() / 1000.0 }) { s -> app.audio.play(s) } }
         app.audio.volume = (content.tuning.values["volume"]?.value ?: 0.5).toFloat()
         // Pictures from assets.json (png/webp under content/data), decoded once on first use.
         val files = content.assets.assets.filter { it.kind == "picture" }.associate { it.id to it.file }

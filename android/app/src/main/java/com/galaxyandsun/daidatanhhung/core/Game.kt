@@ -49,6 +49,25 @@ class MemoryStore : Store {
 }
 
 /**
+ * A debug run's store (screenshots and QC jumps only): it reads through to the real save, but progress writes
+ * (stars, `medal`, `completed`, `seen_open`) stay in memory and are dropped with the process, so a jumped run never
+ * puts progress the child didn't earn in the real save (r12, parity with iOS r9). Results still show it, from memory.
+ * The language and sound settings are still saved.
+ */
+class ShadowStore(private val base: Store) : Store {
+    private val over = MemoryStore()
+    private val starsSet = mutableSetOf<String>()
+    override fun lang() = base.lang()
+    override fun setLang(code: String) = base.setLang(code)
+    override fun sound() = base.sound()
+    override fun setSound(on: Boolean) = base.setSound(on)
+    override fun stars(heroId: String) = if (heroId in starsSet) over.stars(heroId) else base.stars(heroId)
+    override fun setStars(heroId: String, stars: Int) { starsSet += heroId; over.setStars(heroId, stars) }
+    override fun flag(key: String) = over.flag(key) || base.flag(key)
+    override fun setFlag(key: String) = over.setFlag(key)
+}
+
+/**
  * The whole slice's flow: title → intro → play (beats, captions) → ending → quiz → results →
  * unlock, plus pause. Pure Kotlin: the Android layer feeds it fixed steps and menu actions, then
  * draws what it exposes. Menu actions return true when they did something (the tap tone plays once).
@@ -56,7 +75,7 @@ class MemoryStore : Store {
 class Game(
     val content: Content,
     val heroId: String,
-    private val store: Store,
+    saveStore: Store,
     /**
      * The platform's monotonic clock in seconds (Android: uptime), the same clock as the press
      * timestamps it passes. Null: the sim clock (unit tests). Input Rule 12 debounces on press
@@ -65,6 +84,10 @@ class Game(
     private val now: (() -> Double)? = null,
     private val sfx: (Sfx) -> Unit,
 ) {
+    /** The save. A debug jump swaps in a [ShadowStore] over it, so the jumped run writes no progress (r12). */
+    private var store: Store = saveStore
+    /** True once a debug jump started this run (screenshots and QC only): progress is kept in memory, not saved. */
+    var debugJumped = false; private set
     val tuning = Tuning.from(content.tuning)
     val bundle: HeroBundle = content.heroes.getValue(heroId)
     val claimStatus: Map<String, String> = bundle.claims.claims.associate { it.id to it.signoff.status }
@@ -314,8 +337,18 @@ class Game(
 
     /** Debug builds: jump to a screen for screenshots (adb `--es startScreen`). */
     fun debugJump(target: String, question: Int = 1, beat: Int = 1, stage: String? = null, starCount: Int = 2, line: Int = 1) {
+        debugJumped = true; if (store !is ShadowStore) store = ShadowStore(store)
         debugSetup = true
         try { debugJumpInner(target, question, beat, stage, starCount, line) } finally { debugSetup = false }
+    }
+
+    /**
+     * Unit tests only: the same jump, but the run keeps the real save, for tests of what a real run saves (stars,
+     * medal, `completed`). Never called by the app: its debug launches use [debugJump], which saves no progress.
+     */
+    internal fun jumpKeepingSaveForTest(target: String, question: Int = 1, beat: Int = 1, stage: String? = null) {
+        debugSetup = true
+        try { debugJumpInner(target, question, beat, stage, 2, 1) } finally { debugSetup = false }
     }
 
     private fun debugJumpInner(target: String, question: Int, beat: Int, stage: String?, starCount: Int, line: Int) {
