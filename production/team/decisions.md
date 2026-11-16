@@ -40,6 +40,22 @@ it) · **Decided** (Luan's call, with the date).
   - **(d) When to build.** Options: A. spec now, **build right after the vertical-slice gate** (the slice
     keeps the D-27 hero card; iOS r9 / Android r12 parity is not disturbed) · B. build into the slice
     now. *Recommended: A.*
+- **For Luan (from game-art-content's TASK-021 plan, 2026-11-16):**
+  - **(e) Trần Quốc Toản's hometown** (all pending, sources to verify):
+    A. **Tức Mặc, phủ Thiên Trường**, the Trần clan's home village and second capital (today Mỹ Lộc /
+    Lộc Vượng area of old Nam Định, Ninh Bình province since the 2025 merger, to confirm). Source:
+    Toàn thư, Kỷ nhà Trần (page to confirm). It is the clan's home, not his recorded birthplace, so the
+    label reads **"Quê gốc họ Trần / Home of the Trần family"**, never "nơi sinh". *Recommended.*
+    B. Làng Triệt, Tây Chân, Thiên Trường (his father Trần Triệt's birthplace; Wikipedia only, weak).
+    C. Thăng Long (no source; inference only). D. Bình Than, the story place (fallback).
+  - **(f) The short description (blurb)**, pending: VI "Cậu bé thời Trần may cờ sáu chữ vàng, xin đi
+    đánh giặc." / EN "A Trần-era boy who made a six-word banner to fight the invaders." (claims C01,
+    C07, C08; leaves out the age 15, which isn't signed off).
+  - **(g) No app-title row on the map** (no room; the name is on the icon and splash). *Recommended:
+    OK.*
+  - Team calls already made: sound only at top-left (nothing to pause on the map); one pin per place
+    (a count badge when several heroes share it); a pin tap selects the place and a row tap starts;
+    places live in a new `places.json` and each hero points to a place id.
 - **Still needed before release (unchanged):** D-28b (which official map to trace) and the map
   content appraisal (thẩm định).
 - **Status:** Open (direction decided; sub-questions on recommendations).
