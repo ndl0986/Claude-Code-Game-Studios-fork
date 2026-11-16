@@ -29,8 +29,9 @@ touches on QC's own Simulator, no macOS Accessibility, nothing compiled. Each ca
 
 Cases live in four classes: `TouchCasesUITests` (r6), `MoreCasesUITests` (r7), `R8CasesUITests` and `R9CasesUITests`.
 
-Saves: since r9 a run started by a debug jump (`-startScreen …`) never writes stars, medal, completed or seen_open
-(only VI|EN). A Simulator that ran the suite is no longer left at 3★ + medal by the skip-warning case; `test_D` does
+Saves: since r9 a run started by a debug jump (`-startScreen …`) writes no progress after the jump: no stars, medal or
+completed, and no new seen_open. Every launch still marks the first hero seen_open when the title loads, before any
+jump (Save Rule 5; the first hero is always open). VI|EN is saved as usual. A Simulator that ran the suite is no longer left at 3★ + medal by the skip-warning case; `test_D` does
 leave 3★ + medal (a real run), so reset the app's data before checking a fresh-install title.
 
 Guards: each test times out after 420 s and the whole run after `TIMEOUT` (5400 s default). The ~300 s XCTest teardown
