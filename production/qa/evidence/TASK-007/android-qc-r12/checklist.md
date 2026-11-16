@@ -52,3 +52,13 @@ Sources: dev branch commit e24855a (not frozen yet). Docs at **0f90158** (leader
 ## Not assessed (as before)
 - Sound.
 - A real low-end phone.
+
+## Added by the leader at freeze (1ae1560)
+- [ ] Diff 1ae1560 against e24855a. It adds 93e2770 (PARTNER_S = 0.62 × HERO_S, the hint target moves with the partner, tools/dev/android) and 1ae1560 (debug jumps play on a ShadowStore; JVM 165).
+- [ ] Partner size on screen is ≈ 0.62 × the hero's height (dev measured ≈ 143 vs 231 device px).
+- [ ] Debug-save fix, after a reinstall:
+  - run several debug jumps (results/new medal, quiz past the end, unlock), then a normal launch;
+  - the title shows 0★ and no medal, and the prefs hold only settings + seen_open;
+  - then a real full run still saves 3★ + medal across a relaunch.
+- [ ] The release-gate log fails only on R12 (C01–C16).
+- [ ] Note the 1-min load next to each timing item, and run those items only when the load is under ≈ 20. iOS r9 is building at the same time.

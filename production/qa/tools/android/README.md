@@ -20,7 +20,7 @@ Then run `zsh emuwatch.sh &` (with EMULOG=<emulator log>) and `zsh intwatch.sh &
 | `h.sh` | Shell basics: `$A` adb, `$P` package, `wt`, `tap`, `shot` (screencap to `$EV`), `launch` (am start with debug extras). |
 | `tt.sh` | `tt name 'script' [sleep]`: runs a fastmt script under `getevent` and appends the kernel down/up timing (script echo cut to 100 chars) to `$EV/input-timing.txt`. |
 | `wt.py` | Runs a world-coordinate multi-touch script through `mt.py`, using `sendevent`; each event costs ≈ 0.5 s, so don't use it for timing. |
-| `mt.py` | Generates the device-side `sendevent` script for multi-touch on `/dev/input/event1`. |
+| `mt.py` | Generates the device-side `sendevent` script for multi-touch on `/dev/input/event1`. Sends ABS_MT_PRESSURE and TOUCH_MAJOR like `fastmt.py`; without them the app ignores the touch (r12 re-check). Signature `3 57 101012` (the input watcher uses it). |
 | `fastmt.py` | Streams raw `input_event` structs through one `cat`, so taps hold for exactly their scripted length. Use it for every timing test. |
 | `mash.py` | `mash.py X Y N [interval] [hold]`: a fastmt script of N taps. |
 | `tl.py` | Timeline: slot-0 taps every IV from T0 and a slot-1 pad held PH of every PP s (env TX/TY/IV/T0, PX/PY/PH/PP), output as a fastmt script. |
@@ -29,7 +29,7 @@ Then run `zsh emuwatch.sh &` (with EMULOG=<emulator log>) and `zsh intwatch.sh &
 | `quiz3.py` | Quiz autoplay with a slot plan per question, e.g. `'2;1;2;0;0'` for a perfect run. It reuses `run4.py`'s probes. |
 | `frames.swift` | `frames dump <mp4> <outdir> <t0> <t1> [width]` and `frames probe <mp4> "<rects>"`: per-frame PNGs or per-frame mean colours. Pass width 2400 for full resolution. |
 | `sheet.swift` | Contact sheet of PNGs. In zsh, pass the list as `${=sel}`. |
-| `boxes.py` | `boxes.py <mp4> [thr] [y0] [y1]`: times where the panel text strips change (rolling-lock box changes). |
+| `boxes.py` | Run it by full path (it finds `frames` next to itself). `boxes.py <mp4> [thr] [y0] [y1]`: times where the panel text strips change (rolling-lock box changes). |
 | `boxes2.py` | `boxes2.py <mp4> t0 t1 y0 y1 [x0 x1]`: the 12 largest frame-to-frame changes of thin strips, in time order (env THR/LAG). |
 | `fhp.py` | `fhp.py mp4 t0 t1`: per frame, whether pads are visible, the banner cloth top (x 300) and day/night sky; prints changes. |
 | `fhp2.py` | `fhp2.py mp4`: banner top, day/dim/night sky and pause overlay per frame; prints changes. |
@@ -37,7 +37,9 @@ Then run `zsh emuwatch.sh &` (with EMULOG=<emulator log>) and `zsh intwatch.sh &
 | `scan.py` | `scan.py col\|row W A B`: runs of similar colour along a world column or row on the live screen. |
 | `bbox.py` | `bbox.py x0 y0 x1 y1 RRGGBB[,…] [tol]`: world bbox of a colour on the live screen. |
 | `px.py` | `px.py wx,wy …`: RGB at world points from a raw screencap. |
-| `pngpx.py` | RGB at world points in a saved screenshot PNG. |
+| `pngpx.py` | Library, no CLI: `load(png)` decodes a screenshot PNG for `pbbox.py`, `fig2.py` and `hint.py`. |
+| `fig2.py` | `fig2.py frame.png [heroX0-X1] [partnerX0-X1]`: hero and partner heights (hair top to shoes, device px), their ratio, and the gap between them. Check the gap by eye when a hut is behind them. |
+| `hint.py` | `hint.py png…`: pads (cream/gold regions) and the white hint glove in world coords; flags overlap with a pad's drawn box and hint pixels above y 276. |
 | `pbbox.py` | `pbbox.py file.png x0 y0 x1 y1 RRGGBB tol`: world bbox of a colour in a saved screenshot. |
 | `shot.sh` | `shot.sh <delay> [out.png]`: screencap plus a 900 px preview `v.png`. |
 | `emuwatch.sh` | Every 2 s, watches the emulator log (`$EMULOG`) and the qemu process. On a stop it records the time and process snapshots in `emu-stop-evidence.txt`. |

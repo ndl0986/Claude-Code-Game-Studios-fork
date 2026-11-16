@@ -6,6 +6,7 @@ import sys, subprocess
 DEV = '/dev/input/event1'
 EV_SYN, EV_KEY, EV_ABS = 0, 1, 3
 SLOT, TID, PX, PY, BTN, TOUCH = 0x2f, 0x39, 0x35, 0x36, 0x14a, 0x14a
+PRESS, TOUCHMAJ = 0x3a, 0x30   # the app ignores zero-pressure touches; same values as fastmt.py
 def to_panel(x, y):
     # ROTATION_90: landscape (x,y) -> natural portrait (nx, ny) = (1080-1-y?, x?) ; set empirically
     import os
@@ -26,12 +27,12 @@ for cmd in sys.argv[1].split(';'):
         x, y = to_panel(int(p[2]), int(p[3]))
         ev(EV_ABS, SLOT, s)
         if p[0] == 'down': tid[0] += 1; ev(EV_ABS, TID, tid[0])
-        ev(EV_ABS, PX, x); ev(EV_ABS, PY, y)
+        ev(EV_ABS, PX, x); ev(EV_ABS, PY, y); ev(EV_ABS, PRESS, 80); ev(EV_ABS, TOUCHMAJ, 6)
         if p[0] == 'down' and not active: ev(EV_KEY, BTN, 1)
         if p[0] == 'down': active.add(s)
         syn()
     elif p[0] == 'up':
-        ev(EV_ABS, SLOT, s); ev(EV_ABS, TID, -1); active.discard(s)
+        ev(EV_ABS, SLOT, s); ev(EV_ABS, PRESS, 0); ev(EV_ABS, TID, -1); active.discard(s)
         if not active: ev(EV_KEY, BTN, 0)
         syn()
 script = '\n'.join(lines)
