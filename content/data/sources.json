@@ -49,6 +49,27 @@
       "kind": "secondary",
       "location": "https://luatminhkhue.vn/ke-ve-nguoi-anh-hung-tran-quoc-toan.aspx",
       "status": "to_confirm"
+    },
+    {
+      "id": "S8",
+      "citation": "Báo Pháp luật Việt Nam, \"Ngôi đền thiêng ở vùng đất cổ quê hương Đức Thánh Trần\" (Tức Mặc, Thiên Trường as the Trần family's home village)",
+      "kind": "secondary",
+      "location": "https://baophapluat.vn/ngoi-den-thieng-o-vung-dat-co-que-huong-duc-thanh-tran-post363590.html",
+      "status": "to_confirm"
+    },
+    {
+      "id": "S9",
+      "citation": "Wikipedia, \"Trần Triệt\" (English): lists Trần Quốc Toản as a son of Trần Triệt, Hoài Đức vương, born in Triệt village, Tây Chân, Thiên Trường. A lead only: never the only source of a signed claim (leader, TASK-021)",
+      "kind": "secondary",
+      "location": "https://en.wikipedia.org/wiki/Tr%E1%BA%A7n_Tri%E1%BB%87t (to trace to the primary source it cites)",
+      "status": "to_confirm"
+    },
+    {
+      "id": "S10",
+      "citation": "LuatVietnam, \"Nghị quyết 202/2025/QH15 của Quốc hội về việc sắp xếp đơn vị hành chính cấp tỉnh\" (Hà Nam, Nam Định and Ninh Bình merged into Ninh Bình province; in force 2025-07-01)",
+      "kind": "secondary",
+      "location": "https://luatvietnam.vn/hanh-chinh/nghi-quyet-202-2025-qh15-cua-quoc-hoi-ve-viec-sap-xep-don-vi-hanh-chinh-cap-tinh-402728-d1.html (confirm against the official text on vbpl.vn)",
+      "status": "to_confirm"
     }
   ]
 }

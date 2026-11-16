@@ -5,6 +5,8 @@
 > **Platform Target**: Android + iOS phones, landscape, touch only (`project.yaml` goal mobile; no gamepad or keyboard). Accessibility tier: Basic+ (`design/accessibility-requirements.md`).
 > **Records what's built**, plus the **hero card (D-27: A, Luan 2026-11-14; both apps build it in
 > r6)** and one **PENDING** variant waiting for Luan (D-20).
+> **Superseded after the vertical-slice gate** by `design/ux/start-map.md` (D-36, TASK-021): this
+> stays the slice's spec until then, and the D-27 card is kept as built.
 > Sources: Mission flow Rule 1 ("the map" = the title in the slice), P-04, Hero progression
 > Rules 2–5 and 10, Map & timeline (the later home), Language Rule 3, QC G5.
 
@@ -103,13 +105,13 @@ Positions are world px in the 1280×720 world, drawn at `k_px` (Input F1); the c
 |---|---|
 | Place | Centred on x = 640, **x 260–1020, y 175–355** (760 × 180: 20 + portrait 140 + 20 + name box 560 + 20). It sits below the title row (y 18–155, between the sound button top-left and the VI\|EN chip top-right) and above Start, so it never touches the sound button, the chip or Start. It stays clear of the corner blocks at every supported k (k ≥ 0.40, `design/ux/hud.md` §3.3): the sound block is ≈ x 18–155, y 18–155 at k 0.527 and grows to ≈ 18–198 at k 0.40 (≈ 243 even at 0.32), which still ends left of x 260 |
 | Plate | Cream panel `#FFF6E3`, a thin bronze-drum ring border (the story frame motif, one motif only), rounded corners, ink outline |
-| Portrait | **Slice: the hero's determined portrait** (`pic.portrait_<hero_id>_hero_determined`, ASSET-327; it exists in `assets.json`, so R10 stays green and no new asset is needed). A neutral portrait (`…_hero`) replaces it with final art. 140 × 140 in a **round drum-ring frame**, the same frame as the map's open pin (Map Rule 3), left side of the card, 20 from the edge |
+| Portrait | **Slice: the hero's determined portrait** (`pic.portrait_<hero_id>_hero_determined`, ASSET-327; it exists in `assets.json`, so R10 stays green and no new asset is needed). A neutral portrait (`…_hero`) replaces it with final art. 140 × 140 in a **round drum-ring frame**, the same frame as the start map's open pin and row (Map Rule 3; `start-map.md` §5.5), left side of the card, 20 from the edge |
 | Name | The hero's `name` Text, `hero_name` field (box 560, 44 px heading, 1 line), right of the portrait, top row |
 | Best stars | Three stars at 48 px under the name, filled (ASSET-022) up to the saved best (`stars.<hero_id>`), outline (ASSET-023) for the rest. No "best" label: on the title, the stars are always the best |
 | Medal | 56 px right of the stars: gold (ASSET-036) if `medal.<hero_id>`, else outline (ASSET-037). No text line (the results screen carries `ui.medal.*`) |
-| Tap | **None in the slice.** Start is the one action. A tap on the card does nothing and plays no tone; it shows no pressed state. *When the map ships, the same pieces become the timeline card (Map Rule 5), which is tappable and ≥ `pad_min` tall* |
+| Tap | **None in the slice.** Start is the one action. A tap on the card does nothing and plays no tone; it shows no pressed state. *When the start map ships, the same pieces become the hero row (`start-map.md` §5.5), which is tappable and ≥ `pad_min` tall* |
 | Motion | None. No pulse, no flashing (Start is the thing that pulses, if anything) |
-| Which hero | The **current** hero: the last open hero in `timeline_order` (Hero progression F1). The slice has one, Trần Quốc Toản |
+| Which hero | The **current** hero: the last open hero in `timeline_order`, open by Hero progression F1 (the same definition as `start-map.md` §6). The slice has one, Trần Quốc Toản |
 
 **What it shows when:**
 

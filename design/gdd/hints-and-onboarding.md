@@ -64,7 +64,7 @@ flags, `stall`/`idle`), plan reviews 1–2, and QC O2 (hints count from the capt
 | hold-meter | The meter rose | Hand on special again |
 | reach-the-flag (path clear, no encounter active) | Any movement, left or right | An arrow over the flag, if it is on screen; otherwise ▶ pulses |
 | dialogue (ask button showing, Mission flow Rule 7d) | An ask tap or "Tiếp" | Hand on the ask button (the button also pulses) |
-| map: first view (Map Rule 8) | The open pin is tapped | Hand on the only open pin, shown at once on the first map view (not after `hint_delay`) and kept until that tap |
+| map: first view (Map Rule 10) | A hero row is tapped | Hand on the **current hero's row** (its place is pre-selected, Map Rule 7), shown at once on the first map view (not after `hint_delay`) and kept until that tap |
 
 The stuck arrow (ASSET-034) is gold with an ink outline, never red. On banner beats it never enters
 the motto bar's band; where it can't bounce above its target below the bar, it points from the side
@@ -94,8 +94,8 @@ the motto bar's band; where it can't bounce above its target below the bar, it p
 8. **No hints on story screens, with two named exceptions.** Story boxes, the quiz and results
    use their own "Tiếp" pulse (Mission flow, Quiz). This system covers play, plus exactly two
    non-play rows of Rule 4: the **dialogue ask button** (an action the child must take to move
-   the story on) and the **map's first view** (Map & timeline Rule 8). A dialogue line showing
-   "Tiếp" gets no hint. The map's locked-pin arrow is tap feedback owned by Map (Map Rule 3),
+   the story on) and the **map's first view** (Map & Hometowns Rule 10). A dialogue line showing
+   "Tiếp" gets no hint. The map's locked-row arrow is tap feedback owned by Map (Map Rule 6),
    not a hint.
 
 ### States and Transitions
@@ -114,7 +114,7 @@ caption or card closing, or resume).
 | Side-scroll movement & combat | events `hit`, `block`, `pushed`, `windup_started`, `flee`, hero moved | (none) | Combat GDD |
 | Input & touch controls | pad positions and sizes | (none) | Input GDD |
 | Audio & voice-over | (none) | hint shown (post-slice: voice prompt id) | Audio GDD |
-| Map & timeline | "first map view", the open pin's position; pin tapped | (none) | Map GDD |
+| Map & Hometowns | "first map view", the current row's position; row tapped | (none) | Map GDD |
 | Content data | `tuning.json` `hint_delay` | (none) | Content contract |
 
 ## Formulas
@@ -161,7 +161,7 @@ hides them, and the timer restarts.
 | Side-scroll movement & combat | this depends on it | Hard | Combat events |
 | Input & touch controls | this depends on it | Hard | Pad positions |
 | Audio & voice-over | this depends on it (post-slice voice prompts) | Soft | Prompt ids |
-| Map & timeline | this depends on it | Soft | First map view, open-pin position (map row of Rule 4) |
+| Map & Hometowns | this depends on it | Soft | First map view, current-row position (map row of Rule 4) |
 | Content data | this depends on it | Hard | `hint_delay` |
 
 Mission flow (Interactions table), Combat (Interactions table) and Map & timeline (Dependencies)
@@ -223,8 +223,8 @@ need a screenshot per platform.
 10. **GIVEN** a dialogue beat with the ask button showing, **WHEN** no ask tap comes for 301
     steps at dt = 1/60, **THEN** the hand points at the ask button; **WHEN** the ask is tapped,
     **THEN** it hides and the timer restarts. On a line showing "Tiếp", no hint ever shows.
-11. **GIVEN** the first map view, **WHEN** it opens, **THEN** the hand is on the only open pin
-    until that pin is tapped.
+11. **GIVEN** the first map view, **WHEN** it opens, **THEN** the hand is on the current hero's row
+    (its place pre-selected) until a row is tapped.
 12. **GIVEN** the training beat's finish step (a banner beat) at k 0.40, 0.488 and 0.517, in VI and EN, **WHEN** the special-pad teach hand and, separately, the stuck pulse show, **THEN** every hint pixel is at y ≥ 276; where the hand doesn't fit above Cờ it sits left of Cờ at Cờ's mid-height, pointing at it; and no hint pixel lies inside any pad's visible square.
 
 ## Open Questions

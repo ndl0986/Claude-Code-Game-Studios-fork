@@ -119,7 +119,7 @@ Per hero: `hidden` (not playable) → `locked` (playable, not open) → `open` �
 | Quiz & stars | (none: Quiz reports to Mission flow) | best stars for the results screen | Quiz GDD |
 | Save & progress | saved keys | writes `completed`, `seen_open`, `stars`, `medal` | Save GDD / D-04 ADR |
 | Content data & claims | `index.json`, each `mission.json` `hero` (`timeline_order`, `next_hero`), claim status (R12) | (none) | Content contract |
-| Map & timeline (Alpha) | (none) | per hero: state, stars, medal, place | Map GDD |
+| Map & Hometowns (Alpha) | (none) | per hero: state, stars, medal, hometown; the current hero (F1: last open in `timeline_order`); the medal total (F2) | Map GDD |
 
 ## Formulas
 
@@ -186,7 +186,7 @@ but the counts never do, so show counts ("★ 7 · 🏅 2") rather than percenta
 | Mission flow & beat types | both ways | Hard | The one completion report {hero, stars, medal_earned}; open and medal state; the newly opened hero |
 | Save & progress | this depends on it | Hard | The saved keys (Rule 11); storage rules in `design/gdd/save-and-progress.md` |
 | Content data & claims | this depends on it | Hard | `timeline_order`, `next_hero`, R12 |
-| Map & timeline | depends on this | Hard (Alpha) | Per-hero state, stars, medal |
+| Map & Hometowns | depends on this | Hard (Alpha) | Per-hero state, stars, medal, current hero (F1), medal total (F2) |
 | Language & text | this depends on it | Hard | Hero names, results, unlock and medal text (`design/gdd/language-and-text.md`) |
 
 Quiz & stars and Mission flow both list Hero progression as a dependent (bidirectional).

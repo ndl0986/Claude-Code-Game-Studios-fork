@@ -217,6 +217,56 @@
       "signoff": {
         "status": "pending"
       }
+    },
+    {
+      "id": "C17",
+      "vi": "Tức Mặc, phủ Thiên Trường là quê gốc của họ Trần, dòng họ của Trần Quốc Toản; nay thuộc tỉnh Ninh Bình.",
+      "en": "Tức Mặc, in Thiên Trường, is the home of the Trần family, Trần Quốc Toản's family; today it is in Ninh Bình province.",
+      "label": "fact",
+      "sources": [
+        "S3",
+        "S8",
+        "S10"
+      ],
+      "signoff": {
+        "status": "pending"
+      }
+    },
+    {
+      "id": "C18",
+      "vi": "Theo một nguồn, cha của Trần Quốc Toản là Trần Triệt (Hoài Đức vương), người làng Triệt, huyện Tây Chân, phủ Thiên Trường.",
+      "en": "One source says Trần Quốc Toản's father was Trần Triệt (Hoài Đức vương), from Triệt village, Tây Chân district, Thiên Trường.",
+      "label": "interpretation",
+      "sources": [
+        "S9"
+      ],
+      "signoff": {
+        "status": "pending"
+      }
+    },
+    {
+      "id": "C19",
+      "vi": "Là người trong hoàng tộc, Trần Quốc Toản sống ở kinh đô Thăng Long, nay là Hà Nội.",
+      "en": "As a member of the royal family, Trần Quốc Toản lived in the capital, Thăng Long, today Hà Nội.",
+      "label": "interpretation",
+      "sources": [
+        "S3"
+      ],
+      "signoff": {
+        "status": "pending"
+      }
+    },
+    {
+      "id": "C20",
+      "vi": "Bến Bình Than, nơi diễn ra câu chuyện quả cam, nay thuộc tỉnh Bắc Ninh.",
+      "en": "The Bình Than riverbank, where the orange story takes place, is today in Bắc Ninh province.",
+      "label": "fact",
+      "sources": [
+        "S6"
+      ],
+      "signoff": {
+        "status": "pending"
+      }
     }
   ]
 }

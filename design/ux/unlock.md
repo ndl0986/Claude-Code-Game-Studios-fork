@@ -4,7 +4,7 @@
 > **Template**: UX Spec
 > **Platform Target**: Android + iOS phones, landscape, touch only (`project.yaml` goal mobile; no gamepad or keyboard). Accessibility tier: Basic+ (`design/accessibility-requirements.md`).
 > **Records what's built.** Sources: Hero progression Rules 4–6, 10; Mission flow states
-> (`unlock`); Map & timeline Rule 7 (the later arrival sequence); Audio (`sfx_unlock_reveal`); assets
+> (`unlock`); Map & Hometowns Rule 9 (the later arrival sequence; `start-map.md` §10); Audio (`sfx_unlock_reveal`); assets
 > ASSET-038 (the reveal glow).
 
 ## 1. Purpose & Player Need

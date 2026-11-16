@@ -1,0 +1,139 @@
+{
+  "_note": "DRAFT for TASK-021 (D-36). Proposed schema MINOR, NOT BUILT: the apps don't read this file. Devs review the shape in the PR; game-art-content moves it into content/data once the schema lands. All texts and claims pending Luan's sign-off. Map coordinates are placeholders until the map art (D-28b).",
+  "places": {
+    "schema_version": "1.0",
+    "places": [
+      {
+        "id": "place.tuc-mac",
+        "name": {
+          "id": "place.tuc-mac.name",
+          "vi": "Tức Mặc, Thiên Trường",
+          "en": "Tức Mặc, Thiên Trường",
+          "claims": [
+            "C17"
+          ]
+        },
+        "about": {
+          "id": "place.tuc-mac.about",
+          "vi": "Quê gốc họ Trần, nay thuộc Ninh Bình",
+          "en": "Home of the Trần family, today in Ninh Bình",
+          "claims": [
+            "C17"
+          ]
+        },
+        "map": {
+          "x": 0.36,
+          "y": 0.17
+        },
+        "region": "north",
+        "claims": []
+      },
+      {
+        "id": "place.triet",
+        "name": {
+          "id": "place.triet.name",
+          "vi": "Làng Triệt, Thiên Trường",
+          "en": "Triệt village, Thiên Trường",
+          "claims": [
+            "C18"
+          ]
+        },
+        "about": {
+          "id": "place.triet.about",
+          "vi": "Theo một nguồn, quê cha ông; nay thuộc Ninh Bình",
+          "en": "One source: his father's village; today in Ninh Bình",
+          "claims": [
+            "C18"
+          ]
+        },
+        "map": {
+          "x": 0.36,
+          "y": 0.18
+        },
+        "region": "north",
+        "claims": [],
+        "_candidate": "B (lead only)"
+      },
+      {
+        "id": "place.thang-long",
+        "name": {
+          "id": "place.thang-long.name",
+          "vi": "Thăng Long",
+          "en": "Thăng Long",
+          "claims": [
+            "C19"
+          ]
+        },
+        "about": {
+          "id": "place.thang-long.about",
+          "vi": "Kinh đô nhà Trần, nay là Hà Nội",
+          "en": "The Trần capital, today Hà Nội",
+          "claims": [
+            "C19"
+          ]
+        },
+        "map": {
+          "x": 0.33,
+          "y": 0.14
+        },
+        "region": "north",
+        "claims": [],
+        "_candidate": "C"
+      },
+      {
+        "id": "place.binh-than",
+        "name": {
+          "id": "place.binh-than.name",
+          "vi": "Bến Bình Than",
+          "en": "Bình Than riverbank",
+          "claims": [
+            "C04"
+          ]
+        },
+        "about": {
+          "id": "place.binh-than.about",
+          "vi": "Nơi diễn ra câu chuyện, nay thuộc Bắc Ninh",
+          "en": "Where the story happens, today in Bắc Ninh",
+          "claims": [
+            "C20"
+          ]
+        },
+        "map": {
+          "x": 0.36,
+          "y": 0.13
+        },
+        "region": "north",
+        "claims": [],
+        "_candidate": "D (fallback: the story place)"
+      }
+    ],
+    "_claims_note": "Place-level claims go in each place's `claims` array (same Claim shape as claims.json; leader's call). For TQT the candidate claims C17-C20 already sit in his claims.json, because each one is a claim about him; a place shared by later heroes moves its location claim here."
+  },
+  "hero_fields": {
+    "hero_id": "tran-quoc-toan",
+    "hometown": {
+      "place": "place.tuc-mac",
+      "claims": [
+        "C17"
+      ],
+      "_candidates": {
+        "A (recommended)": "place.tuc-mac / C17",
+        "B": "place.triet / C18",
+        "C": "place.thang-long / C19",
+        "D": "place.binh-than / C04, C20"
+      },
+      "_label": "Quê gốc họ Trần / Home of the Trần family (never 'nơi sinh')"
+    },
+    "blurb": {
+      "id": "tqt.hero.blurb",
+      "vi": "Cậu bé thời Trần tự lập đội quân nhỏ đi đánh giặc.",
+      "en": "A Trần-era boy who raised a band to fight the invaders.",
+      "claims": [
+        "C01",
+        "C07",
+        "C09"
+      ],
+      "_why": "Cites facts only. The banner (C08) is a legend claim, so citing it would need a legend marker (R4), which a 2-line blurb has no room for."
+    }
+  }
+}
