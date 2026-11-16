@@ -48,9 +48,11 @@ it) · **Decided** (Luan's call, with the date).
     label reads **"Quê gốc họ Trần / Home of the Trần family"**, never "nơi sinh". *Recommended.*
     B. Làng Triệt, Tây Chân, Thiên Trường (his father Trần Triệt's birthplace; Wikipedia only, weak).
     C. Thăng Long (no source; inference only). D. Bình Than, the story place (fallback).
-  - **(f) The short description (blurb)**, pending: VI "Cậu bé thời Trần may cờ sáu chữ vàng, xin đi
-    đánh giặc." / EN "A Trần-era boy who made a six-word banner to fight the invaders." (claims C01,
-    C07, C08; leaves out the age 15, which isn't signed off).
+  - **(f) The short description (blurb)**, pending (revised 2026-11-16 to cite facts only — the banner
+    is a legend claim and would need a "Truyện kể rằng" marker that a 2-line blurb can't fit):
+    VI "Cậu bé thời Trần tự lập đội quân nhỏ đi đánh giặc." / EN "A Trần-era boy who raised a band to
+    fight the invaders." (claims C01, C07, C09; leaves out the age 15). Hometown claims are C17–C20
+    (A–D above), sources S8–S10, all pending.
   - **(g) No app-title row on the map** (no room; the name is on the icon and splash). *Recommended:
     OK.*
   - Team calls already made: sound only at top-left (nothing to pause on the map); one pin per place
