@@ -616,6 +616,7 @@ final class R9CasesUITests: UITestBase {
         let end = Date().addingTimeInterval(400)
         var s = state(), taps = 0, warnings = 0
         while Date() < end {
+            let t0 = Date()
             s = state()
             let screen = s["screen"] as? String ?? "", btns = s["buttons"] as? [String: Any] ?? [:]
             if screen == "results" { break }
@@ -624,15 +625,22 @@ final class R9CasesUITests: UITestBase {
                 button("card\(slot)")?.tap(); taps += 1
             } else if btns["ask"] != nil { button("ask")?.tap(); taps += 1 }
             else if btns["next"] != nil { button("next")?.tap(); taps += 1 }
-            Thread.sleep(forTimeInterval: 0.35)
+            let left = 0.35 - Date().timeIntervalSince(t0) // a press every ≈ 0.35 s when XCUITest allows (r9: a fixed 0.35 s sleep gave ≈ 0.73 s)
+            if left > 0 { Thread.sleep(forTimeInterval: left) }
         }
-        note("real run", "taps \(taps); skip warning seen \(warnings) times; debug_jumped \(s["debug_jumped"] ?? "?")\n"
+        // the mash's real cadence: gaps between consecutive Tiếp/ask presses while a story box is up
+        let pressTimes = log(s).filter { $0.0 == "fire:next" || $0.0 == "fire:ask" }.map(\.1)
+        let gaps = zip(pressTimes.dropFirst(), pressTimes).map { $0 - $1 }.sorted()
+        let median = gaps.isEmpty ? .infinity : gaps[gaps.count / 2]
+        note("real run", String(format: "press gaps: median %.3f s, min %.3f s (%d presses in the log)\n", median, gaps.first ?? .infinity, pressTimes.count)
+             + "taps \(taps); skip warning seen \(warnings) times; debug_jumped \(s["debug_jumped"] ?? "?")\n"
              + log(s).map { String(format: "%@ @ %.3f", $0.0, $0.1) }.joined(separator: "\n"))
         XCTAssertEqual(s["screen"] as? String, "results", "the run reached the results")
         XCTAssertEqual(s["debug_jumped"] as? Bool, false, "no debug jump")
         XCTAssertEqual(warnings, 0, "the mash never opened the skip warning")
         XCTAssertEqual(s["medal_earned"] as? Bool, true, "mashing is not skipping: the medal is earned")
         XCTAssertEqual(s["stars"] as? Int, 3)
+        XCTAssertLessThan(median, 0.6, "a real mash: the median press gap is inside the 0.6 s lock (else the run proves only fast taps)")
         shot("results after a mashed real run")
         quit()
         launch([])
