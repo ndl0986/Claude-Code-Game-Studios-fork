@@ -1,6 +1,6 @@
 # TASK-028: move Dải Đất Anh Hùng into `games/dai-dat-anh-hung/` (plan only)
 
-Status: **PLAN**. Nothing has moved. Author: game-dev-ios. The Android parts were surveyed by game-dev-android (folded
+Status: **PLAN, revised after game-dev-android's review** (rev 2, on docs 4792468). Nothing has moved. **Execution waits for Luan's go.** Author: game-dev-ios. The Android parts were surveyed by game-dev-android (folded
 in below), who reviews them. Luan put the game on hold (2026-11-17), and a new game starts next. The framework stays at
 the root so that game starts clean.
 
@@ -8,13 +8,13 @@ the root so that game starts clean.
 
 | Branch | Tip (fetched 2026-11-17) | Holds | Not in docs |
 |---|---|---|---|
-| `docs/vn-history-game-plan` | 3a32cf4 | design/, production/, content/, assets/, docs/architecture ADRs, tools/art, tools/team, project.yaml (≈ 446 commits ahead of main) | — |
-| `feat/TASK-006-ios-native` | 81d3fa4 local (origin 9af55da) | + ios/, tools/ios, tools/qa/ios-*, production/qa/tools/ios, iOS evidence, TASK-026 (Preview, icon, privacy, guides) | 117 commits |
+| `docs/vn-history-game-plan` | 4792468 | design/, production/, content/, assets/, docs/architecture ADRs, tools/art, tools/team, project.yaml (≈ 446 commits ahead of main) | — |
+| `feat/TASK-006-ios-native` | 81d3fa4 (pushed) | + ios/, tools/ios, tools/qa/ios-*, production/qa/tools/ios, iOS evidence, TASK-026 (Preview, icon, privacy, guides) | 117 commits |
 | `setup/TASK-007-android-kotlin` | beea731 | + android/, tools/dev/android, production/qa/tools/android, Android evidence | 115 commits |
 
-Both code branches already contain docs up to 3f464b4. Docs has about 23 newer commits (board, decisions, QC records).
-**The leader pushes 81d3fa4 first** (55cbbe6 install-script fix, 81d3fa4 device-run evidence); the move starts from the
-pushed tips.
+Both code branches already contain docs up to 3f464b4. Docs has newer commits (board, decisions, QC records).
+All three tips are pushed (81d3fa4 includes 55cbbe6, the install-script fix, and the device-run evidence). The merge
+dry run was repeated on these tips with the same result (§1).
 
 ## 1. Merge order and expected conflicts
 
@@ -24,11 +24,24 @@ On one branch, **`chore/TASK-028-move-game`** (cut from `docs/vn-history-game-pl
 2. `git merge --no-ff setup/TASK-007-android-kotlin`: **one conflict, `.gitignore`**. Both sides add
    `production/qa/builds/`, and Android also adds `*.jks`, `*.keystore`, `keystore.properties`, `preview.properties`
    (D-37). Resolve by keeping both blocks (one `production/qa/builds/` line, and the four key rules).
-3. **Commit the merged state before moving anything** (a pure merge commit). This gives the build/test baseline in §5 a
+3. **Commit the merged state before moving anything** (a pure merge commit). This gives the build/test baseline in §4 a
    reference point: every check runs once here, then again after the move.
-4. The move itself is one commit of `git mv` only (§2), so `git log --follow` and blame survive. Path fixes follow it
+4. **Baselines, one after the other, never both at once** (load ≤ 40, one emulator per platform): game-dev-ios runs the
+   iOS baseline on the merge commit, then game-dev-android runs the Android baseline on the same commit in its own
+   worktree. **Gate: game-dev-android reports its baseline before the `git mv` commit is made.**
+5. The move itself is one commit of `git mv` only (§2), so `git log --follow` and blame survive. Path fixes follow it
    as separate commits, one per platform or tool (§3).
-5. Merging to `main` is the leader's call afterwards. Nothing in the plan pushes.
+   - **`git mv` of a directory renames it on disk, untracked and ignored files included.** So `android/local.properties`,
+     `android/.gradle/`, `android/build/`, `android/app/build/` and the untracked (not ignored) `android/production/`
+     harness logs all move with it. The same goes for any untracked files under the production/ subfolders that move
+     (e.g. ignored `production/qa/builds/`). After the move, *check* `local.properties` is there (sdk.dir); don't
+     recreate it.
+   - **The move commit never uses `git add -A`, `git add .` or `commit -a`.** Only the index changes `git mv` made are
+     committed. Before committing, `git status --short` must show **only renames (`R`)**, plus untracked
+     `?? games/dai-dat-anh-hung/android/production/` (and nothing else untracked that wasn't untracked before). Any
+     other line stops the move.
+   - Run `./gradlew --stop` (and quit Xcode/Simulators building from these paths) before the `git mv`.
+6. Merging to `main` is the leader's call afterwards. Nothing in the plan pushes.
 
 Risk: a QC round still open on either code branch. The move starts only when both platforms are idle. iOS: r11 passed,
 and iOS-R11-01 (9af55da) is committed but not frozen. Android: r14 is the latest.
@@ -44,7 +57,7 @@ and iOS-R11-01 (9af55da) is committed but not frozen. Android: r14 is the latest
 | `content/` | `…/content/` | data, schema, samples, fixtures, drafts, metrics; **must stay a sibling of ios/ and android/** (§3) |
 | `assets/` | `…/assets/` | art (incl. app_icon) |
 | `design/` (game parts) | `…/design/` | gdd/, narrative/, art/, assets/ (specs), ux/, accessibility-requirements.md, **registry/entities.yaml as edited by the game** (see "copied") |
-| `production/` (game parts) | `…/production/` | progress.md, project-plan.md, stage.txt, gate-checks/, qa/ (evidence ≈ 1060 files, tools/), releases/, team/ (board, decisions, handover, plans) |
+| `production/` (game parts, **item by item, never the whole folder**) | `…/production/` | `git mv` each of: progress.md, project-plan.md, stage.txt, gate-checks/, qa/ (evidence ≈ 1060 files, tools/; the ignored builds/ inside moves on disk and stays ignored by the generic `[Bb]uild/` rule), releases/, team/ (board, decisions, handover, plans). **Not** session-state/ or session-logs/ (see "Not moved") |
 | `docs/architecture/adr-000{1,2,3}-*.md`, `docs/architecture/architecture.md` | `…/docs/architecture/` | the game's ADRs (the 4 files the game added) |
 | `tools/ios/`, `tools/qa/` (ios-touch-tests, ios-release-check), `tools/dev/android/`, `tools/art/` | `…/tools/…` | game build, QC and art tools |
 | `project.yaml` (game version) | `…/project.yaml` | the game's config (stage Systems Design, goal mobile, native engine notes) |
@@ -62,13 +75,19 @@ for the team sessions; its prompts get a game-root parameter, §3).
   as template files. The root keeps main's version, and the game folder gets its own copy where the game edited it
   (entities.yaml is unchanged vs main today, so the game only gets a copy if it diverges).
 - `.claude/skills/game-team-lead/SKILL.md`: the only `.claude/` file the game changed. It stays at the root (a team
-  skill), but its paths (`production/team/board.md`, `production/qa/evidence/`, `ios/`, `android/`, `tools/team/…`)
-  become relative to a **game root** it reads from the leader's brief. The leader's call.
+  skill). Its paths become relative to the game root; **the leader updates them**.
 
-**Not moved** (untracked or ignored): `production/qa/builds/` (frozen QC builds),
-`production/session-state/active.md` and `team-sessions.tsv`, `android/local.properties`, `.gradle/`, `build/`,
-`ios/…/xcuserdata`. Run `./gradlew --stop` first. After the move, `local.properties` (sdk.dir) is re-created or
-`ANDROID_HOME` is set. Frozen build folders stay usable from their old place, or move by hand.
+**Not moved:**
+- **`production/session-state/` and `production/session-logs/` stay at the root.** Their ignore rules are anchored
+  (a slash in the middle: `production/session-state/*`, `production/session-logs/`), so under
+  `games/dai-dat-anh-hung/production/` they would stop matching, and `active.md` and `team-sessions.tsv` would become
+  trackable. They are session and team infra anyway. If game sessions ever write them inside the game folder, add
+  `**/production/session-state/` and `**/production/session-logs/` to the root `.gitignore` (or a
+  `games/dai-dat-anh-hung/.gitignore`) first.
+- Ignored and untracked files **inside** moved folders travel with `git mv` on disk (§1.5) and stay untracked:
+  `android/local.properties`, `.gradle/`, `build/`, `android/production/` logs, `production/qa/builds/` (still ignored
+  by `[Bb]uild/`… under the new path, which is checked by `git status --short` showing no `??` for them), and
+  `ios/…/xcuserdata`.
 
 ## 3. Hard-coded paths that must change (and those that don't)
 
@@ -96,7 +115,7 @@ folder):
 | `production/qa/tools/ios/q8.sh` L8 | `$ROOT/production/qa/evidence/…` | `$ROOT/games/dai-dat-anh-hung/production/…`, or ROOT = the game folder: **game-qc-ios** |
 | `production/qa/tools/android/h.sh` L2 (and siblings using `QCREPO`/`EV`) | `…/game-qc-android/production/qa/evidence/…` | add `games/dai-dat-anh-hung/`: **game-qc-android** |
 | `tools/team/start-member.sh` L23–L34, L47–L50 | prompts name `ios/`, `android/`, `production/project-plan.md`, `production/progress.md`; `$ROOT/production/session-state/team-sessions.tsv` | a `GAME_ROOT` parameter (default `games/dai-dat-anh-hung`) put in front of the game paths in the prompts. The session list stays at the root `production/session-state/` (team infra) |
-| `.claude/skills/game-team-lead/SKILL.md` | `production/team/board.md`, `production/qa/evidence/`, `production/progress.md`, `ios/`, `android/` | relative to the game root (leader) |
+| `.claude/skills/game-team-lead/SKILL.md` | `production/team/board.md`, `production/qa/evidence/`, `production/progress.md`, `ios/`, `android/` | relative to the game root: **the leader updates these** |
 | Guides and READMEs | `tools/qa/ios-touch-tests.md`, `production/releases/ios-device-and-testflight.md`, `tools/dev/android/README.md`, `android/README.md`, `production/qa/tools/*/README.md`, evidence READMEs | path text only. Old evidence READMEs stay as they are (historical record); only the guides people run from get updated |
 | `project.yaml` (game copy) | `code_root: ios` / `android`, `shared_content: content/data` | relative to the game folder (unchanged text; a comment says so) |
 
@@ -128,13 +147,16 @@ Each check runs on the merge commit (baseline) and again after the move and path
 5. Scripts: `install-device.sh --dry-run` and `archive-upload.sh --dry-run` print paths under the game folder. One real
    `install-device.sh` to Luan's iPhone if it is connected (it renews the 7-day profile anyway).
 
-**Android** (game-dev-android's list, verbatim scope):
-1. `./gradlew --stop`, then `clean testDebugUnitTest assembleDebug assemblePreview`: JVM **182/182**, TraceTest
-   (trace 1.3 **byte-identical**). RngTest must actually run: it skips silently if its fixture is missing, so check its
-   count in the report.
-2. `unzip -l` the Debug and Preview APKs: `assets/data/…`, samples (Debug only), drafts where expected. Diff against the
-   baseline APK listing.
-3. `assembleRelease` still stops **only** at R12.
+**Android** (game-dev-android runs both the baseline and the after-move checks; every item is a **diff against the
+baseline**, not a pass/fail on its own):
+1. `./gradlew --stop`, then `clean testDebugUnitTest assembleDebug assemblePreview`: JVM **182/182**. Compare the
+   **test counts per class from the JUnit XML** with the baseline, at least TraceTest (trace 1.3 **byte-identical**),
+   FixtureTest, RngTest (it skips silently when its fixture is missing, so its count must equal the baseline) and
+   ContentTests.
+2. `unzip -l` the Debug and Preview APKs, diffed against the baseline listings. **Preview has `assets/data/…` only;
+   Debug also has samples and drafts.**
+3. `assembleRelease` still stops **only** at R12, with **error text matching the baseline** (claims C01–C16 only; no
+   "not found" or missing-path message).
 4. `tools/dev/android/phone-install.sh --no-install`; a smoke run on emulator 5556.
 
 **Repo-wide:**
@@ -171,11 +193,15 @@ Each check runs on the merge commit (baseline) and again after the move and path
 
 ## 6. Order of work once approved
 
+0. **Luan says go.** Until then nothing in this plan runs.
 1. The leader pushes the code tips. Both platforms are idle.
-2. game-dev-ios: the merge branch (§1), baseline checks (§4), `git mv` commit, the iOS path fixes and iOS checks.
-3. game-dev-android: the Android path fixes (if any beyond the guides) and the Android checks on the same branch.
-   game-qc-ios and game-qc-android fix their QC tool paths (§3).
-4. The leader: `game-team-lead` skill paths, `tools/team` `GAME_ROOT`, the root reset (§5), and the merge to main.
+2. game-dev-ios: the merge branch and merge commit (§1). Then the iOS baseline (§4).
+3. game-dev-android: the Android baseline on the same merge commit, after the iOS baseline finishes (never both at
+   once), and reports it. **Gate.**
+4. game-dev-ios: the `git mv` commit (§1.5 rules: renames only), then the iOS path fixes and the iOS after-move checks.
+5. game-dev-android: the Android path fixes (if any beyond the guides) and the Android after-move diffs, after step 4's
+   iOS checks finish. game-qc-ios and game-qc-android fix their QC tool paths (§3).
+6. The leader: `game-team-lead` skill paths, `tools/team` `GAME_ROOT`, the root reset (§5), and the merge to main.
 
 Estimated: about half a day of iOS-side work including the baseline and after-move checks; the Android checks run in
 parallel.
