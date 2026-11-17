@@ -2,10 +2,11 @@
 # QC helper for the iOS Simulator (game-qc-ios).
 # usage: q8.sh shot NAME | tmp | launch ARGS... | term | defaults
 # env:   U   Simulator UDID (default: QC iPhone 18 Pro E9F515E9)
-#        E   evidence folder for `shot` (default: TASK-006/ios-qc-r8 in this worktree)
+#        E   evidence folder for `shot` (default: <game>/production/qa/evidence/TASK-006/ios-qc-r8)
 #        S   scratch folder for `tmp` (default: $TMPDIR)
-ROOT=$(cd "$(dirname "$0")/../../../.." && pwd)
-E=${E:-$ROOT/production/qa/evidence/TASK-006/ios-qc-r8}
+# GAME: the game folder (TASK-028: games/dai-dat-anh-hung/), four levels above this script
+GAME=$(cd "$(dirname "$0")/../../../.." && pwd)
+E=${E:-$GAME/production/qa/evidence/TASK-006/ios-qc-r8}
 S=${S:-${TMPDIR:-/tmp}}
 U=${U:-E9F515E9-58F2-4A92-ABEF-C5CD59CE8183}
 ID=com.galaxyandsun.daidatanhhung
