@@ -268,28 +268,154 @@ outline traits (Section 3) tell them apart, which is why markings are never the 
 
 ## 5. Character Design Direction
 
-[To be designed] — the player character's visual archetype, how players tell
-enemies, NPCs and allies apart at a glance, expression and pose style, and how
-much detail survives at game camera distance (LOD philosophy).
+**No avatar: the child is the player, and the creatures are the cast.** There is no player
+character on screen; the child's own finger or keyboard is the actor (Pillar 1). Every figure is a
+*theme cast member*: a creature or object that a letter or number becomes. There are no enemies
+and no NPC roles, so telling characters apart means telling **the 26 cast members of a theme**
+apart (Section 3: family plus one outline trait; Section 4: hue slots) and telling **the cast from
+the UI**: cast members have an ink outline and never glow; UI tokens glow and have no outline.
+
+**Expression: friendly, awake, never scary** (Pillar 3, Calm Magic). Eyes are large with a
+highlight, looking forward and right. Mouths are closed or a small smile; teeth appear only as tiny
+rounded nubs (the T-Rex), never bared. No claws aimed at the viewer, no angry brows, no open
+roaring jaws wider than the head.
+*Design test: when a pose or face could read as fierce to a 3-year-old, choose the softer one,
+even for the T-Rex.*
+
+**Motion is the character, not detail.** Each family has one signature idle, slow and at most
+1 Hz: sauropod neck sway, raptor head look, ankylosaurus tail wag, rex jaw nod, nest egg wobble
+with a peek, flyer wing flap; everyone has a breathing bob. Two moves are shared by every cast
+member: the **tap hop** (tap → hop → its own sound again, iteration 4) and the **parade walk**. No
+other actions: no eating, fighting or sleeping animations in the MVP.
+
+**Pose:** side view, facing right, standing on the stage line, filling ≥ 60% of the stage box.
+Flyers are the one exception: a flyer may hover, anchored by its ground shadow.
+
+**Detail per size (the 2D equivalent of LOD):**
+
+| Size | Where | Height on the 1280×720 stage | What survives |
+|---|---|---|---|
+| Stage | reveal / idle | ~280–360 px | everything: markings, spots, toes, blush |
+| Figures / grown-up list | reference | ~70–90 px | outline trait, eye, main colour areas |
+| Parade | the walk | ~75–95 px | outline trait, eye, body colour; spots, stripes and blush are dropped |
+
+*Design test: if a marking is under 6 px at the size it is shown, leave it out at that size.*
+
+**Numbers:** the baby dinosaurs are one shared, simpler cast member (round body, big head), varied
+only by colour, so the **count** is what reads.
 
 ## 6. Environment Design Language
 
-[To be designed] — architectural style and its tie to the world's culture,
-texture philosophy (painted, PBR or stylised, and why), prop density rules per
-area type, and environmental storytelling guidelines.
+**A stage, not a world.** There is no architecture, culture or history to show: the environment is
+a theatre set that belongs to the toy, not to the theme (Section 1). Three layers, back to front:
+**sky** (the time-of-day gradient, stars, sun or moon, hand-picked weather; Section 2), **hills**
+(two long overlapping bands) and **stage** (a shallow cream floor where the cast stands). A new
+theme never adds scenery.
+*Design test: when a theme asks for a backdrop of its own (a volcano, a city), say no; the cast
+carries the theme.*
+
+**Flat fills, no texture** (Pillars 2 and 3). Only the sky and ground use a vertical gradient;
+every other shape is a flat fill. No noise, grain, painted brush texture or PBR materials: texture
+would compete with the stardust, which is the only "texture" in the game. Cast members keep their
+ink outline; the environment has none (Section 3).
+
+**Prop density: zero on the stage.** The stage is empty except for the cast member, its soft
+ground shadow and, now and then, the parade on the hill ridge. Sky elements are limited by count:
+stars ≤ 50, clouds 2–4, and the weather caps in Section 2. Hint letters live in the sky band only
+(Section 4).
+*Design test: if an element is neither sky, hill, stage nor cast, it does not belong.*
+
+**Environmental storytelling without text.** The time of day tells the child where the day is:
+the morning sun rising, the evening dimming, the night quiet with stars (night is the "bedtime"
+cue, with no words). The parade on the hill ridge says "all your friends", with no score. The moon
+in the corner is scenery that a grown-up knows to hold.
 
 ## 7. UI/HUD Visual Direction
 
-[To be designed] — diegetic versus screen-space HUD, typography (personality,
-weight, size hierarchy, minimum readable size), iconography style, UI animation
-feel, and any art-direction versus readability conflict and how it was decided.
+### Art view
+
+**No HUD for the child.** The child sees only the hint letters (floating in the sky, almost part
+of the scene), the queue tokens, the play button and the moon; plus, if a grown-up turns it on,
+the on-screen keyboard row (below). The grown-up panel is the only screen with text.
+
+**Typography: the glyph is the UI.** One bundled OFL rounded, heavy sans (the prototype uses Arial
+Rounded as a stand-in; production bundles the font TASK-033 baked the glyphs from). Letters are
+uppercase; digits are plain "school" forms, with no decorative serifs or ligatures. Sizes on the
+1280×720 stage: the glyph about 330 px tall, hint letters about 80 px, queue tokens about 30 px.
+The grown-up panel uses the same family, regular weight, 15–22 pt.
+
+**Icons:** one only, the play triangle. Everything else is a letter, a creature or the moon.
+
+**UI motion:** hints fade and scale in over 0.6 s and drift slowly; tokens appear without bounce;
+the glyph rises from where it was pressed with an ease-out.
+
+### UX view
+
+- **Every press is answered:** a chime plus a sparkle; an ignored press still sparkles; with the
+  sound off, everything still reads visually.
+- **Flash safety:** the glyph's ~2.2 Hz halo pulse (K-08) is below the three-flashes-per-second
+  threshold and changes blur, not brightness.
+- **Target size:** a hint is about 120 px on the stage, roughly 75–80 pt on an 11" iPad: well above
+  44 pt and sized for small fingers.
+- **Reduce Motion (rule):** follow the iOS/macOS Reduce Motion setting with a shorter morph, no hint
+  drift and a calmer parade.
+- **Keyboard-only grown-ups on the Mac (rule):** the grown-up panel also opens from the parent key
+  chord (as in the TASK-033 kiosk), not only by holding the moon with a mouse.
+
+### Conflicts and how they were decided (Luan, 2026-11-17)
+
+1. **Hints drift and fade after ~6 s; a slow 2.5-year-old aim can miss.** Decided: hints keep a slow
+   drift and fade, but **a touch on a fading hint still counts and the hint holds still once
+   touched**, and the touch area is a little larger than the drawn bubble.
+2. **Touch-only play reaches only the 3 random hints, so the child cannot choose a favourite.**
+   Decided: an **optional on-screen keyboard row** (big letter keys along the bottom, as in the
+   first prototype), **off by default**, turned on by a grown-up in the panel. When it is on, the
+   stage's ground line moves up to make room; hints stay in the sky.
 
 ## 8. Asset Standards
 
-[To be designed] — file formats, naming convention, texture resolution tiers,
-LOD levels, export settings, and the engine's hard limits (poly budgets per
-asset category, texture memory, material slots). Where an art preference and a
-technical limit disagree, record both and the trade-off chosen.
+### Art view
+
+- **Source format:** every cast member is a layered **SVG** on a 640×440 artboard, anchor at the
+  feet (320, 410), facing right. Layers: `body`, `outline`, `detail` (`detail` is hidden at parade
+  size, Section 5). One **silhouette** path is exported per cast member (a single compound path, no
+  strokes) for MorphCore: the TASK-033 contract (glyphs pre-baked to paths from the bundled OFL
+  font; silhouettes as SVG path data in the key table).
+- **Naming** (`[category]_[theme]_[key]_[name]_[variant].[ext]`):
+  - `cast_dino_c_triceratops_01.svg`, `sil_dino_c_triceratops_01.svg`
+  - `glyph_<font>_<char>.json`
+  - `sfx_dino_c_triceratops_01.m4a`
+  - `vo_en-us_letter_c.m4a`, `vo_en-us_word_triceratops.m4a`
+- **Animation:** idles are **parameters in data** (sway amplitude and rate per family), not frame
+  sequences. No sprite sheets in the MVP.
+- **Audio:** creature sounds ≤ 2 s; every sound and voice line loudness-matched (the level is set
+  with the audio direction).
+
+### Technical view
+
+- **Stack:** native Swift + SpriteKit (ADR-0001). There is no engine reference in the repo for this
+  stack, so importer behaviour is **unverified until a build proves it**.
+- **No performance budgets are set** in `project.yaml` (frame time, memory, app size). Proposed:
+  60 fps (16.7 ms) on the oldest supported iPad; the rest set with `/project-settings` after the
+  architecture step.
+- **Memory rule:** on the largest iPad a stage creature is about 775 px tall, so ≤ 1024 px per
+  creature texture if rasterized. All 26 loaded at once would be ≈ 100 MB, so **load on demand**:
+  the current creature, the one leaving, and the parade at a small 256 px tier.
+- **Particles:** 420 per morph by default; TASK-033 measured the SpriteKit morph fine on the iPad
+  Simulator and the Mac. **On a real device: NOT ASSESSED** until Luan runs TASK-033's iPad
+  procedure.
+- **Audio:** AAC `.m4a` mono for storage, decoded to PCM at load so a press plays at once
+  (TASK-033: stop + schedule + play costs 3–10 ms on the main thread).
+
+### Conflict: how the SVG art reaches the screen (Luan, 2026-11-17: record both, decide in architecture)
+
+- **Ideal (art):** draw the vector live, crisp at any size, small files.
+- **Constrained (technical):** SpriteKit has no SVG renderer; live paths (SKShapeNode) have an
+  **unverified** cost for 26 detailed creatures. Rasterizing the SVG to PNG at build time in 3 tiers
+  (stage, list, parade) is fast and proven, at the cost of a larger app and a re-export on every
+  art change.
+- **Decision path:** the source is always SVG either way. Which one renders is decided by an ADR in
+  `/create-architecture`, backed by a measurement on a real iPad.
 
 ## 9. Reference Direction
 
