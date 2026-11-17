@@ -303,14 +303,15 @@ Vietnamese legends as told to children, school history lessons, national celebra
 
 | Consideration | Assessment |
 | ---- | ---- |
-| **Recommended Engine** | No preference stated; `/setup-engine` decides with this concept and the mobile platform (the project plan's candidate is Godot 4, alternative Unity) |
-| **Key Technical Challenges** | Android + iOS builds for a first game; Vietnamese diacritic fonts and VI/EN voice; switching language at runtime; adding storybook content after release without collecting data; performance on low-end Android |
+| **Platforms and stack** | Two native apps (ADR-0001, accepted by Luan 2026-11-14). **iOS:** Swift + SpriteKit in a SwiftUI shell, minimum iOS 17 (ADR-0002). **Android:** Kotlin + the Android SDK only (SurfaceView game loop drawn with Canvas, SoundPool audio, no game framework). Both apps read one shared, bundled, offline `content/data/` folder of JSON. Godot 4 (TASK-002) is shelved; no engine from the template's engine table is used |
+| **Key Technical Challenges** | The same rules written twice (Swift and Kotlin), kept equal by shared content and shared test fixtures; Vietnamese diacritic fonts and VI/EN voice; switching language at runtime; adding storybook content after release without collecting data; performance on low-end Android |
 | **Art Style** | 2D modern kids' cartoon |
 | **Art Pipeline Complexity** | Medium (custom 2D; likely AI-assisted, needs an art bible for consistency) |
 | **Audio Needs** | Moderate: voice-over in two languages per mission, music, SFX |
 | **Networking** | None. The game stays fully offline; storybook content ships in **timed app updates** (Luan, 2026-11-14), so no content server or download |
 | **Content Volume** | MVP: 1 hero mission (~5 min), 1 lit place on the map and timeline, 1 quiz. First release: 2 heroes + 1 storybook. Full vision: many heroes ⟨placeholder count⟩ + a calendar of storybooks |
 | **Procedural Systems** | None |
+| **Memory budget** | At most 64 MB of decoded textures alive at any moment, on both apps (ADR-0002) |
 
 ---
 
@@ -323,14 +324,21 @@ Vietnamese legends as told to children, school history lessons, national celebra
 - Battle stories must feel heroic without violence; balance is set with the reviewer.
 
 ### Technical Risks
-- Engine not chosen; both mobile builds are unproven in this template (plan: build an
-  empty project for Android and iOS in phase 0).
+- Two codebases (Swift, Kotlin) can drift apart. Mitigation (ADR-0001): one shared
+  `content/data/` schema that carries the history sign-off gate, and the same test
+  fixtures run on both apps.
+- The studio template's engine tooling has no Swift or Kotlin support (no
+  `docs/engine-reference/` folder, no `engines.tsv` row), so engine-dependent checks
+  report NOT ASSESSED, and APIs newer than the model's knowledge are checked by building
+  against the installed SDK, not from memory.
 - Storybooks "day by day or on celebrations" ship in **timed app updates** (decided):
   each celebration's update must clear Google Play and App Store review before the date,
   so releases are planned on a content calendar with review lead time. "Day by day"
   pages are bundled in the update and unlocked by the device date, offline.
 - Runtime VI/EN switching with voice doubles audio assets and requires layouts that fit both.
-- `TD-FEASIBILITY skipped — Lean mode`: feasibility not reviewed by the technical-director.
+- Feasibility is shown by the vertical slice built on both apps and passed by QC: iOS
+  r9 `9c12a4a` (QC `fc43e7d`) and Android r12 `1ae1560` (QC `25ce9c9`), reviewed at the
+  Concept → Systems Design gate (2026-11-17).
 
 ### Market Risks
 - Audience size and competition for Vietnamese children's history games: not researched.
@@ -388,7 +396,7 @@ If time runs out: ship the MVP hero alone, polished, and add heroes and storyboo
 ## Next Steps
 
 - [x] Luan approves this concept (design and content decision), 2026-11-14
-- [ ] `/setup-engine`: choose and pin the engine for Android + iOS (later task)
+- [x] Platform chosen: native per platform, Swift + SpriteKit and Kotlin (ADR-0001, 2026-11-14); `/setup-engine` not used
 - [ ] `/prototype [core mechanic]`: validate the story-first side-scrolling attack/defend mission (later task)
 - [ ] Collect the team's hero list, sources and reviewer; replace every ⟨placeholder⟩
 - [ ] `/art-bible`: modern kids' cartoon with Vietnamese motifs
