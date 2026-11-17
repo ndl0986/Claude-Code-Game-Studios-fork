@@ -53,7 +53,7 @@ All measured numbers come from Release builds of the spike.
 | **Authoring effort for 36 morphs** | **One shared effect.** Per key: the object's outline as an SVG path (exported from the art) plus a JSON row; glyphs are baked by a tool. Engineering per key ≈ 0 | Per key: one authored glyph → object animation in the Rive editor (≈ 36 animations; our desk estimate is 1–3 h each for a simple shape morph, not measured). A generic morph would need a Luau path-effect script, compiled and signed by Rive's servers: feasibility not verified |
 | **App-size delta**, iOS arm64 Release (approximation of a thinned build) | SpikeNoRive.app **540 KB** (199 KB zipped) | Spike.app **6,152 KB** (2,443 KB zipped): **RiveRuntime.framework adds 5,528 KB** |
 | **Licence / cost** | Apple SDK; Fredoka font OFL 1.1 (bake tool only) | Runtime MIT, free. The editor's free plan exports **with a Rive splash screen**; no splash needs Cadet, $17/seat/month |
-| **Android reuse** | Same recipe plus the shared fixture (Kotlin must match to 1e-3); same JSON, SVG paths and baked glyphs; new drawing code | The same .riv plays on rive-android 11.16.3 (MIT, minSdk 21, Rive Renderer), with per-feature gaps. Size per ABI not verified |
+| **Android reuse** | Same recipe plus the shared fixture (Kotlin must match to 1e-3); same JSON, SVG paths and baked glyphs; new drawing code | The same .riv plays on rive-android, with per-feature gaps. Latest release 11.16.3, per Maven Central's `app/rive/rive-android/maven-metadata.xml` (`<release>11.16.3</release>`, lastUpdated 2026-11-11; repo1.maven.org/maven2/app/rive/rive-android/maven-metadata.xml). MIT, minSdk 21 (README "Supported Versions"). The rive-android README doesn't name a renderer; Rive's docs say the Rive Renderer is the default (rive.app/docs/runtimes/choose-a-renderer). Size per ABI not verified |
 | **Offline / Kids / COPPA** | No network code; nothing collected | Runtime ships a PrivacyInfo.xcprivacy that collects nothing. Its legacy API **fetches CDN-hosted assets at play time by default** (below). Not on Apple's commonly-used-SDK list |
 
 **How the numbers were measured** (`Spike/Metrics.swift`):
@@ -150,15 +150,23 @@ found on an official page.
 - **The recipe is fixed:** SplitMix64 (ULong), the SVG subset with 16-segment curves, arc-length sampling, the
   pairing shuffle and the per-particle draws. The doc comment of `MorphCore/Sources/MorphCore/Morph.swift` gives
   it in full.
+  - **Segment length is `sqrt(dx² + dy²)`, written out** (MorphCore's own `hypot` is `(a*a + b*b).squareRoot()`).
+    Ports must **not** use a library `hypot`: `kotlin.math.hypot` rounds differently at the last bit, and the
+    arc-length sampling then drifts.
+  - **UInt64 values in the fixture stay strings** (`rngFirst4`): JSON numbers lose precision above 2^53. Parse
+    them as unsigned 64-bit.
 - **The proof:** load `fixtures/morph-D-dinosaur.json`, run the Kotlin morph, and compare the 240 particles at
-  t = 0, 0.5 and 1 within 1e-3.
+  t = 0, 0.5 and 1 within 1e-3. **Done:** game-dev-android's independent Kotlin port matched it bit for bit.
 - **Drawing:**
-  - One `Canvas.drawPoints(float[], paint)` with a round cap.
-  - Or one `drawBitmap` per particle from a pre-rendered soft-dot bitmap. With 240 particles that's well inside a
-    mid-range tablet's budget.
-  - Or Compose `drawPoints(PointMode.Points, cap = Round)`.
-  - Avoid `BlurMaskFilter` per point; use a pre-blurred dot, or `RenderEffect` (API 31+) on the layer.
-- **Budget:** 240–600 particles at 60 fps, to be confirmed by game-dev-android on a real low-end tablet.
+  - `Canvas.drawPoints(float[], paint)` and Compose `drawPoints(PointMode.Points, cap = Round)` use **one Paint,
+    one colour and one size per call**, so they suit only uniform dots.
+  - Twinkling or size-varying stardust (as on iOS) needs **`drawCircle` per particle**, or **`drawBitmap` per
+    particle from a pre-blurred soft-dot bitmap with a per-draw alpha** (`Paint.alpha`).
+  - Avoid `BlurMaskFilter` per point.
+  - `RenderEffect` (API 31+) applies to a View, a RenderNode or a Compose `graphicsLayer`. It does **not** apply
+    to a frame drawn with `SurfaceView` / `lockHardwareCanvas`.
+- **Budget:** 240–600 particles at 60 fps is **NOT ASSESSED**. It stays so until it's measured on a real low-end
+  tablet (game-dev-android).
 
 ## Child lock-in (Luan's playtest: control keys switched apps)
 
