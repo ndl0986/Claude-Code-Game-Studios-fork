@@ -1,10 +1,10 @@
 # ADR-0001: Native Apple stack: Swift, SpriteKit in a SwiftUI shell, one Xcode project
 
 ## Status
-Proposed (awaiting Luan's approval)
+Accepted (Luan, 2026-11-18)
 
 ## Date
-2026-11-17. Revised 2026-11-17 (TASK-035): adds the TASK-033 spike's findings.
+2026-11-17. Revised 2026-11-17 (TASK-035): adds the TASK-033 spike's findings. Accepted by Luan 2026-11-18.
 
 ## Last Verified
 2026-11-17 (TASK-035), against the TASK-033 spike's builds (Release, Xcode 27.1 (27A9275), iOS SDK 27.1, macOS
@@ -58,8 +58,8 @@ iPadOS and macOS, with iPhone to follow.
 |-------|-------|
 | **Depends On** | None |
 | **Enables** | The key-table / content-data ADR; the audio ADR; the SVG-rendering ADR (open follow-up below); a later Android ADR (which adopts `morph-contract-v1`); a 3D (RealityKit) ADR if K-01 moves to 3D |
-| **Blocks** | The scaffold story (first Xcode project). Not blocked by approval of this ADR for design work. |
-| **Ordering Note** | Written at Concept stage so `/setup-engine` has a recorded engine. Revised by TASK-035 with the TASK-033 spike. `/create-architecture` and `/architecture-decision` extend it. |
+| **Blocks** | The scaffold story (first Xcode project). Now accepted (2026-11-18), so this ADR no longer holds it back. |
+| **Ordering Note** | Written at Concept stage so `/setup-engine` has a recorded engine. Revised by TASK-035 with the TASK-033 spike. Accepted by Luan on 2026-11-18. `/create-architecture` and `/architecture-decision` extend it. |
 
 ## Context
 
