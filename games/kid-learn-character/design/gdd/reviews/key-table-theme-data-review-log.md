@@ -57,3 +57,14 @@ Reviewed-Content-Hash: docs/architecture/adr-0001-native-apple.md 9bd960cdffd4be
 Reviewed-Content-Hash: design/gdd/game-concept.md e525c154ca1b014fe3ca0024ba5a339d37135429
 Reviewed-Content-Hash: production/team/decisions.md f952e72dffded60e03757aa070e59bbc13fc03f4
 Reviewed-Content-Hash: design/gdd/systems-index.md 6652c64909266be6f7de820ddfbff3a731c77c7d
+
+## Update — 2026-11-18 — game-dev-ios review + Luan's letter-sound picks (TASK-036)
+Not a re-review; it records one consumer fix and Luan's decisions.
+- Fix (matches TASK-038): glyph missing → no morph, the cast member fades in, with the voice.
+- P1: P = **Tapejara** replaces pteranodon (/p/ inside; flyer in flight; teal slot unchanged).
+- X1: **Xenoceratops kept** as the one recorded exception to T5 / K-09. New theme field
+  `soundExceptions` and item `sound: "exception"`; V4 allows it only for listed keys.
+- C1–C3: Triceratops, Oviraptor, Utahraptor, Quetzalcoatlus kept.
+- Still open: hue-slot cap counted per edition (art-director). The silhouette-storage and family-name
+  findings are handled outside this GDD (leader).
+Reviewed-Content-Hash: design/gdd/key-table-theme-data.md f8f54faf82ac675dfdf929b0465ef4bdff8253c8

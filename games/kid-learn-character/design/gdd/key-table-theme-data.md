@@ -74,6 +74,7 @@ There are three kinds of file, all JSON, bundled in the app, and read with plain
 | `glyphSet` | string | The id of the glyph set the theme uses (c below). |
 | `families` | object | Family id → `{ idle: <idle param id> }`. The idle parameters themselves live in Cast Rendering data (art bible §5, §8). |
 | `countedItem` | object | The thing numbers count and the "empty" item for 0: `{ castId, singular, plural, emptyCastId, emptyWord }`, e.g. `baby dinosaur` / `baby dinosaurs`, `dino_0_nest_01` / `an empty nest`. |
+| `soundExceptions` | object | Key → the decision that allows it to break T5, e.g. `{ "X": "K-09, Luan 2026-11-18" }`. Empty by default. |
 | `keys` | object | Key ("A"…"9") → key entry (b). All 36 keys are required. |
 
 **b. Key entry and item**
@@ -87,7 +88,7 @@ A key entry is `{ "items": [ item, … ] }`. The demo and MVP have exactly 1 ite
 | `name` | string | Display name for the grown-up list ("Triceratops"). The child never needs to read it. |
 | `word` | string | The words the voice says after the letter, e.g. `"triceratops"`, `"three baby dinosaurs"`. |
 | `say` | string | The letter or number name spelled the way it sounds, the script for recording and for any TTS fallback: `"see"`, `"double you"`, `"zee"` (US, K-05), `"three"`. A is `"A."` because the prototype's voice read "ay" as "eye". Never "letter C" (concept §3). |
-| `sound` | string | How the letter's usual sound is heard in the word: `"start"`, `"inside"` or `"end"` (K-07, Q3). Not set on digit items. |
+| `sound` | string | How the letter's usual sound is heard in the word: `"start"`, `"inside"` or `"end"` (K-07, K-09), or `"exception"` for a key Luan recorded as an exception (theme `soundExceptions`). Not set on digit items. |
 | `family` | string | A family id from the theme (`horned`, `sauropod`…; art bible §3). |
 | `variant` | string | The family variant: the one outline trait (`tri-horn`, `neck-up`…). Siblings in a family never share one. |
 | `hueSlot` | string | One of `rose coral ochre leaf mint teal blue violet`, or `shared` for objects that use the shared constants (art bible §4). |
@@ -185,7 +186,7 @@ lowercase with underscores:
 | V1 | `schemaVersion` is a known major. |
 | V2 | All 36 keys are present, each with ≥ 1 item; MVP themes have exactly 1. |
 | V3 | Keys are exactly `A`–`Z`, `0`–`9`; no other key appears. |
-| V4 | Every letter item's `word` contains its letter (case-insensitive) **and** its `sound` field is set (K-07, Q3). Whether the sound is really audible is a human content check (Toddler-safe rule T5); the field records the reviewer's answer. |
+| V4 | Every letter item's `word` contains its letter (case-insensitive) **and** its `sound` field is set (K-07, K-09). `"exception"` is allowed only for a key listed in the theme's `soundExceptions`. Whether the sound is really audible is a human content check (Toddler-safe rule T5); the field records the reviewer's answer. |
 | V5 | Every digit item's `word` begins with the number word (`one`…`nine`) and contains `countedItem.singular` for 1 and `.plural` for 2–9 (MVP edition); key `0`'s item is `countedItem.emptyCastId` with `emptyWord`. |
 | V6 | `castId` is unique in the theme and follows the naming pattern; `art`, `silhouette`, `sfx` follow art bible §8 naming. |
 | V7 | Every referenced file exists: art, silhouette, sfx (if not null), and every voice line for **every** locale in `voiceLocales`. |
@@ -205,7 +206,7 @@ lowercase with underscores:
 | T2 | **No weapons, fire, blood, skulls, death or danger** as a cast member or a word. A fossil is a friendly bone, not a skeleton of a death. |
 | T3 | **No brands, no known characters**: no real-world logo, product or character look-alike. |
 | T4 | **Recognisable**: the silhouette at 64 px stays nameable and distinct from its family siblings (art bible §3 test). |
-| T5 | **The letter's usual sound is audible** in the spoken word (Luan, Q3), at the start, inside or at the end (K-07). A silent letter (**p**teranodon) or a different sound (**x**enoceratops says "z") fails. A content reviewer listens to every word and sets `sound`. |
+| T5 | **The letter's usual sound is audible** in the spoken word (K-09, Luan 2026-11-18), at the start, inside or at the end (K-07). A silent letter (**p**teranodon) fails. A content reviewer listens to every word and sets `sound`. **Recorded exception: X = xenoceratops** (X says "z"; X has few options; Luan, 2026-11-18). Any other exception needs Luan's decision and a `soundExceptions` entry. |
 | T6 | The voice says the letter **name**, then the word (K-05): "C… triceratops", never "letter C". |
 | T7 | Sounds are short (≤ 2 s) and gentle: roars stay low and soft (prototype `roar_volume` 0.35; level set by Audio & Voice). |
 | T8 | Real names are kept even when long (Luan, Q2): quetzalcoatlus, wuerhosaurus and others stay. |
@@ -290,7 +291,7 @@ whenever C is non-empty. C is never empty: n ≥ 1, and `last` is only excluded 
 | `schemaVersion` unknown (newer major) | The theme is refused at load and the app stays on the current theme. If it is the default theme, it can't ship: the build validator uses the same version list. |
 | A theme fails the load check when picked in the panel | It is not shown. The current theme stays, with one debug log line. No message to the child. The grown-up panel may grey out the theme (Parent Gate GDD's call). |
 | Silhouette or art missing at run time (despite the gate) | Per asset, nothing shown to the child, one debug log line. **The glyph glows and sparkles out** instead of morphing, and the letter voice plays if present (game-dev-ios point 6). |
-| Glyph missing | The key's reveal is a sparkle with the letter voice, if present. |
+| Glyph missing | No morph: the cast member fades in, with the voice (matches TASK-038). |
 | sfx missing | Skipped. The rest of the reveal plays. |
 | Word voice missing | The letter (or number) line only. |
 | Letter voice missing too | The chime only (Audio & Voice). |
@@ -364,7 +365,7 @@ the theme pick (Parent Gate & Grown-up Panel GDD).
 
 From the played prototype (iterations 1–4). Families, variants and hue slots follow art bible §3–§4.
 SFX kinds are the prototype's synth recipes, which stand in until real sounds are sourced. **Flag
-column:** ✅ passes T5; ⚠ see the content questions below.
+column:** ✅ passes T5; ✳ recorded exception (K-09).
 
 ### Letters
 
@@ -372,7 +373,7 @@ column:** ✅ passes T5; ⚠ see the content questions below.
 |---|---|---|---|---|---|---|---|---|
 | A | Ankylosaurus | ankylosaurus | A. | start, short a | ankylosaur / club-tail | blue | thump | ✅ |
 | B | Brachiosaurus | brachiosaurus | bee | start | sauropod / neck-up | leaf | deep roar | ✅ |
-| C | Triceratops | triceratops | see | inside, soft c /s/ | horned / tri-horn | coral | grumble | ⚠ C1 |
+| C | Triceratops | triceratops | see | inside, soft c /s/ | horned / tri-horn | coral | grumble | ✅ (C1: kept) |
 | D | Diplodocus | diplodocus | dee | start | sauropod / neck-forward | teal | deep roar | ✅ |
 | E | Edmontosaurus | edmontosaurus | ee | start, short e | duckbill / duck-bill | blue | honk | ✅ |
 | F | Fossil | fossil | eff | start | object / fossil | shared | crack | ✅ (Q6: kept) |
@@ -384,23 +385,22 @@ column:** ✅ passes T5; ⚠ see the content questions below.
 | L | Lambeosaurus | lambeosaurus | el | start | duckbill / hatchet-crest | rose | honk | ✅ |
 | M | Maiasaura | maiasaura | em | start | duckbill / brow-baby | violet | honk | ✅ |
 | N | Nest | nest | en | start | object / nest | shared | crack | ✅ (Q6: kept) |
-| O | Oviraptor | oviraptor | oh | start, long o | ornithomimid / oviraptor | rose | chirp | ⚠ C2 |
-| P | Pteranodon | pteranodon | pee | **silent p** | flyer / in-flight | teal | screech | ❌ replace (P1) |
-| Q | Quetzalcoatlus | quetzalcoatlus | cue | start, /k/ ("KET-sal") | flyer / standing | coral | screech | ⚠ C3 |
+| O | Oviraptor | oviraptor | oh | start, long o | ornithomimid / oviraptor | rose | chirp | ✅ (C2: kept) |
+| P | Tapejara | tapejara | pee | inside, /p/ ("ta-peh-JAR-a") | flyer / in-flight | teal | screech | ✅ (P1: replaces pteranodon) |
+| Q | Quetzalcoatlus | quetzalcoatlus | cue | start, /k/ ("KET-sal") | flyer / standing | coral | screech | ✅ (C3: kept) |
 | R | Raptor | raptor | are | start | raptor / stripes-brows | leaf | raptor chirp | ✅ |
 | S | Stegosaurus | stegosaurus | ess | start | plated / plates | leaf | grumble | ✅ |
 | T | T-Rex | tee rex | tee | start | rex / plain | violet | big roar (soft) | ✅ (Q5: kept) |
-| U | Utahraptor | utahraptor | you | start, long u /juː/ | raptor / arm-feathers-crest | coral | raptor chirp | ⚠ C2 |
+| U | Utahraptor | utahraptor | you | start, long u /juː/ | raptor / arm-feathers-crest | coral | raptor chirp | ✅ (C2: kept) |
 | V | Velociraptor | velociraptor | vee | start | raptor / long-snout | ochre | raptor chirp | ✅ |
 | W | Wuerhosaurus | wuerhosaurus | double you | start, /w/ | plated / low-plates | teal | grumble | ✅ |
-| X | Xenoceratops | xenoceratops | ex | **"z" sound** | horned / xeno-horns | blue | grumble | ❌ replace (X1) |
+| X | Xenoceratops | xenoceratops | ex | "z" sound: **exception** | horned / xeno-horns | blue | grumble | ✳ (X1: K-09 exception) |
 | Y | Yutyrannus | yutyrannus | why | start, /j/ | rex / feathered | coral | big roar (soft) | ✅ |
 | Z | Zuniceratops | zuniceratops | zee | start | horned / zuni-horns | leaf | grumble | ✅ |
 
 Hue-slot count (art bible §4, current table): rose 2, coral 4, ochre 4, leaf 4, mint 1, teal 3,
-blue 4, violet 2. All are within the cap of 4. A replacement for P or X must take a slot that keeps
-the cap and the sibling rule (e.g. a new P out of teal keeps teal at 3; a horned X replacement can't
-use coral or leaf, the slots of its siblings C and Z).
+blue 4, violet 2. All are within the cap of 4. Tapejara takes pteranodon's place in teal, so the
+counts are unchanged.
 
 ### Numbers
 
@@ -422,50 +422,18 @@ Counted item: `baby dinosaur` / `baby dinosaurs`. Empty item: the nest (the same
 The prototype capped the chirps at 5, so 6–9 don't sound longer than 5. Whether the sound should
 count along is Audio & Voice's call.
 
-### Replacements to pick (Luan, Q3)
+### Letter-sound picks (Luan, 2026-11-18)
 
-All are real dinosaur-world animals in which the child can hear the letter's usual sound (K-07: it
-can be anywhere in the name). They are listed for Luan to pick, not decided here.
+Under K-09 (hear the letter's usual sound), game-art-content listed options for every key where the
+sound was silent, shifted or borderline. Luan picked:
 
-**P1: P (pteranodon has a silent p).**
-
-| Option | Spoken | Sound heard | Family effect |
+| # | Key | Pick | Why / note |
 |---|---|---|---|
-| a. Tapejara | "ta-peh-JAR-a" | inside, /p/ | stays a **flyer** (in flight, big crest). Keeps the art bible's flyer pair (P, Q). |
-| b. Tupandactylus | "too-pan-DAC-ti-lus" | inside, /p/ | flyer, giant sail crest. Longer word. |
-| c. Protoceratops | "pro-to-SER-a-tops" | start, /p/ | joins **horned** (4 with C, X, Z). Best known of the three, but loses the in-flight flyer. |
-| d. Parasaurolophus | "pa-ra-saw-ROL-o-fus" | start, /p/ | joins **duckbills** (6 members). Well known (tube crest), but the duckbill family is already the largest. |
-
-Recommendation for Luan's choice: **a. Tapejara**. It keeps the flyer in flight, so the art bible's
-families don't change, and the /p/ is clear.
-
-**X1: X (xenoceratops says "z").** Almost no word starts with X's usual sound, /ks/, so the sound has
-to sit inside or at the end of the name. T-Rex stays at T (Q5), so "rex" is not available for X.
-
-| Option | Spoken | Sound heard | Family effect |
-|---|---|---|---|
-| a. Alxasaurus | "alk-sa-SAW-rus" | inside, /ks/ | a new family (a long-armed, pot-bellied plant-eater). One more family to draw. |
-| b. Mixosaurus | "mix-o-SAW-rus" | inside, /ks/ | a small sea reptile of the dinosaur age (not a dinosaur). A new "swimmer" family; it would stand on the stage line like the others, or float like the flyers. |
-| c. Keep xenoceratops as a declared exception | "ZEE-no-SER-a-tops" | ✗ | Breaks Q3. Listed only for completeness. |
-
-Recommendation for Luan's choice: **a. Alxasaurus**. It is a dinosaur, the /ks/ is clear ("alk-sa"),
-and its round, pot-bellied shape draws friendly. Horned keeps C and Z.
-
-### Other keys where the letter's usual sound may not be heard (Luan picks)
-
-Luan's rule (Q3) covers every key, not only P and X. These three pass or fail depending on what counts
-as the "usual" sound, so each is listed for Luan's pick:
-
-- **C1: C = triceratops makes C's soft sound /s/.** C has two usual sounds, hard /k/ (cat) and soft
-  /s/ (city). Triceratops is Luan's own K-07 example, so the table keeps it until Luan says otherwise.
-  If Luan wants the hard c: **Corythosaurus** (a duckbill with a helmet crest, friendly) or
-  **Carnotaurus** (horned brows; would need the friendliest face).
-- **C2: O = oviraptor and U = utahraptor say the long vowel**, which is the letter's name ("oh",
-  "you"). A, E and I use short vowels. Both long and short are usual vowel sounds. Keep, or ask for a
-  short vowel: O = **Ornithomimus** ("OR-ni-tho-MY-mus"; U has no well-known short-u dinosaur).
-- **C3: Q = quetzalcoatlus starts with /k/ ("KET-sal-ko-AT-lus")**, not Q's usual /kw/ (queen).
-  Keep, or ask for /kw/: **Quaesitosaurus** ("kwee-SIT-o-SAW-rus", a sauropod; loses the standing
-  flyer).
+| P1 | P | **Tapejara** replaces pteranodon | /p/ heard inside the name ("ta-peh-JAR-a"); stays a flyer in flight, so the art bible's flyer pair (P, Q) and the teal slot don't change. Not picked: Tupandactylus, Protoceratops, Parasaurolophus. |
+| X1 | X | **Keep Xenoceratops** as a recorded exception to T5 | X has few options (no toddler word starts with /ks/; T-Rex stays at T). The voice still says "ex… xenoceratops". The theme lists `"X"` in `soundExceptions`. Not picked: Alxasaurus, Mixosaurus. |
+| C1 | C | **Keep Triceratops** | Soft c /s/ is one of C's usual sounds; it is Luan's own K-07 example. |
+| C2 | O, U | **Keep Oviraptor, Utahraptor** | The long vowel (the letter's name) counts as a usual sound. |
+| C3 | Q | **Keep Quetzalcoatlus** | The q is heard as /k/. |
 
 ## Decisions (Luan, 2026-11-18)
 
@@ -473,16 +441,13 @@ as the "usual" sound, so each is listed for Luan's pick:
 |---|---|---|
 | Q1 | Production variety | **4–5 items per key**, every key including digits. Pick rule **uniform, no immediate repeat** (F1). |
 | Q2 | Hard real names | **Keep the real names** (quetzalcoatlus, wuerhosaurus, juravenator…). |
-| Q3 | Letter sound | **The child must hear the letter's usual sound** in the word, anywhere in the name (K-07). Items where it is silent or different are replaced; Luan picks from P1, X1 (and C1–C3 if he wants them changed). G = gallimimus passes: hard g /g/ is G's usual sound. |
+| Q3 | Letter sound (K-09) | **The child must hear the letter's usual sound** in the word, anywhere in the name (K-07). G = gallimimus passes: hard g /g/ is G's usual sound. Picks: **P = Tapejara** (replaces pteranodon); **X = Xenoceratops kept as the one recorded exception**; C, O, U, Q kept (see Letter-sound picks). |
 | Q4 | Numbers | Like the prototype: **"three… three baby dinosaurs"**. The counted item and the line are **per-theme data** (a vehicles theme: "three little cars"); 0 = the theme's "empty" item. |
 | Q5 | T = "tee rex" | **Keep** T = "tee… tee rex": the T-Rex is the dinosaur toddlers know best. |
 | Q6 | Objects in a creature theme | **Keep** F = fossil and N = nest: theme-world objects are allowed (the hatching baby is a favourite). |
 
 ## Open Questions
 
-- **P1:** the P replacement (Luan picks; recommendation a, Tapejara).
-- **X1:** the X replacement (Luan picks; recommendation a, Alxasaurus).
-- **C1–C3:** C (soft c), O and U (long vowels), Q (/k/): keep or replace (Luan picks).
 - **Hue slots with variety:** V10 counts per edition (proposed; art-director to confirm when
   production content is drawn).
 
@@ -492,7 +457,8 @@ Each criterion is checked by the validator on the data, or by a unit test with f
 
 1. **36 keys:** for the Dinosaurs theme, the validator reports 36/36 keys present, each with exactly 1
    item (MVP), and no other key.
-2. **Words:** every letter item's `word` contains its letter, and every letter item has `sound` set.
+2. **Words:** every letter item's `word` contains its letter, and every letter item has `sound` set;
+   only X has `"exception"`, and X is the only key in `soundExceptions`.
    0 failures.
 3. **Paths:** every silhouette (36) and every glyph (36) parses with the morph-v1 reference parser,
    has ≥ 1 subpath of 2+ points and total length > 0. 0 failures. A test file with an `A` arc command
