@@ -180,7 +180,7 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
             KeyEvent.KEYCODE_J, KeyEvent.KEYCODE_SPACE -> { if (g.screen == Screen.PLAY) { input.tapped += Action.ATTACK; false } else confirm(g) }
             KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_DPAD_CENTER -> confirm(g)
             KeyEvent.KEYCODE_L -> g.toggleLang()
-            KeyEvent.KEYCODE_P, KeyEvent.KEYCODE_ESCAPE -> if (g.screen == Screen.PAUSE) g.resume() else g.pause()
+            KeyEvent.KEYCODE_P, KeyEvent.KEYCODE_ESCAPE -> if (g.screen == Screen.PAUSE) { if (g.leaveCard) g.keepPlaying() else g.resume() } else g.pause()
             KeyEvent.KEYCODE_M -> g.toggleMute()
             KeyEvent.KEYCODE_1, KeyEvent.KEYCODE_2, KeyEvent.KEYCODE_3 -> renderer.cardForSlot(g, code - KeyEvent.KEYCODE_1)?.invoke() ?: false
             else -> false
@@ -190,7 +190,7 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
 
     private fun confirm(g: Game): Boolean = when (g.screen) {
         Screen.TITLE -> audio.ready && g.start()
-        Screen.PAUSE -> g.resume()
+        Screen.PAUSE -> if (g.leaveCard) g.keepPlaying() else g.resume() // Enter = the default button
         Screen.UNLOCK -> g.home()
         else -> g.next()
     }

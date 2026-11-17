@@ -139,7 +139,9 @@ class Game(
             Screen.PLAY -> when (run.phase) { Phase.CARD -> "card${run.beat}.${run.cardLine}"; Phase.CAPTION -> "caption${run.beat}.${run.captionLine}"
                 Phase.DIALOGUE -> "dialogue${run.beat}.${run.lineIndex}"; else -> "play" }
             Screen.INTRO -> "INTRO$line"
-            Screen.PAUSE -> return ctx // pausing doesn't change the context, and the pause menu is exempt
+            // Pausing doesn't change the context and the pause menu is exempt; the leave card (W18) is its own context, so
+            // its buttons take the entry lock while it slides in (Input Rule 13), and closing it returns without a lock.
+            Screen.PAUSE -> return if (leaveCard) (if (ctx.endsWith("/leave")) ctx else "$ctx/leave") else ctx.removeSuffix("/leave")
             Screen.QUIZ -> if (lockEachQuestion) "quiz${quiz?.index}" else "quiz"
             Screen.ENDING -> "ENDING$line" // the hero's last lines never flash past under a mash
             else -> screen.name
@@ -150,13 +152,13 @@ class Game(
     /** Stamps [enteredAt] when the context changes (not between boxes; not when the skip warning closes back onto its box). */
     private fun syncContext() {
         val c = context(); if (c == ctx) return
-        val returning = ctx == "$c/warn"
+        val returning = ctx == "$c/warn" || ctx == "$c/leave"
         ctx = c
         if (c != "play" && !returning) { enteredAt = now?.invoke() ?: clock; lockUntil = enteredAt + tuning["screen_enter_lock"] }
     }
 
     /** Presses on these keys are dropped within `screen_enter_lock` of entering a context; pause, sound, VI|EN and the pause menu are exempt. */
-    private fun lockedKey(key: String) = key in setOf("next", "ask", "skip", "tomap", "start", "keep", "skipok") || key.startsWith("card")
+    private fun lockedKey(key: String) = key in setOf("next", "ask", "skip", "tomap", "start", "keep", "skipok", "leavekeep", "leavego") || key.startsWith("card")
     /** True while a debug jump sets up its stage (screenshots only): the jump's own actions skip the entry lock. */
     private var debugSetup = false
 
@@ -174,7 +176,7 @@ class Game(
     private fun reset() {
         run = MissionRun(bundle.mission, tuning, Mulberry32(tuning.seed), sfx)
         quiz = null; line = 0; t = 0.0
-        skipped = false; skipWarning = false; warnedThisRun = false; medalThisRun = false; newlyOpen = null
+        skipped = false; skipWarning = false; leaveCard = false; warnedThisRun = false; medalThisRun = false; newlyOpen = null
     }
 
     val medalEarned get() = store.flag("medal.$heroId")
@@ -189,6 +191,7 @@ class Game(
     fun step(dt: Double, input: InputFrame) {
         t += dt; clock += dt
         if (skipWarning) { input.clearTaps(); syncContext(); return }
+        if (screen == Screen.PAUSE && leaveCard) leaveT += dt
         when (screen) {
             Screen.PLAY -> { run.update(dt, input); if (run.missionDone) { line = 0; go(Screen.ENDING) } }
             Screen.QUIZ -> quiz?.update(dt)
@@ -278,11 +281,27 @@ class Game(
     }
 
     /** Pause from play, the story screens, the quiz and results (Mission flow States: `paused` from any state; Input Rule 3). */
-    fun pause(): Boolean = (screen in PAUSABLE).also { if (it) { pausedFrom = screen; screen = Screen.PAUSE; skipWarning = false } }
+    fun pause(): Boolean = (screen in PAUSABLE).also { if (it) { pausedFrom = screen; screen = Screen.PAUSE; skipWarning = false; leaveCard = false } }
 
     /** Resuming resets the 5 s hint timers (Hints GDD; the prototype froze them). */
-    fun resume(): Boolean = (screen == Screen.PAUSE).also { if (it) { screen = pausedFrom; if (screen == Screen.PLAY) run.onResume() } }
-    fun home(): Boolean = (screen == Screen.PAUSE || screen == Screen.UNLOCK).also { if (it) { reset(); go(Screen.TITLE) } }
+    fun resume(): Boolean = (screen == Screen.PAUSE && !leaveCard).also { if (it) { screen = pausedFrom; if (screen == Screen.PLAY) run.onResume() } }
+    /** Results/unlock → the title; from pause only through the leave card's "Về bản đồ" ([leave]). */
+    fun home(): Boolean = (screen == Screen.UNLOCK).also { if (it) { reset(); go(Screen.TITLE) } }
+
+    // ---- The leave card (Mission flow Rule 11, TASK-020 W18; pause.md) ----
+    /** True while the pause menu's leave card shows: "Về bản đồ? / Leave the story?". */
+    var leaveCard = false; private set
+    /** Seconds since the leave card opened (its slide-in). */
+    var leaveT = 0.0; private set
+    /** Pause menu "Về bản đồ": opens the leave card; nothing is discarded yet. */
+    fun askLeave(): Boolean = (screen == Screen.PAUSE && !leaveCard).also { if (it) { leaveCard = true; leaveT = 0.0; syncContext() } }
+    /** The card's "Chơi tiếp" (default): back to the pause menu with the run intact. */
+    fun keepPlaying(): Boolean = (screen == Screen.PAUSE && leaveCard).also { if (it) { leaveCard = false; syncContext() } }
+    /**
+     * The card's "Về bản đồ": discards the run and shows the title. The slice has no map screen yet (TASK-025), so
+     * "to the map" goes to the title for now.
+     */
+    fun leave(): Boolean = (screen == Screen.PAUSE && leaveCard).also { if (it) { leaveCard = false; reset(); go(Screen.TITLE) } }
     fun replay(): Boolean = (screen == Screen.UNLOCK).also { if (it) { reset(); go(Screen.INTRO) } }
 
     /** The VI|EN toggle (title and pause only, leader's call for the slice). Remembered on the device. */
@@ -359,7 +378,7 @@ class Game(
                 when (stage) { "blocks", "special" -> run.debugTraining(stage); "finishleft" -> { run.debugTraining("special"); run.debugHeroScreen(100.0, -1) }; "finishright" -> { run.debugTraining("special"); run.debugHeroScreen(1045.0, 1) } "teach" -> run.debugTeach(); "meter" -> run.debugTraining("meter", 0.6); "encounter" -> run.debugEncounter(); "flag" -> run.debugNearFlag(); "leader" -> run.debugLeaderWindup(); "line", "askhint" -> run.debugDialogue(line, stage == "askhint"); "skip" -> { run.debugDialogue(line, false); skip() } } }
             "skipwarn" -> { go(Screen.INTRO); skip() }
             "caption" -> { go(Screen.PLAY); run.debugStartBeat(beat - 1, telegraph = false, caption = true) }
-            "pause" -> { go(Screen.PLAY); pause() }
+            "pause" -> { go(Screen.PLAY); pause(); if (stage == "leave") askLeave() }
             "ending" -> go(Screen.ENDING)
             "quiz" -> { startQuiz(); repeat((question - 1).coerceAtLeast(0)) { skipQuestion() }; if (stage == "wrong") quiz?.let { answer((it.current.correctIndex + 1) % it.current.choices.size) }
                 if (stage == "right") quiz?.let { answer(it.current.correctIndex); it.update(tuning["feedback_time"]) } }

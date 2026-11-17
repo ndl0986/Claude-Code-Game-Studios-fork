@@ -19,3 +19,17 @@ Unit tests: JVM 173/173 (drawing colours only; trace 1.3 unchanged).
 | 06–07 skip warning (VI/EN) | W20: "Đọc tiếp / Keep reading" big (440), default (pulsing) and on the RIGHT with an open-book icon; "Vẫn bỏ qua / Skip anyway" smaller (340) on the left with a skip-arrow icon; both pad_min tall. **QC note:** the two buttons swapped sides |
 
 Unit tests: SpecialIconTest (fist on hold-meter, banner on training; mutation-checked). JVM 175/175.
+
+## W18 leave card (folded into r14 after the strings merged, docs 3f464b4)
+
+| Shot | Checks |
+|---|---|
+| 08 pause menu (VI) | "Chơi tiếp" big on top; "Về bản đồ" smaller, lower, with a map icon (pause.md) |
+| 09–10 leave card (VI/EN) | ASSET-324 card, ASSET-334 placeholder picture (a parchment map with a dotted path home), `ui.pause.leave_confirm` "Về bản đồ? / Leave the story?", "Về bản đồ / To the map" (cream, small, left, map icon), "Chơi tiếp / Keep playing" (gold, big, right, default/pulsing, ▶ icon). No red |
+| 11–13 real taps | Menu "Về bản đồ" → card (11); card "Chơi tiếp" → back to the menu, run intact (12); menu → card → "Về bản đồ" → the title (13) |
+
+**"To the map" goes to the title for now:** the map screen isn't built yet (TASK-025). This is expected; don't flag it.
+
+The card slides up over 0.25 s and its buttons take the entry lock while it does (Input Rule 13). P/Esc and Enter on the card = "Chơi tiếp".
+
+Unit tests: LeaveCardTest (7): the card discards nothing; Chơi tiếp returns to the menu with the run intact; only the card's Về bản đồ leaves; entry lock on its buttons; closing it doesn't relock the menu; a new pause never reopens an old card; the line in VI/EN. Mutation-checked (letting the menu leave directly fails it). JVM 182/182.

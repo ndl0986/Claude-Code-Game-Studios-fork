@@ -15,6 +15,8 @@ object UiIds {
     const val ATTACK = "ui.pad.attack"
     const val DEFEND = "ui.pad.defend"
     const val PAUSED = "ui.pause.title"
+    /** The leave card line (Mission flow Rule 11, TASK-020 W18): "Về bản đồ? / Leave the story?". */
+    const val LEAVE_CONFIRM = "ui.pause.leave_confirm"
     const val RETRY = "ui.quiz.retry"
     const val CORRECT = "ui.quiz.correct"
     const val QUESTION = "ui.quiz.question"
@@ -39,5 +41,5 @@ object UiIds {
     /** D-07 strings, from TASK-011: checked by the content test once they are on the base. */
     val D07 = listOf(SKIP, SKIP_WARNING, SKIP_CONFIRM, KEEP_READING, MEDAL_EARNED, MEDAL_MISSING)
     val ALL = listOf(TITLE, SUBTITLE_DEBUG, START, NEXT, GO, RESUME, HOME, TO_MAP, REPLAY, MOVE, ATTACK, DEFEND,
-        PAUSED, RETRY, CORRECT, QUESTION, DONE, MORE_HEROES, UNLOCKED, MAP_STUB, OOF, BLOCKED, BEAT, TURN, LANG_VI, LANG_EN, SPECIAL) + D07
+        PAUSED, LEAVE_CONFIRM, RETRY, CORRECT, QUESTION, DONE, MORE_HEROES, UNLOCKED, MAP_STUB, OOF, BLOCKED, BEAT, TURN, LANG_VI, LANG_EN, SPECIAL) + D07
 }

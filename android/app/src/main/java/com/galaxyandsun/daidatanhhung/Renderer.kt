@@ -603,8 +603,58 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         d.text(g.ui(UiIds.PAUSED), W / 2, 200f, 64f, C.WHITE)
         val bh = rowH() // pad_min (Input Rule 4)
         button("resume", g.ui(UiIds.RESUME), W / 2 - 200, 260f, 400f, bh, g.t, pulse = true) { g.resume() }
-        button("home", g.ui(UiIds.HOME), W / 2 - 200, 260f + bh + 24f, 400f, bh, g.t, fill = C.CREAM, shade = 0xFFC8B89A.toInt()) { g.home() }
+        // "Về bản đồ / To the map": smaller, lower, with a map icon; it opens the leave card (pause.md, W18)
+        button("pausemap", g.ui(UiIds.TO_MAP), W / 2 - 170, 260f + bh + 24f, 340f, bh, g.t, fill = C.CREAM, shade = 0xFFC8B89A.toInt(), size = 30f,
+            icon = { x, y, s -> mapGlyph(x, y, s) }) { g.askLeave() }
         langButton(g)
+        if (g.leaveCard) leaveCard(g)
+    }
+
+    /**
+     * The leave card (Mission flow Rule 11, TASK-020 W18, pause.md): the ASSET-324 card with an ASSET-334 placeholder
+     * picture (a map with a path home), `ui.pause.leave_confirm`, "Về bản đồ" (cream, small, left, map icon) and
+     * "Chơi tiếp" (gold, big, right, default, play icon). No red. It slides up over 0.25 s; its buttons take the entry
+     * lock meanwhile (Input Rule 13). Only "Về bản đồ" leaves.
+     */
+    private fun leaveCard(g: Game) {
+        next = ArrayList() // only the card's buttons are live
+        val k = min(1.0, g.leaveT / 0.25); val e = (1 - (1 - k) * (1 - k)).toFloat() // ease-out
+        d.rr(0f, 0f, W, H, 0f, C.a(0xFF2A2440.toInt(), 0.75 * e))
+        val old = d.alpha; d.alpha = old * (0.4 + 0.6 * e)
+        val dy = (1 - e) * 60f
+        val bh = rowH(); val by = 430f + dy
+        d.rr(240f, 120f + dy, 800f, by + bh + 24f - (120f + dy), 36f, C.CREAM, C.GOLD, 6f)
+        mapPicture(W / 2, 215f + dy, 150f)
+        d.textBox(g.ui(UiIds.LEAVE_CONFIRM), W / 2, 345f + dy, 700f, 40f, C.INK, 2, semiBold = true)
+        button("leavego", g.ui(UiIds.TO_MAP), 280f, by, 320f, bh, g.t, fill = C.a(C.WHITE, 0.9), shade = 0xFFC8B89A.toInt(), size = 30f,
+            icon = { x, y, s -> mapGlyph(x, y, s) }) { g.leave() }
+        button("leavekeep", g.ui(UiIds.RESUME), 630f, by, 370f, bh, g.t, pulse = true, icon = { x, y, s -> playGlyph(x, y, s) }) { g.keepPlaying() }
+        d.alpha = old
+    }
+
+    /** ASSET-334 placeholder: a folded parchment map with a dotted path to a little home (no red). */
+    private fun mapPicture(x: Float, y: Float, w: Float) {
+        val h = w * 0.62f
+        d.rr(x - w / 2, y - h / 2, w, h, 12f, 0xFFF3E6C8.toInt(), C.INK, 4f)
+        for (i in 1..2) d.rr(x - w / 2 + w * i / 3f - 1.5f, y - h / 2 + 4, 3f, h - 8, 1.5f, C.a(C.INK, 0.25))
+        for (i in 0..6) { val f = i / 6f; d.circle(x - w * 0.38f + f * w * 0.62f, y + h * 0.28f - f * h * 0.5f + (if (i % 2 == 0) 0f else 5f), 4f, C.a(C.INK, 0.7)) }
+        val hx = x + w * 0.32f; val hy = y - h * 0.12f // the home: a hut with a gold roof
+        d.rr(hx - 14, hy - 4, 28f, 20f, 3f, 0xFFA8794A.toInt(), C.INK, 3f)
+        d.poly(C.GOLD, hx - 20, hy - 2, hx, hy - 20, hx + 20, hy - 2); d.c.drawPath(d.path, d.stroke(C.INK, 3f))
+    }
+
+    /** A small map icon for the "Về bản đồ" buttons: a folded map with a dotted path. Centred on (x, y), [s] wide. */
+    private fun mapGlyph(x: Float, y: Float, s: Float) {
+        val h = s * 0.72f
+        d.poly(0xFFF3E6C8.toInt(), x - s / 2, y - h / 2 + 6, x - s / 6, y - h / 2, x + s / 6, y - h / 2 + 6, x + s / 2, y - h / 2,
+            x + s / 2, y + h / 2 - 6, x + s / 6, y + h / 2, x - s / 6, y + h / 2 - 6, x - s / 2, y + h / 2)
+        d.c.drawPath(d.path, d.stroke(C.INK, 4f))
+        for (i in 0..3) d.circle(x - s * 0.3f + i * s * 0.2f, y + h * 0.15f - i * h * 0.1f, 3f, C.INK)
+    }
+
+    /** A play triangle (▶) for "Chơi tiếp". */
+    private fun playGlyph(x: Float, y: Float, s: Float) {
+        d.poly(C.INK, x - s * 0.28f, y - s * 0.36f, x + s * 0.38f, y, x - s * 0.28f, y + s * 0.36f)
     }
 
     /** Quiz pictures: real ids come from assets.json; debug sample ids "pic.icon.X" draw icon X. */
