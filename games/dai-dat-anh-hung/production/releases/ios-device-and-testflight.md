@@ -1,5 +1,8 @@
 # iOS: the game on Luan's iPhone, then TestFlight (TASK-026)
 
+> **TASK-028 (2026-11-17):** the game moved to `games/dai-dat-anh-hung/`. Every path in this guide is relative to that
+> folder; run the commands from there (e.g. `cd games/dai-dat-anh-hung`).
+
 Two paths. **A** puts the Preview build on Luan's own iPhone with his free Apple ID (no enrolment). **B** is
 TestFlight, after enrolling in the Apple Developer Program. game-dev-ios runs every command. Luan's part is the
 clicks marked **Luan**.

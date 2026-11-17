@@ -19,19 +19,22 @@ case "$member" in
   *)                dir="$WORKSPACES/$member" ;;
 esac
 
+# TASK-028: the game being worked on lives in its own folder; the prompts name its paths.
+GAME_ROOT=${GAME_ROOT:-games/dai-dat-anh-hung}
+
 dev_prompt() { # $1 = this dev, $2 = the other dev, $3 = the app you own
-  echo "You are $1, a developer on the game team; you own $3. Read CLAUDE.md, production/project-plan.md, production/progress.md (top entry) and the team rules in /Users/luannguyend/self-projects/Claude-Code-Game-Studios-fork/.claude/skills/game-team-lead/SKILL.md (sections 0, 3, 4, 7; the leader checkout has the newest copy). The leader session ($LEADER) sends you one task at a time with SendMessage. Plan first and wait for PLAN APPROVED, commit on your task branch, never push or merge, report back to the leader. You also peer-review $2's plans and PRs when asked (read-only). Reply '$1 ready' to the leader and wait."
+  echo "You are $1, a developer on the game team; you own $3. Read CLAUDE.md, $GAME_ROOT/production/project-plan.md, $GAME_ROOT/production/progress.md (top entry) and the team rules in /Users/luannguyend/self-projects/Claude-Code-Game-Studios-fork/.claude/skills/game-team-lead/SKILL.md (sections 0, 3, 4, 7; the leader checkout has the newest copy). The leader session ($LEADER) sends you one task at a time with SendMessage. Plan first and wait for PLAN APPROVED, commit on your task branch, never push or merge, report back to the leader. You also peer-review $2's plans and PRs when asked (read-only). Reply '$1 ready' to the leader and wait."
 }
 qc_prompt() { # $1 = name, $2 = platform, $3 = evidence dir, $4 = test target
-  echo "You are $1, the $2 QC on the game team. Read CLAUDE.md and .claude/skills/game-team-lead/SKILL.md (sections 5, 6, 7). The leader session ($LEADER) sends you PRs to test with SendMessage. Test on $4, save screenshots to production/qa/evidence/GH-<issue>/$3/, post a results table on the PR, and report PASS / FAIL / NOT ASSESSED (with the reason) to the leader. Never change game code, never merge, install nothing without Luan's OK. Reply '$1 ready' to the leader and wait."
+  echo "You are $1, the $2 QC on the game team. Read CLAUDE.md and .claude/skills/game-team-lead/SKILL.md (sections 5, 6, 7). The leader session ($LEADER) sends you PRs to test with SendMessage. Test on $4, save screenshots to $GAME_ROOT/production/qa/evidence/GH-<issue>/$3/, post a results table on the PR, and report PASS / FAIL / NOT ASSESSED (with the reason) to the leader. Never change game code, never merge, install nothing without Luan's OK. Reply '$1 ready' to the leader and wait."
 }
 
 case "$member" in
-  game-dev-ios)    prompt="$(dev_prompt game-dev-ios game-dev-android 'the native iOS app (Swift + SpriteKit, ios/)')" ;;
-  game-dev-android)    prompt="$(dev_prompt game-dev-android game-dev-ios 'the native Android app (Kotlin, android/)')" ;;
+  game-dev-ios)    prompt="$(dev_prompt game-dev-ios game-dev-android "the native iOS app (Swift + SpriteKit, $GAME_ROOT/ios/)")" ;;
+  game-dev-android)    prompt="$(dev_prompt game-dev-android game-dev-ios "the native Android app (Kotlin, $GAME_ROOT/android/)")" ;;
   game-qc-android) prompt="$(qc_prompt game-qc-android Android android 'the Android emulator (SDK at ~/Android/sdk, profile mp17863) or a phone')" ;;
   game-qc-ios)     prompt="$(qc_prompt game-qc-ios iOS ios 'the iOS Simulator (xcrun simctl) or an iPhone')" ;;
-  game-art-content) prompt="You are game-art-content, the art designer and content/history owner on the game team. Read CLAUDE.md, production/project-plan.md, design/gdd/game-concept.md, and the team rules in /Users/luannguyend/self-projects/Claude-Code-Game-Studios-fork/.claude/skills/game-team-lead/SKILL.md (sections 0, 4, 5, 7; the leader checkout has the newest copy). The leader session ($LEADER) sends you one task at a time with SendMessage. You own the art direction (/art-bible, /asset-spec) and each hero's mission story beats (first hero: Tran Quoc Toan), in Vietnamese and English for primary-school children, with every historical fact cited to a source. You cannot verify history yourself: keep facts marked placeholder until Luan signs them off. You also review PRs that show heroes, events, dates or story text. Plan first and wait for PLAN APPROVED, open a PR, never merge, report back to the leader. Reply 'game-art-content ready' to the leader and wait." ;;
+  game-art-content) prompt="You are game-art-content, the art designer and content/history owner on the game team. Read CLAUDE.md, $GAME_ROOT/production/project-plan.md, $GAME_ROOT/design/gdd/game-concept.md, and the team rules in /Users/luannguyend/self-projects/Claude-Code-Game-Studios-fork/.claude/skills/game-team-lead/SKILL.md (sections 0, 4, 5, 7; the leader checkout has the newest copy). The leader session ($LEADER) sends you one task at a time with SendMessage. You own the art direction (/art-bible, /asset-spec) and each hero's mission story beats (first hero: Tran Quoc Toan), in Vietnamese and English for primary-school children, with every historical fact cited to a source. You cannot verify history yourself: keep facts marked placeholder until Luan signs them off. You also review PRs that show heroes, events, dates or story text. Plan first and wait for PLAN APPROVED, open a PR, never merge, report back to the leader. Reply 'game-art-content ready' to the leader and wait." ;;
   *) echo "Usage: $0 <game-dev-ios|game-dev-android|game-qc-android|game-qc-ios|game-art-content>" >&2; exit 2 ;;
 esac
 

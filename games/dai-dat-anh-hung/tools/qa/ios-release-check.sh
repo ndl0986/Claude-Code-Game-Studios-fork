@@ -17,6 +17,7 @@
 # the gate and must build cleanly. Exit 0 only when every configuration passes.
 set -uo pipefail
 ROOT=$(git rev-parse --show-toplevel)
+GAME=games/dai-dat-anh-hung # TASK-028: the game folder inside the repo
 REF=${REF:-HEAD}
 OUT=${OUT:-$(mktemp -d "${TMPDIR:-/tmp}/ios-release-check.XXXXXX")}
 CONFIGS=("$@"); [ ${#CONFIGS[@]} -gt 0 ] || CONFIGS=(Release Preview)
@@ -47,11 +48,11 @@ PY
 
 for CONFIG in "${CONFIGS[@]}"; do
   W="$OUT/$CONFIG"; mkdir -p "$W/src"
-  git -C "$ROOT" archive "$REF" ios content | tar -x -C "$W/src"
+  git -C "$ROOT" archive "$REF" "$GAME/ios" "$GAME/content" | tar -x -C "$W/src"
   DD="$W/dd"
   APP="$DD/Build/Products/$CONFIG-iphonesimulator/DaiDatAnhHung.app/DaiDatAnhHung"
   build() { # $1 = label
-    (cd "$W/src" && xcodebuild build -project ios/DaiDatAnhHung.xcodeproj -scheme DaiDatAnhHung -configuration "$CONFIG" \
+    (cd "$W/src/$GAME" && xcodebuild build -project ios/DaiDatAnhHung.xcodeproj -scheme DaiDatAnhHung -configuration "$CONFIG" \
       -destination "generic/platform=iOS Simulator" -derivedDataPath "$DD" > "$W/$1.log" 2>&1)
     local st=$?
     if [ $st -ne 0 ]; then
@@ -65,9 +66,9 @@ for CONFIG in "${CONFIGS[@]}"; do
   }
   echo "== $CONFIG"
   H1=$(build A1) || { FAIL=1; echo "$H1"; continue; }; echo "  A1 ${H1##*$'\n'}"
-  find "$W/src/ios" -name '*.swift' -exec touch {} +
+  find "$W/src/$GAME/ios" -name '*.swift' -exec touch {} +
   H2=$(build A2) || { FAIL=1; echo "$H2"; continue; }; echo "  A2 ${H2##*$'\n'}"
-  FILES=$(grep -rl --include='*.swift' '^ *#if DEBUG$' "$W/src/ios/DaiDatAnhHung" "$W/src/ios/GameCore/Sources")
+  FILES=$(grep -rl --include='*.swift' '^ *#if DEBUG$' "$W/src/$GAME/ios/DaiDatAnhHung" "$W/src/$GAME/ios/GameCore/Sources")
   BEFORE=$(cat $FILES | wc -l); strip_debug $FILES; AFTER=$(cat $FILES | wc -l)
   echo "  B: stripped $((BEFORE - AFTER)) lines from $(echo $FILES | wc -w | tr -d ' ') files"
   HB=$(build B) || { FAIL=1; echo "$HB"; continue; }; echo "  B  ${HB##*$'\n'}"

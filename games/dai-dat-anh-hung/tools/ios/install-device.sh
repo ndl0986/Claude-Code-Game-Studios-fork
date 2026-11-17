@@ -19,7 +19,7 @@
 # Xcode's Device Hub has the network connection on), unlocked, and in Developer Mode. See
 # production/releases/ios-device-and-testflight.md.
 set -euo pipefail
-cd "$(git rev-parse --show-toplevel)"
+cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)" # the game folder (games/dai-dat-anh-hung, TASK-028): ios/ and content/ are siblings here
 DRY=0; [ "${1:-}" = "--dry-run" ] && DRY=1
 TEAM_ID=${TEAM_ID:-}; DEVICE=${DEVICE:-}
 CONFIG=${CONFIG:-Preview}; OUT=${OUT:-build/device}

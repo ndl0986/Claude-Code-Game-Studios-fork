@@ -1,5 +1,8 @@
 # iOS touch tests (XCUITest) — what QC runs and what each case proves
 
+> **TASK-028 (2026-11-17):** the game moved to `games/dai-dat-anh-hung/`. Every path in this guide is relative to that
+> folder; run the commands from there (e.g. `cd games/dai-dat-anh-hung`).
+
 Run: `tools/qa/ios-touch-tests.sh <frozen build folder> [output folder]` (see the script header). Real
 touches on QC's own Simulator, no macOS Accessibility, nothing compiled. Each case reads the Debug-only
 `debugState` element (compiled out of Release; checked byte-for-byte at each freeze).

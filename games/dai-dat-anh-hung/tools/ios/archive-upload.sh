@@ -13,7 +13,7 @@
 #                       e.g. ~/.appstoreconnect/private_keys). Without them, the Apple ID signed in to Xcode is used.
 # --dry-run prints the commands and runs nothing.
 set -euo pipefail
-cd "$(git rev-parse --show-toplevel)"
+cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)" # the game folder (games/dai-dat-anh-hung, TASK-028)
 DRY=0; [ "${1:-}" = "--dry-run" ] && DRY=1
 TEAM_ID=${TEAM_ID:-}
 [ -n "$TEAM_ID" ] || { echo "TEAM_ID is not set (the paid team's ID)" >&2; exit 2; }

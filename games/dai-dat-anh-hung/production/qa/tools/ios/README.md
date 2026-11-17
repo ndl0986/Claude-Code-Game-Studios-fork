@@ -1,5 +1,8 @@
 # iOS QC helpers (game-qc-ios)
 
+> **TASK-028 (2026-11-17):** the game moved to `games/dai-dat-anh-hung/`. Every path in this guide is relative to that
+> folder; run the commands from there (e.g. `cd games/dai-dat-anh-hung`).
+
 Scripts kept here because the session scratchpad is wiped on restart. Compile the Swift ones into a scratch
 folder, never into the repo: `swiftc -O scan.swift -o $TMPDIR/scan` (same for hist2, sheet).
 

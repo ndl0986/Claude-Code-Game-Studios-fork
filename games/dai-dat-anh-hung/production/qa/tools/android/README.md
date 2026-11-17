@@ -1,5 +1,8 @@
 # Android QC helpers (TASK-007, emulator mp17863 / emulator-5554)
 
+> **TASK-028 (2026-11-17):** the game moved to `games/dai-dat-anh-hung/`. Every path in this guide is relative to that
+> folder; run the commands from there (e.g. `cd games/dai-dat-anh-hung`).
+
 These are the QC session's measurement scripts, kept here so a restart or reboot can't wipe them. They are rebuilt from the session transcript, with the later in-place patches applied. All coordinates are world 1280 × 720, mapped with K = 1.28055, OX = 448.5, OY = 74 (landscape, k ≈ 0.488). The scripts are QC-only and never touch game code.
 
 **Setup:**

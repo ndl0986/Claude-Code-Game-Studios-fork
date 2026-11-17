@@ -1,5 +1,8 @@
 # Dải Đất Anh Hùng: Android (vertical slice)
 
+> **TASK-028 (2026-11-17):** the game moved to `games/dai-dat-anh-hung/`. Every path in this guide is relative to that
+> folder; run the commands from there (e.g. `cd games/dai-dat-anh-hung`).
+
 TASK-007. This is the **native vertical slice** of one mission (Trần Quốc Toản), built to prove
 the game on Android devices. It is **not yet the production codebase**: the full build follows
 the epics and stories, and this code is kept, refactored or rewritten as they decide.
