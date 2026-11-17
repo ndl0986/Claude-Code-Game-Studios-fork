@@ -1,0 +1,12 @@
+Raw pixel values (NSBitmapImageRep getPixel; files tagged sRGB). Target C.skin #F1C9A0 = 241,201,160.
+04 hint hand: palm 1870,625 / 1860,650 = 241,201,160; finger 1930,645 = 241,201,160; thumb 1870,682 = 241,201,160
+04 hint hand: cuff 1815,640 = 255,246,227 (#FFF6E3); outline 1890,600 = 58,42,31 (#3A2A1F)
+04 cuff left edge, row 640: sky to x1805, ink 58,42,31 x1806-1810, AA x1811, cream from x1812 (~6 px = 4 world)
+04 cuff top edge, col 1815: ink 58,42,31 y607-612, cream from y614
+04 hero face 1010,540 / 1030,560 and hero hand 1045,605 = 241,201,160
+05 partner face 1200,625 / 1195,635 = 241,201,160; hero hair top y463 (col 1015), feet y749; partner hair top y571 (col 1205), feet y748 -> 177/286 = 0.62
+06 camp fight: exact 241,201,160 cells at the hero face (x1000-1080) and the spear enemy face (x1280-1400, y520-600)
+old #F5C9A0 (245,201,160): 0 cells in 04, 05, 06, 07 (title portrait), 1E06... (pushed pose)
+01 sample quiz q2 child icon face 1311,494 / 1290,510 = 241,201,160 (simctl screenshot)
+02/03 hero face 1008,545 = 241,201,160 (simctl screenshot)
+Note: the dev's "#F5D3AF" is a colour-managed read; the raw values in both XCUITest and simctl PNGs are the drawn #F1C9A0.

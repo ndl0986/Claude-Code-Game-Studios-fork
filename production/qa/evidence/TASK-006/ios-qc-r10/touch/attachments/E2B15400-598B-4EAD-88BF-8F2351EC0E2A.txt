@@ -1,0 +1,4 @@
+entered_at 147502.568; tap latency 0.130 s
+next t +0.349 s, lock end +0.600, locked true (rule: true)
+next t +0.854 s, lock end +0.949, locked true (rule: true)
+next t +1.564 s, lock end +1.454, locked false (rule: false)

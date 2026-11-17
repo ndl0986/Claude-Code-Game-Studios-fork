@@ -1,0 +1,1 @@
+hero_x 5332 cam 4520 (screen x 812)

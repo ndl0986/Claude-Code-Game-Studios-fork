@@ -1,0 +1,5 @@
+entered_at 147083.367; lock_until +600 ms; now +7468 ms; card log +0 ms
+fire skip t 147086.296 (+2929 ms) locked 0
+play|0|walkTo|3|0|0|0 @ 147080.962 (-2406 ms)
+play|0|beatCard|3|0|0|0 @ 147083.367 (+0 ms)
+fire:skip @ 147086.296 (+2929 ms)
