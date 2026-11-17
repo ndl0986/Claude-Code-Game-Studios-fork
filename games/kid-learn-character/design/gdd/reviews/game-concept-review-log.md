@@ -15,7 +15,7 @@ Findings:
 - [RECOMMENDED] Technical Considerations: SpriteKit + MorphCore + morph contract v1, no Rive, no network
 - [RECOMMENDED] Scope: Vertical Slice tier added; "~1 week" marked an aspiration
 - [RECOMMENDED] Next Steps: checklist updated
-Reviewed-Content-Hash: design/gdd/game-concept.md e525c154ca1b014fe3ca0024ba5a339d37135429
+Reviewed-Content-Hash: design/gdd/game-concept.md 1aade6c2cb6dbe829a5c671dad4a17556bd18e73
 review-receipts: not stamped, no such file: design/registry/entities.yaml
 Reviewed-Content-Hash: .claude/skills/design-review/SKILL.md 4dcc8b81162613c757144532f1b72708ab3ba27f
 Reviewed-Content-Hash: design/art/art-bible.md a01094340e7e5b7bdae636f4cc879d0f84b472b5
