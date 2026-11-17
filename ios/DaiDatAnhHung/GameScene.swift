@@ -42,6 +42,8 @@ final class GameScene: SKScene {
     private var clock = 0.0
     /// Whether last frame's screen was the pause screen: leaving it is the resume frame.
     private var wasPaused = false
+    /// The largest lead SpriteKit's currentTime has shown over the press clock (iOS-R10-01); subtracted from it.
+    private var clockLead = 0.0
     /// The screen and play phase last frame: a change cancels a pressed menu button (Input GDD).
     private var lastPlace = "" 
     /// How far (world px) backdrops and dimming run past the world on each side, to cover the outside area.
@@ -122,12 +124,16 @@ final class GameScene: SKScene {
         // r10 N1: the tap that leaves pause arrives before this update, so this is the resume frame; it credits no time
         let leftPause = wasPaused && game.screen != .pause
         wasPaused = game.screen == .pause
-        // iOS-R10-01 (r11): SpriteKit's currentTime, but never ahead of the press clock (systemUptime, the clock of
-        // UITouch.timestamp and the entry lock) read as this update runs. On the Simulator currentTime ran up to a
-        // frame ahead of the wall clock over a hold (0.8333 s of currentTime in 0.816-0.830 s of wall time), so the
-        // banner-up after a resume came out short. currentTime alone is perfectly even (one step a frame on a walk);
-        // the wall clock alone judders (5 of 216 frames ran 0 or 2 steps), so the frame time is the earlier of the two.
-        let now = min(currentTime, ProcessInfo.processInfo.systemUptime)
+        // iOS-R10-01 (r11): the frame time is SpriteKit's currentTime minus the largest lead it has shown over the
+        // press clock (systemUptime, the clock of UITouch.timestamp and the entry lock, read as this update runs).
+        // On the Simulator currentTime ran up to a frame ahead of the wall clock over a hold (0.8333 s of currentTime
+        // in 0.816-0.830 s of wall time), so the banner-up after a resume came out short. currentTime keeps a walk at
+        // one step a frame; the lead (≤ about a frame, only ever growing) keeps the sim from running ahead of real
+        // time. The resume frame starts from the wall time itself, so nothing before it is credited.
+        // (systemUptime alone judders 5 of 216 walk frames; min(currentTime, systemUptime) still 1-3.)
+        let wall = ProcessInfo.processInfo.systemUptime
+        clockLead = max(clockLead, currentTime - wall)
+        let now = leftPause ? wall : currentTime - clockLead
         #if DEBUG
         // `-timeScale 0.1`: slow motion for UI-test screenshots; the same fixed steps, only slower
         let steps = frames.frame(now, leftPause: leftPause, scale: debugTimeScale)
