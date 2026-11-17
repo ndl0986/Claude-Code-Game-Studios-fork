@@ -21,3 +21,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
   studio project (links `.claude/` + `CLAUDE.md`, own `project.yaml`). K-03: fully native, Apple
   first (iPadOS + macOS). TASK-029…032 paused, wip pushed. Next: the leader restarts in the game
   folder and runs /start → /brainstorm with Luan.
+- 2026-11-17: /start (stage Concept, rigor standard, goal mobile, automation guided) and
+  /brainstorm open with Luan: concept **Letter Morph** written to `design/gdd/game-concept.md`.
+  Decided K-01 (2D first), K-02 (English first), K-05 (US, letter name + word), K-06 (concept);
+  K-03 reaffirmed (native Swift, not Unity). Next: /setup-engine → /prototype → /art-bible.
