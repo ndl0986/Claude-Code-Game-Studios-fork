@@ -5,12 +5,13 @@
 
 > **Placeholder notice.** Every hero, event, date and story beat named in this
 > document is an **illustrative placeholder ⟨placeholder⟩**. The real hero and event
-> list, sources and the named history reviewer come from the team's history
-> material, which has not arrived yet (see `production/project-plan.md`, "Material
-> we need from the team"). Nothing here is a verified historical claim.
+> list and sources come from the team's history material, which has not arrived yet
+> (see `production/project-plan.md`, "Material we need from the team"). The named history reviewer is **Luan**, who signs off every
+> history claim (Luan, 2026-11-14; see Open Questions). Nothing here is a verified
+> historical claim.
 >
 > **Exception (Luan, 2026-11-14): the first hero is Trần Quốc Toản.** His story beats
-> are not written yet; the content and history owner writes and signs them off.
+> are written by the content and history owner and **signed off by Luan**.
 
 > **Luan's idea, in Luan's words:** "a mobile game about Vietnamese historical figures,
 > the player targeting is starting from primary school level in Vietnam, they are able
@@ -40,7 +41,7 @@ to the content and history owner (see below), who writes them from verified sour
 **Content and history owner:** the team's art designer, who also covers the content,
 history and real stories (the `game-art-content` team member). They draft each hero's
 story beats and claims from cited sources (Trần Quốc Toản: `design/narrative/heroes/tran-quoc-toan.md`,
-TASK-004); every claim stays `pending` until it is signed off (see Open Questions).
+TASK-004); every claim stays `pending` until it is signed off by Luan (see Open Questions).
 
 ---
 
@@ -216,7 +217,7 @@ Every mission *is* the hero's famous moment, played and not just read.
 
 ### Pillar 2: Đúng sự thật (True to history)
 Every claim is labelled fact, interpretation or invented, and signed off by the named
-history reviewer.
+history reviewer, **Luan**.
 
 *Design test*: debating a dramatic invented detail vs. a plain verified one, **the
 verified one wins**, or the invented one is labelled.
@@ -403,7 +404,7 @@ If time runs out: ship the MVP hero alone, polished, and add heroes and storyboo
 - [x] Luan approves this concept (design and content decision), 2026-11-14
 - [x] Platform chosen: native per platform, Swift + SpriteKit and Kotlin (ADR-0001, 2026-11-14); `/setup-engine` not used
 - [x] `/prototype`: story-first side-scrolling mission prototype, TASK-003 (`proto/TASK-003-mission-prototype` @ `203d73e`, not merged); closed by Luan (`73abd04`)
-- [ ] Collect the team's hero list, sources and reviewer; replace every ⟨placeholder⟩
+- [ ] Collect the team's hero list and sources; replace every ⟨placeholder⟩ (reviewer decided: Luan)
 - [x] `/art-bible`: `design/art/art-bible.md` (TASK-004, `769a1b2`, merged `2f6e661`)
 - [x] `/design-review design/gdd/game-concept.md`: `design/gdd/reviews/game-concept-review-log.md` (TASK-022, merged `3f61e4b`)
 - [x] `/map-systems`, then `/design-system` per system: `design/gdd/systems-index.md` (`76bfce5`) and the vertical-slice GDDs (TASK-008, merged `383d90c`); later systems continue in the index
