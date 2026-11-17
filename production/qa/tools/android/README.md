@@ -40,6 +40,8 @@ Then run `zsh emuwatch.sh &` (with EMULOG=<emulator log>) and `zsh intwatch.sh &
 | `pngpx.py` | Library, no CLI: `load(png)` decodes a screenshot PNG for `pbbox.py`, `fig2.py` and `hint.py`. |
 | `fig2.py` | `fig2.py frame.png [heroX0-X1] [partnerX0-X1]`: hero and partner heights (hair top to shoes, device px), their ratio, and the gap between them. Check the gap by eye when a hut is behind them. |
 | `hint.py` | `hint.py png…`: pads (cream/gold regions) and the white hint glove in world coords; flags overlap with a pad's drawn box and hint pixels above y 276. |
+| `rn.sh` | `source rn.sh; rn <mp4> [scale]`: pause-dim and day/night transitions, then last resume frame → first night frame, in wall s and game s (wall × scale; 0.1 for slow 0.1, 1 for real speed). |
+| `handtrack.py` | `handtrack.py <dir of full-res frames>`: per frame, pause dim, the hint hand's x (world y 400) and the Cờ pad's width, for checking that a resume causes no jump. |
 | `pbbox.py` | `pbbox.py file.png x0 y0 x1 y1 RRGGBB tol`: world bbox of a colour in a saved screenshot. |
 | `shot.sh` | `shot.sh <delay> [out.png]`: screencap plus a 900 px preview `v.png`. |
 | `emuwatch.sh` | Every 2 s, watches the emulator log (`$EMULOG`) and the qemu process. On a stop it records the time and process snapshots in `emu-stop-evidence.txt`. |
