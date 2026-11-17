@@ -1,4 +1,4 @@
-# Game Brief: Letter Morph: DINOSAUR
+# Game Brief: Letter Morph: Dinosaurs
 
 ## In your words
 thử với chữ cái có trong Dinosoaur
@@ -9,8 +9,11 @@ After play: khi bé chơi, nên đisable tất cả các phím ngoài phím lett
 After play: không cần hiện dòng chữ DINOSAUR sẵn trên màn hình, thay vào đó, có thể gợi ý bằng các chữ cái ngẫu nhiên hiện trên màn hình chính của game
 After play: không cần đọc letter A, letter D, ... chỉ cần đọc A hoặc D hoặc 1 (one) khi được nhấn
 After play (asked): "D" rồi "dinosaur" — keep the word after the letter's name
+After play: có 1 hiểu lầm, mình nói bắt đầu với dinosaur là 1 chủ đề, tức là mình thể cho bé gõ bất ký ký tự nào ngoài 8 ký tự thì vẫn có thể đọc và hiện 1 khủng long tương ứng, có thể ký tự không phải là đầu tiên tương ứng với phím đc nhấn
+After play: với bản đề demo, có thể fix cứng mỗi ký tự là 1 con vật/đồ vật, tương ứng với từng chủ đề, nhưng với bản production, nên xây dựng cơ sở dữ liệu vừa đủ để tạo sự đa dạng
+After play (asked): the A–Z table and numbers as N baby dinosaurs — "Làm đúng như vậy"
 
-**Pitch:** A toddler presses D, I, N, O, S, A, U or R, and the big glowing letter dissolves into stardust and becomes a dinosaur-world creature that roars while a voice says "D… dinosaur!" *(inferred (strong), from design/gdd/game-concept.md)*
+**Pitch:** Dinosaurs is the theme: a toddler presses any letter or number, and the big glowing letter dissolves into stardust and becomes a dinosaur-world creature (C: triceratops) or that many baby dinosaurs, while a voice says "C… triceratops!".
 
 **Genre:** toddler toy / early-learning sandbox *(inferred (strong))*
 
@@ -31,7 +34,7 @@ After play (asked): "D" rồi "dinosaur" — keep the word after the letter's na
 The screen shows a soft dusk scene with a few glowing letters drifting in at random spots, pulsing gently until the first press. The child taps anything: the key lights up, the letter rises big and golden, glows, dissolves into stardust and becomes the creature with its sound, and the voice says "D… dinosaur!". The next tap brings another. Mashing queues up to three, and each one plays in turn. *(provisional)*
 
 ## Challenge
-None by design: there is no failure and no wrong key. What changes: discovering all 8 creatures; when all 8 have been seen, a soft "parade" of the 8 dinosaurs walks across once. *(provisional)*
+None by design: there is no failure and no wrong key. What changes: discovering all 36 keys; every 8 new creatures met, a soft "parade" of those 8 walks across once. *(provisional)*
 
 ## Core loop
 - Press a letter (screen or keyboard), and the key lights up at once.
@@ -43,12 +46,12 @@ None by design: there is no failure and no wrong key. What changes: discovering 
 - No goal and no fail. A session feels complete when the child has met all 8 creatures (the parade plays once).
 
 ## Features
-- [x] The 8 letters D I N O S A U R, as random glowing hint letters on screen (tappable) plus the hardware keyboard; other letters and digits only sparkle; every other key does nothing
+- [x] Every letter A–Z and digit 0–9, as random glowing hint letters on screen (tappable) plus the hardware keyboard; every other key does nothing
 - [x] Stardust morph: letter → particles in the letter's shape → creature, all values in config.js
-- [x] 8 drawn creatures: Dinosaur (Brontosaurus-type), Iguanodon, Nest with eggs, Oviraptor, Stegosaurus, Ankylosaurus, Utahraptor, T‑Rex, each with an idle bob *(provisional)*
+- [x] Theme Dinosaurs: 26 drawn dinosaur-world creatures A–Z, one per key, name contains the letter (A Ankylosaurus … C Triceratops, F Fossil, N Nest … Z Zuniceratops), each with its own outline and an idle bob; digits 1–9 become that many baby dinosaurs, 0 an empty nest
 - [ ] Sound: synthesized roar or chirp per creature plus sparkle chime; browser speech in US English, just the letter's name then the word: "D… dinosaur" (never "letter D")
 - [x] Mash queue: max 3 pending, ~3 s hold while queued, extra presses sparkle only
-- [x] The parade after all 8 have been seen *(guessed)*
+- [x] A parade of the last 8 new creatures, every 8 met *(guessed)*
 - [x] Tweak panel (queue size, hold time, morph speed, volume), hidden behind a long-press corner (parent gate stand-in) *(provisional)*
 
 ## Keep
@@ -61,7 +64,8 @@ None by design: there is no failure and no wrong key. What changes: discovering 
 - Scores, timers, quizzes, fail states, text the child must read (beyond the letter), ads, links out, network, data collection, strobing, loud stings. *(from the concept's anti-pillars)*
 
 ## Out of scope
-- The other 18 letters and the numbers 0–9: change it after play
+- A database with several creatures per key per theme, for variety: production (K-07); the demo fixes one per key
+- Other themes (Vehicles…): grow it
 - Theme packs and Mash World (objects stay in a scene): grow it
 - Recorded voice and licensed art: in the native Swift app (ADR-0001)
 - 3D creatures: later (K-01)

@@ -33,6 +33,13 @@ or number, which dissolves into stardust and becomes the object. Mash World (obj
 scene) is Scope Tier 2, after the MVP. Mash rule: a queue of at most 3 keys, further presses
 ignored, about 3 s per reveal while keys are queued. See `design/gdd/game-concept.md`.
 
+### K-07 Themes and the key database (Luan, 2026-11-17, prototype play)
+
+A **theme** (Dinosaurs first) covers **every key**: any letter A–Z or digit 0–9 shows a creature or
+thing from that theme, and the letter may sit anywhere in its name (C = triceratops). Numbers show
+that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
+**Production:** a small database with several items per key per theme, enough for variety.
+
 ### K-03 Platforms (Luan, 2026-11-17)
 
 **Fully native on every platform, Apple first.** iPadOS and macOS come first (Swift), then iPhone.

@@ -56,8 +56,8 @@ const W = 1280, H = 720;        // logical size
 const PIXEL = false;
 const FONT = '"Avenir Next Rounded", "Arial Rounded MT Bold", "Nunito", "Avenir Next", "Trebuchet MS", system-ui, sans-serif';
 const GLYPH_FONT = '"Arial Rounded MT Bold", "Avenir Next Rounded", "Nunito", "Avenir Next", "Trebuchet MS", system-ui, sans-serif';
-const TITLE = 'Letter Morph: DINOSAUR';
-const CONTROLS = ['Tap a glowing letter, or press letters on a keyboard', 'Grown-ups: hold the moon for settings'];
+const TITLE = 'Letter Morph: Dinosaurs';
+const CONTROLS = ['Tap a glowing letter, or press any letter or number on a keyboard', 'Grown-ups: hold the moon for settings'];
 const clock = window.GAME_CLOCK || { now: () => performance.now() / 1000 }; // a check may inject one
 const CHEAP = params.get('render') === 'cheap';
 let seed;
@@ -270,151 +270,286 @@ function kite(c, x, y, h, w, rot = 0) { // a pointed plate or spike
   c.restore();
 }
 
-// Each creature: anchor at its feet (0,0), about 480 wide and 300 tall, facing right.
+// Each creature: anchor at its feet (0,0), up to about 560 wide and 360 tall, facing right.
+// Every drawing takes a palette (pal) and options (o) from the key table in config.js, so one
+// family (the long-necks, the duck-bills...) gives several dinosaurs, each with its own outline.
+const pick = (pal, d) => Object.assign({}, d, pal || {});
+function baby(c, x, y, s, col, t, ph) { // a little hatchling, for the numbers and Maiasaura
+  const b = Math.abs(Math.sin(t * 3 + ph)) * 6;
+  c.save(); c.translate(x, y - b); c.scale(s, s);
+  taper(c, -20, -34, -40, -26, -58, -12, 11); F(c, col); O(c, 2);
+  leg(c, -20, -24, 16, 24, col); leg(c, 8, -24, 16, 24, col);
+  E(c, 0, -40, 34, 26); F(c, col); O(c, 2);
+  E(c, 4, -30, 22, 12); F(c, 'rgba(255,255,240,0.55)');
+  E(c, 30, -72, 24, 20); F(c, col); O(c, 2);
+  eye(c, 36, -78, 6); smile(c, 44, -66, 7); blush(c, 44, -70, 5);
+  c.restore();
+}
 const CREATURES = {
-  sauropod(c, t) { // D: a long-neck dinosaur, leaf green
-    const sway = Math.sin(t * 1.4) * 6, g = '#6cc08b', g2 = '#58a876';
-    leg(c, -95, -98, 38, 98, g2); leg(c, 45, -98, 38, 98, g2);
-    taper(c, -95, -118, -190, -105, -265, -42, 26); F(c, g); O(c);
-    E(c, 0, -118, 128, 72); F(c, g); O(c);
-    E(c, 8, -84, 96, 28); F(c, '#b6e6c0');
-    if (!MONO) [[-40, -152, 13], [2, -168, 15], [44, -152, 11], [-80, -128, 9]].forEach(([x, y, r]) => { E(c, x, y, r, r * 0.75); F(c, '#4f9e6e'); });
-    leg(c, -60, -92, 40, 92, g); leg(c, 76, -92, 40, 92, g);
-    c.beginPath(); c.moveTo(62, -150); c.bezierCurveTo(118, -178, 126 + sway * 0.5, -232, 142 + sway, -270);
-    if (!MONO) S(c, OUT, 50); S(c, g, 44);
-    E(c, 154 + sway, -282, 48, 31, -0.15); F(c, g); O(c);
-    eye(c, 166 + sway, -292, 10); smile(c, 178 + sway, -272, 14); blush(c, 186 + sway, -280, 9);
+  sauropod(c, t, pal, o = {}) { // long-necks: Diplodocus (long and low), Brachiosaurus (tall)
+    const P = pick(pal, { body: '#6cc08b', dark: '#58a876', belly: '#b6e6c0', spot: '#4f9e6e' });
+    const sway = Math.sin(t * 1.4) * 6;
+    if (o.tall) {
+      leg(c, -92, -84, 38, 84, P.dark); leg(c, 40, -116, 38, 116, P.dark);
+      taper(c, -90, -112, -150, -92, -210, -50, 22); F(c, P.body); O(c);
+      E(c, 0, -128, 122, 66, -0.2); F(c, P.body); O(c);
+      E(c, 12, -96, 88, 22, -0.2); F(c, P.belly);
+      if (!MONO) [[-30, -160, 12], [14, -172, 13], [-62, -140, 9]].forEach(([x, y, r]) => { E(c, x, y, r, r * 0.75); F(c, P.spot); });
+      leg(c, -62, -84, 40, 84, P.body); leg(c, 72, -120, 40, 120, P.body);
+      c.beginPath(); c.moveTo(70, -170); c.bezierCurveTo(96, -226, 104 + sway * 0.4, -292, 112 + sway, -326);
+      if (!MONO) S(c, OUT, 50); S(c, P.body, 44);
+      E(c, 104 + sway, -356, 18, 14); F(c, P.body); O(c);
+      E(c, 126 + sway, -338, 42, 26, -0.1); F(c, P.body); O(c);
+      eye(c, 132 + sway, -348, 9); smile(c, 150 + sway, -328, 12); blush(c, 156 + sway, -334, 8);
+    } else {
+      leg(c, -95, -98, 38, 98, P.dark); leg(c, 45, -98, 38, 98, P.dark);
+      taper(c, -95, -118, -210, -112, -300, -62, 24); F(c, P.body); O(c);
+      E(c, 0, -118, 128, 72); F(c, P.body); O(c);
+      E(c, 8, -84, 96, 28); F(c, P.belly);
+      if (!MONO) [[-40, -152, 13], [2, -168, 15], [44, -152, 11], [-80, -128, 9]].forEach(([x, y, r]) => { E(c, x, y, r, r * 0.75); F(c, P.spot); });
+      leg(c, -60, -92, 40, 92, P.body); leg(c, 76, -92, 40, 92, P.body);
+      c.beginPath(); c.moveTo(62, -150); c.bezierCurveTo(130, -176, 160 + sway * 0.5, -206, 200 + sway, -232);
+      if (!MONO) S(c, OUT, 46); S(c, P.body, 40);
+      E(c, 214 + sway, -240, 42, 26, -0.25); F(c, P.body); O(c);
+      eye(c, 222 + sway, -250, 9); smile(c, 236 + sway, -232, 12); blush(c, 242 + sway, -238, 7);
+    }
   },
-  iguanodon(c, t) { // I: a tall plant-eater with thumb spikes, sunny yellow
-    const nod = Math.sin(t * 1.7) * 4, y1 = '#e2bb4f', y2 = '#c99f35';
-    taper(c, -60, -118, -170, -80, -245, -20, 30); F(c, y1); O(c);
-    E(c, -35, -100, 42, 56, 0.15); F(c, y2); O(c);
-    leg(c, -58, -78, 38, 78, y2);
-    E(c, 0, -146, 108, 62, -0.32); F(c, y1); O(c);
-    if (!MONO) for (let i = 0; i < 4; i++) { c.beginPath(); c.arc(-40 + i * 34, -150 - i * 10, 22, -2.4, -1.4); S(c, '#c18f2a', 5); }
-    E(c, 10, -98, 46, 60, 0.12); F(c, y1); O(c);
-    leg(c, -8, -70, 42, 70, y1);
-    c.beginPath(); c.moveTo(64, -160); c.lineTo(88, -108); S(c, y2, 20);
-    E(c, 90, -100, 13, 11); F(c, y2); O(c, 2);
-    kite(c, 98, -104, 24, 7, 0.6); F(c, '#fff1cf'); O(c, 2);
-    c.beginPath(); c.moveTo(70, -186); c.lineTo(112, -218 + nod); if (!MONO) S(c, OUT, 46); S(c, y1, 40);
-    E(c, 140, -226 + nod, 54, 32, 0.12); F(c, y1); O(c);
-    E(c, 186, -214 + nod, 20, 15); F(c, '#f3dfa0'); O(c, 2);
-    eye(c, 140, -238 + nod, 9); smile(c, 168, -212 + nod, 12); blush(c, 160, -222 + nod, 8);
+  duckbill(c, t, pal, o = {}) { // Iguanodon (thumb spike), Edmontosaurus (duck bill), Hadrosaurus (bill + nose bump), Lambeosaurus (hatchet crest), Maiasaura (brow crest + a baby)
+    const P = pick(pal, { body: '#e2bb4f', dark: '#c99f35', belly: '#f3dfa0', stripe: '#c18f2a', crest: '#e8704f' });
+    const nod = Math.sin(t * 1.7) * 4, hx = 140, hy = -226 + nod;
+    taper(c, -60, -118, -170, -80, -245, -20, 30); F(c, P.body); O(c);
+    E(c, -35, -100, 42, 56, 0.15); F(c, P.dark); O(c);
+    leg(c, -58, -78, 38, 78, P.dark);
+    E(c, 0, -146, 108, 62, -0.32); F(c, P.body); O(c);
+    if (!MONO) for (let i = 0; i < 4; i++) { c.beginPath(); c.arc(-40 + i * 34, -150 - i * 10, 22, -2.4, -1.4); S(c, P.stripe, 5); }
+    E(c, 10, -98, 46, 60, 0.12); F(c, P.body); O(c);
+    leg(c, -8, -70, 42, 70, P.body);
+    c.beginPath(); c.moveTo(64, -160); c.lineTo(88, -108); S(c, P.dark, 20);
+    E(c, 90, -100, 13, 11); F(c, P.dark); O(c, 2);
+    if (o.head === 'thumb') { kite(c, 98, -104, 24, 7, 0.6); F(c, '#fff1cf'); O(c, 2); }
+    if (o.head === 'hatchet') { c.beginPath(); c.moveTo(118, hy - 22); c.lineTo(96, hy - 92); c.quadraticCurveTo(140, hy - 96, 150, hy - 26); c.closePath(); F(c, P.crest); O(c); }
+    c.beginPath(); c.moveTo(70, -186); c.lineTo(112, hy + 8); if (!MONO) S(c, OUT, 46); S(c, P.body, 40);
+    E(c, hx, hy, 54, 32, 0.12); F(c, P.body); O(c);
+    if (o.head === 'thumb') { E(c, hx + 46, hy + 12, 20, 15); F(c, P.belly); O(c, 2); }
+    else { E(c, hx + 50, hy + 14, 30, 13, 0.1); F(c, P.belly); O(c, 2); }
+    if (o.head === 'bump') { E(c, hx + 26, hy - 28, 20, 13, 0.3); F(c, P.dark); O(c, 2); }
+    if (o.head === 'brow') { kite(c, hx - 4, hy - 26, 18, 14, -0.2); F(c, P.crest); O(c, 2); }
+    eye(c, hx, hy - 12, 9); smile(c, hx + 28, hy + 14, 12); blush(c, hx + 20, hy + 4, 8);
+    if (o.baby) baby(c, 200, 0, 0.75, P.crest, t, 1);
   },
-  nest(c, t) { // N: a nest of speckled eggs, one hatching
+  nest(c, t, pal, o = {}) { // N: a nest of speckled eggs, one hatching; 0: an empty nest
     const wob = Math.sin(t * 3.2) * 0.07, peek = 6 + Math.max(0, Math.sin(t * 1.3)) * 14;
     E(c, 0, -78, 158, 26); F(c, '#6e4a2c');
     const egg = (x, y, rx, ry, rot) => {
       E(c, x, y, rx, ry, rot); F(c, '#f7eedb'); O(c);
       if (!MONO) [[-0.3, -0.3], [0.25, -0.1], [-0.1, 0.25], [0.3, 0.35]].forEach(([u, v]) => { E(c, x + u * rx, y + v * ry, 4, 3); F(c, '#d9b98f'); });
     };
-    egg(-66, -100, 36, 46, -0.18 + wob * 0.6);
-    egg(66, -100, 36, 46, 0.18 - wob * 0.6);
-    // the middle egg is hatching: a baby peeks over the cracked shell
-    E(c, 0, -150 - peek, 26, 22); F(c, '#7fcf8f'); O(c);
-    eye(c, -8, -156 - peek, 6); eye(c, 10, -156 - peek, 6);
-    c.beginPath(); c.moveTo(-40, -122); c.lineTo(-30, -138); c.lineTo(-16, -126); c.lineTo(-4, -142); c.lineTo(8, -126);
-    c.lineTo(22, -140); c.lineTo(34, -124); c.lineTo(42, -122); c.quadraticCurveTo(46, -70, 0, -62); c.quadraticCurveTo(-46, -70, -40, -122); c.closePath();
-    F(c, '#f7eedb'); O(c);
-    kite(c, 30, -176 - peek * 0.4, 22, 20, 0.5 + wob); F(c, '#f7eedb'); O(c);
+    if (!o.empty) {
+      egg(-66, -100, 36, 46, -0.18 + wob * 0.6);
+      egg(66, -100, 36, 46, 0.18 - wob * 0.6);
+      E(c, 0, -150 - peek, 26, 22); F(c, '#7fcf8f'); O(c);
+      eye(c, -8, -156 - peek, 6); eye(c, 10, -156 - peek, 6);
+      c.beginPath(); c.moveTo(-40, -122); c.lineTo(-30, -138); c.lineTo(-16, -126); c.lineTo(-4, -142); c.lineTo(8, -126);
+      c.lineTo(22, -140); c.lineTo(34, -124); c.lineTo(42, -122); c.quadraticCurveTo(46, -70, 0, -62); c.quadraticCurveTo(-46, -70, -40, -122); c.closePath();
+      F(c, '#f7eedb'); O(c);
+      kite(c, 30, -176 - peek * 0.4, 22, 20, 0.5 + wob); F(c, '#f7eedb'); O(c);
+    } else { kite(c, 20, -96, 40, 9, 1.1 + wob); F(c, '#f2b8c6'); O(c, 2); } // one soft feather
     c.beginPath(); c.ellipse(0, -78, 176, 74, 0, 0, Math.PI); c.closePath(); F(c, '#a8743f'); O(c);
     if (!MONO) for (let i = 0; i < 7; i++) {
       c.beginPath(); c.moveTo(-150 + i * 45, -60 + (i % 2) * 18); c.quadraticCurveTo(-120 + i * 45, -30, -100 + i * 45, -50 + (i % 3) * 10); S(c, '#c99560', 5);
     }
   },
-  oviraptor(c, t) { // O: a feathered, crested bird-like dinosaur, coral pink
-    const bob = Math.sin(t * 2.4) * 4, p = '#f29a76', pf = '#f7c59f', cr = '#e8566b';
-    [[-0.2, pf], [0.15, cr], [0.5, pf], [0.85, cr]].forEach(([a, col]) => { E(c, -100, -150, 58, 18, -0.9 + a); F(c, col); O(c); });
-    c.beginPath(); c.moveTo(-28, -100); c.lineTo(-38, -14); S(c, '#d98a4a', 12);
-    c.beginPath(); c.moveTo(-38, -10); c.lineTo(-62, -2); c.moveTo(-38, -10); c.lineTo(-30, 0); c.moveTo(-38, -10); c.lineTo(-12, -4); S(c, '#d98a4a', 7);
-    E(c, 0, -142, 84, 58, -0.1); F(c, p); O(c);
-    E(c, 6, -118, 50, 26); F(c, '#fbd7c2');
-    E(c, -6, -112, 30, 40, 0.2); F(c, pf); O(c);
-    c.beginPath(); c.moveTo(-2, -82); c.lineTo(10, -14); S(c, '#e79a54', 12);
-    c.beginPath(); c.moveTo(10, -10); c.lineTo(-14, -2); c.moveTo(10, -10); c.lineTo(18, 0); c.moveTo(10, -10); c.lineTo(36, -4); S(c, '#e79a54', 7);
-    E(c, 12, -146, 54, 26, 0.45); F(c, pf); O(c);
-    if (!MONO) for (let i = 0; i < 3; i++) { c.beginPath(); c.arc(-22 + i * 22, -136 + i * 10, 12, 0.3, 2.6); S(c, '#e9a882', 3); }
-    c.beginPath(); c.moveTo(58, -168); c.bezierCurveTo(84, -188, 78, -210, 96, -226 + bob); if (!MONO) S(c, OUT, 36); S(c, p, 30);
-    c.beginPath(); c.moveTo(80, -258 + bob); c.quadraticCurveTo(92, -326 + bob, 140, -276 + bob); c.closePath(); F(c, cr); O(c);
-    E(c, 106, -242 + bob, 38, 31); F(c, p); O(c);
-    c.beginPath(); c.moveTo(136, -252 + bob); c.quadraticCurveTo(172, -246 + bob, 152, -216 + bob); c.lineTo(130, -224 + bob); c.closePath(); F(c, '#f6c14b'); O(c);
-    eye(c, 112, -250 + bob, 9); blush(c, 122, -232 + bob, 8);
+  ostrich(c, t, pal, o = {}) { // Oviraptor (crest, fan tail), Gallimimus (no crest, long neck, long legs)
+    const P = pick(pal, { body: '#f29a76', feather: '#f7c59f', crest: '#e8566b', leg: '#d98a4a', beak: '#f6c14b' });
+    const bob = Math.sin(t * 2.4) * 4, gal = !!o.gallimimus, lift = gal ? 30 : 0;
+    if (gal) { taper(c, -60, -150 - lift, -140, -160 - lift, -220, -150 - lift, 20); F(c, P.body); O(c); }
+    else [[-0.2, P.feather], [0.15, P.crest], [0.5, P.feather], [0.85, P.crest]].forEach(([a, col]) => { E(c, -100, -150, 58, 18, -0.9 + a); F(c, col); O(c); });
+    c.beginPath(); c.moveTo(-28, -100 - lift); c.lineTo(-38, -14); S(c, P.leg, 12);
+    c.beginPath(); c.moveTo(-38, -10); c.lineTo(-62, -2); c.moveTo(-38, -10); c.lineTo(-30, 0); c.moveTo(-38, -10); c.lineTo(-12, -4); S(c, P.leg, 7);
+    E(c, 0, -142 - lift, 84, gal ? 48 : 58, -0.1); F(c, P.body); O(c);
+    E(c, 6, -118 - lift, 50, 22); F(c, 'rgba(255,240,225,0.6)');
+    E(c, -6, -112 - lift, 30, 40, 0.2); F(c, P.feather); O(c);
+    c.beginPath(); c.moveTo(-2, -82 - lift); c.lineTo(10, -14); S(c, P.leg, 12);
+    c.beginPath(); c.moveTo(10, -10); c.lineTo(-14, -2); c.moveTo(10, -10); c.lineTo(18, 0); c.moveTo(10, -10); c.lineTo(36, -4); S(c, P.leg, 7);
+    if (!gal) { E(c, 12, -146, 54, 26, 0.45); F(c, P.feather); O(c); }
+    if (gal) {
+      c.beginPath(); c.moveTo(58, -190); c.bezierCurveTo(90, -230, 100, -270, 110, -300 + bob); if (!MONO) S(c, OUT, 26); S(c, P.body, 20);
+      E(c, 120, -306 + bob, 26, 18); F(c, P.body); O(c);
+      c.beginPath(); c.moveTo(140, -312 + bob); c.lineTo(182, -300 + bob); c.lineTo(140, -296 + bob); c.closePath(); F(c, P.beak); O(c, 2);
+      eye(c, 122, -312 + bob, 7); blush(c, 132, -298 + bob, 6);
+    } else {
+      c.beginPath(); c.moveTo(58, -168); c.bezierCurveTo(84, -188, 78, -210, 96, -226 + bob); if (!MONO) S(c, OUT, 36); S(c, P.body, 30);
+      c.beginPath(); c.moveTo(80, -258 + bob); c.quadraticCurveTo(92, -326 + bob, 140, -276 + bob); c.closePath(); F(c, P.crest); O(c);
+      E(c, 106, -242 + bob, 38, 31); F(c, P.body); O(c);
+      c.beginPath(); c.moveTo(136, -252 + bob); c.quadraticCurveTo(172, -246 + bob, 152, -216 + bob); c.lineTo(130, -224 + bob); c.closePath(); F(c, P.beak); O(c);
+      eye(c, 112, -250 + bob, 9); blush(c, 122, -232 + bob, 8);
+    }
   },
-  stegosaurus(c, t) { // S: green with orange back plates and a spiky tail
-    const g = '#7cb85a', g2 = '#669e48', pl = '#f39c4a';
-    const back = x => -112 - 72 * Math.sqrt(Math.max(0, 1 - (x / 142) * (x / 142)));
-    for (let i = 0; i < 6; i++) { const x = -88 + i * 34; kite(c, x, back(x) + 14, 30 + (i === 2 || i === 3 ? 18 : 6), 14, (x / 142) * 0.6); F(c, '#d77f30'); O(c); }
-    for (let i = 0; i < 7; i++) { const x = -104 + i * 34; kite(c, x, back(x) + 12, 38 + (i === 3 ? 22 : i === 2 || i === 4 ? 14 : 0), 18, (x / 142) * 0.6); F(c, pl); O(c); }
-    taper(c, -118, -98, -200, -118, -268, -136, 26); F(c, g); O(c);
+  plated(c, t, pal, o = {}) { // Stegosaurus (big plates), Kentrosaurus (plates then long spikes), Wuerhosaurus (low flat plates)
+    const P = pick(pal, { body: '#7cb85a', dark: '#669e48', belly: '#c6e6a6', plate: '#f39c4a', plate2: '#d77f30' });
+    const k = o.kind || 'stego', ry = k === 'wuerho' ? 58 : 72;
+    const back = x => -112 - ry * Math.sqrt(Math.max(0, 1 - (x / 142) * (x / 142)));
+    if (k === 'stego') {
+      for (let i = 0; i < 6; i++) { const x = -88 + i * 34; kite(c, x, back(x) + 14, 30 + (i === 2 || i === 3 ? 18 : 6), 14, (x / 142) * 0.6); F(c, P.plate2); O(c); }
+      for (let i = 0; i < 7; i++) { const x = -104 + i * 34; kite(c, x, back(x) + 12, 38 + (i === 3 ? 22 : i === 2 || i === 4 ? 14 : 0), 18, (x / 142) * 0.6); F(c, P.plate); O(c); }
+    } else if (k === 'kentro') {
+      for (let i = 0; i < 4; i++) { const x = 20 + i * 30; kite(c, x, back(x) + 12, 30, 13, (x / 142) * 0.6); F(c, P.plate); O(c); }
+      for (let i = 0; i < 5; i++) { const x = -120 + i * 30; kite(c, x, back(x) + 10, 56, 6, (x / 142) * 0.6 - 0.2); F(c, '#fff1d6'); O(c, 2); }
+    } else {
+      for (let i = 0; i < 8; i++) { const x = -110 + i * 31; c.save(); c.translate(x, back(x) + 8); c.rotate((x / 142) * 0.5); RR(c, -11, -26, 22, 30, 8); c.restore(); F(c, P.plate); O(c); }
+    }
+    taper(c, -118, -98, -200, -118, -268, -136, 26); F(c, P.body); O(c);
     [[-240, -132, -0.9], [-246, -128, 0.6], [-262, -138, -1.2], [-266, -132, 0.9]].forEach(([x, y, r]) => { kite(c, x, y, 34, 7, r); F(c, '#fff1d6'); O(c, 2); });
-    leg(c, -96, -66, 40, 66, g2); leg(c, 52, -66, 40, 66, g2);
-    E(c, 0, -112, 142, 72); F(c, g); O(c);
-    E(c, 8, -74, 112, 24); F(c, '#c6e6a6');
-    leg(c, -64, -62, 44, 62, g); leg(c, 84, -62, 44, 62, g);
-    c.beginPath(); c.moveTo(122, -102); c.lineTo(166, -74); if (!MONO) S(c, OUT, 42); S(c, g, 36);
-    E(c, 182, -70, 38, 25, 0.15); F(c, g); O(c);
+    leg(c, -96, -66, 40, 66, P.dark); leg(c, 52, -66, 40, 66, P.dark);
+    E(c, 0, -112, 142, ry); F(c, P.body); O(c);
+    E(c, 8, -74, 112, 24); F(c, P.belly);
+    if (k === 'kentro') { kite(c, 40, -96, 52, 7, 2.3); F(c, '#fff1d6'); O(c, 2); }
+    leg(c, -64, -62, 44, 62, P.body); leg(c, 84, -62, 44, 62, P.body);
+    c.beginPath(); c.moveTo(122, -102); c.lineTo(166, -74); if (!MONO) S(c, OUT, 42); S(c, P.body, 36);
+    E(c, 182, -70, 38, 25, 0.15); F(c, P.body); O(c);
     eye(c, 186, -78, 8); smile(c, 204, -62, 11); blush(c, 198, -66, 7);
   },
-  ankylosaurus(c, t) { // A: low and armoured, sky blue, a club on its tail
-    const wag = Math.sin(t * 2) * 0.14, b = '#5f8fd6', b2 = '#4a76bb';
+  ankylosaurus(c, t, pal) { // A: low and armoured, a club on its tail
+    const P = pick(pal, { body: '#5f8fd6', dark: '#4a76bb', club: '#3f68a8', stud: '#a9c6f2' });
+    const wag = Math.sin(t * 2) * 0.14;
     c.save(); c.translate(-118, -66); c.rotate(wag);
-    c.beginPath(); c.moveTo(0, 0); c.lineTo(-108, 6); S(c, b2, 26);
-    E(c, -128, 6, 36, 27); F(c, '#3f68a8'); O(c);
-    if (!MONO) { E(c, -136, 0, 10, 7); F(c, '#a9c6f2'); E(c, -118, 12, 8, 6); F(c, '#a9c6f2'); }
+    c.beginPath(); c.moveTo(0, 0); c.lineTo(-108, 6); S(c, P.dark, 26);
+    E(c, -128, 6, 36, 27); F(c, P.club); O(c);
+    if (!MONO) { E(c, -136, 0, 10, 7); F(c, P.stud); E(c, -118, 12, 8, 6); F(c, P.stud); }
     c.restore();
-    leg(c, -112, -50, 40, 50, b2); leg(c, 66, -50, 40, 50, b2);
+    leg(c, -112, -50, 40, 50, P.dark); leg(c, 66, -50, 40, 50, P.dark);
     for (let i = 0; i < 8; i++) { const x = -132 + i * 38; kite(c, x, -46, 22, 9, x < 0 ? -1.3 : 1.3); F(c, '#e8eefc'); O(c, 2); }
-    c.beginPath(); c.moveTo(-156, -40); c.bezierCurveTo(-156, -172, 156, -172, 156, -40); c.closePath(); F(c, b); O(c);
+    c.beginPath(); c.moveTo(-156, -40); c.bezierCurveTo(-156, -172, 156, -172, 156, -40); c.closePath(); F(c, P.body); O(c);
     if (!MONO) {
-      [0.55, 0.82].forEach(k => { c.beginPath(); c.moveTo(-156 * k, -40); c.bezierCurveTo(-156 * k, -40 - 132 * k, 156 * k, -40 - 132 * k, 156 * k, -40); S(c, b2, 4); });
-      for (let r = 0; r < 3; r++) for (let i = 0; i < 6 - r; i++) { E(c, -90 + r * 18 + i * 36, -70 - r * 32, 9, 6); F(c, '#a9c6f2'); }
+      [0.55, 0.82].forEach(k => { c.beginPath(); c.moveTo(-156 * k, -40); c.bezierCurveTo(-156 * k, -40 - 132 * k, 156 * k, -40 - 132 * k, 156 * k, -40); S(c, P.dark, 4); });
+      for (let r = 0; r < 3; r++) for (let i = 0; i < 6 - r; i++) { E(c, -90 + r * 18 + i * 36, -70 - r * 32, 9, 6); F(c, P.stud); }
     }
-    leg(c, -76, -44, 44, 44, b); leg(c, 100, -44, 44, 44, b);
-    E(c, 182, -60, 42, 30); F(c, b); O(c);
+    leg(c, -76, -44, 44, 44, P.body); leg(c, 100, -44, 44, 44, P.body);
+    E(c, 182, -60, 42, 30); F(c, P.body); O(c);
     kite(c, 158, -78, 22, 8, -0.7); F(c, '#e8eefc'); O(c, 2);
     eye(c, 190, -70, 9); smile(c, 206, -52, 12); blush(c, 202, -58, 7);
   },
-  utahraptor(c, t) { // U: a feathered raptor, warm rust, standing alert
-    const look = Math.sin(t * 1.9) * 4, r = '#c76a4a', r2 = '#a95536', fe = '#eaa36c';
-    taper(c, -60, -168, -150, -178, -238, -184, 22); F(c, r); O(c);
-    [-0.5, 0, 0.5].forEach(a => { E(c, -238, -184, 34, 9, a); F(c, fe); O(c, 2); });
-    E(c, -18, -126, 30, 44, 0.3); F(c, r2); O(c);
-    c.beginPath(); c.moveTo(-18, -96); c.lineTo(-30, -36); c.lineTo(-4, -8); S(c, r2, 13);
-    E(c, 0, -160, 94, 46, -0.05); F(c, r); O(c);
-    E(c, 8, -138, 60, 20); F(c, '#e9b494');
-    E(c, 26, -124, 34, 48, 0.25); F(c, r); O(c);
-    c.beginPath(); c.moveTo(26, -92); c.lineTo(10, -36); c.lineTo(42, -10); S(c, r, 14);
-    c.beginPath(); c.moveTo(42, -10); c.lineTo(66, -6); S(c, r, 9);
+  raptor(c, t, pal, o = {}) { // Utahraptor (feathers, crest), Velociraptor (long snout, speckles), Raptor (stripes, brow bumps), Juravenator (small, fuzzy long tail)
+    const P = pick(pal, { body: '#c76a4a', dark: '#a95536', feather: '#eaa36c', belly: '#e9b494', mark: '#8a4630' });
+    const look = Math.sin(t * 1.9) * 4, sn = o.snout || 1, tl = o.tail || 1;
+    taper(c, -60, -168, -150 * tl, -178, -238 * tl, -184, 22); F(c, P.body); O(c);
+    if (o.fuzz) for (let i = 0; i < 7; i++) { kite(c, -80 - i * 26 * tl, -186 + i * -2, 16, 6, -0.2); F(c, P.feather); O(c, 1.5); }
+    if (o.armFeathers) [-0.5, 0, 0.5].forEach(a => { E(c, -238 * tl, -184, 34, 9, a); F(c, P.feather); O(c, 2); });
+    E(c, -18, -126, 30, 44, 0.3); F(c, P.dark); O(c);
+    c.beginPath(); c.moveTo(-18, -96); c.lineTo(-30, -36); c.lineTo(-4, -8); S(c, P.dark, 13);
+    E(c, 0, -160, 94, 46, -0.05); F(c, P.body); O(c);
+    E(c, 8, -138, 60, 20); F(c, P.belly);
+    if (!MONO && o.stripes) for (let i = 0; i < 4; i++) { c.beginPath(); c.moveTo(-50 + i * 30, -200); c.lineTo(-40 + i * 30, -170); S(c, P.mark, 7); }
+    if (!MONO && o.speckles) [[-40, -180], [-10, -188], [20, -182], [-25, -165], [5, -170]].forEach(([x, y]) => { E(c, x, y, 5, 4); F(c, P.mark); });
+    E(c, 26, -124, 34, 48, 0.25); F(c, P.body); O(c);
+    c.beginPath(); c.moveTo(26, -92); c.lineTo(10, -36); c.lineTo(42, -10); S(c, P.body, 14);
+    c.beginPath(); c.moveTo(42, -10); c.lineTo(66, -6); S(c, P.body, 9);
     c.beginPath(); c.moveTo(40, -14); c.quadraticCurveTo(52, -38, 40, -46); S(c, '#fff1d6', 6);
-    [[0.9, 52], [1.2, 44], [1.5, 36]].forEach(([a, l]) => { E(c, 62 + Math.cos(a) * l * 0.5, -150 + Math.sin(a) * l * 0.5, l * 0.5, 9, a); F(c, fe); O(c, 2); });
-    c.beginPath(); c.moveTo(68, -178); c.lineTo(108, -214 + look); if (!MONO) S(c, OUT, 34); S(c, r, 28);
-    [-0.6, -0.2, 0.2].forEach(a => { E(c, 102, -238 + look, 22, 7, -1.9 + a); F(c, fe); O(c, 2); });
-    E(c, 136, -222 + look, 50, 25, 0.06); F(c, r); O(c);
-    E(c, 170, -214 + look, 22, 13, 0.1); F(c, '#e9b494');
-    eye(c, 132, -232 + look, 9); smile(c, 166, -210 + look, 11); blush(c, 154, -216 + look, 7);
+    if (o.armFeathers) [[0.9, 52], [1.2, 44], [1.5, 36]].forEach(([a, l]) => { E(c, 62 + Math.cos(a) * l * 0.5, -150 + Math.sin(a) * l * 0.5, l * 0.5, 9, a); F(c, P.feather); O(c, 2); });
+    else { c.beginPath(); c.moveTo(62, -158); c.lineTo(84, -128); S(c, P.dark, 10); }
+    c.beginPath(); c.moveTo(68, -178); c.lineTo(108, -214 + look); if (!MONO) S(c, OUT, 34); S(c, P.body, 28);
+    if (o.crest) [-0.6, -0.2, 0.2].forEach(a => { E(c, 102, -238 + look, 22, 7, -1.9 + a); F(c, P.feather); O(c, 2); });
+    E(c, 126 + 10 * sn, -222 + look, 50 * sn, 25, 0.06); F(c, P.body); O(c);
+    E(c, 126 + 44 * sn, -214 + look, 22 * sn, 13, 0.1); F(c, P.belly);
+    if (o.brows) { kite(c, 124, -244 + look, 14, 9, -0.3); F(c, P.dark); O(c, 2); }
+    eye(c, 132, -232 + look, o.bigEye ? 11 : 9); smile(c, 126 + 40 * sn, -210 + look, 11); blush(c, 126 + 28 * sn, -216 + look, 7);
   },
-  rex(c, t) { // R: a big-headed T-Rex, soft purple, tiny arms, friendly smile
-    const jaw = Math.max(0, Math.sin(t * 1.3)) * 7, p = '#9a6fd1', p2 = '#7f58b6';
-    taper(c, -70, -150, -170, -110, -262, -62, 34); F(c, p); O(c);
-    E(c, -42, -104, 46, 56, 0.1); F(c, p2); O(c);
-    leg(c, -62, -66, 40, 66, p2);
-    E(c, 0, -164, 108, 76, -0.4); F(c, p); O(c);
-    if (!MONO) for (let i = 0; i < 6; i++) { kite(c, -76 + i * 30, -222 + i * 6 - (i < 3 ? 0 : (i - 2) * 4), 16, 9, -0.3); F(c, '#c39af0'); }
-    E(c, 28, -142, 52, 56, -0.4); F(c, '#d6bdf3');
-    E(c, 4, -102, 56, 62, 0.15); F(c, p); O(c);
-    leg(c, -16, -62, 44, 62, p);
-    c.beginPath(); c.moveTo(72, -160); c.lineTo(96, -142); S(c, p2, 12);
+  rex(c, t, pal, o = {}) { // T-Rex; Yutyrannus (feathered, a snout crest)
+    const P = pick(pal, { body: '#9a6fd1', dark: '#7f58b6', belly: '#d6bdf3', ridge: '#c39af0' });
+    const jaw = Math.max(0, Math.sin(t * 1.3)) * 7;
+    taper(c, -70, -150, -170, -110, -262, -62, 34); F(c, P.body); O(c);
+    if (o.feathers) for (let i = 0; i < 6; i++) { E(c, -110 - i * 24, -150 + i * 15, 20, 8, 0.5); F(c, P.ridge); O(c, 1.5); }
+    E(c, -42, -104, 46, 56, 0.1); F(c, P.dark); O(c);
+    leg(c, -62, -66, 40, 66, P.dark);
+    E(c, 0, -164, 108, 76, -0.4); F(c, P.body); O(c);
+    if (!MONO) for (let i = 0; i < 6; i++) {
+      if (o.feathers) { E(c, -76 + i * 30, -226 + i * 6 - (i < 3 ? 0 : (i - 2) * 4), 16, 7, -0.4); F(c, P.ridge); }
+      else { kite(c, -76 + i * 30, -222 + i * 6 - (i < 3 ? 0 : (i - 2) * 4), 16, 9, -0.3); F(c, P.ridge); }
+    }
+    E(c, 28, -142, 52, 56, -0.4); F(c, P.belly);
+    E(c, 4, -102, 56, 62, 0.15); F(c, P.body); O(c);
+    leg(c, -16, -62, 44, 62, P.body);
+    c.beginPath(); c.moveTo(72, -160); c.lineTo(96, -142); S(c, P.dark, 12);
     c.beginPath(); c.moveTo(96, -142); c.lineTo(104, -134); c.moveTo(96, -142); c.lineTo(106, -146); S(c, '#fff1d6', 4);
     c.save(); c.translate(124, -252);
-    RR(c, -46, 0 + jaw, 116, 36, 16); F(c, p2); O(c);
+    RR(c, -46, 0 + jaw, 116, 36, 16); F(c, P.dark); O(c);
     if (!MONO) for (let i = 0; i < 5; i++) { c.beginPath(); c.moveTo(-6 + i * 16, 24 + jaw * 0.5); c.lineTo(0 + i * 16, 31 + jaw * 0.5); c.lineTo(6 + i * 16, 24 + jaw * 0.5); c.closePath(); F(c, '#fffdf7'); }
-    RR(c, -58, -48, 136, 70, 30); F(c, p); O(c);
+    RR(c, -58, -48, 136, 70, 30); F(c, P.body); O(c);
+    if (o.feathers) { c.beginPath(); c.moveTo(0, -46); c.quadraticCurveTo(30, -70, 60, -46); c.closePath(); F(c, P.ridge); O(c, 2); }
     if (!MONO) { c.beginPath(); c.moveTo(-20, 20); c.quadraticCurveTo(30, 34, 74, 18); S(c, '#3a2a40', 3); }
     if (!MONO) { E(c, 62, -26, 4, 3); F(c, '#3a2a40'); }
     eye(c, -6, -18, 11); blush(c, 22, 2, 9);
-    if (!MONO) { c.beginPath(); c.moveTo(-20, -38); c.lineTo(8, -34); S(c, '#5d3f8c', 5); }
+    if (!MONO) { c.beginPath(); c.moveTo(-20, -38); c.lineTo(8, -34); S(c, P.dark, 5); }
     c.restore();
+  },
+  horned(c, t, pal, o = {}) { // Triceratops (three horns), Xenoceratops (spiky frill), Zuniceratops (two brow horns, frill windows)
+    const P = pick(pal, { body: '#e48a5a', dark: '#c46f42', belly: '#f6c7a4', frill: '#f2b04f', horn: '#fff1d6' });
+    const nod = Math.sin(t * 1.6) * 3, h = o.horns || 'tri';
+    taper(c, -120, -100, -180, -80, -230, -50, 26); F(c, P.body); O(c);
+    leg(c, -100, -74, 44, 74, P.dark); leg(c, 50, -74, 44, 74, P.dark);
+    E(c, -10, -112, 136, 70); F(c, P.body); O(c);
+    E(c, -4, -76, 104, 22); F(c, P.belly);
+    leg(c, -70, -68, 48, 68, P.body); leg(c, 82, -68, 48, 68, P.body);
+    c.save(); c.translate(0, nod);
+    if (h === 'xeno') for (let i = 0; i < 5; i++) { kite(c, 92 + i * 14, -206 + i * 12, 46, 8, -0.9 + i * 0.25); F(c, P.horn); O(c, 2); }
+    E(c, 124, -150, 64, 78, -0.4); F(c, P.frill); O(c);
+    if (!MONO) { E(c, 124, -150, 48, 62, -0.4); F(c, 'rgba(255,255,255,0.18)'); }
+    if (!MONO && h === 'zuni') { E(c, 104, -176, 12, 18, -0.4); F(c, P.dark); E(c, 132, -192, 12, 18, -0.4); F(c, P.dark); }
+    E(c, 178, -100, 50, 38, 0.15); F(c, P.body); O(c);
+    c.beginPath(); c.moveTo(214, -104); c.quadraticCurveTo(244, -96, 226, -70); c.lineTo(206, -80); c.closePath(); F(c, P.dark); O(c, 2);
+    if (h === 'tri' || h === 'zuni') { kite(c, 168, -128, h === 'zuni' ? 64 : 56, 9, 0.5); F(c, P.horn); O(c, 2); kite(c, 186, -128, h === 'zuni' ? 60 : 52, 9, 0.75); F(c, P.horn); O(c, 2); }
+    if (h === 'tri' || h === 'xeno') { kite(c, 214, -114, h === 'xeno' ? 34 : 24, 8, 0.4); F(c, P.horn); O(c, 2); }
+    eye(c, 176, -110, 9); smile(c, 200, -84, 11); blush(c, 194, -92, 7);
+    c.restore();
+  },
+  flyer(c, t, pal, o = {}) { // Pteranodon (flying, long back crest), Quetzalcoatlus (standing tall on four long limbs)
+    const P = pick(pal, { body: '#5fb6b0', dark: '#468f8a', wing: '#9fd9cf', beak: '#f6c14b', crest: '#e8704f' });
+    if (o.standing) {
+      const sway = Math.sin(t * 1.2) * 5;
+      c.beginPath(); c.moveTo(-40, -120); c.lineTo(-50, -60); c.lineTo(-40, 0); S(c, P.dark, 12);
+      c.beginPath(); c.moveTo(30, -150); c.lineTo(60, -80); c.lineTo(54, 0); S(c, P.dark, 14);
+      c.beginPath(); c.moveTo(30, -150); c.lineTo(-30, -110); c.lineTo(60, -80); c.closePath(); F(c, P.wing); O(c, 2);
+      E(c, -6, -140, 62, 38, -0.3); F(c, P.body); O(c);
+      c.beginPath(); c.moveTo(-10, -140); c.lineTo(-40, -120); c.lineTo(-20, -60); S(c, P.body, 12);
+      c.beginPath(); c.moveTo(-20, -60); c.lineTo(-24, 0); S(c, P.body, 11);
+      c.beginPath(); c.moveTo(48, -170); c.bezierCurveTo(80, -220, 90, -270, 104 + sway, -300); if (!MONO) S(c, OUT, 24); S(c, P.body, 18);
+      E(c, 116 + sway, -312, 32, 22, 0.15); F(c, P.body); O(c);
+      kite(c, 100 + sway, -328, 30, 12, -0.5); F(c, P.crest); O(c, 2);
+      c.beginPath(); c.moveTo(140 + sway, -320); c.lineTo(222 + sway, -290); c.lineTo(138 + sway, -298); c.closePath(); F(c, P.beak); O(c, 2);
+      eye(c, 118 + sway, -318, 8); blush(c, 132 + sway, -304, 6);
+      leg(c, -56, -14, 30, 14, P.dark); leg(c, 40, -14, 30, 14, P.dark);
+    } else {
+      const flap = Math.sin(t * 3), y0 = -170 + Math.sin(t * 1.5) * 8;
+      const wing = s => { c.beginPath(); c.moveTo(-10 * s, y0 - 8); c.quadraticCurveTo(-130 * s, y0 - 80 - flap * 50, -250 * s, y0 - 30 - flap * 80);
+        c.quadraticCurveTo(-150 * s, y0 + 10, -20 * s, y0 + 16); c.closePath(); F(c, P.wing); O(c); };
+      wing(1); wing(-1);
+      E(c, 0, y0, 46, 28); F(c, P.body); O(c);
+      c.beginPath(); c.moveTo(-14, y0 + 22); c.lineTo(-24, y0 + 48); c.moveTo(10, y0 + 22); c.lineTo(4, y0 + 48); S(c, P.dark, 7);
+      c.beginPath(); c.moveTo(60, y0 - 30); c.lineTo(-18, y0 - 76); c.lineTo(48, y0 - 46); c.closePath(); F(c, P.crest); O(c, 2);
+      E(c, 56, y0 - 24, 28, 22); F(c, P.body); O(c);
+      c.beginPath(); c.moveTo(78, y0 - 30); c.lineTo(168, y0 - 14); c.lineTo(76, y0 - 10); c.closePath(); F(c, P.beak); O(c, 2);
+      eye(c, 60, y0 - 30, 8); blush(c, 72, y0 - 16, 6);
+    }
+  },
+  fossil(c, t) { // F: a dinosaur skeleton, resting in the sand
+    const bone = '#f3e6c8', shade = '#d9c7a0';
+    if (!MONO) { E(c, -20, -10, 260, 26); F(c, 'rgba(160,120,80,0.25)'); }
+    const pts = []; for (let i = 0; i <= 12; i++) { const u = i / 12; pts.push([lerp(110, -250, u), -70 - Math.sin(u * Math.PI) * 50 + u * 40]); }
+    for (let i = 3; i < 9; i++) { const [x, y] = pts[i]; c.beginPath(); c.moveTo(x, y); c.quadraticCurveTo(x + 18, y + 40, x + 4, y + 66); S(c, bone, 8); if (!MONO) { c.beginPath(); c.moveTo(x, y); c.quadraticCurveTo(x + 18, y + 40, x + 4, y + 66); S(c, OUT, 1); } }
+    pts.forEach(([x, y], i) => { const r = 14 - i * 0.7; RR(c, x - r, y - r * 0.8, r * 2, r * 1.6, r * 0.6); F(c, bone); O(c, 2); });
+    [[60, -50, 40, -6], [-120, -50, -150, -6]].forEach(([x0, y0, x1, y1]) => { c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); S(c, bone, 12); E(c, x1, y1, 12, 8); F(c, bone); O(c, 2); });
+    c.save(); c.translate(160, -74);
+    RR(c, -36, -34, 100, 50, 20); F(c, bone); O(c);
+    RR(c, -26, 10, 86, 20, 9); F(c, shade); O(c, 2);
+    if (!MONO) { E(c, -6, -14, 13, 12); F(c, '#6f5a48'); E(c, 30, -10, 10, 8); F(c, '#8a7460');
+      for (let i = 0; i < 5; i++) { c.beginPath(); c.moveTo(-14 + i * 14, 14); c.lineTo(-8 + i * 14, 22); c.lineTo(-2 + i * 14, 14); c.closePath(); F(c, '#fffdf7'); } }
+    c.restore();
+  },
+  babies(c, t, pal, o = {}) { // the numbers: exactly n little hatchlings
+    const n = o.n || 1, cols = ['#7fcf8f', '#f2a37a', '#8fb4ea', '#e7c45a', '#c39af0', '#f29ab0', '#6fc9c0', '#e48a5a', '#a5d46a'];
+    const front = Math.min(n, 5), backN = n - front;
+    for (let i = 0; i < backN; i++) baby(c, (i - (backN - 1) / 2) * 104, -118, 0.95, cols[(i + 5) % cols.length], t, i + 5);
+    for (let i = 0; i < front; i++) baby(c, (i - (front - 1) / 2) * 104, 0, 1.05, cols[i % cols.length], t, i);
   },
 };
 
@@ -430,12 +565,13 @@ function sample(w, h, draw, ox, oy, stepPx = 3) {
   for (let y = 0; y < h; y += stepPx) for (let x = 0; x < w; x += stepPx) if (d[(y * w + x) * 4 + 3] > 140) pts.push([x - ox, y - oy]);
   return pts;
 }
+function drawKind(c, L, t) { const k = KEY_TABLE[L]; CREATURES[k.creature](c, t, k.pal, k.opts || {}); }
 function bakeShapes() {
   for (const L of KEY_ORDER) {
     const glyph = sample(460, 460, c => {
       c.fillStyle = '#fff'; c.font = `900 ${LETTER_SIZE}px ${GLYPH_FONT}`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(L, 230, 240);
     }, 230, 240);
-    const body = sample(600, 360, c => { MONO = true; c.translate(300, 340); CREATURES[KEY_TABLE[L].creature](c, 0); MONO = false; }, 300, 340);
+    const body = sample(680, 440, c => { MONO = true; c.translate(340, 410); drawKind(c, L, 0); MONO = false; }, 340, 410);
     shapes[L] = { glyph, body };
   }
 }
@@ -487,7 +623,7 @@ function reset() {
     hints: [],          // glowing letters drifting on screen: { L, x, y, age, life, ph }
     seen: [],           // letters met this session
     firstPress: false,
-    parade: null, paradeDone: false,
+    parade: null, paradeAt: 0,      // a parade of the last 8 new creatures, every 8 met
     reveals: 0, queued: 0, ignored: 0,
   };
   keyFlash = {}; sparks.length = 0;
@@ -542,9 +678,9 @@ const scenes = {
     draw() {
       drawSky(); drawGround();
       KEY_ORDER.forEach((L, i) => {
-        const col = i % 4, row = Math.floor(i / 4), x = 170 + col * 313, y = 300 + row * 300;
-        ctx.save(); ctx.translate(x, y); ctx.scale(0.5, 0.5); CREATURES[KEY_TABLE[L].creature](ctx, state.t); ctx.restore();
-        ctx.save(); ctx.shadowColor = 'rgba(20,20,50,0.8)'; ctx.shadowBlur = 6; text(`${L}: ${KEY_TABLE[L].name}`, x, y + 28, 22, '#fff4dc'); ctx.restore();
+        const col = i % 9, row = Math.floor(i / 9), x = 72 + col * 142, y = 150 + row * 172;
+        ctx.save(); ctx.translate(x, y); ctx.scale(0.23, 0.23); drawKind(ctx, L, state.t); ctx.restore();
+        ctx.save(); ctx.shadowColor = y > 560 ? 'rgba(255,250,235,0.9)' : 'rgba(20,20,50,0.8)'; ctx.shadowBlur = 6; text(/^[0-9]$/.test(L) ? KEY_TABLE[L].name : `${L}: ${KEY_TABLE[L].name}`, x, y + 16, 14, y > 560 ? '#3b2f2a' : '#fff4dc'); ctx.restore();
       });
     },
   },
@@ -573,8 +709,8 @@ const scenes = {
       // inputs
       for (const code of hit) {
         if (!isLetterOrDigit(code)) continue; // every other key does nothing at all
-        const L = code.startsWith('Key') ? code.slice(3) : null;
-        if (L && KEY_TABLE[L]) pressLetter(L);
+        const L = code.startsWith('Key') ? code.slice(3) : code.slice(-1); // KeyD -> D, Digit3 / Numpad3 -> 3
+        if (KEY_TABLE[L]) pressLetter(L);
         else nothingPress(KEYBOARD_FROM.x + (rng() - 0.5) * 300, KEYBOARD_FROM.y - 40); // a letter or digit with no creature yet
       }
       while (taps.length) {
@@ -598,7 +734,7 @@ const scenes = {
       }
       if (state.prev) { state.prev.t += dt; state.prev.fade += dt; if (state.prev.fade > 0.45) state.prev = null; }
       // the parade, once all 8 have been met
-      if (!state.paradeDone && state.seen.length === KEY_ORDER.length && cur && cur.fired.form && !state.queue.length && cur.t >= ph.formEnd + tune.parade_delay_s) startParade();
+      if (state.seen.length >= state.paradeAt + 8 && cur && cur.fired.form && !state.queue.length && cur.t >= ph.formEnd + tune.parade_delay_s) startParade();
       if (state.parade) { state.parade.t += dt; if (state.parade.t > tune.parade_s) state.parade = null; }
       for (const k in keyFlash) { keyFlash[k] -= dt; if (keyFlash[k] <= 0) delete keyFlash[k]; }
       for (let i = sparks.length - 1; i >= 0; i--) {
@@ -618,7 +754,8 @@ const scenes = {
   },
 };
 function startParade() {
-  state.paradeDone = true; state.parade = { t: 0 };
+  state.paradeAt = state.seen.length; state.parade = { t: 0, who: state.seen.slice(-8) };
+  if (state.parade.who.length < 8) state.parade.who = KEY_ORDER.filter(k => /[A-Z]/.test(k)).slice(0, 8);
   events.push({ type: 'parade' }); paradeTune();
 }
 
@@ -676,7 +813,7 @@ function drawCreature(L, x, y, sc, t, alpha) {
   ctx.translate(x, y); ctx.scale(sc, sc * (1 + breathe * 0.012)); ctx.translate(0, -(0.5 + 0.5 * breathe) * tune.bob_px);
   // a soft shadow on the ground
   ctx.save(); ctx.globalAlpha = alpha * 0.25; E(ctx, 0, 6, 210, 18); ctx.fillStyle = '#3b2f45'; ctx.fill(); ctx.restore();
-  CREATURES[KEY_TABLE[L].creature](ctx, t);
+  drawKind(ctx, L, t);
   ctx.restore();
 }
 function drawGlyph(L, x, y, s, alpha, glow) {
@@ -765,14 +902,14 @@ function drawSparks() {
   ctx.restore();
 }
 function drawParade() { // all eight walk across the hills, small, once
-  const p = state.parade, n = KEY_ORDER.length, gap = 150, speed = (W + 200 + n * gap) / tune.parade_s;
+  const p = state.parade, n = p.who.length, gap = 150, speed = (W + 200 + n * gap) / tune.parade_s;
   const fadeIn = clamp01(p.t / 0.6), fadeOut = clamp01((tune.parade_s - p.t) / 0.6);
-  KEY_ORDER.forEach((L, i) => {
+  p.who.forEach((L, i) => {
     const x = -100 + p.t * speed - i * gap, step = Math.abs(Math.sin(p.t * 7 + i)) * 5;
     if (x < -150 || x > W + 150) return;
     ctx.save(); ctx.globalAlpha = Math.min(fadeIn, fadeOut);
     ctx.translate(x, 478 + GROUND_SHIFT - step); ctx.scale(0.26, 0.26);
-    CREATURES[KEY_TABLE[L].creature](ctx, p.t + i);
+    drawKind(ctx, L, p.t + i);
     ctx.restore();
   });
 }
