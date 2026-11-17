@@ -1,4 +1,4 @@
-# Kid Learn Character: game brief
+# Kid Learn Character: kickoff notes (input for /brainstorm)
 
 **Status:** Concept (2026-11-17). Luan's request, written down by the leader. Working title; the
 real name comes later.
@@ -47,7 +47,7 @@ key and plays its sound.
 | Topic | Default | Why |
 |---|---|---|
 | Folder | `games/kid-learn-character/` | Luan wrote `game/`; the repo already uses `games/`, so the two games sit side by side |
-| Platforms | Native iOS (Swift) and Android (Kotlin), tablet first, phone too | Same stack and team as the last game |
+| Platforms | **Decided K-03:** fully native, Apple first (iPadOS + macOS), then iPhone; Android later | Luan, 2026-11-17 |
 | Language | English first; Vietnamese later as a second voice | Luan's examples are English ("dinosaur", "ONE") |
 | Art | Decided after TASK-029 and the tech plans compare 2D and 3D | Luan said "2D/3D, we will define later" |
 

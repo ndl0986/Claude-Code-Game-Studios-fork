@@ -20,7 +20,7 @@ case "$member" in
 esac
 
 # TASK-028: the game being worked on lives in its own folder; the prompts name its paths.
-GAME_ROOT=${GAME_ROOT:-games/dai-dat-anh-hung}
+GAME_ROOT=${GAME_ROOT:-games/kid-learn-character}
 
 dev_prompt() { # $1 = this dev, $2 = the other dev, $3 = the app you own
   echo "You are $1, a developer on the game team; you own $3. Read CLAUDE.md, $GAME_ROOT/production/project-plan.md, $GAME_ROOT/production/progress.md (top entry) and the team rules in /Users/luannguyend/self-projects/Claude-Code-Game-Studios-fork/.claude/skills/game-team-lead/SKILL.md (sections 0, 3, 4, 7; the leader checkout has the newest copy). The leader session ($LEADER) sends you one task at a time with SendMessage. Plan first and wait for PLAN APPROVED, commit on your task branch, never push or merge, report back to the leader. You also peer-review $2's plans and PRs when asked (read-only). Reply '$1 ready' to the leader and wait."
@@ -45,7 +45,8 @@ if [ ! -d "$dir" ]; then
   exit 1
 fi
 
-cd "$dir"
+# The game folder is its own studio project (it links .claude/ and CLAUDE.md): start there.
+cd "$dir/$GAME_ROOT" 2>/dev/null || cd "$dir"
 # --resume: resume this member's saved Claude session (id in the gitignored
 # production/session-state/team-sessions.tsv), same name. Falls back to the most
 # recent conversation in its folder when no id is saved.

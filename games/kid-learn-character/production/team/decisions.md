@@ -21,11 +21,11 @@ it) · **Decided** (Luan's call, with the date). The leader owns this file.
 - **Options:** A. English only · B. Vietnamese only · C. both, chosen by the parent.
 - **Status:** **Proposed A** (English first, Vietnamese added later). Luan's examples were English.
 
-### K-03 Platforms and devices
+### K-05 Voice: US or UK English; letter name or letter sound
 
-- **Options:** A. native iOS + Android, tablet and phone · B. iPad and Android tablet only ·
-  C. one cross-platform engine.
-- **Status:** **Proposed A**, the same native stack as the last game.
+- From game-art-content (TASK-029 draft): US ("zee") or UK ("zed")? Say the letter name first
+  ("D… dinosaur") or the letter sound ("duh…")?
+- **Status:** Open. It goes into /brainstorm.
 
 ### K-04 Name of the game
 
@@ -33,4 +33,14 @@ it) · **Decided** (Luan's call, with the date). The leader owns this file.
 
 ## Decided
 
-(none yet)
+### K-03 Platforms (Luan, 2026-11-17)
+
+**Fully native on every platform, Apple first.** iPadOS and macOS come first (Swift), then iPhone.
+Android (Kotlin) comes after, as its own native app. No cross-platform engine.
+
+### K-00 Process (Luan, 2026-11-17)
+
+Follow the original Claude Code Game Studios process: /start → /brainstorm (game-concept) →
+/setup-engine → /art-bible → /map-systems → /gate-check, and so on. The game folder is its own
+studio project (it links `.claude/` and `CLAUDE.md`). The leader runs the Concept-stage skills
+with Luan, and the team members get the later stages.

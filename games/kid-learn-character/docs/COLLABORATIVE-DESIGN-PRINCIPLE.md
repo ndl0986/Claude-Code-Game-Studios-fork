@@ -1,0 +1,1 @@
+../../../docs/COLLABORATIVE-DESIGN-PRINCIPLE.md

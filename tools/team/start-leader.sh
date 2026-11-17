@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Start the game team LEADER at the repo root, always named "game-leader", so the
+# Start the game team LEADER in the active game folder, always named "game-leader", so the
 # member sessions (tools/team/start-<member>.sh) can always message it.
 #
 # Usage: tools/team/start-leader.sh            resume the saved leader conversation
@@ -9,6 +9,11 @@
 # (machine-local, gitignored). Rules: .claude/skills/game-team-lead/SKILL.md
 set -euo pipefail
 cd "$(dirname "$0")/../.."
+# The active game's folder is its own studio project (it links .claude/ and CLAUDE.md), so the
+# leader starts there and the studio skills read and write that game's files.
+# GAME_DIR="" starts at the repo root instead.
+GAME_DIR="${GAME_DIR-games/kid-learn-character}"
+[ -n "$GAME_DIR" ] && cd "$GAME_DIR"
 id_file=production/session-state/leader-session.txt
 name=game-leader
 

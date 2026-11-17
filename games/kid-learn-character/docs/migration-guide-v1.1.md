@@ -1,0 +1,1 @@
+../../../docs/migration-guide-v1.1.md
