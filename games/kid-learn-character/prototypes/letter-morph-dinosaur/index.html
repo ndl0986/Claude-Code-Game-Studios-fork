@@ -228,6 +228,7 @@ function say(words, cancel) {
   if (!window.speechSynthesis || muted) return;
   try {
     if (cancel) speechSynthesis.cancel(); // a new letter never stacks behind old speech
+    if (!voice) pickVoice(); // voices load late in some browsers: never fall back to a non-English default
     const u = new SpeechSynthesisUtterance(words);
     u.lang = 'en-US'; if (voice) u.voice = voice;
     u.rate = tune.voice_rate; u.pitch = tune.voice_pitch; u.volume = Math.min(1, tune.volume * 1.6);

@@ -14,6 +14,7 @@ After play: với bản đề demo, có thể fix cứng mỗi ký tự là 1 co
 After play (asked): the A–Z table and numbers as N baby dinosaurs — "Làm đúng như vậy"
 After play: khoảnh khắc hay và vui nhất là sau khi kết thúc 1 loạt phím, thì có đoàn khủng long chạy qua, rất vui và bất ngờ
 After play: tệ nhất là khi nhấn vào các phím controls, thì có thê bị chuyển app hoặc mất focus lên game
+After play: trong bản dùng thử, phần đọc ký tự A đang bị sai, đang theo tiếng Việt, không đúng tiếng Anh
 
 **Pitch:** Dinosaurs is the theme: a toddler presses any letter or number, and the big glowing letter dissolves into stardust and becomes a dinosaur-world creature (C: triceratops) or that many baby dinosaurs, while a voice says "C… triceratops!".
 

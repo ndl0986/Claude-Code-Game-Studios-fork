@@ -43,7 +43,7 @@ window.CONFIG = {
 // per key; production gets a small database with several per key per theme (K-07).
 // creature: which drawing family; opts: that family's variant; pal: its colours;
 // sound: which synth recipe; say: the letter's name spelled the way it sounds (so the voice
-// says just "D", never "letter D"); word: spoken after the creature forms.
+// says just "D", never "letter D"; A is "A." because "ay" was read like "eye"); word: spoken after.
 const ROAR_BIG = { kind: 'roar', f0: 58, cut: 900, dur: 1.6, vol: 1, vib: 6 };
 const ROAR_DEEP = { kind: 'roar', f0: 70, cut: 600, dur: 1.3, vol: 0.9, vib: 5 };
 const GRUMBLE = { kind: 'roar', f0: 85, cut: 450, dur: 0.9, vol: 0.7, vib: 3 };
@@ -52,7 +52,7 @@ const CHIRP = { kind: 'chirp', f0: 900, f1: 1400, n: 3 };
 const RAPTOR = { kind: 'chirp', f0: 650, f1: 1050, n: 2 };
 const SCREECH = { kind: 'chirp', f0: 1100, f1: 1700, n: 2 };
 window.KEY_TABLE = {
-  A: { name: 'Ankylosaurus', word: 'ankylosaurus', say: 'ay', creature: 'ankylosaurus', sound: { kind: 'thump', f0: 60, cut: 380, dur: 0.8, vol: 0.7, vib: 4 } },
+  A: { name: 'Ankylosaurus', word: 'ankylosaurus', say: 'A.', creature: 'ankylosaurus', sound: { kind: 'thump', f0: 60, cut: 380, dur: 0.8, vol: 0.7, vib: 4 } },
   B: { name: 'Brachiosaurus', word: 'brachiosaurus', say: 'bee', creature: 'sauropod', opts: { tall: true }, pal: { body: '#8fbf6a', dark: '#77a556', belly: '#d2e8b4', spot: '#6f9e4f' }, sound: ROAR_DEEP },
   C: { name: 'Triceratops', word: 'triceratops', say: 'see', creature: 'horned', opts: { horns: 'tri' }, sound: GRUMBLE },
   D: { name: 'Diplodocus', word: 'diplodocus', say: 'dee', creature: 'sauropod', sound: ROAR_DEEP },
