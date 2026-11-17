@@ -25,8 +25,8 @@ it) · **Decided** (Luan's call, with the date).
 
 - **Flow:** TASK-026, the free install on Luan's iPhone and later TestFlight. The project currently has
   `com.galaxyandsun.daidatanhhung`. The preview build adds `.preview`.
-- **Ask:** keep `com.galaxyandsun.daidatanhhung`, or give another (reverse-domain you own or like).
-- **Status:** Open.
+- **Status:** **Decided (Luan, 2026-11-17): keep `com.galaxyandsun.daidatanhhung`** for iOS and Android.
+  The preview build is `com.galaxyandsun.daidatanhhung.preview`.
 
 ### D-39 App Store Kids category age band (later, for TestFlight/App Store)
 
