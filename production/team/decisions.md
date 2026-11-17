@@ -11,6 +11,28 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-37 Phone builds while history claims are unsigned (2026-11-17)
+
+- **Flow:** a real release build stops at the R12 content gate (claims C01–C16 unsigned), and the
+  release app hides unsigned missions, so neither app can go on Luan's phone as a release.
+- **Options:** A. sign C01–C16 first · B. a **preview** build type · C. install the debug build.
+- **Status:** **Decided B (Luan, 2026-11-17)**, on both apps. Release-speed and not debuggable, with no debug
+  jumps. Signed locally, never uploaded. The content gate is skipped, but the UNSIGNED badges stay
+  visible. Named "Dải Đất Anh Hùng (preview)", bundle/application ID suffix `.preview`. R12 still
+  blocks every real release and TestFlight.
+
+### D-38 Bundle ID for the iOS app (and Android applicationId)
+
+- **Flow:** TASK-026, the free install on Luan's iPhone and later TestFlight. The project currently has
+  `com.galaxyandsun.daidatanhhung`. The preview build adds `.preview`.
+- **Ask:** keep `com.galaxyandsun.daidatanhhung`, or give another (reverse-domain you own or like).
+- **Status:** Open.
+
+### D-39 App Store Kids category age band (later, for TestFlight/App Store)
+
+- **Options:** 6–8 · 9–11 (primary school spans both).
+- **Status:** Open; needed only when the App Store Connect record is created.
+
 ### D-36 Start screen: Vietnam map with hero hometowns (Luan's direction, 2026-11-16)
 
 - **Luan's direction (decided):** the start screen is the map of Vietnam. Each pin marks a **hero's
