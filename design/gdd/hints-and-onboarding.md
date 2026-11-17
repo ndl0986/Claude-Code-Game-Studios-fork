@@ -86,8 +86,8 @@ the motto bar's band; where it can't bounce above its target below the bar, it p
      Otherwise (e.g. the special pad "Cờ" stacked above attack at small k) it sits **beside the
      pad, on the side away from the screen edge** (left of a right-hand pad), at the pad's
      mid-height, pointing sideways at it, as the stuck arrow's side fallback does.
-   - Either way the hand **never covers any pad's touch rect** (`pad_min` square plus the
-     touch slop, Input Rule 4), its own pad included.
+   - Either way the hand **never covers any pad's visible square** (`pad_min` diameter; the
+     touch slop is excluded), its own pad included. The hand takes no touches.
 7. **Per run, not saved.** Teach flags are kept for one mission run, so a replay shows the hand
    again briefly until each button is used once. Hints saves nothing; the saved keys are listed
    in Save & progress Rule 1.
@@ -225,7 +225,7 @@ need a screenshot per platform.
     **THEN** it hides and the timer restarts. On a line showing "Tiếp", no hint ever shows.
 11. **GIVEN** the first map view, **WHEN** it opens, **THEN** the hand is on the only open pin
     until that pin is tapped.
-12. **GIVEN** the training beat's finish step (a banner beat) at k 0.40, 0.488 and 0.517, in VI and EN, **WHEN** the special-pad teach hand and, separately, the stuck pulse show, **THEN** every hint pixel is at y ≥ 276; where the hand doesn't fit above Cờ it sits left of Cờ at Cờ's mid-height, pointing at it; and no hint pixel lies inside any pad's touch rect.
+12. **GIVEN** the training beat's finish step (a banner beat) at k 0.40, 0.488 and 0.517, in VI and EN, **WHEN** the special-pad teach hand and, separately, the stuck pulse show, **THEN** every hint pixel is at y ≥ 276; where the hand doesn't fit above Cờ it sits left of Cờ at Cờ's mid-height, pointing at it; and no hint pixel lies inside any pad's visible square.
 
 ## Open Questions
 

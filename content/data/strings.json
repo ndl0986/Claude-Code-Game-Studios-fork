@@ -72,6 +72,12 @@
       "en": "Paused"
     },
     {
+      "id": "ui.pause.leave_confirm",
+      "vi": "Về bản đồ?",
+      "en": "Leave the story?",
+      "field": "dialog"
+    },
+    {
       "id": "ui.quiz.retry",
       "vi": "Thử lại nhé!",
       "en": "Try again!"
