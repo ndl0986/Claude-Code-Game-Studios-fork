@@ -20,7 +20,7 @@ ROOT=$(git rev-parse --show-toplevel)
 REF=${REF:-HEAD}
 OUT=${OUT:-$(mktemp -d "${TMPDIR:-/tmp}/ios-release-check.XXXXXX")}
 CONFIGS=("$@"); [ ${#CONFIGS[@]} -gt 0 ] || CONFIGS=(Release Preview)
-DEBUG_KEYS='debugState|resetProgress|autoplay|timeScale|quiz_motion|quiz_overlap|debug_jumped|lock_until|lock_context|sprites_visible|max_bottom|touch:%'
+DEBUG_KEYS='debugState|resetProgress|autoplay|timeScale|quiz_motion|quiz_overlap|debug_jumped|lock_until|lock_context|sprites_visible|max_bottom|touch:%|resume_frame|step_hist|leave_card|walk_ct'
 DEBUG_SYMS='botInput|didFinishUpdate|quizMotion|debugAutoplay|debugPublish|lockUntilForDebug'
 FAIL=0
 echo "ref $(git -C "$ROOT" rev-parse --short "$REF"), work folder $OUT"
