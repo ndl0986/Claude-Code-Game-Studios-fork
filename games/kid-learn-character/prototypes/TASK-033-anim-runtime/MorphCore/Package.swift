@@ -11,6 +11,7 @@ let package = Package(
     targets: [
         .target(name: "MorphCore"),
         .executableTarget(name: "morph-fixture", dependencies: ["MorphCore"]),
+        .executableTarget(name: "morph-contract-fixture", dependencies: ["MorphCore"]),
         .testTarget(name: "MorphCoreTests", dependencies: ["MorphCore"]),
     ]
 )
