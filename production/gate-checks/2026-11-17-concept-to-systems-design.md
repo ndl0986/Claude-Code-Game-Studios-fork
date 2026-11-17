@@ -3,7 +3,7 @@
 **Date:** 2026-11-17
 **Config:** `workflow: standard`, `review_mode: lean`, `qa.level: standard`, `team.size: individual`
 **Stage at check:** Concept (`project.yaml`)
-**Verdict:** **CONCERNS** (stage not advanced)
+**Verdict:** **CONCERNS** (first run) → **PASS** (re-run, same day; see below)
 
 ## Required artifacts (1/1)
 
@@ -50,3 +50,26 @@
 ## Note
 
 `project.stage` lags reality: the project already has GDDs, ADRs and a QC-passed native slice. After this gate, Systems Design → Technical Setup and Technical Setup → Pre-Production follow before the Pre-Production → Production gate, which is where the slice and the family playtest count as evidence.
+
+---
+
+## Re-run (2026-11-17): PASS
+
+Fixes merged: TASK-022 `3f61e4b` (native stack + concept `/design-review` APPROVED), TASK-022b `8a54606`, TASK-022c `ef25ac5`, TASK-022d `3f41886` (D-14 A, D-35 A applied). Luan decided D-14: A and D-35: A.
+
+| First-run concern | Status |
+|---|---|
+| 1. Stale engine wording | CLOSED: concept L313–348 match ADR-0001/0002 |
+| 2. Stars/difficulty (D-14) | CLOSED: L162–167, stars = story recall, never reaction time |
+| 3. "Unless Luan decides" (D-35) | CLOSED: removed at L69 and the pillar-5 test |
+| 4. No concept `/design-review` | CLOSED: `design/gdd/reviews/game-concept-review-log.md`, APPROVED |
+
+**Panel:** Producer PASS · Technical Director READY (PASS equivalent).
+
+**Advisory (not blocking):**
+- L364 "no ads to kids *by default*" softens D-35. Delete "by default".
+- L359 "PR-SCOPE skipped" is stale after this gate.
+- D-31 (voice promised; the slice is text only). Settle it before the narration and UI GDDs.
+- The concept has changed since Luan's 2026-11-14 approval (hash `f53366c` → `5e1f447`). The edits apply his own decisions.
+- ADR-0002 checks are still open: real iPhone memory and frame time, a run on iOS 17, low-end Android profiling (TASK-007).
+- No Android minimum SDK is stated anywhere.
