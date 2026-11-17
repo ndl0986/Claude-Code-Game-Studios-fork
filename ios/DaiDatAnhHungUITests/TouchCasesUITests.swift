@@ -594,15 +594,18 @@ final class R9CasesUITests: UITestBase {
             let s = waitFor(3) { $0["story_line"] as? Int == 2 }
             let presses = fires(s).filter { $0.t > e && $0.id == "next" }
             // replay the rule on the logged times
-            var end = e + 0.6, nearBefore = false, nearAfter = false, lines: [String] = []
+            var end = e + 0.6, nearBefore = false, nearAfter = false, unlocked = false, lines: [String] = []
             for p in presses {
                 let expect = p.t < end
                 lines.append(String(format: "next t %+.3f s, lock end %+.3f, locked %@ (rule: %@)", p.t - e, end - e, "\(p.locked)", "\(expect)"))
                 XCTAssertEqual(p.locked, expect, String(format: "press at +%.3f s against the rule (attempt %d)", p.t - e, attempt))
                 if expect { if end - p.t <= 0.2 { nearBefore = true }; end = min(max(end, p.t + 0.6), e + 1.5) }
-                else { if p.t - end <= 0.25 { nearAfter = true }; break }
+                else { unlocked = true; if p.t - end <= 0.25 { nearAfter = true }; break }
             }
             note("deliberate tap, attempt \(attempt)", String(format: "entered_at %.3f; tap latency %.3f s\n", e, latency) + lines.joined(separator: "\n"))
+            // r10: a slow tap can land tap 3 before the lock's end too (seen: latency 0.287 s, tap 3 at +1.475 against
+            // the cap 1.5). The app then rightly drops it; that attempt didn't exercise "just after", so it retries.
+            guard unlocked else { misses.append(String(format: "no press after the lock end (latency %.3f)", latency)); quit(); continue }
             XCTAssertEqual(s["story_line"] as? Int, 2, "the press after the lock advanced (attempt \(attempt))")
             if nearBefore && nearAfter { shot("intro box 3 after the deliberate tap"); return }
             misses.append("before \(nearBefore), after \(nearAfter)"); quit()
