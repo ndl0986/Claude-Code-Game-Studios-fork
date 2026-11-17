@@ -9,7 +9,7 @@ These are the QC session's measurement scripts, kept here so a restart or reboot
 
 ```sh
 QCW=<work dir>                # scratch dir: outputs (png, mp4, logs) land here, not in the repo
-cp production/qa/tools/android/* $QCW/
+cp games/dai-dat-anh-hung/production/qa/tools/android/* $QCW/
 cd $QCW
 swiftc -O frames.swift -o frames && swiftc -O sheet.swift -o sheet
 export QCW EV=<evidence dir>  # EV defaults to .../evidence/TASK-007/android-qc-r12
