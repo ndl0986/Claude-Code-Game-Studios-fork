@@ -222,3 +222,4 @@ test-setup, smoke-check), those checks report NOT ASSESSED by design (ADR-0001).
 - 2026-11-17 — TASK-022b merged (f677c87): concept content owner, Next Steps ticked with proof, medal (D-07) in rewards, first-launch language pending D-20. Item (2) unblocked: Luan signs off history (his TASK-004 answer, cabf824).
 - 2026-11-17 — TASK-022c merged (e05daf6): concept names Luan as the history reviewer (his TASK-004 answer).
 - 2026-11-17 — Luan decided D-14: A (stars = story recall; star payoff sub-choice still open) and D-35: A. TASK-022d → game-art-content: remove both 'unless Luan decides' clauses. Then re-run the gate.
+- 2026-11-17 — TASK-022d merged (3f41886): no 'unless' left in concept (D-35 A); stars = story recall, never reaction time (D-14 A). Gate re-run in progress (producer + TD).
