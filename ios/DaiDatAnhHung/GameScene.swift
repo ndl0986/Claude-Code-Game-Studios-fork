@@ -588,7 +588,9 @@ final class GameScene: SKScene {
         let bh = rowH, by = 390.0
         add(D.rr(-420, -170, 840, by + bh + 24 - 160, 36, C.cream, C.gold, 6), 640, 330)
         add(D.drum(50, SKColor(hex: 0xc98a12, alpha: 0.5)), 640, 210)
-        add(Font.label(game.ui("ui.story.skip_warning"), 37, C.ink, width: 780, weight: 600), 640, 300)
+        // iOS-R11-01: 8 world px lower than r11, clear of the drum (the drum's top already sits on the card's edge);
+        // two lines at 37 px end ≈ 358, still above the buttons at 390
+        add(Font.label(game.ui("ui.story.skip_warning"), 37, C.ink, width: 780, weight: 600), 640, 308)
         // W20 (Mission flow, skip warning): "Skip anyway" smaller on the left with a skip arrow; "Keep reading" big,
         // default (pulsing) and on the RIGHT with an open book. Both ≥ pad_min tall (Input Rule 4).
         button(game.ui("ui.story.skip_confirm"), 240, by, 340, bh, "skipAnyway", fill: C.cream, size: 30, icon: skipGlyph)
