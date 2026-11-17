@@ -33,6 +33,32 @@ or number, which dissolves into stardust and becomes the object. Mash World (obj
 scene) is Scope Tier 2, after the MVP. Mash rule: a queue of at most 3 keys, further presses
 ignored, about 3 s per reveal while keys are queued. See `design/gdd/game-concept.md`.
 
+### K-09 Theme content rules (Luan, 2026-11-18, TASK-036 questions)
+
+- **Real names stay**, even the hard ones (quetzalcoatlus, wuerhosaurus, juravenator…).
+- **The child must hear the letter's usual sound in the word** (K-07 still lets it sit anywhere in
+  the name): silent or shifted letters (P in pteranodon, X in xenoceratops) get replacements, which
+  game-art-content proposes and Luan picks. G = gallimimus is fine (hard g).
+- **Production variety: 4–5 items per key per theme**; default pick rule: uniform with no immediate
+  repeat (to confirm when the GDD is reviewed).
+- **Numbers follow the theme:** "three… three baby dinosaurs" in Dinosaurs, "three little cars" in a
+  vehicles theme; 0 = the theme's "empty" item.
+- T stays "tee… tee rex"; F = fossil and N = nest stay (theme-world objects are allowed).
+
+### K-10 Input rules (Luan, 2026-11-18, TASK-037 questions)
+
+- **Keyboard layout: by the character printed on the key** (character first, folded to A–Z/0–9),
+  with a US-QWERTY position fallback for keys that give no A–Z/0–9 (AZERTY digit row, non-Latin).
+- **Parent chord: ⌃⌥⌘Q on the Mac only.** An iPad with a keyboard has no chord; the moon hold is the
+  way in.
+- Swallowed keys do nothing at all; a tap on the empty stage sparkles (from Luan's play notes).
+
+### K-11 Morph choices (Luan, 2026-11-18, TASK-038 questions)
+
+- **240 stardust particles** to start (measured on Mac/Simulator); raise only after the real-iPad
+  measurement.
+- **A different morph on every press** (seed from the key and the press count, reproducible in debug).
+
 ### K-08 Time of day and weather in the scene (Luan, 2026-11-17, /art-bible Section 2)
 
 - **Time of day from the system clock:** a morning scene in the morning, day, then evening/dusk and
