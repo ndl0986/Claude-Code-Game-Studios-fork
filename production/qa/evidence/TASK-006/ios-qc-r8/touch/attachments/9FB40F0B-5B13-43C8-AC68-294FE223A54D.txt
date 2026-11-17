@@ -1,0 +1,22 @@
+intro|0|walkTo|0|0|0|0 @ 52447.198
+fire:next @ 52449.184
+intro|1|walkTo|0|0|0|0 @ 52449.201
+fire:next @ 52449.570
+fire:next @ 52449.945
+fire:next @ 52450.320
+fire:next @ 52450.698
+fire:next @ 52451.066
+intro|2|walkTo|0|0|0|0 @ 52451.084
+fire:next @ 52451.436
+fire:next @ 52451.809
+fire:next @ 52452.176
+fire:next @ 52452.557
+fire:next @ 52452.958
+intro|3|walkTo|0|0|0|0 @ 52452.968
+fire:next @ 52453.319
+fire:next @ 52453.702
+fire:next @ 52454.086
+fire:next @ 52454.457
+fire:next @ 52454.818
+play|3|walkTo|0|0|0|0 @ 52454.835
+taps 16

@@ -1,0 +1,11 @@
+play|0|beatPlay|4|0|0|0 @ 52303.862
+play|0|beatEnd|4|0|0|0 @ 52303.934
+ending|0|walkTo|5|0|0|0 @ 52304.469
+fire:next @ 52305.828
+ending|1|walkTo|5|0|0|0 @ 52305.835
+fire:next @ 52306.242
+fire:next @ 52306.642
+fire:next @ 52307.003
+fire:next @ 52307.383
+quiz|1|walkTo|5|0|0|0 @ 52307.384
+taps 16

@@ -1,0 +1,5 @@
+play|0|walkTo|3|0|0|0 @ 95583.605
+play|0|beatCard|3|0|0|0 @ 95586.051
+fire:skip @ 95586.467
+fire:skip @ 95586.835
+fire:skip @ 95587.207

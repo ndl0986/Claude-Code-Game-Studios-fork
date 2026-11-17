@@ -1,0 +1,9 @@
+card2 t 100687.811 locked false
+next t 100689.242 locked false
+index 0 → 1; picked 0; wrong 0; overlap [0.7488876064557809, 0.7483208824449511, 1.4136125654449643]
+quiz|0|walkTo|0|0|0|0 @ 100685.147
+touch:1050,423:card2 @ 100687.744
+fire:card2 @ 100687.811
+touch:1050,567:next @ 100689.175
+fire:next @ 100689.242
+touch:1050,567:next @ 100689.242

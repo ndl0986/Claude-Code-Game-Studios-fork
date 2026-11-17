@@ -1,0 +1,12 @@
+play|0|beatPlay|4|0|0|0 @ 147068.435
+play|0|beatEnd|4|0|0|0 @ 147068.518
+ending|0|walkTo|5|0|0|0 @ 147069.051
+fire:next @ 147070.381
+ending|1|walkTo|5|0|0|0 @ 147070.403
+fire:next @ 147070.719
+fire:next @ 147071.059
+fire:next @ 147071.397
+fire:next @ 147071.737
+fire:next @ 147072.085
+quiz|1|walkTo|5|0|0|0 @ 147072.101
+taps 18

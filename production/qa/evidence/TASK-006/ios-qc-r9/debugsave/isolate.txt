@@ -1,0 +1,28 @@
+== -startScreen quiz -q 5 -stage right
+{
+  "seen_open.tran-quoc-toan" => true
+}
+== -startScreen play -beat 4 -stage flag
+{
+  "seen_open.tran-quoc-toan" => true
+}
+== -startScreen caption -beat 1 -hero sample
+{
+  "seen_open.tran-quoc-toan" => true
+}
+== -startScreen quiz -q 1 -stage right
+{
+  "seen_open.tran-quoc-toan" => true
+}
+== -startScreen intro
+{
+  "seen_open.tran-quoc-toan" => true
+}
+== -startScreen play -beat 3 -stage walkto
+{
+  "seen_open.tran-quoc-toan" => true
+}
+== control: plain launch to the title (no args)
+{
+  "seen_open.tran-quoc-toan" => true
+}

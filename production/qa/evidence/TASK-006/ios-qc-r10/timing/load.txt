@@ -1,0 +1,32 @@
+test_a_resume_restarts_the_hold_to_rise_done-1 start 5.19 8.31 20.39
+test_a_resume_restarts_the_hold_to_rise_done-1 end 6.13 8.37 20.21 exit 0
+test_a_resume_restarts_the_hold_to_rise_done-2 start 6.13 8.37 20.21
+test_a_resume_restarts_the_hold_to_rise_done-2 end 23.43 21.36 21.47 exit 0
+test_a_resume_restarts_the_hold_to_rise_done-3 start 23.43 21.36 21.47
+test_a_resume_restarts_the_hold_to_rise_done-3 end 34.60 24.00 22.41 exit 0
+test_the_finish_hold_lasts_and_drops_taps start 34.60 24.00 22.41
+test_the_finish_hold_lasts_and_drops_taps end 33.77 24.58 22.66 exit 0
+test_C_a_tap_just_before_the_lock_end_drops_and_just_after_advances start 33.77 24.58 22.66
+test_C_a_tap_just_before_the_lock_end_drops_and_just_after_advances end 37.03 26.17 23.30 exit 0
+test_D_a_mashed_real_run_keeps_the_medal_and_saves_it start 37.03 26.17 23.30
+test_D_a_mashed_real_run_keeps_the_medal_and_saves_it end 10.30 19.92 21.24 exit 0
+test_left_taps_as_the_training_card_appears_open_no_skip_warning start 10.30 19.92 21.24
+test_left_taps_as_the_training_card_appears_open_no_skip_warning end 9.90 19.35 21.02 exit 0
+test_a_resume_restarts_the_hold_to_rise_done-4 start { 8.09 18.02 20.48 }
+test_a_resume_restarts_the_hold_to_rise_done-4 end { 16.22 19.45 20.95 } exit 0
+test_a_resume_restarts_the_hold_to_rise_done-5 start { 14.25 18.92 20.74 }
+test_a_resume_restarts_the_hold_to_rise_done-5 end { 13.42 18.50 20.56 } exit 0
+test_a_resume_restarts_the_hold_to_rise_done-6 start { 13.42 18.50 20.56 }
+test_a_resume_restarts_the_hold_to_rise_done-6 end { 8.30 10.19 14.70 } exit 0
+test_a_resume_restarts_the_hold_to_rise_done-7 start { 8.30 10.19 14.70 }
+test_a_resume_restarts_the_hold_to_rise_done-7 end { 11.67 10.92 14.86 } exit 0
+test_a_resume_restarts_the_hold_to_rise_done-8 start { 11.67 10.92 14.86 }
+test_a_resume_restarts_the_hold_to_rise_done-8 end { 16.09 11.93 15.16 } exit 0
+test_a_resume_restarts_the_hold_to_rise_done-9 start { 14.82 11.80 15.07 }
+test_a_resume_restarts_the_hold_to_rise_done-9 end { 14.22 11.84 15.03 } exit 0
+test_the_finish_hold_lasts_and_drops_taps-2 start { 13.95 12.13 14.99 }
+test_the_finish_hold_lasts_and_drops_taps-2 end { 19.95 13.61 15.47 } exit 0
+test_C_a_tap_just_before_the_lock_end_drops_and_just_after_advances-2 start { 13.79 12.73 15.09 }
+test_C_a_tap_just_before_the_lock_end_drops_and_just_after_advances-2 end { 12.24 12.44 14.94 } exit 0
+test_D_a_mashed_real_run_keeps_the_medal_and_saves_it-2 start { 12.24 12.44 14.94 }
+test_D_a_mashed_real_run_keeps_the_medal_and_saves_it-2 end { 10.81 11.80 14.31 } exit 0

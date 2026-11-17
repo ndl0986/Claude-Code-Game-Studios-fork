@@ -1,0 +1,52 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "modelName" : "iPhone 18 Pro",
+        "osBuildNumber" : "24A434",
+        "osVersion" : "27.0",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 1,
+      "passedTests" : 13,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "DaiDatAnhHung · Built with macOS 27.2.1",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1794796630.412,
+  "passedTests" : 13,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1794795716.703,
+  "statistics" : [
+
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "XCTAssertEqual failed: (\"Optional(true)\") is not equal to (\"Optional(false)\") - no skip warning opened under the taps (attempt 1)",
+      "targetName" : "DaiDatAnhHungUITests",
+      "testIdentifier" : 3,
+      "testIdentifierString" : "MoreCasesUITests/test_left_taps_as_the_training_card_appears_open_no_skip_warning()",
+      "testIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/MoreCasesUITests/test_left_taps_as_the_training_card_appears_open_no_skip_warning",
+      "testName" : "test_left_taps_as_the_training_card_appears_open_no_skip_warning()"
+    }
+  ],
+  "title" : "Test - DaiDatAnhHung",
+  "topInsights" : [
+
+  ],
+  "totalTestCount" : 14
+}

@@ -1,0 +1,1 @@
+hero_x 4590 cam 4130 (screen x 460)

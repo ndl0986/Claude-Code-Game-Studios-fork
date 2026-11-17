@@ -1,0 +1,1 @@
+0.838 s (expected 0.833 ≤ t ≤ 0.850, plus logging latency)

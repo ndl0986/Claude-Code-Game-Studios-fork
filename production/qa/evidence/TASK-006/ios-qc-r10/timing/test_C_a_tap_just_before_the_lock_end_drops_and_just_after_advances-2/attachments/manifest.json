@@ -1,0 +1,26 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "F52E1AC6-8417-4394-B913-DA3414090761.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "intro box 3 after the deliberate tap_0_5AB3B537-3B80-4175-BED6-3194428F86BB.png",
+        "timestamp" : 1794893525.888
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "34F2256B-8D98-46B5-9154-7C9DE6ED68AC.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "deliberate tap, attempt 1_0_C0290F90-96BF-4341-9BA3-34B0DEDCE386.txt",
+        "timestamp" : 1794893525.816
+      }
+    ],
+    "testIdentifier" : "R9CasesUITests/test_C_a_tap_just_before_the_lock_end_drops_and_just_after_advances()",
+    "testIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/R9CasesUITests/test_C_a_tap_just_before_the_lock_end_drops_and_just_after_advances"
+  }
+]

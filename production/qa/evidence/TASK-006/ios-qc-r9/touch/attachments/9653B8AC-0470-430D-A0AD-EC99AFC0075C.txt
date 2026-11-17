@@ -1,0 +1,17 @@
+intro|0|walkTo|0|0|0|0 @ 100562.794
+fire:next @ 100565.043
+intro|1|walkTo|0|0|0|0 @ 100565.052
+fire:next @ 100565.568
+fire:next @ 100566.680
+intro|2|walkTo|0|0|0|0 @ 100566.701
+fire:next @ 100567.107
+fire:next @ 100567.576
+fire:next @ 100567.965
+fire:next @ 100568.525
+intro|3|walkTo|0|0|0|0 @ 100568.534
+fire:next @ 100569.023
+fire:next @ 100569.381
+fire:next @ 100569.907
+fire:next @ 100570.362
+play|3|walkTo|0|0|0|0 @ 100570.368
+taps 11

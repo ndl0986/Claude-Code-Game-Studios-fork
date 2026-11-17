@@ -1,0 +1,26 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "9E3247E2-7577-4877-B15B-B4FE64E6A751.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "training card after the ◀ taps_0_8B268A4C-48CD-45C1-AFB9-2A3CCA0457D6.png",
+        "timestamp" : 1794839037.636
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "E2F9C1CE-FF28-407E-ACAE-B67FA15C7CD5.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "card mash, attempt 1_0_6055849B-021D-4DA4-A710-F0EB0006A04F.txt",
+        "timestamp" : 1794839037.572
+      }
+    ],
+    "testIdentifier" : "MoreCasesUITests/test_left_taps_as_the_training_card_appears_open_no_skip_warning()",
+    "testIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/MoreCasesUITests/test_left_taps_as_the_training_card_appears_open_no_skip_warning"
+  }
+]

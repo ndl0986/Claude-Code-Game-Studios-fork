@@ -1,0 +1,100 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test-without-building -xctestrun /Users/luannguyend/orca/workspaces/Claude-Code-Game-Studios-fork/game-dev-001/production/qa/builds/TASK-006-ios-c388736/DaiDatAnhHung_iphonesimulator27.1-arm64.xctestrun -destination id=E9F515E9-58F2-4A92-ABEF-C5CD59CE8183 "-only-testing:DaiDatAnhHungUITests/MoreCasesUITests/test_left_taps_as_the_training_card_appears_open_no_skip_warning" -test-timeouts-enabled YES -default-test-execution-time-allowance 420 -maximum-test-execution-time-allowance 480 -resultBundlePath /Users/luannguyend/orca/workspaces/Claude-Code-Game-Studios-fork/game-qc-ios/production/qa/evidence/TASK-006/ios-qc-r8/touch-r801-3/result.xcresult
+
+Writing result bundle at path:
+	/Users/luannguyend/orca/workspaces/Claude-Code-Game-Studios-fork/game-qc-ios/production/qa/evidence/TASK-006/ios-qc-r8/touch-r801-3/result.xcresult
+
+2026-11-16 21:23:46.516 xcodebuild[21476:4309851] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 21:23:47.875369+0700 DaiDatAnhHungUITests-Runner[21625:4310550] [Default] Running tests...
+    t =      nans Interface orientation changed to Portrait
+Test Suite 'Selected tests' started at 2026-11-16 21:23:50.434.
+Test Suite 'DaiDatAnhHungUITests.xctest' started at 2026-11-16 21:23:50.435.
+Test Suite 'MoreCasesUITests' started at 2026-11-16 21:23:50.435.
+Test Case '-[DaiDatAnhHungUITests.MoreCasesUITests test_left_taps_as_the_training_card_appears_open_no_skip_warning]' started.
+    t =     0.00s Start Test at 2026-11-16 21:23:50.437
+    t =     0.02s Set Up
+    t =     0.02s     Setting device orientation to Landscape Left
+    t =     0.04s         Wait for com.apple.springboard to idle
+    t =     0.09s Open com.galaxyandsun.daidatanhhung
+    t =     0.09s     Launch com.galaxyandsun.daidatanhhung
+2026-11-16 21:23:50.573 xcodebuild[21476:4309851] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-16 21:23:50.573 xcodebuild[21476:4309851] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-16 21:23:50.578 xcodebuild[21476:4309851] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+objc[21625]: Class UIAccessibilityLoaderWebShared is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_24A434/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x102398398) and /Library/Developer/CoreSimulator/Volumes/iOS_24A434/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x10248c310). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+    t =     0.45s         Interface orientation changed to Landscape Right
+    t =     0.55s         Setting up automation session
+    t =     2.65s         Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     3.89s Waiting 15.0s for "debugState" Any to exist
+    t =     4.94s     Checking `Expect predicate `existsNoRetry == 1` for object "debugState" Any`
+    t =     4.95s         Checking existence of `"debugState" Any`
+    t =     5.06s Find the "debugState" Any
+    t =     5.08s Find the "debugState" Any
+    t =     5.11s Find the "debugState" Any
+    t =     5.13s Press Window (First Match)[0.31, 0.81] for 0.5 seconds
+    t =     5.13s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     5.14s     Find the Window (First Match)
+    t =     5.14s     Check for interrupting elements affecting Window
+    t =     5.17s     Synthesize event
+    t =     5.17s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     5.18s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     5.19s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     5.92s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     5.92s Find the "debugState" Any
+    t =     5.94s Find the "debugState" Any
+    t =     5.96s Tap Window (First Match)[0.20, 0.81]
+    t =     5.96s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     5.97s     Find the Window (First Match)
+    t =     5.97s     Check for interrupting elements affecting Window
+    t =     6.00s     Synthesize event
+    t =     6.00s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.01s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.02s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.31s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.31s Find the "debugState" Any
+    t =     6.35s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.20, 0.81]
+    t =     6.35s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.35s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.36s     Check for interrupting elements affecting Window
+    t =     6.38s     Synthesize event
+    t =     6.38s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.39s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.40s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.69s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.69s Find the "debugState" Any
+    t =     6.72s Tap Window at {{0.0, 0.0}, {874.0, 402.0}}[0.20, 0.81]
+    t =     6.72s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     6.73s     Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.73s     Check for interrupting elements affecting Window
+    t =     6.76s     Synthesize event
+    t =     6.76s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.77s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     6.78s         Find the Window at {{0.0, 0.0}, {874.0, 402.0}}
+    t =     7.07s     Wait for com.galaxyandsun.daidatanhhung to idle
+    t =     7.08s Find the "debugState" Any
+    t =     7.10s Find the "debugState" Any
+    t =     7.14s Added attachment named 'card mash, attempt 1'
+    t =     7.20s Added attachment named 'training card after the ◀ taps'
+    t =     7.20s Tear Down
+Test Case '-[DaiDatAnhHungUITests.MoreCasesUITests test_left_taps_as_the_training_card_appears_open_no_skip_warning]' passed (7.441 seconds).
+Test Suite 'MoreCasesUITests' passed at 2026-11-16 21:23:57.878.
+	 Executed 1 test, with 0 failures (0 unexpected) in 7.441 (7.443) seconds
+Test Suite 'DaiDatAnhHungUITests.xctest' passed at 2026-11-16 21:23:57.878.
+	 Executed 1 test, with 0 failures (0 unexpected) in 7.441 (7.443) seconds
+Test Suite 'Selected tests' passed at 2026-11-16 21:23:57.878.
+	 Executed 1 test, with 0 failures (0 unexpected) in 7.441 (7.444) seconds
+2026-11-16 21:23:57.912 xcodebuild[21476:4309851] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 21:23:57.914 xcodebuild[21476:4309851] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 21:23:57.916 xcodebuild[21476:4309851] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 21:23:57.928 xcodebuild[21476:4309851] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 21:23:57.928 xcodebuild[21476:4309851] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 21:23:57.928 xcodebuild[21476:4309851] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-11-16 21:23:58.186 xcodebuild[21476:4309851] [MT] IDETestOperationsObserverDebug: 11.726 elapsed -- Testing started completed.
+2026-11-16 21:23:58.186 xcodebuild[21476:4309851] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-11-16 21:23:58.186 xcodebuild[21476:4309851] [MT] IDETestOperationsObserverDebug: 11.726 sec, +11.726 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/luannguyend/orca/workspaces/Claude-Code-Game-Studios-fork/game-qc-ios/production/qa/evidence/TASK-006/ios-qc-r8/touch-r801-3/result.xcresult
+
+** TEST EXECUTE SUCCEEDED **
+
+Testing started

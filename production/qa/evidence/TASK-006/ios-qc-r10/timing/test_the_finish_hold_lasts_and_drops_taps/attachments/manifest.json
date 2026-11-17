@@ -1,0 +1,26 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "20FC475C-1737-42B1-BC7F-7C9130B9C916.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "after the finish hold_0_FEB2027A-C0AA-4D0C-81BC-20C47BF89C51.png",
+        "timestamp" : 1794892507.022
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "76B65C72-B3E2-4506-BFE1-424CF9BF5B9D.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "finish hold log_0_AF4BB7A6-64BC-413B-A4ED-2AEE692777D2.txt",
+        "timestamp" : 1794892506.914
+      }
+    ],
+    "testIdentifier" : "R9CasesUITests/test_the_finish_hold_lasts_and_drops_taps()",
+    "testIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/R9CasesUITests/test_the_finish_hold_lasts_and_drops_taps"
+  }
+]
