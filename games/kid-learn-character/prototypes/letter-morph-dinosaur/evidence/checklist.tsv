@@ -1,0 +1,19 @@
+L1	pass	evidence/morph-flow.png	dusk gradient, golden glyph, gold/white stardust in the creature's shape (morph-flow), flat rounded creature (creature-rex), breathing bob in drawCreature; all figures drawn in code
+L2	pass	index.html:724	the keys are the toy (Typer Shark's pressing is the fun); alphabet pairing letter→creature
+L3	pass	evidence/play.png	2D, fixed front-on stage above the keyboard row
+F1	pass	evidence/play.png	8 keys spell DINOSAUR; hardware letters via event.code; other keys call nothingPress (index.html:556); on-screen taps not driven by the check (its click did not reach the canvas's pointerdown), so touch is for Luan's play
+F2	pass	evidence/morph-flow.png	makeParticles (index.html:478) pairs glyph and creature samples; every duration and count in config.js
+F3	pass	evidence/figures.png	8 distinct silhouettes with names; idle bob in drawCreature
+F4	not_assessed	index.html:202	synth roar/chirp/crack/thump and browser speech (index.html:223) are built; no shot can show a sound
+F5	pass	evidence/play.png	I on stage, N waiting in the top-right queue bubble; pressLetter (index.html:497) caps at queue_max, extras sparkle; hold rule index.html:573
+F6	pass	index.html:596	parade starts once all 8 formed; not shot (needs 8 reveals, about 24 s of play)
+F7	pass	index.html:763	grown-up panel with sliders, mute, parade, start over, opened by holding the moon gate_hold_s; not shot (a long press)
+M1	pass	evidence/play.png	dusk scene, 8 big rounded keys spelling DINOSAUR
+M2	pass	evidence/morph-flow.png	D key glows with a pulsing twinkle until the first press (index.html:724); seen in the earlier shots before a press
+M3	pass	evidence/creature-rex.png	key lights, letter rises and glows (play.png), stardust (morph-flow.png), creature (creature-rex.png); sound and voice not shown by a shot
+M4	pass	evidence/play.png	the next press reveals the next creature (D then I in play.png)
+M5	pass	evidence/play.png	queue of up to 3 plays in turn, held hold_s each
+M6	pass	evidence/play.png	provisional mark only
+C1	pass	index.html:556	no fail state, no wrong key: non-letters only sparkle
+C2	pass	index.html:596	seen letters get a star on their key (creature-rex.png, R); parade after all 8
+C3	pass	index.html:596	provisional mark only

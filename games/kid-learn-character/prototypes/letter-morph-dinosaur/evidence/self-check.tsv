@@ -1,0 +1,40 @@
+time	2026-11-17 20:42:08
+keep	lines	0	pinned	0
+checklist	L1	pass	evidence/morph-flow.png	Look: "Stardust Storybook". A calm dusk-blue to cream gradient background. The pressed letter shows big, centred and warm golden, glows, then breaks into drifting gold and white stardust that gathers into a flat, rounded 2D vector creature with friendly colours (green Stegosaurus with orange plates, a purple T‑Rex, a blue Ankylosaurus…). The creature idles with a gentle breathing bob. Signature detail: the stardust takes the letter's outline before flowing into the creature. Sparkle, never strobe. Every figure is drawn: no emoji, no plain circles. *(provisional)*	dusk gradient, golden glyph, gold/white stardust in the creature's shape (morph-flow), flat rounded creature (creature-rex), breathing bob in drawCreature; all figures drawn in code
+checklist	L2	pass	index.html:724	References: Typer Shark (pressing keys is the fun); picture-book alphabets. *(from the concept)*	the keys are the toy (Typer Shark's pressing is the fun); alphabet pairing letter→creature
+checklist	L3	pass	evidence/play.png	View: 2D · Camera: fixed, front-on stage above the keyboard. *(provisional)*	2D, fixed front-on stage above the keyboard row
+checklist	F1	pass	evidence/play.png	8 keys D I N O S A U R, on screen plus hardware keyboard; other keys only sparkle *(provisional)*	8 keys spell DINOSAUR; hardware letters via event.code; other keys call nothingPress (index.html:556); on-screen taps not driven by the check (its click did not reach the canvas's pointerdown), so touch is for Luan's play
+checklist	F2	pass	evidence/morph-flow.png	Stardust morph: letter → particles in the letter's shape → creature, all values in config.js	makeParticles (index.html:478) pairs glyph and creature samples; every duration and count in config.js
+checklist	F3	pass	evidence/figures.png	8 drawn creatures: Dinosaur (Brontosaurus-type), Iguanodon, Nest with eggs, Oviraptor, Stegosaurus, Ankylosaurus, Utahraptor, T‑Rex, each with an idle bob *(provisional)*	8 distinct silhouettes with names; idle bob in drawCreature
+checklist	F4	not_assessed	index.html:202	Sound: synthesized roar or chirp per creature plus sparkle chime; browser speech in US English, "D… dinosaur" *(provisional)*	synth roar/chirp/crack/thump and browser speech (index.html:223) are built; no shot can show a sound
+checklist	F5	pass	evidence/play.png	Mash queue: max 3 pending, ~3 s hold while queued, extra presses sparkle only	I on stage, N waiting in the top-right queue bubble; pressLetter (index.html:497) caps at queue_max, extras sparkle; hold rule index.html:573
+checklist	F6	pass	index.html:596	The parade after all 8 have been seen *(guessed)*	parade starts once all 8 formed; not shot (needs 8 reveals, about 24 s of play)
+checklist	F7	pass	index.html:763	Tweak panel (queue size, hold time, morph speed, volume), hidden behind a long-press corner (parent gate stand-in) *(provisional)*	grown-up panel with sliders, mute, parade, start over, opened by holding the moon gate_hold_s; not shot (a long press)
+checklist	M1	pass	evidence/play.png	The screen shows a soft dusk scene and a row of 8 big rounded keys, D I N O S A U R, with the word DINOSAUR spelled out by the keys themselves.	dusk scene, 8 big rounded keys spelling DINOSAUR
+checklist	M2	pass	evidence/morph-flow.png	A gentle twinkle pulses on the D key.	D key glows with a pulsing twinkle until the first press (index.html:724); seen in the earlier shots before a press
+checklist	M3	pass	evidence/creature-rex.png	The child taps anything: the key lights up, the letter rises big and golden, glows, dissolves into stardust and becomes the creature with its sound, and the voice says "D… dinosaur!".	key lights, letter rises and glows (play.png), stardust (morph-flow.png), creature (creature-rex.png); sound and voice not shown by a shot
+checklist	M4	pass	evidence/play.png	The next tap brings another.	the next press reveals the next creature (D then I in play.png)
+checklist	M5	pass	evidence/play.png	Mashing queues up to three, and each one plays in turn.	queue of up to 3 plays in turn, held hold_s each
+checklist	M6	pass	evidence/play.png	*(provisional)*	provisional mark only
+checklist	C1	pass	index.html:556	None by design: there is no failure and no wrong key.	no fail state, no wrong key: non-letters only sparkle
+checklist	C2	pass	index.html:596	What changes: discovering all 8 creatures; when all 8 have been seen, a soft "parade" of the 8 dinosaurs walks across once.	seen letters get a star on their key (creature-rex.png, R); parade after all 8
+checklist	C3	pass	index.html:596	*(provisional)*	provisional mark only
+browser	HeadlessChrome/157.0.0.0
+scene	play	0	title
+scene	play	1	play
+measure	step-time	play	0.033	5.600	214
+lane	play	stop	3.6	94
+uncaught	play	0
+text	play	canvas	611,136,669,390	479.8	1.27	inside	I
+text	play	canvas	1199,40,1221,67	49.4	1.99	inside	N
+text	play	canvas	113,596,162,653	110.5	5.16	inside	D
+text	play	canvas	273,595,287,654	110.5	5.16	inside	I
+text	play	canvas	400,595,448,654	110.5	5.16	inside	N
+text	play	canvas	540,595,596,654	110.5	5.16	inside	O
+text	play	canvas	690,595,735,654	110.5	5.16	inside	S
+text	play	canvas	830,595,882,654	110.5	5.16	inside	A
+text	play	canvas	976,595,1024,654	110.5	5.16	inside	U
+text	play	canvas	1121,596,1169,654	110.5	5.16	inside	R
+screen	play	drawn
+shot	play	prototypes/letter-morph-dinosaur/evidence/play.png
+responds	changed	4

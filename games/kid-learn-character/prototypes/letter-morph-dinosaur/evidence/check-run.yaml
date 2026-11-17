@@ -1,0 +1,117 @@
+# The one-shot's small check (check-run/1).
+# Written by one-shot-check.sh --record: the results are /prototype's reading of
+# evidence/self-check.tsv; never edited by hand.
+kind: check-run/1
+engine: web
+browser: "HeadlessChrome/157.0.0.0"
+time: "2026-11-17 20:42:08"
+checks:
+  - id: boots
+    result: pass
+    evidence:
+      - "evidence/self-check.tsv"
+  - id: shot
+    result: pass
+    evidence:
+      - "evidence/play.png"
+  - id: outlines
+    result: pass
+    evidence:
+      - "evidence/figures.png"
+  - id: brief-words
+    result: pass
+    evidence:
+      - "evidence/brief-words.tsv"
+  - id: emoji
+    result: pass
+    evidence:
+      - "evidence/self-check.tsv"
+  - id: nearest-game
+    result: pass
+    evidence:
+      - "evidence/nearest-game.txt"
+brief_checklist:
+  - id: L1
+    result: pass
+    evidence: "evidence/morph-flow.png"
+    item: "Look: \"Stardust Storybook\". A calm dusk-blue to cream gradient background. The pressed letter shows big, centred and warm golden, glows, then breaks into drifting gold and white stardust that gathers into a flat, rounded 2D vector creature with friendly colours (green Stegosaurus with orange plates, a purple T‑Rex, a blue Ankylosaurus…). The creature idles with a gentle breathing bob. Signature detail: the stardust takes the letter's outline before flowing into the creature. Sparkle, never strobe. Every figure is drawn: no emoji, no plain circles. *(provisional)*"
+  - id: L2
+    result: pass
+    evidence: "index.html:724"
+    item: "References: Typer Shark (pressing keys is the fun); picture-book alphabets. *(from the concept)*"
+  - id: L3
+    result: pass
+    evidence: "evidence/play.png"
+    item: "View: 2D · Camera: fixed, front-on stage above the keyboard. *(provisional)*"
+  - id: F1
+    result: pass
+    evidence: "evidence/play.png"
+    item: "8 keys D I N O S A U R, on screen plus hardware keyboard; other keys only sparkle *(provisional)*"
+  - id: F2
+    result: pass
+    evidence: "evidence/morph-flow.png"
+    item: "Stardust morph: letter → particles in the letter's shape → creature, all values in config.js"
+  - id: F3
+    result: pass
+    evidence: "evidence/figures.png"
+    item: "8 drawn creatures: Dinosaur (Brontosaurus-type), Iguanodon, Nest with eggs, Oviraptor, Stegosaurus, Ankylosaurus, Utahraptor, T‑Rex, each with an idle bob *(provisional)*"
+  - id: F4
+    result: not_run
+    mark: not assessed
+    why: "synth roar/chirp/crack/thump and browser speech (index.html:223) are built; no shot can show a sound"
+    evidence: "index.html:202"
+    item: "Sound: synthesized roar or chirp per creature plus sparkle chime; browser speech in US English, \"D… dinosaur\" *(provisional)*"
+  - id: F5
+    result: pass
+    evidence: "evidence/play.png"
+    item: "Mash queue: max 3 pending, ~3 s hold while queued, extra presses sparkle only"
+  - id: F6
+    result: pass
+    evidence: "index.html:596"
+    item: "The parade after all 8 have been seen *(guessed)*"
+  - id: F7
+    result: pass
+    evidence: "index.html:763"
+    item: "Tweak panel (queue size, hold time, morph speed, volume), hidden behind a long-press corner (parent gate stand-in) *(provisional)*"
+  - id: M1
+    result: pass
+    evidence: "evidence/play.png"
+    item: "The screen shows a soft dusk scene and a row of 8 big rounded keys, D I N O S A U R, with the word DINOSAUR spelled out by the keys themselves."
+  - id: M2
+    result: pass
+    evidence: "evidence/morph-flow.png"
+    item: "A gentle twinkle pulses on the D key."
+  - id: M3
+    result: pass
+    evidence: "evidence/creature-rex.png"
+    item: "The child taps anything: the key lights up, the letter rises big and golden, glows, dissolves into stardust and becomes the creature with its sound, and the voice says \"D… dinosaur!\"."
+  - id: M4
+    result: pass
+    evidence: "evidence/play.png"
+    item: "The next tap brings another."
+  - id: M5
+    result: pass
+    evidence: "evidence/play.png"
+    item: "Mashing queues up to three, and each one plays in turn."
+  - id: M6
+    result: pass
+    evidence: "evidence/play.png"
+    item: "*(provisional)*"
+  - id: C1
+    result: pass
+    evidence: "index.html:556"
+    item: "None by design: there is no failure and no wrong key."
+  - id: C2
+    result: pass
+    evidence: "index.html:596"
+    item: "What changes: discovering all 8 creatures; when all 8 have been seen, a soft \"parade\" of the 8 dinosaurs walks across once."
+  - id: C3
+    result: pass
+    evidence: "index.html:596"
+    item: "*(provisional)*"
+measures:
+  - id: step-time
+    value: 5.600
+    unit: ms
+    by: browser
+    detail: "mean 0.033 ms, slowest 5.600 ms, 214 steps"

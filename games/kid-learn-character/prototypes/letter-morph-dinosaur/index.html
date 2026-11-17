@@ -1,0 +1,823 @@
+<!doctype html>
+<!-- PROTOTYPE - NOT FOR PRODUCTION -->
+<!-- Question: does the stardust morph, plus the 3-key queue with a ~3 s hold, delight a 2.5-3-year-old for 5+ minutes without ever feeling broken or slow? -->
+<!-- Date: 2026-11-17 -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Letter Morph: DINOSAUR</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #1f2a55; overflow: hidden; touch-action: none;
+    -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+  body { font-variant-numeric: tabular-nums; }
+  canvas { display: block; margin: 0 auto; touch-action: none; }
+  #grownup { position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+    background: rgba(20, 24, 50, 0.55); font: 16px "Avenir Next", "Trebuchet MS", system-ui, sans-serif; color: #3b2f2a; }
+  #grownup .card { background: #fbf4e6; border-radius: 22px; padding: 22px 26px; width: min(520px, 92vw);
+    max-height: 90vh; overflow: auto; box-shadow: 0 12px 40px rgba(0,0,0,.35); }
+  #grownup h2 { margin: 0 0 6px; font-size: 22px; }
+  #grownup p { margin: 0 0 14px; color: #6a5a50; font-size: 14px; }
+  #grownup label { display: grid; grid-template-columns: 1fr 64px; gap: 4px 10px; margin: 10px 0; font-size: 15px; }
+  #grownup input[type=range] { grid-column: 1 / 3; width: 100%; accent-color: #e8a33c; }
+  #grownup .row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  #grownup button { font: inherit; border: 0; border-radius: 14px; padding: 10px 16px; background: #e9dcc5; color: #3b2f2a; cursor: pointer; }
+  #grownup button.main { background: #e8a33c; color: #fff; }
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+<div id="grownup" role="dialog" aria-label="Grown-up settings">
+  <div class="card">
+    <h2>Grown-up settings</h2>
+    <p>Tune the toy while your child plays. Values are the prototype's config.js.</p>
+    <div id="sliders"></div>
+    <div class="row">
+      <button id="mute">Mute</button>
+      <button id="parade">Play the parade</button>
+      <button id="clear">Start over</button>
+      <button id="close" class="main">Back to play</button>
+    </div>
+  </div>
+</div>
+<script src="config.js"></script>
+<script>
+'use strict';
+// Letter Morph: DINOSAUR. A toddler presses D I N O S A U R; the letter glows, dissolves into
+// stardust in its own outline, and the stardust flows into a dinosaur-world creature.
+// The starter's check hooks are kept: the fixed step, the clock hook, window.game, and the
+// play and figures scenes.
+
+// ---- Built to be checked ----------------------------------------------------------------
+const params = new URLSearchParams(location.search);
+const tune = new Proxy({}, { get: (_, k) => CONFIG[k].value }); // live: tune.hold_s is CONFIG.hold_s.value
+const STEP = 1 / 60;            // simulation step in seconds; motion is per second, never per frame
+const W = 1280, H = 720;        // logical size
+const PIXEL = false;
+const FONT = '"Avenir Next Rounded", "Arial Rounded MT Bold", "Nunito", "Avenir Next", "Trebuchet MS", system-ui, sans-serif';
+const GLYPH_FONT = '"Arial Rounded MT Bold", "Avenir Next Rounded", "Nunito", "Avenir Next", "Trebuchet MS", system-ui, sans-serif';
+const TITLE = 'Letter Morph: DINOSAUR';
+const CONTROLS = ['Tap a big key, or press D I N O S A U R on a keyboard', 'Grown-ups: hold the moon for settings'];
+const clock = window.GAME_CLOCK || { now: () => performance.now() / 1000 }; // a check may inject one
+const CHEAP = params.get('render') === 'cheap';
+let seed;
+function rng() { // mulberry32; every gameplay random call reads this, never Math.random
+  seed = (seed + 0x6D2B79F5) | 0;
+  let t = Math.imul(seed ^ (seed >>> 15), seed | 1);
+  t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+}
+const events = []; // window.game.events: reveals, queued and ignored presses, the parade
+
+// ---- Screen ---------------------------------------------------------------------------
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+let viewScale = 1;
+function fit() {
+  const k = Math.min(innerWidth / W, innerHeight / H);
+  const r = k * (devicePixelRatio || 1);
+  viewScale = k;
+  canvas.width = Math.round(W * r); canvas.height = Math.round(H * r);
+  canvas.style.width = Math.round(W * k) + 'px'; canvas.style.height = Math.round(H * k) + 'px';
+  canvas.style.marginTop = Math.max(0, Math.floor((innerHeight - H * k) / 2)) + 'px';
+  ctx.setTransform(r, 0, 0, r, 0, 0); ctx.imageSmoothingEnabled = true;
+}
+addEventListener('resize', fit); fit();
+function text(s, x, y, size, c, align = 'center', weight = '600') {
+  ctx.fillStyle = c; ctx.font = `${weight} ${size}px ${FONT}`; ctx.textAlign = align;
+  ctx.textBaseline = 'middle'; ctx.fillText(s, x, y);
+}
+const TAU = Math.PI * 2;
+const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
+const smooth = v => { v = clamp01(v); return v * v * (3 - 2 * v); };
+const lerp = (a, b, u) => a + (b - a) * u;
+
+// ---- Input: keys by position (event.code), OS key repeat ignored ------------------------
+const down = new Set(), hit = new Set();
+const taps = []; // pointer presses in logical coordinates, handled on the next step
+let gateHeld = false;
+addEventListener('keydown', e => {
+  startAudio();
+  if (panelOpen) return;
+  if (!e.repeat) { down.add(e.code); hit.add(e.code); }
+  if (e.code === 'Space' || e.code.startsWith('Arrow') || e.code === 'Tab') e.preventDefault();
+});
+addEventListener('keyup', e => down.delete(e.code));
+addEventListener('blur', () => { down.clear(); gateHeld = false; });
+function toLogical(e) {
+  const r = canvas.getBoundingClientRect();
+  return { x: (e.clientX - r.left) * W / r.width, y: (e.clientY - r.top) * H / r.height };
+}
+const GATE = { x: 66, y: 62, r: 50 }; // the moon: hold it to open the grown-up panel
+canvas.addEventListener('pointerdown', e => {
+  startAudio(); e.preventDefault();
+  const p = toLogical(e);
+  if (Math.hypot(p.x - GATE.x, p.y - GATE.y) < GATE.r) { gateHeld = true; return; }
+  taps.push(p);
+});
+addEventListener('pointerup', () => { gateHeld = false; });
+addEventListener('pointercancel', () => { gateHeld = false; });
+canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+// ---- Audio: started on first input; mute lives in the grown-up panel ----------------------
+let audio = null, muted = false, noiseBuf = null;
+function startAudio() {
+  if (!audio) {
+    const ac = window.GAME_AUDIO || new (window.AudioContext || window.webkitAudioContext)();
+    const out = ac.createGain(); out.gain.value = muted ? 0 : tune.volume;
+    out.connect(ac.destination); audio = { ac, out };
+    noiseBuf = ac.createBuffer(1, ac.sampleRate * 2, ac.sampleRate);
+    const d = noiseBuf.getChannelData(0);
+    let s = 12345; // fixed noise: not gameplay randomness, but kept deterministic anyway
+    for (let i = 0; i < d.length; i++) { s = (s * 1103515245 + 12345) & 0x7fffffff; d[i] = (s / 0x3fffffff) - 1; }
+  }
+  if (audio.ac.state === 'suspended') audio.ac.resume();
+}
+function setMuted(m) {
+  muted = m; if (audio) audio.out.gain.value = m ? 0 : tune.volume;
+  if (m && window.speechSynthesis) speechSynthesis.cancel();
+}
+addEventListener('tune', () => setMuted(muted));
+function env(g, t, dur, v, attack = 0.08) {
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.linearRampToValueAtTime(v, t + attack);
+  g.gain.setValueAtTime(v, t + Math.max(attack, dur * 0.45));
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+}
+function tone(freq, dur, type = 'sine', vol = 0.3, at = 0) {
+  if (!audio || muted) return;
+  const t = audio.ac.currentTime + at, o = audio.ac.createOscillator(), g = audio.ac.createGain();
+  o.type = type; o.frequency.value = freq;
+  env(g, t, dur, vol, 0.01);
+  o.connect(g).connect(audio.out); o.start(t); o.stop(t + dur + 0.02);
+}
+function chime() { // a soft "I heard you" on every press
+  const v = tune.chime_volume; tone(1568, 0.22, 'sine', v); tone(2093, 0.28, 'sine', v * 0.7, 0.05);
+}
+function ping() { tone(2637, 0.12, 'sine', tune.chime_volume * 0.5); } // a press that only sparkles
+function twinkleSound() { // the letter turns to stardust
+  const notes = [1175, 1397, 1568, 1760, 2093], v = tune.chime_volume * 0.8;
+  notes.forEach((f, i) => tone(f, 0.35, 'sine', v, i * 0.07));
+}
+function roar(p, scale = 1) {
+  const ac = audio.ac, t = ac.currentTime, dur = p.dur, vol = p.vol * tune.roar_volume * scale;
+  const n = ac.createBufferSource(); n.buffer = noiseBuf;
+  const f = ac.createBiquadFilter(); f.type = 'lowpass'; f.Q.value = 3;
+  f.frequency.setValueAtTime(p.cut * 0.6, t); f.frequency.linearRampToValueAtTime(p.cut, t + dur * 0.3);
+  f.frequency.linearRampToValueAtTime(p.cut * 0.4, t + dur);
+  const g = ac.createGain(); env(g, t, dur, vol * 0.8, 0.12);
+  n.connect(f).connect(g).connect(audio.out); n.start(t); n.stop(t + dur + 0.05);
+  const o = ac.createOscillator(); o.type = 'sawtooth';
+  o.frequency.setValueAtTime(p.f0, t); o.frequency.linearRampToValueAtTime(p.f0 * 1.25, t + dur * 0.3);
+  o.frequency.linearRampToValueAtTime(p.f0 * 0.8, t + dur);
+  const lfo = ac.createOscillator(), lg = ac.createGain(); lfo.frequency.value = p.vib; lg.gain.value = p.f0 * 0.08;
+  lfo.connect(lg).connect(o.frequency);
+  const of = ac.createBiquadFilter(); of.type = 'lowpass'; of.frequency.value = p.cut * 0.8;
+  const og = ac.createGain(); env(og, t, dur, vol * 0.5, 0.12);
+  o.connect(of).connect(og).connect(audio.out);
+  o.start(t); lfo.start(t); o.stop(t + dur + 0.05); lfo.stop(t + dur + 0.05);
+}
+function chirps(p, type = 'triangle', at = 0) {
+  const ac = audio.ac, v = 0.22 * tune.roar_volume / 0.35;
+  for (let i = 0; i < p.n; i++) {
+    const t = ac.currentTime + at + i * 0.17, o = ac.createOscillator(), g = ac.createGain();
+    o.type = type; o.frequency.setValueAtTime(p.f0, t);
+    o.frequency.exponentialRampToValueAtTime(p.f1, t + 0.06); o.frequency.exponentialRampToValueAtTime(p.f0 * 0.9, t + 0.13);
+    env(g, t, 0.14, v, 0.015);
+    if (type === 'sawtooth') { const lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1200; o.connect(lp).connect(g); }
+    else o.connect(g);
+    g.connect(audio.out); o.start(t); o.stop(t + 0.16);
+  }
+}
+function crack() {
+  const ac = audio.ac;
+  for (let i = 0; i < 3; i++) {
+    const t = ac.currentTime + i * 0.13, n = ac.createBufferSource(); n.buffer = noiseBuf;
+    const hp = ac.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 1800;
+    const g = ac.createGain(); env(g, t, 0.06, 0.25 * tune.roar_volume / 0.35, 0.003);
+    n.connect(hp).connect(g).connect(audio.out); n.start(t, i * 0.3); n.stop(t + 0.08);
+  }
+  chirps({ f0: 1300, f1: 1900, n: 2 }, 'sine', 0.45); // the baby's peep
+}
+function creatureSound(L) {
+  if (!audio || muted) return;
+  const p = KEY_TABLE[L].sound;
+  if (p.kind === 'roar') roar(p);
+  else if (p.kind === 'honk') chirps(p, 'sawtooth');
+  else if (p.kind === 'chirp') chirps(p, 'triangle');
+  else if (p.kind === 'crack') crack();
+  else if (p.kind === 'thump') { tone(70, 0.35, 'sine', 0.5 * tune.roar_volume / 0.35); tone(48, 0.45, 'sine', 0.4 * tune.roar_volume / 0.35, 0.18); roar(p, 0.6); }
+}
+function paradeTune() {
+  const notes = [784, 880, 1047, 880, 1175, 1047, 880, 784, 659, 784, 880, 1047];
+  notes.forEach((f, i) => tone(f, 0.4, 'triangle', tune.chime_volume * 0.9, i * 0.32));
+}
+// ---- Voice: the browser's own speech, US English (a stand-in for a recorded voice) --------
+let voice = null;
+function pickVoice() {
+  if (!window.speechSynthesis) return;
+  const vs = speechSynthesis.getVoices().filter(v => /en[-_]US/i.test(v.lang));
+  voice = vs.find(v => /Samantha|Allison|Ava|Google US English/i.test(v.name)) || vs[0] || null;
+}
+if (window.speechSynthesis) { pickVoice(); speechSynthesis.addEventListener?.('voiceschanged', pickVoice); }
+function say(words, cancel) {
+  if (!window.speechSynthesis || muted) return;
+  try {
+    if (cancel) speechSynthesis.cancel(); // a new letter never stacks behind old speech
+    const u = new SpeechSynthesisUtterance(words);
+    u.lang = 'en-US'; if (voice) u.voice = voice;
+    u.rate = tune.voice_rate; u.pitch = tune.voice_pitch; u.volume = Math.min(1, tune.volume * 1.6);
+    speechSynthesis.speak(u);
+  } catch (_) { /* no voice: the picture and sound still answer */ }
+}
+
+// ---- Drawing helpers: every figure drawn in code, flat storybook 2D -----------------------
+let MONO = false; // true while sampling a silhouette: everything fills white
+const OUT = 'rgba(40,30,60,0.55)';
+function E(c, x, y, rx, ry, rot = 0) { c.beginPath(); c.ellipse(x, y, rx, ry, rot, 0, TAU); }
+function RR(c, x, y, w, h, r) {
+  c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r);
+  c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath();
+}
+function F(c, col) { c.fillStyle = MONO ? '#fff' : col; c.fill(); }
+function O(c, w = 3) { if (MONO) return; c.strokeStyle = OUT; c.lineWidth = w; c.lineJoin = 'round'; c.stroke(); }
+function S(c, col, w) { c.strokeStyle = MONO ? '#fff' : col; c.lineWidth = w; c.lineCap = 'round'; c.lineJoin = 'round'; c.stroke(); }
+function eye(c, x, y, r) {
+  E(c, x, y, r, r * 1.12); F(c, '#fffdf7'); O(c, 2);
+  if (MONO) return;
+  E(c, x + r * 0.22, y + r * 0.12, r * 0.58, r * 0.66); F(c, '#2a2340');
+  E(c, x + r * 0.42, y - r * 0.18, r * 0.2, r * 0.2); F(c, '#ffffff');
+}
+function smile(c, x, y, w) { if (MONO) return; c.beginPath(); c.arc(x, y - w * 0.5, w * 0.6, 0.35, Math.PI - 0.35); S(c, '#3a2a40', 3); }
+function blush(c, x, y, r) { if (MONO) return; E(c, x, y, r, r * 0.6); F(c, 'rgba(255,140,150,0.45)'); }
+function leg(c, x, top, w, h, col) {
+  RR(c, x, top, w, h, Math.min(16, w / 2)); F(c, col); O(c);
+  if (MONO) return;
+  for (let i = 0; i < 3; i++) { E(c, x + w * (0.22 + i * 0.28), top + h - 4, 5, 4); F(c, '#fff4dc'); }
+}
+function taper(c, x0, y0, cx, cy, x1, y1, w0) { // a tail: thick at its root, a point at its tip
+  const dx = cx - x0, dy = cy - y0, l = Math.hypot(dx, dy) || 1, nx = -dy / l * w0, ny = dx / l * w0;
+  c.beginPath(); c.moveTo(x0 + nx, y0 + ny); c.quadraticCurveTo(cx + nx * 0.5, cy + ny * 0.5, x1, y1);
+  c.quadraticCurveTo(cx - nx * 0.5, cy - ny * 0.5, x0 - nx, y0 - ny); c.closePath();
+}
+function kite(c, x, y, h, w, rot = 0) { // a pointed plate or spike
+  c.save(); c.translate(x, y); c.rotate(rot); c.beginPath();
+  c.moveTo(-w, 0); c.quadraticCurveTo(-w * 0.6, -h * 0.6, 0, -h); c.quadraticCurveTo(w * 0.6, -h * 0.6, w, 0); c.closePath();
+  c.restore();
+}
+
+// Each creature: anchor at its feet (0,0), about 480 wide and 300 tall, facing right.
+const CREATURES = {
+  sauropod(c, t) { // D: a long-neck dinosaur, leaf green
+    const sway = Math.sin(t * 1.4) * 6, g = '#6cc08b', g2 = '#58a876';
+    leg(c, -95, -98, 38, 98, g2); leg(c, 45, -98, 38, 98, g2);
+    taper(c, -95, -118, -190, -105, -265, -42, 26); F(c, g); O(c);
+    E(c, 0, -118, 128, 72); F(c, g); O(c);
+    E(c, 8, -84, 96, 28); F(c, '#b6e6c0');
+    if (!MONO) [[-40, -152, 13], [2, -168, 15], [44, -152, 11], [-80, -128, 9]].forEach(([x, y, r]) => { E(c, x, y, r, r * 0.75); F(c, '#4f9e6e'); });
+    leg(c, -60, -92, 40, 92, g); leg(c, 76, -92, 40, 92, g);
+    c.beginPath(); c.moveTo(62, -150); c.bezierCurveTo(118, -178, 126 + sway * 0.5, -232, 142 + sway, -270);
+    if (!MONO) S(c, OUT, 50); S(c, g, 44);
+    E(c, 154 + sway, -282, 48, 31, -0.15); F(c, g); O(c);
+    eye(c, 166 + sway, -292, 10); smile(c, 178 + sway, -272, 14); blush(c, 186 + sway, -280, 9);
+  },
+  iguanodon(c, t) { // I: a tall plant-eater with thumb spikes, sunny yellow
+    const nod = Math.sin(t * 1.7) * 4, y1 = '#e2bb4f', y2 = '#c99f35';
+    taper(c, -60, -118, -170, -80, -245, -20, 30); F(c, y1); O(c);
+    E(c, -35, -100, 42, 56, 0.15); F(c, y2); O(c);
+    leg(c, -58, -78, 38, 78, y2);
+    E(c, 0, -146, 108, 62, -0.32); F(c, y1); O(c);
+    if (!MONO) for (let i = 0; i < 4; i++) { c.beginPath(); c.arc(-40 + i * 34, -150 - i * 10, 22, -2.4, -1.4); S(c, '#c18f2a', 5); }
+    E(c, 10, -98, 46, 60, 0.12); F(c, y1); O(c);
+    leg(c, -8, -70, 42, 70, y1);
+    c.beginPath(); c.moveTo(64, -160); c.lineTo(88, -108); S(c, y2, 20);
+    E(c, 90, -100, 13, 11); F(c, y2); O(c, 2);
+    kite(c, 98, -104, 24, 7, 0.6); F(c, '#fff1cf'); O(c, 2);
+    c.beginPath(); c.moveTo(70, -186); c.lineTo(112, -218 + nod); if (!MONO) S(c, OUT, 46); S(c, y1, 40);
+    E(c, 140, -226 + nod, 54, 32, 0.12); F(c, y1); O(c);
+    E(c, 186, -214 + nod, 20, 15); F(c, '#f3dfa0'); O(c, 2);
+    eye(c, 140, -238 + nod, 9); smile(c, 168, -212 + nod, 12); blush(c, 160, -222 + nod, 8);
+  },
+  nest(c, t) { // N: a nest of speckled eggs, one hatching
+    const wob = Math.sin(t * 3.2) * 0.07, peek = 6 + Math.max(0, Math.sin(t * 1.3)) * 14;
+    E(c, 0, -78, 158, 26); F(c, '#6e4a2c');
+    const egg = (x, y, rx, ry, rot) => {
+      E(c, x, y, rx, ry, rot); F(c, '#f7eedb'); O(c);
+      if (!MONO) [[-0.3, -0.3], [0.25, -0.1], [-0.1, 0.25], [0.3, 0.35]].forEach(([u, v]) => { E(c, x + u * rx, y + v * ry, 4, 3); F(c, '#d9b98f'); });
+    };
+    egg(-66, -100, 36, 46, -0.18 + wob * 0.6);
+    egg(66, -100, 36, 46, 0.18 - wob * 0.6);
+    // the middle egg is hatching: a baby peeks over the cracked shell
+    E(c, 0, -150 - peek, 26, 22); F(c, '#7fcf8f'); O(c);
+    eye(c, -8, -156 - peek, 6); eye(c, 10, -156 - peek, 6);
+    c.beginPath(); c.moveTo(-40, -122); c.lineTo(-30, -138); c.lineTo(-16, -126); c.lineTo(-4, -142); c.lineTo(8, -126);
+    c.lineTo(22, -140); c.lineTo(34, -124); c.lineTo(42, -122); c.quadraticCurveTo(46, -70, 0, -62); c.quadraticCurveTo(-46, -70, -40, -122); c.closePath();
+    F(c, '#f7eedb'); O(c);
+    kite(c, 30, -176 - peek * 0.4, 22, 20, 0.5 + wob); F(c, '#f7eedb'); O(c);
+    c.beginPath(); c.ellipse(0, -78, 176, 74, 0, 0, Math.PI); c.closePath(); F(c, '#a8743f'); O(c);
+    if (!MONO) for (let i = 0; i < 7; i++) {
+      c.beginPath(); c.moveTo(-150 + i * 45, -60 + (i % 2) * 18); c.quadraticCurveTo(-120 + i * 45, -30, -100 + i * 45, -50 + (i % 3) * 10); S(c, '#c99560', 5);
+    }
+  },
+  oviraptor(c, t) { // O: a feathered, crested bird-like dinosaur, coral pink
+    const bob = Math.sin(t * 2.4) * 4, p = '#f29a76', pf = '#f7c59f', cr = '#e8566b';
+    [[-0.2, pf], [0.15, cr], [0.5, pf], [0.85, cr]].forEach(([a, col]) => { E(c, -100, -150, 58, 18, -0.9 + a); F(c, col); O(c); });
+    c.beginPath(); c.moveTo(-28, -100); c.lineTo(-38, -14); S(c, '#d98a4a', 12);
+    c.beginPath(); c.moveTo(-38, -10); c.lineTo(-62, -2); c.moveTo(-38, -10); c.lineTo(-30, 0); c.moveTo(-38, -10); c.lineTo(-12, -4); S(c, '#d98a4a', 7);
+    E(c, 0, -142, 84, 58, -0.1); F(c, p); O(c);
+    E(c, 6, -118, 50, 26); F(c, '#fbd7c2');
+    E(c, -6, -112, 30, 40, 0.2); F(c, pf); O(c);
+    c.beginPath(); c.moveTo(-2, -82); c.lineTo(10, -14); S(c, '#e79a54', 12);
+    c.beginPath(); c.moveTo(10, -10); c.lineTo(-14, -2); c.moveTo(10, -10); c.lineTo(18, 0); c.moveTo(10, -10); c.lineTo(36, -4); S(c, '#e79a54', 7);
+    E(c, 12, -146, 54, 26, 0.45); F(c, pf); O(c);
+    if (!MONO) for (let i = 0; i < 3; i++) { c.beginPath(); c.arc(-22 + i * 22, -136 + i * 10, 12, 0.3, 2.6); S(c, '#e9a882', 3); }
+    c.beginPath(); c.moveTo(58, -168); c.bezierCurveTo(84, -188, 78, -210, 96, -226 + bob); if (!MONO) S(c, OUT, 36); S(c, p, 30);
+    c.beginPath(); c.moveTo(80, -258 + bob); c.quadraticCurveTo(92, -326 + bob, 140, -276 + bob); c.closePath(); F(c, cr); O(c);
+    E(c, 106, -242 + bob, 38, 31); F(c, p); O(c);
+    c.beginPath(); c.moveTo(136, -252 + bob); c.quadraticCurveTo(172, -246 + bob, 152, -216 + bob); c.lineTo(130, -224 + bob); c.closePath(); F(c, '#f6c14b'); O(c);
+    eye(c, 112, -250 + bob, 9); blush(c, 122, -232 + bob, 8);
+  },
+  stegosaurus(c, t) { // S: green with orange back plates and a spiky tail
+    const g = '#7cb85a', g2 = '#669e48', pl = '#f39c4a';
+    const back = x => -112 - 72 * Math.sqrt(Math.max(0, 1 - (x / 142) * (x / 142)));
+    for (let i = 0; i < 6; i++) { const x = -88 + i * 34; kite(c, x, back(x) + 14, 30 + (i === 2 || i === 3 ? 18 : 6), 14, (x / 142) * 0.6); F(c, '#d77f30'); O(c); }
+    for (let i = 0; i < 7; i++) { const x = -104 + i * 34; kite(c, x, back(x) + 12, 38 + (i === 3 ? 22 : i === 2 || i === 4 ? 14 : 0), 18, (x / 142) * 0.6); F(c, pl); O(c); }
+    taper(c, -118, -98, -200, -118, -268, -136, 26); F(c, g); O(c);
+    [[-240, -132, -0.9], [-246, -128, 0.6], [-262, -138, -1.2], [-266, -132, 0.9]].forEach(([x, y, r]) => { kite(c, x, y, 34, 7, r); F(c, '#fff1d6'); O(c, 2); });
+    leg(c, -96, -66, 40, 66, g2); leg(c, 52, -66, 40, 66, g2);
+    E(c, 0, -112, 142, 72); F(c, g); O(c);
+    E(c, 8, -74, 112, 24); F(c, '#c6e6a6');
+    leg(c, -64, -62, 44, 62, g); leg(c, 84, -62, 44, 62, g);
+    c.beginPath(); c.moveTo(122, -102); c.lineTo(166, -74); if (!MONO) S(c, OUT, 42); S(c, g, 36);
+    E(c, 182, -70, 38, 25, 0.15); F(c, g); O(c);
+    eye(c, 186, -78, 8); smile(c, 204, -62, 11); blush(c, 198, -66, 7);
+  },
+  ankylosaurus(c, t) { // A: low and armoured, sky blue, a club on its tail
+    const wag = Math.sin(t * 2) * 0.14, b = '#5f8fd6', b2 = '#4a76bb';
+    c.save(); c.translate(-118, -66); c.rotate(wag);
+    c.beginPath(); c.moveTo(0, 0); c.lineTo(-108, 6); S(c, b2, 26);
+    E(c, -128, 6, 36, 27); F(c, '#3f68a8'); O(c);
+    if (!MONO) { E(c, -136, 0, 10, 7); F(c, '#a9c6f2'); E(c, -118, 12, 8, 6); F(c, '#a9c6f2'); }
+    c.restore();
+    leg(c, -112, -50, 40, 50, b2); leg(c, 66, -50, 40, 50, b2);
+    for (let i = 0; i < 8; i++) { const x = -132 + i * 38; kite(c, x, -46, 22, 9, x < 0 ? -1.3 : 1.3); F(c, '#e8eefc'); O(c, 2); }
+    c.beginPath(); c.moveTo(-156, -40); c.bezierCurveTo(-156, -172, 156, -172, 156, -40); c.closePath(); F(c, b); O(c);
+    if (!MONO) {
+      [0.55, 0.82].forEach(k => { c.beginPath(); c.moveTo(-156 * k, -40); c.bezierCurveTo(-156 * k, -40 - 132 * k, 156 * k, -40 - 132 * k, 156 * k, -40); S(c, b2, 4); });
+      for (let r = 0; r < 3; r++) for (let i = 0; i < 6 - r; i++) { E(c, -90 + r * 18 + i * 36, -70 - r * 32, 9, 6); F(c, '#a9c6f2'); }
+    }
+    leg(c, -76, -44, 44, 44, b); leg(c, 100, -44, 44, 44, b);
+    E(c, 182, -60, 42, 30); F(c, b); O(c);
+    kite(c, 158, -78, 22, 8, -0.7); F(c, '#e8eefc'); O(c, 2);
+    eye(c, 190, -70, 9); smile(c, 206, -52, 12); blush(c, 202, -58, 7);
+  },
+  utahraptor(c, t) { // U: a feathered raptor, warm rust, standing alert
+    const look = Math.sin(t * 1.9) * 4, r = '#c76a4a', r2 = '#a95536', fe = '#eaa36c';
+    taper(c, -60, -168, -150, -178, -238, -184, 22); F(c, r); O(c);
+    [-0.5, 0, 0.5].forEach(a => { E(c, -238, -184, 34, 9, a); F(c, fe); O(c, 2); });
+    E(c, -18, -126, 30, 44, 0.3); F(c, r2); O(c);
+    c.beginPath(); c.moveTo(-18, -96); c.lineTo(-30, -36); c.lineTo(-4, -8); S(c, r2, 13);
+    E(c, 0, -160, 94, 46, -0.05); F(c, r); O(c);
+    E(c, 8, -138, 60, 20); F(c, '#e9b494');
+    E(c, 26, -124, 34, 48, 0.25); F(c, r); O(c);
+    c.beginPath(); c.moveTo(26, -92); c.lineTo(10, -36); c.lineTo(42, -10); S(c, r, 14);
+    c.beginPath(); c.moveTo(42, -10); c.lineTo(66, -6); S(c, r, 9);
+    c.beginPath(); c.moveTo(40, -14); c.quadraticCurveTo(52, -38, 40, -46); S(c, '#fff1d6', 6);
+    [[0.9, 52], [1.2, 44], [1.5, 36]].forEach(([a, l]) => { E(c, 62 + Math.cos(a) * l * 0.5, -150 + Math.sin(a) * l * 0.5, l * 0.5, 9, a); F(c, fe); O(c, 2); });
+    c.beginPath(); c.moveTo(68, -178); c.lineTo(108, -214 + look); if (!MONO) S(c, OUT, 34); S(c, r, 28);
+    [-0.6, -0.2, 0.2].forEach(a => { E(c, 102, -238 + look, 22, 7, -1.9 + a); F(c, fe); O(c, 2); });
+    E(c, 136, -222 + look, 50, 25, 0.06); F(c, r); O(c);
+    E(c, 170, -214 + look, 22, 13, 0.1); F(c, '#e9b494');
+    eye(c, 132, -232 + look, 9); smile(c, 166, -210 + look, 11); blush(c, 154, -216 + look, 7);
+  },
+  rex(c, t) { // R: a big-headed T-Rex, soft purple, tiny arms, friendly smile
+    const jaw = Math.max(0, Math.sin(t * 1.3)) * 7, p = '#9a6fd1', p2 = '#7f58b6';
+    taper(c, -70, -150, -170, -110, -262, -62, 34); F(c, p); O(c);
+    E(c, -42, -104, 46, 56, 0.1); F(c, p2); O(c);
+    leg(c, -62, -66, 40, 66, p2);
+    E(c, 0, -164, 108, 76, -0.4); F(c, p); O(c);
+    if (!MONO) for (let i = 0; i < 6; i++) { kite(c, -76 + i * 30, -222 + i * 6 - (i < 3 ? 0 : (i - 2) * 4), 16, 9, -0.3); F(c, '#c39af0'); }
+    E(c, 28, -142, 52, 56, -0.4); F(c, '#d6bdf3');
+    E(c, 4, -102, 56, 62, 0.15); F(c, p); O(c);
+    leg(c, -16, -62, 44, 62, p);
+    c.beginPath(); c.moveTo(72, -160); c.lineTo(96, -142); S(c, p2, 12);
+    c.beginPath(); c.moveTo(96, -142); c.lineTo(104, -134); c.moveTo(96, -142); c.lineTo(106, -146); S(c, '#fff1d6', 4);
+    c.save(); c.translate(124, -252);
+    RR(c, -46, 0 + jaw, 116, 36, 16); F(c, p2); O(c);
+    if (!MONO) for (let i = 0; i < 5; i++) { c.beginPath(); c.moveTo(-6 + i * 16, 24 + jaw * 0.5); c.lineTo(0 + i * 16, 31 + jaw * 0.5); c.lineTo(6 + i * 16, 24 + jaw * 0.5); c.closePath(); F(c, '#fffdf7'); }
+    RR(c, -58, -48, 136, 70, 30); F(c, p); O(c);
+    if (!MONO) { c.beginPath(); c.moveTo(-20, 20); c.quadraticCurveTo(30, 34, 74, 18); S(c, '#3a2a40', 3); }
+    if (!MONO) { E(c, 62, -26, 4, 3); F(c, '#3a2a40'); }
+    eye(c, -6, -18, 11); blush(c, 22, 2, 9);
+    if (!MONO) { c.beginPath(); c.moveTo(-20, -38); c.lineTo(8, -34); S(c, '#5d3f8c', 5); }
+    c.restore();
+  },
+};
+
+// ---- Stardust: sample the letter and each creature once, as point clouds ------------------
+const LETTER_CX = 640, LETTER_CY = 290, LETTER_SIZE = 330;
+const ANCHOR_X = 640, ANCHOR_Y = 500;
+const shapes = {}; // L -> { glyph: [[x,y]...] relative to the letter centre, body: [[x,y]...] relative to the anchor }
+function sample(w, h, draw, ox, oy, stepPx = 3) {
+  const oc = document.createElement('canvas'); oc.width = w; oc.height = h;
+  const c = oc.getContext('2d'); draw(c);
+  const d = c.getImageData(0, 0, w, h).data, pts = [];
+  for (let y = 0; y < h; y += stepPx) for (let x = 0; x < w; x += stepPx) if (d[(y * w + x) * 4 + 3] > 140) pts.push([x - ox, y - oy]);
+  return pts;
+}
+function bakeShapes() {
+  for (const L of KEY_ORDER) {
+    const glyph = sample(460, 460, c => {
+      c.fillStyle = '#fff'; c.font = `900 ${LETTER_SIZE}px ${GLYPH_FONT}`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(L, 230, 240);
+    }, 230, 240);
+    const body = sample(600, 360, c => { MONO = true; c.translate(300, 340); CREATURES[KEY_TABLE[L].creature](c, 0); MONO = false; }, 300, 340);
+    shapes[L] = { glyph, body };
+  }
+}
+bakeShapes();
+
+// ---- Layout ------------------------------------------------------------------------------
+const KEY_W = 128, KEY_H = 118, KEY_GAP = 16, KEY_Y = 568;
+const KEY_X0 = (W - (KEY_ORDER.length * KEY_W + (KEY_ORDER.length - 1) * KEY_GAP)) / 2;
+const keyRect = i => ({ x: KEY_X0 + i * (KEY_W + KEY_GAP), y: KEY_Y, w: KEY_W, h: KEY_H });
+const keyCenter = L => { const r = keyRect(KEY_ORDER.indexOf(L)); return { x: r.x + r.w / 2, y: r.y + r.h / 2 }; };
+
+// Scenery: fixed stars and hills, made once from the seed
+const STARS = [], HILLS = [];
+function bakeScenery() {
+  seed = 777;
+  for (let i = 0; i < 46; i++) STARS.push({ x: rng() * W, y: 20 + rng() * 300, s: 1.5 + rng() * 3, ph: rng() * TAU, sp: 0.6 + rng() * 1.6 });
+}
+bakeScenery();
+
+// ---- Game state --------------------------------------------------------------------------
+let scene, state;
+const phases = () => {
+  const k = 1 / tune.morph_speed;
+  const a = tune.letter_in_s * k, b = a + tune.glow_s * k, c2 = b + tune.dissolve_s * k, d = c2 + tune.flow_s * k, e = d + tune.form_s * k;
+  return { inEnd: a, glowEnd: b, dustEnd: c2, flowEnd: d, formEnd: e };
+};
+const holdTime = () => Math.max(tune.hold_s, phases().formEnd);
+function reset() {
+  seed = Number(params.get('seed')) || CONFIG.seed;
+  state = {
+    t: 0, score: 0, gained: '',
+    cur: null,          // the reveal on stage: { letter, t, parts, fired }
+    prev: null,         // the creature leaving: { letter, t, fade }
+    queue: [],          // letters waiting their turn (at most queue_max)
+    seen: [],           // letters met this session
+    firstPress: false,
+    parade: null, paradeDone: false,
+    reveals: 0, queued: 0, ignored: 0,
+  };
+  keyFlash = {}; sparks.length = 0;
+}
+let keyFlash = {};
+const sparks = []; // little twinkles: answers to presses that only sparkle, and leftover stardust
+
+function makeParticles(L) {
+  const g = shapes[L].glyph, b = shapes[L].body, n = Math.round(tune.particles), parts = [];
+  const sc = tune.creature_scale;
+  for (let i = 0; i < n; i++) {
+    const a = g[Math.floor(rng() * g.length)], z = b[Math.floor(rng() * b.length)];
+    const sx = LETTER_CX + a[0], sy = LETTER_CY + a[1], ex = ANCHOR_X + z[0] * sc, ey = ANCHOR_Y + z[1] * sc;
+    const mx = (sx + ex) / 2, my = (sy + ey) / 2, dx = ex - sx, dy = ey - sy;
+    const bend = (rng() - 0.5) * 2 * tune.swirl;
+    parts.push({ sx, sy, ex, ey, cx: mx - dy * bend, cy: my + dx * bend, delay: rng() * 0.3, size: 1.4 + rng() * 2.4, ph: rng() * TAU, gold: rng() < 0.7 });
+  }
+  return parts;
+}
+function startReveal(L) {
+  if (state.cur) state.prev = { letter: state.cur.letter, t: state.cur.t, fade: 0 };
+  state.cur = { letter: L, t: 0, parts: makeParticles(L), fired: {} };
+  state.reveals++;
+  events.push({ type: 'reveal', letter: L });
+  say(KEY_TABLE[L].say, true);
+}
+function pressLetter(L) {
+  state.firstPress = true;
+  keyFlash[L] = tune.key_flash_s;
+  chime();
+  const cur = state.cur;
+  if (!cur || (cur.t >= holdTime() && state.queue.length === 0)) { startReveal(L); return; }
+  if (state.queue.length < Math.round(tune.queue_max)) { state.queue.push(L); state.queued++; events.push({ type: 'queued', letter: L }); return; }
+  state.ignored++; events.push({ type: 'ignored', letter: L });
+  const k = keyCenter(L); burst(k.x, k.y - 30, 8);
+}
+function burst(x, y, n) {
+  for (let i = 0; i < n; i++) {
+    const a = rng() * TAU, s = 40 + rng() * 90;
+    sparks.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 30, life: 0.6 + rng() * 0.4, age: 0, size: 3 + rng() * 4 });
+  }
+}
+function nothingPress(x, y) { ping(); burst(x, y, 6); }
+
+// ---- Scenes ------------------------------------------------------------------------------
+const scenes = {
+  figures: {
+    update(dt) { state.t += dt; },
+    draw() {
+      drawSky(); drawGround();
+      KEY_ORDER.forEach((L, i) => {
+        const col = i % 4, row = Math.floor(i / 4), x = 170 + col * 313, y = 300 + row * 300;
+        ctx.save(); ctx.translate(x, y); ctx.scale(0.5, 0.5); CREATURES[KEY_TABLE[L].creature](ctx, state.t); ctx.restore();
+        ctx.save(); ctx.shadowColor = 'rgba(20,20,50,0.8)'; ctx.shadowBlur = 6; text(`${L}: ${KEY_TABLE[L].name}`, x, y + 28, 22, '#fff4dc'); ctx.restore();
+      });
+    },
+  },
+  title: {
+    update(dt) {
+      state.t += dt;
+      if (hit.size || taps.length) { taps.length = 0; hit.clear(); reset(); scene = 'play'; }
+    },
+    draw() {
+      drawSky(); drawGround(); drawMoon();
+      const p = 1 + Math.sin(state.t * 2.4) * 0.04;
+      ctx.save(); ctx.translate(640, 300); ctx.scale(p, p);
+      glowDisk(0, 0, 150, 'rgba(255,214,110,0.35)');
+      ctx.save(); ctx.translate(30, 150); ctx.scale(0.62, 0.62); CREATURES.rex(ctx, state.t); ctx.restore();
+      ctx.restore();
+      ctx.save(); ctx.shadowColor = 'rgba(255,200,90,0.9)'; ctx.shadowBlur = 24;
+      text('Letter Morph', 640, 110, 64, '#ffe7a8', 'center', '800'); ctx.restore();
+      text('D I N O S A U R', 640, 168, 30, '#fbe9c4', 'center', '700');
+      drawPlay(640, 520, state.t);
+      text(CONTROLS[0], 640, 640, 22, '#4a3b33');
+      text(CONTROLS[1], 640, 680, 18, '#6b5a4f');
+    },
+  },
+  play: {
+    update(dt) {
+      state.t += dt;
+      // inputs
+      for (const code of hit) {
+        if (code === 'Backquote') continue;
+        const L = code.startsWith('Key') ? code.slice(3) : null;
+        if (L && KEY_TABLE[L]) pressLetter(L);
+        else nothingPress(160 + rng() * 960, KEY_Y + 20);
+      }
+      while (taps.length) {
+        const p = taps.shift();
+        const i = KEY_ORDER.findIndex((_, j) => { const r = keyRect(j); return p.x >= r.x && p.x <= r.x + r.w && p.y >= r.y && p.y <= r.y + r.h; });
+        if (i >= 0) pressLetter(KEY_ORDER[i]); else nothingPress(p.x, p.y);
+      }
+      // the reveal on stage
+      const cur = state.cur, ph = phases();
+      if (cur) {
+        cur.t += dt;
+        if (!cur.fired.dust && cur.t >= ph.glowEnd) { cur.fired.dust = true; twinkleSound(); }
+        if (!cur.fired.form && cur.t >= ph.flowEnd) {
+          cur.fired.form = true; creatureSound(cur.letter); say(KEY_TABLE[cur.letter].word, false);
+          if (!state.seen.includes(cur.letter)) state.seen.push(cur.letter);
+          events.push({ type: 'formed', letter: cur.letter });
+        }
+        if (state.queue.length && cur.t >= holdTime()) startReveal(state.queue.shift());
+      }
+      if (state.prev) { state.prev.t += dt; state.prev.fade += dt; if (state.prev.fade > 0.45) state.prev = null; }
+      // the parade, once all 8 have been met
+      if (!state.paradeDone && state.seen.length === KEY_ORDER.length && cur && cur.fired.form && !state.queue.length && cur.t >= ph.formEnd + tune.parade_delay_s) startParade();
+      if (state.parade) { state.parade.t += dt; if (state.parade.t > tune.parade_s) state.parade = null; }
+      for (const k in keyFlash) { keyFlash[k] -= dt; if (keyFlash[k] <= 0) delete keyFlash[k]; }
+      for (let i = sparks.length - 1; i >= 0; i--) {
+        const s = sparks[i]; s.age += dt; s.x += s.vx * dt; s.y += s.vy * dt; s.vy += 40 * dt; s.vx *= 0.97;
+        if (s.age > s.life) sparks.splice(i, 1);
+      }
+    },
+    draw() {
+      drawSky(); drawGround(); drawMoon();
+      if (state.parade) drawParade();
+      if (state.prev) drawPrev();
+      if (state.cur) drawReveal();
+      drawQueue();
+      drawKeys();
+      drawSparks();
+    },
+  },
+};
+function startParade() {
+  state.paradeDone = true; state.parade = { t: 0 };
+  events.push({ type: 'parade' }); paradeTune();
+}
+
+// ---- Drawing the world -------------------------------------------------------------------
+function glowDisk(x, y, r, col) {
+  const g = ctx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, col); g.addColorStop(1, 'rgba(255,214,110,0)');
+  ctx.fillStyle = g; ctx.fillRect(x - r, y - r, r * 2, r * 2);
+}
+function star4(x, y, s) { // a four-point twinkle
+  ctx.beginPath(); ctx.moveTo(x, y - s * 2.2); ctx.quadraticCurveTo(x, y, x + s * 2.2, y); ctx.quadraticCurveTo(x, y, x, y + s * 2.2);
+  ctx.quadraticCurveTo(x, y, x - s * 2.2, y); ctx.quadraticCurveTo(x, y, x, y - s * 2.2); ctx.closePath(); ctx.fill();
+}
+function drawSky() {
+  const g = ctx.createLinearGradient(0, 0, 0, 520);
+  g.addColorStop(0, '#1f2a55'); g.addColorStop(0.55, '#46558f'); g.addColorStop(1, '#b8a0c8');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, 520);
+  const tt = state ? state.t : 0;
+  ctx.fillStyle = '#fff6da';
+  for (const s of STARS) { ctx.globalAlpha = 0.35 + 0.45 * (0.5 + 0.5 * Math.sin(tt * s.sp + s.ph)); star4(s.x, s.y, s.s); }
+  ctx.globalAlpha = 1;
+}
+function drawGround() {
+  ctx.fillStyle = '#5a6a9c';
+  ctx.beginPath(); ctx.moveTo(0, 470); ctx.bezierCurveTo(200, 400, 360, 430, 520, 450); ctx.bezierCurveTo(700, 470, 860, 400, 1040, 420);
+  ctx.bezierCurveTo(1150, 432, 1230, 440, W, 430); ctx.lineTo(W, 560); ctx.lineTo(0, 560); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#6f8aa6';
+  ctx.beginPath(); ctx.moveTo(0, 500); ctx.bezierCurveTo(240, 470, 420, 490, 640, 486); ctx.bezierCurveTo(860, 482, 1060, 470, W, 494);
+  ctx.lineTo(W, 560); ctx.lineTo(0, 560); ctx.closePath(); ctx.fill();
+  const g = ctx.createLinearGradient(0, 505, 0, H);
+  g.addColorStop(0, '#efe2c6'); g.addColorStop(1, '#e3d1ae');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(0, 520); ctx.quadraticCurveTo(640, 490, W, 520); ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath(); ctx.fill();
+}
+function drawMoon() {
+  const { x, y } = GATE;
+  glowDisk(x, y, 60, 'rgba(255,240,190,0.35)');
+  ctx.fillStyle = '#fff2c4'; ctx.beginPath(); ctx.arc(x, y, 26, 0, TAU); ctx.arc(x + 11, y - 8, 22, 0, TAU, true); ctx.fill('evenodd');
+  if (gateHeld && state && state.gate > 0) {
+    ctx.beginPath(); ctx.arc(x, y, 38, -Math.PI / 2, -Math.PI / 2 + TAU * clamp01(state.gate / tune.gate_hold_s));
+    ctx.strokeStyle = '#ffd36e'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.stroke();
+  }
+}
+function drawPlay(x, y, t) {
+  const s = 1 + Math.sin(t * 3) * 0.05;
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  ctx.shadowColor = 'rgba(255,190,80,0.8)'; ctx.shadowBlur = 26;
+  RR(ctx, -70, -46, 140, 92, 40); ctx.fillStyle = '#f5b14a'; ctx.fill(); ctx.shadowBlur = 0;
+  ctx.beginPath(); ctx.moveTo(-16, -24); ctx.lineTo(28, 0); ctx.lineTo(-16, 24); ctx.closePath(); ctx.fillStyle = '#fffaf0'; ctx.fill();
+  ctx.restore();
+}
+function drawCreature(L, x, y, sc, t, alpha) {
+  ctx.save(); ctx.globalAlpha = alpha;
+  const breathe = Math.sin(t * 2.1);
+  ctx.translate(x, y); ctx.scale(sc, sc * (1 + breathe * 0.012)); ctx.translate(0, -(0.5 + 0.5 * breathe) * tune.bob_px);
+  // a soft shadow on the ground
+  ctx.save(); ctx.globalAlpha = alpha * 0.25; E(ctx, 0, 6, 210, 18); ctx.fillStyle = '#3b2f45'; ctx.fill(); ctx.restore();
+  CREATURES[KEY_TABLE[L].creature](ctx, t);
+  ctx.restore();
+}
+function drawGlyph(L, x, y, s, alpha, glow) {
+  ctx.save(); ctx.globalAlpha = alpha; ctx.translate(x, y); ctx.scale(s, s);
+  ctx.font = `900 ${LETTER_SIZE}px ${GLYPH_FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.shadowColor = 'rgba(255,200,90,0.95)'; ctx.shadowBlur = 20 + glow * 40;
+  const g = ctx.createLinearGradient(0, -150, 0, 150); g.addColorStop(0, '#fff1b8'); g.addColorStop(0.5, '#ffd36e'); g.addColorStop(1, '#f6a93b');
+  ctx.fillStyle = g; ctx.fillText(L, 0, 0);
+  ctx.shadowBlur = 0; ctx.lineWidth = 6; ctx.strokeStyle = 'rgba(255,250,235,0.85)'; ctx.strokeText(L, 0, 0);
+  ctx.restore();
+}
+function drawReveal() {
+  const cur = state.cur, ph = phases(), t = cur.t, L = cur.letter;
+  // 1. the letter rises from its key and grows; 2. it glows
+  if (t < ph.dustEnd) {
+    const k = keyCenter(L), u = smooth(t / ph.inEnd);
+    const x = lerp(k.x, LETTER_CX, u), y = lerp(k.y, LETTER_CY, u), s = lerp(0.25, 1, u);
+    const glow = t < ph.inEnd ? u : 0.6 + 0.4 * Math.sin((t - ph.inEnd) * 14);
+    const alpha = t < ph.glowEnd ? 1 : 1 - smooth((t - ph.glowEnd) / (ph.dustEnd - ph.glowEnd));
+    if (t >= ph.inEnd) glowDisk(LETTER_CX, LETTER_CY, 230, `rgba(255,214,110,${0.25 * alpha})`);
+    drawGlyph(L, x, y, s, alpha, glow);
+  }
+  // 5. the creature forms, then idles
+  if (t >= ph.flowEnd) {
+    const u = smooth((t - ph.flowEnd) / (ph.formEnd - ph.flowEnd));
+    const pop = 0.92 + 0.08 * u + Math.sin(u * Math.PI) * 0.03;
+    drawCreature(L, ANCHOR_X, ANCHOR_Y, tune.creature_scale * pop, t - ph.flowEnd, u);
+  }
+  // 3-4. stardust: in the letter's outline, then flowing to the creature's shape
+  if (t >= ph.glowEnd && t < ph.formEnd + 0.2) {
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    const flowLen = ph.flowEnd - ph.dustEnd;
+    for (const p of cur.parts) {
+      let x, y, a;
+      if (t < ph.dustEnd) {
+        const u = smooth((t - ph.glowEnd) / (ph.dustEnd - ph.glowEnd));
+        x = p.sx + Math.sin(t * 7 + p.ph) * 1.6 * u; y = p.sy + Math.cos(t * 6 + p.ph) * 1.6 * u; a = u;
+      } else {
+        const v = smooth((t - ph.dustEnd - p.delay * flowLen) / (flowLen * 0.7));
+        const iv = 1 - v;
+        x = iv * iv * p.sx + 2 * iv * v * p.cx + v * v * p.ex; y = iv * iv * p.sy + 2 * iv * v * p.cy + v * v * p.ey;
+        a = t < ph.flowEnd ? 1 : 1 - clamp01((t - ph.flowEnd) / (ph.formEnd - ph.flowEnd + 0.2));
+      }
+      const tw = 0.6 + 0.4 * Math.sin(t * 9 + p.ph);
+      ctx.globalAlpha = a * tw;
+      ctx.fillStyle = p.gold ? '#ffd27a' : '#fff8e8';
+      const s = p.size;
+      if (s > 3.2) star4(x, y, s * 0.55); else ctx.fillRect(x - s / 2, y - s / 2, s, s);
+    }
+    ctx.restore();
+  }
+}
+function drawPrev() {
+  const p = state.prev, u = clamp01(p.fade / 0.45);
+  const ph = phases();
+  if (p.t < ph.flowEnd) return; // it never formed: nothing to fade
+  drawCreature(p.letter, ANCHOR_X, ANCHOR_Y + u * 12, tune.creature_scale * (1 - u * 0.08), p.t - ph.flowEnd, 1 - u);
+}
+function drawQueue() { // letters waiting their turn: small glowing bubbles, top right
+  state.queue.forEach((L, i) => {
+    const x = 1210 - i * 74, y = 58 + Math.sin(state.t * 3 + i) * 4;
+    glowDisk(x, y, 46, 'rgba(255,214,110,0.35)');
+    RR(ctx, x - 28, y - 28, 56, 56, 22); ctx.fillStyle = 'rgba(255,246,222,0.92)'; ctx.fill();
+    ctx.save(); ctx.font = `900 34px ${GLYPH_FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#e09a2e'; ctx.fillText(L, x, y + 2); ctx.restore();
+  });
+}
+function drawKeys() {
+  RR(ctx, KEY_X0 - 22, KEY_Y - 18, W - 2 * (KEY_X0 - 22), KEY_H + 36, 34); ctx.fillStyle = 'rgba(214,190,150,0.55)'; ctx.fill();
+  KEY_ORDER.forEach((L, i) => {
+    const r = keyRect(i), f = keyFlash[L] ? keyFlash[L] / tune.key_flash_s : 0;
+    const hint = !state.firstPress && L === 'D' ? 0.5 + 0.5 * Math.sin(state.t * 4) : 0;
+    const lift = f * 6;
+    ctx.save();
+    RR(ctx, r.x, r.y + 8, r.w, r.h, 26); ctx.fillStyle = '#c9a97c'; ctx.fill();
+    if (f > 0 || hint > 0) { ctx.shadowColor = 'rgba(255,200,80,0.95)'; ctx.shadowBlur = 30 * Math.max(f, hint); }
+    RR(ctx, r.x, r.y - lift + (f > 0 ? 4 : 0), r.w, r.h, 26);
+    const g = ctx.createLinearGradient(0, r.y, 0, r.y + r.h);
+    g.addColorStop(0, f > 0 ? '#fff4c8' : '#fffaf0'); g.addColorStop(1, f > 0 ? '#ffd98a' : '#f4e6cc');
+    ctx.fillStyle = g; ctx.fill(); ctx.shadowBlur = 0;
+    ctx.font = `900 76px ${GLYPH_FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = f > 0 ? '#e0892a' : '#8a5a3a'; ctx.fillText(L, r.x + r.w / 2, r.y + r.h / 2 + 4 - lift + (f > 0 ? 4 : 0));
+    if (state.seen.includes(L)) { ctx.fillStyle = '#f5b14a'; star4(r.x + r.w - 18, r.y + 18 - lift, 4); }
+    ctx.restore();
+    if (hint > 0) { ctx.fillStyle = `rgba(255,236,170,${hint})`; star4(r.x + r.w / 2 + 40, r.y - 10, 5 + hint * 3); }
+  });
+}
+function drawSparks() {
+  ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  for (const s of sparks) { ctx.globalAlpha = 1 - s.age / s.life; ctx.fillStyle = '#ffe9a8'; star4(s.x, s.y, s.size * 0.5); }
+  ctx.restore();
+}
+function drawParade() { // all eight walk across the hills, small, once
+  const p = state.parade, n = KEY_ORDER.length, gap = 150, speed = (W + 200 + n * gap) / tune.parade_s;
+  const fadeIn = clamp01(p.t / 0.6), fadeOut = clamp01((tune.parade_s - p.t) / 0.6);
+  KEY_ORDER.forEach((L, i) => {
+    const x = -100 + p.t * speed - i * gap, step = Math.abs(Math.sin(p.t * 7 + i)) * 5;
+    if (x < -150 || x > W + 150) return;
+    ctx.save(); ctx.globalAlpha = Math.min(fadeIn, fadeOut);
+    ctx.translate(x, 478 - step); ctx.scale(0.26, 0.26);
+    CREATURES[KEY_TABLE[L].creature](ctx, p.t + i);
+    ctx.restore();
+  });
+}
+
+// ---- Grown-up panel: hold the moon (a parent gate stand-in) ------------------------------
+let panelOpen = false;
+const panel = document.getElementById('grownup');
+const PANEL_KEYS = [['volume', 'Volume'], ['hold_s', 'Hold per creature while keys wait (s)'], ['queue_max', 'Keys that may wait'],
+  ['morph_speed', 'Morph speed'], ['particles', 'Stardust specks'], ['roar_volume', 'Creature sound volume'], ['voice_rate', 'Voice speed']];
+function buildPanel() {
+  const box = document.getElementById('sliders');
+  for (const [k, label] of PANEL_KEYS) {
+    const c = CONFIG[k], lab = document.createElement('label');
+    lab.innerHTML = `<span>${label}</span><span id="v_${k}" style="text-align:right">${c.value}</span>`;
+    const inp = document.createElement('input'); inp.type = 'range'; inp.min = c.min; inp.max = c.max; inp.step = c.step; inp.value = c.value;
+    inp.addEventListener('input', () => { c.value = parseFloat(inp.value); document.getElementById('v_' + k).textContent = c.value; dispatchEvent(new Event('tune')); });
+    lab.appendChild(inp); box.appendChild(lab);
+  }
+  const m = document.getElementById('mute');
+  m.onclick = () => { setMuted(!muted); m.textContent = muted ? 'Unmute' : 'Mute'; };
+  document.getElementById('parade').onclick = () => { closePanel(); startParade(); };
+  document.getElementById('clear').onclick = () => { closePanel(); reset(); };
+  document.getElementById('close').onclick = closePanel;
+}
+function openPanel() { panelOpen = true; panel.style.display = 'flex'; down.clear(); hit.clear(); taps.length = 0; }
+function closePanel() { panelOpen = false; panel.style.display = 'none'; }
+buildPanel();
+
+// ---- Loop: fixed step, frame time clamped ---------------------------------------------
+function step() {
+  if (state) {
+    if (gateHeld && !panelOpen) { state.gate = (state.gate || 0) + STEP; if (state.gate >= tune.gate_hold_s) { state.gate = 0; gateHeld = false; openPanel(); } }
+    else state.gate = 0;
+  }
+  if (!panelOpen) scenes[scene].update(STEP);
+  hit.clear(); if (panelOpen) taps.length = 0;
+}
+let last, acc = 0, ALPHA = 1;
+function tick() {
+  const now = clock.now();
+  acc += Math.min(now - last, 0.25); last = now;
+  while (acc >= STEP) { step(); acc -= STEP; }
+  ALPHA = acc / STEP;
+  drawFrame();
+}
+function drawFrame() { scenes[scene].draw(); }
+function frame() { tick(); requestAnimationFrame(frame); }
+function timer() { if (document.visibilityState === 'visible' && clock.now() - last > 0.1) tick(); }
+
+// ---- What a check can read and drive (?manual=1 stops the loop; players never see it) ----
+window.game = {
+  get scene() { return scene; },
+  get state() { return state; },
+  press(code) { hit.add(code); },
+  hold(code, on) { on ? down.add(code) : down.delete(code); },
+  get events() { return events; },
+  step(n = 1, draw = true, alpha = 1) {
+    for (let i = 0; i < n; i++) step();
+    if (draw) { ALPHA = alpha; drawFrame(); }
+  },
+};
+
+reset();
+scene = params.get('scene') || 'title';
+last = clock.now();
+if (params.get('manual') === '1') drawFrame();
+else { requestAnimationFrame(frame); setInterval(timer, 50); }
+</script>
+</body>
+</html>
