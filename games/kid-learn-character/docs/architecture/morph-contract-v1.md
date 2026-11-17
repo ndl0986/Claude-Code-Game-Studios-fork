@@ -1,6 +1,6 @@
 # Morph contract v1 ("morph-v1")
 
-**Status:** Proposed with ADR-0001 (TASK-035, 2026-11-17).
+**Status:** Accepted with ADR-0001 (Luan, 2026-11-18). Written in TASK-035, 2026-11-17.
 **Shared fixture:** `games/kid-learn-character/content/fixtures/morph-contract-v1.json`.
 **Reference implementation:** the TASK-033 spike's `MorphCore` (a throwaway prototype). This document, not that
 code, is the contract.
