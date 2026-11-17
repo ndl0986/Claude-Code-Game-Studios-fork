@@ -233,3 +233,4 @@ test-setup, smoke-check), those checks report NOT ASSESSED by design (ADR-0001).
 - 2026-11-17 — Luan decided D-38: keep com.galaxyandsun.daidatanhhung (both apps; preview adds .preview).
 - 2026-11-17 — **Android QC r13 PASS** on 3183874 (evidence 8a64802): FrameClock 0.837–0.850 s, skin #F1C9A0 everywhere, r12 suite PASS. Parity question: the Android hint hand is a white glove (no skin), while iOS draws it in skin; sent to game-art-content. Next: preview build + phone-install script (D-37).
 - 2026-11-17 — Hint hand: the spec (ASSET-033, look-sheet L72) says skin #F1C9A0 with a cream #FFF6E3 cuff. Android's white glove + red cuff → fix in r14; iOS to confirm its cuff in r10.
+- 2026-11-17 — Android preview FROZEN 73efb30 (on 3183874): package .preview, not debuggable, local key at ~/.config/daidatanhhung/ (Luan keeps it), UNSIGNED badges shown, release gate untouched; phone-install.sh + frametime.sh + README. → game-qc-android short check.
