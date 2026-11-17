@@ -1,0 +1,759 @@
+package com.galaxyandsun.daidatanhhung.core
+
+import com.galaxyandsun.daidatanhhung.core.content.ContentLoader
+import com.galaxyandsun.daidatanhhung.core.content.FightParams
+import com.galaxyandsun.daidatanhhung.core.content.MissionFile
+import com.galaxyandsun.daidatanhhung.core.content.Beat
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonArray
+import kotlin.math.abs
+import kotlin.math.cos
+import kotlin.math.min
+import kotlin.math.sign
+import kotlin.math.sin
+
+/** The four game actions a pad or key produces. */
+enum class Action { LEFT, RIGHT, ATTACK, DEFEND, SPECIAL }
+
+/** One fixed step's input: actions held now, and actions newly pressed this step. */
+class InputFrame {
+    val held = mutableSetOf<Action>()
+    val tapped = mutableSetOf<Action>()
+    fun clearTaps() = tapped.clear()
+}
+
+/** Sounds the simulation asks for; the platform layer plays them (placeholder tones in the slice). */
+enum class Sfx { TAP, DRUM, CLANG, SWOOSH, BONK, CHIME, SOFT }
+
+/**
+ * Phases inside the play screen (mission-flow GDD state table): WALK = walk_to[i], CARD = beat_card[i]
+ * (non-fight beats, before play), PLAY = beat_play[i], END = beat_end[i] (end_pause), CAPTION =
+ * caption[i] (fight beats only, after play).
+ */
+enum class Phase { WALK, CARD, PLAY, END, CAPTION, DIALOGUE }
+
+/** The beat types the slice implements (D-08 B). */
+enum class BeatType(val id: String) { FIGHT("fight"), WALK("walk"), HOLD("hold-meter"), TRAINING("training"), REACH("reach-the-flag"), DIALOGUE("dialogue");
+    /**
+     * The special pad's icon on this beat type (Mission flow Rule 7c, TASK-020 W17 / A3): hold-meter shows a clenched
+     * fist (the hero's hand in the orange moment); every other beat that has the pad (training's finish) the banner.
+     */
+    val specialIcon: SpecialIcon get() = if (this == HOLD) SpecialIcon.FIST else SpecialIcon.BANNER
+    companion object { fun of(id: String) = entries.firstOrNull { it.id == id } }
+}
+
+/** The special pad's glyph (W17). Its label stays `ui.pad.special` until D-34. */
+enum class SpecialIcon { BANNER, FIST }
+
+/** Training's three parts, in order (mission-flow rule 7, F4). */
+enum class TrainingStep { DUMMIES, BLOCKS, SPECIAL, DONE }
+
+/** A straw dummy in a training beat: knocked over by one hit. */
+class Dummy(val x: Double) { var down = false; var t = 0.0 }
+
+/** The prototype's enemy state names, exactly (TASK-007 brief item 5). */
+enum class EnemyState(val id: String) { ENTER("enter"), APPROACH("approach"), WINDUP("windup"), STRIKE("strike"), REST("rest"), HURT("hurt"), FLEE("flee") }
+
+class Hero(var x: Double) {
+    var face = 1
+    /** Swing progress 0..1, or -1 when not attacking. */
+    var atk = -1.0
+    var hitDone = false
+    var cool = 0.0
+    var hurt = 0.0
+    var def = false
+    var walk = false
+}
+
+class Enemy(val id: Int, val kind: String, var x: Double, var face: Int) {
+    var state = EnemyState.ENTER
+    var t = 0.0
+    var hits = 0
+    var kb = 0.0
+    var moving = true
+    /** Rule 7c slice placeholder: the partner stands beside the hero with its staff upright (for the raised fist). */
+    var staffUp = false
+}
+
+class Dropped(val x: Double, val kind: String, val rot: Double) { var life = 4.0 }
+class Particle(var x: Double, var y: Double, var vx: Double, var vy: Double, var life: Double, val color: Long, val r: Double, var rot: Double)
+/** A floating word ("Ối!", "Đỡ được!"): a UI string id, never baked into art. */
+class Pop(val textId: String, val x: Double, var y: Double, var life: Double, val color: Long)
+
+class Tutorial { var moved = false; var hit = false; var blocked = false; var windupSeen = false; var enemySeen = false; var specialTapped = false; var holdPast25 = false }
+
+/** Which control the first-use hand points at. */
+enum class HandHint { NONE, MOVE, ATTACK, DEFEND, SPECIAL_TAP, SPECIAL_HOLD }
+
+/** Palette shared with the renderer for particles and pops (ARGB). */
+object Palette {
+    const val GLOW = 0xFFFFE24AL
+    const val WHITE = 0xFFFFFFFFL
+    const val INDIGO = 0xFF2B4C8CL
+    const val RED = 0xFFD9342BL
+}
+
+/**
+ * One run of a hero's mission screen (mission-flow GDD): walk_to → (beat_card for non-fight beats)
+ * → beat_play → beat_end (end_pause) → caption (fight beats only) → next beat. Fight rules are a
+ * port of the prototype's updatePlay / updateEnemies / heroAttack (index.html @203d73e), in the
+ * agreed frame order; every number is read from [tuning].
+ */
+class MissionRun(
+    val mission: MissionFile,
+    private val tuning: Tuning,
+    private val rng: Mulberry32,
+    private val sfx: (Sfx) -> Unit,
+) {
+    val ground get() = tuning["ground_y"]
+    val hero = Hero(tuning["hero_start_x"])
+    var t = 0.0; private set
+    var cam = 0.0; private set
+    var beat = 0; private set
+    var phase = Phase.WALK; private set
+    /** The camera lock of the current fight or encounter; null while the camera scrolls free. */
+    var lockX: Double? = null; private set
+    /** The box shown in a caption or beat card (one sentence per box). */
+    var captionLine = 0; private set
+    var cardLine = 0; private set
+    private val queue = ArrayDeque<Pair<String, Boolean>>()
+    private var maxActive = 1
+    private var spawnT = 0.0
+    private var endT = 0.0
+    private var nextId = 1
+    val enemies = mutableListOf<Enemy>()
+    val dropped = mutableListOf<Dropped>()
+    val parts = mutableListOf<Particle>()
+    val pops = mutableListOf<Pop>()
+    var stall = 0.0; private set
+    var idle = 0.0; private set
+    val tut = Tutorial()
+    /** Beats whose type this app doesn't build (none today); computed once, never mutated by a getter. */
+    val stubbedBeats: List<Int> = mission.beats.indices.filter { BeatType.of(mission.beats[it].type) == null }
+
+    // ---- Per-beat play state ----
+    /** Hero x when beat_play started (walk, training, reach-the-flag measure from here, F2). */
+    var xStart = 0.0; private set
+    /** hold-meter: total time the special pad was held (F3), never drains. */
+    var heldTotal = 0.0; private set
+    var trainingStep = TrainingStep.DONE; private set
+    val dummies = mutableListOf<Dummy>()
+    var blocksDone = 0; private set
+    var partner: Enemy? = null; private set
+    var bannerRaised = false; private set
+    private var encounterNext = 0
+    /** True while a reach-the-flag encounter holds the camera. */
+    var inEncounter = false; private set
+    /**
+     * Combat Rule 15b: in a training beat (beat_play start to beat_end) the camera follows right but
+     * never past this cap, and the hero never past cap + W − enemy_reach − hero_edge_margin; null otherwise.
+     */
+    var trainCap: Double? = null; private set
+
+    val beats get() = mission.beats
+    val currentBeat: Beat get() = beats[beat.coerceAtMost(beats.size - 1)]
+    val beatType: BeatType get() = typeOf(beat)
+
+    /** All five schema types are built, so the P-02 stub (an unknown type plays as a fight) is only a fallback. */
+    fun typeOf(i: Int): BeatType = BeatType.of(beats[i].type) ?: BeatType.FIGHT
+
+    private fun num(b: Beat, k: String) = (b.params[k] as? JsonPrimitive)?.content?.toDoubleOrNull()
+    private fun bool(b: Beat, k: String) = (b.params[k] as? JsonPrimitive)?.content == "true"
+    fun lengthScreens(i: Int) = num(beats[i], "length_screens") ?: 0.0
+    fun holdSeconds(i: Int) = num(beats[i], "hold_seconds") ?: 1.0
+    fun dummyCount(i: Int) = (num(beats[i], "dummies") ?: 0.0).toInt()
+    fun blockCount(i: Int) = (num(beats[i], "blocks") ?: 0.0).toInt()
+    fun finishSpecial(i: Int) = bool(beats[i], "finish_special")
+    private fun encounters(i: Int): List<Pair<Double, FightParams>> =
+        ((beats[i].params["encounters"] as? JsonArray) ?: JsonArray(emptyList())).map { e ->
+            val o = e as JsonObject
+            (o["at_screen"] as JsonPrimitive).content.toDouble() to ContentLoader.JSON.decodeFromJsonElement(FightParams.serializer(), JsonObject(o - "at_screen"))
+        }
+    fun encounterAt(i: Int) = encounters(i).map { it.first }
+
+    /** The world length a beat's play covers, so the next beat starts after it. */
+    private fun extent(i: Int): Double = when (typeOf(i)) {
+        BeatType.WALK, BeatType.REACH -> lengthScreens(i) * WORLD_W
+        BeatType.TRAINING -> (dummyCount(i) + 1) * tuning["dummy_spacing"]
+        else -> 0.0 // fight, hold-meter, dialogue
+    }
+
+    /**
+     * Where beat i starts: beat_start_x, then each beat starts beat_gap after the end of the one
+     * before (= beat_start_x + i × beat_gap when no beat has a length, as with 4 fights).
+     */
+    fun beatX(i: Int): Double {
+        var x = tuning["beat_start_x"]
+        for (j in 0 until i) x += extent(j) + tuning["beat_gap"]
+        return x
+    }
+    /** The flag of a reach-the-flag beat (or the end of a walk). */
+    val goalX get() = xStart + lengthScreens(beat) * WORLD_W
+
+    fun fightParams(i: Int): FightParams {
+        val b = beats[i]
+        val p = if (b.type == "fight") ContentLoader.fightParams(b) else null
+        return p ?: FightParams(listOf("spear"), 1, emptyList())
+    }
+
+    private fun hp(kind: String) = when (kind) {
+        "shield" -> tuning.int("hp_shield"); "leader" -> tuning.int("hp_leader"); else -> tuning.int("hp_spear")
+    }
+    private fun speed(kind: String) = tuning["enemy_speed"] * (if (kind == "leader") tuning["leader_speed_mul"] else 1.0)
+
+    /** Reaching beat i's start: fights go straight to play, other types show their card first. */
+    private fun arriveAtBeat(i: Int) {
+        when (typeOf(i)) {
+            BeatType.FIGHT -> startPlay(i)
+            BeatType.DIALOGUE -> { phase = Phase.DIALOGUE; lineIndex = 0; asksDone = 0; stall = 0.0; hero.walk = false } // no card
+            else -> { phase = Phase.CARD; cardLine = 0 }
+        }
+    }
+
+    // ---- Dialogue beat (mission-flow Rule 7d, schema 1.4): phase dialogue_line, lineIndex (0-based), asksDone ----
+    var lineIndex = 0; private set
+    var asksDone = 0; private set
+    val dialogue get() = ContentLoader.dialogueParams(currentBeat)
+    /** The button the current line shows: "ask" or "tiep" (at_line ≤ L < at_line + taps, L 1-based). */
+    val dialogueButton: String get() = dialogue?.buttonOn(lineIndex + 1) ?: "tiep"
+
+    /** Tiếp on a dialogue line (refused while the line shows the ask button). */
+    fun dialogueNext(): Boolean {
+        if (phase != Phase.DIALOGUE || dialogueButton != "tiep") return false
+        return advanceLine()
+    }
+
+    /** The ask button (the child's action in the scene): shows the next line. */
+    fun dialogueAsk(): Boolean {
+        if (phase != Phase.DIALOGUE || dialogueButton != "ask") return false
+        asksDone++; return advanceLine()
+    }
+
+    private fun advanceLine(): Boolean {
+        stall = 0.0; idle = 0.0
+        val n = dialogue?.lines?.size ?: 0
+        if (lineIndex < n - 1) lineIndex++ else { phase = Phase.END; endT = 0.0 }
+        return true
+    }
+
+    /** The card's boxes: the scene lines, then the goal (title is the card's header). */
+    fun cardBoxes() = currentBeat.scene + listOfNotNull(currentBeat.goal)
+
+    fun startBeat(i: Int) = startPlay(i)
+
+    private fun startPlay(i: Int) {
+        phase = Phase.PLAY; stall = 0.0; idle = 0.0; endT = 0.0
+        xStart = hero.x
+        when (typeOf(i)) {
+            BeatType.FIGHT -> {
+                val p = fightParams(i)
+                startGroup(beatX(i) - tuning["lock_offset"], p)
+            }
+            BeatType.WALK -> Unit
+            BeatType.HOLD -> heldTotal = 0.0
+            BeatType.TRAINING -> {
+                trainCap = maxOf(cam, xStart - tuning["hero_edge_margin"]) // fixed here; the camera stops following at it
+                dummies.clear(); blocksDone = 0; partner = null; bannerRaised = false
+                repeat(dummyCount(i)) { k -> dummies += Dummy(xStart + (k + 1) * tuning["dummy_spacing"]) }
+                trainingStep = if (dummies.isNotEmpty()) TrainingStep.DUMMIES else nextTrainingStep(TrainingStep.DUMMIES, i)
+            }
+            BeatType.REACH -> encounterNext = 0
+            BeatType.DIALOGUE -> { phase = Phase.DIALOGUE; lineIndex = 0; asksDone = 0 }
+        }
+    }
+
+    private fun nextTrainingStep(after: TrainingStep, i: Int): TrainingStep = when (after) {
+        TrainingStep.DUMMIES -> if (blockCount(i) > 0) TrainingStep.BLOCKS else nextTrainingStep(TrainingStep.BLOCKS, i)
+        TrainingStep.BLOCKS -> if (finishSpecial(i)) TrainingStep.SPECIAL else TrainingStep.DONE
+        else -> TrainingStep.DONE
+    }
+
+    private fun advanceTraining() {
+        stall = 0.0
+        trainingStep = nextTrainingStep(trainingStep, beat)
+        if (trainingStep == TrainingStep.BLOCKS) spawnPartner()
+        if (trainingStep != TrainingStep.BLOCKS) partner = null
+    }
+
+    private fun spawnPartner() {
+        partner = Enemy(0, "partner", hero.x + hero.face * (tuning["enemy_reach"] - tuning["stand_gap"]), -hero.face)
+            .also { it.state = EnemyState.REST; it.moving = false; it.t = tuning["enemy_rest"] - tuning["approach_min_time"] }
+    }
+
+    /** A fight group: the fight beat itself, or one reach-the-flag encounter. Locks the camera. */
+    private fun startGroup(lock: Double, p: FightParams) {
+        lockX = lock; cam = lock
+        queue.clear(); p.enemies.forEachIndexed { j, k -> queue.addLast(k to (j in p.fromLeft)) }
+        maxActive = p.maxActive
+        spawnT = tuning["first_spawn_delay"]; stall = 0.0
+    }
+
+    private fun spawn(kind: String, left: Boolean) {
+        val lock = lockX ?: cam
+        val x = if (left) lock - tuning["spawn_offset"] else lock + WORLD_W + tuning["spawn_offset"]
+        enemies += Enemy(nextId++, kind, x, if (left) 1 else -1)
+        tut.enemySeen = true
+    }
+
+    private fun pop(id: String, x: Double, y: Double, color: Long) {
+        pops += Pop(id, x.coerceIn(cam + 90, cam + WORLD_W - 90), y, 0.9, color)
+    }
+
+    private fun burst(x: Double, y: Double, n: Int, color: Long) {
+        repeat(n) {
+            val a = rng.next() * Math.PI * 2; val v = 160 + rng.next() * 260
+            parts += Particle(x, y, cos(a) * v, sin(a) * v - 120, 0.5 + rng.next() * 0.4, color, 8 + rng.next() * 8, rng.next() * 6)
+        }
+    }
+
+    private fun side(e: Enemy): Int = (e.x - hero.x).sign.toInt().let { if (it == 0) 1 else it }
+
+    /** Resolves a strike at the hero: blocked if defend is held at this instant, else a push-back. */
+    private fun resolveStrike(e: Enemy, side: Int, dist: Double): Boolean {
+        val h = hero
+        if (dist > tuning["enemy_reach"] + tuning["strike_reach_extra"]) return false
+        return if (h.def) {
+            e.kb = side * tuning["block_knock"]; sfx(Sfx.CLANG)
+            burst((e.x + h.x) / 2, ground - 140, 6, Palette.WHITE)
+            pop("ui.play.blocked", h.x, ground - 300, Palette.INDIGO); tut.blocked = true; true
+        } else {
+            h.x -= side * tuning["hero_pushback"]; h.hurt = tuning["hurt_time"]; sfx(Sfx.BONK)
+            pop("ui.play.oof", h.x, ground - 300, Palette.RED); false
+        }
+    }
+
+    private fun updateEnemies(dt: Double) {
+        val h = hero
+        for (e in enemies) {
+            e.t += dt
+            if (e.kb != 0.0) { val m = e.kb * min(1.0, dt / tuning["kb_decay"]); e.x += m; e.kb -= m; if (abs(e.kb) < 2) e.kb = 0.0 }
+            val side = side(e); val dist = abs(e.x - h.x)
+            if (e.state != EnemyState.FLEE) e.face = -side
+            // Only the nearest enemy on each side may strike; the others wait a little further back.
+            // Raw sign, as the prototype's Math.sign(o.x − h.x) === side: an enemy exactly at the hero is on no side.
+            val sameSide = enemies.filter { it.state != EnemyState.FLEE && (it.x - h.x).sign.toInt() == side }.sortedBy { abs(it.x - h.x) }
+            val rank = sameSide.indexOf(e)
+            val stand = tuning["enemy_reach"] - tuning["stand_gap"] + maxOf(0, rank) * tuning["queue_spacing"]
+            when (e.state) {
+                EnemyState.ENTER, EnemyState.APPROACH -> {
+                    val target = h.x + side * stand; val dx = target - e.x
+                    e.moving = abs(dx) > 6
+                    val far = tuning["enter_to_approach_dist"]
+                    if (e.moving) e.x += dx.sign * min(abs(dx), (if (e.state == EnemyState.ENTER || abs(dx) > far) tuning["enter_speed"] else speed(e.kind)) * dt)
+                    if (e.state == EnemyState.ENTER && abs(dx) < far) { e.state = EnemyState.APPROACH; e.t = 0.0 }
+                    if (e.state == EnemyState.APPROACH && rank == 0 && dist <= tuning["enemy_reach"] + tuning["windup_reach_extra"] &&
+                        e.t > tuning["approach_min_time"] && enemies.none { it !== e && (it.state == EnemyState.WINDUP || it.state == EnemyState.STRIKE) }) {
+                        e.state = EnemyState.WINDUP; e.t = 0.0; tut.windupSeen = true
+                    }
+                }
+                EnemyState.WINDUP -> if (e.t >= windupTime(e.kind)) { e.state = EnemyState.STRIKE; e.t = 0.0; resolveStrike(e, side, dist) }
+                EnemyState.STRIKE -> if (e.t >= tuning["strike_time"]) { e.state = EnemyState.REST; e.t = 0.0 }
+                EnemyState.REST -> {
+                    val dx = h.x + side * stand - e.x
+                    if (abs(dx) > 6) e.x += dx.sign * min(abs(dx), speed(e.kind) * tuning["rest_speed_mul"] * dt)
+                    if (e.t >= tuning["enemy_rest"]) { e.state = EnemyState.APPROACH; e.t = tuning["approach_min_time"] }
+                }
+                EnemyState.HURT -> if (e.t >= tuning["hurt_recover"]) { e.state = EnemyState.APPROACH; e.t = 0.0 }
+                EnemyState.FLEE -> e.x += e.face * tuning["flee_speed"] * dt
+            }
+        }
+        val margin = tuning["flee_remove_margin"]; val lock = lockX ?: cam
+        enemies.removeAll { it.state == EnemyState.FLEE && (it.x < lock - margin || it.x > lock + WORLD_W + margin) }
+    }
+
+    /** Training's friendly partner: practice strikes only, never hit by the hero (F4). */
+    private fun updatePartner(dt: Double) {
+        val p = partner ?: return
+        val h = hero
+        p.t += dt
+        if (p.kb != 0.0) { val m = p.kb * min(1.0, dt / tuning["kb_decay"]); p.x += m; p.kb -= m; if (abs(p.kb) < 2) p.kb = 0.0 }
+        val side = side(p); p.face = -side
+        when (p.state) {
+            EnemyState.REST -> if (p.t >= tuning["enemy_rest"]) {
+                p.x = h.x + side * (tuning["enemy_reach"] - tuning["stand_gap"]) // steps back in front of the hero
+                p.state = EnemyState.WINDUP; p.t = 0.0; tut.windupSeen = true
+            }
+            EnemyState.WINDUP -> if (p.t >= tuning["telegraph"]) {
+                p.state = EnemyState.STRIKE; p.t = 0.0
+                if (resolveStrike(p, side, abs(p.x - h.x))) { blocksDone++; if (blocksDone >= blockCount(beat)) advanceTraining() }
+            }
+            EnemyState.STRIKE -> if (p.t >= tuning["strike_time"]) { p.state = EnemyState.REST; p.t = 0.0 }
+            else -> { p.state = EnemyState.REST; p.t = 0.0 }
+        }
+    }
+
+    /** The windup (telegraph) length: 1.1 s, the leader's × leader_telegraph_mul. */
+    fun windupTime(kind: String) = tuning["telegraph"] * (if (kind == "leader") tuning["leader_telegraph_mul"] else 1.0)
+
+    private fun heroAttack() {
+        val h = hero
+        sfx(Sfx.SWOOSH)
+        for (e in enemies) {
+            if (e.state == EnemyState.FLEE) continue
+            val dx = e.x - h.x
+            if ((dx.sign.toInt() == h.face && abs(dx) <= tuning["attack_range"]) || abs(dx) < tuning["attack_close_range"]) {
+                e.hits++
+                val dir = (if (dx != 0.0) dx.sign else h.face.toDouble())
+                e.kb = dir * tuning["knockback"] * (if (e.kind == "leader") tuning["leader_knock_mul"] else 1.0)
+                burst(e.x - (if (dx != 0.0) dx.sign else 1.0) * 30, ground - 160, 8, Palette.GLOW); sfx(Sfx.DRUM)
+                stall = 0.0; tut.hit = true
+                if (e.hits >= hp(e.kind)) {
+                    e.state = EnemyState.FLEE; e.face = dir.toInt(); e.t = 0.0
+                    dropped += Dropped(e.x, e.kind, (rng.next() - 0.5) * 0.3)
+                } else { e.state = EnemyState.HURT; e.t = 0.0 }
+            }
+        }
+        if (phase == Phase.PLAY && beatType == BeatType.TRAINING && trainingStep == TrainingStep.DUMMIES) {
+            for (d in dummies) {
+                if (d.down) continue
+                val dx = d.x - h.x
+                if ((dx.sign.toInt() == h.face && abs(dx) <= tuning["attack_range"]) || abs(dx) < tuning["attack_close_range"]) {
+                    d.down = true; tut.hit = true; stall = 0.0; sfx(Sfx.DRUM); burst(d.x, ground - 160, 8, Palette.GLOW)
+                }
+            }
+            if (dummies.all { it.down }) advanceTraining()
+        }
+    }
+
+    /** The buttons the HUD shows now (mission-flow rule 4): the beat's buttons in play, move while walking. */
+    fun visibleButtons(): Set<String> = when (phase) {
+        Phase.WALK -> setOf("move")
+        Phase.END -> if (finishHolding) emptySet() // Rule 7c: every pad hides at the Cờ tap
+            else if (beatType == BeatType.TRAINING) currentBeat.buttons.toSet() intersect trainingPads(trainingStep) else currentBeat.buttons.toSet()
+        Phase.PLAY -> if (beatType == BeatType.TRAINING) currentBeat.buttons.toSet() intersect trainingPads(trainingStep) else currentBeat.buttons.toSet()
+        else -> emptySet()
+    }
+
+    /**
+     * Mission flow Rule 7c (TASK-020 W12): training shows only the pads its current step uses, so no
+     * pad on screen does nothing; derived from the step, never read from data. A pad appears at the
+     * start of the step that first uses it.
+     */
+    private fun trainingPads(step: TrainingStep): Set<String> = when (step) {
+        TrainingStep.DUMMIES -> setOf("move", "attack")
+        TrainingStep.BLOCKS -> setOf("move", "attack", "defend")
+        TrainingStep.SPECIAL, TrainingStep.DONE -> setOf("move", "attack", "defend", "special")
+    }
+
+    private fun allowed(a: Action, vis: Set<String>) = when (a) {
+        Action.LEFT, Action.RIGHT -> "move" in vis
+        Action.ATTACK -> "attack" in vis
+        Action.DEFEND -> "defend" in vis
+        Action.SPECIAL -> "special" in vis
+    }
+
+    /** One fixed step of the play screen (the agreed frame order). */
+    fun update(dt: Double, input: InputFrame) {
+        val h = hero
+        val vis = visibleButtons()
+        val held = input.held.filter { allowed(it, vis) }.toSet()
+        val tapped = input.tapped.filter { allowed(it, vis) }.toSet()
+        val canAct = phase == Phase.WALK || phase == Phase.PLAY || phase == Phase.END
+        t += dt
+        h.def = canAct && Action.DEFEND in held
+        h.cool = maxOf(0.0, h.cool - dt); h.hurt = maxOf(0.0, h.hurt - dt)
+        if (h.atk >= 0) {
+            h.atk += dt / tuning["attack_time"]
+            if (h.atk >= tuning["attack_hit_at"] && !h.hitDone) { heroAttack(); h.hitDone = true }
+            if (h.atk >= 1) { h.atk = -1.0; h.cool = tuning["attack_cooldown"] }
+        }
+        if (canAct && !h.def && h.atk < 0 && h.cool <= 0 && Action.ATTACK in tapped) {
+            h.atk = 0.0; h.hitDone = false
+            // G2 rule 2 (combat Rule 15): the swing auto-faces the nearest non-fleeing enemy (a tie keeps the facing)
+            // Only enemies count (never dummies or the training partner). A tie between sides, or an enemy at
+            // exactly hero.x, keeps the current facing (parity with iOS).
+            val live = enemies.filter { it.state != EnemyState.FLEE }
+            val best = live.minOfOrNull { abs(it.x - h.x) }
+            if (best != null) {
+                val sides = live.filter { abs(it.x - h.x) == best }.map { (it.x - h.x).sign.toInt() }.toSet()
+                if (sides.size == 1 && 0 !in sides) h.face = sides.first()
+            }
+        }
+        var mv = 0
+        if (canAct && !h.def) { if (Action.LEFT in held) mv -= 1; if (Action.RIGHT in held) mv += 1 }
+        h.walk = mv != 0
+        if (mv != 0) {
+            if (h.atk < 0) h.face = mv // G2 rule 2b: during a swing, moving doesn't change facing
+            h.x += mv * tuning["hero_speed"] * dt * (if (h.atk >= 0) tuning["attack_move_mul"] else 1.0)
+            if (mv > 0) tut.moved = true; idle = 0.0
+        } else idle += dt
+        // Camera: locked during a fight or encounter (and the fight's caption), else it follows right.
+        val edge = tuning["hero_edge_margin"]
+        val lock = lockX
+        if (lock != null) {
+            val m = edge + tuning["enemy_reach"] // G2 rule 1: the fight zone keeps an enemy in front always on screen
+            h.x = h.x.coerceIn(lock + m, lock + WORLD_W - m); cam = lock
+        }
+        else {
+            val tc = trainCap
+            if (tc != null) h.x = minOf(h.x, tc + WORLD_W - tuning["enemy_reach"] - edge) // Rule 15b: stopped, never moved
+            h.x = maxOf(cam + edge, h.x)
+            val follow = h.x - tuning["camera_follow_offset"]
+            cam = maxOf(cam, if (tc != null) minOf(follow, tc) else follow) // follows, never left, never past the cap
+        }
+        if (phase == Phase.WALK && beat < beats.size && h.x >= beatX(beat)) arriveAtBeat(beat)
+        if (phase == Phase.DIALOGUE) { if (dialogueButton == "ask") stall += dt }
+        else if (phase == Phase.PLAY) playStep(dt, held, tapped)
+        else if (phase == Phase.END) {
+            updateEnemies(dt)
+            endT += dt
+            if (finishHolding) placeFinishPartner()
+            if (endT >= endLength) endBeat()
+        } else updateEnemies(dt)
+        for (p in parts) { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 900 * dt; p.life -= dt; p.rot += dt * 6 }
+        parts.removeAll { it.life <= 0 }
+        for (p in pops) { p.y -= 60 * dt; p.life -= dt }
+        pops.removeAll { it.life <= 0 }
+        for (d in dropped) d.life -= dt * 0.25
+        dropped.removeAll { it.life <= 0 }
+        for (d in dummies) if (d.down) d.t += dt
+    }
+
+    private fun groupStep(dt: Double): Boolean {
+        stall += dt; spawnT -= dt
+        val active = enemies.count { it.state != EnemyState.FLEE }
+        if (queue.isNotEmpty() && active < maxActive && spawnT <= 0) {
+            val (k, left) = queue.removeFirst(); spawn(k, left); spawnT = tuning["spawn_gap"]
+        }
+        updateEnemies(dt)
+        return queue.isEmpty() && enemies.isEmpty()
+    }
+
+    private fun playStep(dt: Double, held: Set<Action>, tapped: Set<Action>) {
+        val goal = when (beatType) {
+            BeatType.DIALOGUE -> false // advanced by its lines (phase DIALOGUE), never by play
+            BeatType.FIGHT -> groupStep(dt)
+            BeatType.WALK -> { updateEnemies(dt); hero.x >= goalX }
+            BeatType.HOLD -> {
+                updateEnemies(dt)
+                if (Action.SPECIAL in held) {
+                    heldTotal = min(holdSeconds(beat), heldTotal + dt); stall = 0.0
+                    if (heldTotal / holdSeconds(beat) > 0.25) tut.holdPast25 = true
+                } else stall += dt
+                heldTotal >= holdSeconds(beat)
+            }
+            BeatType.TRAINING -> {
+                stall += dt
+                updatePartner(dt)
+                if (Action.SPECIAL in tapped) {
+                    tut.specialTapped = true
+                    if (trainingStep == TrainingStep.SPECIAL) { bannerRaised = true; sfx(Sfx.CHIME); advanceTraining() }
+                }
+                trainingStep == TrainingStep.DONE
+            }
+            BeatType.REACH -> {
+                val at = encounterAt(beat)
+                val trigger = if (encounterNext < at.size) xStart + at[encounterNext] * WORLD_W else Double.MAX_VALUE
+                if (!inEncounter && hero.x >= trigger) { // parity note (a): lockX = trigger x − lock_offset; fights this same frame
+                    inEncounter = true
+                    startGroup(trigger - tuning["lock_offset"], encounters(beat)[encounterNext].second)
+                }
+                if (inEncounter) {
+                    if (groupStep(dt)) { inEncounter = false; lockX = null; encounterNext++; stall = 0.0; idle = 0.0 }
+                } else updateEnemies(dt)
+                !inEncounter && hero.x >= goalX
+            }
+        }
+        if (goal) { phase = Phase.END; endT = 0.0; if (finishHolding) startFinishHold() }
+    }
+
+    // ---- Mission flow Rule 7c (r10): the banner moment after the training finish ----
+    /** The raise (ASSET-108, 8 × 83 ms; in the slice the banner's rise from y + 40), s. */
+    val raiseTime = 0.67
+    /** True in beat_end of a training beat with `finish_special`: the end lasts `finish_hold`, not `end_pause`. */
+    val finishHolding get() = phase == Phase.END && beatType == BeatType.TRAINING && finishSpecial(beat)
+    private val endLength get() = if (finishHolding) tuning["finish_hold"] else tuning["end_pause"]
+    /** 0 → 1 over the raise (the renderer eases it); 1 while the banner is up. */
+    val raiseProgress get() = if (finishHolding) min(1.0, endT / raiseTime) else 1.0
+    private var partnerFrom = 0.0; private var partnerTo = 0.0
+
+    /** The partner (re-entering: Android sends it off after the blocks step) walks in beside the hero over the raise. */
+    private var partnerFace = 1
+    private var partnerFades = false
+    /** Render only: the finish partner's opacity (fades in over 0.2 s when it starts on screen; Rule 7c amend). */
+    val partnerAlpha get() = if (finishHolding && partnerFades) min(1.0, endT / CueLayout.FADE_IN) else 1.0
+
+    /**
+     * Rule 7c (r11, QC r10 B8): the partner re-enters from just off the nearer screen edge on its side and stands on
+     * the hero's front side, or beyond the banner when that won't fit (CueLayout.finishPartner), facing the banner.
+     */
+    private fun startFinishHold() {
+        val fp = CueLayout.finishPartner(hero.x, hero.face, cam, currentBeat.usesBanner, tuning["enemy_reach"])
+        partnerFrom = fp.spawn; partnerTo = fp.stand; partnerFace = fp.face; partnerFades = fp.fadeIn
+        partner = Enemy(0, "partner", partnerFrom, partnerFace).also { it.state = EnemyState.REST; it.moving = true; it.staffUp = true }
+    }
+
+    private fun placeFinishPartner() {
+        val p = partner ?: return
+        val k = raiseProgress // Rule 7c amend: linear, constant speed (the banner's rise stays eased)
+        p.x = partnerFrom + (partnerTo - partnerFrom) * k; p.moving = k < 1
+        p.face = partnerFace // facing the banner
+    }
+
+    /** beat_end: a fight goes to its caption; any other beat cheers and goes on (no caption). */
+    private fun endBeat() {
+        if (beatType == BeatType.FIGHT) { phase = Phase.CAPTION; captionLine = 0; return }
+        // Mission flow Rule 2 / AC30: a beat with `cheer: false` ends on a neutral page turn, no cheer burst or pose.
+        if (currentBeat.cheer) { sfx(Sfx.CHIME); cheerT = t } else sfx(Sfx.SOFT) // the burst is drawn by the app; the core RNG is used only by fights and dummies (iOS parity)
+        lockX = null; partner = null; trainCap = null
+        // r12 (QC r11): the camera catches up in this same update, so the next beat's theme and the new view appear
+        // on the same frame (a cut), never one frame of the new sky at the old view
+        cam = maxOf(cam, hero.x - tuning["camera_follow_offset"])
+        if (beatType == BeatType.TRAINING) dummies.clear() // Rule 7c (r11, QC r10): no straw dummies on the next beat's sky
+        beat++
+        phase = Phase.WALK
+        missionDone = beat >= beats.size
+    }
+
+    /** Mission time of the last non-fight beat's cheer (the renderer draws a star burst from it). */
+    var cheerT = -1.0; private set
+
+    /** True once the last beat has ended (the game goes to the ending). */
+    var missionDone = false; private set
+
+    /** A beat card's Next: the next box, then play. */
+    fun cardNext(): Boolean {
+        if (phase != Phase.CARD) return false
+        idle = 0.0; stall = 0.0
+        if (cardLine < cardBoxes().size - 1) { cardLine++; return true }
+        startPlay(beat); return true
+    }
+
+    /** Skip the rest of the current story section (D-07): a card goes to play, a caption ends. */
+    fun skipSection(): Boolean = when (phase) {
+        Phase.CARD -> { startPlay(beat); idle = 0.0; stall = 0.0; true }
+        Phase.DIALOGUE -> { phase = Phase.END; endT = 0.0; true } // the whole exchange is the story section
+        Phase.CAPTION -> { captionLine = currentBeat.scene.size - 1; captionNext(); true }
+        else -> false
+    }
+
+    /**
+     * The caption's Next: the next scene line of this beat, else the next beat. Returns true when
+     * the last beat's caption closes (the mission goes to its ending). The 5 s hints count from here.
+     */
+    fun captionNext(): Boolean {
+        if (phase != Phase.CAPTION) return false
+        idle = 0.0; stall = 0.0
+        if (captionLine < currentBeat.scene.size - 1) { captionLine++; return false }
+        lockX = null
+        beat++
+        if (beat >= beats.size) { missionDone = true; return true }
+        phase = Phase.WALK
+        return false
+    }
+
+    /** Resuming from pause (Hints rule 5, combat AC19): hint timers reset; a windup restarts its telegraph. */
+    fun onResume() {
+        stall = 0.0; idle = 0.0
+        // Rule 7c (r11): every resume in the hold restarts it from the raise's last frame (a full finish_hold − raise left);
+        // the hold still ends once play runs that long without a pause.
+        if (finishHolding) { endT = raiseTime; placeFinishPartner() }
+        for (e in enemies) if (e.state == EnemyState.WINDUP) e.t = 0.0
+        partner?.let { if (it.state == EnemyState.WINDUP) it.t = 0.0 }
+    }
+
+    fun resetHintTimers() = onResume()
+
+    // ---- Hints (Hints & onboarding GDD; strictly > hint_delay) ----
+    val stalled get() = phase == Phase.PLAY && stall > tuning["hint_delay"] && (beatType == BeatType.FIGHT || inEncounter || beatType == BeatType.TRAINING || beatType == BeatType.HOLD)
+    val pulseRight get() = (!tut.moved && beat == 0 && phase == Phase.WALK) ||
+        ((phase == Phase.WALK || (phase == Phase.PLAY && (beatType == BeatType.WALK || (beatType == BeatType.REACH && !inEncounter)))) && idle > tuning["hint_delay"])
+    val pulseAttack get() = stalled && (beatType == BeatType.FIGHT || inEncounter || (beatType == BeatType.TRAINING && trainingStep == TrainingStep.DUMMIES))
+    val pulseDefend get() = stalled && beatType == BeatType.TRAINING && trainingStep == TrainingStep.BLOCKS
+    /** Hints: the hand on the ask button after hint_delay without an ask tap (mission-flow 7d). */
+    val askHint get() = phase == Phase.DIALOGUE && dialogueButton == "ask" && stall > tuning["hint_delay"]
+    val pulseSpecial get() = stalled && ((beatType == BeatType.TRAINING && trainingStep == TrainingStep.SPECIAL) || beatType == BeatType.HOLD)
+    val hand: HandHint get() = when {
+        phase != Phase.WALK && phase != Phase.PLAY -> HandHint.NONE
+        !tut.moved && beat == 0 && phase == Phase.WALK -> HandHint.MOVE
+        phase == Phase.PLAY && (tut.enemySeen || (beatType == BeatType.TRAINING && trainingStep == TrainingStep.DUMMIES)) && !tut.hit -> HandHint.ATTACK
+        tut.windupSeen && !tut.blocked && (enemies.any { it.state == EnemyState.WINDUP } || partner?.state == EnemyState.WINDUP) -> HandHint.DEFEND
+        phase == Phase.PLAY && beatType == BeatType.TRAINING && trainingStep == TrainingStep.SPECIAL && !tut.specialTapped -> HandHint.SPECIAL_TAP
+        phase == Phase.PLAY && beatType == BeatType.HOLD && (!tut.holdPast25 || stall > tuning["hint_delay"]) -> HandHint.SPECIAL_HOLD
+        else -> HandHint.NONE
+    }
+    /** Hints GDD: on reach-the-flag's clear path, an arrow over the flag when it's on screen and the child idles. */
+    val flagArrow: Boolean get() = phase == Phase.PLAY && beatType == BeatType.REACH && !inEncounter &&
+        idle > tuning["hint_delay"] && goalX - cam < WORLD_W
+
+    /** The stall arrow: the nearest enemy in a fight, the next dummy in training. */
+    val stallTargetX: Double? get() = if (!stalled) null else when {
+        beatType == BeatType.TRAINING && trainingStep == TrainingStep.DUMMIES -> dummies.firstOrNull { !it.down }?.x
+        else -> enemies.filter { it.state != EnemyState.FLEE }.minByOrNull { abs(it.x - hero.x) }?.x
+    }
+    val stallTarget: Enemy? get() = if (!stalled) null else enemies.filter { it.state != EnemyState.FLEE }.minByOrNull { abs(it.x - hero.x) }
+
+    // ---- Debug jumps (screenshots; players never see them) ----
+    /** Debug (r11 evidence, AC33 case d): the hero at a screen x, facing a way, the camera unchanged. */
+    fun debugHeroScreen(screenX: Double, face: Int) { hero.x = cam + screenX; hero.face = face }
+    fun debugStartBeat(i: Int, telegraph: Boolean, caption: Boolean, card: Boolean = false) {
+        beat = i.coerceIn(0, beats.size - 1)
+        tut.moved = true; tut.hit = true; tut.blocked = true; tut.windupSeen = true; tut.enemySeen = true
+        hero.x = beatX(beat) + 10; cam = maxOf(0.0, hero.x - tuning["camera_follow_offset"])
+        if (typeOf(beat) == BeatType.DIALOGUE) { arriveAtBeat(beat); return }
+        if (card && typeOf(beat) != BeatType.FIGHT) { phase = Phase.CARD; cardLine = 0; return }
+        startPlay(beat)
+        if (telegraph && typeOf(beat) == BeatType.FIGHT) {
+            tut.blocked = false
+            val kinds = fightParams(beat).enemies
+            if (queue.isNotEmpty()) queue.removeFirst()
+            enemies += Enemy(99, kinds[0], hero.x + tuning["enemy_reach"], -1).also { it.state = EnemyState.WINDUP; it.moving = false }
+            spawnT = 99.0
+        }
+        if (caption && typeOf(beat) == BeatType.FIGHT) { queue.clear(); phase = Phase.CAPTION; captionLine = 0 }
+    }
+
+    /** Debug: the training teach hints as on a first play (the attack hand at the dummies, QC r3 B3b). */
+    fun debugTeach() { tut.hit = false; tut.specialTapped = false }
+
+    /** Debug: jump a training beat to its blocks or special step, or a hold to [meter] full. */
+    fun debugTraining(step: String, meter: Double = 0.0) {
+        tut.blocked = false; tut.specialTapped = false
+        if (beatType == BeatType.HOLD) { heldTotal = holdSeconds(beat) * meter; tut.holdPast25 = meter > 0.25; return }
+        if (beatType != BeatType.TRAINING) return
+        dummies.forEach { it.down = true; it.t = 1.0 }
+        trainingStep = TrainingStep.DUMMIES; advanceTraining()
+        if (step == "special") { blocksDone = blockCount(beat); trainingStep = TrainingStep.BLOCKS; advanceTraining() }
+        else partner?.let { it.state = EnemyState.WINDUP; it.t = 0.0; tut.windupSeen = true }
+    }
+
+    /** Debug: show dialogue line [line1] (1-based); asks before it count as done; [hint] puts the ask hint up. */
+    fun debugDialogue(line1: Int, hint: Boolean) {
+        if (phase != Phase.DIALOGUE) return
+        val d = dialogue ?: return
+        lineIndex = (line1 - 1).coerceIn(0, d.lines.size - 1)
+        asksDone = (1..lineIndex).count { d.buttonOn(it) == "ask" }
+        stall = if (hint) tuning["hint_delay"] + 0.1 else 0.0
+    }
+
+    /** Debug: walk into reach-the-flag's first encounter. */
+    fun debugEncounter() {
+        if (beatType != BeatType.REACH) return
+        hero.x = xStart + encounterAt(beat).first() * WORLD_W; cam = maxOf(cam, hero.x - tuning["camera_follow_offset"])
+    }
+
+    /** Debug (screenshots): reach-the-flag past every encounter, the hero 600 px before the flag, so the flag is on screen. */
+    fun debugNearFlag() {
+        if (beatType != BeatType.REACH) return
+        encounterNext = encounters(beat).size; inEncounter = false; enemies.clear()
+        hero.x = goalX - 600; cam = maxOf(0.0, hero.x - tuning["camera_follow_offset"])
+    }
+
+    /** Debug (QC: measure the leader's 1.32 s): the encounter with a leader, the leader already in windup. */
+    fun debugLeaderWindup() {
+        if (beatType != BeatType.REACH) return
+        val all = encounters(beat); val i = all.indexOfFirst { "leader" in it.second.enemies }.takeIf { it >= 0 } ?: return
+        encounterNext = i; inEncounter = true
+        val trigger = xStart + all[i].first * WORLD_W
+        hero.x = trigger; startGroup(trigger - tuning["lock_offset"], all[i].second)
+        queue.clear(); tut.windupSeen = true; tut.blocked = false
+        enemies += Enemy(98, "leader", hero.x + tuning["enemy_reach"], -1).also { it.state = EnemyState.WINDUP; it.moving = false }
+        spawnT = 99.0
+    }
+
+    companion object {
+        const val WORLD_W = 1280.0
+        const val WORLD_H = 720.0
+    }
+}

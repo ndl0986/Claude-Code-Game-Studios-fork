@@ -1,0 +1,347 @@
+package com.galaxyandsun.daidatanhhung
+
+import com.galaxyandsun.daidatanhhung.core.Dropped
+import com.galaxyandsun.daidatanhhung.core.Enemy
+import com.galaxyandsun.daidatanhhung.core.EnemyState
+import kotlin.math.abs
+import kotlin.math.cos
+import kotlin.math.sin
+
+/**
+ * Placeholder figures drawn in code, ported from the prototype and following the art bible:
+ * rounded, warm hero; muted purple-grey grumpy-cartoon enemies with dome helmets and padded
+ * weapon tips; the commander no taller than the hero; no text inside art.
+ */
+class Figures(private val d: Draw) {
+    private val c get() = d.c
+    private fun deg(r: Double) = Math.toDegrees(r).toFloat()
+
+    /** Placeholder bodies at spec height (hud.md §3.3): the hero 262 → 180, partner ≤ 180, enemies and dummies ≤ 170. */
+    companion object {
+        const val HERO_S = 180f / 262f
+        /** The partner (a follower, look sheet d18) is 0.62 × the hero's height (≈ 112 of 180), not 0.62 of the art unit (r12). */
+        const val PARTNER_S = 0.62f * HERO_S
+        const val DUMMY_S = 0.75f
+        /** Look sheet d18 (slice placeholders until D-18 is signed off). */
+        const val FOLLOWER_TUNIC = 0xFFD8C9A3.toInt(); const val FOLLOWER_SASH = 0xFFB9705C.toInt()
+        const val HERO_BANNER = 0xFFD64A2E.toInt(); const val HERO_GOLD = 0xFFE8A93B.toInt()
+    }
+    private fun enemyScale(kind: String) = when (kind) { "shield" -> 0.72f; else -> 0.64f } // spear/leader ≈ 260 tall, shield ≈ 232
+
+    /**
+     * The hero figure (also the partner). [s] scales the body; with [reach] set (play), the staff and the swing arc are
+     * drawn at world length instead: the arc reaches [reach] world px from the shoulder (hud.md §3.3, AC13).
+     */
+    fun hero(x: Float, y: Float, face: Int, walk: Boolean, defend: Boolean, attack: Double?, t: Double, s: Float = 1f, tunic: Int = C.RED, reach: Float? = null,
+             staffUp: Boolean = false, follower: Boolean = false) {
+        c.save(); c.translate(x, y); c.scale(face * s, s)
+        d.ellipse(0f, 4f, 60f, 12f, C.a(0, 0.18))
+        val w = if (walk) sin(t * 14).toFloat() else 0f
+        val bob = if (walk) abs(sin(t * 14)).toFloat() * 4 else 0f
+        c.translate(0f, -bob)
+        if (!defend) d.ellipse(-30f, -118f, 14f, 40f, C.GOLD_DARK)
+        d.rr(-24 + w * 8, -70f, 20f, 68f, 8f, C.INDIGO); d.rr(4 - w * 8, -70f, 20f, 68f, 8f, C.INDIGO)
+        d.rr(-28 + w * 8, -10f, 28f, 12f, 6f, C.INK); d.rr(0 - w * 8, -10f, 28f, 12f, 6f, C.INK)
+        d.path.reset(); d.path.moveTo(-34f, -150f); d.path.lineTo(34f, -150f); d.path.lineTo(42f, -62f)
+        d.path.quadTo(0f, -52f, -42f, -62f); d.path.close(); c.drawPath(d.path, d.fill(tunic))
+        // look sheet d18 (slice placeholder): a follower wears a muted-vermilion sash, not the hero's gold
+        val trim = if (follower) FOLLOWER_SASH else C.GOLD
+        d.rr(-38f, -96f, 76f, 12f, 6f, trim)
+        d.poly(trim, -14f, -150f, 0f, -126f, 14f, -150f)
+        val swing = attack ?: -1.0
+        val ang = if (swing >= 0) -1.9 + swing * 2.6 else if (defend) 0.9 else if (staffUp) -0.05 else -0.6 // staffUp: Rule 7c slice
+        val len = reach ?: 150f
+        c.save(); c.translate(18f, -128f); if (reach != null) c.scale(1f / s, 1f / s) // the staff keeps its world length
+        c.rotate(deg(ang))
+        d.rr(-6f, -len, 12f, len + 40f, 6f, 0xFF8A5A2B.toInt()); d.rr(-8f, -len - 8f, 16f, 18f, 6f, C.GOLD); d.circle(0f, 0f, 12f * (if (reach != null) s else 1f), C.SKIN)
+        if (swing in 0.2..0.85) d.arc(0f, 0f, len, (-1.9 + 0.3 - ang).toFloat(), (-1.9 + swing * 2.6 - 0.3 - ang).toFloat(), C.a(C.WHITE, 0.8), 10f)
+        c.restore()
+        d.circle(0f, -196f, 44f, C.SKIN)
+        d.dome(-2f, -200f, 46f, C.HAIR)
+        d.circle(-14f, -246f, 15f, C.HAIR)
+        if (!follower) { // the vermilion headband and its two tails are the hero's signature; followers have none
+            d.rr(-46f, -214f, 92f, 12f, 6f, C.RED)
+            val flap = (sin(t * 9) * 6).toFloat()
+            d.path.reset(); d.path.moveTo(-44f, -210f); d.path.quadTo(-70f, -206 + flap, -84f, -192 + flap); d.path.lineTo(-78f, -186 + flap)
+            d.path.quadTo(-64f, -198f, -44f, -200f); d.path.close(); c.drawPath(d.path, d.fill(C.RED))
+        }
+        d.circle(14f, -190f, 6f, C.INK); d.circle(32f, -190f, 6f, C.INK); d.circle(16f, -192f, 2f, C.WHITE); d.circle(34f, -192f, 2f, C.WHITE)
+        val ink = d.stroke(C.INK, 4f)
+        c.drawLine(8f, -204f, 20f, -202f, ink); c.drawLine(28f, -202f, 40f, -204f, ink)
+        d.arc(24f, -176f, 9f, 0.2f, (Math.PI - 0.2).toFloat(), C.INK, 4f)
+        d.circle(6f, -178f, 6f, C.a(0xFFF0786E.toInt(), 0.5)); d.circle(40f, -178f, 5f, C.a(0xFFF0786E.toInt(), 0.5))
+        if (defend) {
+            d.circle(46f, -128f, 50f, 0xFFD8A657.toInt(), C.GOLD_DARK, 5f)
+            d.circle(46f, -128f, 36f, null, 0xFFB8823A.toInt(), 3f); d.circle(46f, -128f, 22f, null, 0xFFB8823A.toInt(), 3f)
+            d.circle(46f, -128f, 10f, C.GOLD, C.GOLD_DARK, 3f)
+        }
+        c.restore()
+    }
+
+    private fun grumpy(fx: Float, fy: Float, r: Float, dizzy: Boolean, t: Double) {
+        if (dizzy) {
+            for (ex in listOf(fx - r * 0.3f, fx + r * 0.25f)) d.arc(ex, fy, r * 0.14f, (t * 8).toFloat(), (t * 8 + 5).toFloat(), C.INK, 3f)
+            d.circle(fx, fy + r * 0.42f, r * 0.14f, null, C.INK, 3f)
+        } else {
+            d.circle(fx - r * 0.3f, fy, r * 0.11f, C.INK); d.circle(fx + r * 0.25f, fy, r * 0.11f, C.INK)
+            val p = d.stroke(C.INK, 4f)
+            c.drawLine(fx - r * 0.48f, fy - r * 0.28f, fx - r * 0.12f, fy - r * 0.16f, p); c.drawLine(fx + r * 0.42f, fy - r * 0.28f, fx + r * 0.08f, fy - r * 0.16f, p)
+            d.arc(fx, fy + r * 0.5f, r * 0.22f, (Math.PI + 0.4).toFloat(), (2 * Math.PI - 0.4).toFloat(), C.INK, 4f)
+        }
+    }
+
+    fun enemy(e: Enemy, ground: Float, t: Double) {
+        val k = e.kind; val x = e.x.toFloat()
+        if (e.state == EnemyState.WINDUP) {
+            val p = 0.5 + 0.5 * sin(t * 16)
+            d.ellipse(x, ground - 88, (if (k == "leader") 80f else 58f) + p.toFloat() * 8, 110f, C.a(C.GLOW, 0.3 + 0.25 * p))
+        }
+        val sb = enemyScale(k) // hud.md §3.3: bodies ≤ 170 world px; weapons keep world length (AC13)
+        c.save(); c.translate(x, ground); c.scale(e.face.toFloat() * sb, sb)
+        if (e.state == EnemyState.HURT) c.rotate(deg(-0.12))
+        d.ellipse(0f, 4f, if (k == "leader") 80f else if (k == "shield") 66f else 50f, 12f, C.a(0, 0.18))
+        val walking = e.state == EnemyState.ENTER || e.state == EnemyState.FLEE || (e.state == EnemyState.APPROACH && e.moving)
+        val lw = if (walking) sin(t * (if (e.state == EnemyState.FLEE) 24 else 12) + e.id).toFloat() else 0f
+        val lean = if (e.state == EnemyState.WINDUP) -0.12 else if (e.state == EnemyState.STRIKE) 0.15 else 0.0
+        val weapon = e.state != EnemyState.FLEE
+        val dizzy = e.state == EnemyState.FLEE || e.state == EnemyState.HURT
+        when (k) {
+            "shield" -> {
+                d.rr(-34 + lw * 8, -64f, 26f, 62f, 9f, C.ENEMY_DARK); d.rr(8 - lw * 8, -64f, 26f, 62f, 9f, C.ENEMY_DARK)
+                c.save(); c.rotate(deg(lean))
+                d.ellipse(0f, -112f, 58f, 56f, C.ENEMY)
+                d.circle(0f, -184f, 34f, C.SKIN); grumpy(10f, -182f, 34f, dizzy, t)
+                d.dome(0f, -192f, 38f, C.STEEL); d.rr(-40f, -196f, 14f, 34f, 6f, C.STEEL); d.rr(26f, -196f, 14f, 34f, 6f, C.STEEL)
+                if (weapon) { // the shield's front edge reaches enemy_reach − stand_gap (140) on the strike
+                    val edge = if (e.state == EnemyState.STRIKE) 140f else if (e.state == EnemyState.WINDUP) 90f else 106f
+                    c.save(); c.scale(1f / sb, 1f / sb)
+                    d.rr(edge - 34f, -168f * sb, 34f, 120f * sb, 10f, C.TEAL, 0xFF2B4F4F.toInt(), 5f)
+                    for (ry in listOf(-150f, -108f, -66f)) d.circle(edge - 17f, ry * sb, 4f, 0xFFC8D3D3.toInt())
+                    c.restore()
+                } else { d.circle(-40f, -160f, 12f, C.SKIN); d.circle(44f, -164f, 12f, C.SKIN) }
+                c.restore()
+            }
+            "leader" -> {
+                d.rr(-50 + lw * 8, -66f, 36f, 64f, 12f, C.ENEMY_DARK); d.rr(14 - lw * 8, -66f, 36f, 64f, 12f, C.ENEMY_DARK)
+                c.save(); c.rotate(deg(lean))
+                d.poly(0xFF3B3A6B.toInt(), -60f, -170f, -100f, -64f, -30f, -70f)
+                d.rr(-78f, -174f, 156f, 116f, 44f, C.ENEMY); d.rr(-54f, -156f, 108f, 56f, 16f, C.STEEL); d.circle(0f, -128f, 10f, C.GOLD)
+                d.circle(6f, -200f, 38f, C.SKIN); grumpy(18f, -198f, 38f, dizzy, t)
+                d.dome(6f, -208f, 42f, C.STEEL); d.rr(-40f, -212f, 92f, 10f, 5f, C.STEEL)
+                d.path.reset(); d.path.moveTo(2f, -246f); d.path.quadTo(-18f, -260f, -40f, -252f); d.path.quadTo(-20f, -248f, -8f, -242f); d.path.close()
+                c.drawPath(d.path, d.fill(0xFFC0733A.toInt()))
+                if (weapon) { // the club's head reaches 140 world px in front on the strike (pivot ≈ 39 + 101 forward)
+                    val sw = if (e.state == EnemyState.WINDUP) 2.4 else if (e.state == EnemyState.STRIKE) -1.14 else -0.4
+                    c.save(); c.translate(60f, -130f); c.scale(1f / sb, 1f / sb); c.rotate(deg(sw))
+                    d.rr(-6f, -10f, 12f, 96f, 6f, 0xFF7A5530.toInt()); d.ellipse(0f, 96f, 20f, 22f, 0xFFE9E1CF.toInt())
+                    c.restore()
+                } else { d.circle(-80f, -170f, 14f, C.SKIN); d.circle(90f, -174f, 14f, C.SKIN) }
+                c.restore()
+            }
+            else -> {
+                d.rr(-18 + lw * 8, -80f, 16f, 78f, 7f, C.ENEMY_DARK); d.rr(2 - lw * 8, -80f, 16f, 78f, 7f, C.ENEMY_DARK)
+                c.save(); c.rotate(deg(lean))
+                d.rr(-26f, -176f, 52f, 104f, 18f, C.ENEMY); d.rr(-28f, -122f, 56f, 10f, 5f, C.STEEL)
+                d.circle(4f, -206f, 32f, C.SKIN); grumpy(14f, -206f, 32f, dizzy, t)
+                d.dome(4f, -214f, 36f, C.STEEL); d.rr(-36f, -218f, 80f, 10f, 5f, C.STEEL); d.circle(4f, -252f, 7f, C.STEEL)
+                if (weapon) { // the spear tip reaches enemy_reach − stand_gap (140) on the strike
+                    val tip = if (e.state == EnemyState.STRIKE) 140f else if (e.state == EnemyState.WINDUP) 80f else 110f
+                    c.save(); c.scale(1f / sb, 1f / sb); val sy = -140f * sb
+                    d.rr(tip - 150f, sy - 4f, 138f, 8f, 4f, 0xFF7A5530.toInt())
+                    d.circle(tip - 12f, sy, 12f, 0xFFE9E1CF.toInt(), 0xFFB8AB90.toInt(), 3f)
+                    d.ellipse(tip - 36f, sy - 10f, 10f, 7f, 0xFF9B8FC0.toInt(), -0.3f)
+                    c.restore()
+                } else { d.circle(-30f, -190f, 10f, C.SKIN); d.circle(36f, -194f, 10f, C.SKIN) }
+                c.restore()
+            }
+        }
+        c.restore()
+        val topY = ground - 180f // bodies are ≤ 170 tall (hud.md §3.3)
+        if (dizzy) for (i in 0 until 3) { val a = t * 5 + i * 2.1; d.star(x + cos(a).toFloat() * 34, topY + 20 + sin(a).toFloat() * 10, 9f, C.GLOW, C.GOLD_DARK, a.toFloat()) }
+    }
+
+    /** A straw training dummy on a post: a hit makes it wobble and spring back (asset spec: never breaks). */
+    fun dummy(x: Float, ground: Float, down: Boolean, t: Double) {
+        c.save(); c.translate(x, ground); c.scale(DUMMY_S, DUMMY_S) // ≤ 170 tall (a body, hud.md §3.3)
+        if (down && t < 1.5) c.rotate((-22 * sin(t * 14) * kotlin.math.exp(-t * 3)).toFloat())
+        val old = d.alpha; if (down && t >= 1.5) d.alpha = 0.6 // a done dummy stands, slightly faded
+        d.rr(-6f, -150f, 12f, 150f, 6f, 0xFF8A5A2B.toInt())
+        d.ellipse(0f, -110f, 34f, 46f, 0xFFE3C46B.toInt()); d.circle(0f, -175f, 26f, 0xFFE3C46B.toInt(), 0xFFB8963A.toInt(), 3f)
+        d.rr(-40f, -128f, 80f, 10f, 5f, 0xFFB8963A.toInt())
+        d.alpha = old
+        c.restore()
+    }
+
+    /** Training's friendly partner: the hero's figure in an indigo practice tunic with a padded stick. */
+    fun partner(p: Enemy, ground: Float, t: Double) {
+        val x = p.x.toFloat()
+        if (p.state == EnemyState.WINDUP) {
+            val k = 0.5 + 0.5 * sin(t * 16)
+            d.ellipse(x, ground - 90, 58f + k.toFloat() * 8, 116f, C.a(C.GLOW, 0.3 + 0.25 * k))
+        }
+        val swing = when (p.state) { EnemyState.WINDUP -> 0.0; EnemyState.STRIKE -> 0.6; else -> null }
+        // look sheet d18 follower (r12, leader's call): straw-beige tunic, muted-vermilion sash, plain topknot, no headband
+        hero(x, ground, p.face, p.moving && p.staffUp, false, swing, t, PARTNER_S, tunic = FOLLOWER_TUNIC, reach = 140f - 18f * PARTNER_S, // the stick reaches 140 (hud.md)
+            staffUp = p.staffUp, follower = true)
+    }
+
+    fun dropped(w: Dropped, ground: Float) {
+        val old = d.alpha; d.alpha = minOf(1.0, w.life)
+        c.save(); c.translate(w.x.toFloat(), ground - 8); c.rotate(deg(w.rot))
+        when (w.kind) {
+            "spear" -> { d.rr(-75f, -5f, 150f, 10f, 5f, 0xFF7A5530.toInt()); d.circle(80f, 0f, 15f, 0xFFE9E1CF.toInt(), 0xFFB8AB90.toInt(), 3f) }
+            "shield" -> d.rr(-60f, -16f, 120f, 32f, 8f, C.TEAL)
+            else -> { d.rr(-60f, -6f, 120f, 12f, 6f, 0xFF7A5530.toInt()); d.ellipse(70f, 0f, 30f, 24f, 0xFFE9E1CF.toInt()) }
+        }
+        c.restore(); d.alpha = old
+    }
+
+    /** The teach hand; [rot] in degrees (0 points down, -90 points right). */
+    fun hand(x: Float, y: Float, t: Double, rot: Float = 0f) {
+        val b = (sin(t * 6) * 12).toFloat()
+        c.save(); c.translate(x, y); c.rotate(rot); c.translate(0f, -70 - b)
+        // ASSET-033 placeholder (r14): a child's hand in the one skin C.SKIN #F1C9A0 (look sheet d18), a cream #FFF6E3
+        // sleeve cuff, the ink outline kept; not a white glove (the spec's negatives rule one out).
+        d.rr(-8f, -10f, 16f, 44f, 8f, C.SKIN, C.INK); d.rr(-26f, -48f, 52f, 48f, 18f, C.SKIN, C.INK)
+        d.rr(-30f, -42f, 14f, 30f, 7f, C.SKIN, C.INK); d.rr(-22f, -66f, 44f, 20f, 8f, C.CREAM, C.INK)
+        c.restore()
+    }
+
+    /**
+     * The stuck arrow (ASSET-034 placeholder; hud.md §3.3): star gold with an ink outline ≥ 3 px, never red. Drawn
+     * pointing down with its tip at y + 22 (CueLayout), rotated for the side placements; it bounces ±6 along its axis.
+     */
+    fun arrow(x: Float, y: Float, dir: com.galaxyandsun.daidatanhhung.core.CueLayout.Dir, t: Double) {
+        val b = (sin(t * 8) * com.galaxyandsun.daidatanhhung.core.CueLayout.A_BOUNCE).toFloat()
+        c.save(); c.translate(x, y)
+        c.rotate(when (dir) { com.galaxyandsun.daidatanhhung.core.CueLayout.Dir.DOWN -> 0f; com.galaxyandsun.daidatanhhung.core.CueLayout.Dir.LEFT -> 90f; else -> -90f })
+        d.poly(C.STAR_GOLD, -14f, -42 + b, 14f, -42 + b, 14f, -10 + b, 30f, -10 + b, 0f, 22 + b, -30f, -10 + b, -14f, -10 + b)
+        c.drawPath(d.path, d.stroke(0xFF3A2A20.toInt(), 5f)) // 5 px stroke: the outline is ≥ 3 px wherever it shows
+        d.poly(C.a(C.WHITE, 0.45), -8f, -38 + b, -2f, -38 + b, -2f, -14 + b, -8f, -14 + b) // the lighter highlight
+        c.restore()
+    }
+
+    /** The telegraph "!" bubble (ASSET-208 placeholder): a #FFD54F circle, ink outline, a drawn "!" and a tail toward [dir]. */
+    fun bubble(x: Float, y: Float, dir: com.galaxyandsun.daidatanhhung.core.CueLayout.Dir) {
+        val r = com.galaxyandsun.daidatanhhung.core.CueLayout.B_R.toFloat(); val tl = com.galaxyandsun.daidatanhhung.core.CueLayout.B_TAIL.toFloat()
+        val ink = 0xFF4A3428.toInt(); val fill = 0xFFFFD54F.toInt()
+        c.save(); c.translate(x, y)
+        c.rotate(when (dir) { com.galaxyandsun.daidatanhhung.core.CueLayout.Dir.DOWN -> 0f; com.galaxyandsun.daidatanhhung.core.CueLayout.Dir.LEFT -> 90f; else -> -90f })
+        d.poly(fill, -10f, r - 4, 10f, r - 4, 0f, r + tl); c.drawPath(d.path, d.stroke(ink, 4f))
+        d.circle(0f, 0f, r, fill, ink, 4f)
+        d.poly(fill, -8f, r - 8, 8f, r - 8, 0f, r + tl - 5) // the tail joins the disc without the outline between them
+        c.restore()
+        d.rr(x - 5, y - 18, 10f, 24f, 5f, ink); d.circle(x, y + 14, 5.5f, ink) // the "!" stays upright
+    }
+
+    // ---- Icons: generic objects, no history claim (quiz pictures in debug, background props) ----
+    fun icon(name: String, x: Float, y: Float, s: Float) {
+        when (name) {
+            "flag" -> flag(x, y, s, C.RED); "herobanner" -> flag(x, y, s, HERO_BANNER, border = HERO_GOLD); "flag2" -> flag(x, y, s, C.GOLD); "flag3" -> flag(x, y, s, 0xFF3F9A8A.toInt())
+            "child" -> {
+                d.rr(x - s * 0.2f, y + s * 0.05f, s * 0.16f, s * 0.45f, 6f, C.INDIGO); d.rr(x + s * 0.04f, y + s * 0.05f, s * 0.16f, s * 0.45f, 6f, C.INDIGO)
+                d.rr(x - s * 0.3f, y - s * 0.4f, s * 0.6f, s * 0.55f, 14f, C.RED)
+                d.circle(x, y - s * 0.62f, s * 0.3f, C.SKIN); d.dome(x, y - s * 0.66f, s * 0.31f, C.HAIR)
+                d.circle(x - s * 0.1f, y - s * 0.6f, 4f, C.INK); d.circle(x + s * 0.1f, y - s * 0.6f, 4f, C.INK)
+                d.arc(x, y - s * 0.52f, s * 0.08f, 0.3f, (Math.PI - 0.3).toFloat(), C.INK, 3f)
+            }
+            "hourglass" -> {
+                d.rr(x - s * 0.5f, y - s * 0.75f, s, s * 0.12f, 6f, 0xFF8A5A2B.toInt()); d.rr(x - s * 0.5f, y + s * 0.55f, s, s * 0.12f, 6f, 0xFF8A5A2B.toInt())
+                d.poly(0xFFD7EEF5.toInt(), x - s * 0.38f, y - s * 0.63f, x + s * 0.38f, y - s * 0.63f, x + s * 0.06f, y - s * 0.04f, x + s * 0.38f, y + s * 0.55f, x - s * 0.38f, y + s * 0.55f, x - s * 0.06f, y - s * 0.04f)
+                c.drawPath(d.path, d.stroke(0xFF8A5A2B.toInt(), 4f))
+                d.poly(C.GOLD, x - s * 0.3f, y + s * 0.55f, x + s * 0.3f, y + s * 0.55f, x, y + s * 0.22f)
+                d.poly(C.GOLD, x - s * 0.22f, y - s * 0.45f, x + s * 0.22f, y - s * 0.45f, x, y - s * 0.12f)
+            }
+            "bed" -> {
+                d.rr(x - s * 0.8f, y - s * 0.35f, s * 0.14f, s * 0.8f, 5f, 0xFF8A5A2B.toInt()); d.rr(x + s * 0.66f, y - s * 0.05f, s * 0.14f, s * 0.5f, 5f, 0xFF8A5A2B.toInt())
+                d.rr(x - s * 0.8f, y + s * 0.05f, s * 1.6f, s * 0.18f, 6f, 0xFFA8794A.toInt()); d.rr(x - s * 0.62f, y - s * 0.12f, s * 0.38f, s * 0.2f, 10f, C.WHITE)
+                d.rr(x - s * 0.3f, y - s * 0.16f, s * 0.96f, s * 0.24f, 10f, 0xFF7AA8D8.toInt())
+            }
+            "orange" -> { d.circle(x, y, s * 0.5f, 0xFFF39A1E.toInt(), 0xFFC97010.toInt()); d.circle(x - s * 0.16f, y - s * 0.16f, s * 0.1f, C.a(C.WHITE, 0.45)); d.ellipse(x + s * 0.14f, y - s * 0.56f, s * 0.2f, s * 0.08f, C.LEAF_DARK, -0.5f) }
+            "banana" -> {
+                d.path.reset(); d.path.moveTo(x - s * 0.6f, y - s * 0.3f); d.path.quadTo(x - s * 0.3f, y + s * 0.55f, x + s * 0.6f, y - s * 0.15f)
+                d.path.quadTo(x - s * 0.15f, y + s * 0.25f, x - s * 0.6f, y - s * 0.3f); d.path.close()
+                c.drawPath(d.path, d.fill(0xFFF5D33A.toInt())); c.drawPath(d.path, d.stroke(0xFFB8960F.toInt(), 4f))
+                d.rr(x - s * 0.68f, y - s * 0.4f, s * 0.12f, s * 0.14f, 3f, 0xFF6A4A2A.toInt())
+            }
+            "coconut" -> { d.circle(x, y, s * 0.5f, 0xFF7A5032.toInt(), 0xFF5A3820.toInt()); for ((dx, dy) in listOf(-0.12f to -0.12f, 0.1f to -0.12f, 0f to 0.06f)) d.circle(x + s * dx, y + s * dy, s * 0.06f, 0xFF3E2614.toInt()) }
+            "helmet" -> { d.dome(x, y + s * 0.1f, s * 0.5f, C.STEEL); d.rr(x - s * 0.6f, y + s * 0.05f, s * 1.2f, s * 0.14f, 6f, 0xFF6F758A.toInt()); d.circle(x, y - s * 0.45f, s * 0.08f, C.STEEL) }
+            "helmet2" -> { d.dome(x, y + s * 0.2f, s * 0.7f, C.STEEL); d.rr(x - s * 0.75f, y + s * 0.15f, s * 1.5f, s * 0.12f, 6f, 0xFF6F758A.toInt()) }
+            "helmet3" -> { d.rr(x - s * 0.45f, y - s * 0.45f, s * 0.9f, s * 0.65f, 14f, C.STEEL); d.rr(x - s * 0.55f, y + s * 0.1f, s * 0.22f, s * 0.4f, 6f, 0xFF6F758A.toInt()); d.rr(x + s * 0.33f, y + s * 0.1f, s * 0.22f, s * 0.4f, 6f, 0xFF6F758A.toInt()) }
+            "house" -> {
+                d.path.reset(); d.path.moveTo(x - s * 0.85f, y - s * 0.05f); d.path.quadTo(x, y - s * 0.95f, x + s * 0.85f, y - s * 0.05f); d.path.close(); c.drawPath(d.path, d.fill(0xFFD9B26A.toInt()))
+                d.rr(x - s * 0.6f, y - s * 0.05f, s * 1.2f, s * 0.45f, 6f, 0xFFA8794A.toInt()); d.rr(x - s * 0.12f, y + s * 0.08f, s * 0.24f, s * 0.32f, 4f, 0xFF6A4A2A.toInt())
+            }
+            "bamboo" -> for ((dx, h) in listOf(-0.35f to 1.3f, 0f to 1.6f, 0.35f to 1.1f)) {
+                d.rr(x + s * dx - 9, y + s * 0.6f - s * h, 18f, s * h, 8f, C.LEAF)
+                for (j in 1 until 4) d.rr(x + s * dx - 10, y + s * 0.6f - s * h * j / 4, 20f, 5f, 2f, C.LEAF_DARK)
+            }
+            "boat" -> {
+                d.path.reset(); d.path.moveTo(x - s * 0.8f, y); d.path.quadTo(x, y + s * 0.5f, x + s * 0.8f, y); d.path.close(); c.drawPath(d.path, d.fill(0xFF9A6A3A.toInt()))
+                d.rr(x - s * 0.9f, y + s * 0.25f, s * 1.8f, s * 0.15f, 8f, C.RIVER)
+                d.poly(C.CREAM, x, y - s * 0.7f, x + s * 0.45f, y - s * 0.05f, x, y - s * 0.05f); d.rr(x - 3, y - s * 0.75f, 6f, s * 0.75f, 3f, 0xFF6A4A2A.toInt())
+            }
+            "lotus" -> {
+                for (a in listOf(-0.9, -0.45, 0.0, 0.45, 0.9)) {
+                    c.save(); c.translate(x, y + s * 0.2f); c.rotate(deg(a)); d.ellipse(0f, -s * 0.4f, s * 0.17f, s * 0.42f, if (a == 0.0) 0xFFF48FB1.toInt() else 0xFFF8BBD0.toInt()); c.restore()
+                }
+                d.ellipse(x, y + s * 0.38f, s * 0.7f, s * 0.12f, C.LEAF_DARK)
+            }
+            else -> { // a drum: the fallback picture for an id with no drawing yet
+                d.ellipse(x, y + s * 0.3f, s * 0.7f, s * 0.18f, 0xFF8A5A2B.toInt()); d.rr(x - s * 0.7f, y - s * 0.25f, s * 1.4f, s * 0.55f, 10f, 0xFFB07A3A.toInt())
+                d.ellipse(x, y - s * 0.25f, s * 0.7f, s * 0.2f, 0xFFE0A85A.toInt()); d.drum(x, y - s * 0.25f, s * 0.18f, 0xFF8A5A2B.toInt())
+            }
+        }
+    }
+
+    /** A flag on a pole; with [border], a ≈ 4 px band inside the cloth's edge (the cloth's box doesn't grow). */
+    private fun flag(x: Float, y: Float, s: Float, col: Int, border: Int? = null) {
+        d.rr(x - s * 0.5f, y - s * 0.7f, 8f, s * 1.4f, 4f, 0xFF6A4A2A.toInt())
+        d.path.reset(); d.path.moveTo(x - s * 0.45f, y - s * 0.68f); d.path.quadTo(x + s * 0.1f, y - s * 0.8f, x + s * 0.7f, y - s * 0.6f)
+        d.path.lineTo(x + s * 0.7f, y - s * 0.05f); d.path.quadTo(x + s * 0.1f, y - s * 0.2f, x - s * 0.45f, y - s * 0.1f); d.path.close()
+        c.drawPath(d.path, d.fill(col))
+        if (border != null) { c.save(); c.clipPath(d.path); c.drawPath(d.path, d.stroke(border, 8f)); c.restore() } // 8 stroke clipped = 4 px inside
+    }
+
+    /** Sky band colours per theme from content/data/themes.json (ADR-0002); set by the activity. */
+    var skyBands: Map<String, Pair<Int, Int>> = emptyMap()
+    /** The theme's sky band (top, bottom); the prototype's sky until themes.json names the theme. */
+    fun skyBand(theme: String): Pair<Int, Int> = skyBands[theme] ?: (0xFFFFD59A.toInt() to 0xFFCFEEF2.toInt())
+    private val skyPaint = android.graphics.Paint()
+    private var skyKey = ""
+
+    fun background(camX: Double, theme: String, ground: Float) {
+        val cam = camX.toFloat()
+        val (top, bottom) = skyBand(theme)
+        val key = "$theme/$ground"
+        if (key != skyKey) { skyKey = key; skyPaint.shader = android.graphics.LinearGradient(0f, 0f, 0f, ground + 10, top, bottom, android.graphics.Shader.TileMode.CLAMP) }
+        c.drawRect(0f, 0f, 1280f, ground + 10, skyPaint)
+        val sx = 980 - cam * 0.03f
+        d.circle(sx, 190f, 54f, C.a(0xFFFFCF5A.toInt(), 0.8)); d.drum(sx, 190f, 46f, C.a(C.GOLD_DARK, 0.4))
+        for (i in -1 until 8) {
+            val bx = i * 260 - (cam * 0.15f) % 260
+            d.path.reset(); d.path.moveTo(bx - 40, ground - 60); d.path.quadTo(bx + 20, ground - 330 - ((i % 3 + 3) % 3) * 30, bx + 90, ground - 260 + ((i % 2 + 2) % 2) * 40)
+            d.path.quadTo(bx + 150, ground - 300, bx + 230, ground - 60); d.path.close(); c.drawPath(d.path, d.fill(0xFFA9CFC3.toInt()))
+        }
+        d.rr(0f, ground - 70, 1280f, 80f, 0f, 0xFF8FC77A.toInt())
+        for (i in -1 until 9) {
+            val bx = i * 180 - (cam * 0.45f) % 180
+            val ii = (i + 10) % 10
+            when {
+                theme == "village" && ii % 2 == 0 -> icon("house", bx + 60, ground - 92, 80f)
+                theme == "bamboo" -> icon("bamboo", bx + 50, ground - 120, 90f)
+                theme == "river" && ii % 3 == 0 -> icon("boat", bx + 60, ground - 98, 55f)
+                theme == "camp" && ii % 2 == 1 -> { d.poly(0xFFC9B38A.toInt(), bx, ground - 70, bx + 60, ground - 160, bx + 120, ground - 70); icon("flag", bx + 60, ground - 190, 40f) }
+                else -> {
+                    d.rr(bx + 52, ground - 230, 10f, 160f, 5f, 0xFF8A6A44.toInt())
+                    for (a in listOf(-2.4, -1.9, -1.2, -0.7)) { c.save(); c.translate(bx + 57, ground - 230); c.rotate(deg(a)); d.ellipse(34f, 0f, 38f, 9f, C.LEAF_DARK); c.restore() }
+                }
+            }
+        }
+        if (theme == "river") d.rr(0f, ground - 30, 1280f, 26f, 0f, C.RIVER)
+        d.rr(0f, ground - 6, 1280f, 14f, 0f, C.LEAF)
+        d.rr(0f, ground + 8, 1280f, 720 - ground, 0f, C.EARTH)
+        for (i in -1 until 12) { val px = i * 130 - cam % 130; d.ellipse(px, ground + 40 + ((i % 3 + 3) % 3) * 18, 18f, 6f, C.EARTH_DARK) }
+        for (i in -1 until 6) { val px = i * 340 - cam % 340 + 120; icon("lotus", px, ground + 4, 26f) }
+    }
+}

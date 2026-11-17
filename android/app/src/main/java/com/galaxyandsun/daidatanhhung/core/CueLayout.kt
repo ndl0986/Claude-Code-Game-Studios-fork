@@ -1,0 +1,169 @@
+package com.galaxyandsun.daidatanhhung.core
+
+import kotlin.math.max
+
+/**
+ * hud.md §3.3 (r8, AC17): where the telegraph "!" bubble and the stuck arrow go. On a banner beat neither may
+ * straddle the motto bar: every pixel at y ≥ bar bottom + 8. Screen coordinates (world px after the camera).
+ */
+object CueLayout {
+    const val SCREEN_W = 1280.0
+    /** The motto bar is 156–268 (hud.md §3.3); cues stay at y ≥ 276 on banner beats. */
+    const val BAR_BOTTOM = 268.0; const val FLOOR = BAR_BOTTOM + 8
+    const val EDGE = 8.0
+    const val GAP = 12.0
+
+    /** Which way the arrow's tip, or the bubble's tail, points. */
+    enum class Dir { DOWN, LEFT, RIGHT }
+    /** A placed cue: the shape's origin and its pointing direction. */
+    data class Cue(val x: Double, val y: Double, val dir: Dir)
+
+    /** What the cue points at: its centre x, top, mid-height and half width. */
+    data class Target(val x: Double, val top: Double, val midY: Double, val halfW: Double)
+
+    // The arrow (ASSET-034 placeholder): 64 long, drawn pointing down with its tip at +22 and its back at −42, ±30 wide,
+    // bouncing ±6 (12) along its axis; above a target its tip rests on the target's top at the bounce's low point, so it
+    // fits below the bar exactly when the target's top ≥ 276 + 64 + 12 = 352 (hud.md §3.3). Rotated 90° for the sides.
+    const val A_TIP = 22.0; const val A_BACK = 42.0; const val A_HALF = 30.0; const val A_BOUNCE = 6.0
+    // The bubble (ASSET-208 placeholder): a circle of radius 30 with a 12 px tail.
+    const val B_R = 30.0; const val B_TAIL = 12.0
+
+    /** Every pixel the arrow can reach over its bounce. */
+    fun arrowBox(c: Cue): StoryLayout.Box = when (c.dir) {
+        Dir.DOWN -> StoryLayout.Box(c.x - A_HALF, c.y - A_BACK - A_BOUNCE, c.x + A_HALF, c.y + A_TIP + A_BOUNCE)
+        Dir.LEFT -> StoryLayout.Box(c.x - A_TIP - A_BOUNCE, c.y - A_HALF, c.x + A_BACK + A_BOUNCE, c.y + A_HALF)
+        Dir.RIGHT -> StoryLayout.Box(c.x - A_BACK - A_BOUNCE, c.y - A_HALF, c.x + A_TIP + A_BOUNCE, c.y + A_HALF)
+    }
+
+    /** Every pixel of the bubble and its tail. */
+    fun bubbleBox(c: Cue): StoryLayout.Box = when (c.dir) {
+        Dir.DOWN -> StoryLayout.Box(c.x - B_R, c.y - B_R, c.x + B_R, c.y + B_R + B_TAIL)
+        Dir.LEFT -> StoryLayout.Box(c.x - B_R - B_TAIL, c.y - B_R, c.x + B_R, c.y + B_R)
+        Dir.RIGHT -> StoryLayout.Box(c.x - B_R, c.y - B_R, c.x + B_R + B_TAIL, c.y + B_R)
+    }
+
+    private fun onScreen(b: StoryLayout.Box) = b.left >= EDGE && b.right <= SCREEN_W - EDGE
+
+    /**
+     * Side placement: away from the hero (or, with no hero, the side nearer the screen centre); if that side is
+     * within 8 px of the screen edge, the other side. [reach] is the distance from the target's centre to the cue's
+     * origin; [box] measures a candidate.
+     */
+    private fun side(t: Target, heroX: Double?, y: Double, reach: Double, box: (Cue) -> StoryLayout.Box): Cue {
+        val away = if (heroX != null) (if (t.x >= heroX) 1 else -1) else (if (t.x < SCREEN_W / 2) 1 else -1)
+        fun at(s: Int) = Cue(t.x + s * reach, y, if (s > 0) Dir.LEFT else Dir.RIGHT)
+        val first = at(away)
+        return if (onScreen(box(first))) first else at(-away)
+    }
+
+    /** The stuck arrow: above the target when its whole bounce fits below the bar; else from the side, at mid-height. */
+    fun arrow(t: Target, heroX: Double?, banner: Boolean): Cue {
+        val above = Cue(t.x, t.top - A_TIP - A_BOUNCE, Dir.DOWN)
+        if (!banner || arrowBox(above).top >= FLOOR) return above
+        val y = max(t.midY, FLOOR + A_HALF)
+        return side(t, heroX, y, t.halfW + GAP + A_TIP + A_BOUNCE, ::arrowBox)
+    }
+
+    /** The telegraph "!": above the helmet when it fits wholly below the bar; else beside the head at head height. */
+    fun bubble(t: Target, heroX: Double?, banner: Boolean): Cue {
+        val above = Cue(t.x, t.top - GAP - B_TAIL - B_R, Dir.DOWN)
+        if (!banner || bubbleBox(above).top >= FLOOR) return above
+        val y = max(t.midY, FLOOR + B_R)
+        return side(t, heroX, y, t.halfW + B_TAIL + B_R, ::bubbleBox)
+    }
+
+    // ---- Props on banner beats (r9, leader's call (a); hud.md §3.3) ----
+    // Figures.flag(x, y, s): the pole spans y − 0.7 s … y + 0.7 s and the cloth peaks at y − 0.8 s, so its box is
+    // y − 0.8 s … y + 0.7 s (1.5 s tall).
+    const val FLAG_TOP_K = 0.8; const val FLAG_FOOT_K = 0.7
+    const val GOAL_FLAG = 150.0; const val GOAL_FLAG_BANNER = 120.0
+
+    /** A flag icon's centre y and size. */
+    data class Prop(val y: Double, val size: Double) { val top get() = y - FLAG_TOP_K * size; val foot get() = y + FLAG_FOOT_K * size }
+
+    /** The goal flag, its foot on the ground; on a banner beat 120 so the whole flag sits at y ≥ 276 (below the bar). */
+    fun goalFlag(ground: Double, banner: Boolean): Prop {
+        val s = if (banner) GOAL_FLAG_BANNER else GOAL_FLAG
+        return Prop(ground - FLAG_FOOT_K * s, s)
+    }
+
+    /**
+     * How far behind the hero the raised banner's icon centre sits (its x = hero.x − face × this). Off banner beats it
+     * is held high (60); on banner beats it is held lower, at head height, so it moves back until the cloth (icon
+     * x − 0.45 s … x + 0.7 s) clears the head (±32 at HERO_S) by ≥ 8 (r9 pre-freeze: 60 put the cloth over his face).
+     */
+    fun raisedBannerOffset(banner: Boolean) = if (banner) 125.0 else 60.0
+    const val HERO_HEAD_HALF = 32.0
+
+    /** The banner the hero raises in training (110, held beside him): on a banner beat it stays below the bar too. */
+    fun raisedBanner(ground: Double, banner: Boolean): Prop =
+        if (!banner) Prop(ground - 250, 110.0) else Prop(max(ground - 250, FLOOR + FLAG_TOP_K * 110.0), 110.0)
+
+    // ---- Hints Rule 6 (r10): teach hands on banner beats stay below the bar, never over a pad ----
+    // Figures.hand(x, y, t, rot): drawn pointing down, its box x −30 … +26, y −148 … −24 from the anchor including
+    // the ±12 bounce (fingertip at −36 ± 12). Rotated −90° it points right, +90° left.
+    const val HAND_GAP = 6.0
+
+    /** A round pad: centre and radius (its touch rect is the square around it). */
+    data class Pad(val x: Double, val y: Double, val r: Double)
+    /** A placed hand: anchor and rotation (0 points down, −90 right, +90 left). */
+    data class Hand(val x: Double, val y: Double, val rot: Float)
+
+    fun handBox(h: Hand): StoryLayout.Box = when (h.rot) {
+        0f -> StoryLayout.Box(h.x - 30, h.y - 148, h.x + 26, h.y - 24)
+        -90f -> StoryLayout.Box(h.x - 148, h.y - 26, h.x - 24, h.y + 30)
+        else -> StoryLayout.Box(h.x + 24, h.y - 30, h.x + 148, h.y + 26)
+    }
+
+    private fun overlaps(b: StoryLayout.Box, p: Pad) = b.left < p.x + p.r && b.right > p.x - p.r && b.top < p.y + p.r && b.bottom > p.y - p.r
+
+    /**
+     * The hand for [target]: above it when the whole hand fits there at y ≥ 276; otherwise beside it, on the side away
+     * from the screen edge first, at its mid-height, pointing at it. Never over any pad's touch rect ([pads], its own
+     * included). Null when no spot fits (the caller then draws no hand).
+     */
+    fun hintHand(target: Pad, pads: List<Pad>): Hand? {
+        val above = Hand(target.x, target.y - target.r - HAND_GAP + 24, 0f)
+        val left = Hand(target.x - target.r - HAND_GAP + 24, target.y, -90f)
+        val right = Hand(target.x + target.r + HAND_GAP - 24, target.y, 90f)
+        val sides = if (target.x >= SCREEN_W / 2) listOf(left, right) else listOf(right, left)
+        return (listOf(above) + sides).firstOrNull { h ->
+            val b = handBox(h)
+            b.top >= FLOOR && b.left >= EDGE && b.right <= SCREEN_W - EDGE && pads.none { overlaps(b, it) }
+        }
+    }
+
+    // ---- Mission flow Rule 7c (r11, QC r10 B8): where the partner stands in the finish hold ----
+    const val FIGURE_HALF = 32.0      // hero and partner bodies, ± from x
+    const val FINISH_GAP = 110.0      // partner's x from the hero's on the front side
+    const val CLEAR = 8.0             // ≥ 8 px between partner, cloth, hero and the screen edge
+    /** The raised banner's box in x: icon centre bx, pole at bx − 0.5 s, cloth to bx + 0.7 s (s 110; not mirrored). */
+    fun bannerSpan(heroX: Double, face: Int, banner: Boolean): Pair<Double, Double> {
+        val bx = heroX - face * raisedBannerOffset(banner)
+        return (bx - 0.5 * 110.0) to (bx + 0.7 * 110.0)
+    }
+
+    /**
+     * The finish partner: where it starts (1.2 × enemy_reach outward from its spot), where it stands, its facing, and
+     * whether it fades in (alpha 0 → 1 over the first 0.2 s) because the start point is on screen.
+     */
+    data class FinishPartner(val spawn: Double, val stand: Double, val face: Int, val fadeIn: Boolean)
+    const val FADE_IN = 0.2
+
+    /**
+     * On the hero's front side (opposite the banner), [FINISH_GAP] from him, when its body fits on screen with ≥ 8 px
+     * margin; otherwise beyond the banner, ≥ 8 px clear of the cloth. It faces the banner. World px; [cam] = screen left.
+     */
+    fun finishPartner(heroX: Double, face: Int, cam: Double, banner: Boolean, enemyReach: Double): FinishPartner {
+        val (cl, cr) = bannerSpan(heroX, face, banner)
+        val lo = cam + CLEAR + FIGURE_HALF; val hi = cam + SCREEN_W - CLEAR - FIGURE_HALF
+        val front = heroX + face * FINISH_GAP
+        val stand = if (front in lo..hi) front
+            else if (face > 0) cl - CLEAR - FIGURE_HALF // banner on the left: stand left of the cloth
+            else cr + CLEAR + FIGURE_HALF               // banner on the right: stand right of the cloth
+        val outward = if (stand > heroX) 1 else -1 // away from the hero
+        val spawn = stand + outward * 1.2 * enemyReach // constant distance and speed (Rule 7c amend)
+        val bannerMid = (cl + cr) / 2
+        return FinishPartner(spawn, stand, if (bannerMid > stand) 1 else -1, spawn in cam..cam + SCREEN_W)
+    }
+}

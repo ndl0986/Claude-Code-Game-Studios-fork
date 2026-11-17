@@ -1,0 +1,7 @@
+# TASK-007 frame time: Google sdk_gphone64_arm64, Android 16 (API 36), com.galaxyandsun.daidatanhhung.preview, 2026-11-17 11:11
+# each line: one 10 s window; interval = vsync to vsync, work = the app's own frame work (input, sim, draw)
+--------- beginning of main
+11-17 11:11:03.138  3706  3706 I DDAH-frametime: on: Google sdk_gphone64_arm64, Android 16 (API 36), com.galaxyandsun.daidatanhhung.preview 0.1.0-preview
+11-17 11:11:13.224  3706  3743 I DDAH-frametime: frames=503 interval_ms p50=16.7 p90=33.3 p99=50.0 max=233.3 over20=74 over34=12 | work_ms p50=3.1 p90=17.4 p99=38.8 max=230.1
+11-17 11:11:23.250  3706  3743 I DDAH-frametime: frames=450 interval_ms p50=16.7 p90=33.3 p99=50.0 max=83.3 over20=138 over34=10 | work_ms p50=10.9 p90=20.0 p99=41.2 max=71.6
+11-17 11:11:33.266  3706  3743 I DDAH-frametime: frames=552 interval_ms p50=16.7 p90=16.7 p99=33.3 max=83.3 over20=43 over34=4 | work_ms p50=2.1 p90=12.8 p99=27.6 max=69.0

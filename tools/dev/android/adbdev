@@ -1,0 +1,7 @@
+#!/bin/zsh
+# game-dev-android's only adb entry point: always targets its own AVD devandroid002 (emulator-5556),
+# and refuses mp17863 (emulator-5554, game-qc-android's device) whatever the arguments or environment say.
+SERIAL=emulator-5556
+for a in "$@"; do case "$a" in *5554*) echo "adbdev: refusing emulator-5554 (QC's device)" >&2; exit 2;; esac; done
+[ -n "$ANDROID_SERIAL" ] && [ "$ANDROID_SERIAL" != "$SERIAL" ] && { echo "adbdev: ANDROID_SERIAL=$ANDROID_SERIAL is not $SERIAL; refusing" >&2; exit 2; }
+exec ~/Android/sdk/platform-tools/adb -s "$SERIAL" "$@"

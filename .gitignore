@@ -174,5 +174,11 @@ $RECYCLE.BIN/
 /reports/
 /test-results/
 
-# frozen QC builds (copied .app / .apk), never committed
+# frozen QC builds (copied .app / .apk; TASK-006, TASK-007), never committed
 production/qa/builds/
+
+# D-37: local signing keys never go in git (the preview key lives in ~/.config/daidatanhhung)
+*.jks
+*.keystore
+keystore.properties
+preview.properties
