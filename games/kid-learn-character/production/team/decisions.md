@@ -33,6 +33,19 @@ or number, which dissolves into stardust and becomes the object. Mash World (obj
 scene) is Scope Tier 2, after the MVP. Mash rule: a queue of at most 3 keys, further presses
 ignored, about 3 s per reveal while keys are queued. See `design/gdd/game-concept.md`.
 
+### K-08 Time of day and weather in the scene (Luan, 2026-11-17, /art-bible Section 2)
+
+- **Time of day from the system clock:** a morning scene in the morning, day, then evening/dusk and
+  night, following the device's clock. No network and no permission needed.
+- **Weather from the network, opt-in:** if internet is available and a grown-up turns it on behind
+  the parent gate, the scene follows the local weather. The app must ask for network, time and
+  weather (location) access. This **changes Pillar 5 (Safe by Design) and the anti-pillar "no
+  network, no data"**: the concept needs that revision. Before any build, game-qc-ios checks Apple
+  Kids category + COPPA rules for network and location in a kids app (TASK-034). Scope tier: not
+  decided (MVP or later).
+- **Reveal glow pulse stays ~2.2 Hz** as in the prototype (Luan), over the art-director's "≤ 1 Hz"
+  proposal.
+
 ### K-07 Themes and the key database (Luan, 2026-11-17, prototype play)
 
 A **theme** (Dinosaurs first) covers **every key**: any letter A–Z or digit 0–9 shows a creature or
