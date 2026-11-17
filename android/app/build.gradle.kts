@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -16,11 +18,46 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "0.1.0"
+        // Show missions with unapproved claims, with their UNSIGNED badges: debug and preview only (R12, D-37).
+        buildConfigField("boolean", "SHOW_UNSIGNED", "false")
+        // The opt-in frame-time recorder (`adb shell setprop debug.ddah.frametime 1`): debug and preview only.
+        buildConfigField("boolean", "FRAME_STATS", "false")
+    }
+
+    // D-37: the preview build is signed with a local key kept outside the repo (tools/dev/android/phone-install.sh
+    // creates it). Without the key file, assemblePreview still builds but the APK is unsigned and won't install.
+    val previewKey = file("${System.getProperty("user.home")}/.config/daidatanhhung/preview.properties")
+    signingConfigs {
+        if (previewKey.exists()) create("preview") {
+            val p = Properties().apply { previewKey.inputStream().use { load(it) } }
+            storeFile = file(p.getProperty("storeFile")); storePassword = p.getProperty("storePassword")
+            keyAlias = p.getProperty("keyAlias"); keyPassword = p.getProperty("keyPassword")
+        }
     }
 
     buildTypes {
+        debug {
+            buildConfigField("boolean", "SHOW_UNSIGNED", "true")
+            buildConfigField("boolean", "FRAME_STATS", "true")
+        }
         release {
             isMinifyEnabled = false
+        }
+        /**
+         * D-37 (Luan): a release-like build for installing on a real phone without Play. Not debuggable, no debug
+         * jumps, no sample hero or drafts, own app id (com.galaxyandsun.daidatanhhung.preview, D-38) and name, so
+         * it installs beside a real build. It shows unapproved missions with their UNSIGNED badges, so it can't pass
+         * for a release; the R12 content gate stays on `release` only. Never uploaded anywhere.
+         */
+        create("preview") {
+            initWith(getByName("release"))
+            applicationIdSuffix = ".preview"
+            versionNameSuffix = "-preview"
+            isDebuggable = false
+            buildConfigField("boolean", "SHOW_UNSIGNED", "true")
+            buildConfigField("boolean", "FRAME_STATS", "true")
+            signingConfig = signingConfigs.findByName("preview")
+            matchingFallbacks += "release"
         }
     }
 

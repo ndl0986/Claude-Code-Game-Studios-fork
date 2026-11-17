@@ -47,7 +47,7 @@ class GameActivity : Activity() {
         val heroId = content.heroes.keys.sortedBy { if (it == wanted) 0 else 1 }.firstOrNull { id ->
             val b = content.heroes.getValue(id)
             val gate = ClaimGate.evaluate(b.claims.claims.associate { it.id to it.signoff.status }, Validator.texts(b).map { it.second.claims })
-            (BuildConfig.DEBUG || gate.runtimeShow).also { ok -> if (!ok) Log.w(TAG, "hiding mission $id: unsigned ${gate.debugBadges}") }
+            (BuildConfig.SHOW_UNSIGNED || gate.runtimeShow).also { ok -> if (!ok) Log.w(TAG, "hiding mission $id: unsigned ${gate.debugBadges}") }
         }
         val font = { w: Int -> Typeface.Builder(assets, "fonts/nunito.ttf").setFontVariationSettings("'wght' $w").build() }
         // Debug: a launch with a `startScreen` jump plays on a shadow of the save, so it never writes the real one (r12).
@@ -60,8 +60,13 @@ class GameActivity : Activity() {
         val cache = HashMap<String, android.graphics.Bitmap?>()
         val pictures = { id: String -> cache.getOrPut(id) { files[id]?.let { f -> try { assets.open(f).use { android.graphics.BitmapFactory.decodeStream(it) } } catch (e: Exception) { null } } } }
         val sky = content.themes?.themes?.mapValues { (_, th) -> android.graphics.Color.parseColor(th.skyBand.top) to android.graphics.Color.parseColor(th.skyBand.bottom) } ?: emptyMap()
-        view = GameView(this, game, app.audio, Renderer(font(800), font(600), BuildConfig.DEBUG, pictures, sky))
+        view = GameView(this, game, app.audio, Renderer(font(800), font(600), BuildConfig.SHOW_UNSIGNED, pictures, sky))
         setContentView(view)
+        // TASK-007 profiling (D-37): `adb shell setprop debug.ddah.frametime 1` turns on the frame-time log (debug and
+        // preview builds only; off by default). Read once per launch; logcat only, nothing stored or sent.
+        if (BuildConfig.FRAME_STATS && sysProp("debug.ddah.frametime") == "1") {
+            view.frameStats = com.galaxyandsun.daidatanhhung.core.FrameStats(); Log.i("DDAH-frametime", "on: ${Build.MANUFACTURER} ${Build.MODEL}, Android ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT}), ${BuildConfig.APPLICATION_ID} ${BuildConfig.VERSION_NAME}")
+        }
         if (BuildConfig.DEBUG && game != null) intent?.getStringExtra("startScreen")?.let { target ->
             game.debugJump(target, intent.getIntExtra("q", 1), intent.getIntExtra("beat", 1), intent.getStringExtra("stage"), intent.getIntExtra("stars", 2), intent.getIntExtra("line", 1))
             view.frozen = intent.getBooleanExtra("freeze", false)
@@ -114,4 +119,9 @@ class GameActivity : Activity() {
     override fun onPause() { view.releaseAll(); view.onHostPause(); super.onPause() }
 
     companion object { const val TAG = "DaiDat" }
+
+    /** A system property via the public `getprop` tool (no hidden API); "" when unset or unreadable. */
+    private fun sysProp(name: String): String = try {
+        Runtime.getRuntime().exec(arrayOf("getprop", name)).inputStream.bufferedReader().use { it.readText().trim() }
+    } catch (e: Exception) { "" }
 }

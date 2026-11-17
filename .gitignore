@@ -176,3 +176,9 @@ $RECYCLE.BIN/
 
 # QC build copies (TASK-007): never committed
 production/qa/builds/
+
+# D-37: local signing keys never go in git (the preview key lives in ~/.config/daidatanhhung)
+*.jks
+*.keystore
+keystore.properties
+preview.properties

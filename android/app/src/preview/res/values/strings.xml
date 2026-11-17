@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- D-37: the preview build's name on the phone, so it is never mistaken for a release. -->
+    <string name="app_name">Dải Đất Anh Hùng (preview)</string>
+</resources>

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
 import android.os.HandlerThread
+import android.util.Log
 import android.view.Choreographer
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -50,6 +51,9 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
     private var hostResumed = true
     /** Fixed-step clock; zeroes the frame that leaves PAUSE (r13, iOS r10 parity). */
     private val clock = com.galaxyandsun.daidatanhhung.core.FrameClock()
+    /** TASK-007 profiling (D-37): set by the activity when `debug.ddah.frametime` is 1; null (off) by default. */
+    var frameStats: com.galaxyandsun.daidatanhhung.core.FrameStats? = null
+    private var statsLast = -1L
     private val input = InputFrame()
     private val padHolds = com.galaxyandsun.daidatanhhung.core.PadHolds()
     private val keyHolds = HashSet<Action>()
@@ -87,7 +91,7 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
         if (!surfaceOk || !hostResumed) return
         handler.post {
             if (running) return@post
-            running = true; clock.start()
+            running = true; clock.start(); statsLast = -1L
             choreographer?.postFrameCallback(this)
         }
     }
@@ -101,6 +105,7 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
 
     override fun doFrame(frameTimeNanos: Long) {
         if (!running) return
+        val workStart = System.nanoTime()
         clock.beginFrame(frameTimeNanos)
         val w = width.toFloat(); val h = height.toFloat()
         renderer.layout(w, h, safe, resources.displayMetrics.density * padScale, game?.tuning?.get("pad_min")?.toFloat() ?: 72f)
@@ -118,6 +123,10 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
         val c = if (!surfaceOk) null else try { holder.surface.lockHardwareCanvas() } catch (e: Exception) { null }
         if (c != null) {
             try { renderer.draw(c, game, audio.ready, portrait) } finally { holder.surface.unlockCanvasAndPost(c) }
+        }
+        frameStats?.let { st ->
+            if (statsLast >= 0) st.add((frameTimeNanos - statsLast) / 1e6, (System.nanoTime() - workStart) / 1e6)?.let { Log.i("DDAH-frametime", it) }
+            statsLast = frameTimeNanos
         }
         choreographer?.postFrameCallback(this)
     }
