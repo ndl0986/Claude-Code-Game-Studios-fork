@@ -223,3 +223,4 @@ test-setup, smoke-check), those checks report NOT ASSESSED by design (ADR-0001).
 - 2026-11-17 — TASK-022c merged (e05daf6): concept names Luan as the history reviewer (his TASK-004 answer).
 - 2026-11-17 — Luan decided D-14: A (stars = story recall; star payoff sub-choice still open) and D-35: A. TASK-022d → game-art-content: remove both 'unless Luan decides' clauses. Then re-run the gate.
 - 2026-11-17 — TASK-022d merged (3f41886): no 'unless' left in concept (D-35 A); stars = story recall, never reaction time (D-14 A). Gate re-run in progress (producer + TD).
+- 2026-11-17 — Gate Concept → Systems Design re-run **PASS**; Luan approved, stage advanced to **Systems Design** (project.yaml + stage.txt). TASK-022e merged (37e38a7). Next gate: Systems Design → Technical Setup.
