@@ -1,0 +1,2 @@
+# fhm <mp4>: per-frame pad (Cờ), banner-top band, sky probes -> transitions
+fhm(){ $S/frames probe $1 "1911,563,20,20;$(python3 -c "K,OX,OY=1.28055,448.5,74;print(f'{round(OX+300*K)},{round(OY+290*K)},{round(100*K)},{round(6*K)}')");1258,320,20,20" | awk '{split($2,a,","); split($3,b,","); split($4,c,","); pad=(a[1]>200&&a[2]>190)?"padON":"padoff"; ban=(b[1]>170&&b[2]<100)?"BANNER-TOP":"-"; sky=(c[3]>c[1]+20 && c[1]<120)?"night":"day"; s=pad" "ban" "sky; if(s!=p){printf "%.3f %s  (%s|%s|%s)\n",$1/1000,s,$2,$3,$4; p=s}}'; }

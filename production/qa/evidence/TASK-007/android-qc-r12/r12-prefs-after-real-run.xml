@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+    <boolean name="seen_open.tran-quoc-toan" value="true" />
+    <int name="stars.tran-quoc-toan" value="3" />
+    <boolean name="completed.tran-quoc-toan" value="true" />
+    <boolean name="medal.tran-quoc-toan" value="true" />
+</map>
