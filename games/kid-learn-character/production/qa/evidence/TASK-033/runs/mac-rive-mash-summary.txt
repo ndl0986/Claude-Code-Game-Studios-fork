@@ -1,0 +1,9 @@
+[spike] mac-rive-mash: presses=599 dropped=584 queued=14 maxActiveMorphs=1 maxQueue=3 maxVoices=1 swallowedKeys=0
+press→firstFrame cold n=0 median=nan p95=nan max=nan
+press→presentEst cold n=0 median=nan p95=nan max=nan
+press→soundEst cold n=0 median=nan p95=nan max=nan
+press→firstFrame warm n=1 median=16.8 p95=16.8 max=16.8
+press→presentEst warm n=1 median=24.9 p95=24.9 max=24.9
+press→soundEst warm n=1 median=17.7 p95=17.7 max=17.7
+frames n=4575 p50=13.34 p99=15.43 max=29.47 ms
+memory MB start=150.3 mid=150.2 end=150.1 (61 s)

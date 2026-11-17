@@ -1,0 +1,9 @@
+[spike] sim-spritekit-mash: presses=599 dropped=584 queued=14 maxActiveMorphs=1 maxQueue=3 maxVoices=1
+press→firstFrame cold n=1 median=15.8 p95=15.8 max=15.8
+press→presentEst cold n=1 median=31.0 p95=31.0 max=31.0
+press→soundEst cold n=1 median=10.2 p95=10.2 max=10.2
+press→firstFrame warm n=0 median=nan p95=nan max=nan
+press→presentEst warm n=0 median=nan p95=nan max=nan
+press→soundEst warm n=0 median=nan p95=nan max=nan
+frames n=3713 p50=16.67 p99=16.92 max=24.54 ms
+memory MB start=23.4 mid=26.8 end=26.8 (61 s)

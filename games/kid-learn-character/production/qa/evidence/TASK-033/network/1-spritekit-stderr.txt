@@ -1,0 +1,23 @@
+2026-11-17 22:08:21.242611+0700 Spike[80779:9491906] [Connection] Unable to get remoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-11-17 22:08:21.243036+0700 Spike[80779:9491906] [Application] Error registering app with AppIntents framework: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-11-17 22:08:21.369589+0700 Spike[80779:9491893] [plugin] AddInstanceForFactory: No factory registered for id <CFUUID 0x7a42f7f160> F8BB1C28-BAE8-11D6-9C31-00039315CD46
+2026-11-17 22:08:21.414234+0700 Spike[80779:9491893] [spike] audio ioBuffer=10.67 ms outputLatency=1.25 ms
+2026-11-17 22:08:21.443593+0700 Spike[80779:9491893] [spike] rive file=mascot loadCdn=0 bytes=27909
+2026-11-17 22:08:21.448078+0700 Spike[80779:9491917] [] CVDisplayLinkCreateWithCGDisplays error -6661 due to invalid display count (0)
+2026-11-17 22:08:21.450575+0700 Spike[80779:9491905] [] CVDisplayLinkCreateWithCGDisplays error -6661 due to invalid display count (0)
+2026-11-17 22:08:22.306482+0700 Spike[80779:9492052] [Connection] Unable to get remoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-11-17 22:08:22.306551+0700 Spike[80779:9492052] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-11-17 22:08:24.440210+0700 Spike[80779:9492059] [Connection] Unable to get remoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-11-17 22:08:24.440392+0700 Spike[80779:9492059] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-11-17 22:08:28.706639+0700 Spike[80779:9491920] [Connection] Will NOT re-try to establish the connection
+2026-11-17 22:08:28.706758+0700 Spike[80779:9491920] [Connection] Unable to get remoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-11-17 22:08:28.706805+0700 Spike[80779:9491920] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-11-17 22:08:42.238969+0700 Spike[80779:9491893] [spike] net-1-spritekit: presses=6 dropped=0 queued=1 maxActiveMorphs=0 maxQueue=1 maxVoices=1 swallowedKeys=0
+press→firstFrame cold n=0 median=nan p95=nan max=nan
+press→presentEst cold n=0 median=nan p95=nan max=nan
+press→soundEst cold n=0 median=nan p95=nan max=nan
+press→firstFrame warm n=0 median=nan p95=nan max=nan
+press→presentEst warm n=0 median=nan p95=nan max=nan
+press→soundEst warm n=0 median=nan p95=nan max=nan
+frames n=0 p50=nan p99=nan max=nan ms
+memory MB start=146.7 mid=46.3 end=50.3 (19 s)

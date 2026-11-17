@@ -1,0 +1,17 @@
+iOS device Release (generic/platform=iOS, arm64, unsigned), 2026-11-17 22:10, Xcode 27.1, iOS SDK 27.1
+Spike.app: 6152 KB on disk, 2443 KB zipped
+SpikeNoRive.app: 540 KB on disk, 199 KB zipped
+
+Spike.app contents (KB):
+76	build/dd/Build/Products/Release-iphoneos/Spike.app/fixtures
+5528	build/dd/Build/Products/Release-iphoneos/Spike.app/Frameworks
+4	build/dd/Build/Products/Release-iphoneos/Spike.app/Info.plist
+4	build/dd/Build/Products/Release-iphoneos/Spike.app/PkgInfo
+36	build/dd/Build/Products/Release-iphoneos/Spike.app/rivassets
+80	build/dd/Build/Products/Release-iphoneos/Spike.app/roar.wav
+424	build/dd/Build/Products/Release-iphoneos/Spike.app/Spike
+5528	build/dd/Build/Products/Release-iphoneos/Spike.app/Frameworks/RiveRuntime.framework
+
+lipo:
+Non-fat file: build/dd/Build/Products/Release-iphoneos/Spike.app/Frameworks/RiveRuntime.framework/RiveRuntime is architecture: arm64
+Non-fat file: build/dd/Build/Products/Release-iphoneos/Spike.app/Spike is architecture: arm64
