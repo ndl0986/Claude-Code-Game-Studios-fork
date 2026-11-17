@@ -133,19 +133,25 @@ public final class Game {
 
     /// `hero` is the mission to play. In a release build a hero whose claims aren't all approved
     /// never starts (the runtime guard of R12); `isPlayable` is false and the title shows no Start.
-    public init(content: ContentSet, hero: HeroContent, store: KeyValueStore, isDebug: Bool) {
+    /// `allowsUnsigned` lifts that guard without the debug tools: the Preview build (D-37, Luan's own device,
+    /// never uploaded) plays unsigned heroes with their `UNSIGNED` badges showing. Debug always allows them.
+    public init(content: ContentSet, hero: HeroContent, store: KeyValueStore, isDebug: Bool, allowsUnsigned: Bool = false) {
         self.content = content; self.hero = hero; self.store = store; self.isDebug = isDebug
+        self.allowsUnsigned = isDebug || allowsUnsigned
+        let allows = self.allowsUnsigned
         gate = ClaimGate.evaluate(hero)
         progress = Progress.load(store, heroIds: content.heroes.map(\.mission.hero.id))
-        progression = Progression(heroes: content.heroes) { isDebug || ClaimGate.evaluate($0).runtimeRelease == .show }
+        progression = Progression(heroes: content.heroes) { allows || ClaimGate.evaluate($0).runtimeRelease == .show }
         play = PlayState(tuning: content.tuning, beats: hero.mission.beats, seed: content.tuning.seed)
-        if !isDebug && gate.runtimeRelease == .hideAndLog {
+        if !allows && gate.runtimeRelease == .hideAndLog {
             NSLog("[claims] hero \(hero.mission.hero.id) hidden: unsigned \(gate.debugBadges.joined(separator: ", "))")
         }
         titleLoaded()
     }
 
-    public var isPlayable: Bool { isDebug || gate.runtimeRelease == .show }
+    /// Whether unsigned heroes may play (Debug, or the Preview build; never Release).
+    public let allowsUnsigned: Bool
+    public var isPlayable: Bool { allowsUnsigned || gate.runtimeRelease == .show }
 
     /// The title's hero card (D-27 A, title.md §5.5): the current hero (the last open one in timeline_order),
     /// its saved best stars and medal. Display only; nil when no hero is playable (a release build with

@@ -94,7 +94,7 @@ enum Boot {
             guard let hero = content.heroes.first(where: { $0.mission.hero.id == wanted }) ?? content.heroes.first else {
                 NSLog("[content] no hero bundled"); return nil
             }
-            let game = Game(content: content, hero: hero, store: d, isDebug: isDebug)
+            let game = Game(content: content, hero: hero, store: d, isDebug: isDebug, allowsUnsigned: showsUnsigned)
             if isDebug, let s = d.string(forKey: "startScreen") {
                 func int(_ k: String) -> Int? { d.object(forKey: k) == nil ? nil : d.integer(forKey: k) }
                 game.debugStart(screen: s, q: int("q"), beat: int("beat"), stage: d.string(forKey: "stage"), stars: int("stars"))
