@@ -221,3 +221,4 @@ test-setup, smoke-check), those checks report NOT ASSESSED by design (ADR-0001).
 - 2026-11-17 — TASK-022 merged (12bc968): concept technical sections now native stack; concept /design-review APPROVED (log design/gdd/reviews/game-concept-review-log.md). Gate concerns 1 and 4 closed. D-35 widened to cover the pillar-5 design test too. Remaining for gate re-run: Luan's D-14 and D-35.
 - 2026-11-17 — TASK-022b merged (f677c87): concept content owner, Next Steps ticked with proof, medal (D-07) in rewards, first-launch language pending D-20. Item (2) unblocked: Luan signs off history (his TASK-004 answer, cabf824).
 - 2026-11-17 — TASK-022c merged (e05daf6): concept names Luan as the history reviewer (his TASK-004 answer).
+- 2026-11-17 — Luan decided D-14: A (stars = story recall; star payoff sub-choice still open) and D-35: A. TASK-022d → game-art-content: remove both 'unless Luan decides' clauses. Then re-run the gate.

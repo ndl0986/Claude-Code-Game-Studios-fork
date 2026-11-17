@@ -121,9 +121,8 @@ it) · **Decided** (Luan's call, with the date).
   "unless" clauses leave the same opening.
 - **Options:** A. **remove the "unless" clause in both places** so they match the pillar · B. keep
   both as an open question for later.
-- **Blocks:** re-run of the Concept → Systems Design gate (with D-14).
 - **Recommendation:** A.
-- **Status:** Open.
+- **Status:** **Decided A (Luan, 2026-11-17):** remove the "unless" clause at both places (TASK-022d).
 
 ### D-30 Accept ADR-0003: how the game saves progress
 
@@ -291,7 +290,10 @@ it) · **Decided** (Luan's call, with the date).
   payoff (a "Did you know?" fact page per star, or a map decoration).
 - **Recommendation:** A + a fact page per star. Note: Luan's new **medal** (D-07) already rewards
   playing the full story, so stars = quiz recall, medal = full story fits A well.
-- **Status:** Open.
+- **Status:** **Decided A (Luan, 2026-11-17):** stars measure story recall only; later heroes
+  scale by enemy count and hits, never reaction time. The concept already follows A (TASK-020a
+  1feac26). Still open, not blocking: which visible payoff each star gets (fact page or map
+  decoration). Ask with the next design round.
 
 ### D-15 Quiz card order repeats on every replay
 
