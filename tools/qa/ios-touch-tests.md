@@ -36,3 +36,12 @@ leave 3★ + medal (a real run), so reset the app's data before checking a fresh
 
 Guards: each test times out after 420 s and the whole run after `TIMEOUT` (5400 s default). The ~300 s XCTest teardown
 seen on 2026-11-15 is gone (2026-11-16: the full 27-case run takes ≈ 10 min; cases 6–105 s).
+
+## Opt-in: the Preview build (TASK-026, D-37)
+
+`PreviewCheckUITests.test_preview_title_then_story_screens_show_the_unsigned_strip` is **skipped** in a normal run,
+so a full run reports 1 skipped. To run it, install the Preview app (`com.galaxyandsun.daidatanhhung.preview`) on
+the Simulator and pass `TEST_RUNNER_PREVIEW_CHECK=1` to `xcodebuild test-without-building`. It asserts that there is
+no debug state, ignores the `-startScreen` jump, taps Start by position, and attaches the title and the first story
+screen for a person to check the `UNSIGNED Cxx` strip.
+
