@@ -35,8 +35,16 @@ enum class Phase { WALK, CARD, PLAY, END, CAPTION, DIALOGUE }
 
 /** The beat types the slice implements (D-08 B). */
 enum class BeatType(val id: String) { FIGHT("fight"), WALK("walk"), HOLD("hold-meter"), TRAINING("training"), REACH("reach-the-flag"), DIALOGUE("dialogue");
+    /**
+     * The special pad's icon on this beat type (Mission flow Rule 7c, TASK-020 W17 / A3): hold-meter shows a clenched
+     * fist (the hero's hand in the orange moment); every other beat that has the pad (training's finish) the banner.
+     */
+    val specialIcon: SpecialIcon get() = if (this == HOLD) SpecialIcon.FIST else SpecialIcon.BANNER
     companion object { fun of(id: String) = entries.firstOrNull { it.id == id } }
 }
+
+/** The special pad's glyph (W17). Its label stays `ui.pad.special` until D-34. */
+enum class SpecialIcon { BANNER, FIST }
 
 /** Training's three parts, in order (mission-flow rule 7, F4). */
 enum class TrainingStep { DUMMIES, BLOCKS, SPECIAL, DONE }

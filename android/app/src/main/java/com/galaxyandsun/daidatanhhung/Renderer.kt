@@ -10,6 +10,7 @@ import com.galaxyandsun.daidatanhhung.core.SkyContrast
 import com.galaxyandsun.daidatanhhung.core.Action
 import com.galaxyandsun.daidatanhhung.core.ScreenFit
 import com.galaxyandsun.daidatanhhung.core.BeatType
+import com.galaxyandsun.daidatanhhung.core.SpecialIcon
 import com.galaxyandsun.daidatanhhung.core.ClaimGate
 import com.galaxyandsun.daidatanhhung.core.Game
 import com.galaxyandsun.daidatanhhung.core.HandHint
@@ -89,13 +90,17 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
 
     // ---- Widgets ----
     private fun button(key: String, label: String, x: Float, y: Float, w: Float, h: Float, t: Double, pulse: Boolean = false,
-                       fill: Int = C.GOLD, shade: Int = C.GOLD_DARK, size: Float = 34f, enabled: Boolean = true, labelColor: Int = C.INK, onTap: () -> Boolean) {
+                       fill: Int = C.GOLD, shade: Int = C.GOLD_DARK, size: Float = 34f, enabled: Boolean = true, labelColor: Int = C.INK,
+                       icon: ((Float, Float, Float) -> Unit)? = null, onTap: () -> Boolean) {
         val p = if (pulse && enabled) 1 + sin(t * 6).toFloat() * 0.04f else 1f
         val old = d.alpha; if (!enabled) d.alpha = 0.5
         d.c.save(); d.c.translate(x + w / 2, y + h / 2); d.c.scale(p, p)
         d.rr(-w / 2, -h / 2 + 6, w, h, h / 2.6f, shade); d.rr(-w / 2, -h / 2, w, h, h / 2.6f, fill, C.WHITE, 4f)
         d.c.restore()
-        d.textBox(label, x + w / 2, y + h / 2, w - 30, size, labelColor, 1)
+        if (icon != null) { // the icon backs up the words for a pre-reader (W20); the label fills the rest
+            icon(x + 22 + h * 0.36f, y + h / 2, h * 0.56f)
+            d.textBox(label, x + 22 + h * 0.72f + (w - 22 - h * 0.72f) / 2, y + h / 2, w - 22 - h * 0.72f - 20, size, labelColor, 1)
+        } else d.textBox(label, x + w / 2, y + h / 2, w - 30, size, labelColor, 1)
         d.alpha = old
         next += Region(key, x, y, w, h, false, onTap = onTap)
     }
@@ -308,7 +313,7 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
             if ("defend" in vis) pad("defend", 950f, 625f, 80f, Action.DEFEND, h.def, r.pulseDefend, g.ui(UiIds.DEFEND), t) { rr -> shieldGlyph(rr) }
             if ("attack" in vis) pad("attack", 1150f, 590f, 92f, Action.ATTACK, h.atk >= 0, r.pulseAttack, g.ui(UiIds.ATTACK), t) { rr -> staffGlyph(rr) }
             val special = if (r.beatType == BeatType.HOLD) Pair(1150f, 590f) else Pair(1150f, 400f) // alone, it takes attack's place
-            if ("special" in vis) pad("special", special.first, special.second, 80f, Action.SPECIAL, false, r.pulseSpecial, g.uiOrNull(UiIds.SPECIAL), t) { rr -> bannerGlyph(rr) }
+            if ("special" in vis) pad("special", special.first, special.second, 80f, Action.SPECIAL, false, r.pulseSpecial, g.uiOrNull(UiIds.SPECIAL), t) { rr -> if (r.beatType.specialIcon == SpecialIcon.FIST) fistGlyph(rr) else bannerGlyph(rr) }
             val barShown = beat.usesBanner && (r.phase == Phase.PLAY || r.phase == Phase.END)
             if (barShown && r.hand != HandHint.NONE) { // Hints Rule 6 (r10): below the bar, beside the pad when it can't go above
                 val pads = buildList {
@@ -513,8 +518,11 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         d.rr(200f, 150f, 880f, by + bh + 24f - 150f, 36f, C.CREAM, C.GOLD, 6f)
         medal(W / 2, 250f, 56f, false)
         d.textBox(g.ui(UiIds.SKIP_WARNING), W / 2, 365f, 780f, 37f, C.INK, 3, semiBold = true) // fit.dialog 780 @ 37, 3 lines, weight 600
-        button("keep", g.ui(UiIds.KEEP_READING), 260f, by, 360f, bh, g.t, pulse = true) { g.keepReading() }
-        button("skipok", g.ui(UiIds.SKIP_CONFIRM), 660f, by, 360f, bh, g.t, fill = C.a(C.WHITE, 0.9), shade = 0xFFC8B89A.toInt()) { g.confirmSkip() }
+        // W20 (Mission flow, skip warning): "Keep reading" big, default and on the RIGHT with an open book; "Skip anyway"
+        // smaller on the left with a skip arrow. Both stay ≥ pad_min tall (Input Rule 4).
+        button("skipok", g.ui(UiIds.SKIP_CONFIRM), 240f, by, 340f, bh, g.t, fill = C.a(C.WHITE, 0.9), shade = 0xFFC8B89A.toInt(), size = 30f,
+            icon = { x, y, s -> skipGlyph(x, y, s) }) { g.confirmSkip() }
+        button("keep", g.ui(UiIds.KEEP_READING), 600f, by, 440f, bh, g.t, pulse = true, icon = { x, y, s -> bookGlyph(x, y, s) }) { g.keepReading() }
     }
 
     /** A drawn medal: a gold disc with the drum motif (earned) or an outline (not yet). */
@@ -529,6 +537,31 @@ class Renderer(bold: Typeface, semi: Typeface, private val debug: Boolean, priva
         d.circle(x, y, 48f, C.a(C.WHITE, 0.85), C.GOLD, 4f)
         d.arc(x, y, 40f, (-Math.PI / 2).toFloat(), (-Math.PI / 2 + 2 * Math.PI * frac).toFloat(), C.GLOW, 12f)
         fig.icon("orange", x, y, 46f * (1f - 0.35f * frac.toFloat()))
+    }
+
+    /** W17: a clenched fist (hold-meter's special pad): skin #F1C9A0, ink outline, knuckle creases and the thumb across. */
+    private fun fistGlyph(r: Float) {
+        d.rr(-r * 0.42f, -r * 0.40f, r * 0.84f, r * 0.62f, r * 0.2f, C.SKIN, C.INK, 4f) // the curled fingers
+        for (i in 1..3) { val x = -r * 0.42f + r * 0.21f * i; d.rr(x - 1.5f, -r * 0.40f, 3f, r * 0.28f, 1.5f, C.INK) } // knuckle creases
+        d.rr(-r * 0.46f, -r * 0.02f, r * 0.62f, r * 0.24f, r * 0.12f, C.SKIN, C.INK, 4f) // the thumb across the front
+        d.rr(-r * 0.30f, r * 0.22f, r * 0.60f, r * 0.26f, r * 0.08f, C.CREAM, C.INK, 4f) // the cuff
+    }
+
+    /** W20: an open book (Keep reading): two cream pages and a spine, ink outline. Centred on (x, y), [s] wide. */
+    private fun bookGlyph(x: Float, y: Float, s: Float) {
+        val h = s * 0.62f
+        d.poly(C.CREAM, x, y - h * 0.38f, x - s / 2, y - h / 2, x - s / 2, y + h / 2, x, y + h * 0.62f)
+        d.c.drawPath(d.path, d.stroke(C.INK, 4f))
+        d.poly(C.CREAM, x, y - h * 0.38f, x + s / 2, y - h / 2, x + s / 2, y + h / 2, x, y + h * 0.62f)
+        d.c.drawPath(d.path, d.stroke(C.INK, 4f))
+        for (k in 1..2) { val yy = y - h * 0.2f + k * h * 0.22f
+            d.rr(x - s * 0.40f, yy, s * 0.30f, 3f, 1.5f, C.a(C.INK, 0.55)); d.rr(x + s * 0.10f, yy, s * 0.30f, 3f, 1.5f, C.a(C.INK, 0.55)) }
+    }
+
+    /** W20: a skip arrow (Skip anyway): two ink chevrons pointing right. Centred on (x, y), [s] wide. */
+    private fun skipGlyph(x: Float, y: Float, s: Float) {
+        for (k in 0..1) { val x0 = x - s / 2 + k * s * 0.48f
+            d.poly(C.INK, x0, y - s * 0.36f, x0 + s * 0.14f, y - s * 0.36f, x0 + s * 0.52f, y, x0 + s * 0.14f, y + s * 0.36f, x0, y + s * 0.36f, x0 + s * 0.38f, y) }
     }
 
     private fun bannerGlyph(r: Float) { d.rr(-r * 0.32f, -r * 0.5f, 7f, r * 1.0f, 3f, 0xFF6A4A2A.toInt()); d.poly(C.RED, -r * 0.28f, -r * 0.5f, r * 0.42f, -r * 0.38f, r * 0.42f, r * 0.02f, -r * 0.28f, -r * 0.06f) }
