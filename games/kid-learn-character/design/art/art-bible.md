@@ -1,9 +1,9 @@
 # Art Bible: Letter Morph (working title; K-04 open)
 
-> **Status**: Draft
+> **Status**: Approved (all 9 sections approved one by one by Luan, 2026-11-17)
 > **Owned By**: art-director
 > **Last Updated**: 2026-11-17
-> **Art Director Sign-Off (AD-ART-BIBLE)**: [Not yet reviewed]
+> **Art Director Sign-Off (AD-ART-BIBLE)**: SKIPPED 2026-11-17 — lean mode
 
 `/art-bible` writes these nine sections in this order and replaces each
 section's `[To be designed]` line as that section is approved. A section still
@@ -419,6 +419,45 @@ the glyph rises from where it was pressed with an ease-out.
 
 ## 9. Reference Direction
 
-[To be designed] — 3–5 references (games, films, art styles or artists). For
-each: the specific element to take from it, and what to avoid so the result
-does not read as a copy.
+**Four references, each pointing a different way:** one for the press, one for the figure, one for
+the light, one for the system. Only the first, Typer Shark, is Luan's; the other three are the
+art-director's proposals, accepted by Luan on 2026-11-17.
+
+### Typer Shark (PopCap, typing game): Luan's reference, for the press
+
+- **Take:** the key press is the fun. Each press shows on screen the instant it is made, at the
+  letter, so the child sees cause and effect with no wait (Pillar 1): the spark at the press point
+  and the glyph rising from where it was pressed (Sections 2 and 7).
+- **Avoid:** everything that turns it into a test: the approaching threat, the timer and air meter,
+  the miss, the score, the dark water, the sharks and teeth. Here there is no wrong press, and
+  nothing swims toward the child.
+
+### Dick Bruna's picture books (Miffy): the figure
+
+- **Take:** one figure, centred, on an almost empty ground; flat fills with no shading; one heavy,
+  even outline around the whole figure. That is "a stage, not a world" and "an outline marks a
+  hero" (Sections 3 and 6).
+- **Avoid:** the front-facing pose (our cast faces right, side view), dot eyes (ours are large with
+  a highlight), a pure black outline (ours is Ink at 80%) and the small primary palette (ours is the
+  eight hue slots). Never his characters.
+
+### Fantasia (Disney, 1940), the "Nutcracker Suite" fairies: the light
+
+- **Take:** light as something *applied*: small glows drift onto a form, touch it and fade, and the
+  form stays lit. That is "the light gently settles into the thing": the stardust lands on the
+  silhouette and gets quieter as it lands (Section 2, rule 4).
+- **Avoid:** the painted naturalism, detailed plants and rendered depth (we use flat fills and no
+  texture), the fast sweeping passes, and any fairy or character figure. The light has no character
+  of its own.
+
+### Isotype (Otto Neurath, Gerd Arntz): the system
+
+- **Take:** two rules. A set of figures is drawn to one shared system, each differing by the one
+  element that defines it: our family plus one outline trait (Section 3). A larger quantity is shown
+  by *more* identical figures, never by a bigger one: how the number babies count (Section 5).
+- **Avoid:** the hard cut-paper edges, the strict grid, the black-and-red print palette and the
+  statistics subjects. We use Isotype's rules, not its look.
+
+**How these are used:** each reference answers one question (how the press feels, how a figure
+sits, how light moves, how a set holds together). They guide technique only; no character, artwork,
+name or layout from any of them is copied into the game.
