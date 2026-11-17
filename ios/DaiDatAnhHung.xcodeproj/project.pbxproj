@@ -263,7 +263,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# ADR-0001 R11 + R12: a Release build fails on a pending claim or a newer schema MAJOR.\nif [ \"$CONFIGURATION\" = \"Release\" ]; then\n  xcrun --sdk macosx swift \"$SRCROOT/Scripts/ContentGate.swift\" \"$SRCROOT/../content/data\" 1 || exit 1\nfi\n";
+			shellScript = "# ADR-0001 R11 + R12: a Release build fails on a pending claim or a newer schema MAJOR.\n# D-37: only Release runs the gate. Preview (Luan's own device, never archived or uploaded) skips it and shows\n# the UNSIGNED badges; Debug skips it as before. Archive builds Release, so it still stops here.\nif [ \"$CONFIGURATION\" = \"Release\" ]; then\n  xcrun --sdk macosx swift \"$SRCROOT/Scripts/ContentGate.swift\" \"$SRCROOT/../content/data\" 1 || exit 1\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -311,7 +311,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung.uitests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_TARGET_NAME = DaiDatAnhHung;
@@ -324,12 +324,25 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung.uitests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_TARGET_NAME = DaiDatAnhHung;
 			};
 			name = Release;
+		};
+		5152DB57CAA0B2B9867487D7 /* Preview */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = DaiDatAnhHung;
+			};
+			name = Preview;
 		};
 		43D414A56741CDB8330000C8 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -373,19 +386,42 @@
 			};
 			name = Release;
 		};
+		19806B7C9460CCB46C75CBBB /* Preview */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = PREVIEW;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Preview;
+		};
 		165878DF126C47EFC31DE978 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_KEY_CFBundleDisplayName = "Dải Đất Anh Hùng";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_FILE = Config/Info.plist;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.1.0;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -399,19 +435,43 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_KEY_CFBundleDisplayName = "Dải Đất Anh Hùng";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_FILE = Config/Info.plist;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.1.0;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 			};
 			name = Release;
+		};
+		C4CC4B653A3BF50D913C943F /* Preview */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_KEY_CFBundleDisplayName = "Dải Đất Anh Hùng (preview)";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_FILE = Config/Info.plist;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.1.0;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung.preview;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+			};
+			name = Preview;
 		};
 		13965053179E8B5B6571EC50 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -420,7 +480,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DaiDatAnhHung.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)DaiDatAnhHung";
@@ -434,12 +494,26 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DaiDatAnhHung.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)DaiDatAnhHung";
 			};
 			name = Release;
+		};
+		992E64237ECD4D85F73351B3 /* Preview */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DaiDatAnhHung.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)DaiDatAnhHung";
+			};
+			name = Preview;
 		};
 /* End XCBuildConfiguration section */
 
@@ -449,6 +523,7 @@
 			buildConfigurations = (
 				E2DFCF7333B80A4A24862AF3 /* Debug */,
 				C6E4A40D1AABC9622BF68473 /* Release */,
+				5152DB57CAA0B2B9867487D7 /* Preview */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -458,6 +533,7 @@
 			buildConfigurations = (
 				43D414A56741CDB8330000C8 /* Debug */,
 				980AA67F1D9CA063EE9E1313 /* Release */,
+				19806B7C9460CCB46C75CBBB /* Preview */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -467,6 +543,7 @@
 			buildConfigurations = (
 				165878DF126C47EFC31DE978 /* Debug */,
 				CE2CEEE4C574A165B6AC9765 /* Release */,
+				C4CC4B653A3BF50D913C943F /* Preview */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -476,6 +553,7 @@
 			buildConfigurations = (
 				13965053179E8B5B6571EC50 /* Debug */,
 				B0DC4B85D56F3244F7A81D78 /* Release */,
+				992E64237ECD4D85F73351B3 /* Preview */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
