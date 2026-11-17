@@ -200,8 +200,10 @@ class Figures(private val d: Draw) {
     fun hand(x: Float, y: Float, t: Double, rot: Float = 0f) {
         val b = (sin(t * 6) * 12).toFloat()
         c.save(); c.translate(x, y); c.rotate(rot); c.translate(0f, -70 - b)
-        d.rr(-8f, -10f, 16f, 44f, 8f, C.WHITE, C.INK); d.rr(-26f, -48f, 52f, 48f, 18f, C.WHITE, C.INK)
-        d.rr(-30f, -42f, 14f, 30f, 7f, C.WHITE, C.INK); d.rr(-22f, -66f, 44f, 20f, 8f, C.RED)
+        // ASSET-033 placeholder (r14): a child's hand in the one skin C.SKIN #F1C9A0 (look sheet d18), a cream #FFF6E3
+        // sleeve cuff, the ink outline kept; not a white glove (the spec's negatives rule one out).
+        d.rr(-8f, -10f, 16f, 44f, 8f, C.SKIN, C.INK); d.rr(-26f, -48f, 52f, 48f, 18f, C.SKIN, C.INK)
+        d.rr(-30f, -42f, 14f, 30f, 7f, C.SKIN, C.INK); d.rr(-22f, -66f, 44f, 20f, 8f, C.CREAM, C.INK)
         c.restore()
     }
 
