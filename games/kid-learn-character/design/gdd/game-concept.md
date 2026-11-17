@@ -1,7 +1,7 @@
 # Game Concept: Letter Morph
 
 *Created: 2026-11-17*
-*Status: Draft*
+*Status: Approved (revised 2026-11-18 after /design-review to match decisions K-01…K-08, the art bible and the prototype iterations 1–4)*
 *Working title. The final name is decision K-04 (open). Project folder: `kid-learn-character`.*
 
 ---
@@ -10,7 +10,7 @@
 
 > It's a magical alphabet toy for toddlers where every key the child presses, on screen or on a
 > real keyboard, turns into its letter or number, and then that letter dissolves into stardust
-> and becomes a thing: **D** becomes a roaring dinosaur, **3** becomes three bouncing apples.
+> and settles into a thing from today's theme: **D** becomes a diplodocus, **3** becomes three baby dinosaurs.
 > The child mashes the keyboard, and the whole world answers.
 
 ---
@@ -71,15 +71,29 @@ something they see happen, not two pictures side by side.
 
 ### Core Mechanics (Systems we build)
 
-1. **Key input:** an on-screen toddler keyboard (big keys) plus hardware keyboard input on iPad and
-   Mac; every key A–Z and 0–9 maps to one entry in a data table (JSON).
+1. **Key input:** a hardware keyboard on iPad and Mac, plus touch on a few glowing **hint letters**
+   that drift in the sky (a touch on a fading hint still counts); an **optional on-screen keyboard
+   row**, off by default, turned on by a grown-up (art bible §7). Only letters A–Z and digits 0–9 do
+   anything; every other key is swallowed, held keys and repeats are ignored.
+1a. **Theme key table (K-07):** a **theme** (Dinosaurs first) covers every key: each letter becomes
+   a cast member whose name contains the letter, often but not always first (C = triCeratops); each
+   digit becomes that many baby dinosaurs (0 = an empty nest). Data (JSON), not code. The demo fixes
+   one item per key per theme; production has a small per-key database for variety.
 2. **Morph reveal:** one shared "stardust morph" effect for every key: the big letter glows,
    dissolves into particles, and the particles form the object, which then idles gently.
-3. **Sound and voice:** the object's sound plus the spoken line ("D… dinosaur", US English, letter
-   name then word).
-4. **Mash control:** a queue of at most 3 pending keys; further presses are ignored, with a soft
-   sparkle on the key *(proposal)*; while keys are queued, each reveal holds for about 3 s.
-5. **Parent gate:** settings (theme packs later, language later) sit behind a grown-up check.
+3. **Sound and voice:** the cast member's own sound plus the spoken line (US English, the letter's
+   name then the word: "C… triceratops"; never "letter C"). **Tap the cast member** on stage and it
+   hops and makes its own sound again (iteration 4), so the child links the creature to its sound.
+4. **Mash control:** a queue of at most 3 pending keys; further presses only sparkle; while keys
+   are queued, each reveal holds for about 3 s.
+5. **Parade:** every 8 new cast members met, those 8 walk across the hills once (Luan's favourite
+   moment in the playtest: Keep).
+6. **Parent gate and child lock-in:** settings sit behind a grown-up check (hold the moon, or the
+   parent key chord on the Mac). Child lock-in keeps the child in the app: a kiosk mode on the Mac,
+   Guided Access guidance on the iPad (TASK-033; the playtest's worst moment was shortcuts
+   switching apps).
+7. **The stage follows the clock (K-08):** morning, day, dusk, night from the device's clock; a
+   grown-up can pick today's weather by hand. No network, no location.
 
 ---
 
@@ -117,16 +131,19 @@ curriculum with progress tracking and tests.
 
 ### Moment-to-Moment (30 seconds)
 
-The child presses a key. The key lights up at once; the big letter appears, glows, dissolves into
-stardust and becomes the object (D → a dinosaur that roars) while the voice says "D… dinosaur".
+The child presses a key or touches a hint letter. A chime answers at once; the big letter rises
+from where it was pressed, glows, dissolves into stardust and settles into the cast member
+(D → a diplodocus that hums) while the voice says "D… diplodocus".
 The object idles gently until the next press. Satisfying through instant acknowledgement, a
 moment of wonder, and the visible letter-to-object link. When the child mashes, up to 3 keys
-queue and each reveal holds about 3 s; extra presses are ignored with a soft sparkle *(proposal)*.
+queue and each reveal holds about 3 s; extra presses only sparkle. Touching the cast member makes it
+hop and make its sound again.
 
 ### Short-Term (5-15 minutes)
 
 Exploration: which key becomes what? The child finds favourites and presses them again. Numbers
-count: **3** splits into three apples that bounce, and the voice says "three".
+count: **3** becomes three baby dinosaurs, and the voice says "three… three baby dinosaurs".
+Every 8 new cast members met, they walk across the hills in a parade.
 
 ### Session-Level (30-120 minutes)
 
@@ -135,13 +152,15 @@ when the child wanders off or a parent closes the app; nothing is lost, there is
 
 ### Long-Term Progression
 
-None for the child: no scores, levels or unlocks. The toy grows instead: new theme packs
-(Dinosaurs, Vehicles…) chosen by a parent, driven by the child's feedback. It is a toy, so it is
+None for the child: no scores, levels, unlocks or "seen" marks (art bible §4). The toy grows
+instead: the Dinosaurs theme first, then new themes (Vehicles…) chosen by a parent, driven by the
+child's feedback, and more items per key (K-07). It is a toy, so it is
 never "done".
 
 ### Retention Hooks
 
-- **Curiosity**: "what does this key become?" across 36 keys; later, new theme packs.
+- **Curiosity**: "what does this key become?" across 36 keys; later, new themes.
+- **Surprise**: the parade, which arrives without warning after a run of new creatures.
 - **Investment**: favourite letters the child wants to see again ("the dinosaur!").
 - **Social**: the parent and child playing together.
 - **Mastery**: recognising letters and numbers, passively.
@@ -187,24 +206,26 @@ A parent can hand the device over without worry: offline, no data, a parent gate
 
 ## Visual Identity Anchor
 
-*Provisional: derived from the brainstorm (feel "magical"; K-01 "2D first, 3D later").
-AD-CONCEPT-VISUAL was skipped (Lean mode); `/art-bible` confirms or replaces it.*
+*The art bible (`design/art/art-bible.md`, Approved 2026-11-17) is the source of truth; this is
+its summary. The brainstorm's provisional "Stardust Storybook" anchor was sharpened there.*
 
-**Direction: "Stardust Storybook"**
+**Visual rule:** *The letter is light, and the light gently settles into the thing.*
 
-**Visual rule:** every letter is made of light, and the light becomes the thing.
-
-**Supporting principles:**
-1. **The glyph is the hero.** The letter or number is shown big, bold and centred before it morphs.
-   *Design test: a decorative background or a clearer glyph → the clearer glyph.*
-2. **Soft storybook 2D.** Flat, rounded illustrations with gentle idle motion; 3D only later for a
-   few favourites. *Design test: more detail or a cleaner silhouette a toddler can read → the
-   cleaner silhouette.*
-3. **Sparkle, never strobe.** Particles drift and twinkle; nothing flashes. *Design test: a faster,
+**Supporting principles** (art bible §1):
+1. **The glyph gets the first look** (Pillar 2): the letter is the brightest, largest, warmest
+   thing on screen, and the stardust keeps its outline before it becomes the cast member.
+   *Design test: when something competes with the glyph, dim or shrink the competitor.*
+2. **One flat, friendly silhouette** (Pillar 4): rounded flat shapes a 3-year-old can name from the
+   outline alone; never emoji, never plain circles. *Design test: more detail or a cleaner
+   silhouette → the silhouette.*
+3. **Drift, never flash** (Pillar 3): light fades up, glows and drifts. The one exception, by
+   Luan's choice (K-08), is the glyph's halo pulse at ~2.2 Hz: a blur pulse below the
+   three-flashes-per-second threshold; every other pulse is ≤ 1 Hz. *Design test: a faster,
    brighter burst or a slower glow → the slower glow.*
 
-**Colour philosophy:** calm, low-saturation backgrounds (dusk blue, cream) so the warm, glowing
-letter and the stardust carry the colour; each object keeps its own clear, friendly colours.
+**The stage follows the clock** (art bible §2, K-08): morning, day, dusk (the home look), night,
+plus calm weather picked by hand by a grown-up. **Colour:** gold means only "a letter"; cast
+members sit in eight hue slots; no colour means right, wrong or reward (art bible §4).
 
 ---
 
@@ -239,28 +260,30 @@ picture-book alphabets.
 
 | Consideration | Assessment |
 | ---- | ---- |
-| **Recommended Engine** | Native Swift (K-03: no cross-platform engine; Luan's Unity familiarity noted but not used). `/setup-engine` records it; an early team idea is SpriteKit 2D behind a swappable stage |
-| **Key Technical Challenges** | Hardware keyboard input on iPadOS and macOS; low audio latency; one morph effect that works for all 36 glyphs; mash control with no stacking |
-| **Art Style** | 2D first, 3D later for a few favourites (K-01) |
-| **Art Pipeline Complexity** | Medium (custom 2D: 36 illustrations plus one shared morph effect) |
-| **Audio Needs** | Moderate: 36 object sounds, 36 voice lines (US English), soft ambience |
-| **Networking** | None (offline, Safe by Design) |
-| **Content Volume** | 36 keys (A–Z, 0–9) in the MVP; each theme pack adds up to 36 more |
-| **Procedural Systems** | The shared stardust morph (particles from the glyph's shape to the object's) |
+| **Recommended Engine** | Native Swift (K-03; Luan's Unity familiarity noted but not used): SpriteKit in a SwiftUI shell, one Xcode project under `apple/` (ADR-0001). The morph is computed by a UI-free MorphCore to **morph contract v1** (`docs/architecture/morph-contract-v1.md`), which an Android port must match; Rive and an engine-as-a-library were rejected (TASK-033) |
+| **Key Technical Challenges** | Hardware keyboard input and child lock-in on iPadOS and macOS (⌘Tab, Mission Control, Guided Access shortcuts NOT ASSESSED yet); press-to-sound latency on a real iPad (NOT ASSESSED; Simulator/Mac only so far); one morph for every glyph; how SVG art reaches the screen (a later ADR) |
+| **Art Style** | 2D first, 3D later for a few favourites (K-01); flat, rounded, outlined cast (art bible) |
+| **Art Pipeline Complexity** | Medium: per theme, 26 SVG cast members + silhouettes and the number babies, one shared morph |
+| **Audio Needs** | Moderate: per theme, 36 cast sounds, voice lines for 36 letter/number names and 36 words (US English), a press chime |
+| **Networking** | None: no network, no location, no analytics (Pillar 5; K-08 keeps weather hand-picked) |
+| **Content Volume** | Dinosaurs theme in the MVP: 26 letters + 10 numbers; each later theme adds the same; production adds several items per key (K-07) |
+| **Procedural Systems** | The shared stardust morph (MorphCore: glyph points → silhouette points, seeded, data-timed) |
 
 ---
 
 ## Risks and Open Questions
 
 ### Design Risks
-- The ~3 s hold while mashing may feel slow to a toddler; tune it in the prototype.
-- Some letters have no good toddler-safe object (Q, X, Z); TASK-029's draft uses X = fox.
-- Will a 2.5-year-old notice the letter at all, or only watch the object?
+- The ~3 s hold while mashing may feel slow to a toddler; tune it in play (config value).
+- Will a 2.5-year-old notice the letter at all, or only watch the cast member?
+- Hint letters drift and fade: a slow aim can miss (mitigated: a touch on a fading hint counts).
 
 ### Technical Risks
-- Hardware keyboard events on iPad (`pressesBegan`) and Mac; system shortcuts that could exit the app.
+- Child lock-in: ⌘Tab, ⌘⌥Esc, Mission Control, Globe and iPad shortcuts under Guided Access are NOT
+  ASSESSED (TASK-033); a physical-keyboard check is needed.
+- All latency figures are Simulator/Mac lower bounds; the child's real iPad is not measured.
 - A first native Swift build pipeline for this team; signing and the Kids category.
-- Audio latency between the press and the sound.
+- The SVG rendering path in SpriteKit is undecided (a later ADR with an iPad measurement).
 
 ### Market Risks
 - Toddler alphabet apps are a crowded space (not researched).
@@ -268,14 +291,16 @@ picture-book alphabets.
   checklist covers them.
 
 ### Scope Risks
-- 36 sets of picture, sound and voice line in one week; licensing for art and voice.
-- Making the shared morph look good for every glyph could take longer than expected.
+- Per theme: 36 sets of art, silhouette, sound and voice; production wants several per key (K-07).
+- 14 MVP systems against a ~1-week MVP: treat "~1 week" as an aspiration and re-estimate at the
+  Production gate (`/estimate`; producer, gate check 2026-11-18).
 
 ### Open Questions
-- How long should the hold be while mashing? → the prototype, then the child plays it.
-- Should an ignored press (the queue is full) give a sparkle? → the prototype (proposal above).
+- Where do art and voice come from (made, generated or licensed)? → `/asset-spec` and the audio
+  direction.
 - The game's name (K-04) → later.
-- Where do art and voice come from (made, generated or licensed)? → `/art-bible` and TASK-029.
+- Does the App Store Kids category apply to the macOS app? → Luan checks App Store Connect
+  (TASK-034, not verified).
 
 ---
 
@@ -284,36 +309,40 @@ picture-book alphabets.
 **Core hypothesis**: Luan's 2.5–3-year-old child stays delighted pressing keys for 5+ minutes and
 comes back to it, because every key turns into a magical, spoken letter and object.
 
-**Required for MVP**:
-1. On-screen keyboard plus hardware keyboard, A–Z and 0–9, from a JSON data table.
-2. The shared stardust morph, the object's sound and the US English line ("D… dinosaur").
+**Required for MVP** (systems index, 14 MVP systems):
+1. Hardware keyboard + hint letters, A–Z and 0–9, from the Dinosaurs theme's JSON key table;
+   every other key does nothing.
+2. The shared stardust morph, the cast member's sound and the US English line ("C… triceratops");
+   tap the cast member to hear its sound again.
 3. Mash control: a queue of at most 3, about 3 s per reveal while queued; nothing ever breaks.
-4. Fully offline, no data; a parent gate for anything that is not play.
-5. Runs on iPad (plus Mac where the shared code allows it).
+4. The parade every 8 new cast members.
+5. Fully offline, no data; a parent gate for anything that is not play; child lock-in.
+6. Runs on iPad and Mac (iPhone later).
 
 **Explicitly NOT in MVP** (defer to later):
-- Mash World: objects stay in a scene (Tier 2).
-- Theme packs (Tier 1).
-- Vietnamese voice, iPhone, Android (Tier 3).
-- 3D objects.
+- Time of day and hand-picked weather, the optional on-screen keyboard row, Reduce Motion
+  (Vertical Slice).
+- More themes and more items per key (Alpha; K-07).
+- Mash World: cast members stay in a scene (Full Vision).
+- Vietnamese voice, iPhone, Android; 3D cast members.
 
 ### Scope Tiers (if budget/time shrinks)
 
 | Tier | Content | Features | Timeline |
 | ---- | ---- | ---- | ---- |
-| **MVP** | 36 keys, one default set, US English | Morph, sound and voice, mash control, keyboards, parent gate | ~1 week |
-| **Tier 1: Theme packs** | Dinosaurs, Vehicles… (up to 36 each) | Parent picks the pack behind the gate | +1–2 weeks per pack, driven by the child's feedback |
-| **Tier 2: Mash World** | One scene per theme | Objects step into the scene and stay (max N), oldest leaves | +2–3 weeks |
-| **Full Vision** | Several packs, Vietnamese voice, some 3D favourites | iPhone, then Android | ~1–3 months in total |
+| **MVP** | Dinosaurs theme: 26 letters + 10 numbers, US English | Morph, sound and voice, tap sound, mash control, hints, parade, parent gate, child lock-in | ~1 week (aspiration; re-estimate at the Production gate) |
+| **Vertical Slice** | The same theme | Time of day + hand-picked weather, optional keyboard row, Reduce Motion | +1–2 weeks |
+| **Alpha: more themes** | Vehicles… (36 each), more items per key | A grown-up picks the theme behind the gate | +1–2 weeks per theme, driven by the child's feedback |
+| **Full Vision** | Several themes, Vietnamese voice, Mash World, some 3D favourites | iPhone, then Android | ~1–3 months in total |
 
 ---
 
 ## Next Steps
 
-- [ ] `/setup-engine`: record native Swift (K-03) — not in the engine table; last game used an ADR plus a `project.yaml` engine block
-- [ ] **Prototype the core idea** (`/prototype`): a throwaway browser sketch of the morph and the mash rule, played by the child
-- [ ] `/art-bible`: confirm the Visual Identity Anchor
-- [ ] `/design-review design/gdd/game-concept.md`
-- [ ] If the prototype PROCEEDS: `/map-systems`
-- [ ] `/design-system` per system (prototype learnings in Tuning Knobs)
-- [ ] `/gate-check` to leave Concept
+- [x] `/setup-engine`: native Swift recorded in ADR-0001 (Proposed; TASK-035 update in review)
+- [x] `/prototype`: `prototypes/letter-morph-dinosaur/`, iterations 1–4, PROCEED
+- [x] `/art-bible`: 9 sections, Approved
+- [x] `/design-review design/gdd/game-concept.md`: NEEDS REVISION → revised 2026-11-18
+- [x] `/map-systems`: `design/gdd/systems-index.md` (20 systems, 14 MVP)
+- [ ] `/gate-check systems-design` to leave Concept
+- [ ] `/design-system` per system, in the systems index's design order
