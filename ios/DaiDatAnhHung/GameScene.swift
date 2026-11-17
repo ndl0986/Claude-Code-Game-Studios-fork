@@ -122,11 +122,28 @@ final class GameScene: SKScene {
         // r10 N1: the tap that leaves pause arrives before this update, so this is the resume frame; it credits no time
         let leftPause = wasPaused && game.screen != .pause
         wasPaused = game.screen == .pause
+        // iOS-R10-01 (r11): SpriteKit's currentTime, but never ahead of the press clock (systemUptime, the clock of
+        // UITouch.timestamp and the entry lock) read as this update runs. On the Simulator currentTime ran up to a
+        // frame ahead of the wall clock over a hold (0.8333 s of currentTime in 0.816-0.830 s of wall time), so the
+        // banner-up after a resume came out short. currentTime alone is perfectly even (one step a frame on a walk);
+        // the wall clock alone judders (5 of 216 frames ran 0 or 2 steps), so the frame time is the earlier of the two.
+        let now = min(currentTime, ProcessInfo.processInfo.systemUptime)
         #if DEBUG
         // `-timeScale 0.1`: slow motion for UI-test screenshots; the same fixed steps, only slower
-        let steps = frames.frame(currentTime, leftPause: leftPause, scale: debugTimeScale)
+        let steps = frames.frame(now, leftPause: leftPause, scale: debugTimeScale)
+        // r11 smoothness check: steps per frame from this clock and from a shadow clock on SpriteKit's currentTime
+        // alone (the r10 clock). At 60 Hz every frame should run 1 step; 0 or 2 is a judder frame.
+        let shadow = debugShadowFrames.frame(currentTime, leftPause: leftPause, scale: debugTimeScale)
+        debugStepHist.sys[min(steps, 3)] += 1; debugStepHist.ct[min(shadow, 3)] += 1
+        // iOS-R10-01 diagnosis: on the resume frame, SpriteKit's currentTime, the wall time this update runs and the
+        // last menu press, all on the mach clock (systemUptime)
+        if leftPause { debugResumeFrame = ["current_time": currentTime, "update_at": now, "press": debugFires.last?.1 ?? 0, "steps": 0, "frames": 0, "end_t": game.play.endT] }
+        else if debugResumeFrame["walk_ct"] == nil, debugResumeFrame["current_time"] != nil {
+            debugResumeFrame["frames", default: 0] += 1; debugResumeFrame["steps", default: 0] += Double(steps)
+            debugResumeFrame["max_dt"] = max(debugResumeFrame["max_dt"] ?? 0, frames.dt)
+        }
         #else
-        let steps = frames.frame(currentTime, leftPause: leftPause)
+        let steps = frames.frame(now, leftPause: leftPause)
         #endif
         clock += frames.dt
         for _ in 0..<steps {
@@ -140,6 +157,11 @@ final class GameScene: SKScene {
             debugHeld = input.held
             #endif
             game.step(frames.step, input)
+            #if DEBUG
+            if debugResumeFrame["current_time"] != nil, debugResumeFrame["walk_ct"] == nil, game.play.phase != .beatEnd {
+                debugResumeFrame["walk_ct"] = currentTime; debugResumeFrame["walk_at"] = now
+            }
+            #endif
         }
         #if DEBUG
         debugPublish()
@@ -1144,6 +1166,10 @@ final class GameScene: SKScene {
     private var debugLastPlace = ""
     /// Every button press: id, press time, and whether the entry lock was closed at that time (pause/sound exempt).
     private var debugFires: [(String, TimeInterval, Bool)] = []
+    private var debugResumeFrame: [String: Double] = [:]
+    private var debugShadowFrames = FrameClock()
+    /// Frames by steps run (0, 1, 2, 3+): this clock vs the shadow on currentTime. The UI case subtracts two snapshots.
+    private var debugStepHist = (sys: [0, 0, 0, 0], ct: [0, 0, 0, 0])
 
     private func debugAttach(_ v: SKView) {
         let l = UILabel(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
@@ -1209,6 +1235,8 @@ final class GameScene: SKScene {
         extra["lock_context"] = game.lockContextForDebug ?? NSNull()
         extra["lock_until"] = game.lockUntilForDebug ?? NSNull() // the rolling lock's end, for the UI touch cases (iOS-R8-01)
         extra["fires"] = debugFires.map { ["id": $0.0, "t": $0.1, "locked": $0.2] }
+        extra["resume_frame"] = debugResumeFrame
+        extra["step_hist"] = ["sys": debugStepHist.sys, "ct": debugStepHist.ct]
         extra["muted"] = game.muted
         extra["quiz_motion"] = ["q": quizMotion.q, "frames": quizMotion.frames, "max_bottom": quizMotion.maxBottom, "glide": quizMotion.glide]
         extra["debug_jumped"] = game.debugJumped

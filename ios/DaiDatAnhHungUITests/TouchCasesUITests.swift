@@ -426,8 +426,20 @@ final class R9CasesUITests: UITestBase {
         // r10 N1: the frame that leaves pause credits no time, so the 50 remaining steps (0.833 s) all run after the
         // press: never early, and late by at most the press-to-frame gap plus a frame or two of logging
         let up = walk - resumed
+        if let rf = s["resume_frame"] as? [String: Double], let ct = rf["current_time"], let ua = rf["update_at"] {
+            // iOS-R10-01: where the resume frame's clock sits against the press (all mach-clock seconds)
+            note("resume frame", String(format: "currentTime %+.4f s, update ran %+.4f s, after the press; walk %+.4f s after currentTime; to the hold end: %.0f frames, %.0f steps, max dt %.4f, currentTime +%.4f, wall +%.4f; endT at resume %.4f",
+                                        ct - resumed, ua - resumed, walk - ct, rf["frames"] ?? -1, rf["steps"] ?? -1, rf["max_dt"] ?? -1,
+                                        (rf["walk_ct"] ?? 0) - ct, (rf["walk_at"] ?? 0) - ua, rf["end_t"] ?? -1))
+            // iOS-R10-01 (r11): in wall time, from the resume frame's update to the update that ends the hold, the
+            // banner stays up the full 50 steps; the sim never runs ahead of the press clock. (On r10 this was
+            // 0.816-0.830 s: SpriteKit's currentTime ran ahead of the wall clock.)
+            let wall = try XCTUnwrap(rf["walk_at"], "the hold's end was recorded") - ua
+            XCTAssertGreaterThanOrEqual(wall, 50.0 / 60 - 0.0005, "banner-up from the resume frame, wall clock")
+            XCTAssertGreaterThanOrEqual((rf["walk_at"] ?? 0) - resumed, 50.0 / 60 - 0.0005, "and from the press")
+        }
         note("banner-up after the resume", String(format: "%.3f s (expected 0.833 ≤ t ≤ 0.850, plus logging latency)", up))
-        XCTAssertGreaterThanOrEqual(up, 0.833 - 0.005, "the banner-up after a resume is never short (r9: 0.800–0.812)")
+        XCTAssertGreaterThanOrEqual(up, 0.833 - 0.003, "the banner-up after a resume is never short (r9: 0.800–0.812; r10: 0.816-0.833)")
         XCTAssertLessThan(up, 0.833 + 0.1, "and not much longer")
     }
 

@@ -104,6 +104,31 @@ final class R11CasesUITests: UITestBase {
         XCTAssertEqual(s2["story_line"] as? Int, 0)
     }
 
+    /// (f) iOS-R10-01 fix, smoothness: with the sim on the press clock, a 3 s walk (▶ held) runs one step a frame as
+    /// steadily as the r10 clock did. The app counts frames by steps run, on this clock and on a shadow clock fed
+    /// SpriteKit's currentTime (r10); 0 or 2+ steps in a frame is a judder frame at 60 Hz. Recorded, and this clock
+    /// must not judder more than the shadow by more than a frame or two.
+    func test_f_a_walk_runs_one_step_a_frame_on_the_press_clock() throws {
+        for (beat, name) in [("1", "walk"), ("4", "training walk")] {
+            launch(["-startScreen", "play", "-beat", beat])
+            Thread.sleep(forTimeInterval: 1)
+            func hist() -> (sys: [Int], ct: [Int]) {
+                let h = state()["step_hist"] as? [String: [Int]] ?? [:]
+                return (h["sys"] ?? [0, 0, 0, 0], h["ct"] ?? [0, 0, 0, 0])
+            }
+            let a = hist(), x0 = state()["hero_x"] as? Double
+            pad("right").press(forDuration: 3)
+            Thread.sleep(forTimeInterval: 0.3)
+            let b = hist(), x1 = state()["hero_x"] as? Double
+            let sys = zip(b.sys, a.sys).map { $0 - $1 }, ct = zip(b.ct, a.ct).map { $0 - $1 }
+            let judder = { (h: [Int]) in h[0] + h[2] + h[3] }
+            note("\(name): frames by steps 0/1/2/3+", "press clock (r11): \(sys), judder frames \(judder(sys))\ncurrentTime (r10): \(ct), judder frames \(judder(ct))\nhero x \(x0 ?? -1) → \(x1 ?? -1)")
+            XCTAssertGreaterThan(sys[1], 100, "\(name): the walk ran")
+            XCTAssertLessThanOrEqual(judder(sys), judder(ct) + 2, "\(name): no more judder than the r10 clock")
+            quit()
+        }
+    }
+
     /// (d) W20: "Keep reading" is on the right, "Skip anyway" on the left; each does its own thing.
     func test_d_skip_warning_keep_reading_on_the_right_skip_anyway_on_the_left() throws {
         launch(["-startScreen", "intro", "-resetProgress", "YES"]) // a saved medal would skip without the warning
