@@ -407,7 +407,7 @@ final class R9CasesUITests: UITestBase {
         shot("after the finish hold")
     }
 
-    /// AC32: pause 0.3 s into the hold, then resume: the banner-up still lasts ≥ 0.8 s after the resume.
+    /// AC32: pause 0.3 s into the hold, then resume: the banner-up lasts the full 0.833 s after the resume (r10 N1).
     func test_a_resume_restarts_the_hold_to_rise_done() throws {
         launch(["-startScreen", "play", "-beat", "4", "-stage", "finish"])
         let flag = pad("special"), pause = try XCTUnwrap(button("pause")) // looked up first, so the pause lands 0.3 s in
@@ -423,7 +423,12 @@ final class R9CasesUITests: UITestBase {
         XCTAssertNotNil(at(entries, screen: "pause", "beatEnd", beat: 3), "the pause opened inside the hold")
         let resumed = try XCTUnwrap(fires.last { $0["id"] as? String == "resume" }?["t"] as? Double, "resume pressed")
         let walk = try XCTUnwrap(at(entries, "walkTo", beat: 4, after: resumed), "the walk started")
-        XCTAssertGreaterThanOrEqual(walk - resumed, 0.8 - 0.05, "≥ 0.8 s of banner-up after the resume")
+        // r10 N1: the frame that leaves pause credits no time, so the 50 remaining steps (0.833 s) all run after the
+        // press: never early, and late by at most the press-to-frame gap plus a frame or two of logging
+        let up = walk - resumed
+        note("banner-up after the resume", String(format: "%.3f s (expected 0.833 ≤ t ≤ 0.850, plus logging latency)", up))
+        XCTAssertGreaterThanOrEqual(up, 0.833 - 0.005, "the banner-up after a resume is never short (r9: 0.800–0.812)")
+        XCTAssertLessThan(up, 0.833 + 0.1, "and not much longer")
     }
 
     /// r9 screen pass (evidence, game-dev-ios pre-freeze): the Cờ hint hand, the banner rise frames and the partner's

@@ -36,10 +36,14 @@ final class GameScene: SKScene {
     private var handNode: SKNode?
     private var cardNodes: [SKNode] = []
 
-    private var last: TimeInterval = 0, acc = 0.0, clock = 0.0
+    /// Fixed 1/60 steps from frame times; a frame that leaves the pause screen credits nothing (GameCore FrameClock, r10 N1).
+    private var frames = FrameClock()
+    /// The animation clock: the sum of credited frame time, so it also stands still on a resume frame.
+    private var clock = 0.0
+    /// Whether last frame's screen was the pause screen: leaving it is the resume frame.
+    private var wasPaused = false
     /// The screen and play phase last frame: a change cancels a pressed menu button (Input GDD).
     private var lastPlace = "" 
-    private let step = 1.0 / 60
     /// How far (world px) backdrops and dimming run past the world on each side, to cover the outside area.
     static let bleed = 600.0
     /// The play phases drawn as story screens: no play sprites, no top stack (story-screens §5.2, hud §5; r8).
@@ -112,12 +116,17 @@ final class GameScene: SKScene {
         // Input GDD Rule 9/11: a screen or phase change only cancels a pressed menu button; held pads
         // stay held (hidden pads are filtered by the beat's buttons in the core, not released)
         if place != lastPlace { if !lastPlace.isEmpty { menuTouches = [:] }; lastPlace = place }
-        var dt = last == 0 ? 0 : min(currentTime - last, 0.25)
+        // r10 N1: the tap that leaves pause arrives before this update, so this is the resume frame; it credits no time
+        let leftPause = wasPaused && game.screen != .pause
+        wasPaused = game.screen == .pause
         #if DEBUG
-        dt *= debugTimeScale // `-timeScale 0.1`: slow motion for UI-test screenshots; the same fixed steps, only slower
+        // `-timeScale 0.1`: slow motion for UI-test screenshots; the same fixed steps, only slower
+        let steps = frames.frame(currentTime, leftPause: leftPause, scale: debugTimeScale)
+        #else
+        let steps = frames.frame(currentTime, leftPause: leftPause)
         #endif
-        last = currentTime; acc += dt; clock += dt
-        while acc >= step {
+        clock += frames.dt
+        for _ in 0..<steps {
             var input = pads.take()
             #if DEBUG
             // `-autoplay YES` (r9 UI case D): the GameCore bot plays the play beats, only while no story box or
@@ -127,8 +136,7 @@ final class GameScene: SKScene {
             }
             debugHeld = input.held
             #endif
-            game.step(step, input)
-            acc -= step
+            game.step(frames.step, input)
         }
         #if DEBUG
         debugPublish()
