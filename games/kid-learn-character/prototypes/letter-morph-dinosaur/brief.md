@@ -5,11 +5,16 @@ thử với chữ cái có trong Dinosoaur
 
 (Questions 1–6 not answered: the usual options taken.)
 
+After play: khi bé chơi, nên đisable tất cả các phím ngoài phím letter và number, các phím còn lại, khi đang focus trên màn hình game thì sẽ bị mất tác dụng
+After play: không cần hiện dòng chữ DINOSAUR sẵn trên màn hình, thay vào đó, có thể gợi ý bằng các chữ cái ngẫu nhiên hiện trên màn hình chính của game
+After play: không cần đọc letter A, letter D, ... chỉ cần đọc A hoặc D hoặc 1 (one) khi được nhấn
+After play (asked): "D" rồi "dinosaur" — keep the word after the letter's name
+
 **Pitch:** A toddler presses D, I, N, O, S, A, U or R, and the big glowing letter dissolves into stardust and becomes a dinosaur-world creature that roars while a voice says "D… dinosaur!" *(inferred (strong), from design/gdd/game-concept.md)*
 
 **Genre:** toddler toy / early-learning sandbox *(inferred (strong))*
 
-**Controls:** tap the big on-screen keys, or press the same letters on a real keyboard. *(inferred (strong))*
+**Controls:** tap a glowing letter that drifts on screen, or press letters on a real keyboard; every key other than a letter or digit does nothing while the game has focus.
 
 **Question:** does the stardust morph, plus the 3-key queue with a ~3 s hold, delight a 2.5–3-year-old for 5+ minutes without ever feeling broken or slow? *(inferred (strong))*
 
@@ -23,7 +28,7 @@ thử với chữ cái có trong Dinosoaur
 - View: 2D · Camera: fixed, front-on stage above the keyboard. *(provisional)*
 
 ## First minute
-The screen shows a soft dusk scene and a row of 8 big rounded keys, D I N O S A U R, with the word DINOSAUR spelled out by the keys themselves. A gentle twinkle pulses on the D key. The child taps anything: the key lights up, the letter rises big and golden, glows, dissolves into stardust and becomes the creature with its sound, and the voice says "D… dinosaur!". The next tap brings another. Mashing queues up to three, and each one plays in turn. *(provisional)*
+The screen shows a soft dusk scene with a few glowing letters drifting in at random spots, pulsing gently until the first press. The child taps anything: the key lights up, the letter rises big and golden, glows, dissolves into stardust and becomes the creature with its sound, and the voice says "D… dinosaur!". The next tap brings another. Mashing queues up to three, and each one plays in turn. *(provisional)*
 
 ## Challenge
 None by design: there is no failure and no wrong key. What changes: discovering all 8 creatures; when all 8 have been seen, a soft "parade" of the 8 dinosaurs walks across once. *(provisional)*
@@ -38,10 +43,10 @@ None by design: there is no failure and no wrong key. What changes: discovering 
 - No goal and no fail. A session feels complete when the child has met all 8 creatures (the parade plays once).
 
 ## Features
-- [x] 8 keys D I N O S A U R, on screen plus hardware keyboard; other keys only sparkle *(provisional)*
+- [x] The 8 letters D I N O S A U R, as random glowing hint letters on screen (tappable) plus the hardware keyboard; other letters and digits only sparkle; every other key does nothing
 - [x] Stardust morph: letter → particles in the letter's shape → creature, all values in config.js
 - [x] 8 drawn creatures: Dinosaur (Brontosaurus-type), Iguanodon, Nest with eggs, Oviraptor, Stegosaurus, Ankylosaurus, Utahraptor, T‑Rex, each with an idle bob *(provisional)*
-- [ ] Sound: synthesized roar or chirp per creature plus sparkle chime; browser speech in US English, "D… dinosaur" *(provisional)*
+- [ ] Sound: synthesized roar or chirp per creature plus sparkle chime; browser speech in US English, just the letter's name then the word: "D… dinosaur" (never "letter D")
 - [x] Mash queue: max 3 pending, ~3 s hold while queued, extra presses sparkle only
 - [x] The parade after all 8 have been seen *(guessed)*
 - [x] Tweak panel (queue size, hold time, morph speed, volume), hidden behind a long-press corner (parent gate stand-in) *(provisional)*
@@ -50,6 +55,9 @@ None by design: there is no failure and no wrong key. What changes: discovering 
 -
 
 ## Avoid
+- A fixed DINOSAUR key row on screen *(you said)*
+- The voice saying "letter D" / "capital D" *(you said)*
+- Any key other than letters and digits doing anything while the game has focus *(you said)*
 - Scores, timers, quizzes, fail states, text the child must read (beyond the letter), ads, links out, network, data collection, strobing, loud stings. *(from the concept's anti-pillars)*
 
 ## Out of scope

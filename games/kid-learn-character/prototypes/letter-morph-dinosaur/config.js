@@ -18,6 +18,10 @@ window.CONFIG = {
   form_s: { value: 0.5, min: 0.1, max: 1.5, step: 0.05 },       // s: creature fades in, stardust fades out
   particles: { value: 420, min: 100, max: 900, step: 20 },      // count of stardust specks per morph
   swirl: { value: 0.35, min: 0, max: 1, step: 0.05 },           // how much the stardust curves on its way
+  // --- Hint letters: a few glowing letters drift in at random spots (no fixed key row) ---
+  hint_count: { value: 3, min: 0, max: 6, step: 1 },          // letters on screen at once
+  hint_life_s: { value: 6, min: 2, max: 15, step: 0.5 },       // s: how long one lingers
+  hint_size: { value: 120, min: 70, max: 170, step: 5 },       // px: a hint bubble's size
   // --- Look ---
   creature_scale: { value: 1, min: 0.6, max: 1.3, step: 0.05 },
   bob_px: { value: 5, min: 0, max: 15, step: 1 },                // px: idle breathing bob
@@ -34,15 +38,16 @@ window.CONFIG = {
 };
 
 // The key table: data, not code (concept: "the key -> picture -> sound table is data").
-// creature: which drawing; sound: which synth recipe; say: the letter as spoken; word: spoken after.
+// creature: which drawing; sound: which synth recipe; say: the letter's name spelled the way it
+// sounds (so the voice says just "D", never "capital D" or "letter D"); word: spoken after.
 window.KEY_TABLE = {
-  D: { name: 'Dinosaur', word: 'dinosaur', say: 'D', creature: 'sauropod', sound: { kind: 'roar', f0: 70, cut: 600, dur: 1.3, vol: 0.9, vib: 5 } },
-  I: { name: 'Iguanodon', word: 'iguanodon', say: 'I', creature: 'iguanodon', sound: { kind: 'honk', f0: 260, f1: 380, n: 2 } },
-  N: { name: 'Nest', word: 'nest', say: 'N', creature: 'nest', sound: { kind: 'crack' } },
-  O: { name: 'Oviraptor', word: 'oviraptor', say: 'O', creature: 'oviraptor', sound: { kind: 'chirp', f0: 900, f1: 1400, n: 3 } },
-  S: { name: 'Stegosaurus', word: 'stegosaurus', say: 'S', creature: 'stegosaurus', sound: { kind: 'roar', f0: 85, cut: 450, dur: 0.9, vol: 0.7, vib: 3 } },
+  D: { name: 'Dinosaur', word: 'dinosaur', say: 'dee', creature: 'sauropod', sound: { kind: 'roar', f0: 70, cut: 600, dur: 1.3, vol: 0.9, vib: 5 } },
+  I: { name: 'Iguanodon', word: 'iguanodon', say: 'eye', creature: 'iguanodon', sound: { kind: 'honk', f0: 260, f1: 380, n: 2 } },
+  N: { name: 'Nest', word: 'nest', say: 'en', creature: 'nest', sound: { kind: 'crack' } },
+  O: { name: 'Oviraptor', word: 'oviraptor', say: 'oh', creature: 'oviraptor', sound: { kind: 'chirp', f0: 900, f1: 1400, n: 3 } },
+  S: { name: 'Stegosaurus', word: 'stegosaurus', say: 'ess', creature: 'stegosaurus', sound: { kind: 'roar', f0: 85, cut: 450, dur: 0.9, vol: 0.7, vib: 3 } },
   A: { name: 'Ankylosaurus', word: 'ankylosaurus', say: 'ay', creature: 'ankylosaurus', sound: { kind: 'thump', f0: 60, cut: 380, dur: 0.8, vol: 0.7, vib: 4 } },
-  U: { name: 'Utahraptor', word: 'utahraptor', say: 'U', creature: 'utahraptor', sound: { kind: 'chirp', f0: 650, f1: 1050, n: 2 } },
-  R: { name: 'T-Rex', word: 'rex', say: 'R', creature: 'rex', sound: { kind: 'roar', f0: 58, cut: 900, dur: 1.6, vol: 1, vib: 6 } },
+  U: { name: 'Utahraptor', word: 'utahraptor', say: 'you', creature: 'utahraptor', sound: { kind: 'chirp', f0: 650, f1: 1050, n: 2 } },
+  R: { name: 'T-Rex', word: 'rex', say: 'are', creature: 'rex', sound: { kind: 'roar', f0: 58, cut: 900, dur: 1.6, vol: 1, vib: 6 } },
 };
-window.KEY_ORDER = ['D', 'I', 'N', 'O', 'S', 'A', 'U', 'R']; // the on-screen row spells DINOSAUR
+window.KEY_ORDER = ['D', 'I', 'N', 'O', 'S', 'A', 'U', 'R']; // the letters with a creature (hints are drawn from these)

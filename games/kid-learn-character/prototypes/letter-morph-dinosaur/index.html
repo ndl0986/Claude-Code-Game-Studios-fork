@@ -57,7 +57,7 @@ const PIXEL = false;
 const FONT = '"Avenir Next Rounded", "Arial Rounded MT Bold", "Nunito", "Avenir Next", "Trebuchet MS", system-ui, sans-serif';
 const GLYPH_FONT = '"Arial Rounded MT Bold", "Avenir Next Rounded", "Nunito", "Avenir Next", "Trebuchet MS", system-ui, sans-serif';
 const TITLE = 'Letter Morph: DINOSAUR';
-const CONTROLS = ['Tap a big key, or press D I N O S A U R on a keyboard', 'Grown-ups: hold the moon for settings'];
+const CONTROLS = ['Tap a glowing letter, or press letters on a keyboard', 'Grown-ups: hold the moon for settings'];
 const clock = window.GAME_CLOCK || { now: () => performance.now() / 1000 }; // a check may inject one
 const CHEAP = params.get('render') === 'cheap';
 let seed;
@@ -96,13 +96,17 @@ const lerp = (a, b, u) => a + (b - a) * u;
 const down = new Set(), hit = new Set();
 const taps = []; // pointer presses in logical coordinates, handled on the next step
 let gateHeld = false;
+// While the game has focus every key belongs to it: the browser's own key actions are blocked,
+// and in play only letters and digits do anything (After play: "disable all other keys").
+// The OS still owns a few shortcuts no web page can block (Cmd+Q, Cmd+Tab, Cmd+W).
+const isLetterOrDigit = code => /^(Key[A-Z]|Digit[0-9]|Numpad[0-9])$/.test(code);
 addEventListener('keydown', e => {
   startAudio();
   if (panelOpen) return;
+  e.preventDefault();
   if (!e.repeat) { down.add(e.code); hit.add(e.code); }
-  if (e.code === 'Space' || e.code.startsWith('Arrow') || e.code === 'Tab') e.preventDefault();
 });
-addEventListener('keyup', e => down.delete(e.code));
+addEventListener('keyup', e => { if (!panelOpen) e.preventDefault(); down.delete(e.code); });
 addEventListener('blur', () => { down.clear(); gateHeld = false; });
 function toLogical(e) {
   const r = canvas.getBoundingClientRect();
@@ -415,8 +419,9 @@ const CREATURES = {
 };
 
 // ---- Stardust: sample the letter and each creature once, as point clouds ------------------
-const LETTER_CX = 640, LETTER_CY = 290, LETTER_SIZE = 330;
-const ANCHOR_X = 640, ANCHOR_Y = 500;
+const LETTER_CX = 640, LETTER_CY = 320, LETTER_SIZE = 330;
+const ANCHOR_X = 640, ANCHOR_Y = 600;
+const GROUND_SHIFT = 80; // the hills and ground sit lower now that there is no key row
 const shapes = {}; // L -> { glyph: [[x,y]...] relative to the letter centre, body: [[x,y]...] relative to the anchor }
 function sample(w, h, draw, ox, oy, stepPx = 3) {
   const oc = document.createElement('canvas'); oc.width = w; oc.height = h;
@@ -437,10 +442,24 @@ function bakeShapes() {
 bakeShapes();
 
 // ---- Layout ------------------------------------------------------------------------------
-const KEY_W = 128, KEY_H = 118, KEY_GAP = 16, KEY_Y = 568;
-const KEY_X0 = (W - (KEY_ORDER.length * KEY_W + (KEY_ORDER.length - 1) * KEY_GAP)) / 2;
-const keyRect = i => ({ x: KEY_X0 + i * (KEY_W + KEY_GAP), y: KEY_Y, w: KEY_W, h: KEY_H });
-const keyCenter = L => { const r = keyRect(KEY_ORDER.indexOf(L)); return { x: r.x + r.w / 2, y: r.y + r.h / 2 }; };
+// No fixed key row: a few glowing letters drift in at random spots as hints, and can be tapped.
+const KEYBOARD_FROM = { x: 640, y: 700 }; // a letter pressed on a real keyboard rises from here
+const HINT_AREAS = [{ x0: 110, x1: 380, y0: 160, y1: 560 }, { x0: 900, x1: 1170, y0: 160, y1: 560 }];
+function spawnHint() {
+  const onScreen = state.hints.map(h => h.L).concat(state.cur ? [state.cur.letter] : []);
+  const pool = KEY_ORDER.filter(L => !onScreen.includes(L));
+  if (!pool.length) return;
+  const L = pool[Math.floor(rng() * pool.length)];
+  let x = 0, y = 0;
+  for (let tries = 0; tries < 12; tries++) {
+    const a = HINT_AREAS[Math.floor(rng() * HINT_AREAS.length)];
+    x = lerp(a.x0, a.x1, rng()); y = lerp(a.y0, a.y1, rng());
+    if (state.hints.every(h => Math.hypot(h.x - x, h.y - y) > tune.hint_size * 1.7)) break;
+  }
+  const life = tune.hint_life_s * (0.8 + rng() * 0.4);
+  state.hints.push({ L, x, y, age: 0, life, ph: rng() * TAU });
+}
+function hintAt(p) { return state.hints.find(h => Math.hypot(p.x - h.x, p.y - h.y) < tune.hint_size * 0.62); }
 
 // Scenery: fixed stars and hills, made once from the seed
 const STARS = [], HILLS = [];
@@ -464,7 +483,8 @@ function reset() {
     t: 0, score: 0, gained: '',
     cur: null,          // the reveal on stage: { letter, t, parts, fired }
     prev: null,         // the creature leaving: { letter, t, fade }
-    queue: [],          // letters waiting their turn (at most queue_max)
+    queue: [],          // presses waiting their turn (at most queue_max): { L, from }
+    hints: [],          // glowing letters drifting on screen: { L, x, y, age, life, ph }
     seen: [],           // letters met this session
     firstPress: false,
     parade: null, paradeDone: false,
@@ -487,23 +507,26 @@ function makeParticles(L) {
   }
   return parts;
 }
-function startReveal(L) {
+function startReveal(L, from = KEYBOARD_FROM) {
   if (state.cur) state.prev = { letter: state.cur.letter, t: state.cur.t, fade: 0 };
-  state.cur = { letter: L, t: 0, parts: makeParticles(L), fired: {} };
+  state.cur = { letter: L, t: 0, parts: makeParticles(L), fired: {}, from };
   state.reveals++;
   events.push({ type: 'reveal', letter: L });
   say(KEY_TABLE[L].say, true);
 }
-function pressLetter(L) {
+function pressLetter(L, hint) {
   state.firstPress = true;
   keyFlash[L] = tune.key_flash_s;
   chime();
+  hint = hint || state.hints.find(h => h.L === L); // a letter on screen flies from its bubble
+  const from = hint ? { x: hint.x, y: hint.y } : KEYBOARD_FROM;
   const cur = state.cur;
-  if (!cur || (cur.t >= holdTime() && state.queue.length === 0)) { startReveal(L); return; }
-  if (state.queue.length < Math.round(tune.queue_max)) { state.queue.push(L); state.queued++; events.push({ type: 'queued', letter: L }); return; }
+  if (!cur || (cur.t >= holdTime() && state.queue.length === 0)) { takeHint(hint); startReveal(L, from); return; }
+  if (state.queue.length < Math.round(tune.queue_max)) { takeHint(hint); state.queue.push({ L, from }); state.queued++; events.push({ type: 'queued', letter: L }); return; }
   state.ignored++; events.push({ type: 'ignored', letter: L });
-  const k = keyCenter(L); burst(k.x, k.y - 30, 8);
+  burst(from.x, from.y - 20, 8);
 }
+function takeHint(h) { if (h) { burst(h.x, h.y, 10); state.hints.splice(state.hints.indexOf(h), 1); } }
 function burst(x, y, n) {
   for (let i = 0; i < n; i++) {
     const a = rng() * TAU, s = 40 + rng() * 90;
@@ -539,7 +562,6 @@ const scenes = {
       ctx.restore();
       ctx.save(); ctx.shadowColor = 'rgba(255,200,90,0.9)'; ctx.shadowBlur = 24;
       text('Letter Morph', 640, 110, 64, '#ffe7a8', 'center', '800'); ctx.restore();
-      text('D I N O S A U R', 640, 168, 30, '#fbe9c4', 'center', '700');
       drawPlay(640, 520, state.t);
       text(CONTROLS[0], 640, 640, 22, '#4a3b33');
       text(CONTROLS[1], 640, 680, 18, '#6b5a4f');
@@ -550,16 +572,18 @@ const scenes = {
       state.t += dt;
       // inputs
       for (const code of hit) {
-        if (code === 'Backquote') continue;
+        if (!isLetterOrDigit(code)) continue; // every other key does nothing at all
         const L = code.startsWith('Key') ? code.slice(3) : null;
         if (L && KEY_TABLE[L]) pressLetter(L);
-        else nothingPress(160 + rng() * 960, KEY_Y + 20);
+        else nothingPress(KEYBOARD_FROM.x + (rng() - 0.5) * 300, KEYBOARD_FROM.y - 40); // a letter or digit with no creature yet
       }
       while (taps.length) {
-        const p = taps.shift();
-        const i = KEY_ORDER.findIndex((_, j) => { const r = keyRect(j); return p.x >= r.x && p.x <= r.x + r.w && p.y >= r.y && p.y <= r.y + r.h; });
-        if (i >= 0) pressLetter(KEY_ORDER[i]); else nothingPress(p.x, p.y);
+        const p = taps.shift(), h = hintAt(p);
+        if (h) pressLetter(h.L, h); else nothingPress(p.x, p.y);
       }
+      // hint letters drift in, linger and fade, a few at a time
+      for (let i = state.hints.length - 1; i >= 0; i--) { const h = state.hints[i]; h.age += dt; if (h.age > h.life) state.hints.splice(i, 1); }
+      if (state.hints.length < Math.round(tune.hint_count) && (state.hintGap = (state.hintGap || 0) - dt) <= 0) { spawnHint(); state.hintGap = 0.7; }
       // the reveal on stage
       const cur = state.cur, ph = phases();
       if (cur) {
@@ -570,7 +594,7 @@ const scenes = {
           if (!state.seen.includes(cur.letter)) state.seen.push(cur.letter);
           events.push({ type: 'formed', letter: cur.letter });
         }
-        if (state.queue.length && cur.t >= holdTime()) startReveal(state.queue.shift());
+        if (state.queue.length && cur.t >= holdTime()) { const q = state.queue.shift(); startReveal(q.L, q.from); }
       }
       if (state.prev) { state.prev.t += dt; state.prev.fade += dt; if (state.prev.fade > 0.45) state.prev = null; }
       // the parade, once all 8 have been met
@@ -587,8 +611,8 @@ const scenes = {
       if (state.parade) drawParade();
       if (state.prev) drawPrev();
       if (state.cur) drawReveal();
+      drawHints();
       drawQueue();
-      drawKeys();
       drawSparks();
     },
   },
@@ -608,15 +632,16 @@ function star4(x, y, s) { // a four-point twinkle
   ctx.quadraticCurveTo(x, y, x - s * 2.2, y); ctx.quadraticCurveTo(x, y, x, y - s * 2.2); ctx.closePath(); ctx.fill();
 }
 function drawSky() {
-  const g = ctx.createLinearGradient(0, 0, 0, 520);
+  const g = ctx.createLinearGradient(0, 0, 0, 520 + GROUND_SHIFT);
   g.addColorStop(0, '#1f2a55'); g.addColorStop(0.55, '#46558f'); g.addColorStop(1, '#b8a0c8');
-  ctx.fillStyle = g; ctx.fillRect(0, 0, W, 520);
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
   const tt = state ? state.t : 0;
   ctx.fillStyle = '#fff6da';
   for (const s of STARS) { ctx.globalAlpha = 0.35 + 0.45 * (0.5 + 0.5 * Math.sin(tt * s.sp + s.ph)); star4(s.x, s.y, s.s); }
   ctx.globalAlpha = 1;
 }
 function drawGround() {
+  ctx.save(); ctx.translate(0, GROUND_SHIFT);
   ctx.fillStyle = '#5a6a9c';
   ctx.beginPath(); ctx.moveTo(0, 470); ctx.bezierCurveTo(200, 400, 360, 430, 520, 450); ctx.bezierCurveTo(700, 470, 860, 400, 1040, 420);
   ctx.bezierCurveTo(1150, 432, 1230, 440, W, 430); ctx.lineTo(W, 560); ctx.lineTo(0, 560); ctx.closePath(); ctx.fill();
@@ -626,6 +651,7 @@ function drawGround() {
   const g = ctx.createLinearGradient(0, 505, 0, H);
   g.addColorStop(0, '#efe2c6'); g.addColorStop(1, '#e3d1ae');
   ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(0, 520); ctx.quadraticCurveTo(640, 490, W, 520); ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath(); ctx.fill();
+  ctx.restore();
 }
 function drawMoon() {
   const { x, y } = GATE;
@@ -666,7 +692,7 @@ function drawReveal() {
   const cur = state.cur, ph = phases(), t = cur.t, L = cur.letter;
   // 1. the letter rises from its key and grows; 2. it glows
   if (t < ph.dustEnd) {
-    const k = keyCenter(L), u = smooth(t / ph.inEnd);
+    const k = cur.from, u = smooth(t / ph.inEnd);
     const x = lerp(k.x, LETTER_CX, u), y = lerp(k.y, LETTER_CY, u), s = lerp(0.25, 1, u);
     const glow = t < ph.inEnd ? u : 0.6 + 0.4 * Math.sin((t - ph.inEnd) * 14);
     const alpha = t < ph.glowEnd ? 1 : 1 - smooth((t - ph.glowEnd) / (ph.dustEnd - ph.glowEnd));
@@ -710,32 +736,28 @@ function drawPrev() {
   drawCreature(p.letter, ANCHOR_X, ANCHOR_Y + u * 12, tune.creature_scale * (1 - u * 0.08), p.t - ph.flowEnd, 1 - u);
 }
 function drawQueue() { // letters waiting their turn: small glowing bubbles, top right
-  state.queue.forEach((L, i) => {
+  state.queue.forEach(({ L }, i) => {
     const x = 1210 - i * 74, y = 58 + Math.sin(state.t * 3 + i) * 4;
     glowDisk(x, y, 46, 'rgba(255,214,110,0.35)');
     RR(ctx, x - 28, y - 28, 56, 56, 22); ctx.fillStyle = 'rgba(255,246,222,0.92)'; ctx.fill();
     ctx.save(); ctx.font = `900 34px ${GLYPH_FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#e09a2e'; ctx.fillText(L, x, y + 2); ctx.restore();
   });
 }
-function drawKeys() {
-  RR(ctx, KEY_X0 - 22, KEY_Y - 18, W - 2 * (KEY_X0 - 22), KEY_H + 36, 34); ctx.fillStyle = 'rgba(214,190,150,0.55)'; ctx.fill();
-  KEY_ORDER.forEach((L, i) => {
-    const r = keyRect(i), f = keyFlash[L] ? keyFlash[L] / tune.key_flash_s : 0;
-    const hint = !state.firstPress && L === 'D' ? 0.5 + 0.5 * Math.sin(state.t * 4) : 0;
-    const lift = f * 6;
-    ctx.save();
-    RR(ctx, r.x, r.y + 8, r.w, r.h, 26); ctx.fillStyle = '#c9a97c'; ctx.fill();
-    if (f > 0 || hint > 0) { ctx.shadowColor = 'rgba(255,200,80,0.95)'; ctx.shadowBlur = 30 * Math.max(f, hint); }
-    RR(ctx, r.x, r.y - lift + (f > 0 ? 4 : 0), r.w, r.h, 26);
-    const g = ctx.createLinearGradient(0, r.y, 0, r.y + r.h);
-    g.addColorStop(0, f > 0 ? '#fff4c8' : '#fffaf0'); g.addColorStop(1, f > 0 ? '#ffd98a' : '#f4e6cc');
-    ctx.fillStyle = g; ctx.fill(); ctx.shadowBlur = 0;
-    ctx.font = `900 76px ${GLYPH_FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillStyle = f > 0 ? '#e0892a' : '#8a5a3a'; ctx.fillText(L, r.x + r.w / 2, r.y + r.h / 2 + 4 - lift + (f > 0 ? 4 : 0));
-    if (state.seen.includes(L)) { ctx.fillStyle = '#f5b14a'; star4(r.x + r.w - 18, r.y + 18 - lift, 4); }
+function drawHints() { // glowing letters drifting on screen: a hint and a tap target
+  const pulse = state.firstPress ? 0 : 0.5 + 0.5 * Math.sin(state.t * 4);
+  for (const h of state.hints) {
+    const a = Math.min(clamp01(h.age / 0.6), clamp01((h.life - h.age) / 0.8));
+    const sz = tune.hint_size * (0.85 + 0.15 * smooth(h.age / 0.6)) * (1 + pulse * 0.06);
+    const x = h.x + Math.sin(state.t * 0.7 + h.ph) * 10, y = h.y + Math.sin(state.t * 1.3 + h.ph) * 8;
+    ctx.save(); ctx.globalAlpha = a;
+    glowDisk(x, y, sz * 0.95, `rgba(255,214,110,${0.35 + pulse * 0.2})`);
+    ctx.shadowColor = 'rgba(255,200,80,0.8)'; ctx.shadowBlur = 18 + pulse * 14;
+    RR(ctx, x - sz / 2, y - sz / 2, sz, sz, sz * 0.36); ctx.fillStyle = 'rgba(255,248,230,0.95)'; ctx.fill(); ctx.shadowBlur = 0;
+    ctx.font = `900 ${Math.round(sz * 0.66)}px ${GLYPH_FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#e0892a'; ctx.fillText(h.L, x, y + sz * 0.04);
+    ctx.fillStyle = `rgba(255,236,170,${0.6 + 0.4 * Math.sin(state.t * 5 + h.ph)})`; star4(x + sz * 0.42, y - sz * 0.42, 4 + pulse * 3);
     ctx.restore();
-    if (hint > 0) { ctx.fillStyle = `rgba(255,236,170,${hint})`; star4(r.x + r.w / 2 + 40, r.y - 10, 5 + hint * 3); }
-  });
+  }
 }
 function drawSparks() {
   ctx.save(); ctx.globalCompositeOperation = 'lighter';
@@ -749,7 +771,7 @@ function drawParade() { // all eight walk across the hills, small, once
     const x = -100 + p.t * speed - i * gap, step = Math.abs(Math.sin(p.t * 7 + i)) * 5;
     if (x < -150 || x > W + 150) return;
     ctx.save(); ctx.globalAlpha = Math.min(fadeIn, fadeOut);
-    ctx.translate(x, 478 - step); ctx.scale(0.26, 0.26);
+    ctx.translate(x, 478 + GROUND_SHIFT - step); ctx.scale(0.26, 0.26);
     CREATURES[KEY_TABLE[L].creature](ctx, p.t + i);
     ctx.restore();
   });

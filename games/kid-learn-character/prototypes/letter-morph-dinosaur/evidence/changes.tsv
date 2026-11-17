@@ -1,0 +1,1 @@
+iteration 1	keys: every non letter/digit key blocked and inert in play; no DINOSAUR key row, 3 random glowing hint letters drift on screen (tappable, from config hint_*); voice says the letter name spelled phonetically (dee, eye, en...) then the word; ground lowered	errors: none	evidence/iteration-1-play.png evidence/iteration-1-creature.png evidence/iteration-1-title.png
