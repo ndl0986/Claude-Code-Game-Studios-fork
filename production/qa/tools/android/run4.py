@@ -27,8 +27,8 @@ def state():
     if px is None: return 'none', 0
     G = lambda c: c[0] > 200 and 150 < c[1] < 200 and c[2] < 90
     dots = sum(1 for i in range(5) if sum(1 for dx in range(-24, 26, 3) if G(px(627 + 90 * i + dx, 55))) >= 5)
-    if gold(px(440, 495)) and not gold(px(1000, 600)) and dark(px(640, 30)) is False and cream(px(840, 470)): return 'skipwarn', dots
-    if gold(px(440, 495)) and cream(px(840, 470)): return 'skipwarn', dots
+    # r14 W20 layout: 'Keep reading' gold on the RIGHT (600-1040), 'Skip anyway' white on the left (240-580), row centre y 529
+    if gold(px(1010, 480)) and cream(px(560, 480)): return 'skipwarn', dots
     if dark(px(640, 30)) and cream(px(100, 320)) and cream(px(560, 320)): return 'quiz', dots
     if dark(px(640, 30)) and gold(px(640, 600)) and dark(px(1000, 600)): return 'results', dots
     c = px(1000, 600)
@@ -44,8 +44,8 @@ while time.time() - T0 < 1200:
     if s == 'skipwarn':
         if last is None or last[0] != 'skipwarn': shot(f'skip-warning-{warned + 1}')
         warned += 1
-        if MODE == 'skipwarn' and warned == 1: tap(440, 495); say('-> Keep reading')
-        else: tap(840, 495); say('-> Skip anyway')
+        if MODE == 'skipwarn' and warned == 1: tap(820, 529); say('-> Keep reading')
+        else: tap(410, 529); say('-> Skip anyway')
         time.sleep(1.0); last = (s, beat); continue
     if s in ('next', 'ask'):
         if last != (s, beat): shot(f'{s}-d{beat}')
