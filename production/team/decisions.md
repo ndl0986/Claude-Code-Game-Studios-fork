@@ -114,11 +114,14 @@ it) · **Decided** (Luan's call, with the date).
 
 ### D-35 Concept wording on ads and purchases (TASK-020 A13)
 
-- **Flow:** `design/gdd/game-concept.md` line 67 vs the "Safe for kids" pillar.
-- **Finding:** line 67 says "no ads or purchases aimed at kids **unless Luan decides**"; the pillar
-  says none. The "unless" leaves an opening.
-- **Options:** A. **remove "unless Luan decides"** so it matches the pillar · B. keep it as an open
-  question for later.
+- **Flow:** `design/gdd/game-concept.md` line 67 **and** the pillar-5 design test (≈L235–236)
+  vs the "Safe for kids" pillar. Widened 2026-11-17 by the TASK-022 concept review.
+- **Finding:** line 67 says "no ads or purchases aimed at kids **unless Luan decides**", and the
+  pillar-5 design test says "**none**, unless Luan decides otherwise"; the pillar says none. Both
+  "unless" clauses leave the same opening.
+- **Options:** A. **remove the "unless" clause in both places** so they match the pillar · B. keep
+  both as an open question for later.
+- **Blocks:** re-run of the Concept → Systems Design gate (with D-14).
 - **Recommendation:** A.
 - **Status:** Open.
 
