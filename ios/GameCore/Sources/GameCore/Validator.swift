@@ -31,7 +31,7 @@ public struct ContentValidator {
         for s in content.strings.strings where !ids.insert(s.id).inserted { out.append(.init(rule: "R9", message: "duplicate id \(s.id)")) }
         for s in content.strings.strings {
             out += Self.nfc([s.vi, s.en], id: s.id)
-            out += Self.enBudget(s.en, fieldType: Self.uiBudgetType(s.id), budgets: content.rules.textLimits.enBudget)
+            out += Self.enBudget(s.en, fieldType: s.field ?? Self.uiBudgetType(s.id), budgets: content.rules.textLimits.enBudget)
         }
         out += Self.schemaMajor(file: content.index.schemaVersion, app: ContentSet.supportedSchema)
         out += Self.tuningRules(content.tuning.values.mapValues(\.value))
@@ -152,7 +152,8 @@ public struct ContentValidator {
         return [.init(rule: "R8", message: "EN \(fieldType) is \(en.count) chars, budget \(max)")]
     }
 
-    /// R8 for strings.json: the budget type comes from the id (TASK-005e README).
+    /// R8 for strings.json: the budget type comes from the entry's `field` when set (D-21, as Android), else from the
+    /// id (TASK-005e README).
     public static func uiBudgetType(_ id: String) -> String {
         if id.hasPrefix("ui.btn.") || id.hasPrefix("ui.pad.") || id.hasPrefix("ui.lang.") || id.hasSuffix("_confirm") || id.hasSuffix("_keep_reading") { return "button" }
         if id.hasSuffix("_warning") { return "dialog" }

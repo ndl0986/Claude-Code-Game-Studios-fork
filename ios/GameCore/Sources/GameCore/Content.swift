@@ -23,6 +23,8 @@ public struct UiText: Codable, Equatable, Sendable {
     public let id: String
     public let vi: String
     public let en: String
+    /// The R8 field type when the entry names one (D-21, e.g. `dialog`); otherwise the id rule decides.
+    public let field: String?
 
     /// The string in the given language.
     public func text(_ language: Language) -> String { language == .vi ? vi : en }
