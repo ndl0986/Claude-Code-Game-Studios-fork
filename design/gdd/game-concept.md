@@ -5,12 +5,13 @@
 
 > **Placeholder notice.** Every hero, event, date and story beat named in this
 > document is an **illustrative placeholder ⟨placeholder⟩**. The real hero and event
-> list, sources and the named history reviewer come from the team's history
-> material, which has not arrived yet (see `production/project-plan.md`, "Material
-> we need from the team"). Nothing here is a verified historical claim.
+> list and sources come from the team's history material, which has not arrived yet
+> (see `production/project-plan.md`, "Material we need from the team"). The named history reviewer is **Luan**, who signs off every
+> history claim (Luan, 2026-11-14; see Open Questions). Nothing here is a verified
+> historical claim.
 >
 > **Exception (Luan, 2026-11-14): the first hero is Trần Quốc Toản.** His story beats
-> are not written yet; the content and history owner writes and signs them off.
+> are written by the content and history owner and **signed off by Luan**.
 
 > **Luan's idea, in Luan's words:** "a mobile game about Vietnamese historical figures,
 > the player targeting is starting from primary school level in Vietnam, they are able
@@ -37,9 +38,10 @@ timeline; the map shows where each story happened (Luan, 2026-11-14).
 **Mission beats:** not drafted here. Luan asked to leave Trần Quốc Toản's story beats
 to the content and history owner (see below), who writes them from verified sources.
 
-**Content and history owner:** none yet. Luan plans to add a **new team member, an art
-designer who also covers the content, history and real stories**, and who signs off
-each hero's mission.
+**Content and history owner:** the team's art designer, who also covers the content,
+history and real stories (the `game-art-content` team member). They draft each hero's
+story beats and claims from cited sources (Trần Quốc Toản: `design/narrative/heroes/tran-quoc-toan.md`,
+TASK-004); every claim stays `pending` until it is signed off by Luan (see Open Questions).
 
 ---
 
@@ -64,12 +66,14 @@ each hero's mission.
 | **Target Audience** | Vietnamese primary-school children, about 6–10 (see Target Player Profile) |
 | **Player Count** | Single-player |
 | **Session Length** | 5–15 minutes (one or two missions, or one storybook) |
-| **Monetization** | None decided (open question; no ads or purchases aimed at kids unless Luan decides) |
+| **Monetization** | None decided (open question; no ads or purchases aimed at kids) |
 | **Estimated Scope** | Large (12–24 months, solo + AI studio) for the full vision; MVP ~3–5 weeks *(estimates)* |
 | **Comparable Titles** | Educational story apps and kids' puzzle apps: not researched |
 
 **Languages.** Vietnamese (default) and English. The player can switch language at any
-time (first-launch choice + a toggle in settings). All text, voice-over and fonts cover
+time: in the slice, with the VI|EN switch on the title screen and in the pause menu
+(Language & text Rule 2). Whether the very first launch also asks which language
+(a first-launch choice) is **pending D-20**. All text, voice-over and fonts cover
 both, with full Vietnamese diacritics (e.g. *Hưng Đạo Đại Vương*). English text runs
 longer, so UI layouts must fit both.
 
@@ -121,7 +125,8 @@ game follows the national calendar the child lives in.
    3–4 beats of the real story, using a few big on-screen buttons: move, attack,
    defend (a special move is optional). Enemies are few and forgiving.
 2. **Story quiz**: 3–5 picture-supported questions after each mission; passing it
-   gives 1–3 stars and **unlocks the next hero**.
+   gives 1–3 stars and **unlocks the next hero**. Hearing the whole story without
+   skipping also earns that hero's **medal** (D-07, Mission flow Rule 15).
 3. **Map of Vietnam + historical timeline**: heroes appear in the order they lived;
    each finished hero lights up their place on the map and the timeline.
 4. **Storybook mini-games** (later content): illustrated pages, each a short touch
@@ -154,11 +159,12 @@ want trustworthy history, no ads or data collection, and a conversation starter.
 
 - **Onboarding curve**: the first mission teaches each touch action inside the story,
   with voice prompts and a hand icon, no reading required to start.
-- **Difficulty scaling**: the one lever across heroes is **encounter composition**: how many
-  enemies, which kinds, and from which sides (mission data). Timing stays global and gentle
-  (`tuning.json`; the telegraph never drops below 0.8 s, R15), and a beat still fits the
-  60 s play cap. Stars measure only quiz recall (Quiz & stars Rule 7), never play skill, and
-  progress never depends on either (TASK-020 W16, A6).
+- **Difficulty scaling**: later heroes scale only by **encounter composition**: how many
+  enemies and how many hits they take (their kinds), and from which sides (mission data);
+  **never by reaction time**. Timing stays global and gentle (`tuning.json`; the telegraph
+  never drops below 0.8 s, R15), and a beat still fits the 60 s play cap. Stars measure
+  **story recall only** (the quiz, Quiz & stars Rule 7), never play skill, and progress never
+  depends on either (D-14 A, Luan 2026-11-17; TASK-020 W16, A6).
 - **Feedback clarity**: big animation, sound and voice on every beat; stars and the next
   hero unlocking at the end.
 - **Recovery from failure**: a beat can't be failed; a mistake costs a moment and a small
@@ -180,8 +186,9 @@ knocked back or run away.
 
 ### Short-Term (5 minutes)
 One mission: short story scene (picture + voice) → 3–4 side-scrolling story beats in order →
-story ending → 3–5 question quiz → 1–3 stars + **next hero unlocked**. "One more"
-comes from the next hero appearing on the map and timeline, and a missing star.
+story ending → 3–5 question quiz → 1–3 stars + the **medal** if the story was not skipped
+(D-07) + **next hero unlocked**. "One more" comes from the next hero appearing on the map
+and timeline, a missing star, and a missing medal.
 
 ### Session-Level (5–15 minutes)
 One or two missions, or one storybook mini-game. Every session ends back on the map, a
@@ -190,7 +197,7 @@ the template's 30–120 minutes because the players are primary-school children.
 
 ### Long-Term Progression
 The map of Vietnam and the historical timeline light up hero by hero, in the order
-the heroes lived; each hero keeps their best stars. The
+the heroes lived; each hero keeps their best stars and their medal. The
 main game is "done" when every main hero's mission is played; the storybook calendar
 continues after that.
 
@@ -198,7 +205,7 @@ continues after that.
 - **Curiosity**: the next locked hero on the timeline; the next celebration's storybook.
 - **Investment**: the lit-up map and timeline (saved locally on the device).
 - **Social**: none in-game; children share stories with family and class offline.
-- **Mastery**: the missing third star on a hero's mission.
+- **Mastery**: the missing third star on a hero's quiz (story recall).
 
 ---
 
@@ -211,7 +218,7 @@ Every mission *is* the hero's famous moment, played and not just read.
 
 ### Pillar 2: Đúng sự thật (True to history)
 Every claim is labelled fact, interpretation or invented, and signed off by the named
-history reviewer.
+history reviewer, **Luan**.
 
 *Design test*: debating a dramatic invented detail vs. a plain verified one, **the
 verified one wins**, or the invented one is labelled.
@@ -233,7 +240,7 @@ reward, **fold it in**.
 No data collection, no ads, no purchases or chat aimed at kids, and it works offline.
 
 *Design test*: debating a feature that needs child data or a network login vs. none,
-**none**, unless Luan decides otherwise.
+**none**.
 
 ### Anti-Pillars (What This Game Is NOT)
 
@@ -303,14 +310,15 @@ Vietnamese legends as told to children, school history lessons, national celebra
 
 | Consideration | Assessment |
 | ---- | ---- |
-| **Recommended Engine** | No preference stated; `/setup-engine` decides with this concept and the mobile platform (the project plan's candidate is Godot 4, alternative Unity) |
-| **Key Technical Challenges** | Android + iOS builds for a first game; Vietnamese diacritic fonts and VI/EN voice; switching language at runtime; adding storybook content after release without collecting data; performance on low-end Android |
+| **Platforms and stack** | Two native apps (ADR-0001, accepted by Luan 2026-11-14). **iOS:** Swift + SpriteKit in a SwiftUI shell, minimum iOS 17 (ADR-0002). **Android:** Kotlin + the Android SDK only (SurfaceView game loop drawn with Canvas, SoundPool audio, no game framework). Both apps read one shared, bundled, offline `content/data/` folder of JSON. Godot 4 (TASK-002) is shelved; no engine from the template's engine table is used |
+| **Key Technical Challenges** | The same rules written twice (Swift and Kotlin), kept equal by shared content and shared test fixtures; Vietnamese diacritic fonts and VI/EN voice; switching language at runtime; adding storybook content after release without collecting data; performance on low-end Android |
 | **Art Style** | 2D modern kids' cartoon |
 | **Art Pipeline Complexity** | Medium (custom 2D; likely AI-assisted, needs an art bible for consistency) |
 | **Audio Needs** | Moderate: voice-over in two languages per mission, music, SFX |
 | **Networking** | None. The game stays fully offline; storybook content ships in **timed app updates** (Luan, 2026-11-14), so no content server or download |
 | **Content Volume** | MVP: 1 hero mission (~5 min), 1 lit place on the map and timeline, 1 quiz. First release: 2 heroes + 1 storybook. Full vision: many heroes ⟨placeholder count⟩ + a calendar of storybooks |
 | **Procedural Systems** | None |
+| **Memory budget** | At most 64 MB of decoded textures alive at any moment, on both apps (ADR-0002) |
 
 ---
 
@@ -323,14 +331,21 @@ Vietnamese legends as told to children, school history lessons, national celebra
 - Battle stories must feel heroic without violence; balance is set with the reviewer.
 
 ### Technical Risks
-- Engine not chosen; both mobile builds are unproven in this template (plan: build an
-  empty project for Android and iOS in phase 0).
+- Two codebases (Swift, Kotlin) can drift apart. Mitigation (ADR-0001): one shared
+  `content/data/` schema that carries the history sign-off gate, and the same test
+  fixtures run on both apps.
+- The studio template's engine tooling has no Swift or Kotlin support (no
+  `docs/engine-reference/` folder, no `engines.tsv` row), so engine-dependent checks
+  report NOT ASSESSED, and APIs newer than the model's knowledge are checked by building
+  against the installed SDK, not from memory.
 - Storybooks "day by day or on celebrations" ship in **timed app updates** (decided):
   each celebration's update must clear Google Play and App Store review before the date,
   so releases are planned on a content calendar with review lead time. "Day by day"
   pages are bundled in the update and unlocked by the device date, offline.
 - Runtime VI/EN switching with voice doubles audio assets and requires layouts that fit both.
-- `TD-FEASIBILITY skipped — Lean mode`: feasibility not reviewed by the technical-director.
+- Feasibility is shown by the vertical slice built on both apps and passed by QC: iOS
+  r9 `9c12a4a` (QC `fc43e7d`) and Android r12 `1ae1560` (QC `25ce9c9`), reviewed at the
+  Concept → Systems Design gate (2026-11-17).
 
 ### Market Risks
 - Audience size and competition for Vietnamese children's history games: not researched.
@@ -341,12 +356,14 @@ Vietnamese legends as told to children, school history lessons, national celebra
 - Each hero is a hand-built mission (story-first), the biggest cost driver for a solo developer.
 - Luan's "weeks" timeline fits the MVP, not a store release.
 - Art and two-language voice per hero are labour-heavy.
-- `PR-SCOPE skipped — Lean mode`: scope not reviewed by the producer.
+- Scope reviewed by the producer at the Concept → Systems Design gate (2026-11-17,
+  `production/gate-checks/2026-11-17-concept-to-systems-design.md`): realistic for a solo
+  developer; the vertical slice proves the loop.
 
 ### Open Questions
 - **Which heroes and events, in what order?** First hero decided: **Trần Quốc Toản** (Luan, 2026-11-14). More heroes are added over time, placed in historical order.
 - ~~Who is the named history reviewer?~~ **Decided (Luan, 2026-11-14): Luan signs off history.** game-art-content drafts each hero's content with cited sources; nothing is final until Luan signs it off.
-- **Monetization**: paid, free, school/government funded? (Luan decides; no ads to kids by default.)
+- **Monetization**: paid, free, school/government funded? (Luan decides; no ads to kids.)
 - ~~How storybook content arrives after release~~ **Decided (Luan, 2026-11-14): timed app updates**, no content download.
 - ~~Portrait or landscape?~~ **Decided (Luan): landscape.** Every GDD and both apps are
   landscape. Held in portrait, the app shows a picture-only "turn the phone" screen (title UX,
@@ -388,11 +405,15 @@ If time runs out: ship the MVP hero alone, polished, and add heroes and storyboo
 ## Next Steps
 
 - [x] Luan approves this concept (design and content decision), 2026-11-14
-- [ ] `/setup-engine`: choose and pin the engine for Android + iOS (later task)
-- [ ] `/prototype [core mechanic]`: validate the story-first side-scrolling attack/defend mission (later task)
-- [ ] Collect the team's hero list, sources and reviewer; replace every ⟨placeholder⟩
-- [ ] `/art-bible`: modern kids' cartoon with Vietnamese motifs
-- [ ] `/design-review design/gdd/game-concept.md`
-- [ ] `/map-systems`, then `/design-system` per system
-- [ ] `/create-architecture`, `/architecture-decision`, `/architecture-review`
-- [ ] `/vertical-slice` on real phones before production
+- [x] Platform chosen: native per platform, Swift + SpriteKit and Kotlin (ADR-0001, 2026-11-14); `/setup-engine` not used
+- [x] `/prototype`: story-first side-scrolling mission prototype, TASK-003 (`proto/TASK-003-mission-prototype` @ `203d73e`, not merged); closed by Luan (`73abd04`)
+- [ ] Collect the team's hero list and sources; replace every ⟨placeholder⟩ (reviewer decided: Luan)
+- [x] `/art-bible`: `design/art/art-bible.md` (TASK-004, `769a1b2`, merged `2f6e661`)
+- [x] `/design-review design/gdd/game-concept.md`: `design/gdd/reviews/game-concept-review-log.md` (TASK-022, merged `3f61e4b`)
+- [x] `/map-systems`, then `/design-system` per system: `design/gdd/systems-index.md` (`76bfce5`) and the vertical-slice GDDs (TASK-008, merged `383d90c`); later systems continue in the index
+- [x] `/create-architecture`: `docs/architecture/architecture.md` (`e5fbfdd`)
+- [x] `/architecture-decision`: ADR-0001 and ADR-0002 Accepted; ADR-0003 Proposed (D-30)
+- [ ] `/architecture-review`: not run (the tr-registry has no TR-ids yet, `architecture.md`)
+- [ ] `/vertical-slice` on real phones before production: the slice is built and QC-passed on
+  the iOS Simulator (r9 `9c12a4a`, QC `fc43e7d`) and the Android emulator (r12 `1ae1560`, QC
+  `25ce9c9`); the real-phone run (frame time, iOS memory) is still open (`architecture.md`)

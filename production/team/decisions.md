@@ -11,6 +11,79 @@ it) · **Decided** (Luan's call, with the date).
 
 ## Open
 
+### D-37 Phone builds while history claims are unsigned (2026-11-17)
+
+- **Flow:** a real release build stops at the R12 content gate (claims C01–C16 unsigned), and the
+  release app hides unsigned missions, so neither app can go on Luan's phone as a release.
+- **Options:** A. sign C01–C16 first · B. a **preview** build type · C. install the debug build.
+- **Status:** **Decided B (Luan, 2026-11-17)**, on both apps. Release-speed and not debuggable, with no debug
+  jumps. Signed locally, never uploaded. The content gate is skipped, but the UNSIGNED badges stay
+  visible. Named "Dải Đất Anh Hùng (preview)", bundle/application ID suffix `.preview`. R12 still
+  blocks every real release and TestFlight.
+
+### D-38 Bundle ID for the iOS app (and Android applicationId)
+
+- **Flow:** TASK-026, the free install on Luan's iPhone and later TestFlight. The project currently has
+  `com.galaxyandsun.daidatanhhung`. The preview build adds `.preview`.
+- **Status:** **Decided (Luan, 2026-11-17): keep `com.galaxyandsun.daidatanhhung`** for iOS and Android.
+  The preview build is `com.galaxyandsun.daidatanhhung.preview`.
+
+### D-39 App Store Kids category age band (later, for TestFlight/App Store)
+
+- **Options:** 6–8 · 9–11 (primary school spans both).
+- **Status:** Open; needed only when the App Store Connect record is created.
+
+### D-36 Start screen: Vietnam map with hero hometowns (Luan's direction, 2026-11-16)
+
+- **Luan's direction (decided):** the start screen is the map of Vietnam. Each pin marks a **hero's
+  hometown**. The child taps a place to pick a hero. Several heroes from the same place are listed
+  **vertically**, each with a short description and information to choose from, plus the
+  **medals the child has earned**.
+- **What changes vs today's docs:** `map-and-timeline.md` puts one pin per hero at the place *the
+  story happened*, with a timeline column on the right. Now the pins are per **hometown**, a place can
+  hold several heroes, and a tap opens that place's hero list. Title UX (`design/ux/title.md`, the D-27
+  hero card) becomes a row in that list.
+- **Flow:** game-art-content revises the Map & Timeline GDD and writes a new start-screen UX spec (plan
+  first, leader approves) → hometown and description claims added per hero, `pending` → Luan signs
+  off the wording and claims → devs build both apps → QC.
+- **Sub-questions (the team applies the recommendation unless Luan says otherwise):**
+  - **(a) A hero whose hometown is disputed or unknown** (Trần Quốc Toản's is not clearly recorded).
+    Options: A. use the best-sourced place, labelled "theo [source]" · B. fall back to where the story
+    happened · C. Luan picks per hero. *Recommended: C*, with game-art-content's sourced proposal
+    for each hero.
+  - **(b) The timeline column.** Options: A. **replace it with the place's hero list** (the right column
+    shows the tapped place's heroes, earliest first; on arrival it pre-selects the place of the current
+    open hero, so it's never empty) · B. keep the timeline and open the list as a pop-up. *Recommended: A*
+    (one column, no pop-up, and no scrolling besides the list).
+  - **(c) "Medal history".** Options: A. each hero row shows best stars + the medal (gold or outline),
+    plus a total at the top of the map (e.g. "Huy hiệu 1/12") · B. A, plus the date each was earned (a new
+    save field, ADR-0003 change) · C. a separate "my medals" screen. *Recommended: A* (no new save
+    data; no dates for 6–10-year-olds).
+  - **(d) When to build.** Options: A. spec now, **build right after the vertical-slice gate** (the slice
+    keeps the D-27 hero card; iOS r9 / Android r12 parity is not disturbed) · B. build into the slice
+    now. *Recommended: A.*
+- **For Luan (from game-art-content's TASK-021 plan, 2026-11-16):**
+  - **(e) Trần Quốc Toản's hometown** (all pending, sources to verify):
+    A. **Tức Mặc, phủ Thiên Trường**, the Trần clan's home village and second capital (today Mỹ Lộc /
+    Lộc Vượng area of old Nam Định, Ninh Bình province since the 2025 merger, to confirm). Source:
+    Toàn thư, Kỷ nhà Trần (page to confirm). It is the clan's home, not his recorded birthplace, so the
+    label reads **"Quê gốc họ Trần / Home of the Trần family"**, never "nơi sinh". *Recommended.*
+    B. Làng Triệt, Tây Chân, Thiên Trường (his father Trần Triệt's birthplace; Wikipedia only, weak).
+    C. Thăng Long (no source; inference only). D. Bình Than, the story place (fallback).
+  - **(f) The short description (blurb)**, pending (revised 2026-11-16 to cite facts only — the banner
+    is a legend claim and would need a "Truyện kể rằng" marker that a 2-line blurb can't fit):
+    VI "Cậu bé thời Trần tự lập đội quân nhỏ đi đánh giặc." / EN "A Trần-era boy who raised a band to
+    fight the invaders." (claims C01, C07, C09; leaves out the age 15). Hometown claims are C17–C20
+    (A–D above), sources S8–S10, all pending.
+  - **(g) No app-title row on the map** (no room; the name is on the icon and splash). *Recommended:
+    OK.*
+  - Team calls already made: sound only at top-left (nothing to pause on the map); one pin per place
+    (a count badge when several heroes share it); a pin tap selects the place and a row tap starts;
+    places live in a new `places.json` and each hero points to a place id.
+- **Still needed before release (unchanged):** D-28b (which official map to trace) and the map
+  content appraisal (thẩm định).
+- **Status:** Open (direction decided; sub-questions on recommendations).
+
 ### D-31 The slice has too much reading for a 6-year-old, and no voice (TASK-020 W1)
 
 - **Flow:** cross-GDD review (`design/gdd/reviews/gdd-cross-review-TASK-020.md` W1) → mission text
@@ -63,13 +136,15 @@ it) · **Decided** (Luan's call, with the date).
 
 ### D-35 Concept wording on ads and purchases (TASK-020 A13)
 
-- **Flow:** `design/gdd/game-concept.md` line 67 vs the "Safe for kids" pillar.
-- **Finding:** line 67 says "no ads or purchases aimed at kids **unless Luan decides**"; the pillar
-  says none. The "unless" leaves an opening.
-- **Options:** A. **remove "unless Luan decides"** so it matches the pillar · B. keep it as an open
-  question for later.
+- **Flow:** `design/gdd/game-concept.md` line 67 **and** the pillar-5 design test (≈L235–236)
+  vs the "Safe for kids" pillar. Widened 2026-11-17 by the TASK-022 concept review.
+- **Finding:** line 67 says "no ads or purchases aimed at kids **unless Luan decides**", and the
+  pillar-5 design test says "**none**, unless Luan decides otherwise"; the pillar says none. Both
+  "unless" clauses leave the same opening.
+- **Options:** A. **remove the "unless" clause in both places** so they match the pillar · B. keep
+  both as an open question for later.
 - **Recommendation:** A.
-- **Status:** Open.
+- **Status:** **Decided A (Luan, 2026-11-17):** remove the "unless" clause at both places (TASK-022d).
 
 ### D-30 Accept ADR-0003: how the game saves progress
 
@@ -237,7 +312,10 @@ it) · **Decided** (Luan's call, with the date).
   payoff (a "Did you know?" fact page per star, or a map decoration).
 - **Recommendation:** A + a fact page per star. Note: Luan's new **medal** (D-07) already rewards
   playing the full story, so stars = quiz recall, medal = full story fits A well.
-- **Status:** Open.
+- **Status:** **Decided A (Luan, 2026-11-17):** stars measure story recall only; later heroes
+  scale by enemy count and hits, never reaction time. The concept already follows A (TASK-020a
+  1feac26). Still open, not blocking: which visible payoff each star gets (fact page or map
+  decoration). Ask with the next design round.
 
 ### D-15 Quiz card order repeats on every replay
 
