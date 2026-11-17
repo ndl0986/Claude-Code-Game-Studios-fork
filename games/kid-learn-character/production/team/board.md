@@ -12,6 +12,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-030 | iOS tech plan: on-screen keyboard + hardware keys, audio, 2D (SpriteKit) vs 3D (SceneKit/RealityKit), Kids category rules, project layout | plan | game-dev-ios (review: game-dev-android) | PAUSED (K-00): no commits; becomes /setup-engine + /create-architecture | `plan/TASK-030-ios-tech` | 2026-11-17 |
 | TASK-031 | Android tech plan: on-screen keyboard + hardware keys, audio, 2D vs 3D (e.g. Filament/SceneView), Families policy, project layout | plan | game-dev-android (review: game-dev-ios) | PAUSED (K-00): wip notes `45b9fe1` pushed; Android comes after Apple (K-03) | `plan/TASK-031-android-tech` | 2026-11-17 |
 | TASK-032 | Store rules checklist for kids apps: Apple Kids category (game-qc-ios) and Google Play Families + COPPA (game-qc-android), plus a first test-case list for the core loop | qa | game-qc-ios + game-qc-android | PAUSED (K-00): Google draft `ac7b97b` pushed (qa/TASK-032-kids-store-rules-android); Apple half not started; feeds /qa-plan | `qa/TASK-032-kids-store-rules` | 2026-11-17 |
+| TASK-033 | Spike: 2D animation runtime for the letter morph: SpriteKit vs Rive for one letter (latency, authoring effort, app size, Android reuse); research Unity as a Library + LibGodot from official sources (Kids/COPPA data, licence) | spike | game-dev-ios (review: game-dev-android) | SENT 2026-11-17: plan first | `spike/TASK-033-anim-runtime` | 2026-11-17 |
 
 ## Leader log
 
@@ -25,3 +26,6 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
   /brainstorm open with Luan: concept **Letter Morph** written to `design/gdd/game-concept.md`.
   Decided K-01 (2D first), K-02 (English first), K-05 (US, letter name + word), K-06 (concept);
   K-03 reaffirmed (native Swift, not Unity). Next: /setup-engine → /prototype → /art-bible.
+- 2026-11-17: /setup-engine: ADR-0001 native Apple (Swift, SpriteKit in SwiftUI, one `apple/`
+  project, KidCore, min OS 26), Proposed; commented engine block in project.yaml. Luan asked about
+  combining a graphics engine with native: TASK-033 spike sent to game-dev-ios. Next: /prototype.

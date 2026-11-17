@@ -33,3 +33,21 @@ project:
 modes:
   rigor: standard
   automation: guided
+
+# Engine: native Apple stack (ADR-0001, Proposed). NOT SOURCEABLE in this template:
+# engine.name accepts only Godot | Unity | Unreal | Web, engines.tsv has no Swift row, and
+# docs/engine-reference/ has no SpriteKit or SwiftUI folder. engine.name and engine.code_root
+# therefore stay UNSET on purpose; engine-dependent checks report NOT ASSESSED.
+# Code root: apple/ (never src/). Every task brief names its root.
+#
+# engine:
+#   apple:
+#     language: Swift 6.4
+#     frameworks: SpriteKit (scene, particles) in a SwiftUI shell; AVAudioEngine (audio)
+#     build: Xcode 27.1, one multiplatform project (iPadOS + macOS, iPhone later)
+#     tests: XCTest (KidCore package + app targets)
+#     code_root: apple
+#     core_package: apple/KidCore (no UI imports)
+#     min_os: iPadOS 26, macOS 26 (to confirm by the scaffold build)
+#     simulator: iPad Pro 11-inch (M5), iOS 27.0 (installed)
+#   android: later, its own ADR (Kotlin, native)
