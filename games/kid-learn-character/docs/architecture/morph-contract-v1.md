@@ -36,8 +36,8 @@ Scan the string one character at a time, building a current number:
 - **Space, comma, `\n`, `\t`** end the current number.
 - **`-`** starts a new number (ending the current one) **unless the current number is empty or ends in `e`/`E`**.
   `10-5` is 10 and −5; `1e-5` is one number.
-- **`.`** starts a new number when the current number already contains `.` **and contains no lowercase `e`**.
-  `-.5.5` is −0.5 and 0.5. Note the v1 quirk: only lowercase `e` blocks this rule.
+- **`.`** starts a new number when the current number already contains `.`, `e` or `E` (as in SVG).
+  `-.5.5` is −0.5 and 0.5; `1.5e2.5` is 150 and 0.5.
 - **Any other character** (digits, `+`, `e`, `E`) is appended to the current number.
 - At the end, the last number is flushed.
 
@@ -56,9 +56,10 @@ numbers.
   k = 1…16, using the Bernstein form. Cubic: (1−t)³·P0 + 3(1−t)²t·C1 + 3(1−t)t²·C2 + t³·P1. Quadratic:
   (1−t)²·P0 + 2(1−t)t·C + t²·P1.
 - `Z`: if the subpath's last point differs from its first, append the first. Then end the subpath; the current
-  point becomes the subpath start. A number directly after `Z` is an error.
-  - **v1 quirk:** a drawing command after `Z` without a new `M` starts a subpath **without** the start point.
-    Producers must emit `M` after every `Z`.
+  point becomes the subpath start, and a new subpath begins with that point (as in SVG). A number directly after
+  `Z` is an error.
+  - So `M0 0L10 0L10 10ZL0 10` is a closed triangle plus the line (0, 0)→(0, 10). If `M` follows `Z`, the
+    1-point subpath is dropped (next rule).
 - **A subpath counts only if it has 2 or more points.** A lone `M` is dropped everywhere, including the bounding
   box.
 
@@ -128,7 +129,10 @@ At `s ≥ glow + dissolve + travel` every particle is exactly on `to[perm[i]]`.
   - `count-1` (N = 1);
   - `zero-length`: zero-length segments and a lone trailing `M`.
   - Each is checked at s = 0, mid-dissolve, half the duration, and the end.
-- **Tokenizer cases:** `M0 0L1e1-5`, `M0 0L-.5.5`, `M10-5L20-5`, `M0,0\n\tL.5.5`, `M1e-1 2E+1L3 4`.
+- **Tokenizer cases:** `M0 0L1e1-5`, `M0 0L-.5.5`, `M10-5L20-5`, `M0,0\n\tL.5.5`, `M1e-1 2E+1L3 4`,
+  `M0 0L10 0L10 10ZL0 10` (drawing after `Z`), `M0 0L1.5e2.5`, `M0 0L1.5E2.5` (`.` after an exponent).
+  These last three were added on 2026-11-18 with the two parser fixes from game-dev-android's review, before v1
+  was accepted. The four cases' outputs did not change.
 - **How it was generated:**
   - `swift run morph-contract-fixture ../fixtures <out>` in the TASK-033 prototype's `MorphCore`.
   - Glyphs: `glyph-D.json` and `glyph-3.json`, baked from Fredoka (OFL 1.1, Version 2.001, weight 600) by
@@ -140,7 +144,8 @@ At `s ≥ glow + dissolve + travel` every particle is exactly on `to[perm[i]]`.
 ## 8. Producing paths (the bake tool)
 Art tools export arcs (`A`), `S`/`T` shorthand, transforms and nested groups, none of which v1 parses.
 - The bake tool must flatten each cast member's silhouette into **one compound path** using only the v1 subset,
-  with plain decimal numbers and an `M` after every `Z`. It **fails loudly** on anything else.
+  with plain decimal numbers and an `M` after every `Z` (the parser doesn't need it, but it is clearer). It
+  **fails loudly** on anything else.
 - A CI check parses every path in the key table with a v1 parser.
 - Glyph outlines are baked the same way from the bundled OFL font. The font name, version and licence are recorded
   next to each glyph file.

@@ -45,7 +45,7 @@ for c in cases {
 }
 
 // Tokenizer cases: the raw (un-normalised) polylines the parser must produce.
-let tokenizer = ["M0 0L1e1-5", "M0 0L-.5.5", "M10-5L20-5", "M0,0\n\tL.5.5", "M1e-1 2E+1L3 4"]
+let tokenizer = ["M0 0L1e1-5", "M0 0L-.5.5", "M10-5L20-5", "M0,0\n\tL.5.5", "M1e-1 2E+1L3 4", "M0 0L10 0L10 10ZL0 10", "M0 0L1.5e2.5", "M0 0L1.5E2.5"]
 let tokOut: [[String: Any]] = try tokenizer.map { ["d": $0, "polylines": try SVGPath.polylines($0).map(pts)] }
 
 let doc: [String: Any] = [
@@ -54,7 +54,7 @@ let doc: [String: Any] = [
     "tolerance": 1e-3,
     "units": "unit box (longer side 1, centred, y down); times in seconds from the press",
     "uint64AsString": "seed and rngFirst4 are decimal strings (JSON numbers lose precision above 2^53)",
-    "generatedBy": "prototypes/TASK-033-anim-runtime/MorphCore: swift run morph-contract-fixture ../fixtures <out> (TASK-035, 2026-11-17)",
+    "generatedBy": "prototypes/TASK-033-anim-runtime/MorphCore: swift run morph-contract-fixture ../fixtures <out> (TASK-035, 2026-11-17; tokenizer cases added 2026-11-18)",
     "cases": caseOut,
     "tokenizer": tokOut,
 ]

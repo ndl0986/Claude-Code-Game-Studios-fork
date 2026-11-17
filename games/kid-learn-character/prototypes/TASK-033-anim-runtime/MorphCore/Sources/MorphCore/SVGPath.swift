@@ -21,7 +21,7 @@ public enum SVGPath {
             if ch.isLetter && ch != "e" && ch != "E" { flush(); tokens.append(String(ch)) }
             else if ch == " " || ch == "," || ch == "\n" || ch == "\t" { flush() }
             else if ch == "-" && !num.isEmpty && num.last != "e" && num.last != "E" { flush(); num = "-" }
-            else if ch == "." && num.contains(".") && !num.contains("e") { flush(); num = "." }
+            else if ch == "." && (num.contains(".") || num.contains("e") || num.contains("E")) { flush(); num = "." }
             else { num.append(ch) }
         }
         flush()
@@ -72,7 +72,7 @@ public enum SVGPath {
                 p = e
             case "Z", "z":
                 if let f = cur.first, cur.last != f { cur.append(f) }
-                endSub(); p = start
+                endSub(); p = start; cur = [start] // as in SVG: a drawing command after Z starts at the subpath start
                 if hasNumber() { throw ParseError.badToken(tokens[i]) }
             default:
                 throw ParseError.badToken(String(cmd))
