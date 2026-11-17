@@ -1,0 +1,9 @@
+-- com.galaxyandsun.daidatanhhung
+    codePath=/data/app/~~NJ7PfST06sZivrOKc93bag==/com.galaxyandsun.daidatanhhung-WP6NiwRhGw9TCH3crLOitw==
+    versionName=0.1.0
+    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ]
+-- com.galaxyandsun.daidatanhhung.preview
+    codePath=/data/app/~~gDar7KJmg1cGCwqYWd2XdQ==/com.galaxyandsun.daidatanhhung.preview-wgaC39V5y0OSd-LzaW8yhg==
+    versionName=0.1.0-preview
+    pkgFlags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ]
