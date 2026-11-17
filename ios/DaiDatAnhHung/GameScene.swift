@@ -443,11 +443,12 @@ final class GameScene: SKScene {
     }
 
     private func handHint() -> SKNode {
+        // ASSET-033 / look-sheet-d18: a skin-tone hand (the shared C.skin) with a cream cuff, ink outline (r10)
         let n = SKNode()
-        n.addChild(D.rr(-8, -10, 16, 44, 8, .white, C.ink, 4))
-        n.addChild(D.rr(-26, -48, 52, 48, 18, .white, C.ink, 4))
-        n.addChild(D.rr(-30, -42, 14, 30, 7, .white, C.ink, 4))
-        n.addChild(D.rr(-22, -66, 44, 20, 8, C.red))
+        n.addChild(D.rr(-8, -10, 16, 44, 8, C.skin, C.ink, 4))
+        n.addChild(D.rr(-26, -48, 52, 48, 18, C.skin, C.ink, 4))
+        n.addChild(D.rr(-30, -42, 14, 30, 7, C.skin, C.ink, 4))
+        n.addChild(D.rr(-22, -66, 44, 20, 8, C.cream, C.ink, 4))
         return n
     }
 
