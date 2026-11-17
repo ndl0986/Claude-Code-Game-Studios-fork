@@ -12,7 +12,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-030 | iOS tech plan: on-screen keyboard + hardware keys, audio, 2D (SpriteKit) vs 3D (SceneKit/RealityKit), Kids category rules, project layout | plan | game-dev-ios (review: game-dev-android) | PAUSED (K-00): no commits; becomes /setup-engine + /create-architecture | `plan/TASK-030-ios-tech` | 2026-11-17 |
 | TASK-031 | Android tech plan: on-screen keyboard + hardware keys, audio, 2D vs 3D (e.g. Filament/SceneView), Families policy, project layout | plan | game-dev-android (review: game-dev-ios) | PAUSED (K-00): wip notes `45b9fe1` pushed; Android comes after Apple (K-03) | `plan/TASK-031-android-tech` | 2026-11-17 |
 | TASK-032 | Store rules checklist for kids apps: Apple Kids category (game-qc-ios) and Google Play Families + COPPA (game-qc-android), plus a first test-case list for the core loop | qa | game-qc-ios + game-qc-android | PAUSED (K-00): Google draft `ac7b97b` pushed (qa/TASK-032-kids-store-rules-android); Apple half not started; feeds /qa-plan | `qa/TASK-032-kids-store-rules` | 2026-11-17 |
-| TASK-033 | Spike: 2D animation runtime for the letter morph: SpriteKit vs Rive for one letter (latency, authoring effort, app size, Android reuse); research Unity as a Library + LibGodot from official sources (Kids/COPPA data, licence) | spike | game-dev-ios (review: game-dev-android) | PAUSED 2026-11-17 by Luan: no spike work while the game is played on this Mac (plan APPROVED after game-dev-android review) | `spike/TASK-033-anim-runtime` | 2026-11-17 |
+| TASK-033 | Spike: 2D animation runtime for the letter morph: SpriteKit vs Rive for one letter (latency, authoring effort, app size, Android reuse); research Unity as a Library + LibGodot from official sources (Kids/COPPA data, licence) | spike | game-dev-ios (review: game-dev-android) | IN PROGRESS: RESUMED 2026-11-17 after play (wip `ed4b64f`); added: child lock-in research (Guided Access, macOS kiosk) | `spike/TASK-033-anim-runtime` | 2026-11-17 |
 
 ## Leader log
 
@@ -29,3 +29,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 - 2026-11-17: /setup-engine: ADR-0001 native Apple (Swift, SpriteKit in SwiftUI, one `apple/`
   project, KidCore, min OS 26), Proposed; commented engine block in project.yaml. Luan asked about
   combining a graphics engine with native: TASK-033 spike sent to game-dev-ios. Next: /prototype.
+- 2026-11-17: /prototype letter-morph-dinosaur: one-shot + iterations 1–2 (hint letters, keys locked,
+  Dinosaurs theme for A–Z and 0–9). Luan's verdict: PROCEED (Keep: the dinosaur parade). Worst:
+  OS shortcuts switch app / steal focus: a native-app requirement (child lock-in). K-07 decided.
+  Next: /art-bible.

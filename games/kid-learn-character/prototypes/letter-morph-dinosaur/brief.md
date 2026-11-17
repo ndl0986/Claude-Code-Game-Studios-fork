@@ -12,6 +12,8 @@ After play (asked): "D" rồi "dinosaur" — keep the word after the letter's na
 After play: có 1 hiểu lầm, mình nói bắt đầu với dinosaur là 1 chủ đề, tức là mình thể cho bé gõ bất ký ký tự nào ngoài 8 ký tự thì vẫn có thể đọc và hiện 1 khủng long tương ứng, có thể ký tự không phải là đầu tiên tương ứng với phím đc nhấn
 After play: với bản đề demo, có thể fix cứng mỗi ký tự là 1 con vật/đồ vật, tương ứng với từng chủ đề, nhưng với bản production, nên xây dựng cơ sở dữ liệu vừa đủ để tạo sự đa dạng
 After play (asked): the A–Z table and numbers as N baby dinosaurs — "Làm đúng như vậy"
+After play: khoảnh khắc hay và vui nhất là sau khi kết thúc 1 loạt phím, thì có đoàn khủng long chạy qua, rất vui và bất ngờ
+After play: tệ nhất là khi nhấn vào các phím controls, thì có thê bị chuyển app hoặc mất focus lên game
 
 **Pitch:** Dinosaurs is the theme: a toddler presses any letter or number, and the big glowing letter dissolves into stardust and becomes a dinosaur-world creature (C: triceratops) or that many baby dinosaurs, while a voice says "C… triceratops!".
 
@@ -55,7 +57,7 @@ None by design: there is no failure and no wrong key. What changes: discovering 
 - [x] Tweak panel (queue size, hold time, morph speed, volume), hidden behind a long-press corner (parent gate stand-in) *(provisional)*
 
 ## Keep
--
+- the dinosaur parade running across after a run of keys: the most fun, a happy surprise *(you said)* · pins: parade_s 11, parade_delay_s 1.5
 
 ## Avoid
 - A fixed DINOSAUR key row on screen *(you said)*
