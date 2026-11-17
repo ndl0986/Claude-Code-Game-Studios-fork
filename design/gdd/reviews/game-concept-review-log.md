@@ -30,10 +30,10 @@ Known-open items (Luan's decisions; not new findings):
 
 Earlier concept warnings (2026-11-14 cross-review, TASK-020):
 - W1: still open (D-31).
-- W16: concept text fixed (TASK-020a); decision still open (D-14).
+- W16: concept text fixed (TASK-020a); decision still open (D-14). → **RESOLVED 2026-11-17** (D-14 A, TASK-022d; see update below).
 - A11: resolved. Open Questions records landscape as decided (Luan). The "turn the phone" screen
   is specified in `design/ux/title.md` (L136).
-- A13: still open (D-35).
+- A13: still open (D-35). → **RESOLVED 2026-11-17** (D-35 A, TASK-022d; see update below).
 
 Findings:
 - [RECOMMENDED] First Hero (L40–42): "Content and history owner: none yet. Luan plans to add a new
@@ -70,3 +70,19 @@ Reviewed-Content-Hash: docs/architecture/adr-0002-asset-pipeline-and-budgets.md 
 Reviewed-Content-Hash: production/team/decisions.md 69e7687fddec619d7b259794f054ac9220e420bc
 Reviewed-Content-Hash: design/gdd/reviews/gdd-cross-review-TASK-020.md 8a178de797e8c17195c148e0b13d178af9861952
 Reviewed-Content-Hash: design/ux/title.md d297e16473eface0317e19dff1e14e4b2cdfeb76
+
+## Update — 2026-11-17 — Luan decided D-35 A and D-14 A (TASK-022d)
+Not a re-review; it records the decisions applied to the concept.
+- **A13 / D-35: RESOLVED.** Both "unless Luan decides" clauses are removed, so the concept matches
+  *Safe for kids*. The Monetization row now reads "None decided (open question; no ads or purchases
+  aimed at kids)". The pillar-5 design test ends "**none**."
+- **W16 / D-14: RESOLVED.** Confirmed that the concept already followed A (TASK-020a 1feac26). Two
+  drifts were tightened:
+  - Flow State "Difficulty scaling" now says later heroes scale by enemy count and the hits they
+    take (their kinds), plus side, **never by reaction time**, and that stars measure story recall
+    only.
+  - Retention "Mastery" now says the missing third star is on the hero's quiz (story recall), not
+    "mission".
+  - Every other star line already names the quiz (L110, L128, L188, L379).
+  - Not added: a per-star payoff, because that D-14 sub-choice is still open.
+- Still open: D-31 (W1).

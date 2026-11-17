@@ -66,7 +66,7 @@ TASK-004); every claim stays `pending` until it is signed off by Luan (see Open 
 | **Target Audience** | Vietnamese primary-school children, about 6–10 (see Target Player Profile) |
 | **Player Count** | Single-player |
 | **Session Length** | 5–15 minutes (one or two missions, or one storybook) |
-| **Monetization** | None decided (open question; no ads or purchases aimed at kids unless Luan decides) |
+| **Monetization** | None decided (open question; no ads or purchases aimed at kids) |
 | **Estimated Scope** | Large (12–24 months, solo + AI studio) for the full vision; MVP ~3–5 weeks *(estimates)* |
 | **Comparable Titles** | Educational story apps and kids' puzzle apps: not researched |
 
@@ -159,11 +159,12 @@ want trustworthy history, no ads or data collection, and a conversation starter.
 
 - **Onboarding curve**: the first mission teaches each touch action inside the story,
   with voice prompts and a hand icon, no reading required to start.
-- **Difficulty scaling**: the one lever across heroes is **encounter composition**: how many
-  enemies, which kinds, and from which sides (mission data). Timing stays global and gentle
-  (`tuning.json`; the telegraph never drops below 0.8 s, R15), and a beat still fits the
-  60 s play cap. Stars measure only quiz recall (Quiz & stars Rule 7), never play skill, and
-  progress never depends on either (TASK-020 W16, A6).
+- **Difficulty scaling**: later heroes scale only by **encounter composition**: how many
+  enemies and how many hits they take (their kinds), and from which sides (mission data);
+  **never by reaction time**. Timing stays global and gentle (`tuning.json`; the telegraph
+  never drops below 0.8 s, R15), and a beat still fits the 60 s play cap. Stars measure
+  **story recall only** (the quiz, Quiz & stars Rule 7), never play skill, and progress never
+  depends on either (D-14 A, Luan 2026-11-17; TASK-020 W16, A6).
 - **Feedback clarity**: big animation, sound and voice on every beat; stars and the next
   hero unlocking at the end.
 - **Recovery from failure**: a beat can't be failed; a mistake costs a moment and a small
@@ -204,7 +205,7 @@ continues after that.
 - **Curiosity**: the next locked hero on the timeline; the next celebration's storybook.
 - **Investment**: the lit-up map and timeline (saved locally on the device).
 - **Social**: none in-game; children share stories with family and class offline.
-- **Mastery**: the missing third star on a hero's mission.
+- **Mastery**: the missing third star on a hero's quiz (story recall).
 
 ---
 
@@ -239,7 +240,7 @@ reward, **fold it in**.
 No data collection, no ads, no purchases or chat aimed at kids, and it works offline.
 
 *Design test*: debating a feature that needs child data or a network login vs. none,
-**none**, unless Luan decides otherwise.
+**none**.
 
 ### Anti-Pillars (What This Game Is NOT)
 
