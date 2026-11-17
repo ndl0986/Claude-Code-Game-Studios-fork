@@ -1,0 +1,578 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C6094464ADCAF52AEB8B3480 /* data in Resources */ = {isa = PBXBuildFile; fileRef = 1B223FD7412F0D8B499B9B1C /* data */; };
+		1F70B0CD4EE5CEAA1702B9B4 /* GameCore in Frameworks */ = {isa = PBXBuildFile; productRef = 66AA32B373A926E8BC9353D4 /* GameCore */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3CC262854D246A706728FA98 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A6F5FA37AD230077E57AFE7F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D15B9AC453575360E6725EF3;
+			remoteInfo = DaiDatAnhHung;
+		};
+		BA510923769B82EDC76A7AA3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A6F5FA37AD230077E57AFE7F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D15B9AC453575360E6725EF3;
+			remoteInfo = DaiDatAnhHung;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1652ADCBA83E4FE58C0005B3 /* DaiDatAnhHungUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaiDatAnhHungUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		535EBCE13BF0BA11AC460A2A /* DaiDatAnhHung.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DaiDatAnhHung.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		65870F37DD6335D281D7F398 /* DaiDatAnhHungTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaiDatAnhHungTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1B223FD7412F0D8B499B9B1C /* data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = data; path = ../content/data; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		AC81D6B6D2DEC85AE4171653 /* DaiDatAnhHungUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; path = DaiDatAnhHungUITests; sourceTree = "<group>"; };
+		8451645A97E4C6D90D327BFE /* DaiDatAnhHung */ = {isa = PBXFileSystemSynchronizedRootGroup; path = DaiDatAnhHung; sourceTree = "<group>"; };
+		5C06B189621E064F8EA62D86 /* DaiDatAnhHungTests */ = {isa = PBXFileSystemSynchronizedRootGroup; path = DaiDatAnhHungTests; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BDB36B7CFBE0EB6C3E48D9F9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6EC1D7B481B39851B9845571 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1F70B0CD4EE5CEAA1702B9B4 /* GameCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AFED48EE269E3EFC24D8F9B2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		436B89B6F614A0E7B2F54DEF = {
+			isa = PBXGroup;
+			children = (
+				8451645A97E4C6D90D327BFE /* DaiDatAnhHung */,
+				5C06B189621E064F8EA62D86 /* DaiDatAnhHungTests */,
+				1B223FD7412F0D8B499B9B1C /* data */,
+				AC81D6B6D2DEC85AE4171653 /* DaiDatAnhHungUITests */,
+				EB0CF27F910E4E396E0CDB8D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EB0CF27F910E4E396E0CDB8D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				535EBCE13BF0BA11AC460A2A /* DaiDatAnhHung.app */,
+				65870F37DD6335D281D7F398 /* DaiDatAnhHungTests.xctest */,
+				1652ADCBA83E4FE58C0005B3 /* DaiDatAnhHungUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D15B9AC453575360E6725EF3 /* DaiDatAnhHung */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4B9A10A170F7A3DA296B08CB;
+			buildPhases = (
+				79FCEBECF126806217B3AA21 /* Sources */,
+				6EC1D7B481B39851B9845571 /* Frameworks */,
+				C011F5B81D00A215FE6EEA84 /* Resources */,
+				3BE08C5F78AC487492C277A8 /* Bundle debug sample */,
+				7490062A39BC7BF0D3D1075A /* Content gate (Release) */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				8451645A97E4C6D90D327BFE /* DaiDatAnhHung */,
+			);
+			name = DaiDatAnhHung;
+			packageProductDependencies = (
+				66AA32B373A926E8BC9353D4 /* GameCore */,
+			);
+			productName = DaiDatAnhHung;
+			productReference = 535EBCE13BF0BA11AC460A2A /* DaiDatAnhHung.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7E69340D638E710740E386C7 /* DaiDatAnhHungTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 347FF137334865B53B5473AD;
+			buildPhases = (
+				3E32E09375436347CF282BDC /* Sources */,
+				AFED48EE269E3EFC24D8F9B2 /* Frameworks */,
+				0B42C9155094E24955AA0FD1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				013EAE19425FC8FC3F23A73F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				5C06B189621E064F8EA62D86 /* DaiDatAnhHungTests */,
+			);
+			name = DaiDatAnhHungTests;
+			productName = DaiDatAnhHungTests;
+			productReference = 65870F37DD6335D281D7F398 /* DaiDatAnhHungTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		2AB9C5B2CB402BA75463B4AE /* DaiDatAnhHungUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ABAA58ECA5FABC0102934585;
+			buildPhases = (
+				98E415D95070D494C4ECB05A /* Sources */,
+				BDB36B7CFBE0EB6C3E48D9F9 /* Frameworks */,
+				C6FDA034EE92E1822EAC2817 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2AB9ADE972E1A154A2E2730B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AC81D6B6D2DEC85AE4171653 /* DaiDatAnhHungUITests */,
+			);
+			name = DaiDatAnhHungUITests;
+			productName = DaiDatAnhHungUITests;
+			productReference = 1652ADCBA83E4FE58C0005B3 /* DaiDatAnhHungUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A6F5FA37AD230077E57AFE7F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2710;
+				LastUpgradeCheck = 2710;
+				TargetAttributes = {
+					7E69340D638E710740E386C7 = {
+						TestTargetID = D15B9AC453575360E6725EF3;
+					};
+					2AB9C5B2CB402BA75463B4AE = {
+						TestTargetID = D15B9AC453575360E6725EF3;
+					};
+				};
+			};
+			buildConfigurationList = 27F9A7F3E1E512E3D54BF9CF;
+			developmentRegion = vi;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				vi,
+				en,
+				Base,
+			);
+			mainGroup = 436B89B6F614A0E7B2F54DEF;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				2A70B8310732147B0F94B652 /* XCLocalSwiftPackageReference "GameCore" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = EB0CF27F910E4E396E0CDB8D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D15B9AC453575360E6725EF3 /* DaiDatAnhHung */,
+				7E69340D638E710740E386C7 /* DaiDatAnhHungTests */,
+				2AB9C5B2CB402BA75463B4AE /* DaiDatAnhHungUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C6FDA034EE92E1822EAC2817 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C011F5B81D00A215FE6EEA84 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C6094464ADCAF52AEB8B3480 /* data in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0B42C9155094E24955AA0FD1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3BE08C5F78AC487492C277A8 /* Bundle debug sample */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Bundle debug sample";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Debug builds only: the placeholder sample hero (content/samples) for testing; never in Release.\nDEST=\"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/samples\"\nrm -rf \"$DEST\"\nif [ \"$CONFIGURATION\" = \"Debug\" ]; then\n  mkdir -p \"$DEST\"\n  cp -R \"$SRCROOT/../content/samples/\" \"$DEST/\"\nfi\n";
+		};
+		7490062A39BC7BF0D3D1075A /* Content gate (Release) */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Content gate (Release)";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# ADR-0001 R11 + R12: a Release build fails on a pending claim or a newer schema MAJOR.\n# D-37: only Release runs the gate. Preview (Luan's own device, never archived or uploaded) skips it and shows\n# the UNSIGNED badges; Debug skips it as before. Archive builds Release, so it still stops here.\nif [ \"$CONFIGURATION\" = \"Release\" ]; then\n  xcrun --sdk macosx swift \"$SRCROOT/Scripts/ContentGate.swift\" \"$SRCROOT/../content/data\" 1 || exit 1\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		98E415D95070D494C4ECB05A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		79FCEBECF126806217B3AA21 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3E32E09375436347CF282BDC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2AB9ADE972E1A154A2E2730B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D15B9AC453575360E6725EF3 /* DaiDatAnhHung */;
+			targetProxy = 3CC262854D246A706728FA98 /* PBXContainerItemProxy */;
+		};
+		013EAE19425FC8FC3F23A73F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D15B9AC453575360E6725EF3 /* DaiDatAnhHung */;
+			targetProxy = BA510923769B82EDC76A7AA3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		E2DFCF7333B80A4A24862AF3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = DaiDatAnhHung;
+			};
+			name = Debug;
+		};
+		C6E4A40D1AABC9622BF68473 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = DaiDatAnhHung;
+			};
+			name = Release;
+		};
+		5152DB57CAA0B2B9867487D7 /* Preview */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = DaiDatAnhHung;
+			};
+			name = Preview;
+		};
+		43D414A56741CDB8330000C8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		980AA67F1D9CA063EE9E1313 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		19806B7C9460CCB46C75CBBB /* Preview */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = PREVIEW;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Preview;
+		};
+		165878DF126C47EFC31DE978 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_KEY_CFBundleDisplayName = "Dải Đất Anh Hùng";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_FILE = Config/Info.plist;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.1.0;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+			};
+			name = Debug;
+		};
+		CE2CEEE4C574A165B6AC9765 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_KEY_CFBundleDisplayName = "Dải Đất Anh Hùng";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_FILE = Config/Info.plist;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.1.0;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+			};
+			name = Release;
+		};
+		C4CC4B653A3BF50D913C943F /* Preview */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_KEY_CFBundleDisplayName = "Dải Đất Anh Hùng (preview)";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_FILE = Config/Info.plist;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.1.0;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung.preview;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+			};
+			name = Preview;
+		};
+		13965053179E8B5B6571EC50 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DaiDatAnhHung.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)DaiDatAnhHung";
+			};
+			name = Debug;
+		};
+		B0DC4B85D56F3244F7A81D78 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DaiDatAnhHung.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)DaiDatAnhHung";
+			};
+			name = Release;
+		};
+		992E64237ECD4D85F73351B3 /* Preview */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.galaxyandsun.daidatanhhung.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DaiDatAnhHung.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)DaiDatAnhHung";
+			};
+			name = Preview;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		ABAA58ECA5FABC0102934585 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E2DFCF7333B80A4A24862AF3 /* Debug */,
+				C6E4A40D1AABC9622BF68473 /* Release */,
+				5152DB57CAA0B2B9867487D7 /* Preview */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		27F9A7F3E1E512E3D54BF9CF = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43D414A56741CDB8330000C8 /* Debug */,
+				980AA67F1D9CA063EE9E1313 /* Release */,
+				19806B7C9460CCB46C75CBBB /* Preview */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4B9A10A170F7A3DA296B08CB = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				165878DF126C47EFC31DE978 /* Debug */,
+				CE2CEEE4C574A165B6AC9765 /* Release */,
+				C4CC4B653A3BF50D913C943F /* Preview */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		347FF137334865B53B5473AD = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				13965053179E8B5B6571EC50 /* Debug */,
+				B0DC4B85D56F3244F7A81D78 /* Release */,
+				992E64237ECD4D85F73351B3 /* Preview */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		2A70B8310732147B0F94B652 /* XCLocalSwiftPackageReference "GameCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = GameCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		66AA32B373A926E8BC9353D4 /* GameCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GameCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = A6F5FA37AD230077E57AFE7F /* Project object */;
+}
