@@ -1,0 +1,22 @@
+fresh install 86ddce0 2026-11-17 14:59:48
+/Users/luannguyend/Library/Developer/CoreSimulator/Devices/E9F515E9-58F2-4A92-ABEF-C5CD59CE8183/data/Containers/Data/Application/76A4F6AF-9F67-40E7-B41F-C6AC97EE6C3B/Library/Preferences/com.galaxyandsun.daidatanhhung.plist: (The file “com.galaxyandsun.daidatanhhung.plist” couldn’t be opened because there is no such file.)
+-- after -startScreen quiz -q 5 -stage right:
+{
+  "seen_open.tran-quoc-toan" => true
+}
+-- after -startScreen play -beat 4 -stage flag:
+{
+  "seen_open.tran-quoc-toan" => true
+}
+-- after -startScreen pause -stage leave:
+{
+  "seen_open.tran-quoc-toan" => true
+}
+-- after -startScreen play -beat 3 -stage finish:
+{
+  "seen_open.tran-quoc-toan" => true
+}
+-- after plain launch:
+{
+  "seen_open.tran-quoc-toan" => true
+}

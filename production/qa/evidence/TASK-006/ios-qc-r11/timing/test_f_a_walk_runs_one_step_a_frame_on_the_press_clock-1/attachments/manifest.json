@@ -1,0 +1,26 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "18AC37FD-4D2A-4D9A-A0F2-054E8D6608AB.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "training walk frames by steps 0123+_0_8A6B0721-17F8-468A-B725-2808CF3F56A8.txt",
+        "timestamp" : 1794903442.471
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "9AF9A09E-1939-4715-A0F4-92A3620C87B2.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "walk frames by steps 0123+_0_A22D2F17-B559-4514-907A-EA565461EAD0.txt",
+        "timestamp" : 1794903431.835
+      }
+    ],
+    "testIdentifier" : "R11CasesUITests/test_f_a_walk_runs_one_step_a_frame_on_the_press_clock()",
+    "testIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/R11CasesUITests/test_f_a_walk_runs_one_step_a_frame_on_the_press_clock"
+  }
+]

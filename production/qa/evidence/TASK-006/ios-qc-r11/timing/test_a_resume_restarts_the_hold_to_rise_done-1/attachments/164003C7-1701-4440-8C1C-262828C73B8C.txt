@@ -1,0 +1,1 @@
+currentTime +0.0179 s, update ran +0.0189 s, after the press; walk +0.8506 s after currentTime; to the hold end: 48 frames, 50 steps, max dt 0.0373, currentTime +0.8667, wall +0.8490; endT at resume 0.6700

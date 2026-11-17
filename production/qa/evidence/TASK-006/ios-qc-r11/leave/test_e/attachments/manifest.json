@@ -1,0 +1,17 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "ABEC7B3F-09A6-4D5B-B6FB-D69F8ABA141B.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "r11 (e) the title after leaving from the pause menu_0_D69339A9-CB33-484F-9F44-8C59BFC7E636.png",
+        "timestamp" : 1794903556.091
+      }
+    ],
+    "testIdentifier" : "R11CasesUITests/test_e_leaving_from_the_pause_menu_by_real_taps_reaches_the_title()",
+    "testIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/R11CasesUITests/test_e_leaving_from_the_pause_menu_by_real_taps_reaches_the_title"
+  }
+]

@@ -1,0 +1,16 @@
+test_a_resume_restarts_the_hold_to_rise_done-1 start { 9.61 11.49 14.47 }
+test_a_resume_restarts_the_hold_to_rise_done-1 end { 10.66 11.63 14.47 } exit 0
+test_a_resume_restarts_the_hold_to_rise_done-2 start { 10.66 11.63 14.47 }
+test_a_resume_restarts_the_hold_to_rise_done-2 end { 10.58 11.56 14.40 } exit 0
+test_a_resume_restarts_the_hold_to_rise_done-3 start { 10.58 11.56 14.40 }
+test_a_resume_restarts_the_hold_to_rise_done-3 end { 10.37 11.48 14.33 } exit 0
+test_a_resume_restarts_the_hold_to_rise_done-4 start { 10.26 11.44 14.30 }
+test_a_resume_restarts_the_hold_to_rise_done-4 end { 12.03 11.80 14.40 } exit 0
+test_a_resume_restarts_the_hold_to_rise_done-5 start { 12.03 11.80 14.40 }
+test_a_resume_restarts_the_hold_to_rise_done-5 end { 16.73 12.80 14.71 } exit 0
+test_a_resume_restarts_the_hold_to_rise_done-6 start { 14.78 12.59 14.58 }
+test_a_resume_restarts_the_hold_to_rise_done-6 end { 13.80 12.45 14.51 } exit 0
+test_f_a_walk_runs_one_step_a_frame_on_the_press_clock-1 start { 13.80 12.45 14.51 }
+test_f_a_walk_runs_one_step_a_frame_on_the_press_clock-1 end { 15.84 12.92 14.60 } exit 0
+test_f_a_walk_runs_one_step_a_frame_on_the_press_clock-2 start { 14.22 12.86 14.52 }
+test_f_a_walk_runs_one_step_a_frame_on_the_press_clock-2 end { 12.75 12.63 14.39 } exit 0

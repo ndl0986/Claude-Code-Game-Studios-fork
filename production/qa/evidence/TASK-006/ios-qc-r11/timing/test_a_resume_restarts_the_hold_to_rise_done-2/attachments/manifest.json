@@ -1,0 +1,44 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "CF57A4D9-5A05-44BD-A30A-A7FE1B22CDC0.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "banner-up after the resume_0_38A0CBB5-BBA5-42E2-A50B-E42CA19CCAA2.txt",
+        "timestamp" : 1794903345.715
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "2554235F-6488-4E41-AEC0-8B9A42AFEB33.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "resume frame_0_12F4D2BC-B55C-45A6-B768-2E63901670C0.txt",
+        "timestamp" : 1794903345.714
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "88466B21-2990-4F6E-851C-9CEB5F01C286.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "resume log_0_2C0A8F24-C032-4B1D-8ACC-22126E0D6A66.txt",
+        "timestamp" : 1794903345.713
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "78B3F04D-73B8-4F22-A67C-7A4A6BD3E925.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "paused in the hold_0_D4BE7EDA-6243-4CAE-8A16-FC2B5AF16008.png",
+        "timestamp" : 1794903344.509
+      }
+    ],
+    "testIdentifier" : "R9CasesUITests/test_a_resume_restarts_the_hold_to_rise_done()",
+    "testIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/R9CasesUITests/test_a_resume_restarts_the_hold_to_rise_done"
+  }
+]

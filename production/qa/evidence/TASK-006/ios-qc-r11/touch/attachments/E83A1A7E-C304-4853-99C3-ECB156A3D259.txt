@@ -1,0 +1,20 @@
+intro|0|walkTo|0|0|0|0 @ 159463.602
+fire:next @ 159465.599
+intro|1|walkTo|0|0|0|0 @ 159465.618
+fire:next @ 159465.972
+fire:next @ 159466.452
+fire:next @ 159466.803
+fire:next @ 159467.176
+intro|2|walkTo|0|0|0|0 @ 159467.184
+fire:next @ 159467.563
+fire:next @ 159467.942
+fire:next @ 159468.330
+fire:next @ 159468.691
+intro|3|walkTo|0|0|0|0 @ 159468.701
+fire:next @ 159469.066
+fire:next @ 159469.441
+fire:next @ 159469.811
+fire:next @ 159470.187
+fire:next @ 159470.571
+play|3|walkTo|0|0|0|0 @ 159470.584
+taps 14
