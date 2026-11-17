@@ -23,7 +23,7 @@ final class HeroNode: SKNode {
         var tunic, sash, skin: SKColor
         var headband: Bool
         static let hero = Look(tunic: C.red, sash: C.gold, skin: C.skin, headband: true)
-        static let follower = Look(tunic: SKColor(hex: 0xD8C9A3), sash: SKColor(hex: 0xB9705C), skin: SKColor(hex: 0xF1C9A0), headband: false)
+        static let follower = Look(tunic: SKColor(hex: 0xD8C9A3), sash: SKColor(hex: 0xB9705C), skin: C.skin, headband: false)
     }
 
     init(scale s: Double = 1, reach: Double? = nil, look: Look = .hero) {

@@ -4,7 +4,7 @@ import GameCore
 /// The prototype's palette (art bible: warm primaries to touch and reward; red never reads as blood).
 enum C {
     static let red = SKColor(hex: 0xd9342b), gold = SKColor(hex: 0xf2b632), goldDark = SKColor(hex: 0xc98a12)
-    static let cream = SKColor(hex: 0xfff6e3), ink = SKColor(hex: 0x3a2a1f), skin = SKColor(hex: 0xf5c9a0)
+    static let cream = SKColor(hex: 0xfff6e3), ink = SKColor(hex: 0x3a2a1f), skin = SKColor(hex: 0xf1c9a0) // look-sheet-d18: one skin for everyone (r10, Android r13 parity)
     static let hair = SKColor(hex: 0x231a16), indigo = SKColor(hex: 0x2b4c8c), leaf = SKColor(hex: 0x6cbf4f)
     static let leafDark = SKColor(hex: 0x3f8a3a), river = SKColor(hex: 0x5ab4d6), earth = SKColor(hex: 0xc99a5b)
     static let earthDark = SKColor(hex: 0xa87a45), enemy = SKColor(hex: 0x6b5b95), enemyDark = SKColor(hex: 0x4b3f6e)
