@@ -172,7 +172,7 @@ final class GameScene: SKScene {
         let p = game.play, q = game.quiz
         return [game.screen.rawValue, game.lang.rawValue, "\(game.storyLine)", "\(p.phase)", "\(p.captionLine)", "\(p.beat)",
                 "\(q?.index ?? -1)", "\(q?.okIndex ?? -1)", "\(q?.wrong.sorted() ?? [])", "\(game.muted)", "\(game.stars)", "\(layout.scale)",
-                "\(p.cardLine)", "\(p.trainingStage)", "\(p.lineIndex)", "\(p.askShowing)", "\(p.askHint)", "\(p.visiblePads.map(\.rawValue).sorted())", "\(game.skipWarning)", "\(p.goArrow)", "\(game.quizCanAdvance)", "\(game.pausedFrom)"].joined(separator: "|")
+                "\(p.cardLine)", "\(p.trainingStage)", "\(p.lineIndex)", "\(p.askShowing)", "\(p.askHint)", "\(p.visiblePads.map(\.rawValue).sorted())", "\(game.skipWarning)", "\(game.leaveCard)", "\(p.goArrow)", "\(game.quizCanAdvance)", "\(game.pausedFrom)"].joined(separator: "|")
     }
 
     // MARK: touches
@@ -243,7 +243,9 @@ final class GameScene: SKScene {
         case "mute": game.toggleMute(); audio.muted = game.muted
         case "pause": releaseAllInput(); game.pause()
         case "resume": game.resume()
-        case "home": game.home()
+        case "pauseMap": game.askLeave() // W18: the menu opens the leave card (exempt from the lock)
+        case "leaveKeep": game.keepPlaying(at: press)
+        case "leaveGo": game.leave(at: press)
         case "toMap": game.toMap(at: press) // the entry lock applies (Input Rule 13); pause's Home is exempt
         case "replay": game.replay()
         case "ask": game.ask(at: press)
@@ -462,11 +464,19 @@ final class GameScene: SKScene {
     private var uiZ: CGFloat = 0
     private func add(_ n: SKNode, _ x: Double, _ y: Double) { n.position = D.p(x, y); uiZ += 1; n.zPosition = uiZ; ui.addChild(n) }
 
-    private func button(_ label: String, _ x: Double, _ y: Double, _ w: Double, _ h: Double, _ id: String, pulse: Bool = false, fill: SKColor = C.gold, size: Double = 34) {
+    /// A menu button. `icon` (W20, W18) draws a glyph `h × 0.56` wide on the left that backs up the words for a
+    /// pre-reader; the label then fills the rest (Android r14's layout).
+    private func button(_ label: String, _ x: Double, _ y: Double, _ w: Double, _ h: Double, _ id: String, pulse: Bool = false, fill: SKColor = C.gold, size: Double = 34, icon: ((Double) -> SKNode)? = nil) {
         let n = SKNode()
         n.addChild(D.rr(-w / 2, -h / 2 + 6, w, h, h / 2.6, fill == C.gold ? C.goldDark : SKColor(hex: 0xc8b89a)))
         n.addChild(D.rr(-w / 2, -h / 2, w, h, h / 2.6, fill, .white, 4))
-        n.addChild(Font.label(label, size, C.ink, width: w - 30))
+        if let icon {
+            let g = icon(h * 0.56); g.position = CGPoint(x: -w / 2 + 22 + h * 0.36, y: 0); n.addChild(g)
+            let rest = w - 22 - h * 0.72
+            let l = Font.label(label, size, C.ink, width: rest - 20); l.position.x = -w / 2 + 22 + h * 0.72 + rest / 2; n.addChild(l)
+        } else {
+            n.addChild(Font.label(label, size, C.ink, width: w - 30))
+        }
         add(n, x + w / 2, y + h / 2)
         if pulse { n.run(.repeatForever(.sequence([.scale(to: 1.04, duration: 0.26), .scale(to: 1, duration: 0.26)]))) }
         buttons.append(Button(rect: CGRect(x: x, y: y, width: w, height: h), id: id))
@@ -547,11 +557,14 @@ final class GameScene: SKScene {
         guard game.skipWarning else { return }
         buttons = []
         add(D.rr(-Self.bleed, -Self.bleed, 1280 + 2 * Self.bleed, 720 + 2 * Self.bleed, 0, SKColor(red: 42 / 255, green: 36 / 255, blue: 64 / 255, alpha: 0.75)), 0, 0)
-        add(D.rr(-420, -170, 840, 340, 36, C.cream, C.gold, 6), 640, 330)
+        let bh = rowH, by = 390.0
+        add(D.rr(-420, -170, 840, by + bh + 24 - 160, 36, C.cream, C.gold, 6), 640, 330)
         add(D.drum(50, SKColor(hex: 0xc98a12, alpha: 0.5)), 640, 210)
         add(Font.label(game.ui("ui.story.skip_warning"), 37, C.ink, width: 780, weight: 600), 640, 300)
-        button(game.ui("ui.story.keep_reading"), 250 + 70, 400, 300, 100, "keepReading", pulse: true)
-        button(game.ui("ui.story.skip_confirm"), 660, 400, 300, 100, "skipAnyway", fill: C.cream)
+        // W20 (Mission flow, skip warning): "Skip anyway" smaller on the left with a skip arrow; "Keep reading" big,
+        // default (pulsing) and on the RIGHT with an open book. Both ≥ pad_min tall (Input Rule 4).
+        button(game.ui("ui.story.skip_confirm"), 240, by, 340, bh, "skipAnyway", fill: C.cream, size: 30, icon: skipGlyph)
+        button(game.ui("ui.story.keep_reading"), 600, by, 440, bh, "keepReading", pulse: true, icon: bookGlyph)
     }
 
     private func buildUI() {
@@ -683,6 +696,8 @@ final class GameScene: SKScene {
             for d in [-1.0, 1] { n.addChild(D.poly([(d * 12 + d * r * 0.3, 0), (d * 12 - d * r * 0.18, -r * 0.28), (d * 12 - d * r * 0.18, r * 0.28)], C.ink)) }
         case "defend":
             n.addChild(D.circle(0, -4, r * 0.55, SKColor(hex: 0xd8a657), C.goldDark, 4)); n.addChild(D.circle(0, -4, r * 0.14, C.gold, C.goldDark, 3))
+        case "special" where game.play.specialIcon == .fist: // W17: the hold-meter's orange moment, the hero's fist
+            n.addChild(fistGlyph(r))
         case "special": // the banner: plain cloth on a pole, never text (art bible §3)
             n.addChild(D.rr(-r * 0.35, -r * 0.55, 6, r * 1.1, 3, SKColor(hex: 0x6a4a2a)))
             n.addChild(D.poly([(-r * 0.3, -r * 0.5), (r * 0.45, -r * 0.4), (r * 0.45, r * 0.05), (-r * 0.3, -r * 0.05)], C.red))
@@ -836,10 +851,102 @@ final class GameScene: SKScene {
         if game.pausedFrom == .quiz { buildQuiz(); buttons = [] } // P-06: the quiz behind the overlay, its cards inert
         add(D.rr(-Self.bleed, -Self.bleed, 1280 + 2 * Self.bleed, 720 + 2 * Self.bleed, 0, SKColor(red: 42 / 255, green: 36 / 255, blue: 64 / 255, alpha: 0.7)), 0, 0)
         add(Font.label(game.ui("ui.pause.title"), 64, .white), 640, 200)
-        button(game.ui("ui.btn.resume"), 440, 290, 400, 120, "resume", pulse: true)
-        button(game.ui("ui.btn.home"), 440, 450, 400, 110, "home", fill: C.cream)
+        let bh = rowH
+        button(game.ui("ui.btn.resume"), 440, 260, 400, bh, "resume", pulse: true)
+        // W18 (pause.md): "Về bản đồ / To the map", smaller and lower with a map icon; it opens the leave card
+        button(game.ui("ui.btn.to_map"), 640 - 170, 260 + bh + 24, 340, bh, "pauseMap", fill: C.cream, size: 30, icon: mapGlyph)
         roundIcon(layout.mute, "mute", speakerIcon(layout.mute.r))
         langButton()
+        if game.leaveCard { leaveCardOverlay() }
+    }
+
+    /// Buttons and dialog rows stay ≥ pad_min tall on every phone (Input Rule 4): 110 world px, or pad_min in world
+    /// units when k is small (≈ 136 at k 0.529).
+    private var rowH: Double { max(110, layout.padWorld) }
+
+    /// The leave card (Mission flow Rule 11, pause.md, TASK-023 W18): the ASSET-324 card with an ASSET-334 placeholder
+    /// picture (a map with a path home), `ui.pause.leave_confirm`, "Về bản đồ" (cream, small, left, map icon) and
+    /// "Chơi tiếp" (gold, big, right, default, ▶). No red. It slides up 60 px and fades in over 0.25 s (ease-out);
+    /// its buttons take the entry lock meanwhile (Input Rule 13). Only its buttons are live.
+    private func leaveCardOverlay() {
+        buttons = []
+        let before = Set(ui.children)
+        let bh = rowH, by = 430.0
+        let dim = D.rr(-Self.bleed, -Self.bleed, 1280 + 2 * Self.bleed, 720 + 2 * Self.bleed, 0, SKColor(red: 42 / 255, green: 36 / 255, blue: 64 / 255, alpha: 0.75))
+        add(dim, 0, 0)
+        add(D.rr(-400, 0, 800, by + bh + 24 - 120, 36, C.cream, C.gold, 6), 640, 120)
+        add(mapPicture(150), 640, 215)
+        add(Font.label(game.ui("ui.pause.leave_confirm"), 40, C.ink, width: 700, weight: 600), 640, 345)
+        button(game.ui("ui.btn.to_map"), 280, by, 320, bh, "leaveGo", fill: C.cream, size: 30, icon: mapGlyph)
+        button(game.ui("ui.btn.resume"), 630, by, 370, bh, "leaveKeep", pulse: true, icon: playGlyph)
+        let left = max(0, 0.25 - game.leaveT)
+        guard left > 0 else { return }
+        for n in ui.children where !before.contains(n) {
+            if n === dim { n.alpha = 0; n.run(.fadeIn(withDuration: left)); continue }
+            n.alpha = 0.4; n.position.y -= 60 // SpriteKit y is up: 60 world px lower
+            let move = SKAction.moveBy(x: 0, y: 60, duration: left); move.timingMode = .easeOut
+            n.run(.group([move, .fadeAlpha(to: 1, duration: left)]))
+        }
+    }
+
+    // MARK: W17 / W18 / W20 glyphs (local y-down coordinates, centred on 0,0; the same shapes as Android r14)
+
+    /// W17: a clenched fist for the hold-meter's special pad: skin, ink outline, knuckle creases, the thumb across,
+    /// a cream cuff.
+    private func fistGlyph(_ r: Double) -> SKNode {
+        let n = SKNode()
+        n.addChild(D.rr(-r * 0.42, -r * 0.40, r * 0.84, r * 0.62, r * 0.2, C.skin, C.ink, 4)) // the curled fingers
+        for i in 1...3 { let x = -r * 0.42 + r * 0.21 * Double(i); n.addChild(D.rr(x - 1.5, -r * 0.40, 3, r * 0.28, 1.5, C.ink)) }
+        n.addChild(D.rr(-r * 0.46, -r * 0.02, r * 0.62, r * 0.24, r * 0.12, C.skin, C.ink, 4)) // the thumb across
+        n.addChild(D.rr(-r * 0.30, r * 0.22, r * 0.60, r * 0.26, r * 0.08, C.cream, C.ink, 4)) // the cuff
+        return n
+    }
+    /// W20 "Keep reading": an open book, two cream pages and a spine, ink outline. `s` wide.
+    private func bookGlyph(_ s: Double) -> SKNode {
+        let n = SKNode(), h = s * 0.62
+        n.addChild(D.poly([(0, -h * 0.38), (-s / 2, -h / 2), (-s / 2, h / 2), (0, h * 0.62)], C.cream, C.ink, 4))
+        n.addChild(D.poly([(0, -h * 0.38), (s / 2, -h / 2), (s / 2, h / 2), (0, h * 0.62)], C.cream, C.ink, 4))
+        for k in 1...2 {
+            let yy = -h * 0.2 + Double(k) * h * 0.22
+            n.addChild(D.rr(-s * 0.40, yy, s * 0.30, 3, 1.5, C.ink.withAlphaComponent(0.55)))
+            n.addChild(D.rr(s * 0.10, yy, s * 0.30, 3, 1.5, C.ink.withAlphaComponent(0.55)))
+        }
+        return n
+    }
+    /// W20 "Skip anyway": two ink chevrons pointing right. `s` wide.
+    private func skipGlyph(_ s: Double) -> SKNode {
+        let n = SKNode()
+        for k in 0...1 {
+            let x0 = -s / 2 + Double(k) * s * 0.48
+            n.addChild(D.poly([(x0, -s * 0.36), (x0 + s * 0.14, -s * 0.36), (x0 + s * 0.52, 0), (x0 + s * 0.14, s * 0.36), (x0, s * 0.36), (x0 + s * 0.38, 0)], C.ink))
+        }
+        return n
+    }
+    /// W18 "Về bản đồ": a folded map with a dotted path. `s` wide.
+    private func mapGlyph(_ s: Double) -> SKNode {
+        let n = SKNode(), h = s * 0.72
+        n.addChild(D.poly([(-s / 2, -h / 2 + 6), (-s / 6, -h / 2), (s / 6, -h / 2 + 6), (s / 2, -h / 2), (s / 2, h / 2 - 6), (s / 6, h / 2), (-s / 6, h / 2 - 6), (-s / 2, h / 2)],
+                          SKColor(hex: 0xF3E6C8), C.ink, 4))
+        for i in 0...3 { n.addChild(D.circle(-s * 0.3 + Double(i) * s * 0.2, h * 0.15 - Double(i) * h * 0.1, 3, C.ink)) }
+        return n
+    }
+    /// W18 "Chơi tiếp": a play triangle.
+    private func playGlyph(_ s: Double) -> SKNode {
+        let n = SKNode(); n.addChild(D.poly([(-s * 0.28, -s * 0.36), (s * 0.38, 0), (-s * 0.28, s * 0.36)], C.ink)); return n
+    }
+    /// ASSET-334 placeholder: a folded parchment map with a dotted path to a little home (no red). `w` wide.
+    private func mapPicture(_ w: Double) -> SKNode {
+        let n = SKNode(), h = w * 0.62
+        n.addChild(D.rr(-w / 2, -h / 2, w, h, 12, SKColor(hex: 0xF3E6C8), C.ink, 4))
+        for i in 1...2 { n.addChild(D.rr(-w / 2 + w * Double(i) / 3 - 1.5, -h / 2 + 4, 3, h - 8, 1.5, C.ink.withAlphaComponent(0.25))) }
+        for i in 0...6 {
+            let f = Double(i) / 6
+            n.addChild(D.circle(-w * 0.38 + f * w * 0.62, h * 0.28 - f * h * 0.5 + (i % 2 == 0 ? 0 : 5), 4, C.ink.withAlphaComponent(0.7)))
+        }
+        let hx = w * 0.32, hy = -h * 0.12 // the home: a hut with a gold roof
+        n.addChild(D.rr(hx - 14, hy - 4, 28, 20, 3, SKColor(hex: 0xA8794A), C.ink, 3))
+        n.addChild(D.poly([(hx - 20, hy - 2), (hx, hy - 20), (hx + 20, hy - 2)], C.gold, C.ink, 3))
+        return n
     }
 
     /// §5.2 small-k: the question whose right pick has already played its fade-and-glide (so a rebuild
@@ -1076,7 +1183,7 @@ final class GameScene: SKScene {
             "train_cap": p.trainCap ?? NSNull(), "x_start": p.xStart,
             "presses": debugPresses.map { ["t": $0.0, "advanced": $0.1] },
             "pads": pads, "buttons": btns,
-            "skip_warning": game.skipWarning, "stars": game.stars, "medal_earned": game.medalEarned,
+            "skip_warning": game.skipWarning, "leave_card": game.leaveCard, "stars": game.stars, "medal_earned": game.medalEarned,
             "hero_hurt": p.hero.hurt > 0, "strike": p.enemies.contains { $0.state == .strike },
             "entered_at": game.enteredAt ?? NSNull(), "now": ProcessInfo.processInfo.systemUptime,
             "log": debugLog.map { ["place": $0.0, "t": $0.1] },

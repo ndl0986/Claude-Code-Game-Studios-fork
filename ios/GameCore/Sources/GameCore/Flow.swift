@@ -101,6 +101,11 @@ public final class Game {
     /// D-07: a story section was skipped this run (no medal), the warning is up, the child chose "Skip anyway".
     public private(set) var skipped = false
     public private(set) var skipWarning = false
+    /// Mission flow Rule 11 / pause.md (TASK-023 W18): the pause menu's "Về bản đồ" opens this card first,
+    /// "Về bản đồ? / Leave the story?". Nothing is discarded until the card's own "Về bản đồ".
+    public private(set) var leaveCard = false
+    /// Seconds since the leave card opened (its 0.25 s slide-in).
+    public private(set) var leaveT = 0.0
     var warningAccepted = false
     /// Results: the medal is earned (this or any run), and the hero this finish opened (unlock screen).
     public private(set) var medalEarned = false
@@ -177,7 +182,7 @@ public final class Game {
     func titleLoaded() { progress.markSeenOpen(progression.openHeroes(progress), store: progressStore) }
     func reset() {
         play = PlayState(tuning: tuning, beats: hero.mission.beats, seed: tuning.seed)
-        quiz = nil; stars = 0; skipped = false; warningAccepted = false; skipWarning = false; unlockedHero = nil
+        quiz = nil; stars = 0; skipped = false; warningAccepted = false; skipWarning = false; leaveCard = false; unlockedHero = nil
     }
 
     /// Input GDD Rule 12 / F3: an advance button ignores a press within `advance_debounce` of the last
@@ -209,7 +214,11 @@ public final class Game {
             case .dialogueLine: return "dialogue\(play.beat).\(play.lineIndex)" // an ask tap advances a line too
             default: return nil
             }
-        case .pause: return lockContext
+        // pausing keeps the context it came from (the menu is exempt); the leave card is its own context, so its
+        // buttons take the entry lock while it slides in (Input Rule 13b), and closing it returns without a new lock
+        case .pause:
+            let base = lockContext.map { $0.hasSuffix("/leave") ? String($0.dropLast(6)) : $0 }
+            return leaveCard ? (base ?? "pause") + "/leave" : (base == "pause" ? nil : base)
         default: return nil
         }
     }
@@ -217,7 +226,10 @@ public final class Game {
     /// Stamps the entry time when the lock context changes (called after every step and action).
     func noteContext() {
         let c = currentLockContext()
-        if c != lockContext { lockContext = c; enteredAt = c == nil ? nil : uptime(); lockUntil = enteredAt.map { $0 + tuning["screen_enter_lock"] } }
+        guard c != lockContext else { return }
+        // closing the leave card goes back to the menu's context: no new entry, no relock (W18)
+        if let old = lockContext, old.hasSuffix("/leave"), String(old.dropLast(6)) == (c ?? "pause") { lockContext = c; return }
+        lockContext = c; enteredAt = c == nil ? nil : uptime(); lockUntil = enteredAt.map { $0 + tuning["screen_enter_lock"] }
     }
 
     /// Input Rule 13 / TASK-005p/q: within screen_enter_lock of entering a context a press is dropped, and a
@@ -251,10 +263,26 @@ public final class Game {
     public func forceLang(_ l: Language) { progress.lang = l; progress.saveLang(store) }
     public func toggleMute() { muted.toggle(); tap() }
     /// Input Rule 3 / W7: every screen but the title (sound only) and pause itself can pause.
-    public func pause() { guard screen != .title && screen != .pause else { return }; tap(); pausedFrom = screen; screen = .pause; skipWarning = false }
+    public func pause() { guard screen != .title && screen != .pause else { return }; tap(); pausedFrom = screen; screen = .pause; skipWarning = false; leaveCard = false }
     /// Resume: play's hint timers and windups restart (Hints GDD rule 5, AC19).
-    public func resume() { guard screen == .pause else { return }; tap(); screen = pausedFrom; if pausedFrom == .play { play.resetHintTimers(); play.restartFinishHold() } }
-    public func home() { tap(); reset(); go(.title) }
+    /// Not live under the leave card: only its "Chơi tiếp" closes it (W18).
+    public func resume() { guard screen == .pause, !leaveCard else { return }; tap(); screen = pausedFrom; if pausedFrom == .play { play.resetHintTimers(); play.restartFinishHold() } }
+    /// Results and unlock → the title. Never from pause: there the way out is the leave card's "Về bản đồ" (W18).
+    public func home() { guard screen == .results || screen == .unlock else { return }; tap(); reset(); go(.title) }
+
+    // MARK: the leave card (Mission flow Rule 11, pause.md, TASK-023 W18; same API as Android r14)
+
+    /// The pause menu's "Về bản đồ": opens the leave card; nothing is discarded yet. The menu is exempt from the lock.
+    public func askLeave() { guard screen == .pause, !leaveCard else { return }; tap(); leaveCard = true; leaveT = 0; noteContext() }
+    /// The card's "Chơi tiếp" (the default): back to the pause menu with the run intact; the menu isn't relocked.
+    public func keepPlaying(at press: Double? = nil) {
+        guard screen == .pause, leaveCard, !entryLocked(press) else { return }; tap(); leaveCard = false; noteContext()
+    }
+    /// The card's "Về bản đồ": the only way out of pause. Discards the run and shows the title (the map screen is
+    /// TASK-025, not built yet).
+    public func leave(at press: Double? = nil) {
+        guard screen == .pause, leaveCard, !entryLocked(press) else { return }; tap(); reset(); go(.title)
+    }
     public func replay() { tap(); reset(); storyLine = 0; go(.intro) }
 
     /// "Tiếp / Next" on any story box, card, caption, quiz why, results or unlock; `press` is the
@@ -379,7 +407,7 @@ public final class Game {
         case .quiz:
             t += dt
             quiz!.update(dt)
-        case .pause: break
+        case .pause: if leaveCard { leaveT += dt }
         default: t += dt
         }
         noteContext()
@@ -416,7 +444,9 @@ public final class Game {
         case .play:
             go(.play)
             if let b = beat { play.debugJump(beat: b - 1, stage: name == "caption" ? "caption" : stage) }
-        case .pause: go(.play); if let b = beat { play.debugJump(beat: b - 1, stage: stage) }; pausedFrom = .play; screen = .pause
+        case .pause:
+            go(.play); if let b = beat { play.debugJump(beat: b - 1, stage: stage == "leave" ? nil : stage) }; pausedFrom = .play; screen = .pause
+            if stage == "leave" { leaveCard = true; leaveT = 1 } // W18 screenshots: the card already in
         default: go(target)
         }
         if stage == "skipwarning" && canSkip { skipWarning = true }
