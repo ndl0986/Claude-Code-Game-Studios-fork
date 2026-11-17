@@ -42,7 +42,7 @@ title (the run is discarded) and whose "Chơi tiếp" → back to this menu.
 | Sound | the toggle, saved | Audio Rule 14 |
 | VI \| EN | the language switch (one of only two places; the other is the title) | P-04; Language Rule 2 |
 | To the map | smaller, lower, with a map icon; opens the leave card | Mission flow Rule 11 |
-| Leave card | ASSET-324 card with the ASSET-334 top picture (a map with a path home); one line `ui.pause.leave_confirm` (proposed: "Về bản đồ? Câu chuyện sẽ bắt đầu lại. / Leave? The story will start again."); "Chơi tiếp / Keep playing" (gold, big, right, default, ▶ icon) and "Về bản đồ / To the map" (cream, small, left, map icon). No red | Mission flow Rule 11 |
+| Leave card | ASSET-324 card with the ASSET-334 top picture (a map with a path home); one line `ui.pause.leave_confirm` = "Về bản đồ? / Leave the story?" (Mission flow Rule 11; `dialog` field; TASK-023 W18); "Chơi tiếp / Keep playing" (gold, big, right, default, ▶ icon) and "Về bản đồ / To the map" (cream, small, left, map icon). No red | Mission flow Rule 11 |
 
 ## 6. States & Variants
 
