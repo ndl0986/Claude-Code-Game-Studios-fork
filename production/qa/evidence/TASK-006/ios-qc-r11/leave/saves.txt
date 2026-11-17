@@ -1,0 +1,22 @@
+before 15:19:02
+5b6a7945639347dae9ed4a5ad559ea2cd5ab2d88972188988bf564845ec14c1a
+mtime Nov 17 15:12:51 2026
+{
+  "completed.tran-quoc-toan" => true
+  "medal.tran-quoc-toan" => true
+  "seen_open.tran-quoc-toan" => true
+  "stars.tran-quoc-toan" => 3
+}
+load { 12.14 12.44 14.24 }
+exit 0
+after 15:19:18
+-- note: the harness install moved the data container (A0C9A20A… → 92DCA8AE…); the saves came across unchanged
+new container save after test_e:
+mtime Nov 17 15:12:51 2026
+{
+  "completed.tran-quoc-toan" => true
+  "medal.tran-quoc-toan" => true
+  "seen_open.tran-quoc-toan" => true
+  "stars.tran-quoc-toan" => 3
+}
+sha256 after: 5b6a7945639347dae9ed4a5ad559ea2cd5ab2d88972188988bf564845ec14c1a (before 5b6a7945639347dae9ed4a5ad559ea2cd5ab2d88972188988bf564845ec14c1a)

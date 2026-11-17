@@ -1,0 +1,1 @@
+card entered 159310.001; leaveGo at +0.422 s, locked true

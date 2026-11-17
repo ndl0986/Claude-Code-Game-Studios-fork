@@ -1,0 +1,2 @@
+f6cf071213360deb957fb330e0c035497e38f8ded563777af0290cf730bf53d4  /Users/luannguyend/Library/Developer/CoreSimulator/Devices/E9F515E9-58F2-4A92-ABEF-C5CD59CE8183/data/Containers/Bundle/Application/3DEE5C0B-BC20-4299-A415-FE4CAFA0AB7B/DaiDatAnhHung.app/DaiDatAnhHung
+load { 23.56 15.45 15.10 }

@@ -1,0 +1,7 @@
+play|0|beatPlay|3|0|0|0 @ 159579.017
+play|0|beatEnd|3|0|0|0 @ 159581.019
+fire:pause @ 159581.752
+pause|0|beatEnd|3|0|0|0 @ 159581.768
+fire:resume @ 159582.222
+play|0|beatEnd|3|0|0|0 @ 159582.234
+play|0|walkTo|4|0|0|0 @ 159583.086

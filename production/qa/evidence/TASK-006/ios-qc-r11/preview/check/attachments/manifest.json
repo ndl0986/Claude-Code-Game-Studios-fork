@@ -1,0 +1,35 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "8BFEA2CB-539A-4F14-B504-67D8A235C6F7.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "03 the same screen 2 s later_0_9D3297A5-1284-4922-BCDB-3F713342637B.png",
+        "timestamp" : 1794903681.198
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "F69611F1-DA72-4C8F-8CEC-FBF33F6B5531.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "02 first story screen after Start UNSIGNED strip at the top edge_0_4586333D-CAC9-4A16-A48F-7A262C54CB4A.png",
+        "timestamp" : 1794903679.09
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "E9F515E9-58F2-4A92-ABEF-C5CD59CE8183",
+        "deviceName" : "iPhone 18 Pro",
+        "exportedFileName" : "9BFEE390-53D3-461F-8913-487579137B77.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "01 title hero card and Start (the debug jump was ignored)_0_7F8A3B77-584E-40F5-B475-FF647BAE817B.png",
+        "timestamp" : 1794903676.653
+      }
+    ],
+    "testIdentifier" : "PreviewCheckUITests/test_preview_title_then_story_screens_show_the_unsigned_strip()",
+    "testIdentifierURL" : "test://com.apple.xcode/DaiDatAnhHung/DaiDatAnhHungUITests/PreviewCheckUITests/test_preview_title_then_story_screens_show_the_unsigned_strip"
+  }
+]

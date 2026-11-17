@@ -1,0 +1,3 @@
+press clock (r11): [0, 220, 1, 1], judder frames 2
+currentTime (r10): [0, 220, 1, 1], judder frames 2
+hero x 4590.0 → 5574.5
