@@ -1,0 +1,9 @@
+[spike] sim-spritekit-latency: presses=30 dropped=0 queued=0 maxActiveMorphs=1 maxQueue=0 maxVoices=1
+press→firstFrame cold n=3 median=12.7 p95=14.3 max=14.3
+press→presentEst cold n=3 median=27.0 p95=27.0 max=27.0
+press→soundEst cold n=3 median=6.3 p95=11.6 max=11.6
+press→firstFrame warm n=27 median=11.3 p95=17.6 max=28.3
+press→presentEst warm n=27 median=26.9 p95=29.1 max=43.2
+press→soundEst warm n=27 median=8.4 p95=13.1 max=13.6
+frames n=5209 p50=16.67 p99=17.07 max=34.61 ms
+memory MB start=21.4 mid=26.8 end=26.9 (86 s)

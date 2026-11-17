@@ -1,0 +1,9 @@
+[spike] sim-rive-mash: presses=599 dropped=584 queued=14 maxActiveMorphs=1 maxQueue=3 maxVoices=1
+press→firstFrame cold n=1 median=11.6 p95=11.6 max=11.6
+press→presentEst cold n=1 median=21.9 p95=21.9 max=21.9
+press→soundEst cold n=1 median=10.1 p95=10.1 max=10.1
+press→firstFrame warm n=0 median=nan p95=nan max=nan
+press→presentEst warm n=0 median=nan p95=nan max=nan
+press→soundEst warm n=0 median=nan p95=nan max=nan
+frames n=3591 p50=16.67 p99=17.35 max=2148.16 ms
+memory MB start=26.1 mid=25.5 end=25.6 (61 s)

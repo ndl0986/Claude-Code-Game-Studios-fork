@@ -1,0 +1,9 @@
+[spike] sim-rive-latency: presses=30 dropped=0 queued=0 maxActiveMorphs=1 maxQueue=0 maxVoices=1
+press→firstFrame cold n=3 median=11.4 p95=12.6 max=12.6
+press→presentEst cold n=3 median=23.3 p95=23.3 max=23.3
+press→soundEst cold n=3 median=10.3 p95=10.5 max=10.5
+press→firstFrame warm n=27 median=9.3 p95=12.4 max=12.9
+press→presentEst warm n=27 median=23.6 p95=27.7 max=27.7
+press→soundEst warm n=27 median=9.0 p95=10.7 max=11.4
+frames n=5098 p50=16.67 p99=17.36 max=2052.41 ms
+memory MB start=23.4 mid=25.4 end=25.6 (86 s)

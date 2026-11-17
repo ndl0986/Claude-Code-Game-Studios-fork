@@ -1,0 +1,6 @@
+rivassets/
+build/
+MorphCore/.build/
+.swiftpm/
+MorphCore/.swiftpm/
+xcuserdata/
