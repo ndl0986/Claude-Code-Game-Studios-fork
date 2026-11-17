@@ -12,16 +12,20 @@
 |---|---|
 | 0:00 | Title card: "Dải Đất Anh Hùng / demo build (Android), 2026-11-17" (3 s) |
 | 0:03 | Title screen, fresh: 0★, grey medal, "Bản chơi thử" |
-| 0:05 | Story intro, 4 boxes at reading pace; first walk with the hint hand |
-| 0:27 | **Pause** once ("Tạm dừng"), then "Chơi tiếp"; part 1 card |
-| 0:38 | Dialogue at Bình Than, all 9 lines, including "Xin vào!" |
-| 1:16 | Part 3 card "Quả cam" and the hold meter (the fist pad) |
-| 1:35 | Part 4 card; training: dummies, blocks with the follower partner, raising the banner |
-| 2:03 | Night camp; part 5 card |
-| 2:12 | The fight on the way to the Trần army's flag; reaching the flag |
-| 2:31 | Ending (2 boxes) |
-| 2:39 | Quiz: questions 1, 2 and 5 answered correctly (3 and 4 cut for length) |
-| 2:58 | Results: 3★ + "Nhận được huy hiệu!"; back to the title, now 3★ + gold medal |
+| 0:05 | Story intro, 4 boxes at reading pace |
+| 0:21 | First walk, with the hint hand |
+| 0:27 | **Pause** once ("Tạm dừng"), then "Chơi tiếp" |
+| 0:30 | Part 1 card "Khi các vương hầu họp bàn ở Bình Than" |
+| 0:42 | Dialogue at Bình Than, all 9 lines, including "Xin vào!" |
+| 1:20 | Part 3 card "Quả cam" and the hold meter (the fist pad) |
+| 1:34 | Part 4 card "Lá cờ sáu chữ vàng" |
+| 1:46 | Training: dummies, blocks with the follower partner, raising the banner |
+| 2:09 | Night camp; part 5 card "Cùng đánh giặc" |
+| 2:22 | The fight on the way to the Trần army's flag; the flag at 2:33 |
+| 2:37 | Ending (2 boxes) |
+| 2:47 | Quiz: questions 1, 2 and 5 answered correctly (3 and 4 cut for length) |
+| 3:01 | Results: 3★ + "Nhận được huy hiệu!" |
+| 3:08 | Back to the title, now 3★ + gold medal |
 
 Trimmed for length: walking stretches, about 70 s of the training beat, the start of the reach-the-flag run, and quiz questions 3–4. These are jump cuts.
 
