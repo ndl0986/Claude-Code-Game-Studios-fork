@@ -1,0 +1,8 @@
+Executable=/Users/luannguyend/orca/workspaces/Claude-Code-Game-Studios-fork/game-dev-001/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/dd/Build/Products/Release/Spike.app/Contents/MacOS/Spike
+[Dict]
+	[Key] com.apple.security.app-sandbox
+	[Value]
+		[Bool] true
+	[Key] com.apple.security.get-task-allow
+	[Value]
+		[Bool] true

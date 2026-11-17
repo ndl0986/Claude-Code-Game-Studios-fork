@@ -2,12 +2,16 @@
 // The shell: a runtime switch (SpriteKit / Rive), the stage, three big keys (D, B, 3) and a status line.
 import SwiftUI
 import SpriteKit
+#if os(iOS)
+import UIKit
+#endif
 #if !NORIVE
 import RiveRuntime
 #endif
 
 @main
 struct SpikeApp: App {
+    nonisolated(unsafe) static var activity: NSObjectProtocol?
     var body: some Scene {
         WindowGroup { ContentView() }
         #if os(macOS)
@@ -55,6 +59,18 @@ struct ContentView: View {
             #endif
             attachStage()
             c.startAutomation()
+            #if os(macOS)
+            // measurement runs: keep the app in front and out of App Nap (timer coalescing / frame throttling)
+            NSApp.activate()
+            SpikeApp.activity = ProcessInfo.processInfo.beginActivity(options: [.userInitiated, .latencyCritical], reason: "TASK-033 measurement")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { Kiosk.apply() }
+            #else
+            // Guided Access is the parent's lock on iPad; the app only observes it (logged for the evidence)
+            NSLog("[spike] guidedAccess=%d", UIAccessibility.isGuidedAccessEnabled ? 1 : 0)
+            NotificationCenter.default.addObserver(forName: UIAccessibility.guidedAccessStatusDidChangeNotification, object: nil, queue: .main) { _ in
+                NSLog("[spike] guidedAccess changed=%d", UIAccessibility.isGuidedAccessEnabled ? 1 : 0)
+            }
+            #endif
         }
         .onChange(of: c.runtime) { attachStage() }
     }

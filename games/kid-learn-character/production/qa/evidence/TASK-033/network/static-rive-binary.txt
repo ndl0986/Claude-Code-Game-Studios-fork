@@ -1,0 +1,35 @@
+RiveRuntime 6.30.1 iOS arm64 binary: strings / imports related to networking
+-- URL-like strings:
+cdnBaseUrl
+cdnBaseURL
+CDNFileAssetLoader
+cdnUuid
+cdnUUID
+https://public.rive.app/cdn/uuid
+import:byteLength:loadCdn:customAssetLoader:error:
+import:byteLength:loadCdn:error:
+initWithByteArray:loadCdn:customAssetLoader:error:
+initWithByteArray:loadCdn:error:
+initWithBytes:byteLength:loadCdn:customAssetLoader:error:
+initWithBytes:byteLength:loadCdn:error:
+initWithData:loadCdn:customAssetLoader:error:
+initWithData:loadCdn:error:
+initWithFileName:extension:in:loadCdn:error:customLoader:
+initWithFileName:extension:in:stateMachineName:fit:alignment:autoPlay:artboardName:loadCdn:customLoader:
+initWithHttpUrl:loadCdn:customAssetLoader:withDelegate:
+initWithHttpUrl:loadCdn:withDelegate:
+initWithResource:loadCdn:customAssetLoader:error:
+initWithResource:loadCdn:error:
+-- networking API references (imported symbols / class names):
+$s11RiveRuntime18URLSessionProtocolP
+$s11RiveRuntime26URLSessionDataTaskProtocolP
+dataTaskWithURL:completionHandler:
+downloadTaskWithURL:completionHandler:
+NSURLSession
+NSURLSessionDataTask
+URLSessionDataTaskProtocol
+URLSessionProtocol
+-- analytics/telemetry keywords:
+isEntryState
+-- PrivacyInfo.xcprivacy in the framework:
+PrivacyInfo.xcprivacy

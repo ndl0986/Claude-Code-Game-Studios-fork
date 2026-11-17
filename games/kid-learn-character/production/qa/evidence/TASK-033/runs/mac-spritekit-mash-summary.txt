@@ -1,0 +1,9 @@
+[spike] mac-spritekit-mash: presses=599 dropped=584 queued=14 maxActiveMorphs=1 maxQueue=3 maxVoices=1 swallowedKeys=0
+press→firstFrame cold n=0 median=nan p95=nan max=nan
+press→presentEst cold n=0 median=nan p95=nan max=nan
+press→soundEst cold n=0 median=nan p95=nan max=nan
+press→firstFrame warm n=1 median=7.2 p95=7.2 max=7.2
+press→presentEst warm n=1 median=11.0 p95=11.0 max=11.0
+press→soundEst warm n=1 median=14.5 p95=14.5 max=14.5
+frames n=4408 p50=13.34 p99=26.73 max=28.49 ms
+memory MB start=167.0 mid=167.0 end=167.0 (61 s)

@@ -34,8 +34,9 @@ if [ "$WHERE" != mac ]; then
   done
 fi
 if [ "$WHERE" != sim ]; then
+  # one launch per runtime: 30 latency presses (hold 0.5), then the 60 s mash (hold 3.0) -> <label>-latency/-mash
   for rt in spritekit rive; do
-    run_mac "mac-$rt-latency" 92 -runtime $rt -latency 30 -hold 0.5
-    run_mac "mac-$rt-mash" 68 -runtime $rt -mash 60
+    run_mac "mac-$rt" 160 -runtime $rt -latency 30 -hold 0.5 -mash 60
+    for part in latency mash; do echo "== mac-$rt-$part"; cat "$OUT/mac-$rt-$part-summary.txt" 2>/dev/null; echo; done
   done
 fi

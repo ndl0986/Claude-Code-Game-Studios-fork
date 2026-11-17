@@ -1,0 +1,15 @@
+kiosk=1 pid=99459 macOS 27.2.1 (26B131)
+Esc: front after='Spike' spikeAlive=yes -> held
+Tab (no modifier): front after='Spike' spikeAlive=yes -> held
+Cmd+Tab app switcher: front after='Spike' spikeAlive=yes -> held
+Cmd+` next window: front after='Spike' spikeAlive=yes -> held
+Cmd+H hide: front after='Spike' spikeAlive=yes -> held
+Cmd+M minimise: front after='Spike' spikeAlive=yes -> held
+Cmd+W close window: front after='Spike' spikeAlive=yes -> held
+Cmd+Space Spotlight: front after='Spike' spikeAlive=yes -> held
+Cmd+Opt+Esc Force Quit: front after='Spike' spikeAlive=yes -> held
+Ctrl+Up Mission Control: front after='Spike' spikeAlive=yes -> held
+Ctrl+Right next Space: front after='Spike' spikeAlive=yes -> held
+Cmd+Ctrl+F full screen: front after='Spike' spikeAlive=yes -> held
+Cmd+Q quit: front after='Spike' spikeAlive=yes -> held
+Ctrl+Opt+Cmd+Q parent exit: front after='Orca' spikeAlive=no -> ESCAPED (Spike quit)

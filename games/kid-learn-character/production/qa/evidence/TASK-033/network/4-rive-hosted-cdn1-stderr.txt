@@ -1,0 +1,46 @@
+2026-11-17 22:09:30.144746+0700 Spike[81627:9498574] [Connection] Unable to get remoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-11-17 22:09:30.144923+0700 Spike[81627:9498574] [Application] Error registering app with AppIntents framework: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-11-17 22:09:30.264989+0700 Spike[81627:9498526] [plugin] AddInstanceForFactory: No factory registered for id <CFUUID 0x77ecf43920> F8BB1C28-BAE8-11D6-9C31-00039315CD46
+2026-11-17 22:09:30.308162+0700 Spike[81627:9498526] [spike] audio ioBuffer=10.67 ms outputLatency=1.25 ms
+2026-11-17 22:09:30.337551+0700 Spike[81627:9498526] [] networkd_settings_read_from_file_locked Sandbox is preventing this process from reading networkd settings file at "/Library/Preferences/com.apple.networkd.plist", please add an exception.
+2026-11-17 22:09:30.338386+0700 Spike[81627:9498526] [] networkd_settings_read_from_file_locked Sandbox is preventing this process from reading networkd settings file at "/Library/Preferences/com.apple.networkd.plist", please add an exception.
+[net] request GET https://public.uat.rive.app/cdn/uuid/eadb7ed8-6d71-4b6c-bbc2-f0f5e9c5dd92
+2026-11-17 22:09:30.341285+0700 Spike[81627:9498526] [spike] rive file=hosted_assets loadCdn=1 bytes=441
+[net] request GET https://public.uat.rive.app/cdn/uuid/60ad5ede-993c-4e03-9a80-e56888b2cff3
+2026-11-17 22:09:30.345030+0700 Spike[81627:9498526] [] CVDisplayLinkCreateWithCGDisplays error -6661 due to invalid display count (0)
+2026-11-17 22:09:30.345044+0700 Spike[81627:9498526] [] CVDisplayLinkCreateWithCGDisplays error -6661 due to CVDisplayLinkCreateWithCGDisplays failure
+2026-11-17 22:09:30.347833+0700 Spike[81627:9498548] [] nw_resolver_can_use_dns_xpc_block_invoke Sandbox does not allow access to com.apple.dnssd.service
+2026-11-17 22:09:30.348383+0700 Spike[81627:9498548] dnssd_clientstub ConnectToServer: connect() failed path:/var/run/mDNSResponder Socket:12 Err:-1 Errno:1 Operation not permitted
+2026-11-17 22:09:30.348416+0700 Spike[81627:9498548] [connection] nw_resolver_create_dns_service_locked [C1.1] DNSServiceCreateDelegateConnection failed: ServiceNotRunning(-65563)
+2026-11-17 22:09:30.348555+0700 Spike[81627:9498548] [Default] Connection 1: received failure notification
+2026-11-17 22:09:30.348571+0700 Spike[81627:9498548] [Default] Connection 1: failed to connect 10:-72000, reason -1
+2026-11-17 22:09:30.348577+0700 Spike[81627:9498548] [Default] Connection 1: encountered error(10:-72000)
+2026-11-17 22:09:30.348704+0700 Spike[81627:9498548] [Default] Task <210A138B-6B88-4A42-B24F-D6D7E72CCF2B>.<1> HTTP load failed, 0/0 bytes (error code: -1003 [10:-72000])
+2026-11-17 22:09:30.349390+0700 Spike[81627:9498548] dnssd_clientstub ConnectToServer: connect() failed path:/var/run/mDNSResponder Socket:12 Err:-1 Errno:1 Operation not permitted
+2026-11-17 22:09:30.349406+0700 Spike[81627:9498548] [connection] nw_resolver_create_dns_service_locked [C2.1] DNSServiceCreateDelegateConnection failed: ServiceNotRunning(-65563)
+2026-11-17 22:09:30.349461+0700 Spike[81627:9498548] [Default] Connection 2: received failure notification
+2026-11-17 22:09:30.349473+0700 Spike[81627:9498548] [Default] Connection 2: failed to connect 10:-72000, reason -1
+2026-11-17 22:09:30.349479+0700 Spike[81627:9498548] [Default] Connection 2: encountered error(10:-72000)
+2026-11-17 22:09:30.349542+0700 Spike[81627:9498548] [Default] Task <26971780-872F-4F29-8DB3-0E748BA7CD0D>.<2> HTTP load failed, 0/0 bytes (error code: -1003 [10:-72000])
+2026-11-17 22:09:30.350036+0700 Spike[81627:9498548] [Default] Task <210A138B-6B88-4A42-B24F-D6D7E72CCF2B>.<1> finished with error [-1003] Error Domain=NSURLErrorDomain Code=-1003 "A server with the specified hostname could not be found." UserInfo={_kCFStreamErrorCodeKey=-72000, NSUnderlyingError=0x77ecc11830 {Error Domain=kCFErrorDomainCFNetwork Code=-1003 "(null)" UserInfo={_kCFStreamErrorDomainKey=10, _kCFStreamErrorCodeKey=-72000, _NSURLErrorNWResolutionReportKey=Resolved 0 endpoints in 1ms using unknown from query, _NSURLErrorNWPathKey=satisfied (Path is satisfied), interface: ppp0, ipv4, dns, uses wifi, LQM: unknown}}, _NSURLErrorFailingURLSessionTaskErrorKey=LocalDownloadTask <210A138B-6B88-4A42-B24F-D6D7E72CCF2B>.<1>, _NSURLErrorRelatedURLSessionTaskErrorKey=(
+    "LocalDownloadTask <210A138B-6B88-4A42-B24F-D6D7E72CCF2B>.<1>"
+), NSLocalizedDescription=A server with the specified hostname could not be found., NSErrorFailingURLStringKey=https://public.uat.rive.app/cdn/uuid/eadb7ed8-6d71-4b6c-bbc2-f0f5e9c5dd92, NSErrorFailingURLKey=https://public.uat.rive.app/cdn/uuid/eadb7ed8-6d71-4b6c-bbc2-f0f5e9c5dd92, _kCFStreamErrorDomainKey=10}
+2026-11-17 22:09:30.350203+0700 Spike[81627:9498548] [Default] Task <26971780-872F-4F29-8DB3-0E748BA7CD0D>.<2> finished with error [-1003] Error Domain=NSURLErrorDomain Code=-1003 "A server with the specified hostname could not be found." UserInfo={_kCFStreamErrorCodeKey=-72000, NSUnderlyingError=0x77ec8c0030 {Error Domain=kCFErrorDomainCFNetwork Code=-1003 "(null)" UserInfo={_kCFStreamErrorDomainKey=10, _kCFStreamErrorCodeKey=-72000, _NSURLErrorNWResolutionReportKey=Resolved 0 endpoints in 0ms using unknown from query, _NSURLErrorNWPathKey=satisfied (Path is satisfied), interface: ppp0, ipv4, dns, uses wifi, LQM: unknown}}, _NSURLErrorFailingURLSessionTaskErrorKey=LocalDownloadTask <26971780-872F-4F29-8DB3-0E748BA7CD0D>.<2>, _NSURLErrorRelatedURLSessionTaskErrorKey=(
+    "LocalDownloadTask <26971780-872F-4F29-8DB3-0E748BA7CD0D>.<2>"
+), NSLocalizedDescription=A server with the specified hostname could not be found., NSErrorFailingURLStringKey=https://public.uat.rive.app/cdn/uuid/60ad5ede-993c-4e03-9a80-e56888b2cff3, NSErrorFailingURLKey=https://public.uat.rive.app/cdn/uuid/60ad5ede-993c-4e03-9a80-e56888b2cff3, _kCFStreamErrorDomainKey=10}
+2026-11-17 22:09:31.209257+0700 Spike[81627:9498663] [Connection] Unable to get remoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-11-17 22:09:31.209285+0700 Spike[81627:9498663] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-11-17 22:09:33.341718+0700 Spike[81627:9498663] [Connection] Unable to get remoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-11-17 22:09:33.341756+0700 Spike[81627:9498663] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-11-17 22:09:37.608246+0700 Spike[81627:9498672] [Connection] Will NOT re-try to establish the connection
+2026-11-17 22:09:37.608339+0700 Spike[81627:9498672] [Connection] Unable to get remoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-11-17 22:09:37.608370+0700 Spike[81627:9498672] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-11-17 22:09:51.132771+0700 Spike[81627:9498526] [spike] net-4-rive-hosted-cdn1: presses=6 dropped=0 queued=1 maxActiveMorphs=0 maxQueue=1 maxVoices=1 swallowedKeys=0
+press→firstFrame cold n=0 median=nan p95=nan max=nan
+press→presentEst cold n=0 median=nan p95=nan max=nan
+press→soundEst cold n=0 median=nan p95=nan max=nan
+press→firstFrame warm n=0 median=nan p95=nan max=nan
+press→presentEst warm n=0 median=nan p95=nan max=nan
+press→soundEst warm n=0 median=nan p95=nan max=nan
+frames n=0 p50=nan p99=nan max=nan ms
+memory MB start=32.0 mid=32.1 end=36.1 (19 s)

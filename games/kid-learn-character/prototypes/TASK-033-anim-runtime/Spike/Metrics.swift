@@ -24,7 +24,7 @@ final class Metrics {
     var rows: [PressRow] = []
     var frameTimes: [Double] = []    // the renderer's own frame timestamps
     var memory: [(t: Double, mb: Double)] = []
-    var maxActiveMorphs = 0, maxVoices = 0, maxQueue = 0
+    var maxActiveMorphs = 0, maxVoices = 0, maxQueue = 0, swallowed = 0
     var seenKeys = Set<String>()
     private var openRow: Int?
     var lastTargetTimestamp = 0.0, lastLinkDuration = 1.0 / 60
@@ -86,7 +86,7 @@ final class Metrics {
             let v = samples.filter { $0.cold == cold }.map(f).filter { $0 > 0 }.map { $0 * 1000 }
             return String(format: "%@ %@ n=%d median=%.1f p95=%.1f max=%.1f", name, cold ? "cold" : "warm", v.count, Self.pct(v, 0.5), Self.pct(v, 0.95), v.max() ?? .nan)
         }
-        var lines = ["[spike] \(label): presses=\(rows.count) dropped=\(rows.filter(\.dropped).count) queued=\(rows.filter(\.queued).count) maxActiveMorphs=\(maxActiveMorphs) maxQueue=\(maxQueue) maxVoices=\(maxVoices)"]
+        var lines = ["[spike] \(label): presses=\(rows.count) dropped=\(rows.filter(\.dropped).count) queued=\(rows.filter(\.queued).count) maxActiveMorphs=\(maxActiveMorphs) maxQueue=\(maxQueue) maxVoices=\(maxVoices) swallowedKeys=\(swallowed)"]
         for cold in [true, false] {
             lines.append(stat("press→firstFrame", { $0.firstFrame - $0.press }, cold: cold))
             lines.append(stat("press→presentEst", { $0.presentEst - $0.press }, cold: cold))

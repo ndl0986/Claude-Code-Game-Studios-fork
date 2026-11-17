@@ -31,7 +31,7 @@ final class RiveStage: Stage {
     let file: String, loadCdn: Bool
     private var startedAt = 0.0, length: Double
 
-    init(controller: SpikeController) {
+    @MainActor init(controller: SpikeController) {
         self.controller = controller
         file = SpikeController.args.string(forKey: "riv") ?? "mascot"
         loadCdn = SpikeController.args.object(forKey: "cdn") != nil ? SpikeController.args.bool(forKey: "cdn") : false

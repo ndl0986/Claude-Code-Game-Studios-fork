@@ -5,6 +5,18 @@
 import SwiftUI
 import QuartzCore
 
+/// Which keys play: exactly one letter A–Z or digit 0–9 with no ⌘/⌃/⌥. Everything else is swallowed and counted.
+enum KeyFilter {
+    static func isPlayKey(_ c: String, command: Bool) -> Bool {
+        guard !command, c.count == 1, let u = c.uppercased().unicodeScalars.first else { return false }
+        return ("A"..."Z").contains(Character(u)) || ("0"..."9").contains(Character(u))
+    }
+    static func swallowed(_ c: String) {
+        Metrics.shared.swallowed += 1
+        NSLog("[spike] swallowed key %@", c.unicodeScalars.map { String(format: "U+%04X", $0.value) }.joined(separator: " "))
+    }
+}
+
 #if os(iOS)
 import UIKit
 
@@ -21,14 +33,18 @@ final class KeyCatcherView: UIView {
         }
     }
     @objc func tick(_ l: CADisplayLink) { Metrics.shared.lastTargetTimestamp = l.targetTimestamp; Metrics.shared.lastLinkDuration = l.targetTimestamp - l.timestamp }
+    /// Child lock-in, keys inside the app: a letter or digit (no ⌘/⌃/⌥) is a press; every other key is swallowed
+    /// (never passed up the responder chain). System shortcuts the OS keeps (⌘Tab, ⌘H, Globe) never reach the app.
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        var unhandled = Set<UIPress>()
         for p in presses {
-            guard let k = p.key, !k.modifierFlags.contains(.command), !held.contains(k.keyCode) else { unhandled.insert(p); continue }
+            guard let k = p.key else { continue }
+            if held.contains(k.keyCode) { continue } // held key / auto-repeat
             held.insert(k.keyCode)
-            onKey?(k.charactersIgnoringModifiers, p.timestamp)
+            let c = k.charactersIgnoringModifiers
+            if KeyFilter.isPlayKey(c, command: k.modifierFlags.contains(.command) || k.modifierFlags.contains(.control) || k.modifierFlags.contains(.alternate)) {
+                onKey?(c, p.timestamp)
+            } else { KeyFilter.swallowed(c) }
         }
-        if !unhandled.isEmpty { super.pressesBegan(unhandled, with: event) }
     }
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         for p in presses { if let k = p.key { held.remove(k.keyCode) } }
@@ -74,9 +90,16 @@ final class KeyCatcherView: NSView {
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
         guard window != nil, monitor == nil else { return }
+        // Child lock-in, keys inside the app: letters and digits play; every other key is swallowed. Without kiosk
+        // mode ⌘-shortcuts still reach the menus (⌘Q works); in kiosk mode (-kiosk 1) they are swallowed too, and only
+        // the parent chord ⌃⌥⌘Q quits.
         monitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] e in
-            if e.modifierFlags.contains(.command) { return e } // ⌘-shortcuts stay with the system
-            if !e.isARepeat, let c = e.charactersIgnoringModifiers { self?.onKey?(c, e.timestamp) }
+            let mods = e.modifierFlags.intersection([.command, .control, .option])
+            if Kiosk.on && mods == [.command, .control, .option] && e.charactersIgnoringModifiers?.lowercased() == "q" { NSApp.terminate(nil); return nil }
+            if mods.contains(.command) && !Kiosk.on { return e }
+            let c = e.charactersIgnoringModifiers ?? ""
+            if e.isARepeat { return nil }
+            if KeyFilter.isPlayKey(c, command: !mods.isEmpty) { self?.onKey?(c, e.timestamp) } else { KeyFilter.swallowed(c) }
             return nil
         }
         link = displayLink(target: self, selector: #selector(tick(_:))); link?.add(to: .main, forMode: .common)

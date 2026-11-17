@@ -19,13 +19,14 @@ final class SpikeController: ObservableObject {
     static let args = UserDefaults.standard
     @Published var runtime: String = SpikeController.args.string(forKey: "runtime") ?? "spritekit"
     @Published var status = "Press D, B or 3"
-    let spec: MorphSpec
+    var spec: MorphSpec
     let audio = Audio()
     weak var stage: Stage?
     private var active: Int?, queue: [(String, Int)] = [], generation = 0
     let keys = ["D", "B", "3"]
 
     init() {
+        NetProbe.install() // before any file loads: every URL-loading request is logged ("[net]")
         let url = Bundle.main.url(forResource: "morph-spec", withExtension: "json", subdirectory: "fixtures")!
         var s = try! JSONDecoder().decode(MorphSpec.self, from: Data(contentsOf: url))
         if Self.args.object(forKey: "hold") != nil { s.hold = Self.args.double(forKey: "hold") }
@@ -81,18 +82,28 @@ final class SpikeController: ObservableObject {
                     self.press(self.keys[i % self.keys.count], source: "synthetic", at: CACurrentMediaTime())
                 }
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2 + Double(n) * gap + 1) { Metrics.shared.dump(label: label) }
+            let both = Self.args.double(forKey: "mash") > 0
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2 + Double(n) * gap + 1) { [weak self] in
+                Metrics.shared.dump(label: both ? label + "-latency" : label); NetProbe.dump(label: both ? label + "-latency" : label)
+                if both { Metrics.shared.reset(); self?.spec.hold = 3.0; self?.startMash(label: label + "-mash", after: 1) }
+            }
+            return
         }
-        if Self.args.double(forKey: "mash") > 0 {
+        if Self.args.double(forKey: "mash") > 0 { startMash(label: label, after: 2) }
+    }
+
+    /// 10 synthetic presses a second for -mash seconds through the same handler, then the summary.
+    private func startMash(label: String, after delay: Double) {
+        do {
             let secs = Self.args.double(forKey: "mash")
             var i = 0
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
                 Metrics.shared.sampleMemory()
                 let start = CACurrentMediaTime()
                 Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { t in
                     MainActor.assumeIsolated {
                         guard let self else { t.invalidate(); return }
-                        if CACurrentMediaTime() - start >= secs { t.invalidate(); Metrics.shared.sampleMemory(); Metrics.shared.dump(label: label); return }
+                        if CACurrentMediaTime() - start >= secs { t.invalidate(); Metrics.shared.sampleMemory(); Metrics.shared.dump(label: label); NetProbe.dump(label: label); return }
                         self.press(self.keys[i % self.keys.count], source: "mash", at: CACurrentMediaTime()); i += 1
                     }
                 }
