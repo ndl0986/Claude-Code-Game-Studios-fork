@@ -26,6 +26,10 @@ window.CONFIG = {
   creature_scale: { value: 1, min: 0.6, max: 1.3, step: 0.05 },
   bob_px: { value: 5, min: 0, max: 15, step: 1 },                // px: idle breathing bob
   key_flash_s: { value: 0.35, min: 0.1, max: 1, step: 0.05 },    // s: a pressed key glows this long
+  // --- Tap the creature: it hops and makes its own sound again (After play: helps the child learn it) ---
+  tap_cooldown_s: { value: 0.9, min: 0.2, max: 3, step: 0.1 },   // s: taps closer than this only sparkle, so sounds never stack
+  hop_px: { value: 26, min: 0, max: 60, step: 2 },               // px: how high the creature hops on a tap
+  hop_s: { value: 0.45, min: 0.2, max: 1, step: 0.05 },          // s: the hop's length
   // --- Sound and voice ---
   voice_rate: { value: 0.85, min: 0.5, max: 1.3, step: 0.05 },
   voice_pitch: { value: 1.15, min: 0.5, max: 2, step: 0.05 },
@@ -55,7 +59,7 @@ window.KEY_TABLE = {
   A: { name: 'Ankylosaurus', word: 'ankylosaurus', say: 'A.', creature: 'ankylosaurus', sound: { kind: 'thump', f0: 60, cut: 380, dur: 0.8, vol: 0.7, vib: 4 } },
   B: { name: 'Brachiosaurus', word: 'brachiosaurus', say: 'bee', creature: 'sauropod', opts: { tall: true }, pal: { body: '#8fbf6a', dark: '#77a556', belly: '#d2e8b4', spot: '#6f9e4f' }, sound: ROAR_DEEP },
   C: { name: 'Triceratops', word: 'triceratops', say: 'see', creature: 'horned', opts: { horns: 'tri' }, sound: GRUMBLE },
-  D: { name: 'Diplodocus', word: 'diplodocus', say: 'dee', creature: 'sauropod', sound: ROAR_DEEP },
+  D: { name: 'Diplodocus', word: 'diplodocus', say: 'dee', creature: 'sauropod', pal: { body: '#5fb3a8', dark: '#4a988e', belly: '#c2e6e0', spot: '#3f8a82' }, sound: ROAR_DEEP },
   E: { name: 'Edmontosaurus', word: 'edmontosaurus', say: 'ee', creature: 'duckbill', opts: { head: 'duck' }, pal: { body: '#9fb8d8', dark: '#7f9cc2', belly: '#e4ecf6', stripe: '#6f8bb0' }, sound: HONK },
   F: { name: 'Fossil', word: 'fossil', say: 'eff', creature: 'fossil', sound: { kind: 'crack' } },
   G: { name: 'Gallimimus', word: 'gallimimus', say: 'jee', creature: 'ostrich', opts: { gallimimus: true }, pal: { body: '#d8b06a', feather: '#efd39a', leg: '#b98a46', beak: '#f2a640' }, sound: CHIRP },
@@ -63,7 +67,7 @@ window.KEY_TABLE = {
   I: { name: 'Iguanodon', word: 'iguanodon', say: 'eye', creature: 'duckbill', opts: { head: 'thumb' }, sound: HONK },
   J: { name: 'Juravenator', word: 'juravenator', say: 'jay', creature: 'raptor', opts: { fuzz: true, snout: 0.8, tail: 1.15, bigEye: true }, pal: { body: '#7aa7d6', dark: '#5f8cbc', feather: '#b9d6f2', belly: '#d9e8f7' }, sound: SCREECH },
   K: { name: 'Kentrosaurus', word: 'kentrosaurus', say: 'kay', creature: 'plated', opts: { kind: 'kentro' }, pal: { body: '#c9a24f', dark: '#ad8a3e', belly: '#ecd9a6', plate: '#e86f4f' }, sound: GRUMBLE },
-  L: { name: 'Lambeosaurus', word: 'lambeosaurus', say: 'el', creature: 'duckbill', opts: { head: 'hatchet' }, pal: { body: '#e7a0b8', dark: '#cf86a0', belly: '#f8dbe5', stripe: '#bf6f8c', crest: '#f2b04f' }, sound: HONK },
+  L: { name: 'Lambeosaurus', word: 'lambeosaurus', say: 'el', creature: 'duckbill', opts: { head: 'hatchet' }, pal: { body: '#e7a0b8', dark: '#cf86a0', belly: '#f8dbe5', stripe: '#bf6f8c', crest: '#e0c08a' }, sound: HONK },
   M: { name: 'Maiasaura', word: 'maiasaura', say: 'em', creature: 'duckbill', opts: { head: 'brow', baby: true }, pal: { body: '#a98fd6', dark: '#8f75c0', belly: '#e3d8f5', stripe: '#7c62ad', crest: '#7fcf8f' }, sound: HONK },
   N: { name: 'Nest', word: 'nest', say: 'en', creature: 'nest', sound: { kind: 'crack' } },
   O: { name: 'Oviraptor', word: 'oviraptor', say: 'oh', creature: 'ostrich', sound: CHIRP },
@@ -74,9 +78,9 @@ window.KEY_TABLE = {
   T: { name: 'T-Rex', word: 'tee rex', say: 'tee', creature: 'rex', sound: ROAR_BIG },
   U: { name: 'Utahraptor', word: 'utahraptor', say: 'you', creature: 'raptor', opts: { armFeathers: true, crest: true }, sound: RAPTOR },
   V: { name: 'Velociraptor', word: 'velociraptor', say: 'vee', creature: 'raptor', opts: { armFeathers: true, speckles: true, snout: 1.25, tail: 1.1 }, pal: { body: '#b99a6a', dark: '#9c7f54', feather: '#e2c79a', belly: '#ecdcc0', mark: '#7a5f3a' }, sound: RAPTOR },
-  W: { name: 'Wuerhosaurus', word: 'wuerhosaurus', say: 'double you', creature: 'plated', opts: { kind: 'wuerho' }, pal: { body: '#6fa7b8', dark: '#5a8e9e', belly: '#cfe6ee', plate: '#f2d06a' }, sound: GRUMBLE },
+  W: { name: 'Wuerhosaurus', word: 'wuerhosaurus', say: 'double you', creature: 'plated', opts: { kind: 'wuerho' }, pal: { body: '#6fa7b8', dark: '#5a8e9e', belly: '#cfe6ee', plate: '#e0c08a' }, sound: GRUMBLE },
   X: { name: 'Xenoceratops', word: 'xenoceratops', say: 'ex', creature: 'horned', opts: { horns: 'xeno' }, pal: { body: '#8f9fd8', dark: '#7584c0', belly: '#dfe4f6', frill: '#f29ab0' }, sound: GRUMBLE },
-  Y: { name: 'Yutyrannus', word: 'yutyrannus', say: 'why', creature: 'rex', opts: { feathers: true }, pal: { body: '#d97a5a', dark: '#bd6246', belly: '#f6c7b4', ridge: '#f2b04f' }, sound: ROAR_BIG },
+  Y: { name: 'Yutyrannus', word: 'yutyrannus', say: 'why', creature: 'rex', opts: { feathers: true }, pal: { body: '#d97a5a', dark: '#bd6246', belly: '#f6c7b4', ridge: '#e0c08a' }, sound: ROAR_BIG },
   Z: { name: 'Zuniceratops', word: 'zuniceratops', say: 'zee', creature: 'horned', opts: { horns: 'zuni' }, pal: { body: '#b6c46a', dark: '#99a654', belly: '#e6ecc0', frill: '#e8704f' }, sound: GRUMBLE },
 };
 // The numbers: the digit morphs into exactly that many baby dinosaurs (0: an empty nest).

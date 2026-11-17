@@ -179,10 +179,92 @@ outline marks a hero.**
 
 ## 4. Color System
 
-[To be designed] — a primary palette of 5–7 colours with their meaning in this
-world, semantic colour usage, per-area colour temperature rules, the UI palette
-and where it diverges, and colourblind safety: which semantic colours need a
-shape, icon or sound backup.
+**Colour rule: gold is a letter, and every other colour makes room for it.** No colour means
+danger, failure or reward. There is no wrong press, so the game never uses red for wrong, green for
+right, or gold for "well done": every press is answered the same way.
+
+### Fixed hues (the same in every look)
+
+| Token | Hexes | Meaning and use |
+|---|---|---|
+| **Letter Gold** | fill `#fff1b8` / `#ffd36e` / `#f6a93b`; outline `#8a4b12`; token ink `#b9631c` | "A letter or number lives here." The glyph, hints, queued tokens and the title's play button (their door, Section 2). Nothing else is gold. |
+| **Starlight** | `#fbeec8` (L 0.86) | "I heard you." Sparkles, pale stardust specks, sky stars at ≤ 80% alpha; also the moon's progress ring. |
+| **Ink** | `#2a2340`; creature outline at **80%** in every look | "A hero" (Section 3): outlines, pupils, smiles. |
+| **Stage Cream** | stage `#efe2c6` → `#e3d1ae`; highlight `#f8efdc` (L 0.87); bone `#f3e6c8`; card `#fbf4e6` | Ground, token bubbles, horns, toes, eye whites. |
+| **Shared constants** | nest `#a8743f`, fossil rock `#6e4a2c`, moon `#e6d6a4` | The same object in every theme and look. |
+
+Section 2's frame cap (L 0.88) applies to these tokens too: the prototype's stars `#fff6da`,
+stardust `#fff8e8`, hint bubble and eye whites (L 0.92–0.99) move to Starlight and highlight
+cream. The grown-up card is exempt: it sits under the 55% navy dim.
+
+### Per-look stage palettes
+
+Section 2's table holds every stage hex. A look or a weather tint is valid when all three hold:
+1. every sky stop, sun, moon, cloud and flake stays at or below L 0.69;
+2. the glyph reaches ≥ 3:1 against the sky's mid band, through its fill or its amber outline;
+3. it uses no Letter Gold, and any stage yellow stays pale, like the sun `#ecd29a`.
+
+**Temperature:** the glyph is the warmest thing in every look. *Morning:* cool at the top, warmth
+only in the peach horizon band. *Day:* neutral to cool; warmth comes only from the glyph and the
+creatures. *Dusk (home):* cool blue with a lilac horizon. *Night:* the coolest look; the moon is
+the only warm sky element, and it is desaturated. Weather is picked by hand by a grown-up behind
+the parent gate, and it only cools or greys the scene (rain takes 10% saturation off; snow is
+`#cfd6e3`). The parade's horizon lift is the only allowed warming.
+
+### Creature palettes
+
+Each creature's body takes one of eight hue **slots**. A slot holds at most 4 creatures per theme.
+Siblings in one family never share a slot, and never use leaf and mint together (they read as one
+green). F and N are objects and use the shared constants.
+
+| Slot | Hue | Dinosaurs (applied 2026-11-17) |
+|---|---|---|
+| Rose | 320–355° | L, O |
+| Coral | 5–32° | C, Q, U, Y |
+| Ochre | 33–50°, S ≤ 60% | G, I, K, V |
+| Leaf | 65–130° | B, R, S, Z |
+| Mint | 130–165° | H |
+| Teal | 165–200° | P, W, D |
+| Blue | 200–235° | A, E, J, X |
+| Violet | 250–290° | M, T |
+
+- **Band:** body relative luminance 0.20–0.47, HSL saturation 35–65%; accents (plates, frills,
+  crests) up to 75%.
+- **Ochre, never gold:** creature yellows stay at ≤ 60% saturation and lean toward brown (`#c99a52`,
+  `#e0c08a`; baby `#d8b87a`). The prototype's `#f2b04f`, `#f2d06a`, `#f6c14b`, `#e2bb4f`,
+  `#e7c45a` move to these.
+- **Greyscale stage test, every look (and with snow).** A creature passes when it separates from
+  both the sky's mid band and the front hill: body ≥ 1.5:1 or outline ≥ 3:1. At night the body
+  carries it; at dusk the body carries it against the sky; in morning, day and against the dusk
+  front hill only the outline carries it (a mid-tone body is ~1.05:1 on the dusk hill, ~1.2:1 on
+  the day sky). That is why the outline is 80%: 3.2:1 on the dusk hill and 3.9:1 on the day hill,
+  against 2.3:1 and 2.6:1 at the prototype's 55%.
+- **Number babies:** nine pastels, one per slot plus a second coral (apricot), always in the same
+  order so neighbouring babies differ.
+
+### UI palette
+
+- **Hints and queued tokens:** Letter Gold ink `#b9631c` on highlight cream (about 4:1; the
+  prototype's `#e0892a` was about 2.5:1). Hints spawn **in the sky only**: on the cream ground a
+  cream bubble loses its edge and crowds the creature's ground line.
+- **"Seen" letters get no mark** (Luan, 2026-11-17): the parade already shows progress, and a mark
+  would introduce a reward colour.
+- **Grown-up panel and moon ring:** panel controls in Dusk Blue `#46558f` (6.5:1 on the card) and
+  the moon's progress ring in Starlight (Luan, 2026-11-17), so gold means only letters. Trade-off:
+  the ring is weaker on the day sky (~2.5:1); its length and the hold time carry it.
+
+### Colourblind safety
+
+| Meaning | Colour | Backup cue |
+|---|---|---|
+| A letter or number | Letter Gold | Largest, centred, outlined, spoken |
+| I heard you | Starlight | Four-point star at the press point, plus a chime |
+| Hint vs waiting | Same gold on cream | Drifting rounded square vs a small circle in a still row |
+| Which creature | Slot | Silhouette trait and spoken name |
+| Moon gate progress | Ring | Ring length and hold time |
+
+Under deuteranopia leaf, ochre and coral converge, so raptors R, U and V become one brown. Their
+outline traits (Section 3) tell them apart, which is why markings are never the only difference.
 
 ## 5. Character Design Direction
 

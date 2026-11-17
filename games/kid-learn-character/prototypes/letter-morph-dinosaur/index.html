@@ -19,10 +19,10 @@
   #grownup h2 { margin: 0 0 6px; font-size: 22px; }
   #grownup p { margin: 0 0 14px; color: #6a5a50; font-size: 14px; }
   #grownup label { display: grid; grid-template-columns: 1fr 64px; gap: 4px 10px; margin: 10px 0; font-size: 15px; }
-  #grownup input[type=range] { grid-column: 1 / 3; width: 100%; accent-color: #e8a33c; }
+  #grownup input[type=range] { grid-column: 1 / 3; width: 100%; accent-color: #46558f; }
   #grownup .row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
   #grownup button { font: inherit; border: 0; border-radius: 14px; padding: 10px 16px; background: #e9dcc5; color: #3b2f2a; cursor: pointer; }
-  #grownup button.main { background: #e8a33c; color: #fff; }
+  #grownup button.main { background: #46558f; color: #fff; }
 </style>
 </head>
 <body>
@@ -238,7 +238,7 @@ function say(words, cancel) {
 
 // ---- Drawing helpers: every figure drawn in code, flat storybook 2D -----------------------
 let MONO = false; // true while sampling a silhouette: everything fills white
-const OUT = 'rgba(40,30,60,0.55)';
+const OUT = 'rgba(42,35,64,0.8)'; // ink outline at 80% (art bible §4: the outline carries creatures on light skies)
 function E(c, x, y, rx, ry, rot = 0) { c.beginPath(); c.ellipse(x, y, rx, ry, rot, 0, TAU); }
 function RR(c, x, y, w, h, r) {
   c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r);
@@ -248,7 +248,7 @@ function F(c, col) { c.fillStyle = MONO ? '#fff' : col; c.fill(); }
 function O(c, w = 3) { if (MONO) return; c.strokeStyle = OUT; c.lineWidth = w; c.lineJoin = 'round'; c.stroke(); }
 function S(c, col, w) { c.strokeStyle = MONO ? '#fff' : col; c.lineWidth = w; c.lineCap = 'round'; c.lineJoin = 'round'; c.stroke(); }
 function eye(c, x, y, r) {
-  E(c, x, y, r, r * 1.12); F(c, '#fffdf7'); O(c, 2);
+  E(c, x, y, r, r * 1.12); F(c, '#f8efdc'); O(c, 2);
   if (MONO) return;
   E(c, x + r * 0.22, y + r * 0.12, r * 0.58, r * 0.66); F(c, '#2a2340');
   E(c, x + r * 0.42, y - r * 0.18, r * 0.2, r * 0.2); F(c, '#ffffff');
@@ -316,7 +316,7 @@ const CREATURES = {
     }
   },
   duckbill(c, t, pal, o = {}) { // Iguanodon (thumb spike), Edmontosaurus (duck bill), Hadrosaurus (bill + nose bump), Lambeosaurus (hatchet crest), Maiasaura (brow crest + a baby)
-    const P = pick(pal, { body: '#e2bb4f', dark: '#c99f35', belly: '#f3dfa0', stripe: '#c18f2a', crest: '#e8704f' });
+    const P = pick(pal, { body: '#c99a52', dark: '#ad8340', belly: '#e9d4a6', stripe: '#9e7633', crest: '#e8704f' });
     const nod = Math.sin(t * 1.7) * 4, hx = 140, hy = -226 + nod;
     taper(c, -60, -118, -170, -80, -245, -20, 30); F(c, P.body); O(c);
     E(c, -35, -100, 42, 56, 0.15); F(c, P.dark); O(c);
@@ -361,7 +361,7 @@ const CREATURES = {
     }
   },
   ostrich(c, t, pal, o = {}) { // Oviraptor (crest, fan tail), Gallimimus (no crest, long neck, long legs)
-    const P = pick(pal, { body: '#f29a76', feather: '#f7c59f', crest: '#e8566b', leg: '#d98a4a', beak: '#f6c14b' });
+    const P = pick(pal, { body: '#e98aa8', feather: '#f5c0d0', crest: '#c94f6d', leg: '#c9806a', beak: '#e0c08a' });
     const bob = Math.sin(t * 2.4) * 4, gal = !!o.gallimimus, lift = gal ? 30 : 0;
     if (gal) { taper(c, -60, -150 - lift, -140, -160 - lift, -220, -150 - lift, 20); F(c, P.body); O(c); }
     else [[-0.2, P.feather], [0.15, P.crest], [0.5, P.feather], [0.85, P.crest]].forEach(([a, col]) => { E(c, -100, -150, 58, 18, -0.9 + a); F(c, col); O(c); });
@@ -484,7 +484,7 @@ const CREATURES = {
     c.restore();
   },
   horned(c, t, pal, o = {}) { // Triceratops (three horns), Xenoceratops (spiky frill), Zuniceratops (two brow horns, frill windows)
-    const P = pick(pal, { body: '#e48a5a', dark: '#c46f42', belly: '#f6c7a4', frill: '#f2b04f', horn: '#fff1d6' });
+    const P = pick(pal, { body: '#e48a5a', dark: '#c46f42', belly: '#f6c7a4', frill: '#e0c08a', horn: '#fff1d6' });
     const nod = Math.sin(t * 1.6) * 3, h = o.horns || 'tri';
     taper(c, -120, -100, -180, -80, -230, -50, 26); F(c, P.body); O(c);
     leg(c, -100, -74, 44, 74, P.dark); leg(c, 50, -74, 44, 74, P.dark);
@@ -504,7 +504,7 @@ const CREATURES = {
     c.restore();
   },
   flyer(c, t, pal, o = {}) { // Pteranodon (flying, long back crest), Quetzalcoatlus (standing tall on four long limbs)
-    const P = pick(pal, { body: '#5fb6b0', dark: '#468f8a', wing: '#9fd9cf', beak: '#f6c14b', crest: '#e8704f' });
+    const P = pick(pal, { body: '#5fb6b0', dark: '#468f8a', wing: '#9fd9cf', beak: '#e0c08a', crest: '#e8704f' });
     if (o.standing) {
       const sway = Math.sin(t * 1.2) * 5;
       c.beginPath(); c.moveTo(-40, -120); c.lineTo(-50, -60); c.lineTo(-40, 0); S(c, P.dark, 12);
@@ -547,7 +547,7 @@ const CREATURES = {
     c.restore();
   },
   babies(c, t, pal, o = {}) { // the numbers: exactly n little hatchlings
-    const n = o.n || 1, cols = ['#7fcf8f', '#f2a37a', '#8fb4ea', '#e7c45a', '#c39af0', '#f29ab0', '#6fc9c0', '#e48a5a', '#a5d46a'];
+    const n = o.n || 1, cols = ['#7fcf8f', '#f2a37a', '#8fb4ea', '#d8b87a', '#c39af0', '#f29ab0', '#6fc9c0', '#e48a5a', '#a5d46a'];
     const front = Math.min(n, 5), backN = n - front;
     for (let i = 0; i < backN; i++) baby(c, (i - (backN - 1) / 2) * 104, -118, 0.95, cols[(i + 5) % cols.length], t, i + 5);
     for (let i = 0; i < front; i++) baby(c, (i - (front - 1) / 2) * 104, 0, 1.05, cols[i % cols.length], t, i);
@@ -573,7 +573,8 @@ function bakeShapes() {
       c.fillStyle = '#fff'; c.font = `900 ${LETTER_SIZE}px ${GLYPH_FONT}`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(L, 230, 240);
     }, 230, 240);
     const body = sample(680, 440, c => { MONO = true; c.translate(340, 410); drawKind(c, L, 0); MONO = false; }, 340, 410);
-    shapes[L] = { glyph, body };
+    const xs = body.map(q => q[0]), ys = body.map(q => q[1]);
+    shapes[L] = { glyph, body, box: { x0: Math.min(...xs), x1: Math.max(...xs), y0: Math.min(...ys), y1: Math.max(...ys) } };
   }
 }
 bakeShapes();
@@ -581,7 +582,7 @@ bakeShapes();
 // ---- Layout ------------------------------------------------------------------------------
 // No fixed key row: a few glowing letters drift in at random spots as hints, and can be tapped.
 const KEYBOARD_FROM = { x: 640, y: 700 }; // a letter pressed on a real keyboard rises from here
-const HINT_AREAS = [{ x0: 110, x1: 380, y0: 160, y1: 560 }, { x0: 900, x1: 1170, y0: 160, y1: 560 }];
+const HINT_AREAS = [{ x0: 110, x1: 380, y0: 150, y1: 420 }, { x0: 900, x1: 1170, y0: 150, y1: 420 }]; // sky only (art bible §4)
 function spawnHint() {
   const onScreen = state.hints.map(h => h.L).concat(state.cur ? [state.cur.letter] : []);
   const pool = KEY_ORDER.filter(L => !onScreen.includes(L));
@@ -670,6 +671,19 @@ function burst(x, y, n) {
     sparks.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 30, life: 0.6 + rng() * 0.4, age: 0, size: 3 + rng() * 4 });
   }
 }
+function onCreature(p) { // the formed creature on stage, by its silhouette's box
+  const cur = state.cur;
+  if (!cur || !cur.fired.form) return false;
+  const b = shapes[cur.letter].box, sc = tune.creature_scale;
+  return p.x >= ANCHOR_X + b.x0 * sc && p.x <= ANCHOR_X + b.x1 * sc && p.y >= ANCHOR_Y + b.y0 * sc && p.y <= ANCHOR_Y + b.y1 * sc;
+}
+function tapCreature(p) { // it hops and makes its own sound again
+  const cur = state.cur;
+  if (state.t - (cur.lastTap ?? -99) < tune.tap_cooldown_s) { burst(p.x, p.y, 4); return; }
+  cur.lastTap = state.t; cur.hop = 0;
+  creatureSound(cur.letter); burst(p.x, p.y, 6);
+  state.taps = (state.taps || 0) + 1; events.push({ type: 'creature-tap', letter: cur.letter });
+}
 function nothingPress(x, y) { ping(); burst(x, y, 6); }
 
 // ---- Scenes ------------------------------------------------------------------------------
@@ -716,7 +730,7 @@ const scenes = {
       }
       while (taps.length) {
         const p = taps.shift(), h = hintAt(p);
-        if (h) pressLetter(h.L, h); else nothingPress(p.x, p.y);
+        if (h) pressLetter(h.L, h); else if (onCreature(p)) tapCreature(p); else nothingPress(p.x, p.y);
       }
       // hint letters drift in, linger and fade, a few at a time
       for (let i = state.hints.length - 1; i >= 0; i--) { const h = state.hints[i]; h.age += dt; if (h.age > h.life) state.hints.splice(i, 1); }
@@ -731,6 +745,7 @@ const scenes = {
           if (!state.seen.includes(cur.letter)) state.seen.push(cur.letter);
           events.push({ type: 'formed', letter: cur.letter });
         }
+        if (cur.hop !== undefined) { cur.hop += dt; if (cur.hop > tune.hop_s) cur.hop = undefined; }
         if (state.queue.length && cur.t >= holdTime()) { const q = state.queue.shift(); startReveal(q.L, q.from); }
       }
       if (state.prev) { state.prev.t += dt; state.prev.fade += dt; if (state.prev.fade > 0.45) state.prev = null; }
@@ -774,7 +789,7 @@ function drawSky() {
   g.addColorStop(0, '#1f2a55'); g.addColorStop(0.55, '#46558f'); g.addColorStop(1, '#b8a0c8');
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
   const tt = state ? state.t : 0;
-  ctx.fillStyle = '#fff6da';
+  ctx.fillStyle = '#fbeec8'; // Starlight (frame cap)
   for (const s of STARS) { ctx.globalAlpha = 0.35 + 0.45 * (0.5 + 0.5 * Math.sin(tt * s.sp + s.ph)); star4(s.x, s.y, s.s); }
   ctx.globalAlpha = 1;
 }
@@ -793,11 +808,11 @@ function drawGround() {
 }
 function drawMoon() {
   const { x, y } = GATE;
-  glowDisk(x, y, 60, 'rgba(255,240,190,0.35)');
-  ctx.fillStyle = '#fff2c4'; ctx.beginPath(); ctx.arc(x, y, 26, 0, TAU); ctx.arc(x + 11, y - 8, 22, 0, TAU, true); ctx.fill('evenodd');
+  glowDisk(x, y, 50, 'rgba(230,214,164,0.22)');
+  ctx.fillStyle = '#e6d6a4'; /* the moon, dimmed below the glyph (art bible §2) */ ctx.beginPath(); ctx.arc(x, y, 26, 0, TAU); ctx.arc(x + 11, y - 8, 22, 0, TAU, true); ctx.fill('evenodd');
   if (gateHeld && state && state.gate > 0) {
     ctx.beginPath(); ctx.arc(x, y, 38, -Math.PI / 2, -Math.PI / 2 + TAU * clamp01(state.gate / tune.gate_hold_s));
-    ctx.strokeStyle = '#ffd36e'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.stroke();
+    ctx.strokeStyle = '#fbeec8'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.stroke();
   }
 }
 function drawPlay(x, y, t) {
@@ -841,7 +856,8 @@ function drawReveal() {
   if (t >= ph.flowEnd) {
     const u = smooth((t - ph.flowEnd) / (ph.formEnd - ph.flowEnd));
     const pop = 0.92 + 0.08 * u + Math.sin(u * Math.PI) * 0.03;
-    drawCreature(L, ANCHOR_X, ANCHOR_Y, tune.creature_scale * pop, t - ph.flowEnd, u);
+    const hop = cur.hop !== undefined ? Math.sin(Math.PI * clamp01(cur.hop / tune.hop_s)) * tune.hop_px : 0;
+    drawCreature(L, ANCHOR_X, ANCHOR_Y - hop, tune.creature_scale * pop, t - ph.flowEnd, u);
   }
   // 3-4. stardust: in the letter's outline, then flowing to the creature's shape
   if (t >= ph.glowEnd && t < ph.formEnd + 0.2) {
@@ -860,7 +876,7 @@ function drawReveal() {
       }
       const tw = 0.6 + 0.4 * Math.sin(t * 9 + p.ph);
       ctx.globalAlpha = a * tw;
-      ctx.fillStyle = p.gold ? '#ffd27a' : '#fff8e8';
+      ctx.fillStyle = p.gold ? '#ffd27a' : '#fbeec8';
       const s = p.size;
       if (s > 3.2) star4(x, y, s * 0.55); else ctx.fillRect(x - s / 2, y - s / 2, s, s);
     }
@@ -873,12 +889,12 @@ function drawPrev() {
   if (p.t < ph.flowEnd) return; // it never formed: nothing to fade
   drawCreature(p.letter, ANCHOR_X, ANCHOR_Y + u * 12, tune.creature_scale * (1 - u * 0.08), p.t - ph.flowEnd, 1 - u);
 }
-function drawQueue() { // letters waiting their turn: small glowing bubbles, top right
+function drawQueue() { // letters waiting their turn: small round tokens in a still row, top right (art bible §3)
   state.queue.forEach(({ L }, i) => {
-    const x = 1210 - i * 74, y = 58 + Math.sin(state.t * 3 + i) * 4;
-    glowDisk(x, y, 46, 'rgba(255,214,110,0.35)');
-    RR(ctx, x - 28, y - 28, 56, 56, 22); ctx.fillStyle = 'rgba(255,246,222,0.92)'; ctx.fill();
-    ctx.save(); ctx.font = `900 34px ${GLYPH_FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#e09a2e'; ctx.fillText(L, x, y + 2); ctx.restore();
+    const x = 1214 - i * 66, y = 58;
+    glowDisk(x, y, 40, 'rgba(255,214,110,0.28)');
+    ctx.beginPath(); ctx.arc(x, y, 26, 0, TAU); ctx.fillStyle = '#f8efdc'; ctx.fill();
+    ctx.save(); ctx.font = `900 30px ${GLYPH_FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#b9631c'; ctx.fillText(L, x, y + 2); ctx.restore();
   });
 }
 function drawHints() { // glowing letters drifting on screen: a hint and a tap target
@@ -890,9 +906,9 @@ function drawHints() { // glowing letters drifting on screen: a hint and a tap t
     ctx.save(); ctx.globalAlpha = a;
     glowDisk(x, y, sz * 0.95, `rgba(255,214,110,${0.35 + pulse * 0.2})`);
     ctx.shadowColor = 'rgba(255,200,80,0.8)'; ctx.shadowBlur = 18 + pulse * 14;
-    RR(ctx, x - sz / 2, y - sz / 2, sz, sz, sz * 0.36); ctx.fillStyle = 'rgba(255,248,230,0.95)'; ctx.fill(); ctx.shadowBlur = 0;
+    RR(ctx, x - sz / 2, y - sz / 2, sz, sz, sz * 0.36); ctx.fillStyle = '#f8efdc'; ctx.fill(); ctx.shadowBlur = 0;
     ctx.font = `900 ${Math.round(sz * 0.66)}px ${GLYPH_FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#e0892a'; ctx.fillText(h.L, x, y + sz * 0.04);
+    ctx.fillStyle = '#b9631c'; ctx.fillText(h.L, x, y + sz * 0.04);
     ctx.fillStyle = `rgba(255,236,170,${0.6 + 0.4 * Math.sin(state.t * 5 + h.ph)})`; star4(x + sz * 0.42, y - sz * 0.42, 4 + pulse * 3);
     ctx.restore();
   }

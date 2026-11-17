@@ -15,6 +15,7 @@ After play (asked): the A–Z table and numbers as N baby dinosaurs — "Làm đ
 After play: khoảnh khắc hay và vui nhất là sau khi kết thúc 1 loạt phím, thì có đoàn khủng long chạy qua, rất vui và bất ngờ
 After play: tệ nhất là khi nhấn vào các phím controls, thì có thê bị chuyển app hoặc mất focus lên game
 After play: trong bản dùng thử, phần đọc ký tự A đang bị sai, đang theo tiếng Việt, không đúng tiếng Anh
+After play: nên bổ sung âm thanh khi bé tap lên con vật hoặc xe, những đối tượng có âm thanh đặc trưng, sẽ giúp bé học nhanh hơn cách nhận biết
 
 **Pitch:** Dinosaurs is the theme: a toddler presses any letter or number, and the big glowing letter dissolves into stardust and becomes a dinosaur-world creature (C: triceratops) or that many baby dinosaurs, while a voice says "C… triceratops!".
 
@@ -55,6 +56,7 @@ None by design: there is no failure and no wrong key. What changes: discovering 
 - [ ] Sound: synthesized roar or chirp per creature plus sparkle chime; browser speech in US English, just the letter's name then the word: "D… dinosaur" (never "letter D")
 - [x] Mash queue: max 3 pending, ~3 s hold while queued, extra presses sparkle only
 - [x] A parade of the last 8 new creatures, every 8 met *(guessed)*
+- [x] Tap the creature on stage: it hops and makes its own sound again (a short cooldown so sounds never stack)
 - [x] Tweak panel (queue size, hold time, morph speed, volume), hidden behind a long-press corner (parent gate stand-in) *(provisional)*
 
 ## Keep
