@@ -1,0 +1,518 @@
+# Key Table & Theme Data
+
+> **Status**: In Review
+> **Author**: game-art-content (TASK-036), with Luan's answers via game-leader; plan reviewed by game-dev-ios
+> **Last Updated**: 2026-11-18
+> **Last Verified**: 2026-11-18
+> **Implements Pillar**: Pillar 1 (Every Press Answers), Pillar 4 (Things the Child Loves), Pillar 5 (Safe by Design)
+
+## Summary
+
+The key table is the game's content. For each theme it maps every key A–Z and 0–9 to a cast member:
+its silhouette for the stardust morph, its art, its sound and its spoken lines. It is bundled JSON,
+checked at build time and loaded whole before use. It holds no game state.
+
+> **Quick reference** — Layer: `Foundation` · Priority: `MVP` · Key deps: `None` (consumed by Audio & Voice, Cast Rendering, Reveal Stage, Hint Letters, Theme Packs, Localization; MorphCore reads its paths)
+
+## Overview
+
+A **theme** (Dinosaurs first) covers **every key** (K-07). Each letter A–Z becomes a cast member
+whose name contains the letter, and the child can **hear** the letter's usual sound in the spoken
+word (Luan, Q3). Each digit 1–9 becomes that many of the theme's counted item, and 0 becomes the
+theme's "empty" item (Luan, Q4). The theme is data, not code (ADR-0001 Decision 6). The demo and
+MVP fix **one item per key**. Production holds **4–5 items per key** and picks one per reveal (Luan, Q1).
+Luan's content decisions for this GDD (Q1–Q6, 2026-11-18) are listed under **Decisions** below.
+
+This system owns:
+1. the data model (theme, key entry, item, glyph set);
+2. the rule that picks an item for a key;
+3. the validation rules, which are the build gate;
+4. the toddler-safe content rules;
+5. the first content set, the Dinosaurs table.
+
+It does **not** own:
+- morph timings, the morph seed or the "reduced" timing set (Reveal Stage / MorphCore data, ADR-0001 Decision 6);
+- how art is drawn (Cast Rendering ADR);
+- how sound is played (Audio & Voice);
+- what a press is (Input & Key Filter).
+
+## Player Fantasy
+
+*Advisory at `standard`.* "Every key I press is someone I know." The child doesn't see a table. They
+meet a world where the C key is always a friendly three-horned creature that grumbles, and the 3 key
+is always three little babies. In production, C might also bring a different horned friend, which
+gives a small surprise. Because of this table, every one of the 36 keys answers with a creature from
+the same world, in the same voice.
+
+## Detailed Design
+
+### Core Rules
+
+#### 1. Keys
+
+1. The key set is fixed: **"A"–"Z" and "0"–"9"**, uppercase, exactly one character. This is the same
+   value the Input & Key Filter press event carries (TASK-037). A lowercase key never reaches this
+   system, because the filter uppercases it.
+2. The **canonical key order** is A–Z, then 0–9. It is a constant in the app, not taken from the
+   JSON object's key order. JSON object order is not reliable: a JS engine lists digit keys first.
+   Lists that need an order use this constant, such as the grown-up cast list and validator reports.
+
+#### 2. Data model
+
+There are three kinds of file, all JSON, bundled in the app, and read with plain relative paths
+(no platform asset-catalog names; ADR-0001 Decision 6). Run time never fetches them (K-08, Pillar 5).
+
+**a. Theme** (`content/themes/<theme_id>/theme.json`)
+
+| Field | Type | Rule |
+|---|---|---|
+| `schemaVersion` | integer | The data format's major version. The app **refuses** a value it doesn't know (Edge Cases). Starts at `1`. |
+| `contentVersion` | string | The theme's content version, e.g. `"1.0.0"`. Informational: the app never rejects on it. |
+| `id` | string | Lowercase, `[a-z]+`. Used in asset names (`dino`). |
+| `name` | string | The grown-up panel name ("Dinosaurs"). |
+| `voiceLocales` | string[] | Locales this theme has voice for, e.g. `["en-us"]` (K-02, K-05). The first is the default. |
+| `glyphSet` | string | The id of the glyph set the theme uses (c below). |
+| `families` | object | Family id → `{ idle: <idle param id> }`. The idle parameters themselves live in Cast Rendering data (art bible §5, §8). |
+| `countedItem` | object | The thing numbers count and the "empty" item for 0: `{ castId, singular, plural, emptyCastId, emptyWord }`, e.g. `baby dinosaur` / `baby dinosaurs`, `dino_0_nest_01` / `an empty nest`. |
+| `keys` | object | Key ("A"…"9") → key entry (b). All 36 keys are required. |
+
+**b. Key entry and item**
+
+A key entry is `{ "items": [ item, … ] }`. The demo and MVP have exactly 1 item; production has 4–5
+(Q1). An item:
+
+| Field | Type | Rule |
+|---|---|---|
+| `castId` | string | `<theme>_<key>_<name>_<variant>`, e.g. `dino_c_triceratops_01`. Unique within the theme. Stable: the Parade counts cast members by this id. |
+| `name` | string | Display name for the grown-up list ("Triceratops"). The child never needs to read it. |
+| `word` | string | The words the voice says after the letter, e.g. `"triceratops"`, `"three baby dinosaurs"`. |
+| `say` | string | The letter or number name spelled the way it sounds, the script for recording and for any TTS fallback: `"see"`, `"double you"`, `"zee"` (US, K-05), `"three"`. A is `"A."` because the prototype's voice read "ay" as "eye". Never "letter C" (concept §3). |
+| `sound` | string | How the letter's usual sound is heard in the word: `"start"`, `"inside"` or `"end"` (K-07, Q3). Not set on digit items. |
+| `family` | string | A family id from the theme (`horned`, `sauropod`…; art bible §3). |
+| `variant` | string | The family variant: the one outline trait (`tri-horn`, `neck-up`…). Siblings in a family never share one. |
+| `hueSlot` | string | One of `rose coral ochre leaf mint teal blue violet`, or `shared` for objects that use the shared constants (art bible §4). |
+| `art` | string | Relative path of the layered SVG: `art/cast_dino_c_triceratops_01.svg`. |
+| `silhouette` | string | Relative path of the baked silhouette path file: `sil/sil_dino_c_triceratops_01.json`. It holds one compound path in the morph-v1 subset (contract §2, §8). |
+| `sfx` | string \| null | Relative path of the cast member's own sound: `sfx/sfx_dino_c_triceratops_01.m4a`; `null` means none. |
+| `voice` | object | Voice **line ids**, not paths: `{ "letter": "c", "word": "triceratops" }`. For digits: `{ "number": "3", "word": "three_baby_dinosaurs" }`. |
+| `weight` | number | Optional, production only; default `1` (Formulas). |
+
+**Voice paths are built, not stored** (game-dev-ios point 10):
+`voice/<locale>/vo_<locale>_<kind>_<id>.m4a`, e.g. `voice/en-us/vo_en-us_letter_c.m4a` or
+`voice/en-us/vo_en-us_word_triceratops.m4a`. Letter and number lines (`letter_c`, `number_3`) are the
+same in every theme. Word lines belong to the theme. Adding a locale (K-02, Localization) adds files
+and one `voiceLocales` entry, without editing any item.
+
+**Asset formats:** SVG for art, JSON for path data, mono AAC `.m4a` for sound and voice. These are
+platform-neutral: the same files serve iOS, macOS and later Android (game-dev-ios point 11).
+
+**c. Glyph set** (`content/glyphs/<glyph_set_id>/glyphs.json`)
+
+The glyph is the morph's start shape. It depends only on the font, not on the theme, so one glyph set
+serves every theme (game-dev-ios point 3). This GDD owns its format. The baking tool belongs to
+MorphCore / tools (contract §8).
+
+| Field | Rule |
+|---|---|
+| `id` | e.g. `fredoka600` |
+| `font` | `{ "name": "Fredoka", "version": "2.001", "weight": 600, "licence": "OFL-1.1", "licenceFile": "OFL.txt" }` (contract §7) |
+| `baker` | Tool name and version that baked the paths |
+| `glyphs` | Key → relative path `glyph_<font>_<char>.json` (art bible §8). All 36 keys are required. |
+
+**d. Asset naming** follows art bible §8, `[category]_[theme]_[key]_[name]_[variant].[ext]`, in
+lowercase with underscores:
+- letters: `cast_dino_c_triceratops_01.svg`, `sil_dino_c_triceratops_01.json`, `sfx_dino_c_triceratops_01.m4a`;
+- digits, under the same pattern: `sil_dino_3_babies_01.json` is **three babies as one compound path**, and `sil_dino_0_nest_01.json` is the empty nest (game-dev-ios point 5);
+- voice: `vo_en-us_letter_c.m4a`, `vo_en-us_number_3.m4a`, `vo_en-us_word_triceratops.m4a`.
+
+**Example item (C, Dinosaurs):**
+
+```json
+"C": { "items": [ {
+  "castId": "dino_c_triceratops_01", "name": "Triceratops", "word": "triceratops",
+  "say": "see", "sound": "inside", "family": "horned", "variant": "tri-horn", "hueSlot": "coral",
+  "art": "art/cast_dino_c_triceratops_01.svg",
+  "silhouette": "sil/sil_dino_c_triceratops_01.json",
+  "sfx": "sfx/sfx_dino_c_triceratops_01.m4a",
+  "voice": { "letter": "c", "word": "triceratops" }
+} ] }
+```
+
+#### 3. Numbers (Luan, Q4)
+
+1. A digit d (1–9) shows **d of the theme's counted item** in **one** silhouette (one compound path),
+   so the morph lands on the whole group. Their order and colours follow the art bible's baby pastels
+   (§4: nine pastels in a fixed order, so neighbouring babies differ). The babies are one shared, simpler
+   cast member (§5), so the count is what reads.
+2. **0** is the theme's **"empty" item**: the empty nest in Dinosaurs.
+3. The voice says the number name, then the counted words: "three… three baby dinosaurs"; "one… one
+   baby dinosaur"; "zero… an empty nest". The counted item comes from the theme, not always dinosaurs:
+   a vehicles theme would say "three… three little cars". Every digit item writes out its own `word`,
+   because plurals and articles differ by language and theme. `countedItem` exists so the validator can
+   check them.
+4. Q1 applies to every key, digits included: in production a digit may have 4–5 items, e.g. other
+   counted items from the same theme ("three… three little eggs").
+
+#### 4. Picking the item for a key (production variety)
+
+1. The item is **resolved when the reveal is shown, not when the key is pressed** (game-dev-ios
+   point 7). A press queued under one theme shows the item of the theme active when its reveal starts.
+2. With one item, it is always that item. With two or more, the pick rule in Formulas applies:
+   uniform with no immediate repeat (Luan, Q1, 2026-11-18).
+3. **No saved progress.** Nothing about which items were seen is saved. The only state is
+   `lastShown[key]`, kept in memory for this run and lost on quit. Settings Store saves nothing from
+   this system.
+4. **Variety seed:** one random 64-bit seed per launch, injectable in tests (game-dev-ios point 8). It
+   is a separate stream from the morph seed, which is not in this table.
+
+#### 5. Build time and run time (game-dev-ios point 2)
+
+- **Build time:** the validator (section 6) runs in CI on every theme and the glyph set. Any error fails
+  the build, so a bad theme never ships.
+- **Run time:**
+  - Themes ship in the app bundle only.
+  - A theme is **loaded and checked whole, off the main thread, before it is used**. The app checks
+    `schemaVersion`, all 36 keys, every referenced file, and every path parsing under morph-v1.
+  - A theme that fails is **never shown**. The app stays on the current theme and writes one debug log
+    line. The child sees nothing.
+  - At launch, the default theme (Dinosaurs) is checked the same way. If it fails, the build gate has
+    already failed, so this cannot ship (Edge Cases).
+
+#### 6. Validation rules (the build gate; also run at load)
+
+| # | Rule |
+|---|---|
+| V1 | `schemaVersion` is a known major. |
+| V2 | All 36 keys are present, each with ≥ 1 item; MVP themes have exactly 1. |
+| V3 | Keys are exactly `A`–`Z`, `0`–`9`; no other key appears. |
+| V4 | Every letter item's `word` contains its letter (case-insensitive) **and** its `sound` field is set (K-07, Q3). Whether the sound is really audible is a human content check (Toddler-safe rule T5); the field records the reviewer's answer. |
+| V5 | Every digit item's `word` begins with the number word (`one`…`nine`) and contains `countedItem.singular` for 1 and `.plural` for 2–9 (MVP edition); key `0`'s item is `countedItem.emptyCastId` with `emptyWord`. |
+| V6 | `castId` is unique in the theme and follows the naming pattern; `art`, `silhouette`, `sfx` follow art bible §8 naming. |
+| V7 | Every referenced file exists: art, silhouette, sfx (if not null), and every voice line for **every** locale in `voiceLocales`. |
+| V8 | Every silhouette and every glyph **parses with a morph-v1 parser** and has **≥ 1 subpath of 2+ points** and **total length > 0** (contract §2–3; game-dev-ios point 4). The bake tool's rule stays: plain decimals, `M` after every `Z`. |
+| V9 | The glyph set has all 36 keys and records font name, version and licence. |
+| V10 | Hue slots: at most **4 items per slot** per theme; family siblings never share a slot; leaf and mint never in one family (art bible §4). Counted over the items in one "edition" (Edge Cases: production variety). |
+| V11 | Family + variant pairs are unique within a theme. |
+| V12 | Every sfx is ≤ 2.0 s long (art bible §8). |
+| V13 | `family` exists in the theme's `families`. |
+| V14 | Every `weight`, when present, is > 0 (F1 needs a positive total). |
+
+#### 7. Toddler-safe content rules (every theme)
+
+| # | Rule |
+|---|---|
+| T1 | **Friendly, never scary** (art bible §5): no bared teeth, no claws at the viewer, no angry brows, no jaws open wider than the head. When in doubt, pick the softer pose. |
+| T2 | **No weapons, fire, blood, skulls, death or danger** as a cast member or a word. A fossil is a friendly bone, not a skeleton of a death. |
+| T3 | **No brands, no known characters**: no real-world logo, product or character look-alike. |
+| T4 | **Recognisable**: the silhouette at 64 px stays nameable and distinct from its family siblings (art bible §3 test). |
+| T5 | **The letter's usual sound is audible** in the spoken word (Luan, Q3), at the start, inside or at the end (K-07). A silent letter (**p**teranodon) or a different sound (**x**enoceratops says "z") fails. A content reviewer listens to every word and sets `sound`. |
+| T6 | The voice says the letter **name**, then the word (K-05): "C… triceratops", never "letter C". |
+| T7 | Sounds are short (≤ 2 s) and gentle: roars stay low and soft (prototype `roar_volume` 0.35; level set by Audio & Voice). |
+| T8 | Real names are kept even when long (Luan, Q2): quetzalcoatlus, wuerhosaurus and others stay. |
+
+### States and Transitions
+
+This system has no runtime state machine. The data is immutable once loaded. The only states are:
+
+| State | Meaning | Goes to |
+|---|---|---|
+| Unloaded | No theme in memory | Loading (launch, or a theme picked in the grown-up panel) |
+| Loading | Reading and checking a theme off the main thread | Active (pass), or back to the previous theme (fail; debug log) |
+| Active | The current theme serves item lookups | Loading (a different theme picked) |
+
+Next to Active, the in-memory `lastShown[key]` map exists. It is reset when the app launches and when
+the theme changes.
+
+### Interactions with Other Systems
+
+| System | Direction | What crosses |
+|---|---|---|
+| Input & Key Filter (TASK-037) | in | The key value "A"–"Z" / "0"–"9" (shared format, Rule 1). |
+| Press Queue | — | Queues keys, not items. Whether closing the grown-up panel clears the queue is **Press Queue's / Reveal Stage's call** (dependency stated, not decided here). |
+| Reveal Stage | out | At reveal start: `resolve(key) → item` (pick rule). |
+| MorphCore | out | The glyph path (glyph set) and the silhouette path (item). The morph seed and timings are not here. |
+| Cast Rendering | out | `art`, `family`, `variant`, `hueSlot`; idle params by family id. |
+| Audio & Voice | out | `sfx` path; voice paths built from `voiceLocales` + line ids. |
+| Hint Letters | out | The 36 keys in canonical order (which keys can be hinted). |
+| Parade | out | Stable `castId` for "8 new cast members met" (in-memory, per run). |
+| Parent Gate & Grown-up Panel | in | The theme picked; takes effect on the next reveal. |
+| Theme Packs | out | This format is what a theme pack ships. |
+| Localization | out | `voiceLocales` and line ids; new locales add files only. |
+| Settings Store | in | Only the chosen theme id (and voice locale, later). Nothing from this system's own state. |
+
+## Formulas
+
+### F1. Item pick for one reveal
+
+Inputs:
+
+| Variable | Meaning | Range |
+|---|---|---|
+| `n` | number of items for the key in the active theme | 1–5 (MVP 1; production 4–5, Q1) |
+| `w_i` | weight of item i (`weight`, default 1) | 0.1–10; default 1 |
+| `last` | index shown last time for this key in this run, or none | — |
+| `u` | uniform random number in [0, 1) from the variety stream | — |
+
+Rule (**uniform, no immediate repeat**; Luan, Q1, 2026-11-18):
+
+```
+if n == 1:            pick 0
+C = all i in 0..n-1, except last (if last is set and n >= 2)
+W = sum of w_i over C
+pick the first i in C (in data order) where (sum of w_j for j in C up to and including i) > u * W
+```
+
+With all weights 1, every candidate has probability `1 / |C|`: `1/(n−1)` after the first reveal, and
+`1/n` on the first reveal of that key in this run.
+
+Random numbers: **SplitMix64**, the same generator as morph contract §4. It is seeded with the
+per-launch variety seed, and its 64-bit output is turned into `u = (x >> 11) * 2^-53`. Using the same
+generator lets a shared test fixture check both apps with one seed.
+
+Examples:
+- `n = 1`: always item 0. No random number is drawn.
+- `n = 5`, all weights 1, no `last`: each item 1/5. With `u = 0.43`, `W = 5`, target 2.15: the running
+  sums go 1, 2, 3, so the pick is item 2.
+- `n = 5`, `last = 2`, all weights 1: C = {0, 1, 3, 4}, each 1/4. With `u = 0.43`, target 1.72: the
+  running sums go 1, 2, so the pick is item 1.
+- `n = 2`, `last = 0`: C = {1}, so it alternates 0, 1, 0, 1… (deterministic once started).
+- Weights `[2, 1, 1, 1, 1]`, no `last`: item 0 has 2/6 = 33%, the others 1/6 each.
+
+Degenerate inputs: every weight must be > 0 (V14), so W > 0
+whenever C is non-empty. C is never empty: n ≥ 1, and `last` is only excluded when n ≥ 2.
+
+## Edge Cases
+
+| Case | What happens |
+|---|---|
+| A key has 0 items | Fails V2 at build. It never ships. At run time a theme with this flaw fails the load check and is never shown. |
+| A key has 1 item | Always that item. F1 draws no random number. |
+| `schemaVersion` unknown (newer major) | The theme is refused at load and the app stays on the current theme. If it is the default theme, it can't ship: the build validator uses the same version list. |
+| A theme fails the load check when picked in the panel | It is not shown. The current theme stays, with one debug log line. No message to the child. The grown-up panel may grey out the theme (Parent Gate GDD's call). |
+| Silhouette or art missing at run time (despite the gate) | Per asset, nothing shown to the child, one debug log line. **The glyph glows and sparkles out** instead of morphing, and the letter voice plays if present (game-dev-ios point 6). |
+| Glyph missing | The key's reveal is a sparkle with the letter voice, if present. |
+| sfx missing | Skipped. The rest of the reveal plays. |
+| Word voice missing | The letter (or number) line only. |
+| Letter voice missing too | The chime only (Audio & Voice). |
+| Theme changed while presses are queued | The new theme applies from the **next reveal**. The item is resolved at reveal start, so queued keys show the new theme's items. `lastShown` resets. Whether the panel clears the queue is Press Queue's call. |
+| Theme changed during a reveal | The running reveal finishes with the item it already resolved. |
+| Same key pressed many times (mash) | Each reveal resolves again with F1. With 1 item, it is the same cast member every time, as intended for the MVP. |
+| Two-word word ("tee rex", "three baby dinosaurs") | Allowed. `word` is free text, and its voice line id uses underscores (`tee_rex`). |
+| Production variety vs hue-slot caps | The art bible's "≤ 4 per slot" was written for 26 one-per-key creatures. With 4–5 items per key, V10 counts per **edition** (item index 0 across all keys is one edition, index 1 the next…). This interpretation is **proposed**; art-director to confirm when production content is drawn. |
+| Locale added with missing files | Fails V7 at build. At run time a locale with missing lines falls back per line, as above. |
+| JSON key order (digits first in JS) | Ignored. The app uses the canonical order (Rule 1.2). |
+| Lowercase or non-key press | Never reaches this system (Input & Key Filter). |
+
+## Dependencies
+
+**Depends on:** nothing at run time (Foundation). It is built on:
+- **morph contract v1** (`docs/architecture/morph-contract-v1.md`): path subset, tokenizer, sampling;
+  V8 uses its parser;
+- **art bible** §3 (families, one outline trait), §4 (hue slots, baby pastels), §5 (cast, friendly
+  faces, numbers), §8 (asset naming, SVG source, silhouette export, sfx ≤ 2 s);
+- **ADR-0001** Decision 6 (bundled JSON, baked glyphs, silhouettes, reduced set kept elsewhere).
+
+**Depended on by** (each GDD must link back to this one when written; noted, not edited here):
+
+| System | Uses |
+|---|---|
+| Input & Key Filter (TASK-037) | Shares the key value format (Rule 1). |
+| Audio & Voice | sfx path; voice paths from `voiceLocales` + line ids. |
+| Cast Rendering | art, family, variant, hueSlot; idle params per family. |
+| MorphCore | glyph and silhouette path data (morph-v1). |
+| Reveal Stage | `resolve(key)` at reveal start; the missing-asset fallbacks. |
+| Press Queue | Whether a theme change clears the queue (decided there). |
+| Hint Letters | The 36 keys in canonical order. |
+| Parade | Stable `castId`. |
+| Parent Gate & Grown-up Panel | Theme pick; the cast list by `name`. |
+| Theme Packs | This format. |
+| Localization | `voiceLocales`, line ids. |
+| Settings Store | Stores only the chosen theme id. |
+
+## Tuning Knobs
+
+| Knob | Default | Safe range | Affects | Owner |
+|---|---|---|---|---|
+| Items per key (production) | 4–5 (Q1) | 1–5 | Variety; art cost (36 × n cast members per theme) | Luan |
+| Pick rule | uniform, no immediate repeat (Q1) | uniform / uniform-no-repeat / weighted | How often a favourite comes back | Luan |
+| `weight` per item | 1 | 0.1–10 | A favourite shows more often | Luan / content |
+| Repeat-avoid | on | on/off | Off allows the same item twice in a row | Luan |
+
+Morph timings, the particle count and the reduced set are **not** knobs here (Reveal Stage / MorphCore).
+
+## Visual/Audio Requirements
+
+From the art bible and the prototype, per item: an SVG on a 640×440 artboard (anchor (320, 410),
+facing right), one compound silhouette path, a gentle sound ≤ 2 s, and voice lines loudness-matched
+(Audio & Voice sets the level). The Dinosaurs prototype used synthesised sounds; real sounds and the
+recorded voice are not sourced yet (systems index high-risk row: Audio & Voice).
+
+## UI Requirements
+
+None for the child. The grown-up panel lists the theme's cast by `name` in canonical order and offers
+the theme pick (Parent Gate & Grown-up Panel GDD).
+
+## Cross-References
+
+- `design/gdd/game-concept.md`: Core Mechanics 1a and 3; MVP; Scope Tiers.
+- `production/team/decisions.md`: K-02, K-05, K-07, K-08.
+- `design/art/art-bible.md`: §3, §4, §5, §8.
+- `docs/architecture/morph-contract-v1.md`; `docs/architecture/adr-0001-native-apple.md` Decision 6.
+- `prototypes/letter-morph-dinosaur/config.js` `KEY_TABLE` (the played table; prototype code, not referenced by production).
+
+## The Dinosaurs theme (first content set)
+
+From the played prototype (iterations 1–4). Families, variants and hue slots follow art bible §3–§4.
+SFX kinds are the prototype's synth recipes, which stand in until real sounds are sourced. **Flag
+column:** ✅ passes T5; ⚠ see the content questions below.
+
+### Letters
+
+| Key | Name | Word (spoken) | Say | Sound heard | Family / variant | Hue slot | SFX (prototype) | Flag |
+|---|---|---|---|---|---|---|---|---|
+| A | Ankylosaurus | ankylosaurus | A. | start, short a | ankylosaur / club-tail | blue | thump | ✅ |
+| B | Brachiosaurus | brachiosaurus | bee | start | sauropod / neck-up | leaf | deep roar | ✅ |
+| C | Triceratops | triceratops | see | inside, soft c /s/ | horned / tri-horn | coral | grumble | ⚠ C1 |
+| D | Diplodocus | diplodocus | dee | start | sauropod / neck-forward | teal | deep roar | ✅ |
+| E | Edmontosaurus | edmontosaurus | ee | start, short e | duckbill / duck-bill | blue | honk | ✅ |
+| F | Fossil | fossil | eff | start | object / fossil | shared | crack | ✅ (Q6: kept) |
+| G | Gallimimus | gallimimus | jee | start, **hard g /g/**, G's usual sound | ornithomimid / gallimimus | ochre | chirp | ✅ (Q3: stated) |
+| H | Hadrosaurus | hadrosaurus | aitch | start | duckbill / bump | mint | honk | ✅ |
+| I | Iguanodon | iguanodon | eye | start, short i | duckbill / thumb-spike | ochre | honk | ✅ |
+| J | Juravenator | juravenator | jay | start, /dʒ/ (US) | raptor / fuzz | blue | screech | ✅ |
+| K | Kentrosaurus | kentrosaurus | kay | start | plated / spikes | ochre | grumble | ✅ |
+| L | Lambeosaurus | lambeosaurus | el | start | duckbill / hatchet-crest | rose | honk | ✅ |
+| M | Maiasaura | maiasaura | em | start | duckbill / brow-baby | violet | honk | ✅ |
+| N | Nest | nest | en | start | object / nest | shared | crack | ✅ (Q6: kept) |
+| O | Oviraptor | oviraptor | oh | start, long o | ornithomimid / oviraptor | rose | chirp | ⚠ C2 |
+| P | Pteranodon | pteranodon | pee | **silent p** | flyer / in-flight | teal | screech | ❌ replace (P1) |
+| Q | Quetzalcoatlus | quetzalcoatlus | cue | start, /k/ ("KET-sal") | flyer / standing | coral | screech | ⚠ C3 |
+| R | Raptor | raptor | are | start | raptor / stripes-brows | leaf | raptor chirp | ✅ |
+| S | Stegosaurus | stegosaurus | ess | start | plated / plates | leaf | grumble | ✅ |
+| T | T-Rex | tee rex | tee | start | rex / plain | violet | big roar (soft) | ✅ (Q5: kept) |
+| U | Utahraptor | utahraptor | you | start, long u /juː/ | raptor / arm-feathers-crest | coral | raptor chirp | ⚠ C2 |
+| V | Velociraptor | velociraptor | vee | start | raptor / long-snout | ochre | raptor chirp | ✅ |
+| W | Wuerhosaurus | wuerhosaurus | double you | start, /w/ | plated / low-plates | teal | grumble | ✅ |
+| X | Xenoceratops | xenoceratops | ex | **"z" sound** | horned / xeno-horns | blue | grumble | ❌ replace (X1) |
+| Y | Yutyrannus | yutyrannus | why | start, /j/ | rex / feathered | coral | big roar (soft) | ✅ |
+| Z | Zuniceratops | zuniceratops | zee | start | horned / zuni-horns | leaf | grumble | ✅ |
+
+Hue-slot count (art bible §4, current table): rose 2, coral 4, ochre 4, leaf 4, mint 1, teal 3,
+blue 4, violet 2. All are within the cap of 4. A replacement for P or X must take a slot that keeps
+the cap and the sibling rule (e.g. a new P out of teal keeps teal at 3; a horned X replacement can't
+use coral or leaf, the slots of its siblings C and Z).
+
+### Numbers
+
+Counted item: `baby dinosaur` / `baby dinosaurs`. Empty item: the nest (the same art as N, shown empty).
+
+| Key | Say | Word (spoken) | Silhouette | SFX (prototype) |
+|---|---|---|---|---|
+| 0 | zero | an empty nest | `sil_dino_0_nest_01` | one soft chirp |
+| 1 | one | one baby dinosaur | `sil_dino_1_babies_01` | chirp ×1 |
+| 2 | two | two baby dinosaurs | `sil_dino_2_babies_01` | chirp ×2 |
+| 3 | three | three baby dinosaurs | `sil_dino_3_babies_01` | chirp ×3 |
+| 4 | four | four baby dinosaurs | `sil_dino_4_babies_01` | chirp ×4 |
+| 5 | five | five baby dinosaurs | `sil_dino_5_babies_01` | chirp ×5 |
+| 6 | six | six baby dinosaurs | `sil_dino_6_babies_01` | chirp ×5 |
+| 7 | seven | seven baby dinosaurs | `sil_dino_7_babies_01` | chirp ×5 |
+| 8 | eight | eight baby dinosaurs | `sil_dino_8_babies_01` | chirp ×5 |
+| 9 | nine | nine baby dinosaurs | `sil_dino_9_babies_01` | chirp ×5 |
+
+The prototype capped the chirps at 5, so 6–9 don't sound longer than 5. Whether the sound should
+count along is Audio & Voice's call.
+
+### Replacements to pick (Luan, Q3)
+
+All are real dinosaur-world animals in which the child can hear the letter's usual sound (K-07: it
+can be anywhere in the name). They are listed for Luan to pick, not decided here.
+
+**P1: P (pteranodon has a silent p).**
+
+| Option | Spoken | Sound heard | Family effect |
+|---|---|---|---|
+| a. Tapejara | "ta-peh-JAR-a" | inside, /p/ | stays a **flyer** (in flight, big crest). Keeps the art bible's flyer pair (P, Q). |
+| b. Tupandactylus | "too-pan-DAC-ti-lus" | inside, /p/ | flyer, giant sail crest. Longer word. |
+| c. Protoceratops | "pro-to-SER-a-tops" | start, /p/ | joins **horned** (4 with C, X, Z). Best known of the three, but loses the in-flight flyer. |
+| d. Parasaurolophus | "pa-ra-saw-ROL-o-fus" | start, /p/ | joins **duckbills** (6 members). Well known (tube crest), but the duckbill family is already the largest. |
+
+Recommendation for Luan's choice: **a. Tapejara**. It keeps the flyer in flight, so the art bible's
+families don't change, and the /p/ is clear.
+
+**X1: X (xenoceratops says "z").** Almost no word starts with X's usual sound, /ks/, so the sound has
+to sit inside or at the end of the name. T-Rex stays at T (Q5), so "rex" is not available for X.
+
+| Option | Spoken | Sound heard | Family effect |
+|---|---|---|---|
+| a. Alxasaurus | "alk-sa-SAW-rus" | inside, /ks/ | a new family (a long-armed, pot-bellied plant-eater). One more family to draw. |
+| b. Mixosaurus | "mix-o-SAW-rus" | inside, /ks/ | a small sea reptile of the dinosaur age (not a dinosaur). A new "swimmer" family; it would stand on the stage line like the others, or float like the flyers. |
+| c. Keep xenoceratops as a declared exception | "ZEE-no-SER-a-tops" | ✗ | Breaks Q3. Listed only for completeness. |
+
+Recommendation for Luan's choice: **a. Alxasaurus**. It is a dinosaur, the /ks/ is clear ("alk-sa"),
+and its round, pot-bellied shape draws friendly. Horned keeps C and Z.
+
+### Other keys where the letter's usual sound may not be heard (Luan picks)
+
+Luan's rule (Q3) covers every key, not only P and X. These three pass or fail depending on what counts
+as the "usual" sound, so each is listed for Luan's pick:
+
+- **C1: C = triceratops makes C's soft sound /s/.** C has two usual sounds, hard /k/ (cat) and soft
+  /s/ (city). Triceratops is Luan's own K-07 example, so the table keeps it until Luan says otherwise.
+  If Luan wants the hard c: **Corythosaurus** (a duckbill with a helmet crest, friendly) or
+  **Carnotaurus** (horned brows; would need the friendliest face).
+- **C2: O = oviraptor and U = utahraptor say the long vowel**, which is the letter's name ("oh",
+  "you"). A, E and I use short vowels. Both long and short are usual vowel sounds. Keep, or ask for a
+  short vowel: O = **Ornithomimus** ("OR-ni-tho-MY-mus"; U has no well-known short-u dinosaur).
+- **C3: Q = quetzalcoatlus starts with /k/ ("KET-sal-ko-AT-lus")**, not Q's usual /kw/ (queen).
+  Keep, or ask for /kw/: **Quaesitosaurus** ("kwee-SIT-o-SAW-rus", a sauropod; loses the standing
+  flyer).
+
+## Decisions (Luan, 2026-11-18)
+
+| # | Question | Decision |
+|---|---|---|
+| Q1 | Production variety | **4–5 items per key**, every key including digits. Pick rule **uniform, no immediate repeat** (F1). |
+| Q2 | Hard real names | **Keep the real names** (quetzalcoatlus, wuerhosaurus, juravenator…). |
+| Q3 | Letter sound | **The child must hear the letter's usual sound** in the word, anywhere in the name (K-07). Items where it is silent or different are replaced; Luan picks from P1, X1 (and C1–C3 if he wants them changed). G = gallimimus passes: hard g /g/ is G's usual sound. |
+| Q4 | Numbers | Like the prototype: **"three… three baby dinosaurs"**. The counted item and the line are **per-theme data** (a vehicles theme: "three little cars"); 0 = the theme's "empty" item. |
+| Q5 | T = "tee rex" | **Keep** T = "tee… tee rex": the T-Rex is the dinosaur toddlers know best. |
+| Q6 | Objects in a creature theme | **Keep** F = fossil and N = nest: theme-world objects are allowed (the hatching baby is a favourite). |
+
+## Open Questions
+
+- **P1:** the P replacement (Luan picks; recommendation a, Tapejara).
+- **X1:** the X replacement (Luan picks; recommendation a, Alxasaurus).
+- **C1–C3:** C (soft c), O and U (long vowels), Q (/k/): keep or replace (Luan picks).
+- **Hue slots with variety:** V10 counts per edition (proposed; art-director to confirm when
+  production content is drawn).
+
+## Acceptance Criteria
+
+Each criterion is checked by the validator on the data, or by a unit test with fixed inputs.
+
+1. **36 keys:** for the Dinosaurs theme, the validator reports 36/36 keys present, each with exactly 1
+   item (MVP), and no other key.
+2. **Words:** every letter item's `word` contains its letter, and every letter item has `sound` set.
+   0 failures.
+3. **Paths:** every silhouette (36) and every glyph (36) parses with the morph-v1 reference parser,
+   has ≥ 1 subpath of 2+ points and total length > 0. 0 failures. A test file with an `A` arc command
+   makes the validator fail with the file name.
+4. **Files:** every art, silhouette, sfx and voice path (built for each locale in `voiceLocales`)
+   resolves to a file in the bundle. 0 missing. Removing one file makes the build fail and names it.
+5. **Hue slots:** no slot holds more than 4 items, and no two siblings share a slot (validator output).
+6. **Schema:** a theme with `schemaVersion: 2` is refused by an app that knows only 1, and the app
+   keeps the current theme (unit test).
+7. **Load off the main thread:** loading a theme runs off the main thread (test asserts the thread),
+   and a theme that fails the check is never made active (unit test with a broken fixture).
+8. **Pick rule:** with seed S from the shared fixture, `n = 5` and no weights, 10,000 reveals of one
+   key give no immediate repeat and each item between 18% and 22% (unit test, both apps; F1).
+   With `n = 1`, no random number is drawn.
+9. **No saved progress:** after quitting and relaunching, no file written by this system exists
+   (`lastShown` is in memory only).
+10. **Theme switch:** with key D queued and the theme switched in the panel, the next reveal shows the
+    new theme's D item (integration test).
+11. **Missing asset:** with the silhouette of D removed from a debug build, pressing D shows the glyph
+    glowing and sparkling out with the letter voice, no crash, and one debug log line. With the word
+    voice removed, only "dee" plays.
+12. **Toddler-safe review:** a content reviewer signs a checklist for T1–T8 for every item of a theme
+    before it ships. Every letter item's `sound` value was set by that listening check.
