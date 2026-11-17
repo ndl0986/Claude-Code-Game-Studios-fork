@@ -78,8 +78,10 @@ jump, as long as the stage maps the glyph's unit box to the glyph's drawn box at
   That is what the shared fixture proves.
 - The seed is an input. Its **source is not part of the cross-platform contract**: MorphCore takes any injectable
   unsigned 64-bit source, and the two platforms need not derive seeds the same way. Tests inject fixed seeds.
-- Which seed policy the game uses (one fixed morph per key, a different morph per press, or random) is open
-  (Q2).
+- **Seed policy (decided, Luan 2026-11-18):** a **different morph on every press**. The caller derives the seed
+  from (key, press count), where the press count is the number of reveals started since launch, so a reveal can
+  be reproduced from those two values. Debug builds log the key, the count and the seed with each reveal. The
+  mixing function is each platform's own (it is not part of the contract).
 
 **6. Interruption.** A morph holds no running state, so there is nothing to cancel inside MorphCore. When the Press
 Queue starts the next reveal, the Reveal Stage stops asking the old morph and builds a new one. At most one morph
@@ -93,11 +95,19 @@ carried over). The hold belongs to the Press Queue.
 - the **reduced** set, used when Reduce Motion (iOS/macOS) or "Remove animations" (Android) is on (art bible
   §7). It is just another spec; the contract's rules don't change (contract §1).
 - The data uses the designer-facing fields of the one-shot prototype (Tuning Knobs). MorphCore's loader turns
-  them into the contract's spec by Formula F1. The particle count is in the same data.
+  them into the contract's spec by Formula F1 (**decided**, Luan 2026-11-18: the rise folds into the glyph phase,
+  `travel = flow + spread`, so one speck's flight is `flow_s`; `morph_speed` stays a knob).
+- **Particle count (decided, Luan 2026-11-18):** **240**, the count measured in TASK-033. It is raised only after
+  the real-iPad measurement (AC-11). It is in the same data.
+- The reduced values are **provisional** data values, tuned in play. The Accessibility GDD owns the switch.
 
-**9. Validation.** On load, each timing set is checked against the ranges in Tuning Knobs. A set that fails
-(a value out of range, missing or not a number) is rejected as a whole. The app then uses the shipped defaults
-bundled with it and logs the failure in debug builds. A morph is never built from an invalid spec.
+**9. Validation.** The timing data ships inside the app, so it is checked **at build time**: a test (AC-7) loads
+the shipped normal and reduced sets and fails the build on any value out of range, missing or not a number. The
+same test reports (but does not fail on) a reveal (F5) longer than the Press Queue's hold; the Press Queue GDD
+decides whether that becomes an error. At run time the loader checks again. A set that fails is rejected as a
+whole, **no morph is built**, and the reveal takes the missing-glyph fallback (the creature fades in); debug
+builds log it. There are no hard-coded fallback timings (ADR-0001 Decision 6), and a morph is never built from
+an invalid spec.
 
 ### States and Transitions
 
@@ -194,8 +204,8 @@ and needs no tuning.
 | | glow | dissolve | travel | spread | flight (F2) | T (F3) | + form (F5) |
 |---|---|---|---|---|---|---|---|
 | Fixture `D-dinosaur` (the TASK-033 spike) | 0.45 | 0.35 | 1.1 | 0.35 | 0.75 | **1.9** | — |
-| Proposed normal (one-shot values via F1) | 0.45 + 0.35 = 0.8 | 0.4 | 0.9 + 0.35 = 1.25 | 0.35 | **0.9** | **2.45** | 2.95 (≤ hold 3.0) |
-| Proposed reduced (Q3) | 0.25 + 0.15 = 0.4 | 0.2 | 0.5 + 0.1 = 0.6 | 0.1 | 0.5 | **1.2** | 1.5 with `form_s` 0.3 |
+| Normal (one-shot values via F1, decided) | 0.45 + 0.35 = 0.8 | 0.4 | 0.9 + 0.35 = 1.25 | 0.35 | **0.9** | **2.45** | 2.95 (≤ hold 3.0) |
+| Reduced (provisional, Q3) | 0.25 + 0.15 = 0.4 | 0.2 | 0.5 + 0.1 = 0.6 | 0.1 | 0.5 | **1.2** | 1.5 with `form_s` 0.3 |
 
 The fixture checks `D-dinosaur` at s = 0, 0.625 (mid-dissolve: 0.45 + 0.35/2), 0.95 (T/2) and 1.9 (T), which
 matches F3 and F6.
@@ -209,9 +219,9 @@ matches F3 and F6.
 | **A path fails to parse at run time** | Treated as missing (the two rows above). CI should make this impossible (contract §8). |
 | **Count 1** | One particle; no shuffle draws (contract §5). Covered by fixture `count-1`. |
 | **Zero-length segments, a lone trailing `M`** | Handled by the contract (kept segments; dropped 1-point subpaths). Covered by fixture `zero-length`. |
-| **A silhouette with several pieces** (digit 3 → three baby dinosaurs; 0 → an empty nest) | Points are shared by arc length over all pieces together (contract §3), so a smaller baby gets fewer particles. Changing that would be contract v2 (Q5). |
+| **A silhouette with several pieces** (digit 3 → three baby dinosaurs; 0 → an empty nest) | Points are shared by arc length over all pieces together (contract §3), so a smaller baby gets fewer particles. **Decided (Luan, 2026-11-18): keep this v1 behaviour**; an even share per piece would be contract v2. |
 | **Thin glyphs** (I, 1, l) | The unit box scales by the longer side, so a thin glyph keeps its proportions and stays narrow. |
-| **Count out of range** | The timing set fails validation (Rule 9); the shipped defaults are used. |
+| **Count or any timing out of range** | The build-time test fails (Rule 9). If bad data still reaches a device, no morph is built and the creature fades in; debug builds log it. |
 | **`s < 0`** (a frame timestamp before the press) | Treated as the Glyph phase: positions are `from[i]` (contract §6, `s ≤ glow`). |
 | **`s` far past T** | Positions stay exactly on `to[perm[i]]`. |
 | **`dissolve` = 0** (e.g. `morph_speed` with `dissolve_s` at a floor) | The Dissolve phase is empty, and the contract never divides by it. Allowed by the contract; the data range keeps `dissolve_s ≥ 0.1` anyway. |
@@ -241,9 +251,10 @@ matches F3 and F6.
 
 ## Tuning Knobs
 
-All values live in the morph timing data. "Proposed" values await Luan (Q1, Q3, Q4).
+All values live in the morph timing data. The normal set and the count are decided (Rule 8); the reduced set is
+provisional and tuned in play (Q3).
 
-| Knob | Normal (proposed) | Reduced (proposed) | Range | Source | Effect |
+| Knob | Normal | Reduced (provisional) | Range | Source | Effect |
 |---|---|---|---|---|---|
 | `letter_in_s` | 0.45 | 0.25 | 0.1–1.5 | one-shot config | longer rise from the key |
 | `glow_s` | 0.35 | 0.15 | 0–1.5 | one-shot config | longer look at the solid glyph |
@@ -252,7 +263,7 @@ All values live in the morph timing data. "Proposed" values await Luan (Q1, Q3, 
 | `spread_s` | 0.35 | 0.1 | 0–1.0 | TASK-033 spike | wider spread of start times and arrivals |
 | `drift` | 0.06 | 0.02 | 0–0.15 | TASK-033 spike | how far stardust wanders while dissolving (F7) |
 | `swirl` | 0.35 | 0 | 0–1 | one-shot config, spike | how much flights curve (F7); 0 = straight |
-| `particles` | **240** | 240 | 100–900 | spike measured 240; art bible §8 proposes 420 | denser stardust; 420 is NOT ASSESSED on a device (Q1) |
+| `particles` | **240** | 240 | 100–900 | measured in TASK-033 (decided); art bible §8's 420 waits for the iPad measurement | denser stardust; above 240 is NOT ASSESSED on a device |
 | `morph_speed` | 1 | 1 | 0.5–2 | one-shot config | scales every time (F1) |
 
 `form_s` (0.5 in the one-shot) is the Reveal Stage's knob, not MorphCore's. The hold (~3 s) is the Press Queue's.
@@ -274,7 +285,7 @@ MorphCore has none of its own. The art bible rules it serves are drawn by others
 
 - **The press answers at once:** s = 0 is the press, and the glyph phase starts there (Pillar 1).
 - **Drift, never flash:** smoothstep easing gives every speck a soft start and a soft landing (F8).
-- **Readable flights:** `flow_s` sets each flight directly (F2). The proposed 0.9 s is slower than the spike's
+- **Readable flights:** `flow_s` sets each flight directly (F2). The 0.9 s is slower than the spike's
   0.75 s, matching the one-shot that Luan played.
 - **Reduced motion is shorter and straighter:** less drift, no swirl, about half the duration.
 
@@ -306,32 +317,33 @@ Each criterion applies to **both** platforms (the Apple `MorphCore` and the late
    AppKit; no android.*), reads no clock, and building the same morph twice gives identical results.
 5. **AC-5 Phase ends.** For a test spec, positions at `s ≤ glow` equal `from[i]` exactly, and at `s ≥ T` equal
    `to[perm[i]]` exactly; `phase(s)` follows F6 at each boundary.
-6. **AC-6 Data mapping.** Loading the timing data gives the contract spec of F1. A unit test checks the proposed
+6. **AC-6 Data mapping.** Loading the timing data gives the contract spec of F1. A unit test checks the
    normal set: glow 0.8, dissolve 0.4, travel 1.25, spread 0.35, flight 0.9, T 2.45.
 7. **AC-7 Validation.** Each range rule in Tuning Knobs has a test: an out-of-range, missing or non-numeric value
-   rejects the set, and the shipped defaults are used.
+   rejects the set, and the loader then builds no morph (the stage gets "no morph"). A build-time test validates
+   the shipped normal and reduced sets and fails the build if either is invalid.
 8. **AC-8 Reduced set.** With the reduced-motion flag injected on, a new morph uses the reduced set; a morph
    already built keeps its spec.
 9. **AC-9 Empty paths.** An empty or unparsable glyph or silhouette builds no morph and never throws to the stage;
    the stage gets "no morph" with which side was missing.
 10. **AC-10 Key-table paths (CI).** Every glyph and silhouette path in the key table parses with the v1 parser
     and has a non-zero total length. Shared with Key Table & Theme Data and the bake tool.
-11. **AC-11 Performance (advisory, NOT ASSESSED).** The default particle count holds the frame budget on a real
-    iPad, measured with `production/qa/evidence/TASK-033/procedure-ipad.md`. Android is measured in its own spike
+11. **AC-11 Performance (advisory, NOT ASSESSED).** With the default particle count, frame time p99 during a
+    reveal is at or below one display refresh (16.7 ms at 60 Hz, 8.3 ms at 120 Hz) on a real iPad, measured with
+    `production/qa/evidence/TASK-033/procedure-ipad.md`. The budget is proposed; the Mac spike run (26.7 ms p99 at
+    75 Hz, whole app) did not meet it, so it is checked on the device before the count is raised. Android is measured in its own spike
     on a low-end tablet. Until then the count stays at the measured 240. The spike's numbers (SpriteKit, 240
     particles, frame p99 17.1 ms Simulator and 26.7 ms Mac) are not device numbers.
 
+12. **AC-12 Seed policy (each platform's own test).** Two presses of the same key in one session give different
+    seeds; the same (key, press count) gives the same seed; debug builds log key, count and seed per reveal.
+
 ## Open Questions
 
-For Luan (sent by the leader 2026-11-18; written as open until answered):
-- **Q1. Particle count.** Default 240 (measured on Simulator and Mac) or 420 (art bible §8, NOT ASSESSED on a
-  device)?
-- **Q2. Seed policy.** The same morph every time for a key, a different one per press (for example from the key
-  and a press counter, reproducible), or random? The first is most predictable; the second varies but can still
-  be replayed in a bug report.
-- **Q3. Reduced set.** Are the proposed reduced values right? Should reduced motion also lower the particle
-  count?
-- **Q4. Timing mapping.** Approve F1 (rise folded into the glyph phase; `flow_s` = one speck's flight time) and
-  keep `morph_speed` as a knob?
-- **Q5. Pieces of a silhouette.** Points are shared by arc length over all pieces (v1), so in "3 baby dinosaurs"
-  a smaller baby gets fewer particles. Keep that, or share evenly per piece (contract v2)?
+- **Q3. Reduced set (provisional).** The reduced values in Tuning Knobs are provisional data values, tuned in
+  play; the Accessibility GDD owns the switch. Whether reduced motion should also lower the particle count is
+  part of that tuning.
+
+**Resolved (Luan, 2026-11-18), now in the rules:** Q1 particle count 240 until the iPad measurement (Rule 8);
+Q2 a different morph per press, seeded from (key, press count) (Rule 5); Q4 the F1 timing mapping (Rule 8, F1);
+Q5 arc-length sharing across pieces stays v1 (Edge Cases).
