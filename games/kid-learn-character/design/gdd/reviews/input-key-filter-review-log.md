@@ -26,7 +26,7 @@ Findings:
 - [ADVISORY] Dependencies: the systems index lists Hint Letters and the On-screen Keyboard Row as depending on
   the Press Queue only; their touches reach it through Input, so the index should add Input & Key Filter (the
   leader updates the index).
-Reviewed-Content-Hash: design/gdd/input-key-filter.md e6c3a30178291a8b4b632ff9762ed3e05ede6dca
+Reviewed-Content-Hash: design/gdd/input-key-filter.md bc074544bfd4323bd2a38f618742f22711231b21
 Reviewed-Content-Hash: .claude/skills/design-review/SKILL.md 4dcc8b81162613c757144532f1b72708ab3ba27f
 Reviewed-Content-Hash: design/gdd/game-concept.md e525c154ca1b014fe3ca0024ba5a339d37135429
 Reviewed-Content-Hash: design/gdd/systems-index.md 6652c64909266be6f7de820ddfbff3a731c77c7d
