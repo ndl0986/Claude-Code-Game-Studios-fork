@@ -60,6 +60,13 @@ enum Boot {
     #else
     static let isDebug = false
     #endif
+    /// Pending history claims show an `UNSIGNED Cxx` strip in Debug and in the Preview build (D-37, Luan's own
+    /// device: the R12 gate is skipped there, so the badges must stay), never in Release.
+    #if DEBUG || PREVIEW
+    static let showsUnsigned = true
+    #else
+    static let showsUnsigned = false
+    #endif
 
     /// Debug launch arguments (same names as Android): -startScreen quiz -q 2 -beat 3 -stage telegraph
     /// -stars 2 -wrong 1 -hero sample -lang en. UserDefaults reads `-key value` arguments.
@@ -93,7 +100,7 @@ enum Boot {
                 game.debugStart(screen: s, q: int("q"), beat: int("beat"), stage: d.string(forKey: "stage"), stars: int("stars"))
             }
             let audio = Audio(volume: content.tuning["volume"])
-            return GameScene(game: game, audio: audio)
+            return GameScene(game: game, audio: audio, showsUnsigned: showsUnsigned)
         } catch {
             NSLog("[content] failed to load: \(error)")
             return nil

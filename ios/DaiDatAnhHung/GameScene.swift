@@ -52,8 +52,11 @@ final class GameScene: SKScene {
     private var spritesVisible = true, dotsVisible = false, shownPlaceholder: Box?
     private var placedHints: [String: Box] = [:]
 
-    init(game: Game, audio: Audio) {
-        self.game = game; self.audio = audio
+    /// Whether pending claims show the `UNSIGNED Cxx` strip: Debug and Preview builds (D-37), never Release.
+    private let showsUnsigned: Bool
+
+    init(game: Game, audio: Audio, showsUnsigned: Bool) {
+        self.game = game; self.audio = audio; self.showsUnsigned = showsUnsigned
         hero = HeroNode(scale: HeroNode.heroScale, reach: game.tuning["attack_range"])
         super.init(size: CGSize(width: 1280, height: 720))
         // Input Rule 1: the 1280×720 world is fitted to the SAFE rect. The scene fills the whole view
@@ -507,19 +510,19 @@ final class GameScene: SKScene {
         return n
     }
 
-    /// A text box for a Text line; in a debug build a pending claim adds an `UNSIGNED Cxx` badge.
+    /// A text box for a Text line; in a Debug or Preview build a pending claim adds an `UNSIGNED Cxx` badge.
     private func textBox(_ t: Text, _ x: Double, _ y: Double, _ w: Double, _ size: Double, _ c: SKColor) {
         add(Font.label(t.text(game.lang), size, c, width: w, weight: 600), x, y) // body reading text: weight 600
-        badge(t, 640, 16) // debug only, a strip at the top edge: never over the text (Android QC r1)
+        badge(t, 640, 16) // Debug and Preview only, a strip at the top edge: never over the text (Android QC r1)
     }
-    /// Debug only: pending claims of the Texts on screen, shown once in a strip at the top edge (iOS-R1-03).
+    /// Debug and Preview only (D-37): pending claims of the Texts on screen, shown once in a strip at the top edge (iOS-R1-03).
     private var unsignedIds: [String] = []
     private func badge(_ t: Text, _ x: Double, _ y: Double) {
-        guard game.isDebug else { return }
+        guard showsUnsigned else { return }
         for id in ClaimGate.unsigned(t, in: game.hero) where !unsignedIds.contains(id) { unsignedIds.append(id) }
     }
     private func badgeStrip() {
-        guard game.isDebug, !unsignedIds.isEmpty else { return }
+        guard showsUnsigned, !unsignedIds.isEmpty else { return }
         let n = SKNode()
         let l = Font.label("UNSIGNED " + unsignedIds.sorted().joined(separator: " "), 16, .white)
         n.addChild(D.rr(-l.frame.width / 2 - 10, -12, l.frame.width + 20, 24, 10, SKColor(hex: 0xb4541e)))
