@@ -37,12 +37,13 @@ ignored, about 3 s per reveal while keys are queued. See `design/gdd/game-concep
 
 - **Time of day from the system clock:** a morning scene in the morning, day, then evening/dusk and
   night, following the device's clock. No network and no permission needed.
-- **Weather from the network, opt-in:** if internet is available and a grown-up turns it on behind
-  the parent gate, the scene follows the local weather. The app must ask for network, time and
-  weather (location) access. This **changes Pillar 5 (Safe by Design) and the anti-pillar "no
-  network, no data"**: the concept needs that revision. Before any build, game-qc-ios checks Apple
-  Kids category + COPPA rules for network and location in a kids app (TASK-034). Scope tier: not
-  decided (MVP or later).
+- **Weather: picked by hand, no network** (revised by Luan after TASK-034, 2026-11-17). A grown-up
+  picks today's weather (clear, cloudy, light rain, snow, windy) behind the parent gate; the app makes
+  **no network call** and uses **no location**. Pillar 5 (Safe by Design) and the no-network
+  anti-pillar stay as they are. TASK-034 (`design/compliance/TASK-034-kids-weather-rules.md`) found a
+  third-party weather API is not allowed in the Kids category and precise location needs verifiable
+  parental consent; its WeatherKit + parent-picked-city design is kept on file if live weather is
+  ever revisited.
 - **Reveal glow pulse stays ~2.2 Hz** as in the prototype (Luan), over the art-director's "≤ 1 Hz"
   proposal.
 
