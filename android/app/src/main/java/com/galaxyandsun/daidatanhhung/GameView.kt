@@ -48,8 +48,8 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
     private var running = false
     @Volatile private var surfaceOk = false
     private var hostResumed = true
-    private var lastNanos = -1L
-    private var acc = 0.0
+    /** Fixed-step clock; zeroes the frame that leaves PAUSE (r13, iOS r10 parity). */
+    private val clock = com.galaxyandsun.daidatanhhung.core.FrameClock()
     private val input = InputFrame()
     private val padHolds = com.galaxyandsun.daidatanhhung.core.PadHolds()
     private val keyHolds = HashSet<Action>()
@@ -87,7 +87,7 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
         if (!surfaceOk || !hostResumed) return
         handler.post {
             if (running) return@post
-            running = true; lastNanos = -1L; acc = 0.0
+            running = true; clock.start()
             choreographer?.postFrameCallback(this)
         }
     }
@@ -101,18 +101,17 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
 
     override fun doFrame(frameTimeNanos: Long) {
         if (!running) return
-        val dt = if (lastNanos < 0) 0.0 else ((frameTimeNanos - lastNanos) / 1e9).coerceIn(0.0, 0.25)
-        lastNanos = frameTimeNanos
+        clock.beginFrame(frameTimeNanos)
         val w = width.toFloat(); val h = height.toFloat()
         renderer.layout(w, h, safe, resources.displayMetrics.density * padScale, game?.tuning?.get("pad_min")?.toFloat() ?: 72f)
+        val wasPaused = game?.screen == Screen.PAUSE
         drainInput()
+        if (wasPaused && game?.screen != Screen.PAUSE) clock.resumed() // no time from before the press (r13)
         val portrait = h > w
         if (game != null && !portrait && !frozen) {
-            acc += dt * slow
-            while (acc >= STEP) {
+            repeat(clock.steps(slow.toDouble())) {
                 input.held.clear(); input.held += padHolds.held(); input.held += keyHolds
                 game.step(STEP, input)
-                acc -= STEP
             }
         }
         audio.muted = game?.muted ?: false
@@ -205,5 +204,5 @@ class GameView(context: Context, private val game: Game?, private val audio: Aud
         return true
     }
 
-    companion object { const val STEP = 1.0 / 60 }
+    companion object { const val STEP = com.galaxyandsun.daidatanhhung.core.FrameClock.STEP }
 }

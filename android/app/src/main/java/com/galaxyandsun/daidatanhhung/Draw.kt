@@ -17,7 +17,7 @@ import kotlin.math.sin
 /** The prototype's palette (index.html `C`). */
 object C {
     const val RED = 0xFFD9342B.toInt(); const val GOLD = 0xFFF2B632.toInt(); const val GOLD_DARK = 0xFFC98A12.toInt()
-    const val CREAM = 0xFFFFF6E3.toInt(); const val INK = 0xFF3A2A1F.toInt(); const val SKIN = 0xFFF5C9A0.toInt()
+    const val CREAM = 0xFFFFF6E3.toInt(); const val INK = 0xFF3A2A1F.toInt(); const val SKIN = 0xFFF1C9A0.toInt() /* look sheet d18: one skin for everyone (r13) */
     const val STAR_GOLD = 0xFFFFC531.toInt() // ASSET-034 arrow, the part label (hud.md §3.3, story-screens §5.2)
     const val DEEP_INK = 0xFF1A120C.toInt() // labels on #3FA34D (white there is 3.2:1)
     const val HAIR = 0xFF231A16.toInt(); const val INDIGO = 0xFF2B4C8C.toInt(); const val LEAF = 0xFF6CBF4F.toInt()
