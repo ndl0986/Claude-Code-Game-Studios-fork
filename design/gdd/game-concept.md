@@ -356,12 +356,14 @@ Vietnamese legends as told to children, school history lessons, national celebra
 - Each hero is a hand-built mission (story-first), the biggest cost driver for a solo developer.
 - Luan's "weeks" timeline fits the MVP, not a store release.
 - Art and two-language voice per hero are labour-heavy.
-- `PR-SCOPE skipped — Lean mode`: scope not reviewed by the producer.
+- Scope reviewed by the producer at the Concept → Systems Design gate (2026-11-17,
+  `production/gate-checks/2026-11-17-concept-to-systems-design.md`): realistic for a solo
+  developer; the vertical slice proves the loop.
 
 ### Open Questions
 - **Which heroes and events, in what order?** First hero decided: **Trần Quốc Toản** (Luan, 2026-11-14). More heroes are added over time, placed in historical order.
 - ~~Who is the named history reviewer?~~ **Decided (Luan, 2026-11-14): Luan signs off history.** game-art-content drafts each hero's content with cited sources; nothing is final until Luan signs it off.
-- **Monetization**: paid, free, school/government funded? (Luan decides; no ads to kids by default.)
+- **Monetization**: paid, free, school/government funded? (Luan decides; no ads to kids.)
 - ~~How storybook content arrives after release~~ **Decided (Luan, 2026-11-14): timed app updates**, no content download.
 - ~~Portrait or landscape?~~ **Decided (Luan): landscape.** Every GDD and both apps are
   landscape. Held in portrait, the app shows a picture-only "turn the phone" screen (title UX,
