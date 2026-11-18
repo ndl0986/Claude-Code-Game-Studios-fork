@@ -110,6 +110,8 @@ that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per
 - Luan wants the child to see progress toward the next parade: **a small energy bar in the top-right corner of the
   stage that fills in 6 steps** (one per new creature met in the batch, K-17 counting) and, when full, the parade starts.
   Chosen over a diegetic star row or hill silhouettes, knowing it is a real HUD element.
+- **Why (Luan's playtest of the browser prototype):** the child did not know the parade was coming, or waited too long
+  to see it. Note: that prototype still uses a parade every **8** new creatures; the design is every **6** (K-17).
 - **Amends:** art bible §7 "No HUD for the child" gains this one exception; the concept's anti-pillar and Long-Term
   Progression gain "a parade meter, not a score". Unchanged: no scores, levels, unlocks, timers or per-letter "seen"
   marks; nothing is saved.
