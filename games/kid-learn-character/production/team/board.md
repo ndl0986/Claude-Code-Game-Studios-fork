@@ -18,6 +18,9 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-036 | GDD: Key Table & Theme Data (`design/gdd/key-table-theme-data.md`) via /design-system | design | game-art-content (review: game-dev-ios) | DONE `c7ef996`, merged 2026-11-18 (review: game-dev-ios APPROVE after one fix) | `design/TASK-036-gdd-key-table` | 2026-11-18 |
 | TASK-037 | GDD: Input & Key Filter (`design/gdd/input-key-filter.md`) via /design-system | design | game-dev-ios (review: game-dev-android) | CODE REVIEW: `6d7cd5e` REVISE (game-dev-android: Android held-set id, system keys pass through) | `design/TASK-037-gdd-input-key-filter` | 2026-11-18 |
 | TASK-038 | GDD: MorphCore (`design/gdd/morphcore.md`) via /design-system | design | game-dev-android (review: game-dev-ios) | DONE `89fb1cc`, merged 2026-11-18 (review: game-dev-ios APPROVE) | `design/TASK-038-gdd-morphcore` | 2026-11-18 |
+| TASK-039 | GDD: Settings Store (`design/gdd/settings-store.md`) via /design-system | design | game-dev-android (review: game-dev-ios) | SENT 2026-11-18: plan first | `design/TASK-039-gdd-settings-store` | 2026-11-18 |
+| TASK-040 | GDD: Privacy & Kids Compliance (`design/gdd/privacy-kids-compliance.md`) via /design-system | design | game-qc-ios (review: game-qc-android) | SENT 2026-11-18: plan first | `design/TASK-040-gdd-privacy-compliance` | 2026-11-18 |
+| TASK-041 | GDD: Audio & Voice (`design/gdd/audio-voice.md`) via /design-system | design | game-art-content (review: game-dev-ios) | SENT 2026-11-18: plan first | `design/TASK-041-gdd-audio-voice` | 2026-11-18 |
 
 ## Leader log
 
@@ -48,3 +51,4 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 - 2026-11-18: ADR-0001 Accepted (merged). Systems Design started: TASK-036/037/038 (first three GDDs) sent.
 - 2026-11-18: Luan decided K-09 (theme content), K-10 (input), K-11 (morph). TASK-036/037 plans approved; TASK-038 drafted.
 - 2026-11-18: TASK-036 (Key Table) and TASK-038 (MorphCore) merged; systems index updated (2/14 MVP approved). K-09 picks (P = Tapejara, X exception) and title-screen rule recorded.
+- 2026-11-18: next GDDs in design order sent: TASK-039 Settings Store, TASK-040 Privacy & Kids Compliance, TASK-041 Audio & Voice.
