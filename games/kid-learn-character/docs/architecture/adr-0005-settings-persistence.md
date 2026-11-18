@@ -4,6 +4,11 @@
 
 Accepted (Luan, 2026-11-18; recorded by game-leader on Luan's explicit acceptance)
 
+*Note 2026-11-18 (K-42, TASK-114; status stays Accepted):* the settings contract is now **settings-record-v2**
+(TASK-091), which supersedes settings-record-v1 (ADR-0004 D1 note). Where this ADR names settings-record-v1 (the
+dependencies, D-text, Validation 1 and Related), read settings-record-v2; the backend's round-trip check runs v2's
+"record → bytes" cases.
+
 > **Who may move this to `Accepted`: the user, or `technical-director` on the
 > user's explicit confirmation. No other agent, and no skill on its own.**
 

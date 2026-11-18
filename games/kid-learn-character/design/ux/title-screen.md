@@ -82,8 +82,8 @@ R7, K-39, K-20).
 │                                                                 │
 │                                                                 │
 │                          ( ▶ )  play button (640,520)           │
+│              🦖  title creature, feet on the ground line        │
 │        ~~~~~~~~~~~~~~ hill / ground line (y 558) ~~~~~~~~~~~~~~  │
-│              🦖 title creature, idling on the ground line       │
 │                         ground                                  │
 └─────────────────────────────────────────────────────────────────┘  ← extra ground (portrait / narrow window)
    no text anywhere · no status bar / home indicator (iPad) · no keyboard row · no hints
@@ -240,7 +240,7 @@ Against `design/accessibility-requirements.md` (tier: Standard, Luan, K-42):
 
 | # | Question | Owner |
 |---|---|---|
-| OQ-1 | The title creature's exact position on the ground line (App Shell R2 says "anchored on the ground line"; Reveal Stage R10 gives the Play anchor (640, 600) and the ground line y 558) | App Shell owner |
+| OQ-1 | The title creature's exact position on the ground line (App Shell R2 says "anchored on the ground line"; Reveal Stage R10 gives the Play anchor (640, 600) and the ground line y 558). It **stands on** the line (feet anchor, art bible §8) and, per game-art-content's review, should stay **out of the play button's column at x 640**; the x value is the owner's | App Shell owner |
 | OQ-2 | The Title → Play handover: do the play button and title creature fade, and over how long? | App Shell owner / art |
 | OQ-3 | The play button's size and drawing (only its position, light and breathe are stated) | art (art bible §7) |
 | OQ-4 | The moon ring's geometry on the Title (see `interaction-patterns.md` OQ-1) | Parent Gate owner / art |
