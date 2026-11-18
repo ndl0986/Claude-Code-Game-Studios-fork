@@ -114,7 +114,9 @@ option B **is** B-load (it rasterises at load, at 2.5×), so P-2 measures it dir
 **Apple.** P-2 and M-13 use `DeviceSpike` Render with TASK-077's art, options **A-candidate** (D3: outline merged per
 part, fills per element; the A the rule judges), **B** (B-load) and, for information, the original per-element A; the
 Metrics recorder gives p50 / p99 over the worst case per option, and the screen logs per-creature build ms per
-option. *(The A-candidate option is game-dev-ios's DeviceSpike change; its sha is recorded here when it lands.)*
+option. *(The A-candidate option and H-2's overlap mode are game-dev-ios's DeviceSpike change; its sha is recorded
+here when it lands.)* H-2's overlap check runs **before** P-2 (Validation, H-2), and P-2 records which outline path
+(merged stroke or fallback) its A-candidate numbers come from.
 
 ### D2. One structure, both options (platform-neutral)
 - Both options read **the same baked file** (ADR-0003 D4): parts with pivots, nested; inside each part the layers
@@ -293,7 +295,10 @@ Per K-34: headless runs need no MAC FREE; the Mac rows do.
 - **H-2 Equivalence (the adapter story).** A's and B's part boxes within 1 px per role for the three creatures; the
   **outline-overlap test** (D2, D3): an outline stroke that crosses itself, drawn by A and by B over a flat fill,
   reads one alpha (0.8 Ink) at the crossing, not two. It decides D3's group-alpha question; if A darkens there, A uses
-  D3's fallback.
+  D3's fallback. **H-2's overlap check runs on the A-candidate DeviceSpike build before P-2** (game-qc-ios; leader's
+  option a): headless, through DeviceSpike's offscreen render, if that can show it; otherwise as the first step of the
+  same device session. P-2 then records **which outline path it measured** (the merged stroke or the fallback), so
+  its A numbers belong to the A that would ship.
 - **H-3 Bake output (the bake tool story).** The baked JSON for the three creatures parses back with the a1 rule; its
   byte size is recorded next to H-1's SVG figure.
 - Simulator frame times: **not taken** (leader, 2026-11-18): every boot pushed the Mac's load to 40–55, and Simulator
