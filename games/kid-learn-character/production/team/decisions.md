@@ -105,6 +105,14 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-31 Build tools (Luan, 2026-11-18, TASK-066 Q2)
+
+- **Own Swift build tools, no third-party build tools:** SVG parsing (XMLParser), loudness (BS.1770 in Swift),
+  AAC encoding (AVFoundation), glyph baking (CoreText). No ffmpeg, sox or SVG libraries (keeps licences and the
+  supply chain out of the build; PKC-03).
+- TTS engine (L-09): still open. Luan asked whether a free, ad-supported release needs a commercial licence —
+  answered 2026-11-18 (yes: free + ads is commercial use); the ads question itself is raised separately.
+
 ### K-30 Accessibility scope (game-leader, 2026-11-18, TASK-061; within K-29 and the art bible)
 
 - **Smart Invert: the stage opts out** (`accessibilityIgnoresInvertColors = true` on the stage view), because
