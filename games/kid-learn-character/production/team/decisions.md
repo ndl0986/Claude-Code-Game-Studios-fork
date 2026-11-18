@@ -105,6 +105,15 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-26 Busy moments and favourite keys (Luan, 2026-11-18, TASK-055 cross-review)
+
+- **Hints dim while a parade walks:** during the parade's Walking state the hint letters fade to a lower
+  opacity and hold still (no drift, no new spawns); they stay tappable. Weather is unchanged.
+- **Accepted on purpose:** a child who only presses one or two favourite keys never sees a parade (K-17 counts a
+  repeat once). The parade rewards trying new keys; hint letters invite them.
+- Leader call (B-1): the Mac chord follows Input R6 as owner: exactly ⌃⌥⌘ + Q, Shift ignored, **Fn disqualifies**
+  (a palm on a laptop's bottom-left row hits fn next to ⌃). Parent Gate G2 drops "Fn is not another key".
+
 ### K-25 Glyph contrast during sky crossfades (Luan, 2026-11-18, TASK-054b review; corrected same day)
 
 - **The glyph's edge switches with the sky:** cream above / amber below the equal-contrast sky-mid luminance
