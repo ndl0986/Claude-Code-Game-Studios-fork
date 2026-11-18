@@ -91,7 +91,9 @@ who wants to pick their own letters, and nothing ever moves under the child's fi
   with a **16** unit gap (the first prototype's DINOSAUR row). The key top is at **y 590** with a 12-unit bottom
   margin, so centres sit at y 649.
 - **Hit rect:** the drawn key plus **8** units on every side, so 144 × 134 units (art bible §7 conflict 1: a little
-  larger than drawn). Keys are 16 apart, so neighbouring hit rects touch at the gap's centre and never overlap.
+  larger than drawn). Keys are 16 apart, so neighbouring hit rects share an edge at the gap's centre and never
+  overlap. **A touch on a shared edge goes to the key whose centre is nearest**; at an exact tie (the edge itself),
+  the left key wins. This is the same nearest-centre rule Input R7 uses for overlapping hints.
 - **Width:** n keys take `144·n − 16` units. The word is capped at **8 letters** (V17), so the row is at most 1136
   units wide, which leaves 72 units on each side of the safe stage. At 9 letters the hit rects would reach −8 and
   1288, outside the safe stage and into Android's back-gesture insets.
@@ -135,8 +137,9 @@ who wants to pick their own letters, and nothing ever moves under the child's fi
 - **Gate challenge** (K-20): drawn as it is, **frozen** (lights and fades hold on the play clock). Input sends
   nothing to play during the challenge, so a touch on the row reaches the challenge only.
 - **Grown-up panel:** drawn under the panel's 55% navy dim, not touchable (Input: panel state).
-- **Background:** not drawn. The return follows App Shell: Play with the same word, or the Title after a long
-  absence (K-22), which draws a new word on the next Play entry.
+- **Background:** not drawn; the word and its pressed letters are **kept** in memory. A return to Play within App
+  Shell's window fades the row back in (0.3 s) with the **same** word. Only a Title entry, including the Title after
+  a long absence (K-22), draws a new word.
 - **Parade Walking:** **fully visible and active**, not dimmed (K-29).
 - **Reduce Motion** (K-16, K-29): no `press_scale` (the key lights without growing); the light and the word fades are
   kept, since they are fades, not motion. A mid-session toggle applies on the next frame (K-29: ambient UI).
@@ -157,9 +160,9 @@ keyboard (every Mac, an iPad with a keyboard). Detecting a keyboard is unreliabl
 
 | State | Entered when | Touchable | Left when |
 |---|---|---|---|
-| **Hidden** | `keyboardRow` off; the Title; background | no | on in Play → Fading in |
-| **Fading in** | Play entry or turned on; a new word is drawn | yes | 0.3 s → Showing |
-| **Showing** | — | yes | every letter pressed → Due; off → Fading out; Title or background → Hidden |
+| **Hidden** | `keyboardRow` off; the Title; background | no | turned on in Play, or a Title → Play entry → Fading in with a **new** word; a return from a short background (App Shell's window, K-22) → Fading in with the **same** word and its pressed letters |
+| **Fading in** | Play entry or turned on (a new word is drawn); return from a short background (the word is kept) | yes | 0.3 s → Showing (or Due, if the kept word was Due) |
+| **Showing** | — | yes | every letter pressed → Due; off → Fading out; Title or background → Hidden (background **keeps** the word and its pressed letters) |
 | **Due** | the word's letters have all been pressed | yes | a quiet moment → Changing; off → Fading out |
 | **Changing** | quiet moment | the old keys until their fade-out ends, then the new ones | 0.6 s → Showing (new word) |
 | **Fading out** | turned off | no | 0.3 s → Hidden |
@@ -326,6 +329,8 @@ retained in `production/qa/evidence/`.
 3. **AC-3 Size (F2).** The hit rect is 144 × 134 units; on the smallest Mac window (stage_to_px 1.5, 254 ppi) it is
    ≥ 18 mm on both sides (21.6 × 20.1).
 4. **AC-4 Origin.** A row tap on X in REX produces one press, `source = keyboardRow`, `origin` = (784, 649).
+   **Boundary:** with REX, a touch at x 711.9 presses E, at 712.1 presses X, and at exactly 712.0 (the shared edge)
+   presses E (the left key).
 5. **AC-5 Light.** Any press of a row key, with any outcome, sets its glow to 0.5 on the same frame and back to 0
    after 0.35 s; with Reduce Motion the scale stays 1.
 6. **AC-6 Ignored.** With the queue full, a row press lights the key, shows the sparkle burst and requests E2.
@@ -343,7 +348,9 @@ retained in `production/qa/evidence/`.
 13. **AC-13 Freeze.** Under the gate freeze, a running light and a running word fade hold their values; after
     `resume()` they continue.
 14. **AC-14 Panel and states.** Under the panel the row is drawn under the dim and a touch on it is not a press; on
-    the Title it is hidden; during a parade it is drawn at full alpha and is touchable.
+    the Title it is hidden; during a parade it is drawn at full alpha and is touchable. **Background:** with REX
+    showing and R pressed, a short background and return shows REX again with R still counted; a Title entry
+    draws a new word.
 15. **AC-15 On and off.** Turning it on in the panel shows the row with a 0.3 s fade after close and lifts the ground
     from the next reveal; turning it off removes the hit rects at once.
 16. **AC-16 Fallback.** With a v1 test theme (no `rowWords`), the row shows FOSSIL (or ABC when no name fits), never

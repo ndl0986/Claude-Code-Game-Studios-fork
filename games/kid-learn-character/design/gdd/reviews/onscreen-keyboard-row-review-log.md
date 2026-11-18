@@ -23,3 +23,10 @@ Reviewed-Content-Hash: design/gdd/hint-letters.md 61ee882c83b3075f1b3221a6167fdb
 Reviewed-Content-Hash: design/gdd/settings-store.md 2ddae72ca6a1ec7067b369e04e1056c9a0148edc
 Reviewed-Content-Hash: design/art/art-bible.md 3b829e1421f7eaa12e72cf7394b3947a42df7b63
 Reviewed-Content-Hash: production/team/decisions.md 7cbcab5bfc439d11f9879c6c404bd4666da33c97
+
+## Update — 2026-11-18 — independent read: REVISE → addressed
+Review mode: lean · Workflow: standard
+Source: game-dev-android's independent read of a6a6532 (all 8 plan items landed; receipts checked). Two fixes:
+- [REQUIRED] States table vs R7 on a short background: background now keeps the word and its pressed letters; a return within App Shell's window fades back in with the same word; only a Title entry (including after a long absence, K-22) draws a new one (States table, R7, AC-14) (fixed)
+- [REQUIRED] Ties on the shared hit-rect edge: the key whose centre is nearest wins, the left key at an exact tie, as Input R7 does for hints (R3, AC-4 boundary case) (fixed)
+Reviewed-Content-Hash: design/gdd/onscreen-keyboard-row.md b805549903a211fb84a2eea508aae46137680d03
