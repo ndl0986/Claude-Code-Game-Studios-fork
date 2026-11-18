@@ -1,0 +1,2132 @@
+{
+  "contract": "audio-plan-v1",
+  "schema": 1,
+  "uint64AsString": true,
+  "units": {
+    "time": "s"
+  },
+  "tolerance": {
+    "time": 1e-09,
+    "gain": 1e-09
+  },
+  "streams": [],
+  "cases": [
+    {
+      "id": "AC1-morph-with-word",
+      "source": "gdd: audio-voice.md R1 worked timeline; AC-1",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "revealSchedule",
+            "glow": 0.8,
+            "isDigit": false,
+            "sfx": true,
+            "case": "morph",
+            "formedS": 2.45,
+            "hasWord": true
+          },
+          "expect": [
+            {
+              "out": "schedule",
+              "event": "E6",
+              "s": 0.0
+            },
+            {
+              "out": "schedule",
+              "event": "E7",
+              "s": 0.8
+            },
+            {
+              "out": "schedule",
+              "event": "E8",
+              "s": 2.45
+            },
+            {
+              "out": "schedule",
+              "event": "E9",
+              "s": 2.7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC1-morph-reduced",
+      "source": "gdd: audio-voice.md R1 (reduced glow 0.4, T 1.2)",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "revealSchedule",
+            "glow": 0.4,
+            "isDigit": false,
+            "sfx": true,
+            "case": "morph",
+            "formedS": 1.2,
+            "hasWord": true
+          },
+          "expect": [
+            {
+              "out": "schedule",
+              "event": "E6",
+              "s": 0.0
+            },
+            {
+              "out": "schedule",
+              "event": "E7",
+              "s": 0.4
+            },
+            {
+              "out": "schedule",
+              "event": "E8",
+              "s": 1.2
+            },
+            {
+              "out": "schedule",
+              "event": "E9",
+              "s": 1.45
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC1-sfx-but-no-word-line",
+      "source": "gdd: audio-voice.md R1 E8/E9 (TASK-088a); AC-1",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "revealSchedule",
+            "glow": 0.8,
+            "isDigit": false,
+            "sfx": true,
+            "case": "morph",
+            "formedS": 2.45,
+            "hasWord": false
+          },
+          "expect": [
+            {
+              "out": "schedule",
+              "event": "E6",
+              "s": 0.0
+            },
+            {
+              "out": "schedule",
+              "event": "E7",
+              "s": 0.8
+            },
+            {
+              "out": "schedule",
+              "event": "E8",
+              "s": 2.45
+            }
+          ]
+        }
+      ],
+      "note": "E8 follows willForm and sfx, not hasWord."
+    },
+    {
+      "id": "AC1-no-sfx",
+      "source": "gdd: audio-voice.md R1 E8 (skipped if sfx is null)",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "revealSchedule",
+            "glow": 0.8,
+            "isDigit": false,
+            "sfx": false,
+            "case": "morph",
+            "formedS": 2.45,
+            "hasWord": true
+          },
+          "expect": [
+            {
+              "out": "schedule",
+              "event": "E6",
+              "s": 0.0
+            },
+            {
+              "out": "schedule",
+              "event": "E7",
+              "s": 0.8
+            },
+            {
+              "out": "schedule",
+              "event": "E9",
+              "s": 2.7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC1-art-missing",
+      "source": "gdd: audio-voice.md R1 E7-E9 (TASK-088a); AC-1",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "revealSchedule",
+            "glow": 0.8,
+            "isDigit": false,
+            "sfx": true,
+            "case": "artMissing",
+            "formedS": 1.4,
+            "hasWord": false
+          },
+          "expect": [
+            {
+              "out": "schedule",
+              "event": "E6",
+              "s": 0.0
+            },
+            {
+              "out": "schedule",
+              "event": "E7",
+              "s": 0.8
+            }
+          ]
+        }
+      ],
+      "note": "The glyph sparkles out: E7 at glow; no creature, so no E8 or E9."
+    },
+    {
+      "id": "AC1-glyph-missing",
+      "source": "gdd: audio-voice.md R1 E7 (not played with no glyph); TASK-088a",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "revealSchedule",
+            "glow": 0.8,
+            "isDigit": false,
+            "sfx": true,
+            "case": "glyphMissing",
+            "formedS": 1.3,
+            "hasWord": true
+          },
+          "expect": [
+            {
+              "out": "schedule",
+              "event": "E6",
+              "s": 0.0
+            },
+            {
+              "out": "schedule",
+              "event": "E8",
+              "s": 1.3
+            },
+            {
+              "out": "schedule",
+              "event": "E9",
+              "s": 1.55
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC1-invalid-set",
+      "source": "gdd: audio-voice.md R1 E7 at fallback_glow_s; AC-1 (TASK-088a)",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "revealSchedule",
+            "glow": 0.4,
+            "isDigit": false,
+            "sfx": true,
+            "case": "invalidSet",
+            "formedS": 1.3,
+            "hasWord": true
+          },
+          "expect": [
+            {
+              "out": "schedule",
+              "event": "E6",
+              "s": 0.0
+            },
+            {
+              "out": "schedule",
+              "event": "E7",
+              "s": 0.8
+            },
+            {
+              "out": "schedule",
+              "event": "E8",
+              "s": 1.3
+            },
+            {
+              "out": "schedule",
+              "event": "E9",
+              "s": 1.55
+            }
+          ]
+        }
+      ],
+      "note": "The invalid set's own glow (0.4 here) is never used: E7 is at fallback_glow_s 0.8."
+    },
+    {
+      "id": "AC1-digit-uses-E11",
+      "source": "gdd: audio-voice.md R1 E11 takes E8's place (AU-Q7)",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "revealSchedule",
+            "glow": 0.8,
+            "isDigit": true,
+            "sfx": true,
+            "case": "morph",
+            "formedS": 2.45,
+            "hasWord": true
+          },
+          "expect": [
+            {
+              "out": "schedule",
+              "event": "E6",
+              "s": 0.0
+            },
+            {
+              "out": "schedule",
+              "event": "E7",
+              "s": 0.8
+            },
+            {
+              "out": "schedule",
+              "event": "E11",
+              "s": 2.45
+            },
+            {
+              "out": "schedule",
+              "event": "E9",
+              "s": 2.7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC2-press-sounds",
+      "source": "gdd: audio-voice.md R1 E1-E3, E5; AC-2",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "started"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E1",
+              "mash": 1.0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 3.0
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E1",
+              "mash": 1.0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 5.0
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "ignored"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E2",
+              "mash": 1.0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 7.0
+          },
+          "event": {
+            "type": "sparkle"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E3",
+              "mash": 1.0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 9.0
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E5",
+              "mash": 1.0
+            }
+          ]
+        }
+      ],
+      "note": "Each 2 s apart, so n = 0 every time. E5 isn't mash-scaled in R1, so its mash is 1."
+    },
+    {
+      "id": "F3-two-in-a-second",
+      "source": "gdd: audio-voice.md F3 table row 2",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "started"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E1",
+              "mash": 1.0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E1",
+              "mash": 0.6666666666666666
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F3-window-excludes-exactly-one-second",
+      "source": "gdd: audio-voice.md F3 window (t - w, t]; AU-Q3",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "started"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E1",
+              "mash": 1.0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E1",
+              "mash": 1.0
+            }
+          ]
+        }
+      ],
+      "note": "The chime exactly 1.0 s earlier is outside the half-open window."
+    },
+    {
+      "id": "F3-one-window-for-E1-E2-E3",
+      "source": "gdd: audio-voice.md F3 (one window for all three; AU-Q3)",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "sparkle"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E3",
+              "mash": 1.0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "ignored"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E2",
+              "mash": 0.6666666666666666
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "started"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E1",
+              "mash": 0.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC8-ten-in-one-batch",
+      "source": "gdd: audio-voice.md F3; AC-8 (one batch: n = 0..9 in delivery order; TASK-088a)",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "started"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E1",
+              "mash": 1.0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E1",
+              "mash": 0.6666666666666666
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E1",
+              "mash": 0.5
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E1",
+              "mash": 0.4
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "ignored"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E2",
+              "mash": 0.35
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "ignored"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E2",
+              "mash": 0.35
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "ignored"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E2",
+              "mash": 0.35
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "ignored"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E2",
+              "mash": 0.35
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "ignored"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E2",
+              "mash": 0.35
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "ignored"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E2",
+              "mash": 0.35
+            }
+          ]
+        }
+      ],
+      "note": "m = 1.0, 0.67, 0.5, 0.4, then the 0.35 floor."
+    },
+    {
+      "id": "R1-E7-not-mash-scaled",
+      "source": "gdd: audio-voice.md R1 E7 (not mash-scaled)",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "started"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E1",
+              "mash": 1.0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.1
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E1",
+              "mash": 0.6666666666666666
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.8
+          },
+          "event": {
+            "type": "revealEvent",
+            "event": "E7"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E7",
+              "mash": 1.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1-gain-voice-default",
+      "source": "gdd: audio-voice.md F1; AC-14 (mute and volume); AU-Q6 (trims as knobs)",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "gain",
+            "v": 0.8,
+            "bus": "voice",
+            "event": "E9",
+            "mash": 1.0,
+            "duck": 1.0
+          },
+          "expect": [
+            {
+              "out": "gain",
+              "value": 0.45308530200584834
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1-gain-cast-ducked",
+      "source": "gdd: audio-voice.md F1; AC-14 (mute and volume); AU-Q6 (trims as knobs)",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "gain",
+            "v": 0.8,
+            "bus": "cast",
+            "event": "E8",
+            "mash": 1.0,
+            "duck": 0.35481338923357547
+          },
+          "expect": [
+            {
+              "out": "gain",
+              "value": 0.10143316431751129
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1-gain-ping-mashed",
+      "source": "gdd: audio-voice.md F1; AC-14 (mute and volume); AU-Q6 (trims as knobs)",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "gain",
+            "v": 0.8,
+            "bus": "ui",
+            "event": "E2",
+            "mash": 0.35,
+            "duck": 1.0
+          },
+          "expect": [
+            {
+              "out": "gain",
+              "value": 0.02513321337636398
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1-gain-muted",
+      "source": "gdd: audio-voice.md F1; AC-14 (mute and volume); AU-Q6 (trims as knobs)",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "gain",
+            "v": 0.0,
+            "bus": "voice",
+            "event": "E6",
+            "mash": 1.0,
+            "duck": 1.0
+          },
+          "expect": [
+            {
+              "out": "gain",
+              "value": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1-gain-full-volume-music",
+      "source": "gdd: audio-voice.md F1; AC-14 (mute and volume); AU-Q6 (trims as knobs)",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "gain",
+            "v": 1.0,
+            "bus": "music",
+            "event": "E12",
+            "mash": 1.0,
+            "duck": 1.0
+          },
+          "expect": [
+            {
+              "out": "gain",
+              "value": 0.28183829312644537
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F2-duck-attack-and-release",
+      "source": "gdd: audio-voice.md F2; AU-Q5",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "voiceStart"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.025
+          },
+          "event": {
+            "type": "duckQuery"
+          },
+          "expect": [
+            {
+              "out": "duck",
+              "value": 0.5956621435290105
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.05
+          },
+          "event": {
+            "type": "duckQuery"
+          },
+          "expect": [
+            {
+              "out": "duck",
+              "value": 0.35481338923357547
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.9
+          },
+          "event": {
+            "type": "voiceEnd"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.025
+          },
+          "event": {
+            "type": "duckQuery"
+          },
+          "expect": [
+            {
+              "out": "duck",
+              "value": 0.5956621435290105
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.15
+          },
+          "event": {
+            "type": "duckQuery"
+          },
+          "expect": [
+            {
+              "out": "duck",
+              "value": 1.0
+            }
+          ]
+        }
+      ],
+      "note": "-9 dB per 0.05 s down, +9 dB per 0.25 s back, linear in dB."
+    },
+    {
+      "id": "F2-release-from-mid-attack",
+      "source": "gdd: audio-voice.md F2 (release starts from the current dB; AU-Q5)",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "voiceStart"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.025
+          },
+          "event": {
+            "type": "voiceEnd"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.025
+          },
+          "event": {
+            "type": "duckQuery"
+          },
+          "expect": [
+            {
+              "out": "duck",
+              "value": 0.5956621435290105
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.15
+          },
+          "event": {
+            "type": "duckQuery"
+          },
+          "expect": [
+            {
+              "out": "duck",
+              "value": 1.0
+            }
+          ]
+        }
+      ],
+      "note": "The word ends at -4.5 dB; the release climbs +9 dB per 0.25 s, reaching 0 dB 0.125 s later."
+    },
+    {
+      "id": "R2-ui-pool-free-before-steal",
+      "source": "gdd: audio-voice.md R2.5; AU-Q4",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "start",
+            "event": "E1",
+            "length": 0.3
+          },
+          "expect": [
+            {
+              "out": "player",
+              "bus": "ui",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.1
+          },
+          "event": {
+            "type": "start",
+            "event": "E1",
+            "length": 0.3
+          },
+          "expect": [
+            {
+              "out": "player",
+              "bus": "ui",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.35
+          },
+          "event": {
+            "type": "start",
+            "event": "E1",
+            "length": 0.3
+          },
+          "expect": [
+            {
+              "out": "player",
+              "bus": "ui",
+              "index": 0
+            }
+          ]
+        }
+      ],
+      "note": "Player 0 freed at 0.3 (start + length); a free player is used before any steal, lowest-numbered first."
+    },
+    {
+      "id": "R2-ui-pool-steals-oldest",
+      "source": "gdd: audio-voice.md R2.5",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "start",
+            "event": "E1",
+            "length": 1.0
+          },
+          "expect": [
+            {
+              "out": "player",
+              "bus": "ui",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.1
+          },
+          "event": {
+            "type": "start",
+            "event": "E1",
+            "length": 1.0
+          },
+          "expect": [
+            {
+              "out": "player",
+              "bus": "ui",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.2
+          },
+          "event": {
+            "type": "start",
+            "event": "E1",
+            "length": 1.0
+          },
+          "expect": [
+            {
+              "out": "player",
+              "bus": "ui",
+              "index": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.3
+          },
+          "event": {
+            "type": "start",
+            "event": "E1",
+            "length": 1.0
+          },
+          "expect": [
+            {
+              "out": "player",
+              "bus": "ui",
+              "index": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.4
+          },
+          "event": {
+            "type": "start",
+            "event": "E2",
+            "length": 1.0
+          },
+          "expect": [
+            {
+              "out": "cut",
+              "bus": "ui",
+              "index": 0
+            },
+            {
+              "out": "player",
+              "bus": "ui",
+              "index": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R2-ui-pool-tie-steals-lowest",
+      "source": "gdd: audio-voice.md R2.5 (a tie steals the lowest-numbered; AU-Q4)",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "start",
+            "event": "E1",
+            "length": 1.0
+          },
+          "expect": [
+            {
+              "out": "player",
+              "bus": "ui",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "start",
+            "event": "E1",
+            "length": 1.0
+          },
+          "expect": [
+            {
+              "out": "player",
+              "bus": "ui",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "start",
+            "event": "E1",
+            "length": 1.0
+          },
+          "expect": [
+            {
+              "out": "player",
+              "bus": "ui",
+              "index": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "start",
+            "event": "E1",
+            "length": 1.0
+          },
+          "expect": [
+            {
+              "out": "player",
+              "bus": "ui",
+              "index": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "start",
+            "event": "E1",
+            "length": 1.0
+          },
+          "expect": [
+            {
+              "out": "cut",
+              "bus": "ui",
+              "index": 0
+            },
+            {
+              "out": "player",
+              "bus": "ui",
+              "index": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R2-E6-cuts-voice-and-cast",
+      "source": "gdd: audio-voice.md R2.3, R2.4; AC-4",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "start",
+            "event": "E8",
+            "length": 1.5
+          },
+          "expect": [
+            {
+              "out": "player",
+              "bus": "cast",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "start",
+            "event": "E9",
+            "length": 1.0
+          },
+          "expect": [
+            {
+              "out": "player",
+              "bus": "voice",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "start",
+            "event": "E6",
+            "length": 0.5
+          },
+          "expect": [
+            {
+              "out": "cut",
+              "bus": "voice",
+              "index": 0
+            },
+            {
+              "out": "cut",
+              "bus": "cast",
+              "index": 0
+            },
+            {
+              "out": "player",
+              "bus": "voice",
+              "index": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R2-cast-sounds-replace-each-other",
+      "source": "gdd: audio-voice.md R2.4 (E8, E10, E11 on one player)",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "start",
+            "event": "E8",
+            "length": 1.5
+          },
+          "expect": [
+            {
+              "out": "player",
+              "bus": "cast",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "start",
+            "event": "E10",
+            "length": 1.5
+          },
+          "expect": [
+            {
+              "out": "cut",
+              "bus": "cast",
+              "index": 0
+            },
+            {
+              "out": "player",
+              "bus": "cast",
+              "index": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R2-ended-sound-is-not-cut",
+      "source": "gdd: audio-voice.md R2 (a sound frees its player at its end; AU-Q4)",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "start",
+            "event": "E9",
+            "length": 0.5
+          },
+          "expect": [
+            {
+              "out": "player",
+              "bus": "voice",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "start",
+            "event": "E6",
+            "length": 0.5
+          },
+          "expect": [
+            {
+              "out": "player",
+              "bus": "voice",
+              "index": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC21-freeze-carries-over",
+      "source": "gdd: audio-voice.md R6 (gate freeze; AU-Q8); AC-21",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "revealSchedule",
+            "glow": 0.8,
+            "isDigit": false,
+            "sfx": true,
+            "case": "morph",
+            "formedS": 2.45,
+            "hasWord": true
+          },
+          "expect": [
+            {
+              "out": "schedule",
+              "event": "E6",
+              "s": 0.0
+            },
+            {
+              "out": "schedule",
+              "event": "E7",
+              "s": 0.8
+            },
+            {
+              "out": "schedule",
+              "event": "E8",
+              "s": 2.45
+            },
+            {
+              "out": "schedule",
+              "event": "E9",
+              "s": 2.7
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.46875
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [
+            {
+              "out": "fire",
+              "event": "E6",
+              "s": 0.0
+            },
+            {
+              "out": "fire",
+              "event": "E7",
+              "s": 0.8
+            },
+            {
+              "out": "fire",
+              "event": "E8",
+              "s": 2.45
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "freeze"
+          },
+          "expect": [
+            {
+              "out": "pause"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 22.5
+          },
+          "event": {
+            "type": "resume"
+          },
+          "expect": [
+            {
+              "out": "resume"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 22.6875
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 22.703125
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [
+            {
+              "out": "fire",
+              "event": "E9",
+              "s": 2.7
+            }
+          ]
+        }
+      ],
+      "note": "Frozen at play s 2.5 for 20 s: E9, due at s 2.7, fires on the first frame at s >= 2.7 after resume (uptime 22.7…), never during the freeze."
+    }
+  ]
+}

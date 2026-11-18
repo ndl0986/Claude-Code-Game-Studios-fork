@@ -1,0 +1,10 @@
+# sources.lock for reveal-timing-v1 (cut 2026-11-18, TASK-086): the ## sections the cases cite.
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/reveal-stage.md#Detailed Design 755c1d0205e133919e2f7fca97fc3add0539d02c
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/reveal-stage.md#Formulas 1a776617c3fa985a5b6b00795027ca2302a8e8a5
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/reveal-stage.md#Edge Cases 6452c2765516e661bebc3cb05bd9195cc7f57be4
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/reveal-stage.md#Acceptance Criteria 1418f4ce4beae1675e42df1199a3dc38cf913068
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/cast-rendering.md#Detailed Design cdfaf2fabae25ee545613c2e405e1a24f2e109da
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/cast-rendering.md#Formulas daa1651b6524f2d5f1c1d60a577c29329210d1fe
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/cast-rendering.md#Edge Cases 4da7969008a2f27d9938ca80237f842a64c583da
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/cast-rendering.md#Acceptance Criteria aafa19a589a90240f8a9218669bacbbe5eb514ec
+Reviewed-Section-Hash: games/kid-learn-character/docs/architecture/adr-0002-modules-seams-types.md#Decision 7a622020948197194ccd9e003ecdfe8e243fb356

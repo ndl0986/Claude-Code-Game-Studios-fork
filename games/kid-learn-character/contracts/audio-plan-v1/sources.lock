@@ -1,0 +1,6 @@
+# sources.lock for audio-plan-v1 (cut 2026-11-18, TASK-086): the ## sections the cases cite.
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/audio-voice.md#Detailed Design a2417ed93a44b811b34c46f7daa64c63efe5ae8c
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/audio-voice.md#Formulas 458c314589f88d3d929573b21d00eef98d136828
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/audio-voice.md#Edge Cases d0f0907e0826dfe92eef739ba3604bf0dc0bd18d
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/audio-voice.md#Acceptance Criteria b54a83db4838b50676fe71a92fec0ed4bf94341b
+Reviewed-Section-Hash: games/kid-learn-character/docs/architecture/adr-0002-modules-seams-types.md#Decision 7a622020948197194ccd9e003ecdfe8e243fb356

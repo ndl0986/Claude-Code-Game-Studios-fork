@@ -1,0 +1,3358 @@
+{
+  "contract": "reveal-timing-v1",
+  "schema": 1,
+  "uint64AsString": true,
+  "units": {
+    "time": "s",
+    "space": "stage units"
+  },
+  "tolerance": {
+    "time": 1e-09,
+    "geometry": 1e-06
+  },
+  "streams": [],
+  "cases": [
+    {
+      "id": "R3-morph-normal",
+      "source": "gdd: reveal-stage.md R3 table (Morph); MorphCore F5",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "startReveal",
+            "revealId": 1,
+            "key": "D",
+            "source": "hardwareKey",
+            "origin": [
+              640.0,
+              700.0
+            ],
+            "item": {
+              "castId": "tb_d_item_01",
+              "hasGlyph": true,
+              "willForm": true,
+              "hasWordLine": true,
+              "sfx": true
+            }
+          },
+          "expect": [
+            {
+              "out": "startResult",
+              "case": "morph",
+              "formedS": 2.45,
+              "revealLen": 2.95,
+              "hasWord": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R3-morph-reduced",
+      "source": "gdd: reveal-stage.md R3; R9 (reduced set)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": true
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "startReveal",
+            "revealId": 1,
+            "key": "D",
+            "source": "hardwareKey",
+            "origin": [
+              640.0,
+              700.0
+            ],
+            "item": {
+              "castId": "tb_d_item_01",
+              "hasGlyph": true,
+              "willForm": true,
+              "hasWordLine": true,
+              "sfx": true
+            }
+          },
+          "expect": [
+            {
+              "out": "startResult",
+              "case": "morph",
+              "formedS": 1.2,
+              "revealLen": 1.5,
+              "hasWord": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R3-morph-no-word-line",
+      "source": "gdd: reveal-stage.md R3 (hasWord; TASK-088b)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "startReveal",
+            "revealId": 1,
+            "key": "D",
+            "source": "hardwareKey",
+            "origin": [
+              640.0,
+              700.0
+            ],
+            "item": {
+              "castId": "tb_d_item_01",
+              "hasGlyph": true,
+              "willForm": true,
+              "hasWordLine": false,
+              "sfx": true
+            }
+          },
+          "expect": [
+            {
+              "out": "startResult",
+              "case": "morph",
+              "formedS": 2.45,
+              "revealLen": 2.95,
+              "hasWord": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F5-glyph-missing-normal",
+      "source": "gdd: reveal-stage.md F5 table",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "startReveal",
+            "revealId": 1,
+            "key": "D",
+            "source": "hardwareKey",
+            "origin": [
+              640.0,
+              700.0
+            ],
+            "item": {
+              "castId": "tb_d_item_01",
+              "hasGlyph": false,
+              "willForm": true,
+              "hasWordLine": true,
+              "sfx": true
+            }
+          },
+          "expect": [
+            {
+              "out": "startResult",
+              "case": "glyphMissing",
+              "formedS": 1.3,
+              "revealLen": 1.3,
+              "hasWord": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F5-glyph-missing-reduced",
+      "source": "gdd: reveal-stage.md F5 table",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": true
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "startReveal",
+            "revealId": 1,
+            "key": "D",
+            "source": "hardwareKey",
+            "origin": [
+              640.0,
+              700.0
+            ],
+            "item": {
+              "castId": "tb_d_item_01",
+              "hasGlyph": false,
+              "willForm": true,
+              "hasWordLine": true,
+              "sfx": true
+            }
+          },
+          "expect": [
+            {
+              "out": "startResult",
+              "case": "glyphMissing",
+              "formedS": 0.75,
+              "revealLen": 0.75,
+              "hasWord": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F5-glyph-missing-no-word-line",
+      "source": "gdd: reveal-stage.md R3 (hasWord; TASK-088b)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "startReveal",
+            "revealId": 1,
+            "key": "D",
+            "source": "hardwareKey",
+            "origin": [
+              640.0,
+              700.0
+            ],
+            "item": {
+              "castId": "tb_d_item_01",
+              "hasGlyph": false,
+              "willForm": true,
+              "hasWordLine": false,
+              "sfx": true
+            }
+          },
+          "expect": [
+            {
+              "out": "startResult",
+              "case": "glyphMissing",
+              "formedS": 1.3,
+              "revealLen": 1.3,
+              "hasWord": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F5-art-missing-normal",
+      "source": "gdd: reveal-stage.md F5 table; R3",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "startReveal",
+            "revealId": 1,
+            "key": "D",
+            "source": "hardwareKey",
+            "origin": [
+              640.0,
+              700.0
+            ],
+            "item": {
+              "castId": "tb_d_item_01",
+              "hasGlyph": true,
+              "willForm": false,
+              "hasWordLine": true,
+              "sfx": true
+            }
+          },
+          "expect": [
+            {
+              "out": "startResult",
+              "case": "artMissing",
+              "formedS": 1.4,
+              "revealLen": 1.4,
+              "hasWord": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F5-art-missing-reduced",
+      "source": "gdd: reveal-stage.md F5 table",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": true
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "startReveal",
+            "revealId": 1,
+            "key": "D",
+            "source": "hardwareKey",
+            "origin": [
+              640.0,
+              700.0
+            ],
+            "item": {
+              "castId": "tb_d_item_01",
+              "hasGlyph": true,
+              "willForm": false,
+              "hasWordLine": true,
+              "sfx": true
+            }
+          },
+          "expect": [
+            {
+              "out": "startResult",
+              "case": "artMissing",
+              "formedS": 1.0,
+              "revealLen": 1.0,
+              "hasWord": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F5-invalid-set-normal",
+      "source": "gdd: reveal-stage.md F5 table (invalid set); R3 (TASK-088b)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": false
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": false
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "startReveal",
+            "revealId": 1,
+            "key": "D",
+            "source": "hardwareKey",
+            "origin": [
+              640.0,
+              700.0
+            ],
+            "item": {
+              "castId": "tb_d_item_01",
+              "hasGlyph": true,
+              "willForm": true,
+              "hasWordLine": true,
+              "sfx": true
+            }
+          },
+          "expect": [
+            {
+              "out": "startResult",
+              "case": "invalidSet",
+              "formedS": 1.3,
+              "revealLen": 1.3,
+              "hasWord": true
+            }
+          ]
+        }
+      ],
+      "note": "The set itself is not trusted, so the fallback timings apply with or without Reduce Motion."
+    },
+    {
+      "id": "F5-invalid-set-reduced",
+      "source": "gdd: reveal-stage.md F5 table (invalid set); R3 (TASK-088b)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": false
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": false
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": true
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "startReveal",
+            "revealId": 1,
+            "key": "D",
+            "source": "hardwareKey",
+            "origin": [
+              640.0,
+              700.0
+            ],
+            "item": {
+              "castId": "tb_d_item_01",
+              "hasGlyph": true,
+              "willForm": true,
+              "hasWordLine": true,
+              "sfx": true
+            }
+          },
+          "expect": [
+            {
+              "out": "startResult",
+              "case": "invalidSet",
+              "formedS": 1.3,
+              "revealLen": 1.3,
+              "hasWord": true
+            }
+          ]
+        }
+      ],
+      "note": "The set itself is not trusted, so the fallback timings apply with or without Reduce Motion."
+    },
+    {
+      "id": "R4-formed-and-shown-once",
+      "source": "gdd: reveal-stage.md R4; AC-2",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "startReveal",
+            "revealId": 1,
+            "key": "D",
+            "source": "hardwareKey",
+            "origin": [
+              640.0,
+              700.0
+            ],
+            "item": {
+              "castId": "tb_d_item_01",
+              "hasGlyph": true,
+              "willForm": true,
+              "hasWordLine": true,
+              "sfx": true
+            }
+          },
+          "expect": [
+            {
+              "out": "startResult",
+              "case": "morph",
+              "formedS": 2.45,
+              "revealLen": 2.95,
+              "hasWord": true
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.4375
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 12.453125
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [
+            {
+              "out": "formed",
+              "revealId": 1
+            },
+            {
+              "out": "shown",
+              "revealId": 1,
+              "key": "D",
+              "castId": "tb_d_item_01",
+              "kind": "creature"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 13.0
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": []
+        }
+      ],
+      "note": "Frames at s = 2.4375 (before) and 2.453125 (the first at s >= 2.45): formed and shown once, never again."
+    },
+    {
+      "id": "R4-art-missing-shown-glyphOnly",
+      "source": "gdd: reveal-stage.md R4 (kind glyphOnly)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "startReveal",
+            "revealId": 1,
+            "key": "D",
+            "source": "hardwareKey",
+            "origin": [
+              640.0,
+              700.0
+            ],
+            "item": {
+              "castId": "tb_d_item_01",
+              "hasGlyph": true,
+              "willForm": false,
+              "hasWordLine": true,
+              "sfx": true
+            }
+          },
+          "expect": [
+            {
+              "out": "startResult",
+              "case": "artMissing",
+              "formedS": 1.4,
+              "revealLen": 1.4,
+              "hasWord": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 11.40625
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [
+            {
+              "out": "formed",
+              "revealId": 1
+            },
+            {
+              "out": "shown",
+              "revealId": 1,
+              "key": "D",
+              "castId": "tb_d_item_01",
+              "kind": "glyphOnly"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R4-settle-before-formedS-shows-once-with-case-kind",
+      "source": "gdd: reveal-stage.md R4; R8 settle; RT-Q5 (game-dev-ios)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "startReveal",
+            "revealId": 1,
+            "key": "D",
+            "source": "hardwareKey",
+            "origin": [
+              640.0,
+              700.0
+            ],
+            "item": {
+              "castId": "tb_d_item_01",
+              "hasGlyph": true,
+              "willForm": false,
+              "hasWordLine": true,
+              "sfx": true
+            }
+          },
+          "expect": [
+            {
+              "out": "startResult",
+              "case": "artMissing",
+              "formedS": 1.4,
+              "revealLen": 1.4,
+              "hasWord": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "settle"
+          },
+          "expect": [
+            {
+              "out": "shown",
+              "revealId": 1,
+              "key": "D",
+              "castId": "tb_d_item_01",
+              "kind": "glyphOnly"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.0
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": []
+        }
+      ],
+      "note": "kind comes from the case, never from how formed was reached; the queue marks it formed itself (press-queue-v1), so only shown is sent."
+    },
+    {
+      "id": "R8-freeze-stops-the-reveal",
+      "source": "gdd: reveal-stage.md R8 (play clock); AC-10",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "startReveal",
+            "revealId": 1,
+            "key": "D",
+            "source": "hardwareKey",
+            "origin": [
+              640.0,
+              700.0
+            ],
+            "item": {
+              "castId": "tb_d_item_01",
+              "hasGlyph": true,
+              "willForm": true,
+              "hasWordLine": true,
+              "sfx": true
+            }
+          },
+          "expect": [
+            {
+              "out": "startResult",
+              "case": "morph",
+              "formedS": 2.45,
+              "revealLen": 2.95,
+              "hasWord": true
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 11.0
+          },
+          "event": {
+            "type": "freeze"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 30.0
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "s": 1.0
+          }
+        },
+        {
+          "t": {
+            "uptime": 31.0
+          },
+          "event": {
+            "type": "resume"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 32.4375
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "s": 2.4375
+          }
+        },
+        {
+          "t": {
+            "uptime": 32.453125
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [
+            {
+              "out": "formed",
+              "revealId": 1
+            },
+            {
+              "out": "shown",
+              "revealId": 1,
+              "key": "D",
+              "castId": "tb_d_item_01",
+              "kind": "creature"
+            }
+          ]
+        }
+      ],
+      "note": "Frozen from uptime 11 to 31: s holds at 1.0, and formed comes 20 s of uptime later."
+    },
+    {
+      "id": "R2-hardware-key-hint-origin",
+      "source": "gdd: reveal-stage.md R2",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "hintOrigins": {
+          "D": [
+            400.0,
+            200.0
+          ]
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "routePress",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "origin",
+              "point": [
+                400.0,
+                200.0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R2-hardware-key-leftmost-row-key",
+      "source": "gdd: reveal-stage.md R2; RT-Q3 (game-dev-ios)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "keyboardRow": {
+          "on": true,
+          "keys": [
+            {
+              "key": "D",
+              "centre": [
+                464.0,
+                659.0
+              ]
+            },
+            {
+              "key": "D",
+              "centre": [
+                752.0,
+                659.0
+              ]
+            },
+            {
+              "key": "A",
+              "centre": [
+                608.0,
+                659.0
+              ]
+            }
+          ]
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "routePress",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "origin",
+              "point": [
+                464.0,
+                659.0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R2-hint-beats-row",
+      "source": "gdd: reveal-stage.md R2; RT-Q3",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "hintOrigins": {
+          "D": [
+            400.0,
+            200.0
+          ]
+        },
+        "keyboardRow": {
+          "on": true,
+          "keys": [
+            {
+              "key": "D",
+              "centre": [
+                464.0,
+                659.0
+              ]
+            },
+            {
+              "key": "D",
+              "centre": [
+                752.0,
+                659.0
+              ]
+            },
+            {
+              "key": "A",
+              "centre": [
+                608.0,
+                659.0
+              ]
+            }
+          ]
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "routePress",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "origin",
+              "point": [
+                400.0,
+                200.0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R2-key-not-in-row-uses-anchor",
+      "source": "gdd: reveal-stage.md R2; RT-Q3",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "keyboardRow": {
+          "on": true,
+          "keys": [
+            {
+              "key": "D",
+              "centre": [
+                464.0,
+                659.0
+              ]
+            },
+            {
+              "key": "D",
+              "centre": [
+                752.0,
+                659.0
+              ]
+            },
+            {
+              "key": "A",
+              "centre": [
+                608.0,
+                659.0
+              ]
+            }
+          ]
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "routePress",
+            "key": "Q",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "origin",
+              "point": [
+                640.0,
+                700.0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R2-no-hint-no-row-anchor",
+      "source": "gdd: reveal-stage.md R2 (keyboard anchor)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "routePress",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "origin",
+              "point": [
+                640.0,
+                700.0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1-stage-fit-2388x1668",
+      "source": "gdd: reveal-stage.md F1 table; RT-Q6",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "stageFit",
+            "windowPx": [
+              2388,
+              1668
+            ]
+          },
+          "expect": [
+            {
+              "out": "stageFit",
+              "stageToPx": 1.865625,
+              "offsetPx": [
+                0.0,
+                162.375
+              ],
+              "visible": [
+                -0.0,
+                -87.03517587939699,
+                1280.0,
+                894.0703517587939
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1-stage-fit-2752x2064",
+      "source": "gdd: reveal-stage.md F1 table; RT-Q6",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "stageFit",
+            "windowPx": [
+              2752,
+              2064
+            ]
+          },
+          "expect": [
+            {
+              "out": "stageFit",
+              "stageToPx": 2.15,
+              "offsetPx": [
+                0.0,
+                258.0
+              ],
+              "visible": [
+                -0.0,
+                -120.0,
+                1280.0,
+                960.0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1-stage-fit-2560x1440",
+      "source": "gdd: reveal-stage.md F1 table; RT-Q6",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "stageFit",
+            "windowPx": [
+              2560,
+              1440
+            ]
+          },
+          "expect": [
+            {
+              "out": "stageFit",
+              "stageToPx": 2.0,
+              "offsetPx": [
+                0.0,
+                0.0
+              ],
+              "visible": [
+                -0.0,
+                -0.0,
+                1280.0,
+                720.0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1-stage-fit-3440x1440",
+      "source": "gdd: reveal-stage.md F1 table; RT-Q6",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "stageFit",
+            "windowPx": [
+              3440,
+              1440
+            ]
+          },
+          "expect": [
+            {
+              "out": "stageFit",
+              "stageToPx": 2.0,
+              "offsetPx": [
+                440.0,
+                0.0
+              ],
+              "visible": [
+                -220.0,
+                -0.0,
+                1720.0,
+                720.0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F2-glyph-rise-example",
+      "source": "gdd: reveal-stage.md F2 example",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "glyphAt",
+            "s": 0.225,
+            "origin": [
+              300.0,
+              250.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "glyph",
+              "pos": [
+                470.0,
+                285.0
+              ],
+              "scale": 0.625
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F2-glyph-at-start-and-end",
+      "source": "gdd: reveal-stage.md F2",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "glyphAt",
+            "s": 0.0,
+            "origin": [
+              300.0,
+              250.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "glyph",
+              "pos": [
+                300.0,
+                250.0
+              ],
+              "scale": 0.25
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "glyphAt",
+            "s": 0.45,
+            "origin": [
+              300.0,
+              250.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "glyph",
+              "pos": [
+                640.0,
+                320.0
+              ],
+              "scale": 1.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F3-pop-u-half-normal",
+      "source": "gdd: reveal-stage.md F3 example",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "creatureAt",
+            "case": "morph",
+            "formedS": 2.45,
+            "form_s": 0.5,
+            "s": 2.7
+          },
+          "expect": [
+            {
+              "out": "creature",
+              "alpha": 0.5,
+              "pop": 0.99
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F3-pop-u-half-reduced",
+      "source": "gdd: reveal-stage.md F3 example (Reduce Motion)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": true
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "creatureAt",
+            "case": "morph",
+            "formedS": 2.45,
+            "form_s": 0.5,
+            "s": 2.7
+          },
+          "expect": [
+            {
+              "out": "creature",
+              "alpha": 0.5,
+              "pop": 0.96
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F3-fallback-fade-start",
+      "source": "gdd: reveal-stage.md F3 (fadeStart = formedS - form_s for the fade-ins)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "creatureAt",
+            "case": "glyphMissing",
+            "formedS": 1.3,
+            "form_s": 0.5,
+            "s": 1.05
+          },
+          "expect": [
+            {
+              "out": "creature",
+              "alpha": 0.5,
+              "pop": 0.99
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F3-settles-at-one",
+      "source": "gdd: reveal-stage.md F3",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "creatureAt",
+            "case": "morph",
+            "formedS": 2.45,
+            "form_s": 0.5,
+            "s": 3.0
+          },
+          "expect": [
+            {
+              "out": "creature",
+              "alpha": 1.0,
+              "pop": 1.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F4-leaving-half-normal",
+      "source": "gdd: reveal-stage.md F4",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "leavingAt",
+            "tLeave": 0.225
+          },
+          "expect": [
+            {
+              "out": "leaving",
+              "alpha": 0.5,
+              "y": 606.0,
+              "scale": 0.96
+            }
+          ]
+        }
+      ],
+      "note": "leave_s 0.45, anchor y 600."
+    },
+    {
+      "id": "F4-leaving-half-reduced",
+      "source": "gdd: reveal-stage.md F4 (Reduce Motion)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": true
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "leavingAt",
+            "tLeave": 0.225
+          },
+          "expect": [
+            {
+              "out": "leaving",
+              "alpha": 0.5,
+              "y": 600.0,
+              "scale": 1.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F6-tap-cooldown-example",
+      "source": "gdd: reveal-stage.md F6 example; AC-9",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "formedCreature": true
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "creatureTap",
+            "point": [
+              640.0,
+              420.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "tap",
+              "counted": true
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "creatureTap",
+            "point": [
+              640.0,
+              420.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "tap",
+              "counted": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 11.0
+          },
+          "event": {
+            "type": "creatureTap",
+            "point": [
+              640.0,
+              420.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "tap",
+              "counted": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F6-tap-cooldown-boundary",
+      "source": "gdd: reveal-stage.md F6 (>=)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "formedCreature": true
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "creatureTap",
+            "point": [
+              640.0,
+              420.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "tap",
+              "counted": true
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.875
+          },
+          "event": {
+            "type": "creatureTap",
+            "point": [
+              640.0,
+              420.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "tap",
+              "counted": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.9
+          },
+          "event": {
+            "type": "creatureTap",
+            "point": [
+              640.0,
+              420.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "tap",
+              "counted": true
+            }
+          ]
+        }
+      ],
+      "note": "0.9 s after the last counted tap counts (>=); the uncounted tap at 10.875 doesn't reset the window."
+    },
+    {
+      "id": "R10-haloOn-boundaries",
+      "source": "gdd: reveal-stage.md R10 (haloOn: letter_in < s <= glow); AC-17",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "startReveal",
+            "revealId": 1,
+            "key": "D",
+            "source": "hardwareKey",
+            "origin": [
+              640.0,
+              700.0
+            ],
+            "item": {
+              "castId": "tb_d_item_01",
+              "hasGlyph": true,
+              "willForm": true,
+              "hasWordLine": true,
+              "sfx": true
+            }
+          },
+          "expect": [
+            {
+              "out": "startResult",
+              "case": "morph",
+              "formedS": 2.45,
+              "revealLen": 2.95,
+              "hasWord": true
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.45
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "haloOn": false
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.453125
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "haloOn": true
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.8
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "haloOn": true
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.8125
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "haloOn": false
+          }
+        }
+      ],
+      "note": "r0 = 0, so each frame's s is its uptime exactly and the boundaries at 0.45 and 0.8 are compared without rounding."
+    },
+    {
+      "id": "R10-mashing-window-strict",
+      "source": "gdd: reveal-stage.md R10 (mashing); RT-Q4 (game-dev-ios: now - t_i < mash_window_s)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 5.0
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "ignored",
+            "queueLength": 3
+          },
+          "expect": [],
+          "expectState": {
+            "mashing": true
+          }
+        },
+        {
+          "t": {
+            "uptime": 5.25
+          },
+          "event": {
+            "type": "queueSnapshot",
+            "queueLength": 0
+          },
+          "expect": [],
+          "expectState": {
+            "mashing": true
+          }
+        },
+        {
+          "t": {
+            "uptime": 5.9990234375
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "mashing": true
+          }
+        },
+        {
+          "t": {
+            "uptime": 6.0
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "mashing": false
+          }
+        }
+      ],
+      "note": "Queue empty from 5.25; the ignored outcome at 5.0 counts while now - 5.0 < 1.0, so not at 6.0."
+    },
+    {
+      "id": "R10-mashing-from-queue",
+      "source": "gdd: reveal-stage.md R10 (mashing: queue length >= 1)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 5.0
+          },
+          "event": {
+            "type": "queueSnapshot",
+            "queueLength": 1
+          },
+          "expect": [],
+          "expectState": {
+            "mashing": true
+          }
+        },
+        {
+          "t": {
+            "uptime": 5.5
+          },
+          "event": {
+            "type": "queueSnapshot",
+            "queueLength": 0
+          },
+          "expect": [],
+          "expectState": {
+            "mashing": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "CR-F1-list-drops-small-marking",
+      "source": "gdd: cast-rendering.md F1 example",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "keepDetail",
+            "sizeArtboard": 10.0,
+            "role": "list",
+            "roleHeight": 80.0,
+            "stageToPx": 1.87
+          },
+          "expect": [
+            {
+              "out": "keep",
+              "value": false,
+              "onScreenPx": 3.4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CR-F1-stage-keeps-marking",
+      "source": "gdd: cast-rendering.md F1 example",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "keepDetail",
+            "sizeArtboard": 10.0,
+            "role": "stage",
+            "roleHeight": 320.0,
+            "stageToPx": 1.87
+          },
+          "expect": [
+            {
+              "out": "keep",
+              "value": true,
+              "onScreenPx": 13.6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CR-F1-parade-drops-every-detail",
+      "source": "gdd: cast-rendering.md F1 (role parade)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "keepDetail",
+            "sizeArtboard": 100.0,
+            "role": "parade",
+            "roleHeight": 85.0,
+            "stageToPx": 2.0
+          },
+          "expect": [
+            {
+              "out": "keep",
+              "value": false,
+              "onScreenPx": 38.63636363636363
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CR-F2-halo-peak",
+      "source": "gdd: cast-rendering.md F2 example; RT-Q8 (t = s - letter_in)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "haloBlur",
+            "s": 0.5636363636363636
+          },
+          "expect": [
+            {
+              "out": "blur",
+              "value": 60.0
+            }
+          ]
+        }
+      ],
+      "note": "A quarter period after the glow begins (t = 0.1136…): 100% of 60 units."
+    },
+    {
+      "id": "CR-F2-halo-trough",
+      "source": "gdd: cast-rendering.md F2 example; RT-Q8",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "haloBlur",
+            "s": 0.7909090909090909
+          },
+          "expect": [
+            {
+              "out": "blur",
+              "value": 36.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CR-F2-halo-steady-reduce-motion",
+      "source": "gdd: cast-rendering.md F2 (Reduce Motion: steady 80%)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": true
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "haloBlur",
+            "s": 0.3
+          },
+          "expect": [
+            {
+              "out": "blur",
+              "value": 48.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CR-F4-cap-one-speck-below",
+      "source": "gdd: cast-rendering.md F4",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "dustCap",
+            "scene": 0.1,
+            "cap": 0.88,
+            "specks": [
+              [
+                0.5,
+                0.6
+              ]
+            ]
+          },
+          "expect": [
+            {
+              "out": "channel",
+              "value": 0.4
+            }
+          ]
+        }
+      ],
+      "note": "0.1 + 0.5 x 0.6 = 0.4, under the cap."
+    },
+    {
+      "id": "CR-F4-cap-many-specks-capped",
+      "source": "gdd: cast-rendering.md F4 example",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "dustCap",
+            "scene": 0.1,
+            "cap": 0.88,
+            "specks": [
+              [
+                0.8,
+                0.9
+              ],
+              [
+                0.8,
+                0.9
+              ],
+              [
+                0.8,
+                0.9
+              ]
+            ]
+          },
+          "expect": [
+            {
+              "out": "channel",
+              "value": 0.88
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CR-F4-cap-never-darkens",
+      "source": "gdd: cast-rendering.md F4 (the outer max)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "dustCap",
+            "scene": 0.95,
+            "cap": 0.88,
+            "specks": [
+              [
+                0.8,
+                0.9
+              ]
+            ]
+          },
+          "expect": [
+            {
+              "out": "channel",
+              "value": 0.95
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CR-F5-hop-peak",
+      "source": "gdd: cast-rendering.md F5 example",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "hopAt",
+            "tau": 0.225
+          },
+          "expect": [
+            {
+              "out": "hop",
+              "value": 26.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CR-F5-hop-peak-reduced",
+      "source": "gdd: cast-rendering.md F5 example (Reduce Motion)",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": true
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "hopAt",
+            "tau": 0.225
+          },
+          "expect": [
+            {
+              "out": "hop",
+              "value": 13.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CR-F5-hop-end",
+      "source": "gdd: cast-rendering.md F5 example",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "hopAt",
+            "tau": 0.45
+          },
+          "expect": [
+            {
+              "out": "hop",
+              "value": 0.0
+            }
+          ]
+        }
+      ],
+      "note": "sin(pi) is 1.2e-16 in binary; the geometry tolerance covers it."
+    },
+    {
+      "id": "CR-F7-late-art-wait-normal-no-extension",
+      "source": "gdd: cast-rendering.md F7 table",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "lateArtWait",
+            "holdEff": 3.0,
+            "formedS": 2.45,
+            "form_s": 0.5,
+            "keyWaiting": true
+          },
+          "expect": [
+            {
+              "out": "wait",
+              "value": 0.05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CR-F7-late-art-wait-nest",
+      "source": "gdd: cast-rendering.md F7 table",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "lateArtWait",
+            "holdEff": 3.2,
+            "formedS": 2.45,
+            "form_s": 0.5,
+            "keyWaiting": true
+          },
+          "expect": [
+            {
+              "out": "wait",
+              "value": 0.25
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CR-F7-late-art-wait-quetzalcoatlus",
+      "source": "gdd: cast-rendering.md F7 table",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "lateArtWait",
+            "holdEff": 3.85,
+            "formedS": 2.45,
+            "form_s": 0.5,
+            "keyWaiting": true
+          },
+          "expect": [
+            {
+              "out": "wait",
+              "value": 0.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CR-F7-late-art-wait-reduced",
+      "source": "gdd: cast-rendering.md F7 table",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "lateArtWait",
+            "holdEff": 3.0,
+            "formedS": 1.2,
+            "form_s": 0.3,
+            "keyWaiting": true
+          },
+          "expect": [
+            {
+              "out": "wait",
+              "value": 0.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CR-F7-late-art-wait-no-key-waiting",
+      "source": "gdd: cast-rendering.md F7 table",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "lateArtWait",
+            "holdEff": 3.0,
+            "formedS": 2.45,
+            "form_s": 0.5,
+            "keyWaiting": false
+          },
+          "expect": [
+            {
+              "out": "wait",
+              "value": 0.5
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
