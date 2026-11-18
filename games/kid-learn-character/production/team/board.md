@@ -90,10 +90,11 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-101a | Parade + Scene: PA/SC answers as precise rules (jump threshold knob, luminance-preserving rain, retry on new rest, panel ends parade) | design | game-art-content (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 752e6b8f) | `design/TASK-101-parade-scene-answers` | 2026-11-18 |
 | TASK-100 | Audio R6 figure: about 0–20 ms heard again; nothing-skipped condition (ADR-0010 D7) | design | game-art-content (review: game-dev-ios) | DONE: MERGED (game-dev-ios APPROVE @ 6bcd32be) | `design/TASK-100-audio-r6-figure` | 2026-11-18 |
 | TASK-102 | ADR-0007 input + ADR-0008 kiosk drafts to Proposed (device rows pending) | architecture | game-dev-ios (review: game-dev-android; rows game-qc-ios) | DONE: SQUASH-MERGED as Proposed (both APPROVE @ e32c6c3e) | `design/TASK-102-adr-0007-0008` | 2026-11-18 |
-| TASK-103 | ADR-0009 render path draft to Proposed (device rows pending) | architecture | game-dev-android (review: game-dev-ios; rows game-qc-ios) | FIXED @ 4c7cb304 (outline-only merge; A-candidate) → game-dev-ios + game-qc-ios delta; DeviceSpike A-candidate sha pending | `design/TASK-103-adr-0009` | 2026-11-18 |
+| TASK-103 | ADR-0009 render path draft to Proposed (device rows pending) | architecture | game-dev-android (review: game-dev-ios; rows game-qc-ios) | 4c7cb304: game-qc-ios REVISE (H-2 before P-2) → fixing; game-dev-ios delta + DeviceSpike A-candidate/H-2 sha pending | `design/TASK-103-adr-0009` | 2026-11-18 |
 | TASK-104 | Cast Rendering F8 edge switch: launch state, background keeps state, reverse crossing mid-dissolve (CR-Q1) | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 5fa2bbff) | `design/TASK-104-cast-f8-edge` | 2026-11-18 |
 | TASK-105 | Device-checks plan: M-1 read-ON procedure, M-2 → ADR-0007, M-3/P-4 keyboard part, P-15 → input-filter-v2 | qa | game-qc-ios (review: game-dev-ios) | DONE: MERGED (game-dev-ios APPROVE @ 1416e04c) | `design/TASK-105-plan-0007-0008` | 2026-11-18 |
 | TASK-106 | Device-checks plan: M-12 uses in-app frame dump; P-2 Settings read time → production re-run | qa | game-qc-ios (review: game-dev-android) | DONE: MERGED (game-dev-android APPROVE @ b6493e6e) | `design/TASK-106-plan-0009` | 2026-11-18 |
+| TASK-107 | Device-checks plan: P-2/M-13 three render options; not runnable until A-candidate sha; H-2 before P-2 | qa | game-qc-ios (review: game-dev-android) | SENT 2026-11-18 | `design/TASK-107-plan-0009-options` | 2026-11-18 |
 
 ## Leader log
 
