@@ -31,6 +31,10 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
   Scene's R3a weather halving; also publish `haloOn` (on through the glow phase, R5 timeline) for the Scene's
   halo fade-out. (TASK-053, game-dev-ios)
 
+## Child Lock-in
+- L1: if 054a's TCC check removes the keyState read, R5's "judged from the OS key state" becomes "from the OS key
+  state, or the held set kept honest by the ⌘-release rule". (game-qc-ios)
+
 ## Hint Letters
 - H1: F5's "Mac 700-pt window, k 1.10" row cannot occur (App Shell minimum 960×540 pt → stage_to_px 1.5,
   22.5 mm, k = 1); correct the row and AC-7's k values. (game-dev-android)
