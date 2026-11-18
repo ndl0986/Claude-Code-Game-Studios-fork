@@ -73,3 +73,8 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md 0124f9531a0bb12e249490be909d338
 Review mode: lean · Workflow: standard
 Change: R1 E8, E9 and E11 now read `s = formedS` (and `formedS + word_offset_s`), equal to T for a morph, the fade-in end for the fallbacks; E8 plays when a creature forms and sfx exists; E9 plays only when hasWord (a creature forms AND the active locale has the item's word line), matching Reveal Stage (TASK-088b). The late-art edge row and AC-1 (fallback cases) updated. Builds on the AU-Q1–Q8 entry above. Review: game-qc-android.
 Reviewed-Content-Hash: design/gdd/audio-voice.md 5b4c029ac7917e603565127b3265eca2a38a65d2
+
+## Update — 2026-11-18 — TASK-088a aligned with Reveal Stage AC-5 (no re-review)
+Review mode: lean · Workflow: standard
+Change: AC-1's fallback cases restated with Reveal Stage AC-5's example numbers (TASK-088b @ 4d83b81e): sfx without a word line gives E8 at 2.45 and no E9; art missing gives neither.
+Reviewed-Content-Hash: design/gdd/audio-voice.md b9db0299f13d5297edb4ee3af73248355d1c31d8

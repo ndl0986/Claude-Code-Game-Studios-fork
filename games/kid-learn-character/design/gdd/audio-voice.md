@@ -437,9 +437,9 @@ Logic criteria run with an injected clock and a fake player layer (no audio hard
 
 1. **AC-1 Event times.** For a reveal of C with the normal set, the scheduled events are: E6 at s = 0, E7 at
    s = 0.8, E8 at s = 2.45, E9 at s = 2.70 (each ±1 ms in the logic test). With the reduced set: 0, 0.4, 1.2, 1.45.
-   **Fallbacks (TASK-088a):** with the glyph missing, E7 is not scheduled and E8/E9 come at the fade-in's `formedS`
-   (and `+ 0.25`); with the art missing (`willForm` false), E7 plays at `glow` and E8/E9 are not scheduled; with a
-   creature but no word line for the locale, E8 plays and E9 does not.
+   **Same as Reveal Stage AC-5 (TASK-088a/b):** for an item with `sfx` but no word line for the locale, E8 at 2.45 and
+   no E9; for art missing (`willForm` false), neither E8 nor E9 (E7 still at 0.8, the sparkle-out). **Glyph missing:**
+   E7 is not scheduled, and E8/E9 come at the fade-in's `formedS` (and `+ 0.25`).
 2. **AC-2 Press sounds.** GIVEN an empty queue, a press schedules E1. GIVEN a full queue, a press schedules E2 (the
    ping) and no chime. A swallowed key and a tap inside the cooldown schedule nothing. A `sparkle` schedules E3.
 3. **AC-3 Title.** `startPlay` schedules E5 and **no** voice line.
