@@ -57,8 +57,8 @@ For the child the gate is invisible. The moon is just the moon.
   its up or cancel emits `gateTouch(ended, pointerId)`. **Input (TASK-054 I2, landed in TASK-054a (5e1c365)):** Input also emits
   `gateTouch(ended, pointerId)` when that pointer leaves the region grown by `moon_slop_pt` (20 pt), so a finger that drifts a little keeps its hold and one that slides away resets (Input R7 layer 3;
   `moon_slop_pt` is Input's knob, safe range 10–40).
-- While one pointer holds the moon, `t_held` grows (measured from the touch's event timestamp, checked
-  every frame against the injected clock) and the Starlight ring fills (F1). At `t_held ≥ gate_hold_s`
+- While one pointer holds the moon, `t_held` grows (measured from the touch's event timestamp converted to
+  the away clock, checked every frame against the injected clock; exact form: G13 B2) and the Starlight ring fills (F1). At `t_held ≥ gate_hold_s`
   (1.5 s, K-19) the challenge opens (G3).
 - **Reset:** `gateTouch(ended)` for the holding pointer (up, cancel, or leaving the slop region) sets
   `t_held = 0` at once and empties the ring. A second pointer elsewhere is classified on its own
@@ -248,14 +248,15 @@ instead of Guided Access. The Android ADR confirms each.
 
 **G13. Timing and boundaries** *(TASK-096; the normative answers to gate-logic-v1's GL-Q1–Q12, TASK-094)*.
 Every timer is evaluated at each tick (the contract's cases supply the ticks); an event exactly on a boundary is
-decided by the inequality written here. **Clocks:** hold progress uses the touch's uptime stamps (G1); every other
-gate and panel timer (sleep, challenge timeout, confirm hide, idle close, cap) uses the injected **away clock**
-(continuous, ADR-0002 D3), so a background never shortens or lengthens them.
+decided by the inequality written here. **Clocks:** every gate and panel timer, **the hold included**, is written on the injected **away clock**
+(continuous, ADR-0002 D3), so a background or a device sleep never shortens or lengthens one. A touch's uptime
+stamp is converted to the away clock once, at receipt (`away_down`); within one hold both clocks advance together,
+so this changes nothing while a finger is down.
 
 | # | Rule | Boundary |
 |---|---|---|
 | B1 | **Code:** at challenge open, d1, d2, d3, d4 take **one `gate-code` draw each, in that order**; `digit = floor(u · 10)` with `u` from KidCore's shared RandomSource unit mapping (ADR-0002; the Key Table pick's), never `draw % 10`. Text: exactly `"Enter " + words.joined(" · ")` (space, U+00B7, space), nothing after | — |
-| B2 | **Hold:** opens at the first tick with `now_up − t_eff ≥ 1.5`, `t_eff = max(t_down, wake_up)`, `wake_up = close_up + 10` (a hold cannot span a background: the OS cancels touches) | inclusive: 1.49 no, 1.50 yes (AC-01) |
+| B2 | **Hold:** opens at the first tick with `away_now − max(away_down, away_close + 10) ≥ 1.5` (the second term only while a sleep from B3 applies). Both terms are on the away clock, so a device sleep between the close and the next hold cannot make B2 and B3 disagree (a wrong answer at away 0, the iPad locked, back at away 12: awake, and a hold from away 12.5 opens at away 14.0) | inclusive: 1.49 no, 1.50 yes (AC-01) |
 | B3 | **Sleep:** asleep while `away_now − away_close < 10`. Started at the close's away time by a wrong digit, a wrong second or third pointer, a two-input digit (B7) or a timeout (`away_close` = that tick). **Not** by Cancel, Esc or a close by background | strict: at exactly 10.0 a hold and the chord work (AC-10) |
 | B4 | **One `ineligible` flag:** a hold starts only from a `gateTouch(began)` received in Idle. At every return to Idle (any challenge close, and the panel's close) every pointer still down is `ineligible` until it ends; a second pointer on the moon while one holds (G1) is the same flag. A down during sleep is eligible and counts from wake (B2) | — |
 | B5 | **Challenge timeout:** closes at the first tick with `away_now − away_lastAccepted ≥ 20`. `away_lastAccepted` starts at the open; a keypad digit is accepted at its **down**, a grace digit (B6) at the **first pointer's lift**, a hardware digit at its key-down | inclusive: open at 19.9, closed at 20.0 (AC-09) |

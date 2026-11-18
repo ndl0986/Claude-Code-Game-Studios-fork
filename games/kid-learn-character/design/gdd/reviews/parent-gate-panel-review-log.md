@@ -259,3 +259,8 @@ Change:
 - AC-38 is pointed at `gateOverlayShown` and App Shell's `edgeDeferral` / `statusBarHidden`.
 - Rule changes are confined to G13's new boundaries. Every other behaviour is unchanged.
 Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 9d85857f213adae43727890f20dcf981df92b2b5
+
+## Update — 2026-11-18 — TASK-096 B2 on the away clock (game-qc-android REVISE)
+Task: TASK-096
+Change: B2 (the hold) moves to the away clock: it opens at the first tick with away_now − max(away_down, away_close + 10) ≥ 1.5. It previously used uptime, which diverged from B3's away-clock sleep across a device sleep (game-qc-android's example). G13's clock note and G1's t_held line now say the touch stamp is converted to the away clock at receipt.
+Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 88580d8ec0ec5f17a6da7a4a9cad38ba54719739
