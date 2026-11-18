@@ -105,6 +105,17 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-25 Glyph contrast during sky crossfades (Luan, 2026-11-18, TASK-054b review)
+
+- **The glyph's edge switches with the sky, not linearly by time of day:** the cream/amber edge weight
+  `d` follows the blended sky-mid luminance, crossing over where cream and amber are equal (sky L ≈ 0.31,
+  short smoothstep around it), so the edge is always the better of the two.
+- **Dated exception to art bible rule 2 (≥ 3:1):** at the looks themselves (crossfade w = 0 and 1) the glyph
+  is ≥ 3:1; inside a 15-min boundary crossfade (or the 3 s jump fade) it is ≥ 2.5:1 (minimum ≈ 2.55:1), for a
+  few minutes around 16:04–16:12 and 06:04–06:13. The halo behind the glyph still carries it.
+- Rejected: an Ink outline on the glyph (breaks art bible §5: cast has ink outlines, UI glows) and a faster sky
+  crossfade (can only shorten the dip, not remove it).
+
 ### K-24 Scene: Time of Day & Weather (Luan, 2026-11-18, TASK-053 questions)
 
 - **A weather change from the panel fades in over ~2 s** while the panel is open (not the art
