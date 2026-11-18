@@ -34,3 +34,8 @@ Findings:
 - New follow-up (open): Audio & Voice has no pause for E12; R6a asks for one on the gate freeze
 Reviewed-Content-Hash: design/gdd/parade.md 5362ec4651bfba78ada2d6524392ce1482ff2278
 Reviewed-Content-Hash: production/team/decisions.md 23b7f9ecc504f023e181c4fea06d89a74ce731f4
+
+## Update — 2026-11-18 — TASK-050 item 8 (no re-review)
+Review mode: lean · Workflow: standard
+Change: Interface 6 now cites the Reveal Stage R8 signals (settle, freeze, resume) and the Press Queue R8, R9 and R8a (the gate freeze on the play clock, added in TASK-050), from game-dev-ios's nit. Verdict unchanged.
+Reviewed-Content-Hash: design/gdd/parade.md f2e4445aca32b3e358a730460d0350de4df83d2f
