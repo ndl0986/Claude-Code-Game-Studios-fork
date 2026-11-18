@@ -99,6 +99,9 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-108 | Apply K-41 Kokoro: Privacy L-09 close (licence + pinned revision), Audio R8 + ADR-0003 D6 dated note, K-35 respelled renders for Luan to approve | audio | game-art-content (review: game-qc-android) | MERGED (L-09 closed; R8/Q8; ADR-0003 D6 note; 7 K-35 names flagged, candidates in evidence) → Luan picks per line, then voice-script commit | `design/TASK-108-kokoro-pick` | 2026-11-18 |
 | TASK-109 | MAC FREE run (Luan granted 2026-11-18): first signed build + PKC-01 signed, macOS launch + title-macos.png, macOS UI test (TASK-079 carried items) | qa | game-qc-ios | DONE: all 3 PASS (signed builds + PKC-01 signed; macOS launch title-macos.png; macOS UI test with Luan's auth). Squash-merged (cert id masked at 4bfc5097; unmasked 0ee595e0 only on the qa branch). Mac released | `qa/TASK-079-mac-free` | 2026-11-18 |
 | TASK-110 | Voice script: apply Luan's K-35 picks (r2 ×7) as respelled TTS input; displayed/Key Table names unchanged | audio | game-art-content (review: game-qc-android) | SENT | `design/TASK-110-k35-voice-script` | 2026-11-18 |
+| TASK-111 | /architecture-review full + requirements-traceability.md (Pre-Production gate) | architecture | game-qc-android (review: game-dev-ios) | SENT | `design/TASK-111-architecture-review` | 2026-11-18 |
+| TASK-112 | accessibility-requirements.md (tier → Luan), ux/interaction-patterns.md, first UX spec title-screen.md (Pre-Production gate) | ux | game-dev-android (review: game-art-content) | SENT | `design/TASK-112-ux-a11y` | 2026-11-18 |
+| TASK-113 | game-local /story-done refuses a story whose contract row is not-started (K-40 follow-up) | tools | game-dev-ios (review: game-qc-ios) | SENT | `tools/TASK-113-story-done-k40` | 2026-11-18 |
 
 ## Leader log
 
