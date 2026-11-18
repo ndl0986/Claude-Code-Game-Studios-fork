@@ -27,3 +27,13 @@ Reviewed-Content-Hash: design/gdd/hint-letters.md 75e34cae7f4d392b2fcef8f22487a4
 Reviewed-Content-Hash: design/gdd/parade.md 80eba63007c5502982d0c69e1a9ae6509ffe8d01
 Reviewed-Content-Hash: design/gdd/privacy-kids-compliance.md a9e00c7a32009cd99a7d1597672c90132ba73d4e
 Reviewed-Content-Hash: production/team/decisions.md ed7e2987c99b2fc575d9f2dcf719e50f7ec61a53
+
+## Update — 2026-11-18 — game-dev-android independent read: REVISE, addressed
+Review mode: lean · Workflow: standard
+Source: game-dev-android's independent read of 2ff0f91 (relayed by the leader), plus a constraint from game-qc-ios's Child Lock-in review.
+Findings:
+- [BLOCKING] R1 step 5 / F1: "app is ready" did not match Child Lock-in's preconditions → ready = first frame, chord installed, kiosk mode on, window covering its display; Child Lock-in adds the app being active and childLockActive on (its R3); AC-3 checks the window covers the display before the options (fixed)
+- [BLOCKING] R9 and the edge case claimed a crash with the kiosk on leaves the Mac usable, untested → NOT ASSESSED, citing Child Lock-in's kill -9 test (fixed)
+- [RECOMMENDED] R7: native full screen vs a borderless window at the screen frame → "decided in the Mac build, NOT ASSESSED", naming window(_:willUseFullScreenPresentationOptions:) for the native case (fixed)
+- [RECOMMENDED] R7 (game-qc-ios): the gate challenge and the panel are overlays in the main window, never separate windows or sheets, so didResignKey never drops the lock (fixed)
+Reviewed-Content-Hash: design/gdd/app-shell-title.md ef2a879a99004c2f3244890c39cc9e560dbf64be

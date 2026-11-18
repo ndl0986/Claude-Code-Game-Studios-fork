@@ -49,7 +49,7 @@ locked in a way they can't undo.
 | 2 | Hand `themeId` to the Key Table, which loads and checks the theme off the main thread, including decoding its audio. A stored theme that fails (or is not bundled) loads Dinosaurs in memory and keeps the stored id | Key Table §5, Audio R4.1 |
 | 3 | In parallel with 2: start the audio engine, silent; install Input's handlers, including the Mac's ⌃⌥⌘Q chord | Audio R2.1, Input R6 |
 | 4 | **First frame: the Title**, already in the clock's look (art bible §2: "the first frame is already in the right look") | this GDD (R2) |
-| 5 | **Mac only:** if `childLock` is stored true, Child Lock-in engages the kiosk **only after** the first frame has been drawn, the chord handler is installed and Input's kiosk-on mode is active. Turning it off in the panel lasts for this run only; it comes back at the next launch (K-21) | Settings Store R8, K-12, K-21 |
+| 5 | **Mac only:** App Shell signals **"the app is ready"** when all of these hold: the first frame has been drawn, the ⌃⌥⌘Q chord handler is installed, Input's kiosk-on mode is on, and the window covers its display. If `childLock` is stored true, Child Lock-in then engages the kiosk once its own preconditions also hold: the app is active and `childLockActive` is on (Child Lock-in R3, TASK-052). Turning it off in the panel lasts for this run only; it comes back at the next launch (K-21) | Settings Store R8, K-12, K-21, Child Lock-in R3 |
 | 6 | When the Key Table reports the theme ready, play may start (R3) | this GDD |
 
 - **Launch screen** (the static image the OS shows before step 4): a plain field of the **Dusk sky's mid colour**
@@ -125,8 +125,13 @@ reset only at launch (Parade R1).
   safe area; a narrow or portrait window simply gets more sky and ground. Guided Access (Child Lock-in) normally
   keeps the app full screen.
 - **Mac:** one resizable window, minimum `mac_min_window` 960 × 540 pt (proposal); full screen allowed. With the
-  kiosk on, the window fills the screen and stays so (ADR-0001 Decision 9b; Child Lock-in). Closing the window
-  quits the app (one window). ⌘Q quits only with the kiosk off (Input R5).
+  kiosk on, the window fills the screen and stays so (ADR-0001 Decision 9b; Child Lock-in). Whether that is native
+  full screen (the options then go through `window(_:willUseFullScreenPresentationOptions:)`) or a borderless window
+  at the screen's frame is **decided in the Mac build, NOT ASSESSED**. Closing the window quits the app (one
+  window). ⌘Q quits only with the kiosk off (Input R5).
+- **One window, overlays inside it:** the gate's challenge and the grown-up panel are **overlays drawn in the main
+  window**, never separate windows, sheets or popovers, so the window never resigns key while they show (a
+  `didResignKey` would drop the lock; Child Lock-in review).
 - **Any resize** (window, rotation, Split View change) republishes the Reveal Stage's fit; the reveal in progress
   is not restarted, and Cast Rendering may change texture tier (its edge case).
 
@@ -146,8 +151,9 @@ rebuilt, in this order:
 - The app has **no crash reporter, no MetricKit or diagnostics subscription, no upload, and no "last session"
   marker** (the Settings Store's list is closed, its R2).
 - After a crash, nothing relaunches the app by itself; the next launch is a normal cold launch to the Title (R6).
-- On the Mac with the child lock stored on, the kiosk engages only once the app is ready (R1 step 5), so a crash
-  before that point leaves the Mac usable, and the chord always works once the kiosk is on.
+- On the Mac with the child lock stored on, the kiosk engages only once the app is ready (R1 step 5), so the chord
+  always works once the kiosk is on. That a crash **with the kiosk on** leaves the Mac usable (the OS drops the
+  presentation options when the process dies) is **NOT ASSESSED**; Child Lock-in's `kill -9` test covers it.
 - Whether the OS's own opt-in crash reports (shared by the user with developers) count as "collection" for the
   store labels and COPPA is **Luan's open call L-07** in the Privacy & Kids Compliance GDD; this GDD does not decide
   it.
@@ -186,7 +192,8 @@ rebuilt, in this order:
 **F1. Launch timeline.**
 ```
 t_settings ≤ t_firstFrame ≤ t_ready_theme     (the Title can show before the theme is ready)
-t_kiosk    ≥ max(t_firstFrame, t_chordInstalled, t_kioskModeOn)      (Mac, childLock true)
+t_ready    = max(t_firstFrame, t_chordInstalled, t_kioskModeOn, t_windowCoversDisplay)     (Mac)
+t_kiosk    ≥ max(t_ready, t_appActive, t_childLockActiveOn)          (Child Lock-in R3; childLock true)
 t_playable = t_ready_theme
 ```
 The read is a few milliseconds (Settings Store R5). Device times are NOT ASSESSED (Cast Rendering's measurement
@@ -230,7 +237,7 @@ at 100 s and 140 s → both level 1.
 | **The Mac window resized below the minimum** | Not possible; the window stops at 960 × 540 pt (R7). |
 | **The kiosk is on and the grown-up tries to resize or leave full screen** | The kiosk keeps it full screen (Child Lock-in). |
 | **Child lock turned off in the panel, app relaunched** | The kiosk comes back once the app is ready (K-21). |
-| **A crash with the kiosk on** | The OS ends the app; the next launch engages the kiosk only after the app is ready (R9). |
+| **A crash with the kiosk on** | The OS ends the app; whether the Mac is then usable at once is NOT ASSESSED (Child Lock-in's `kill -9` test); the next launch engages the kiosk only after the app is ready (R9). |
 | **Two memory warnings 20 s apart during a parade** | The second ends the parade (counted as played) and frees its figures (R8). |
 | **A memory warning during a late-art wait** | The current creature is never shed; its load continues (R8). |
 | **Reduce Motion on the Title** | The button breathes at half amplitude; the creature's idle softens (Cast Rendering). |
@@ -275,7 +282,9 @@ Parade and Child Lock-in. Screenshots are retained in `production/qa/evidence/`.
 2. **AC-2 First frame:** at 06:30, 12:00, 17:00 and 21:00 (injected clock) the first frame is the matching look
    (screenshots), with no text on screen.
 3. **AC-3 Mac kiosk order:** with `childLock` stored true, the kiosk options are applied only after the first frame,
-   the chord handler and Input's kiosk-on mode (a test seam logs each); ⌃⌥⌘Q opens the gate right after.
+   the chord handler, Input's kiosk-on mode **and the window covering its display** (a test seam logs each, in that
+   order, before the options); ⌃⌥⌘Q opens the gate right after. The gate and panel open as overlays in the same
+   window (no window resigns key).
 4. **AC-4 K-21:** child lock turned off in the panel, then a relaunch: the kiosk engages again once ready.
 5. **AC-5 Title starts:** D, 7 and a tap at (200, 200) each start play; Space, Esc and a tap on the moon do not.
 6. **AC-6 Not reveal 1:** after a start by D, the Press Queue has no current and an empty queue; D's repeat and up
