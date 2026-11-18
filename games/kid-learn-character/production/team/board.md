@@ -46,7 +46,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-064 | ADR-0004 KidCore contracts, fixture rules, verification harness (via /architecture-decision; Proposed → Luan) | architecture | game-qc-android (review: game-dev-ios) | DONE `aba43c26`, merged (review: game-dev-ios APPROVE after REVISE); **ADR-0004 Accepted by Luan** | `design/TASK-064-adr-0004` | 2026-11-18 |
 | TASK-065 | Accessibility: mark TASK-062 follow-ups done | design | game-qc-ios (review: game-qc-android) | DONE `03fd76b6`, merged 2026-11-18 | `design/TASK-065-a11y-done` | 2026-11-18 |
 | TASK-066 | ADR-0003 content data and key-table pipeline (via /architecture-decision; Proposed → Luan) | architecture | game-dev-android (review: game-art-content) | DONE `8a9c7efa`, merged (review: game-art-content APPROVE); **ADR-0003 Accepted by Luan** | `design/TASK-066-adr-0003` | 2026-11-18 |
-| TASK-067 | ADR-0005 settings persistence on Apple (via /architecture-decision; Proposed → Luan) | architecture | game-dev-ios (review: game-qc-ios) | DONE `84163153`, merged as Proposed (review: game-qc-ios APPROVE); awaiting Luan acceptance | `design/TASK-067-adr-0005` | 2026-11-18 |
+| TASK-067 | ADR-0005 settings persistence on Apple (via /architecture-decision; Proposed → Luan) | architecture | game-dev-ios (review: game-qc-ios) | DONE `84163153`, merged (review: game-qc-ios APPROVE); **ADR-0005 Accepted by Luan** | `design/TASK-067-adr-0005` | 2026-11-18 |
 | TASK-068 | First contracts: contracts/README, case-schema-v1.md, key-table-schema-v1, settings-record-v1 (specs + hand-written cases, no code) | qa | game-qc-android (review: game-art-content / game-dev-android) | SENT 2026-11-18 | `design/TASK-068-contracts-first` | 2026-11-18 |
 
 ## Leader log
@@ -124,3 +124,4 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 - 2026-11-18: ADR-0002 Accepted by Luan (status recorded by leader). TASK-062 merged (K-14).
 - 2026-11-18: ADR-0004 Accepted (Luan). K-32: no ads reaffirmed; TTS needs a distribution licence even for a free app (L-09 open).
 - 2026-11-18: ADR-0003 Accepted (Luan). ADR-0005 merged as Proposed.
+- 2026-11-18: ADR-0005 Accepted (Luan). Accepted so far: ADR-0001…0005. Luan asked for a TTS licence survey (research running).
