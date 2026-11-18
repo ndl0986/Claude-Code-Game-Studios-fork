@@ -42,14 +42,14 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
   state, or the held set kept honest by the ⌘-release rule". (game-qc-ios)
 
 ## Hint Letters
-- H1: F5's "Mac 700-pt window, k 1.10" row cannot occur (App Shell minimum 960×540 pt → stage_to_px 1.5,
+- **Done (TASK-054a, bc075e52; checked in TASK-085b):** H1: F5's "Mac 700-pt window, k 1.10" row cannot occur (App Shell minimum 960×540 pt → stage_to_px 1.5,
   22.5 mm, k = 1); correct the row and AC-7's k values. (game-dev-android)
 
 ## Parent Gate & Panel
-- P0 (text): Dependencies name game-art-content as TASK-054 owner; 054a (Settings, Input) is game-dev-android.
+- **Done (b11c8d4d, the fc9bdef content merged with TASK-048; owner line updated in ec2f6030; checked in TASK-085b):** P0 (text): Dependencies name game-art-content as TASK-054 owner; 054a (Settings, Input) is game-dev-android.
   Already drafted by game-qc-ios as fc9bdef on design/TASK-048-gdd-parent-gate-panel (after the merge): the owner
   line and the covers in G7's Quit cell (matches TASK-052 R4). Merge that commit into the 054b branch and review it there.
-- P1: the moon is the sky's only moon; it takes the Scene's `look`; daytime moon at 70% in Morning/Day.
+- **Done (ec2f6030, Parent Gate UI Requirements; checked in TASK-085b):** P1: the moon is the sky's only moon; it takes the Scene's `look`; daytime moon at 70% in Morning/Day.
   (TASK-053 Scene)
 
 ## App Shell & Title
@@ -62,12 +62,12 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
 - V2: L-07 (OS crash logs) stays Luan's call; App Shell cites it.
 
 ## Queued after TASK-060 / TASK-061 (next follow-up batch, TASK-062)
-- Hint Letters: read the keyboard row band (y ≥ 582) as an F4 clearance box; note that with the row on the parade
+- **Done (TASK-062, b384818b; checked in TASK-085b):** Hint Letters: read the keyboard row band (y ≥ 582) as an F4 clearance box; note that with the row on the parade
   lane (448) visually overlaps the bottom hint slots, accepted (K-26 dims and stills hints). (TASK-060)
 - Reveal Stage: list the keyboard row band next to its published boxes; set `accessibilityIgnoresInvertColors` on
   the stage view (with App Shell). (TASK-060, TASK-061)
-- Cast Rendering: stardust twinkle steady under Reduce Motion; ambient idles change on the next frame (K-29).
+- **Done (TASK-062, b384818b: R6 twinkle × 0.6 reveal-locked, R7 idles next frame with `idle_rm_ease_s`; checked in TASK-085b):** Cast Rendering: stardust twinkle steady under Reduce Motion; ambient idles change on the next frame (K-29).
 - Reveal Stage: Reduce Motion rule for the tap / ignored-press sparkles (owner decides).
-- App Shell + art bible: play-button breathe rate 0.38 vs 0.48 Hz; play button's physical touch floor.
-- Every motion GDD: read Accessibility's `reduceMotion` flag, not the OS API.
+- **Art bible side done (TASK-062, b384818b: §2 rule 2 reads ~~0.48~~ 0.38 Hz, dated; checked in TASK-085b); App Shell side is game-dev-ios's (TASK-085a).** App Shell + art bible: play-button breathe rate 0.38 vs 0.48 Hz; play button's physical touch floor.
+- **Done (TASK-062, b384818b: all ten motion GDDs name "Accessibility's `reduceMotion` (its A1; never the OS API)"; checked in TASK-085b):** Every motion GDD: read Accessibility's `reduceMotion` flag, not the OS API.
 - Reveal Stage R10: add the On-screen Keyboard Row at z 35 (above the current creature, below glyph/specks) to the draw-order line (ADR-0006 D1, TASK-070).
