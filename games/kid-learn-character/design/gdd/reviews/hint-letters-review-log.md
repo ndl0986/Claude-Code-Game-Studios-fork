@@ -48,3 +48,27 @@ Reviewed-Content-Hash: design/gdd/hint-letters.md 1b9e2c650de556f3da60f980276f17
 Review mode: lean · Workflow: standard
 Change: R-3: R4's seed cite points at Key Table §4 (point 4, Variety seed). From the cross-review re-run (PASS, e8c8344). Text only; no rule changed. Review: game-qc-android, from the diff.
 Reviewed-Content-Hash: design/gdd/hint-letters.md 61ee882c83b3075f1b3221a6167fdb308a1040d3
+
+## Re-review — 2026-11-18 — Verdict: APPROVED
+Reviewer: game-qc-android (independent read for TASK-047; logged afterwards under TASK-058, because the leader's gate-check found the read unlogged)
+Review mode: lean · Workflow: standard
+Scope: the whole GDD at 78a5b50 (file 58edd5c5…), then the diffs e2a5cba (file e1fc5f92…) and 198c910 (file 49cb36cd…).
+Checked:
+- The four conditions of the plan approval are all present:
+  - (a) F4 is checked on the jittered centre, with 4 redraws, then zero jitter, then the next slot (R5, AC-4 over 100k spawns, including the drifted circles over each hint's life);
+  - (b) the slots the widest creature blocks are named (L2, L4, R2, R4 at the estimate), and the empty-screen AC runs in the worst case (AC-6, AC-7);
+  - (c) the K-20 challenge freeze: hintTime stops, with no replay (R9, AC-14), and the panel works the same way (AC-15);
+  - (d) Android gesture insets are read live, and an on-screen hint is never moved (R11, AC-20, NOT ASSESSED until an Android build).
+- Numbers recomputed independently, all matching:
+  - static slots: L1 to the moon 152.1; R1 to the middle token 142.0; glyph-box spare 17.2; stage edges 42.2;
+  - slot spacing after jitter ≥ 190;
+  - at k = 1.2: 222.7 / 167.4 / 157.4 / 117.4;
+  - F5 hit sizes: 27.0 / 31 / 30 / 16.4 mm, with k = 1.10.
+- Non-blocking note: the drop to 2 hints starts at k ≈ 1.044, not 1.2. e2a5cba stated it, and AC-7 added k = 1.10. TASK-054a H1 later made k > 1 impossible in the MVP.
+- 198c910: hints are drawn above the creature (Reveal Stage R10), so what a child sees on top is what a touch hits (Input R7).
+Later diffs, each approved by game-qc-android:
+- TASK-056a ed68d7b: the K-26 Dimmed state. 146b23d: hintTime stops while the parade walks. ddc0531: Frozen → Dimmed when the parade is still walking, and the 0.5 dim is kept.
+- TASK-057a 8034d93: R4 cites Key Table §4 point 4.
+- The cross-review (TASK-055) found no Hint Letters blocker; its re-run after TASK-056 was PASS.
+Prior verdict resolved: Yes (NEEDS REVISION, its blocker and recommendations fixed by the author before this read)
+Reviewed-Content-Hash: design/gdd/hint-letters.md 61ee882c83b3075f1b3221a6167fdb308a1040d3
