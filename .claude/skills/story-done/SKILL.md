@@ -4,7 +4,7 @@ description: "Closes a finished story: verifies each acceptance criterion, check
 argument-hint: "[story-file-path] [--review full|lean|solo]"
 user-invocable: true
 disable-model-invocation: true
-allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, Agent, Bash(bash "*/.claude/skills/story-done/../../hooks/yaml-helper.sh" resolve_config *), Bash(bash .claude/scripts/story-facts.sh *), Bash(bash .claude/scripts/story-status.sh*), Bash(bash .claude/scripts/adr-status.sh *), Bash(bash .claude/scripts/md-section.sh *), Bash(bash .claude/scripts/review-receipts.sh check *), Bash(bash .claude/scripts/session-state.sh *), Bash(git status --porcelain*), Bash(git add -- *), Bash(git commit -m *)
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, Agent, Bash(bash "*/.claude/skills/story-done/../../hooks/yaml-helper.sh" resolve_config *), Bash(bash .claude/scripts/story-facts.sh *), Bash(bash .claude/scripts/story-status.sh*), Bash(bash .claude/scripts/adr-status.sh *), Bash(bash .claude/scripts/md-section.sh *), Bash(bash .claude/scripts/review-receipts.sh check *), Bash(bash .claude/scripts/session-state.sh *), Bash(bash tools/ci/contract-rows.sh *), Bash(git status --porcelain*), Bash(git add -- *), Bash(git commit -m *)
 model: sonnet
 ---
 
@@ -40,7 +40,7 @@ Checklist (copy it and tick as you go):
 - [ ] Phase 1: story found, facts and settings read
 - [ ] Phase 2: what the story is checked against, loaded for its tier
 - [ ] Phase 3: each criterion verified, traceability table built
-- [ ] Phase 4: test evidence and run result checked
+- [ ] Phase 4: test evidence and run result checked (and contract rows, where the project has the reader)
 - [ ] Phase 5: deviations and scope checked; the AI's own calls kept or changed by the person
 - [ ] Phase 6: review gates run, or their skip noted
 - [ ] Phase 7: report and verdict shown; close asked
@@ -196,6 +196,32 @@ from the same checkpoint or Completion Notes. `SAME` or `CHANGED, accepted`: not
 played after this story: `/dev-story [path]` plays it". `NOT ASSESSED — <reason>`: advisory,
 with the reason.
 
+**The system's behaviour contracts, only when the project keeps a contract
+registry.** For a project with a `contracts/README.md` Registry and its reader
+`tools/ci/contract-rows.sh` (such as kid-learn-character's K-40, ADR-0004 D5 note).
+**No `tools/ci/contract-rows.sh` in the project: skip this step and print nothing.**
+Every other project is unaffected. When it exists, every story type and every mode:
+a story cannot close while the contract that proves its system is not yet run. Read
+the rows, never judge them by eye:
+`bash tools/ci/contract-rows.sh --system <stem> --story <story path>`, with `<stem>` the
+Phase 1 GDD stem. It prints observations; this phase decides:
+
+- `ROW <contract> kind=not-started …`: **BLOCKING**, in every mode and at every
+  gate level: "`<contract>` is not-started (`<row>`): register its runner
+  (`runner: <Name>` in `contracts/README.md`'s Registry) and make `tools/ci/verify.sh`
+  run it". A placeholder id (`story:<system>`) still blocks the system's stories:
+  the match is on the owner GDD.
+- `ROW … kind=superseded-by`: skipped; its successor has its own row.
+- `ROW … kind=runner`: note it ("`<contract>`: run by `<Name>`"); whether it passes
+  is `verify.sh`'s, not this skill's.
+- `ROW … kind=other`: NOT ASSESSED, "`<contract>`'s row `<row>` is none of the three
+  forms: fix the Registry".
+- `UNREGISTERED <contract>`: information only (`verify.sh` owns the Registry's
+  completeness).
+- `README MISSING`: NOT ASSESSED, "`contracts/README.md` is missing: whether the
+  system's contracts are run cannot be told". Never a pass.
+- `NONE`: the system owns no contract; nothing to report.
+
 ## Phase 5: Deviations and scope
 
 Run, by tier (`minimal` skips 1 and 3):
@@ -301,7 +327,8 @@ exists yet.
    outcome, the user answered "Not tested yet", a review gate returned NOT ASSESSED
    and its input was not supplied, evidence exists but cannot be read, or the GDD
    or ADR a deviation would be judged against is missing, or the own calls could
-   not be read. Name each one and what
+   not be read, or (where the project has `tools/ci/contract-rows.sh`) the contract
+   registry is missing or has a row of no known form. Name each one and what
    would settle it. It outranks the two passes and never hides a failure.
 3. **COMPLETE WITH NOTES:** every criterion passes or is DEFERRED, with advisory
    items listed. Information lines are not advisory items: the evidence-stamp
@@ -313,7 +340,9 @@ exists yet.
 Close the story — mark it Complete and log notes (Recommended) / Close and log the
 advisory deviations as tech debt / Don't close yet — I'll fix things first / Close
 anyway, accepting the deviations. On BLOCKED or NOT ASSESSED, recommend "Don't close
-yet" and list what must change. Closing such a story is a `scope_changes` decision:
+yet" and list what must change. A not-started contract row (Phase 4) is never
+closed over: drop "Close anyway" from the options while one stands, because a Done
+story with a not-started contract fails `verify.sh` (K-40); the fix is the runner. Closing such a story is a `scope_changes` decision:
 when the `automation_always_ask` line lists it, ask in every automation mode, even
 when the user's own request is what got here. Write only on an explicit choice to
 close.

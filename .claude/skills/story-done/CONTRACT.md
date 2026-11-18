@@ -13,6 +13,7 @@ Closes the implementation loop for a single story by verifying every acceptance 
 | GDD section referenced by each TR-ID | Acceptance criteria and key rules for cross-check | Yes |
 | `docs/architecture/adr-NNNN-[slug].md` (referenced ADR) | `## Decision`, `## Consequences` | Yes |
 | `docs/architecture/control-manifest.md` | `Manifest Version:` header date, forbidden patterns | Yes (existence checked; absent = skip staleness check) |
+| `contracts/README.md`, only in a project that has `tools/ci/contract-rows.sh` (a K-40 registry, e.g. kid-learn-character); absent helper = step skipped | The Registry row of each contract the story's system owns, read by that helper: a `not-started` row is BLOCKED (K-40); a missing README is NOT ASSESSED | Yes |
 | `production/session-state/active.md` | Active story path (used when no argument given) | No — `<!-- CHECKPOINT -->` block overwritten |
 
 > **Tier.** The TR registry, GDD-section and ADR rows are `standard`/`full` inputs.
