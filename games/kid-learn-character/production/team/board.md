@@ -39,7 +39,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-057 | Cross-review re-run Info notes R-1…R-3 (App Shell ready; Child Lock-in early ⌘ window + R3 split; Hint Letters cite) | design | game-dev-ios (b), game-dev-android (a) (review: game-qc-android) | DONE: b `f0b5235`, a `6d5b8fc` merged | `design/TASK-057{a,b}-info` | 2026-11-18 |
 | TASK-058 | Log the independent APPROVE reads (gate CONCERN): morphcore, hint-letters, child-lock-in review logs | design | game-dev-ios, game-qc-android, game-qc-ios | DONE: 47ee06a, e682469, 6d02513 merged | `design/TASK-058-review-logs-*` | 2026-11-18 |
 | TASK-059 | /create-architecture: master architecture (module map, seams, Android mirror) + prioritised ADR work plan + first scaffold story | architecture | game-dev-ios (review: game-dev-android) | DONE `c209e63`, merged 2026-11-18 (review: game-dev-android APPROVE); engine ref at docs/engine-reference-local/native-apple/ | `design/TASK-059-architecture` | 2026-11-18 |
-| TASK-060 | GDD: On-screen Keyboard Row (`design/gdd/onscreen-keyboard-row.md`) via /design-system (Vertical Slice) | design | game-art-content (review: game-dev-android) | REWORK: game-dev-android read REVISE (background keeps the word; hit-rect tie rule) | `design/TASK-060-gdd-keyboard-row` | 2026-11-18 |
+| TASK-060 | GDD: On-screen Keyboard Row (`design/gdd/onscreen-keyboard-row.md`) via /design-system (Vertical Slice) | design | game-art-content (review: game-dev-android) | DONE `71a8d14`, merged 2026-11-18 (review: game-dev-android APPROVE after REVISE) | `design/TASK-060-gdd-keyboard-row` | 2026-11-18 |
 | TASK-061 | GDD: Accessibility (`design/gdd/accessibility.md`) via /design-system (Vertical Slice) | design | game-qc-ios (review: game-qc-android) | IN PROGRESS: PLAN APPROVED 2026-11-18 after REVISE (game-qc-android: WCAG F2, touch split, flags, OS settings) | `design/TASK-061-gdd-accessibility` | 2026-11-18 |
 | TASK-063 | ADR-0002 module layout and seams (via /architecture-decision; Proposed → Luan accepts) | architecture | game-dev-ios (review: game-dev-android) | SENT 2026-11-18 | `design/TASK-063-adr-0002` | 2026-11-18 |
 
@@ -112,3 +112,4 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 - 2026-11-18: Luan decided K-28 (local CI, free Personal Team, native-apple engine-ref docs) and K-29 (keyboard row: random common words/names; a11y answers).
 - 2026-11-18: TASK-059 architecture merged (K-14): docs/architecture/architecture.md (module map, 12 contracts, ADR-0002…0012 plan), engine reference game-local. Next: ADR-0002 module layout.
 - 2026-11-18: TASK-059b merged. TASK-063 ADR-0002 sent.
+- 2026-11-18: TASK-060 Keyboard Row merged (K-14), Vertical Slice 2/3; Key Table is schema v2.
