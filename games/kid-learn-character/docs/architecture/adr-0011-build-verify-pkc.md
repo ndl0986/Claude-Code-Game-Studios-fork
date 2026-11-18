@@ -145,6 +145,14 @@ xcodebuild build -scheme <App> -configuration Release -destination "platform=mac
    developer's pre-push run gives none and skips it (and says so in its output); **QC runs it on both Release
    `.app`s** (D2).
 
+- *Note 2026-11-18 (ADR-0013, K-43; TASK-119; status stays Accepted):* the flash-safety gates join this list
+  after step 3: **G1** the Accessibility F1 rate lint and **G2** the F2b palette check (both ADR-0003 validator
+  rules on `content/`), and **G3** the F2 detector's unit tests (in the `swift test --package-path apple/Tools`
+  run of step 4). All three run on every `verify.sh` run. **`verify.sh --flash`** adds **G4**, the offline busy-case
+  render (27 runs, headless, no Simulator); QC runs it on every merge candidate touching `apple/` or `content/`, and
+  `verify.sh --release` always includes it (NOT ASSESSED there is a FAIL). G5, the device dump, is a
+  release-candidate session (P-3, M-12), like the runtime PKC rows (D2).
+
 It prints one summary line per gate and writes `verify.txt` (D6). `tools/ci/` lives at the **game root**, because
 its content and PKC parts are not Apple-specific and the Android build reuses them.
 

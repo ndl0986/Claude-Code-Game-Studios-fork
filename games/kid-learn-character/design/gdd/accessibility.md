@@ -271,6 +271,10 @@ area_max = 0.25 · (π/4) · field_px²   (the 10° field is a circle of diamete
 | 11" and 13" iPad | 264 | 545.6 | 58,449 |
 | Mac, 2× screen | 254 | 524.9 | 54,105 |
 | Mac, 1× external display | 109 | 225.3 | 9,964 |
+| Mac, 1× class floor *(ADR-0013 D6)* | 72 | 148.8 | 4,347 |
+
+The offline run (ADR-0013 G4) uses each device class's ppi **floor** (264 / 254 / 72); the device run uses the
+device's real ppi. A lower ppi is stricter, so the floor is never substituted for a known lower value.
 
 (Check: the 10° field is a cone of half-angle 5°, 2π(1 − cos 5°) ≈ 0.0239 sr, and 25% of it is
 ≈ 0.0060 sr, the WCAG figure; the on-screen disc of diameter `field_px` subtends the same 0.0239 sr to
@@ -293,12 +297,16 @@ FAIL if ∃ t, ∃ field position F:  #{ p ∈ F : flashing(p, t) } > area_max
 - **Capture:** at the display's refresh rate (60 Hz, or 120 Hz on ProMotion iPads; the rate is recorded
   per run), every frame, the full stage at the device's native resolution, sRGB values
   converted per WCAG; the field slides over every position (step ≤ `field_px` / 4) for every frame.
+  **Frames are timed by their recorded timestamps**, never by counting frames (a frame dump slows the frames it
+  records; ADR-0013 D5).
 - **Scenario:** the K-26 busy case: a seeded mash (the Press Queue's mash fixture) with a walking
-  parade, at Night and at Day, with light rain and with snow; once with Reduce Motion off and once on.
+  parade, at Night and at Day, with light rain and with snow; once with Reduce Motion off and once on;
+  **and a 10 s Title idle run** (Night, light rain, Reduce Motion off) per device class (ADR-0013 D3).
   10 s per run.
-- **Where:** the simulator runs it on every build (the luminance math doesn't depend on the GPU); the
-  **release gate is the run on a real iPad and a real Mac** (frame timing does). **NOT ASSESSED** until
-  device time from Luan.
+- **Where (ADR-0013):** the **offline render (G4)** runs it on every merge candidate that touches `apple/` or
+  `content/`: the stage drawn headless on a synthetic clock, no Simulator (the luminance math doesn't depend on the
+  GPU). The **release gate is the run on a real iPad and a real Mac (G5)** (frame timing and the colour pipeline do).
+  **NOT ASSESSED** until device time from Luan.
 - **F2b, red flash (run on the palette):** every colour in the art bible (51 hex values, read
   2026-11-18) has R/(R+G+B) < 0.8, both on 8-bit sRGB values (highest 0.604, `#80450f`) and on linear
   values (highest 0.781, Letter Gold `#b9631c`). A blend of colours can't exceed its highest component's ratio **when the blend is done and measured in
@@ -393,11 +401,13 @@ GDD's (A8).
    full-screen flash FAILs; a ΔL = 0.08 flicker passes (below 10%); random noise of ±0.04 passes; a
    flicker between L 0.85 and 1.0 passes (darker ≥ 0.80) (unit tests on the detector).
 8. **AC-08 · F2 gate (NOT ASSESSED until device time):** the K-26 busy scenario, Night and Day, rain and
-   snow, Reduce Motion off and on, on a real iPad and a real Mac at the display's refresh rate: no FAIL. The simulator run
-   passes on every build.
+   snow, Reduce Motion off and on, plus a Title idle run, on a real iPad and a real Mac at the display's refresh rate:
+   no FAIL. The offline render (ADR-0013 G4) passes on every merge candidate touching `apple/` or `content/`.
 9. **AC-09 · F2b red flash:** the palette check over every hex in the art bible reports the highest
    R/(R+G+B) (8-bit 0.604, linear 0.781) and passes (< 0.8); adding `#ff0000` to a test palette fails it. It runs on the shipped palette, theme data and SVG fills.
-   The F2 capture's logged per-pixel maximum stays < 0.8.
+   The F2 capture's logged per-pixel maximum stays < 0.8 **over pixels with R + G + B ≥ 0.1** (normalised):
+   near-black pixels are excluded as rounding noise, since (1,0,0) reads 1.0 and can't carry a saturated-red
+   transition (ADR-0013 D4). This is not a threshold change; 0.8 stays.
 10. **AC-10 · contrast:** the Scene's 160-case check (K-25) passes; hints and panel controls meet A5
     (build check on the palette).
 11. **AC-11 · no colour-only meaning:** for each A6 row, a desaturated (greyscale) screenshot still shows
