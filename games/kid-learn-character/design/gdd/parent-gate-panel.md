@@ -112,9 +112,7 @@ corner of a keyboard holds more keys; game-qc-android item 3).
   with dots as digits are entered (the digits themselves are never shown). A **Cancel** button sits
   apart from the keypad.
 - **One touch at a time, with a lift grace** (game-qc-android's choice for Q5): a second keypad pointer
-  down while the first is still down is held pending. If **the first pointer lifts within
-  `overlap_grace_s` (0.15 s) of that second down**, the second counts as the next digit (entered at
-  the first's lift); otherwise, at 0.15 s, it is **wrong**. A palm that stays down is therefore wrong,
+  down while the first is still down is held pending. If **the first pointer lifts less than `overlap_grace_s` (0.15 s) after that second down**, the second counts as the next digit (entered at the first's lift); otherwise, at 0.15 s, it is **wrong** (exact boundaries: G13). A palm that stays down is therefore wrong,
   and **any third simultaneous pointer is wrong at once** (a palm can't enter an ordered sequence;
   item 2). F2 is unchanged: random digits still pass with p = 10⁻⁴. A digit is otherwise entered on its touch *down*, or on
   accessibility activation (VoiceOver double-tap, Switch Control) of the key.
@@ -140,7 +138,8 @@ corner of a keyboard holds more keys; game-qc-android item 3).
 **G4. Closing a challenge without the panel** (wrong digit, second pointer, Cancel, Esc, timeout).
 - The card disappears (Reduce Motion: no fade; otherwise a 0.2 s fade; it also appears with a 0.2 s
   fade, and the dim fades in over 0.2 s). Play **resumes from where it
-  froze** (G5). Moon sleep starts (G1).
+  froze** (G5). Moon sleep starts **only for a wrong answer or a timeout** (G1); Cancel and Esc start
+  none *(TASK-096)*.
 - **The closing touch is consumed:** its up, and any move of that pointer, never reaches Play (item 4).
   The next touch down is classified normally.
 - No message, no penalty, no counter (Settings Store R2 forbids storing gate attempts).
@@ -245,6 +244,29 @@ finishes first. `panel_max_s` ≥ `panel_idle_s` always. A "Hold to confirm" has
 **G12. Android (NOT ASSESSED: no Android build, K-03).** The moon is the only way in (no chord; Input
 R6); Back closes the challenge (as Cancel) and the panel; the "lock" row shows screen-pinning steps
 instead of Guided Access. The Android ADR confirms each.
+
+
+**G13. Timing and boundaries** *(TASK-096; the normative answers to gate-logic-v1's GL-Q1–Q12, TASK-094)*.
+Every timer is evaluated at each tick (the contract's cases supply the ticks); an event exactly on a boundary is
+decided by the inequality written here. **Clocks:** hold progress uses the touch's uptime stamps (G1); every other
+gate and panel timer (sleep, challenge timeout, confirm hide, idle close, cap) uses the injected **away clock**
+(continuous, ADR-0002 D3), so a background never shortens or lengthens them.
+
+| # | Rule | Boundary |
+|---|---|---|
+| B1 | **Code:** at challenge open, d1, d2, d3, d4 take **one `gate-code` draw each, in that order**; `digit = floor(u · 10)` with `u` from KidCore's shared RandomSource unit mapping (ADR-0002; the Key Table pick's), never `draw % 10`. Text: exactly `"Enter " + words.joined(" · ")` (space, U+00B7, space), nothing after | — |
+| B2 | **Hold:** opens at the first tick with `now_up − t_eff ≥ 1.5`, `t_eff = max(t_down, wake_up)`, `wake_up = close_up + 10` (a hold cannot span a background: the OS cancels touches) | inclusive: 1.49 no, 1.50 yes (AC-01) |
+| B3 | **Sleep:** asleep while `away_now − away_close < 10`. Started at the close's away time by a wrong digit, a wrong second or third pointer, a two-input digit (B7) or a timeout (`away_close` = that tick). **Not** by Cancel, Esc or a close by background | strict: at exactly 10.0 a hold and the chord work (AC-10) |
+| B4 | **One `ineligible` flag:** a hold starts only from a `gateTouch(began)` received in Idle. At every return to Idle (any challenge close, and the panel's close) every pointer still down is `ineligible` until it ends; a second pointer on the moon while one holds (G1) is the same flag. A down during sleep is eligible and counts from wake (B2) | — |
+| B5 | **Challenge timeout:** closes at the first tick with `away_now − away_lastAccepted ≥ 20`. `away_lastAccepted` starts at the open; a keypad digit is accepted at its **down**, a grace digit (B6) at the **first pointer's lift**, a hardware digit at its key-down | inclusive: open at 19.9, closed at 20.0 (AC-09) |
+| B6 | **Lift grace:** with a second keypad pointer pending, it is accepted if the first lifts at `t_lift − t2 < 0.15`; it is **wrong** at the first tick with `now − t2 ≥ 0.15` while the first is still down. A pending second that lifts **before** the first is **cancelled** (no digit, not wrong). A third pointer while a second is pending is wrong at once | half-open: exactly 0.15 is wrong (AC-36) |
+| B7 | **Mixed input:** any new digit input (a keypad pointer down or a digit key-down) while another digit input is still down is **wrong**; the only exception is B6's pointer-on-pointer grace | — |
+| B8 | **Confirm (G8):** hides at the first tick with `now − t_ref ≥ 5`, `t_ref` = the later of the reveal and the last lift of an early release; never while a hold is in progress. A second tap on the trigger does not restart it. The hold confirms at `≥ 1.5` | inclusive at 5.0 and at 1.50 (AC-17) |
+| B9 | **Burst (G10):** a touch down at `t` is "third or later" if at least 2 other touch downs on the card (control or empty area) fall in **(t − 1, t]**; key downs never count. A non-resetting down still counts toward later bursts. **Resets:** a control touch down or scroll start that is not a burst down, a slider-drag start, a key down | half-open window: a down exactly 1.0 s earlier does not count (AC-18) |
+| B10 | **Idle close and cap (G10):** closes at the first tick with `away_now − away_lastReset ≥ 60`; cap at `away_now − away_open ≥ 300`. A slider drag or confirm hold in progress at the cap ends first; the panel closes at its end, in the same step, after its effect (the drag's write, the confirmed action) | inclusive at 60.0 and 300.0 (AC-18, AC-29) |
+| B11 | **Background:** the challenge closes as Cancel (no sleep, B3) and every `ineligible` flag clears (the OS ended every touch); a running sleep keeps counting (AC-37); the panel closes and its timers are dropped (G9, AC-22) | — |
+| B12 | **Overlay signal:** gate-logic publishes **`gateOverlayShown`** (true while the challenge or the panel shows). **App Shell** reads it and owns the outputs (R7, K-39; TASK-095): **`edgeDeferral {on}`**, emitted at the Title's first frame and then only on a change: on in the Title and Play, **off** while `gateOverlayShown` is true, on again when it turns false; and **`statusBarHidden {true}`**, emitted once at the first frame on iPadOS and never changing. The Mac has neither output. Both are in app-shell-v1, not gate-logic-v1 (AC-38) | — |
+| B13 | **Chord:** gate-logic takes Input's `openPanel` as given (exactness, Fn, the held set and stale keys are input-filter-v1's). It opens the challenge from the Title or Play; does nothing while asleep (B3), in the challenge or in the panel; sets no `ineligible` flag; on close the gate returns to the state it opened from | — |
 
 ### States and Transitions
 
@@ -526,16 +548,18 @@ All timers use an injected clock and the code an injected seed, so every criteri
 35. **AC-35 · Guided Access line (iPadOS):** with `guidedAccessEnabled` true the lock row reads "Guided
     Access is on"; false → "Guided Access is off".
 36. **AC-36 · overlap grace:** GIVEN the code 4172 and 4 entered, WHEN 1 goes down while the 4-pointer
-    is still down and the 4-pointer lifts 0.10 s later THEN 1 is accepted; WHEN instead it lifts 0.5 s
-    later THEN wrong at 0.15 s after the 1-down. WHEN three keypad pointers are down at once THEN wrong.
+    is still down and the 4-pointer lifts 0.10 s later THEN 1 is accepted; WHEN it lifts 0.149 s later THEN 1 is accepted; WHEN it is still down at exactly 0.15 s THEN wrong at that
+    instant (G13: accepted only if the lift is less than 0.15 s after); WHEN instead it lifts 0.5 s later THEN wrong at
+    0.15 s after the 1-down. WHEN three keypad pointers are down at once THEN wrong.
 37. **AC-37 · sleep across background:** GIVEN a wrong answer at t = 0 and the app in the background
     from 2 s to 6 s, THEN a hold from 8.5 s to 10.0 s does not open, and a hold from 10.0 s to 11.5 s
     does.
-38. **AC-38 · iPad edge gestures follow the gate (App Shell R7, K-39; TASK-092):** GIVEN the Title or Play, THEN
-    system edge gestures are deferred (App Shell AC-14); WHEN the challenge opens THEN the deferral is off, and WHEN
-    the panel is open THEN it is off; WHEN either closes back to the stage THEN it is on again; in all of these the
-    status bar is hidden and the stage fit is unchanged (test seam on the deferral state; the real swipes are
-    device-checks P-16, NOT ASSESSED until run).
+38. **AC-38 · iPad edge gestures follow the gate (App Shell R7, K-39; TASK-092):** GIVEN the Title or Play, THEN `gateOverlayShown` is false and App Shell's `edgeDeferral` is on (App Shell AC-14);
+    WHEN the challenge opens THEN `gateOverlayShown` is true and `edgeDeferral` is off, and the same while the panel
+    is open; WHEN either closes back to the stage THEN `gateOverlayShown` is false and `edgeDeferral` on again; in all
+    of these `statusBarHidden` stays true (iPadOS) and the stage fit is unchanged (test seams: this GDD's
+    `gateOverlayShown`, App Shell's `edgeDeferral` and `statusBarHidden`, G13 B12; the real
+    swipes are device-checks P-16, NOT ASSESSED until run).
 39. **AC-39 · Android (NOT ASSESSED: no Android build, K-03):** Back closes the challenge as Cancel and
     closes the panel; no chord exists; the lock row shows screen-pinning text.
 
