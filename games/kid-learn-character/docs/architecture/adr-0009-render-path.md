@@ -251,8 +251,9 @@ KidCore render plan ── RenderSink.drawCast(castId, role, pose) ──▶ sta
   accept A for older ones (the row is re-run if the floor moves down).
 - **A near miss is a real signal.** The spike's original A (one node per SVG element, every layer in the parade) is
   only about 15–25% above D3's candidate, so P-2 does not discount a narrow failure. DeviceSpike gains an
-  **A-candidate** option (game-dev-ios; the leader accepted it): outline merged per part, fills per element, roles
-  culled. **D1's A is the A-candidate's numbers**; the original A is recorded for information only. B is B-load at
+  **A-candidate** option (game-dev-ios; the leader accepted it): outline merged per part, fills per element. Its
+  parade walkers must draw `body` + `outline` only (R3's parade role) for the "only the parade fails" row to judge
+  the right A. **D1's A is the A-candidate's numbers**; the original A is recorded for information only. B is B-load at
   2.5× (an upper bound for B-build's load).
 - **Texture upload stalls** on first draw (B) on an older GPU. Mitigation: textures created at load, off the main
   thread, before the figure is resident; P-2's frame log covers the first frames after a reveal starts.
@@ -298,8 +299,8 @@ Per K-34: headless runs need no MAC FREE; the Mac rows do.
   reads one alpha (0.8 Ink) at the crossing, not two. It decides D3's group-alpha question; if A darkens there, A uses
   D3's fallback. **H-2's overlap check runs on the A-candidate DeviceSpike build (d21588c0) before P-2** (game-qc-ios;
   leader's option a): DeviceSpike's **Overlap check** button logs whether one `SKShapeNode` blends its own overlap
-  twice, for stroke alpha 0.8 and for node alpha 0.8, from the view's own render; headless through an offscreen render
-  if that shows the same, otherwise as the first step of the same device session. P-2 then records **which outline path it measured** (the merged stroke or the fallback), so
+  twice, for stroke alpha 0.8 and for node alpha 0.8, from the view's own render. It is answered **on the device, as
+  the first step of the device session, before P-2** (not headless). P-2 then records **which outline path it measured** (the merged stroke or the fallback), so
   its A numbers belong to the A that would ship.
 - **H-3 Bake output (the bake tool story).** The baked JSON for the three creatures parses back with the a1 rule; its
   byte size is recorded next to H-1's SVG figure.
