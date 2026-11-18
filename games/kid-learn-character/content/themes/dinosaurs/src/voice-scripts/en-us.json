@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "locale": "en-us",
+  "note": "Build-only TTS input (ADR-0003 D1, D6). Every voice line's script is the Key Table say/word text, except the lines in respell, which use the respelled input for the TTS only (K-35). Displayed and Key Table names keep their spelling. Each respelling was approved by ear by Luan (K-41).",
+  "engine": {
+    "name": "Kokoro-82M",
+    "package": "kokoro==0.9.4",
+    "weightsRevision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+    "voice": "af_heart",
+    "langCode": "a",
+    "speed": 0.88
+  },
+  "decisions": ["K-35", "K-41"],
+  "respell": {
+    "word_ankylosaurus": "ankie low saurus",
+    "word_juravenator": "joor uh vuh nay tor",
+    "word_quetzalcoatlus": "kets all ko at lus",
+    "word_tapejara": "tah pay jar ah",
+    "word_wuerhosaurus": "wur hoe saurus",
+    "word_xenoceratops": "zen oh sair uh tops",
+    "word_zuniceratops": "zoo nee serra tops"
+  }
+}

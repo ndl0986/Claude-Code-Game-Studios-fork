@@ -123,3 +123,8 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md b5677bc5eb639e14f86fbfb80782ec6
 Review mode: lean · Workflow: standard
 Change: from game-qc-android's REVISE: Open Question Q8 (TTS licence) moved to Resolved, "closed by K-41: Kokoro-82M, Apache-2.0, attribution in the acknowledgements; Privacy L-09 (R8)".
 Reviewed-Content-Hash: design/gdd/audio-voice.md 434d426d4bdf9e67e25a23e31b922bb88f5d4e0f
+
+## Update — 2026-11-18 — TASK-110 voice script (no re-review)
+Review mode: lean · Workflow: standard
+Change: R8 defines the build-only voice script, content/themes/<id>/src/voice-scripts/<locale>.json (ADR-0003 D1, D6): the engine settings plus a respell map from line id to the TTS input; every other line uses the Key Table say/word. Dinosaurs en-us gets Luan's seven r2 picks (K-35, K-41); triceratops stays as spelled; displayed and Key Table names unchanged. A respelled line must still pass V15. Review: game-qc-android.
+Reviewed-Content-Hash: design/gdd/audio-voice.md 9692a7ca8ace023623279458e75921c096f21f66
