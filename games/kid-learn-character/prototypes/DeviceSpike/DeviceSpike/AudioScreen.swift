@@ -1,25 +1,30 @@
 // PROTOTYPE - NOT FOR PRODUCTION (TASK-078 DeviceSpike; P-1, P-7, P-8, P-9, M-14)
-// The pad: a press (touch or any key) flashes the pad white on the next frame and plays the chime, for the
-// TASK-033 240 fps camera procedure. Buttons play and cut each bus for the click checks.
+// The pad: a press (touch or any key) lights a small dot on the pad on the next frame and plays the chime, for the
+// TASK-033 240 fps camera procedure. Never a full-pad flash (TASK-118, ADR-0013 D7): mashing a full-width pad white
+// flashed a large area more than 3 times a second. The dot (36 pt) stays under the smallest flash field ADR-0013 allows
+// (4,347 px at the 72 ppi floor): about 1,018 px at 1x and 4,072 px at 2x. Not with the child watching (README). Buttons play and cut each bus for the click checks.
 import SwiftUI
 import QuartzCore
 
 struct AudioScreen: View {
     @State private var audio: AudioSpike? = nil
-    @State private var flash = false
+    @State private var pressed = false
     @State private var muted = false
     @State private var lastHandOff = ""
     var body: some View {
         VStack(spacing: 10) {
-            ZStack {
-                Rectangle().fill(flash ? Color.white : Color(red: 0.12, green: 0.15, blue: 0.30))
-                Text("Press here or any key").foregroundStyle(flash ? .black : .white)
+            ZStack(alignment: .topLeading) {
+                Rectangle().fill(Color(red: 0.12, green: 0.15, blue: 0.30))     // constant: the pad never flashes
+                Text("Press here or any key").foregroundStyle(.white).frame(maxWidth: .infinity, maxHeight: .infinity)
+                Circle().fill(pressed ? Color(white: 0.85) : Color.clear)          // the press marker the camera sees
+                    .overlay(Circle().stroke(Color(white: 0.5), lineWidth: 1))
+                    .frame(width: 36, height: 36).padding(12)
             }
             .frame(maxWidth: .infinity, minHeight: 240)
             .contentShape(Rectangle())
-            .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in if !flash { press(source: "touch") } }.onEnded { _ in flash = false })
+            .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in if !pressed { press(source: "touch") } }.onEnded { _ in pressed = false })
             .focusable().onKeyPress(phases: .down) { _ in press(source: "key"); return .handled }
-            .onKeyPress(phases: .up) { _ in flash = false; return .handled }
+            .onKeyPress(phases: .up) { _ in pressed = false; return .handled }
             Text(lastHandOff).font(.caption.monospaced())
             HStack {
                 ForEach(AudioSpike.Bus.allCases, id: \.self) { b in
@@ -54,12 +59,12 @@ struct AudioScreen: View {
     }
 
     private func press(source: String) {
-        flash = true
+        pressed = true
         let t = audio?.play("chime", on: .ui) ?? 0
         lastHandOff = String(format: "%@ handed to the audio queue at uptime %.4f", source, t)
         SpikeLog.shared.line("[audio] press \(source) handed=\(String(format: "%.4f", t))")
         #if os(iOS)
-        NextFrame.log(after: t)      // ADR-0010 D9: the first frame that draws the flash
+        NextFrame.log(after: t)      // ADR-0010 D9: the first frame that draws the press dot
         #endif
     }
 
@@ -76,7 +81,7 @@ struct AudioScreen: View {
 
 #if os(iOS)
 /// ADR-0010 D9: logs the `targetTimestamp` (display time) and the display rate of the next display-link frame after a
-/// press: the flash set in the same callback is drawn in that frame. One-shot; the link invalidates itself.
+/// press: the press dot set in the same callback is drawn in that frame. One-shot; the link invalidates itself.
 @MainActor final class NextFrame: NSObject {
     private var link: CADisplayLink?
     private let handed: Double
