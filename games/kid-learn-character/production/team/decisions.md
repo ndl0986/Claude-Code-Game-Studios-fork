@@ -105,6 +105,20 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-20 Reveal Stage and gate hardening (Luan, 2026-11-18, TASK-048 review + TASK-049 questions)
+
+- **Gate hardening (adds to K-19):** after a wrong answer or a timed-out challenge, the moon "sleeps"
+  for 10 s (a knob; nothing is stored, no visible lockout); step 2 uses **four** number words
+  (e.g. "four · one · seven · two"). Hourly pass risk for a mashing child stays below ~0.1%.
+- **Challenge open freezes play:** the reveal, the queue and the hints freeze while the number
+  challenge shows; a wrong answer or timeout resumes them. Only a correct answer opens the panel, and
+  K-15's queue clear applies then.
+- **Stage fit:** contain the 1280×720 safe stage and **extend the sky and ground** to fill the screen.
+  No bars, nothing cropped. iPads get more sky and ground; wide Mac windows get wider hills (the
+  parade walks farther). Hints and queue tokens stay in the safe stage. Reveal Stage owns the transform.
+- **Reduce Motion for the reveal softens:** the glyph rises straight with no scale overshoot, the
+  creature appears with no pop overshoot, and the leaving creature fades without sinking.
+
 ### K-19 Parent gate (Luan, 2026-11-18, TASK-048 questions)
 
 - **Two steps:** hold the moon ~1.5 s, then a **number written in words** ("Enter four · one · seven")

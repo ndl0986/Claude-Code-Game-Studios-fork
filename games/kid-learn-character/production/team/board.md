@@ -25,10 +25,10 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-043 | GDD: Press Queue (`design/gdd/press-queue.md`) via /design-system | design | game-dev-android (review: game-dev-ios) | DONE `5a8aa5f`, merged 2026-11-18 (review: game-dev-ios APPROVE) | `design/TASK-043-gdd-press-queue` | 2026-11-18 |
 | TASK-044 | GDD: Cast Rendering (`design/gdd/cast-rendering.md`) via /design-system | design | game-dev-ios (review: game-dev-android) | DONE `c05bdda`, merged 2026-11-18 (review: game-dev-android APPROVE after REVISE) | `design/TASK-044-gdd-cast-rendering` | 2026-11-18 |
 | TASK-045 | Art bible K-16 amendments (stardust + parade-bob exceptions, per-part groups with pivots, Reduce Motion softening, 240 particles, SVG subset pointer) | design | game-art-content (review: game-dev-ios) | DONE `87b6af6`, merged 2026-11-18 (review: game-dev-ios APPROVE) | `design/TASK-045-art-bible-k16` | 2026-11-18 |
-| TASK-046 | GDD: Parade (`design/gdd/parade.md`) via /design-system | design | game-art-content (review: game-dev-android) | IN PROGRESS: PLAN APPROVED 2026-11-18 after REVISE (K-17 folded in) | `design/TASK-046-gdd-parade` | 2026-11-18 |
-| TASK-047 | GDD: Hint Letters (`design/gdd/hint-letters.md`) via /design-system | design | game-dev-android (review: game-qc-android) | PLAN IN REVIEW (game-qc-android); Luan answered (K-18) | `design/TASK-047-gdd-hint-letters` | 2026-11-18 |
-| TASK-048 | GDD: Parent Gate & Grown-up Panel (`design/gdd/parent-gate-panel.md`) via /design-system | design | game-qc-ios (review: game-qc-android) | PLAN IN REVIEW (game-qc-android); Luan answered (K-19) | `design/TASK-048-gdd-parent-gate-panel` | 2026-11-18 |
-| TASK-049 | GDD: Reveal Stage (`design/gdd/reveal-stage.md`) via /design-system | design | game-dev-ios (review: game-dev-android) | SENT 2026-11-18 (plan now; GDD after Cast Rendering approves) | `design/TASK-049-gdd-reveal-stage` | 2026-11-18 |
+| TASK-046 | GDD: Parade (`design/gdd/parade.md`) via /design-system | design | game-art-content (review: game-dev-android) | CODE REVIEW: done `7265545` (lean APPROVED); game-dev-ios independent read | `design/TASK-046-gdd-parade` | 2026-11-18 |
+| TASK-047 | GDD: Hint Letters (`design/gdd/hint-letters.md`) via /design-system | design | game-dev-android (review: game-qc-android) | PLAN REVISE (game-qc-android: drift clearances, slots + empty-screen AC, 18 mm floor, gesture insets, testability); revised plan → game-qc-android re-check | `design/TASK-047-gdd-hint-letters` | 2026-11-18 |
+| TASK-048 | GDD: Parent Gate & Grown-up Panel (`design/gdd/parent-gate-panel.md`) via /design-system | design | game-qc-ios (review: game-qc-android) | PLAN REVISE (game-qc-android: hourly risk, multi-touch, chord palm, dull challenge, freeze, timers, lock hand-off); Luan answered (K-20) | `design/TASK-048-gdd-parent-gate-panel` | 2026-11-18 |
+| TASK-049 | GDD: Reveal Stage (`design/gdd/reveal-stage.md`) via /design-system | design | game-dev-ios (review: game-dev-android) | IN PROGRESS: PLAN APPROVED 2026-11-18 (K-20 stage fit + Reduce Motion) | `design/TASK-049-gdd-reveal-stage` | 2026-11-18 |
 
 ## Leader log
 
@@ -73,3 +73,4 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 - 2026-11-18: TASK-040 Privacy & Kids Compliance merged (K-14), 7/14 MVP GDDs approved. Store/legal calls L-01…L-09 go to Luan.
 - 2026-11-18: Luan decided K-17 (Parade: every 6, per theme), K-18 (Hint Letters), K-19 (Parent gate: words-number step 2). TASK-045 merged (K-14). TASK-044 done → game-dev-android read. TASK-049 Reveal Stage sent.
 - 2026-11-18: TASK-044 Cast Rendering merged (K-14), with the MorphCore when/look ownership split; 8/14 MVP GDDs approved.
+- 2026-11-18: Luan decided K-20 (gate: moon sleeps 10 s + 4 number words; challenge freezes play; stage fit extends sky/ground; reveal Reduce Motion softens). TASK-046 Parade done → game-dev-ios read. TASK-049 plan approved.
