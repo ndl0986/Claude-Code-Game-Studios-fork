@@ -56,3 +56,8 @@ Reviewed-Content-Hash: design/gdd/cast-rendering.md fb093009752428febf40e087cbc6
 Review mode: lean · Workflow: standard
 Change: from /review-all-gdds 2026-11-18 (design/gdd/gdd-cross-review-2026-11-18.md): W-3: R3 puts s and idleTime on the play clock supplied by the Reveal Stage (R8), the edge dissolve stays wall-clock; W-6: Key Table cite → §4; W-9: Scene and App Shell added to Dependencies; nit: the shown edge floors at 2.53:1 under hysteresis (R4, F8). Text only; no rule changed.
 Reviewed-Content-Hash: design/gdd/cast-rendering.md dd6e05e7ee77cf26f2d7ae0e71e3239c515d414b
+
+## Update — 2026-11-18 — TASK-059b stray markup removed (no re-review)
+Review mode: lean · Workflow: standard
+Change: deletes two stray lines of tool markup ("</content>", "</invoke>") left at the end of the file by its author's writing tool; no content or rule changed.
+Reviewed-Content-Hash: design/gdd/cast-rendering.md d8929011578465d6b1ad4118f551540f5bdbc9d9

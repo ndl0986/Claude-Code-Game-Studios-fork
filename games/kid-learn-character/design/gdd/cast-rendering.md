@@ -524,5 +524,3 @@ look of either option on a real iPad screen.
 - **Chosen by the author:** the full 0.5 s wait while no key waits, cut to the hold bound when a key is queued
   (F7); `reduce_motion_scale` 0.5 for "smaller hop" (13 units) and `halo_steady` 0.8 (proposals in Tuning Knobs).
 - **For the SVG-rendering ADR:** option A or B (or a mix), from the R11 measurement.
-</content>
-</invoke>

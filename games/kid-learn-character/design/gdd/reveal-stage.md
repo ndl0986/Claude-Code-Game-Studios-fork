@@ -421,5 +421,3 @@ Rendering's measurement plan).
 - **Chosen by the author (proposals in Tuning Knobs):** `row_lift` 110 units, `sparkle_out_s` 0.6 s, the F5
   `max` with the letter line, the play clock for the freeze, and asking Audio to pause on freeze (the
   alternative, letting a word finish behind the gate, is the Audio GDD's call).
-</content>
-</invoke>

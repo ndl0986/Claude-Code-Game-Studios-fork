@@ -317,5 +317,3 @@ Parade and Child Lock-in. Screenshots are retained in `production/qa/evidence/`.
   memory escalation window, and measuring "away" on the continuous (sleep-inclusive) clock so K-22's 30 min also
   counts device sleep.
 - **Open elsewhere:** L-07, OS crash reports vs "collection" (Privacy & Kids Compliance, Luan).
-</content>
-</invoke>
