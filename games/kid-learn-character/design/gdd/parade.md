@@ -382,7 +382,7 @@ All on the play clock. While the gate challenge or the panel shows, a fill in pr
 glow holds at `ramp · g0`.
 
 Examples: D, C, D → `filled` 1 at D's `shown`, 2 at C's; the second D changes nothing. A cell lit at 10.0 s has
-alpha 0.25 at 10.0, 0.25 + 0.75 · 0.75 = 0.81 at 10.2 and 1 at 10.4. Armed at 20.0: glow 0.40 · 0.5 = 0.20 at 20.2
+alpha 0.25 at 10.0, 0.25 + 0.75 · 0.75 = 0.81 at 10.2 and 1 at 10.4. Armed at 20.0: glow 0.5 · (0.40 + 0.05 · sin(0.2π)) = 0.215 at 20.2
 (ramp), 0.40 + 0.05 = 0.45 at 20.5 (a quarter period). Walking entry with the held list [K]: `filled` → 1; cells 1–5
 fade to 0.25 over 0.6 s; cell 0 stays at 1.
 
@@ -560,7 +560,7 @@ Logic criteria use an injected clock and fake Reveal Stage, Press Queue and Cast
     second D; cell 0's alpha is 0.25 at its `litAt`, 0.81 at +0.2 s and 1 at +0.4 s. `shown(glyphOnly)` for E and an
     ignored press change nothing.
 23. **AC-23 Meter full.** At the 6th distinct key: `filled` 6 and the snapshot is `armed` with `armedAt` = that
-    `shown`'s time; glow 0.20 at +0.2 s and 0.45 at +0.5 s; the glow is 0 while not Armed or Waiting for art.
+    `shown`'s time; glow 0.215 at +0.2 s and 0.45 at +0.5 s; the glow is 0 while not Armed or Waiting for art.
 24. **AC-24 Handover.** Walking entry with the held list [K]: `filled` 1; cells 1–5 reach 0.25 at +0.6 s; cell 0 stays
     1; the glow reaches 0 at +0.6 s. Keys shown during the walk light the next cells.
 25. **AC-25 Meter under the gate and panel.** Armed with a fill in progress: while the challenge or the panel shows,

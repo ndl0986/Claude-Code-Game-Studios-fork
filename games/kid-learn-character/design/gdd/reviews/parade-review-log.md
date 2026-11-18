@@ -59,3 +59,8 @@ Reviewed-Content-Hash: design/gdd/parade.md 4634d12d4160f0f88a278ae0fdbb163a3f54
 Review mode: lean · Workflow: standard
 Change: New R12 parade meter (a cell per new creature at its shown, left to right; full glow 0.5 Hz, 0.35–0.45, steady under Reduce Motion; handover drain over fade_s; per theme, not saved; holds under the gate and panel; not a target; Play only; no sound; drawn by the Reveal Stage from a meter snapshot, Interface 7) and F4 with flash bounds (≤ 1 Hz, glow ΔL ≤ 0.066, ≤ 2 transitions per pixel per second). K-45: R2/F2 rewritten, t_start = armedAt + parade_delay_s (1.5 s after the 6th creature formed, no rest; tune after the word by Audio F6), re-anchored at panel close, return, skip retry (one per formed reveal) and Ended; prefetch from Armed; PA-Q1/Q2/Q4/Q9, States, Interactions (no Press Queue input), Edge Cases, Dependencies, knobs (parade_delay_s 1.5–3; meter knobs), ACs 3, 4, 7, 8, 12, 19 rewritten and AC-20–AC-30 added. Open Questions MT-Q1–Q5 for Luan with recommendations; follow-ups incl. parade-v1 (21 of 30 cases change). Review: game-qc-android (cross-GDD, from the diff); render read by game-dev-ios.
 Reviewed-Content-Hash: design/gdd/parade.md 425d08b1147465b7d10798d8b5f6341c9d57a39b
+
+## Update — 2026-11-18 — TASK-120 glow example fix (no re-review)
+Review mode: lean · Workflow: standard
+Change: from game-qc-android's REVISE: F4's example and AC-23 gave the glow at +0.2 s as 0.20, dropping the sine term; by F4 it is 0.5 · (0.40 + 0.05 · sin(0.2π)) = 0.215.
+Reviewed-Content-Hash: design/gdd/parade.md d056c399102d58342aa5fd09dd73ee40de8c3eb2
