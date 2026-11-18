@@ -402,7 +402,7 @@ All values are bundled data (ADR-0001 Decision 6). "One-shot" means Luan played 
 | `mash_floor` | 0.35 | 0.2–0.7 | proposed | the quietest a mashed chime gets |
 | `chime_window_s` | 1.0 | 0.5–2 | proposed | how far back presses count for F3 (renamed from `mash_window_s`, TASK-056: that name is the Scene's mashing window, a different signal) |
 | `cut_fade_s` | 0.03 | 0.01–0.08 | proposed | fade on any cut; long enough for no click (AC-9) |
-| `cut_settle_s` | 0.04 | **≥ max(`cut_fade_s`, 0.03) + 0.01**; 0.04–0.09 | TASK-090b (ADR-0010 D5, D7; measured clean at 40 ms) | when a cut or a freeze pause has settled: the player is stopped or paused; after a cut a replacing sound starts up to this late (a freeze skips nothing: it resumes at or up to this much before the freeze-moment frame, R6). One value shared by both platforms |
+| `cut_settle_s` | 0.04 | **≥ max(`cut_fade_s`, 0.03) + 0.01**; 0.04–0.09 | TASK-090b (ADR-0010 D5, D7; measured clean at 40 ms) | when a cut or a freeze pause has settled: the player is stopped; after a cut a replacing sound starts up to this late (a freeze skips nothing: it resumes at or up to this much before the freeze-moment frame, R6). One value shared by both platforms |
 | bus trims | voice 0, cast −4, ui −10, music −8 dB | ±6 dB each | proposed; one-shot ratios `roar_volume` 0.35, `chime_volume` 0.12 | balance between classes; F1 headroom |
 | `limiter_ceiling_dbtp` | −1 | −3 – −0.5 | decided (Luan Q5) | the output ceiling |
 | loudness targets | F4 | ±4 LU | decided (Luan Q5), tuned in play | per-class loudness |

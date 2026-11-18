@@ -269,7 +269,7 @@ Moon sleep is a timer on Idle, not a state the grown-up sees.
 | Hint Letters (#10) | out | challenge open → **freeze `hintTime`**, close → resume (**TASK-047**); **panel open → freeze** (under the dim), **panel close → resume** (Hint Letters R9 cites this GDD) |
 | Parade (#11) | out | challenge open → **pause the walk**, close → resume (**TASK-046**); panel open → fade out, counts as played (K-17); debug manual start (K-17, K-19) |
 | Audio & Voice (#6) | out | slider preview gain (R5); panel open → cut players (R6); challenge open → no cut, nothing new starts, **the parade tune pauses and resumes with the walk** (Audio owner, with TASK-046) |
-| App Shell & Title (#14) | — | the chord works on the Title screen (G2); whether the moon is drawn there; backgrounding closes challenge and panel |
+| App Shell & Title (#14) | out | the chord works on the Title screen (G2); whether the moon is drawn there; backgrounding closes challenge and panel; **iPad system overlays (App Shell R7, K-39):** while the challenge or the panel shows, App Shell **stops deferring system edge gestures** (a grown-up's swipe works at once) and restores the deferral when they close; the **status bar stays hidden** throughout, so the stage fit never changes *(TASK-092)* |
 | Child Lock-in (#13) | out | G11 |
 | Key Table & Theme Data (#1) | — | theme list; next reveal uses the new theme (Key Table §4) |
 | Scene: Time of Day & Weather (#15) | in | `look` and `lookBlend` for the moon's opacity (UI Requirements; Scene R1, F1); the Scene draws no moon disc. The weather row appears when it ships |
@@ -531,7 +531,12 @@ All timers use an injected clock and the code an injected seed, so every criteri
 37. **AC-37 · sleep across background:** GIVEN a wrong answer at t = 0 and the app in the background
     from 2 s to 6 s, THEN a hold from 8.5 s to 10.0 s does not open, and a hold from 10.0 s to 11.5 s
     does.
-38. **AC-38 · Android (NOT ASSESSED: no Android build, K-03):** Back closes the challenge as Cancel and
+38. **AC-38 · iPad edge gestures follow the gate (App Shell R7, K-39; TASK-092):** GIVEN the Title or Play, THEN
+    system edge gestures are deferred (App Shell AC-14); WHEN the challenge opens THEN the deferral is off, and WHEN
+    the panel is open THEN it is off; WHEN either closes back to the stage THEN it is on again; in all of these the
+    status bar is hidden and the stage fit is unchanged (test seam on the deferral state; the real swipes are
+    device-checks P-16, NOT ASSESSED until run).
+39. **AC-39 · Android (NOT ASSESSED: no Android build, K-03):** Back closes the challenge as Cancel and
     closes the panel; no chord exists; the lock row shows screen-pinning text.
 
 ---
