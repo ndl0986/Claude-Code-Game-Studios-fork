@@ -113,3 +113,9 @@ Change:
 - A blank line that had split the follow-up table is removed.
 - No rule change.
 Reviewed-Content-Hash: design/gdd/accessibility.md 46b193e259777e4780cb721292dcf79d66462a1a
+
+## Update — 2026-11-18 — TASK-065 (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-065
+Change: The Parent Gate Switch Control note and the PKC-14 extension are marked done (TASK-065). A11 and AC-16 now cite the extended PKC-14. No other change.
+Reviewed-Content-Hash: design/gdd/accessibility.md d3a39163b69dee89a97eb460c69e36d0b9a0c074

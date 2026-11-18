@@ -244,3 +244,9 @@ Review mode: lean · Workflow: standard
 Task: TASK-056
 Change: a one-line note on PKC-09's API scan. The continuous clock (App Shell R6) is not a listed required-reason API; Apple lists only systemUptime and mach_absolute_time under System boot time (checked by game-dev-ios 2026-11-18). The existing 35F9.1 entry would cover it if Apple adds it. No rule change.
 Reviewed-Content-Hash: design/gdd/privacy-kids-compliance.md 6ee522cecceb875f3ab354617121da1a14980ad2
+
+## Update — 2026-11-18 — TASK-065 (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-065
+Change: PKC-14 now also covers the device's accessibility settings (Reduce Motion, VoiceOver, Guided Access, Smart Invert): none is logged in release or ever sent. The code scan and AC-13 include them (Accessibility A11 follow-up). No other change.
+Reviewed-Content-Hash: design/gdd/privacy-kids-compliance.md dcf664a9ba7c30c3f4405b2bb9b596b93c6991ef

@@ -341,8 +341,9 @@ leader (Open Questions Q6).
   spacing.
 - **Two grown-up taps on a confirm trigger:** nothing more happens; only the hold confirms (G8).
 - **Switch Control or AssistiveTouch users** may not be able to hold the moon for 1.5 s or hold a
-  confirm button. Not solved here; noted for the Accessibility GDD (#17). Keypad keys accept
-  accessibility activation (G3).
+  confirm button. **Accepted for the MVP and documented (K-29; Accessibility A8):** on the Mac the ⌃⌥⌘Q
+  chord replaces the moon hold (G2); on the iPad the grown-up pauses Switch Control (or AssistiveTouch)
+  to open the gate and confirm. Keypad keys accept accessibility activation (G3).
 - **Two-thumb typing on an iPad** can overlap two keypad touches: accepted when the first thumb lifts
   within 0.15 s of the second's down (G3); a longer overlap is wrong.
 

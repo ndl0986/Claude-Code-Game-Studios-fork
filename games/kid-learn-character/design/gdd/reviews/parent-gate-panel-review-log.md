@@ -213,3 +213,9 @@ Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 0576d85a17b704c4e89091345
 Review mode: lean · Workflow: standard
 Change: Interactions: Accessibility's reduceMotion (A1), next frame. Follow-ups from the Keyboard Row (TASK-060) and Accessibility (TASK-061) GDDs; verdict unchanged; review by game-qc-ios from the diff.
 Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 27242886bbc1cb238c13e853a0472ca0e89a8719
+
+## Update — 2026-11-18 — TASK-065 (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-065
+Change: Edge Cases: Switch Control / AssistiveTouch are accepted for the MVP and documented (K-29; Accessibility A8). On the Mac, the chord replaces the moon hold; on the iPad, pause Switch Control. This replaces "Not solved here". No other change.
+Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 0b0accd5f91a4b52b6449ddd33d4becfe4948553

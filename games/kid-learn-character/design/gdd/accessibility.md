@@ -199,9 +199,7 @@ a sparkle), so they need no floor.
   on the parent panel as VoiceOver; font scale on the panel; colour correction and inversion are
   OS-wide, as on Apple.
 
-**A11. Privacy.** No accessibility setting is stored (Settings Store R2; PKC-05) or sent (PKC-01). In
-release builds no accessibility setting is logged: PKC-14 today covers the child's input only, so
-extending its code scan to accessibility settings is a follow-up for the Privacy owner. Reading an OS
+**A11. Privacy.** No accessibility setting is stored (Settings Store R2; PKC-05) or sent (PKC-01). In release builds no accessibility setting is logged (PKC-14, extended in TASK-065). Reading an OS
 flag on the device is not collection.
 
 ### States and Transitions
@@ -340,7 +338,7 @@ Example: in a 10 s Night capture on an 11" iPad, if 60,000 px inside one field (
 - **Documents:** art bible §1–§4, §7; decisions K-08, K-13, K-15, K-16, K-17, K-20, K-24, K-25, K-26,
   K-29, K-30; WCAG 2.2 SC 2.3.1 and its definitions (w3.org, read 2026-11-18).
 
-**Follow-ups for other GDDs** (listed here, not edited; status after TASK-062, merged b384818b):
+**Follow-ups for other GDDs** (listed here, not edited; status after TASK-062, merged b384818b, and TASK-065):
 
 | GDD | Follow-up |
 |---|---|
@@ -349,8 +347,8 @@ Example: in a 10 s Night capture on an 11" iPad, if 60,000 px inside one field (
 | App Shell & Title / art bible | **done (TASK-062)**: 0.38 Hz kept, art bible §2 amended (A3 flag) |
 | App Shell & Title / Reveal Stage | **done (TASK-062)**: `accessibilityIgnoresInvertColors` on the stage view (Reveal Stage R1; A10, K-30) |
 | Every motion GDD | **done (TASK-062)**: all 10 name "Accessibility's `reduceMotion`" as the flag's source in their Interactions (A1) |
-| Parent Gate & Grown-up Panel | **open**: record the Switch Control / AssistiveTouch acceptance (K-29) in its Edge Cases |
-| Privacy & Kids Compliance | **open**: extend PKC-14's release log scan to accessibility settings (A11) |
+| Parent Gate & Grown-up Panel | **done (TASK-065)**: its Edge Cases record the Switch Control / AssistiveTouch acceptance (K-29) |
+| Privacy & Kids Compliance | **done (TASK-065)**: PKC-14 and its AC-13 scan now cover accessibility settings (A11) |
 
 ## Tuning Knobs
 
@@ -409,8 +407,7 @@ GDD's (A8).
 15. **AC-15 · Smart Invert:** with Smart Invert on, the stage's pixels are unchanged and the panel is
     inverted (manual: retained screenshot pair).
 16. **AC-16 · privacy (release build):** no stored value (PKC-05) or network call (PKC-01) carries an
-    accessibility setting, and the release build's code scan finds no log call carrying one (once
-    PKC-14's scan is extended; follow-up).
+    accessibility setting, and the release build's code scan finds no log call carrying one (PKC-14, AC-13 there).
 17. **AC-17 · Android (NOT ASSESSED: no Android build, K-03):** "Remove animations" drives the flag;
     TalkBack reads the panel.
 
