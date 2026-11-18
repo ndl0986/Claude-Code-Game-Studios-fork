@@ -38,6 +38,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-056 | Cross-review fixes (B-1, W-1…W-11 per the report's file table; K-26) in 4 owner parts | design | dev-android / qc-ios / dev-ios / art-content (review: game-qc-android diff re-run) | DONE: a `ddc0531`, b `86c31dd`, c `ca526ae`, d `e728b85` all merged (review: game-qc-android APPROVE) | `design/TASK-056{a,b,c,d}-*` | 2026-11-18 |
 | TASK-057 | Cross-review re-run Info notes R-1…R-3 (App Shell ready; Child Lock-in early ⌘ window + R3 split; Hint Letters cite) | design | game-dev-ios (b), game-dev-android (a) (review: game-qc-android) | DONE: b `f0b5235`, a `6d5b8fc` merged | `design/TASK-057{a,b}-info` | 2026-11-18 |
 | TASK-058 | Log the independent APPROVE reads (gate CONCERN): morphcore, hint-letters, child-lock-in review logs | design | game-dev-ios, game-qc-android, game-qc-ios | DONE: 47ee06a, e682469, 6d02513 merged | `design/TASK-058-review-logs-*` | 2026-11-18 |
+| TASK-059 | /create-architecture: master architecture (module map, seams, Android mirror) + prioritised ADR work plan + first scaffold story | architecture | game-dev-ios (review: game-dev-android) | SENT 2026-11-18 | `design/TASK-059-architecture` | 2026-11-18 |
 
 ## Leader log
 
@@ -103,3 +104,4 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 - 2026-11-18: cross-review re-run PASS. Info notes R-1 (App Shell "ready" wording vs kioskModeOn), R-2 (⌘ swallowed from Waiting start, ≤ 5 s, Edge Case line), R-3 (Hint Letters "Key Table R4" cite) queued as small text fixes. Ready for /gate-check.
 - 2026-11-18: TASK-057 merged (K-14). Systems Design complete: 14/14 MVP + Scene approved, cross-review PASS. Next: /gate-check Systems Design → Technical Setup with Luan.
 - 2026-11-18: /gate-check Systems Design → Technical Setup: CONCERNS (review-log bookkeeping for morphcore, hint-letters, child-lock-in); TD READY, PR READY. Luan accepted the risk; STAGE → Technical Setup. Report: production/gate-checks/2026-11-18-systems-design-to-technical-setup.md.
+- 2026-11-18: TASK-058 merged (gate risk closed). Luan: next is /create-architecture → TASK-059 to game-dev-ios.
