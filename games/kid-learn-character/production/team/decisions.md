@@ -105,6 +105,18 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-24 Scene: Time of Day & Weather (Luan, 2026-11-18, TASK-053 questions)
+
+- **A weather change from the panel fades in over ~2 s** while the panel is open (not the art
+  bible's 15-min crossfade, which is for time of day), so the parent sees it on close.
+- **Reduce Motion:** clouds hold still; rain and snow at half count and half speed (windy tilt kept);
+  stars steady, no twinkle.
+- **No weather or ambient sound** (Audio's no-music-bed rule stands).
+- Team proposals accepted: the 15-min time-of-day crossfade starts at the boundary (16:00 → fully
+  Dusk 16:15); a clock / time-zone / DST jump fades to the new look over 3 s; rain and snow show 2–3
+  pale clouds; the horizon warms during a parade (peach by day, amber by night, within the caps); the
+  Title shows the weather too.
+
 ### K-23 Child Lock-in (Luan, 2026-11-18, TASK-052 questions)
 
 - **Extra displays on a locked Mac** are each covered by a plain dusk window that swallows clicks.
