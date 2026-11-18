@@ -39,6 +39,8 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-057 | Cross-review re-run Info notes R-1…R-3 (App Shell ready; Child Lock-in early ⌘ window + R3 split; Hint Letters cite) | design | game-dev-ios (b), game-dev-android (a) (review: game-qc-android) | DONE: b `f0b5235`, a `6d5b8fc` merged | `design/TASK-057{a,b}-info` | 2026-11-18 |
 | TASK-058 | Log the independent APPROVE reads (gate CONCERN): morphcore, hint-letters, child-lock-in review logs | design | game-dev-ios, game-qc-android, game-qc-ios | DONE: 47ee06a, e682469, 6d02513 merged | `design/TASK-058-review-logs-*` | 2026-11-18 |
 | TASK-059 | /create-architecture: master architecture (module map, seams, Android mirror) + prioritised ADR work plan + first scaffold story | architecture | game-dev-ios (review: game-dev-android) | SENT 2026-11-18 | `design/TASK-059-architecture` | 2026-11-18 |
+| TASK-060 | GDD: On-screen Keyboard Row (`design/gdd/onscreen-keyboard-row.md`) via /design-system (Vertical Slice) | design | game-art-content (review: game-dev-android) | SENT 2026-11-18 | `design/TASK-060-gdd-keyboard-row` | 2026-11-18 |
+| TASK-061 | GDD: Accessibility (`design/gdd/accessibility.md`) via /design-system (Vertical Slice) | design | game-qc-ios (review: game-qc-android) | SENT 2026-11-18 | `design/TASK-061-gdd-accessibility` | 2026-11-18 |
 
 ## Leader log
 
@@ -105,3 +107,4 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 - 2026-11-18: TASK-057 merged (K-14). Systems Design complete: 14/14 MVP + Scene approved, cross-review PASS. Next: /gate-check Systems Design → Technical Setup with Luan.
 - 2026-11-18: /gate-check Systems Design → Technical Setup: CONCERNS (review-log bookkeeping for morphcore, hint-letters, child-lock-in); TD READY, PR READY. Luan accepted the risk; STAGE → Technical Setup. Report: production/gate-checks/2026-11-18-systems-design-to-technical-setup.md.
 - 2026-11-18: TASK-058 merged (gate risk closed). Luan: next is /create-architecture → TASK-059 to game-dev-ios.
+- 2026-11-18: while TASK-059 is written, the last two Vertical Slice GDDs sent: TASK-060 Keyboard Row (game-art-content), TASK-061 Accessibility (game-qc-ios).
