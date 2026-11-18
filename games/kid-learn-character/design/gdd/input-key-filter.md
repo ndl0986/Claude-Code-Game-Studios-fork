@@ -2,7 +2,7 @@
 
 > **Status**: Approved (lean review APPROVED 2026-11-18, TASK-037; independent read by game-dev-android APPROVE; merged 2026-11-18)
 > **Author**: game-dev-ios (TASK-037); decisions by Luan; plan reviewed by game-dev-android
-> **Last Updated**: 2026-11-18
+> **Last Updated**: 2026-11-18 (TASK-050 cross-GDD follow-ups)
 > **Last Verified**: 2026-11-18, against ADR-0001 (Accepted), art bible §7, the TASK-033 spike
 > (`prototypes/TASK-033-anim-runtime/Spike/Input.swift`) and the one-shot `prototypes/letter-morph-dinosaur/`
 > **Implements Pillar**: 1 (Every Press Answers), 5 (Safe by Design)
@@ -101,11 +101,19 @@ not a press, not a repeat and not the parent chord:
 
 **R6. The parent chord** (Luan, 2026-11-18). "Open the grown-up panel" is an abstract action with a binding per
 platform.
-- **macOS:** **⌃⌥⌘Q**, exactly those three modifiers plus Q (Shift ignored), as in the TASK-033 kiosk.
+- **macOS:** **⌃⌥⌘Q**, exactly those three modifiers plus Q (Shift ignored), as in the TASK-033 kiosk. It counts
+  **only when no other key is held**: the held set (R4) is **empty when Q goes down** (⌃⌥⌘ are read from the
+  modifier flags; on the Mac they arrive as `flagsChanged` and are not in the held set). ⌃⌥⌘Q with D still down is not
+  the chord *(TASK-050)*. The chord replaces the moon hold only: the gate's second step (the number in words)
+  still shows (K-19).
 - **iPadOS: no chord**, even with a hardware keyboard. Holding the moon is the only way in. ⌃⌥⌘Q on an iPad is
   an ordinary disqualified key: swallowed (R3, R5).
 - **Android:** chosen by its ADR.
-- The chord works with the kiosk on and off. It is never a press and emits only `openPanel`.
+- The chord works with the kiosk on and off. It is never a press and emits only `openPanel`, which **starts the
+  gate's second step** (K-19); the panel itself opens only after the correct answer.
+- **During the gate challenge** (K-20) no key or touch reaches play: no press, no sparkle, no creature tap. Keys
+  and touches go to the challenge only (what it accepts is the Parent Gate GDD's). A wrong answer or a timeout
+  returns to Play, with the held set cleared as for the panel *(TASK-050)*.
 - **Order of checks for a key-down:** hardware system key → pass to the system (R5) → repeat / held (R4) →
   parent chord (R6) → disqualifying modifiers, with the
   macOS kiosk-off ⌘ exception (R3, R5) → resolve the key (R2). So ⌃⌥⌘Q opens the panel even with the kiosk off,
@@ -137,7 +145,7 @@ platform.
 | `key` | one character, `"A"`–`"Z"` or `"0"`–`"9"` | the same key format as the key table (Key Table & Theme Data) |
 | `source` | `hardwareKey` · `hint(id)` · `keyboardRow` | where it came from |
 | `time` | seconds, double | the event's own timestamp on the platform's **monotonic uptime clock** (iOS/macOS event `timestamp` = `systemUptime`; Android `getEventTime() / 1000`), never the wall clock |
-| `origin` | stage point, or `nil` | where a touch landed (the hint's centre for a hint, the key's centre for a row key); `nil` for a hardware key. The glyph rises from here (art bible §7) |
+| `origin` | stage point, or `nil` | where a touch landed (the hint's centre for a hint, the key's centre for a row key); **`nil` from Input for a hardware key**: the Play router sets it from Hint Letters' `originFor(key)` before `press(p)` (K-18: a matching hint is consumed and the glyph rises from it). The glyph rises from here (art bible §7) |
 
 - **Order:** events go out in **delivery order**, synchronously in the platform's event callback. A tie or an
   out-of-order timestamp never reorders or drops an event; `time` is carried for the Queue's use only.
@@ -151,6 +159,7 @@ platform.
 | State | Hardware keys | Touches | Enter / leave |
 |---|---|---|---|
 | **Play** | R2–R6 | R7 | entered from the title (play button or a letter/digit key); left by the panel opening or the app leaving the foreground |
+| **Gate challenge** (K-20) | nothing reaches Play or the queue; **digit keys go only to the challenge's keypad**, every other key emits nothing (system keys still pass, R5) | **go only to the keypad**; anywhere else emits nothing | entered by `openPanel` (chord or moon hold); a wrong answer or timeout → Play, a correct answer → Panel open; the held set clears on enter and on leave |
 | **Panel open** | the filter is off; keys go to the grown-up panel as normal input. Only the panel's own close returns to Play | go to the panel | entered by `openPanel` (chord or moon hold); the held set clears on enter and on leave |
 | **Title** | a key-down that would be a press in Play (R2–R6: resolves to A–Z/0–9, no disqualifying modifier, not a repeat or held) emits `startPlay`, the same as the play button, and **is not a press** (no reveal for that key); every other key emits nothing (system keys still pass, R5) | belong to App Shell | entered and left by the App Shell; the held set is **kept** from Title into Play, so the starting key's repeats and up are ignored and only its next down is a press (Luan, 2026-11-18) |
 | **Inactive** (background, window not key) | nothing emitted; held set cleared | — | the App Shell switches states |
@@ -303,7 +312,9 @@ The two provisional values are tuned in play (leader, 2026-11-18).
     press of "D".
   - **i.** GIVEN Num Lock off, WHEN numpad 7 goes down, THEN one press of "7".
   - **j.** GIVEN macOS, WHEN ⌃⌥⌘Q goes down, THEN `openPanel` and no press; WHEN ⌃⌥Q (no ⌘) goes down, THEN
-    nothing. GIVEN iPadOS, WHEN ⌃⌥⌘Q goes down, THEN nothing (no chord on iPad).
+    nothing. GIVEN iPadOS, WHEN ⌃⌥⌘Q goes down, THEN nothing (no chord on iPad). GIVEN macOS with D held, WHEN
+    ⌃⌥⌘Q goes down, THEN no `openPanel` (TASK-050). GIVEN the gate challenge showing, WHEN D goes down or the
+    stage is touched, THEN no press and no sparkle (K-20).
   - **k.** GIVEN macOS with the kiosk off, WHEN ⌘Q goes down, THEN the filter returns "pass to system"; GIVEN the
     kiosk on, THEN swallowed.
   - **l.** GIVEN `repress_min_s = 0.08`, WHEN D is pressed at 10.00 s and 10.05 s, THEN one press; at 10.00 s and

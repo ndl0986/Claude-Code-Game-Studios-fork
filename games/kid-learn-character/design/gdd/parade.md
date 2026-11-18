@@ -198,8 +198,9 @@ batch is used from then on.
    (`rect.minX = 0`, `rect.width = 1280`, the extension is vertical); wide Mac windows fit by height
    (`rect.minX < 0`, `rect.width > 1280`: the hills extend sideways and the parade walks farther). F3 reads
    `rect.minX` and `W = rect.width`.
-6. **Panel, background and the gate:** the same signals the Press Queue gets (its R8, R8a, R9), including
-   `freeze()` / `resume()` for the gate challenge (K-20), next to `settle`.
+6. **Panel, background and the gate:** the Reveal Stage's R8 signals: `settle` for the panel and the background,
+   and `freeze()` / `resume()` for the gate challenge (K-20). The Press Queue follows the same signals (its R8, R9,
+   and R8a: the gate freeze on the play clock).
 
 ## Formulas
 

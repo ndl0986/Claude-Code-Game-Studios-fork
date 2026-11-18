@@ -53,3 +53,18 @@ Findings:
   starts play (`startPlay`), like the play button, and is not a press; the held set carries into Play. States
   table, R8 outputs, AC-1o.
 Reviewed-Content-Hash: design/gdd/input-key-filter.md bbbc45714a1c29c1a25ec86c921a6e938773b71f
+
+## Update — 2026-11-18 — TASK-050 cross-GDD follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: TASK-050: R8 origin is nil from Input and set by the Play router from Hint Letters' originFor(key) (K-18); R6 the Mac chord counts only with no other key held and starts the gate's second step (K-19); nothing reaches play during the gate challenge (K-20), new Gate challenge state; AC 1j extended. Wording and interface follow-ups from K-18/K-19/K-20 and the Cast Rendering and Reveal Stage reviews; verdict unchanged; review by game-dev-ios.
+Reviewed-Content-Hash: design/gdd/input-key-filter.md 8c1a71612d35412e14543e2f0d9a44ba65a8e5cb
+
+## Update — 2026-11-18 — TASK-050 follow-ups, part 2 (no re-review)
+Review mode: lean · Workflow: standard
+Change: Gate challenge state row: digit keys and touches go only to the challenge's keypad; nothing reaches Play or the queue (K-20); exits on wrong, timeout or correct, correct → Panel open. Verdict unchanged; review by game-dev-ios.
+Reviewed-Content-Hash: design/gdd/input-key-filter.md 1bdc1f15e4f76b3bd5c43c65fdc359238de133e9
+
+## Update — 2026-11-18 — TASK-050 wording notes from game-dev-android (no re-review)
+Review mode: lean · Workflow: standard
+Change: R6 chord wording: the held set is empty when Q goes down; ⌃⌥⌘ are read from the modifier flags (flagsChanged on the Mac, not in the held set). Optional notes from game-dev-android's APPROVE of c4ae20d. Verdict unchanged.
+Reviewed-Content-Hash: design/gdd/input-key-filter.md fd2286b73dad5e6608b42103370102f8f9b44c72

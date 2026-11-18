@@ -78,3 +78,18 @@ Reviewed-Content-Hash: design/gdd/key-table-theme-data.md 6fa1ce3101c05275459090
 Review mode: lean · Workflow: standard
 Change: from game-dev-ios's review of TASK-042: V15's duration is the decoded length with AAC encoder priming and padding removed (what the app's decoder returns and Audio schedules), not the container duration; priming (~2112 samples ≈ 44 ms at 48 kHz) would otherwise break ±0.01 s.
 Reviewed-Content-Hash: design/gdd/key-table-theme-data.md e108179924cb3f53191a26f006791f88e7e342bd
+
+## Update — 2026-11-18 — TASK-050 cross-GDD follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: TASK-050: Rule 4.5 `peek(key)` for prefetch (the item resolve would pick now; lastShown and the variety stream unchanged), the Reveal Stage interaction row, AC-15. Wording and interface follow-ups from K-18/K-19/K-20 and the Cast Rendering and Reveal Stage reviews; verdict unchanged; review by game-dev-ios.
+Reviewed-Content-Hash: design/gdd/key-table-theme-data.md 3732afc4fa931107ff03ab93f9d73a6551e4f483
+
+## Update — 2026-11-18 — TASK-050 item 9 (no re-review)
+Review mode: lean · Workflow: standard
+Change: K-22: new theme field `titleCastId` (the one cast member idling on the Title; Dinosaurs = the T-Rex, as played), validator rule V16 (must name an item in the theme), run-time fallback to the first item in canonical order (key A, item 0) with one debug log line, App Shell & Title rows in Interactions and Dependencies, AC-16. Verdict unchanged; review by game-dev-android.
+Reviewed-Content-Hash: design/gdd/key-table-theme-data.md 6878f022785a592f47c810effdde3d332360a3bc
+
+## Update — 2026-11-18 — TASK-050 item 9 fix (no re-review)
+Review mode: lean · Workflow: standard
+Change: mechanical fix from game-dev-android's check of ed7e812: the V16 row had been inserted inside the V15 row (after "48 "); V15 is whole again (its word ≤ 1.25 s and letter ≤ 1.0 s limits, cited by Audio F6/AC-6 and Press Queue F1) and V16 is its own row. No content change.
+Reviewed-Content-Hash: design/gdd/key-table-theme-data.md 640a8fc4bb90c1b95656ed32f90d046078e50488

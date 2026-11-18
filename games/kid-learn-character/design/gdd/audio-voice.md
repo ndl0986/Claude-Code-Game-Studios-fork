@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent review by game-dev-ios, merged 2026-11-18)
 > **Author**: game-art-content for Luan (TASK-041)
-> **Last Updated**: 2026-11-18 (volume aligned with the Settings Store, K-12)
+> **Last Updated**: 2026-11-18 (TASK-050 cross-GDD follow-ups)
 > **Last Verified**: 2026-11-18
 > **Implements Pillar**: Pillar 1 (Every Press Answers) and Pillar 3 (Calm Magic); serves Pillar 2 (The Letter Comes Alive)
 
@@ -62,7 +62,7 @@ press-time events, which fire when Input delivers the event. `glow` and `T` are 
 | E6 | **Letter / number voice** | reveal start (Reveal Stage) | `s = 0` | voice | `vo_<locale>_letter_<id>` or `vo_<locale>_number_<id>`. Always cuts any line still playing (R2.3). |
 | E7 | **Twinkle** | the glyph starts to dissolve | `s = glow` | ui pool | One per reveal; not mash-scaled. |
 | E8 | **Cast sound** | the reveal is formed | `s = T` | cast | The item's `sfx` (≤ 2 s). Skipped if `sfx` is null or missing. |
-| E9 | **Word voice** | the reveal is formed | `s = T + word_offset_s` (0.25 s, decided, Luan Q1) | voice | `vo_<locale>_word_<id>`. The cast sound is ducked under it (F2). **A waiting key does not cut it** (F6). |
+| E9 | **Word voice** | the reveal is formed | `s = T + word_offset_s` (0.25 s, decided, Luan Q1) | voice | `vo_<locale>_word_<id>`. The cast sound is ducked under it (F2). **A waiting key does not cut it** (F6). **Skipped when `hasWord` is false** (the Reveal Stage's answer, from Cast Rendering's `willForm`: no word line, or the creature will not form) *(TASK-050)*. |
 | E10 | **Creature-tap sound** | `creatureTap` on the formed cast member, outside the cooldown (Reveal Stage) | at the tap | cast | The same `sfx` again; cuts the cast player's current sound (R2.4). During the word it is ducked like E8 (F2): the word stays on top. |
 | E11 | **Number sound** | a digit reveal is formed | `s = T` | cast | The digit item's `sfx`: **one chirp per baby, counting along up to 9** (decided, Luan Q6); 0 (the empty nest) is one soft chirp. The file stays ≤ 2 s (A3), so chirps are ≤ 0.22 s apart for 9. It runs on the cast player, so the next reveal cuts it (R2.4). |
 | E12 | **Parade tune** | the parade starts (Parade GDD owns the trigger) | at parade start | music | Ducked under any voice line (F2). Stops with a fade when the parade ends or the panel opens. |
@@ -159,6 +159,12 @@ never more brightness"; Pillar 3).
 - **Background / the panel:** going to the background cuts every player and pauses the engine; coming back
   follows the interruption rule. Opening the grown-up panel cuts the voice, cast and music players; the panel is
   quiet.
+- **Gate challenge freeze (K-20; TASK-050):** on the Reveal Stage's `freeze()` (the parent-gate number challenge
+  shows), Audio **pauses** every player where it is (voice, cast, ui, and music, so the parade tune E12 too), and
+  **nothing new starts** while frozen: event times run on the same play clock as the reveal, which stands still.
+  On `resume()` (a wrong answer or a timeout) each paused sound **continues** from where it stopped. A correct
+  answer opens the panel, and the panel rule above (cut) applies. Pausing and continuing follow R2.2: no click.
+  Only the gate challenge freezes; the panel and the background keep their cut / settle behaviour.
 - **No sound before the first input** at launch: the engine is already running (R2.1), but **nothing is
   scheduled** until a key or a tap, so the title screen is silent and the first chime pays no engine-start time.
 
@@ -191,6 +197,7 @@ and that the TTS licence allows a commercial kids' app (Open Questions).
 | **Interrupted** | an interruption began, or background | none; events are skipped | "should resume" → Running (re-prime); otherwise the next press restarts it |
 | **Re-priming** | a format change or a media reset | none; events are skipped and logged | buffers ready → Running |
 | **Muted** | mute on (Settings Store) | none; the engine keeps running | mute off → Running |
+| **Frozen** | `freeze()` (gate challenge, K-20) | none; players paused in place, nothing scheduled | `resume()` → Running, sounds continue; a correct answer → the panel cut |
 
 Theme loading is the Key Table's state: until the new theme is Active (R4.1), the old theme's buffers keep
 playing.
@@ -312,6 +319,8 @@ about **2.7 s** later than with a plain 3.0 s hold. Luan accepted this for a wor
 |---|---|
 | **sfx missing or failed to decode** | E8/E10/E11 skipped; the rest plays (Key Table fallback). Debug log. |
 | **Word voice missing** | E9 skipped; the letter line only. The Press Queue uses the plain hold for that reveal. |
+| **Late art** (Cast Rendering: the art is not resident at `formedS`; the stardust holds the shape ≤ 0.5 s) | **E8 and E9 still play on time**, at `s = T` and `T + word_offset_s`: the sounds never wait for the picture *(TASK-050)*. If the art still does not arrive and the specks sparkle out, the cast sound and word that already started finish; nothing is cut. |
+| **`hasWord` false** (`willForm` false: art missing or failed the theme check) | E8 and E9 are skipped; the glyph sparkles out with the letter line and the chime only (Key Table fallback) *(TASK-050)*. |
 | **Letter voice missing too** | The chime only (E1). |
 | **Fixed sound missing** (chime, ping, twinkle, parade) | A build check makes this impossible; at run time it is skipped and logged. Never a crash. |
 | **A locale in `voiceLocales` has no files** | The build fails (A8, Key Table V7). |
@@ -461,6 +470,9 @@ Logic criteria run with an injected clock and a fake player layer (no audio hard
 20. **AC-20 Silent mode (iPad only).** With the iPad in silent mode, no sound is heard for any event, a full reveal
     still shows every visual answer, and music playing in another app is stopped, not mixed (`.soloAmbient`
     behaviour). macOS has no silent mode and is not tested here.
+21. **AC-21 Gate freeze (TASK-050).** With the word line half played and the parade tune running, `freeze()` for
+    10 s then `resume()`: both are silent during the freeze, nothing new starts (an E8 due during it plays only
+    after the resume, at its play-clock time), and both continue from where they paused with no click (AC-9).
 
 ## Open Questions
 
