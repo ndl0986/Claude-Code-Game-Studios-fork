@@ -299,8 +299,8 @@ FAIL if ∃ t, ∃ field position F:  #{ p ∈ F : flashing(p, t) } > area_max
   parade, at Night and at Day, with light rain and with snow; once with Reduce Motion off and once on;
   **and a 10 s Title idle run** (Night, light rain, Reduce Motion off) per device class (ADR-0013 D3).
   10 s per run.
-- **Where (ADR-0013):** the **offline render (G4)** runs it on every merge candidate that touches the stage or
-  content: the stage drawn headless on a synthetic clock, no Simulator (the luminance math doesn't depend on the
+- **Where (ADR-0013):** the **offline render (G4)** runs it on every merge candidate that touches `apple/` or
+  `content/`: the stage drawn headless on a synthetic clock, no Simulator (the luminance math doesn't depend on the
   GPU). The **release gate is the run on a real iPad and a real Mac (G5)** (frame timing and the colour pipeline do).
   **NOT ASSESSED** until device time from Luan.
 - **F2b, red flash (run on the palette):** every colour in the art bible (51 hex values, read
@@ -398,7 +398,7 @@ GDD's (A8).
    flicker between L 0.85 and 1.0 passes (darker ≥ 0.80) (unit tests on the detector).
 8. **AC-08 · F2 gate (NOT ASSESSED until device time):** the K-26 busy scenario, Night and Day, rain and
    snow, Reduce Motion off and on, plus a Title idle run, on a real iPad and a real Mac at the display's refresh rate:
-   no FAIL. The offline render (ADR-0013 G4) passes on every stage-touching merge candidate.
+   no FAIL. The offline render (ADR-0013 G4) passes on every merge candidate touching `apple/` or `content/`.
 9. **AC-09 · F2b red flash:** the palette check over every hex in the art bible reports the highest
    R/(R+G+B) (8-bit 0.604, linear 0.781) and passes (< 0.8); adding `#ff0000` to a test palette fails it. It runs on the shipped palette, theme data and SVG fills.
    The F2 capture's logged per-pixel maximum stays < 0.8 **over pixels with R + G + B ≥ 0.1** (normalised):

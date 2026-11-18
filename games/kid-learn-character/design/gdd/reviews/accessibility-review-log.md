@@ -130,3 +130,9 @@ Change: ADR-0013 (Accepted, Luan, K-43) "GDD sync" applied as listed; F2's rule 
 - F2 field table: the Mac 1× class floor, 72 ppi (148.8 / 4,347), with the note that G4 uses each class's floor and the device run its real ppi.
 - AC-09: the logged per-pixel maximum is over pixels with R + G + B ≥ 0.1, excluding near-black rounding noise; not a threshold change.
 Reviewed-Content-Hash: design/gdd/accessibility.md 6535cac63ecc2189c7c679b22ad431bb81115d93
+
+## Update — 2026-11-18 — TASK-119 nit (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-119
+Change: F2 Where and AC-08 say "a merge candidate touching `apple/` or `content/`", matching ADR-0013 D1 and the ADR-0011 note (game-dev-android nit). No rule change.
+Reviewed-Content-Hash: design/gdd/accessibility.md 64673e2250512e2f0e7c74a1e040211ed3f3aea7
