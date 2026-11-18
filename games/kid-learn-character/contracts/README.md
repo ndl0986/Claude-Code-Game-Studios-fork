@@ -50,9 +50,12 @@ it is never Done.
 
 | Contract | Row | Cases |
 |---|---|---|
+| app-shell-v1 | not-started: story:app-shell | 26 |
 | audio-plan-v1 | not-started: story:audio-voice | 30 |
+| gate-logic-v1 | not-started: story:parent-gate | 48 |
 | hint-letters-v1 | not-started: story:hint-letters | 58 |
-| input-filter-v1 | not-started: story:input-key-filter | 86 |
+| input-filter-v1 | superseded-by: input-filter-v2 | 86 |
+| input-filter-v2 | not-started: story:input | 95 |
 | key-table-schema-v1 | runner: KeyTableModelRunner + Tools.KeyTableFileLayer | 93 |
 | keyboard-row-v1 | not-started: story:keyboard-row | 36 |
 | press-queue-v1 | not-started: story:press-queue | 46 |
