@@ -105,6 +105,42 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-19 Parent gate (Luan, 2026-11-18, TASK-048 questions)
+
+- **Two steps:** hold the moon ~1.5 s, then a **number written in words** ("Enter four · one · seven")
+  on a 0–9 keypad, new each time. Never spoken by the game's voice; English text until Localization.
+- **Mac chord ⌃⌥⌘Q replaces the moon hold but still shows step 2** (one gate everywhere).
+- **The panel auto-closes after 60 s** with no input (a knob).
+- **"Play the parade now" is debug-build only;** release builds have no such button (also K-17).
+
+### K-18 Hint letters (Luan, 2026-11-18, TASK-047 questions; team proposals accepted)
+
+- A hardware key that matches an on-screen hint **consumes that hint** and the glyph rises from it
+  (as played).
+- A new hint never repeats a key on screen, the current reveal's key, **or a queued key**.
+- Hints pulse gently until the first press (as played), reset on each entry to Play.
+- An ignored hint that stays **restarts its life** from that touch (full opacity).
+- Panel open: hints freeze under the dim and carry on after close. Background: hints clear; three
+  fresh ones spawn on return.
+- **The Mac shows hints too** (clickable).
+- Reduce Motion: no drift, no pulse, no scale-in; the consume burst becomes a plain fade.
+
+### K-17 Parade (Luan, 2026-11-18, TASK-046 questions)
+
+- **A parade every 6 creatures met** (changes the brief's 8). **A key pressed again within the same
+  batch counts once.** Parades keep coming for as long as the child plays (no cap at 32/36).
+- **Letters and digits both count;** a digit walks as its group (e.g. three babies) at parade size.
+- **A press mid-parade:** the parade keeps walking behind, the new reveal plays in front (as played).
+  **Panel open or background:** the parade fades out, counts as played, and is not replayed.
+- **The count is per theme;** a parade never mixes themes.
+- Reduce Motion: the same 11 s walk, step bob ×0.5. Art not ready: wait ≤ 0.5 s, then walk without
+  the missing figure. Tapping a walking figure only sparkles.
+- No "Play the parade" button in release builds (debug only).
+- Leader defaults (not asked): the unit is the key, not the castId; a glyph-only fallback (art
+  missing) does not count as met.
+- Cast Rendering note accepted: in a mash at the normal set with no word extension, K-16's 0.5 s
+  late-art wait is in practice 0.05 s (art is prefetched, so it is rare).
+
 ### K-16 Cast rendering choices (Luan, 2026-11-18, TASK-044 questions)
 
 - **Reduce Motion softens:** idles at half amplitude, a smaller tap hop, the glyph halo holds steady
