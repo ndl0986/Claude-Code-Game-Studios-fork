@@ -26,11 +26,12 @@
 - **B13 the chord:** ignored in the challenge and the panel; Esc and Cancel return to the origin, Title or Play
   (AC-25, AC-31).
 - **B8 confirm** (AC-17): 1.49 nothing, 1.50 confirms; a second trigger tap does nothing; it hides 5 s after the
-  later of the reveal and the last lift.
+  later of the reveal and the last lift, never while a hold is in progress.
 - **B9 / B10 auto-close** (AC-18, AC-29):
   - idle 60 s, reset by control touches and key downs, never by the empty area;
   - the third down of a burst doesn't reset it; the window is half-open;
-  - the cap at 300 s, which waits for a slider drag.
+  - a non-resetting burst down still counts toward a later burst;
+  - the cap at 300 s, which waits for a slider drag or a confirm hold (the action, then the close, in one step).
 - **`gateOverlayShown`** (B12): true at the challenge's open, false at every close. App Shell's `edgeDeferral` and
   `statusBarHidden` are app-shell-v1's.
 

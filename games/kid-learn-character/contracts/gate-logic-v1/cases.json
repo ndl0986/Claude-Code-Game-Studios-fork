@@ -5704,6 +5704,621 @@
           ]
         }
       ]
+    },
+    {
+      "id": "B8-confirm-never-hides-during-hold",
+      "source": "gdd: parent-gate-panel.md G8; G13 B8 (never while a hold is in progress)",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.25,
+            "away": 1.25
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 1,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.75,
+            "away": 1.75
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 2,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "panel"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "confirmTrigger",
+            "action": "reset"
+          },
+          "expect": [
+            {
+              "out": "confirm",
+              "state": "shown"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 6.875,
+            "away": 6.875
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "confirm"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 7.0,
+            "away": 7.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 8.25,
+            "away": 8.25
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 8.375,
+            "away": 8.375
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "confirm",
+              "state": "done",
+              "action": "reset"
+            }
+          ]
+        }
+      ],
+      "note": "At 7.0 the reveal is 5 s old, but a hold (from 6.875) is in progress: no hide; it confirms at 8.375."
+    },
+    {
+      "id": "B10-cap-waits-for-confirm-hold",
+      "source": "gdd: parent-gate-panel.md G10; G13 B10 (the confirmed action, then the close, in the same step)",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.25,
+            "away": 1.25
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 1,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.75,
+            "away": 1.75
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 2,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "panel"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 51.75,
+            "away": 51.75
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 101.75,
+            "away": 101.75
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 151.75,
+            "away": 151.75
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 201.75,
+            "away": 201.75
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 251.75,
+            "away": 251.75
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 299.0,
+            "away": 299.0
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "confirmTrigger",
+            "action": "quit"
+          },
+          "expect": [
+            {
+              "out": "confirm",
+              "state": "shown"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 300.5,
+            "away": 300.5
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "confirm"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 301.75,
+            "away": 301.75
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Panel"
+          }
+        },
+        {
+          "t": {
+            "uptime": 302.0,
+            "away": 302.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "confirm",
+              "state": "done",
+              "action": "quit"
+            },
+            {
+              "out": "panelClose",
+              "reason": "cap",
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B9-non-resetting-down-counts-later",
+      "source": "gdd: parent-gate-panel.md G13 B9 (a non-resetting down still counts toward later bursts)",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.25,
+            "away": 1.25
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 1,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.75,
+            "away": 1.75
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 2,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "panel"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 51.75,
+            "away": 51.75
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 52.0,
+            "away": 52.0
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 52.25,
+            "away": 52.25
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 52.875,
+            "away": 52.875
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 111.9375,
+            "away": 111.9375
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 112.0,
+            "away": 112.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "panelClose",
+              "reason": "idle",
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        }
+      ],
+      "note": "52.25 is a burst down (no reset), but it still counts: at 52.875 the window (51.875, 52.875] holds 52.0 and 52.25, so 52.875 is a burst down too. The timer runs from 52.0."
     }
   ]
 }
