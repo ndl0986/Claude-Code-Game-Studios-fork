@@ -35,7 +35,15 @@ GDD's author).
 - **R7 pulse** per Play entry (AC-13). **R10 Reduce Motion** from the start and mid-life (AC-18).
 - **F2** alpha and scale; **F3** drift; **F5** size and `k` (AC-19). The title: no hints (AC-17).
 
+- **Boundaries pinned exactly** (game-dev-android's review): the inclusive gap at a dyadic `hint_gap_s` 0.75; expiry
+  at exactly age = life; the moon's 50 and the tokens' 40 unscaled at `k = 1.2`; the exact 147.8 / 137.8, not the
+  rounded 148 / 138. Each one fails if the rule is flipped in the model (mutation-checked).
+
 **Not covered here, and why:**
+- **F1's `|pool| = 1` (no draw) and `|pool| = 0` (no spawn):** unreachable in play (at most 7 keys are excluded of 36),
+  so no case reaches them; R13 states them.
+- **The box and hint-spacing inclusivity:** their thresholds (97.8, 185.6) are not dyadic, so those cases sit near
+  the threshold rather than on it. The moon and token boundaries are pinned on the exact values instead.
 - **AC-7's 10,000-minute simulation and AC-4's 100,000 spawns:** per-platform unit tests, too large for a case file
   (ADR-0004 D2). AC-3's frequency check over 10,000 spawns is the same kind of test; the cases pin the mapping.
 - **Android insets (AC-20):** a later version. **The look (AC-22):** screenshots.

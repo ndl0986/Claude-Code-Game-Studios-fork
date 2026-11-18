@@ -5057,6 +5057,921 @@
       ]
     },
     {
+      "id": "R13-gap-inclusive-boundary",
+      "source": "gdd: hint-letters.md R13 (the gap test is >=)",
+      "given": {
+        "knobs": {
+          "hint_count": 3,
+          "hint_life_s": 6.0,
+          "hint_gap_s": 0.75,
+          "fade_in_s": 0.6,
+          "fade_out_s": 0.8,
+          "hint_jitter": 10.0,
+          "hit_radius": 75.0,
+          "drift_max": 12.8,
+          "parade_hint_alpha": 0.5,
+          "parade_hint_fade_s": 0.6,
+          "consume_fade_s": 0.3,
+          "hit_floor_mm": 18.0
+        },
+        "layout": {
+          "slots": {
+            "L1": [
+              130.0,
+              200.0
+            ],
+            "L2": [
+              360.0,
+              200.0
+            ],
+            "L3": [
+              130.0,
+              410.0
+            ],
+            "L4": [
+              360.0,
+              410.0
+            ],
+            "R1": [
+              1150.0,
+              200.0
+            ],
+            "R2": [
+              920.0,
+              200.0
+            ],
+            "R3": [
+              1150.0,
+              410.0
+            ],
+            "R4": [
+              920.0,
+              410.0
+            ]
+          },
+          "slotOrder": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "R1",
+            "R2",
+            "R3",
+            "R4"
+          ],
+          "stage": [
+            1280.0,
+            720.0
+          ],
+          "moon": {
+            "centre": [
+              66.0,
+              62.0
+            ],
+            "radius": 50.0
+          },
+          "tokens": {
+            "centres": [
+              [
+                1214.0,
+                58.0
+              ],
+              [
+                1148.0,
+                58.0
+              ],
+              [
+                1082.0,
+                58.0
+              ]
+            ],
+            "radius": 40.0
+          },
+          "glyphBox": [
+            475.0,
+            155.0,
+            805.0,
+            485.0
+          ],
+          "rowBandTop": 582.0
+        },
+        "k": 1.0,
+        "castBox": null,
+        "keyboardRowOn": false,
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {
+        "hints": [
+          "0",
+          "0",
+          "9223372036854775808",
+          "9223372036854775808",
+          "9223372036854775808",
+          "0",
+          "0",
+          "0",
+          "9223372036854775808",
+          "9223372036854775808",
+          "9223372036854775808",
+          "0"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "enterPlay"
+          },
+          "expect": [
+            {
+              "out": "spawn",
+              "id": 1,
+              "key": "A",
+              "slot": "L1",
+              "centre": [
+                130.0,
+                200.0
+              ],
+              "life": 6.0,
+              "phi": 0.0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.71875
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "count": 1
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [
+            {
+              "out": "spawn",
+              "id": 2,
+              "key": "B",
+              "slot": "L2",
+              "centre": [
+                360.0,
+                200.0
+              ],
+              "life": 6.0,
+              "phi": 0.0
+            }
+          ],
+          "expectState": {
+            "count": 2
+          }
+        }
+      ],
+      "note": "hint_gap_s 0.75 (in range) so the boundary is dyadic: a frame exactly 0.75 after the attempt attempts. A on screen: index 0 → B; free L2-R4: index 0 → L2."
+    },
+    {
+      "id": "R13-expiry-at-exactly-life",
+      "source": "gdd: hint-letters.md R13 (age >= life, inclusive); AC-8",
+      "given": {
+        "knobs": {
+          "hint_count": 1,
+          "hint_life_s": 6.0,
+          "hint_gap_s": 0.7,
+          "fade_in_s": 0.6,
+          "fade_out_s": 0.8,
+          "hint_jitter": 10.0,
+          "hit_radius": 75.0,
+          "drift_max": 12.8,
+          "parade_hint_alpha": 0.5,
+          "parade_hint_fade_s": 0.6,
+          "consume_fade_s": 0.3,
+          "hit_floor_mm": 18.0
+        },
+        "layout": {
+          "slots": {
+            "L1": [
+              130.0,
+              200.0
+            ],
+            "L2": [
+              360.0,
+              200.0
+            ],
+            "L3": [
+              130.0,
+              410.0
+            ],
+            "L4": [
+              360.0,
+              410.0
+            ],
+            "R1": [
+              1150.0,
+              200.0
+            ],
+            "R2": [
+              920.0,
+              200.0
+            ],
+            "R3": [
+              1150.0,
+              410.0
+            ],
+            "R4": [
+              920.0,
+              410.0
+            ]
+          },
+          "slotOrder": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "R1",
+            "R2",
+            "R3",
+            "R4"
+          ],
+          "stage": [
+            1280.0,
+            720.0
+          ],
+          "moon": {
+            "centre": [
+              66.0,
+              62.0
+            ],
+            "radius": 50.0
+          },
+          "tokens": {
+            "centres": [
+              [
+                1214.0,
+                58.0
+              ],
+              [
+                1148.0,
+                58.0
+              ],
+              [
+                1082.0,
+                58.0
+              ]
+            ],
+            "radius": 40.0
+          },
+          "glyphBox": [
+            475.0,
+            155.0,
+            805.0,
+            485.0
+          ],
+          "rowBandTop": 582.0
+        },
+        "k": 1.0,
+        "castBox": null,
+        "keyboardRowOn": false,
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {
+        "hints": [
+          "0",
+          "0",
+          "9223372036854775808",
+          "9223372036854775808",
+          "9223372036854775808",
+          "0",
+          "0",
+          "0",
+          "9223372036854775808",
+          "9223372036854775808",
+          "9223372036854775808",
+          "0"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "enterPlay"
+          },
+          "expect": [
+            {
+              "out": "spawn",
+              "id": 1,
+              "key": "A",
+              "slot": "L1",
+              "centre": [
+                130.0,
+                200.0
+              ],
+              "life": 6.0,
+              "phi": 0.0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 5.9375
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "count": 1
+          }
+        },
+        {
+          "t": {
+            "uptime": 6.0
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [
+            {
+              "out": "expire",
+              "id": 1
+            }
+          ],
+          "expectState": {
+            "count": 0
+          }
+        },
+        {
+          "t": {
+            "uptime": 6.03125
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [
+            {
+              "out": "spawn",
+              "id": 2,
+              "key": "A",
+              "slot": "L1",
+              "centre": [
+                130.0,
+                200.0
+              ],
+              "life": 6.0,
+              "phi": 0.0
+            }
+          ],
+          "expectState": {
+            "count": 1
+          }
+        }
+      ],
+      "note": "Life 6.0 exactly (u 0.5): removed on the frame at age 6.0; the attempt comes on the next frame."
+    },
+    {
+      "id": "F4-valid-moon-unscaled-k1.2",
+      "source": "gdd: hint-letters.md F4 (R + 50 + 10k, R + 40 + 10k; exact values, TASK-089b)",
+      "given": {
+        "knobs": {
+          "hint_count": 3,
+          "hint_life_s": 6.0,
+          "hint_gap_s": 0.7,
+          "fade_in_s": 0.6,
+          "fade_out_s": 0.8,
+          "hint_jitter": 10.0,
+          "hit_radius": 75.0,
+          "drift_max": 12.8,
+          "parade_hint_alpha": 0.5,
+          "parade_hint_fade_s": 0.6,
+          "consume_fade_s": 0.3,
+          "hit_floor_mm": 18.0
+        },
+        "layout": {
+          "slots": {
+            "L1": [
+              130.0,
+              200.0
+            ],
+            "L2": [
+              360.0,
+              200.0
+            ],
+            "L3": [
+              130.0,
+              410.0
+            ],
+            "L4": [
+              360.0,
+              410.0
+            ],
+            "R1": [
+              1150.0,
+              200.0
+            ],
+            "R2": [
+              920.0,
+              200.0
+            ],
+            "R3": [
+              1150.0,
+              410.0
+            ],
+            "R4": [
+              920.0,
+              410.0
+            ]
+          },
+          "slotOrder": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "R1",
+            "R2",
+            "R3",
+            "R4"
+          ],
+          "stage": [
+            1280.0,
+            720.0
+          ],
+          "moon": {
+            "centre": [
+              66.0,
+              62.0
+            ],
+            "radius": 50.0
+          },
+          "tokens": {
+            "centres": [
+              [
+                1214.0,
+                58.0
+              ],
+              [
+                1148.0,
+                58.0
+              ],
+              [
+                1082.0,
+                58.0
+              ]
+            ],
+            "radius": 40.0
+          },
+          "glyphBox": [
+            475.0,
+            155.0,
+            805.0,
+            485.0
+          ],
+          "rowBandTop": 582.0
+        },
+        "k": 1.2,
+        "castBox": null,
+        "keyboardRowOn": false,
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {
+        "hints": []
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "validAt",
+            "centre": [
+              186.0,
+              182.0
+            ],
+            "others": []
+          },
+          "expect": [
+            {
+              "out": "valid",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "note": "169.7 from the moon >= 105.36 + 50 + 12 = 167.36; with the radius scaled (60) it would fail"
+    },
+    {
+      "id": "F4-valid-token-unscaled-k1.2",
+      "source": "gdd: hint-letters.md F4 (R + 50 + 10k, R + 40 + 10k; exact values, TASK-089b)",
+      "given": {
+        "knobs": {
+          "hint_count": 3,
+          "hint_life_s": 6.0,
+          "hint_gap_s": 0.7,
+          "fade_in_s": 0.6,
+          "fade_out_s": 0.8,
+          "hint_jitter": 10.0,
+          "hit_radius": 75.0,
+          "drift_max": 12.8,
+          "parade_hint_alpha": 0.5,
+          "parade_hint_fade_s": 0.6,
+          "consume_fade_s": 0.3,
+          "hit_floor_mm": 18.0
+        },
+        "layout": {
+          "slots": {
+            "L1": [
+              130.0,
+              200.0
+            ],
+            "L2": [
+              360.0,
+              200.0
+            ],
+            "L3": [
+              130.0,
+              410.0
+            ],
+            "L4": [
+              360.0,
+              410.0
+            ],
+            "R1": [
+              1150.0,
+              200.0
+            ],
+            "R2": [
+              920.0,
+              200.0
+            ],
+            "R3": [
+              1150.0,
+              410.0
+            ],
+            "R4": [
+              920.0,
+              410.0
+            ]
+          },
+          "slotOrder": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "R1",
+            "R2",
+            "R3",
+            "R4"
+          ],
+          "stage": [
+            1280.0,
+            720.0
+          ],
+          "moon": {
+            "centre": [
+              66.0,
+              62.0
+            ],
+            "radius": 50.0
+          },
+          "tokens": {
+            "centres": [
+              [
+                1214.0,
+                58.0
+              ],
+              [
+                1148.0,
+                58.0
+              ],
+              [
+                1082.0,
+                58.0
+              ]
+            ],
+            "radius": 40.0
+          },
+          "glyphBox": [
+            475.0,
+            155.0,
+            805.0,
+            485.0
+          ],
+          "rowBandTop": 582.0
+        },
+        "k": 1.2,
+        "castBox": null,
+        "keyboardRowOn": false,
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {
+        "hints": []
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "validAt",
+            "centre": [
+              1148.0,
+              218.0
+            ],
+            "others": []
+          },
+          "expect": [
+            {
+              "out": "valid",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "note": "160 from the token >= 105.36 + 40 + 12 = 157.36; with the radius scaled (48) it would fail"
+    },
+    {
+      "id": "F4-valid-moon-exact-147.8",
+      "source": "gdd: hint-letters.md F4 (R + 50 + 10k, R + 40 + 10k; exact values, TASK-089b)",
+      "given": {
+        "knobs": {
+          "hint_count": 3,
+          "hint_life_s": 6.0,
+          "hint_gap_s": 0.7,
+          "fade_in_s": 0.6,
+          "fade_out_s": 0.8,
+          "hint_jitter": 10.0,
+          "hit_radius": 75.0,
+          "drift_max": 12.8,
+          "parade_hint_alpha": 0.5,
+          "parade_hint_fade_s": 0.6,
+          "consume_fade_s": 0.3,
+          "hit_floor_mm": 18.0
+        },
+        "layout": {
+          "slots": {
+            "L1": [
+              130.0,
+              200.0
+            ],
+            "L2": [
+              360.0,
+              200.0
+            ],
+            "L3": [
+              130.0,
+              410.0
+            ],
+            "L4": [
+              360.0,
+              410.0
+            ],
+            "R1": [
+              1150.0,
+              200.0
+            ],
+            "R2": [
+              920.0,
+              200.0
+            ],
+            "R3": [
+              1150.0,
+              410.0
+            ],
+            "R4": [
+              920.0,
+              410.0
+            ]
+          },
+          "slotOrder": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "R1",
+            "R2",
+            "R3",
+            "R4"
+          ],
+          "stage": [
+            1280.0,
+            720.0
+          ],
+          "moon": {
+            "centre": [
+              66.0,
+              62.0
+            ],
+            "radius": 50.0
+          },
+          "tokens": {
+            "centres": [
+              [
+                1214.0,
+                58.0
+              ],
+              [
+                1148.0,
+                58.0
+              ],
+              [
+                1082.0,
+                58.0
+              ]
+            ],
+            "radius": 40.0
+          },
+          "glyphBox": [
+            475.0,
+            155.0,
+            805.0,
+            485.0
+          ],
+          "rowBandTop": 582.0
+        },
+        "k": 1.0,
+        "castBox": null,
+        "keyboardRowOn": false,
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {
+        "hints": []
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "validAt",
+            "centre": [
+              170.58109,
+              166.58109
+            ],
+            "others": []
+          },
+          "expect": [
+            {
+              "out": "valid",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "note": "147.90 from the moon: valid against the exact 147.8, invalid against the rounded 148"
+    },
+    {
+      "id": "F4-valid-token-exact-137.8",
+      "source": "gdd: hint-letters.md F4 (R + 50 + 10k, R + 40 + 10k; exact values, TASK-089b)",
+      "given": {
+        "knobs": {
+          "hint_count": 3,
+          "hint_life_s": 6.0,
+          "hint_gap_s": 0.7,
+          "fade_in_s": 0.6,
+          "fade_out_s": 0.8,
+          "hint_jitter": 10.0,
+          "hit_radius": 75.0,
+          "drift_max": 12.8,
+          "parade_hint_alpha": 0.5,
+          "parade_hint_fade_s": 0.6,
+          "consume_fade_s": 0.3,
+          "hit_floor_mm": 18.0
+        },
+        "layout": {
+          "slots": {
+            "L1": [
+              130.0,
+              200.0
+            ],
+            "L2": [
+              360.0,
+              200.0
+            ],
+            "L3": [
+              130.0,
+              410.0
+            ],
+            "L4": [
+              360.0,
+              410.0
+            ],
+            "R1": [
+              1150.0,
+              200.0
+            ],
+            "R2": [
+              920.0,
+              200.0
+            ],
+            "R3": [
+              1150.0,
+              410.0
+            ],
+            "R4": [
+              920.0,
+              410.0
+            ]
+          },
+          "slotOrder": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "R1",
+            "R2",
+            "R3",
+            "R4"
+          ],
+          "stage": [
+            1280.0,
+            720.0
+          ],
+          "moon": {
+            "centre": [
+              66.0,
+              62.0
+            ],
+            "radius": 50.0
+          },
+          "tokens": {
+            "centres": [
+              [
+                1214.0,
+                58.0
+              ],
+              [
+                1148.0,
+                58.0
+              ],
+              [
+                1082.0,
+                58.0
+              ]
+            ],
+            "radius": 40.0
+          },
+          "glyphBox": [
+            475.0,
+            155.0,
+            805.0,
+            485.0
+          ],
+          "rowBandTop": 582.0
+        },
+        "k": 1.0,
+        "castBox": null,
+        "keyboardRowOn": false,
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {
+        "hints": []
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "validAt",
+            "centre": [
+              1148.0,
+              195.9
+            ],
+            "others": []
+          },
+          "expect": [
+            {
+              "out": "valid",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "note": "137.9 from the token: valid against the exact 137.8, invalid against the rounded 138"
+    },
+    {
       "id": "F2-alpha-scale-a0.3",
       "source": "gdd: hint-letters.md F2 example; AC-8",
       "given": {
