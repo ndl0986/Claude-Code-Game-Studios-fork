@@ -164,7 +164,7 @@ centred over the dimmed stage; it scrolls when Dynamic Type makes it taller than
 | Theme | Theme list | `themeId`; the next reveal uses it (Key Table R3) | more than one theme bundled (hidden in the MVP: Dinosaurs only) |
 | Weather | Clear · Cloudy · Light rain · Snow, and a Windy switch | `weather`, `windy` (Windy enabled only with Light rain or Snow; kept otherwise, Settings Store R1) | once Scene: Time of Day & Weather (#15) ships |
 | Keyboard | On-screen keyboard row switch | `keyboardRow` | once On-screen Keyboard Row (#16) ships |
-| Child lock | Child lock switch; "Quit" button | `childLock` / `childLockActive` → Child Lock-in (G11); Quit = Child Lock-in disengages (options removed, then Input's kiosk mode off), then the app terminates | macOS (Quit only while the lock is on) |
+| Child lock | Child lock switch; "Quit" button | `childLock` / `childLockActive` → Child Lock-in (G11); Quit = Child Lock-in disengages (options removed, extra-display covers removed, then Input's kiosk mode off; its R4), then the app terminates | macOS (Quit only while the lock is on) |
 | Child lock | "Lock the iPad to this app" text: the Guided Access steps (ADR-0001 9c) | — (text only; no link to Settings, which would leave the app). A state line reads Child Lock-in's published `guidedAccessEnabled`: "Guided Access is on" / "Guided Access is off" (K-23) | iPadOS |
 | Privacy | "Privacy" row → a page of bundled text inside the panel | — (PKC-07, L-04) | always |
 | Debug | "Play the parade now" | Parade manual start (K-17); closes the panel | **debug builds only** (K-19); absent from release |
@@ -344,7 +344,8 @@ leader (Open Questions Q6).
 - **Input & Key Filter** (Approved): R5, R6 (chord), R7 (moon layer), states. TASK-050 added the Gate
   challenge state, the exact chord (from the held set) and the chord ignored during the challenge.
   **Audio:** the parade tune pauses and resumes with the walk (TASK-050, done).
-- **Open follow-up TASK-054** (owner game-art-content; queued in `production/team/TASK-054-followups.md`):
+- **Open follow-up TASK-054** (owners as assigned in `production/team/TASK-054-followups.md`; the Input and
+  Settings Store part, 054a, is game-dev-android's):
   - **S1** an R10 notification for a run-only OFF with no write; **S2** the run value `childLockActive`
     defined in the Settings Store (at launch = stored `childLock`; OFF changes only the run value);
   - **I1 (safety)** the chord's "no other key held" judged from the OS key state;
