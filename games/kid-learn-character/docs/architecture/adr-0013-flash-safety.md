@@ -218,7 +218,8 @@ ADR-0009 D6 deferred it, ADR-0004 calls F1/F2 "QC tools", and ADR-0011's gate li
 - **The rule:** a smaller ppi gives a smaller `field_px` and a smaller `area_max`, which is **stricter**. Each class has
   a **ppi floor**, the lowest ppi the game may meet in it: **264** for the iPad (every supported iPad), **254** for a Mac
   2× display, **72** for a Mac 1× external display (external 1× displays reach ~82 ppi; 72 is ADR-0006 D7's
-  "unknown" boundary, so nothing real is lower). **G4 uses the floor.**
+  "unknown" boundary). A display that reports less (a TV, 30–50 ppi) is judged in G5 at its **real** ppi, which is
+  stricter; judging it at the floor would be looser, so the floor is never substituted for a known lower value. **G4 uses the floor.**
 - **G5 uses the device's real ppi** from ADR-0006 D7. That is at or above the floor, so G5 is never stricter than G4 for
   the same frames. **If D7 reports "unknown", the detector takes the class floor.**
 - **AC-06 is unchanged:** its unit test still checks 264 / 254 / 109 ppi (the GDD's table); G3 adds 72 ppi
