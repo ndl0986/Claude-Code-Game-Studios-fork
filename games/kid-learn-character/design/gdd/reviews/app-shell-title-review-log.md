@@ -79,3 +79,9 @@ Review mode: lean · Workflow: standard
 Task: TASK-090
 Change: R7 (K-39): iPad allows every orientation, portrait included, and any window shape; the stage is contained and extends, never letterboxed (K-20). New R7 rule: on the Title and in Play the status bar and home indicator are hidden and system edge gestures are deferred on every edge (prefersStatusBarHidden, .persistentSystemOverlays(.hidden), preferredScreenEdgesDeferringSystemGestures); in the gate challenge and the grown-up panel edge gestures are not deferred, and the status bar stays hidden throughout so the stage fit never jumps; Guided Access stays the real lock. Author's reading of K-39's "during play": the child-facing Title and Play, not the grown-up's screens. AC-10 adds both portrait directions; new AC-14 (overlays, device swipes NOT ASSESSED until run); an Edge Cases row for rotation mid-reveal. Review: game-qc-ios, from the diff.
 Reviewed-Content-Hash: design/gdd/app-shell-title.md 4b7c340a6bd8134c6f9753c231d3d4a2ff497802
+
+## Update — 2026-11-18 — TASK-095 app-shell-v1 author answers (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-095
+Change: game-qc-android's AS-Q2/Q6/Q7/Q9 (TASK-094) written in as the author's decisions, consistent with K-22 (leader): R3 — a start in any state but the Title is ignored; going to the background drops a pending start (the return is the Title). R6 — where a return goes by the state left: Play by F3, the Title always the Title, the Gate or Panel the gate's origin then F3; the States table's Background row says the same. F4 — the previous warning is the immediately preceding one of either level (100, 120, 140 → 1, 2, 2); times on the uptime clock; background warnings count. Review: game-qc-android, from the diff.
+Reviewed-Content-Hash: design/gdd/app-shell-title.md 7e062ab0048269bff9a9ad2d245682ab67cb46ab

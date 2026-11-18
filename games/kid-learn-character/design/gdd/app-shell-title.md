@@ -87,7 +87,11 @@ locked in a way they can't undo.
   **one pending start**. The chime plays and the button lights at once; Play is entered as soon as the Key Table
   reports the theme ready; further starts are absorbed. The Press Queue never sees a press before the theme is
   ready. If the theme never becomes ready (it cannot for Dinosaurs: the build gate), the Title stays, with one
-  debug log line.
+  debug log line. **Going to the background drops a pending start** *(TASK-095, AS-Q9)*: the return is the Title
+  (F3 does not apply, the state was still the Title), and the next start begins again; the chime heard long ago does
+  not turn into a silent entry into Play.
+- **A start while already in Play** (or in any state other than the Title) is ignored *(TASK-095, AS-Q2)*. Input
+  emits `startPlay` only in its Title state, so this is a guard, not a path.
 
 **R4. Entering Play.** App Shell switches to Play and tells, in this order: Input (Play state), the Press Queue
 (empty queue, no current, its R3), the Reveal Stage (Empty), Hint Letters (Play entered: fresh hints, the pulse
@@ -112,6 +116,10 @@ reset only at launch (Parade R1).
   (Hint Letters R9), and the next press starts at once.
 - **Return, away > `title_after_s`:** to the **Title** (R2), as if Play had not begun: the next start enters Play
   afresh (R4).
+- **Where a return goes, by the state that was left** *(TASK-095, AS-Q6)*: from **Play**, F3 decides (above); from
+  the **Title**, always the Title; from the **Gate or the Panel** (the background closes them, Parent Gate), the
+  state the gate was opened from, then F3: an origin of Title → the Title, an origin of Play → Play or the Title by
+  F3.
 - **Clock note:** "away" is measured on a monotonic clock **that keeps counting while the device sleeps** (Apple:
   the continuous clock, `ContinuousClock` / `mach_continuous_time`; Android: `SystemClock.elapsedRealtime`), not
   the uptime clock of Input R8, which stops during sleep, so an iPad put to sleep overnight still counts as away.
@@ -182,7 +190,7 @@ rebuilt, in this order:
 | **Play** | a start from the Title; a return ≤ 30 min | Reveal Stage | Gate (moon or chord); Background |
 | **Gate** | the moon hold or the chord (Parent Gate) | the gate's | Panel (correct); the previous state (wrong, timeout, **Cancel or Esc**, Parent Gate §G9) |
 | **Panel** | a correct answer | the panel's | the state the gate was opened from (close, or the panel's 60 s auto-close, K-19) |
-| **Background** | the app leaves the foreground | none | Play or Title on return (R6) |
+| **Background** | the app leaves the foreground | none | on return (R6): from Play by F3; from the Title the Title; from the Gate or Panel the gate's origin, then F3; a pending start is dropped |
 
 ### Interactions with Other Systems
 
@@ -234,7 +242,11 @@ Examples with `title_after_s` = 1800 s: away 10 min → Play; away 31 min → Ti
 level = (t_warning − t_previousWarning ≤ memory_escalate_s) ? 2 : 1
 ```
 Level 1 sheds R8 steps 1–3; level 2 also the parade. Example: warnings at 100 s and 120 s → the second is level 2;
-at 100 s and 140 s → both level 1.
+at 100 s and 140 s → both level 1. `t_previousWarning` is the immediately preceding warning of either level (so 100,
+120, 140 → 1, 2, 2); the first warning is level 1. **Times are on the uptime clock** (ADR-0002 D3; memory pressure
+belongs to the running process, and a warning across a device sleep is not an escalation), and **warnings received
+in the background count** for the rule like any other; they shed the same list, much of which the background has
+already cleared *(TASK-095, AS-Q7)*.
 
 ## Edge Cases
 
