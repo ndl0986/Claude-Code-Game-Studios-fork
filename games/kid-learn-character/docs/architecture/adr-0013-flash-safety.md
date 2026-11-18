@@ -128,12 +128,12 @@ ADR-0009 D6 deferred it, ADR-0004 calls F1/F2 "QC tools", and ADR-0011's gate li
 |---|---|---|---|---|
 | **G1** F1 rate lint | every periodic animation's rate in the **shipped data** (baked timing data, theme data, every knob a rate is computed from), by F1's formula | `content/` baked output | any `rate ≥ 3 Hz`; any `rate > 1 Hz` not on F1's exception list (halo, stardust twinkle, parade step bob) | `verify.sh`, every run (developer pre-push and QC) |
 | **G2** F2b palette | `R/(R+G+B)` of every colour the build can draw: the art bible palette, theme data, every SVG fill, in **8-bit sRGB and linear** | `content/` source and baked colours | any colour `≥ 0.8` in either space | `verify.sh`, every run |
-| **G3** detector self-test | the F2 tool's unit tests: AC-06 (`field_px`, `area_max` for 264 / 254 / 109 ppi), AC-07 (the synthetic clips at 60 and 120 Hz, every phase offset), the timestamp windowing (D5), determinism | `apple/Tools` tests | any test fails | `verify.sh`, every run (`swift test --package-path apple/Tools`) |
+| **G3** detector self-test | the F2 tool's unit tests: AC-06 (`field_px`, `area_max` for 264 / 254 / 109 ppi, plus the 72 ppi floor), AC-07 (the synthetic clips at 60 and 120 Hz, every phase offset), the timestamp windowing (D5), determinism | `apple/Tools` tests | any test fails | `verify.sh`, every run (`swift test --package-path apple/Tools`) |
 | **G4** offline busy case | the stage rendered headless through `SKRenderer` on a synthetic clock (D3), each frame fed to the F2 detector (D2) and the red backstop (D4) | the built stage + content | F2 FAIL at any (t, field), or the red backstop fires (D4), or a run is incomplete (D5) | QC: `verify.sh --flash` on every merge candidate touching `apple/` or `content/`; `verify.sh --release` always. Developer: optional |
 | **G5** device busy case | the same detector on the **Debug** app's frame dump with per-frame timestamps (D5), on a real iPad and a real Mac | the dump files | as G4, plus a dump that fails D5's coverage rule is **NOT ASSESSED** | QC, per **release candidate**: P-3 (iPad), M-12 (Mac, MAC FREE) |
 
 - **G1–G3 are pure functions of the repo**, so they join ADR-0011 D4's gate list after step 3 (content).
-- **Before the stage exists, G4 prints** `NOT ASSESSED flash-busy-case: not started (story <id>); 0 of 24 runs`, the K-40
+- **Before the stage exists, G4 prints** `NOT ASSESSED flash-busy-case: not started (story <id>); 0 of 27 runs`, the K-40
   form. It does not fail a merge; `verify.sh --release` FAILs on it, as on any not-started contract.
 - **G5 is recorded in the release candidate's evidence**, like the runtime PKC rows. In a merge candidate's verdict it is
   NOT ASSESSED with a pointer to P-3 / M-12, never left blank.
@@ -167,15 +167,17 @@ ADR-0009 D6 deferred it, ADR-0004 calls F1/F2 "QC tools", and ADR-0011's gate li
     pixel size;
   - **seeded input:** the Press Queue's mash fixture as timed input events, and fixed seeds for every `RandomSource`
     stream (ADR-0002 D4).
-- **Device classes**, the stage at each class's full native size, with the smallest ppi in the class (D6):
+- **Device classes**, the stage at each class's full native size, with each class's ppi floor (D6):
 
   | Class | Pixels | ppi | `area_max` |
   |---|---|---|---|
   | 13" iPad (the largest iPad stage at 264 ppi; the 11" has fewer pixels and the same field) | 2752 × 2064 | 264 | 58,449 |
   | Mac, 2× built-in display, full screen | 3024 × 1964 | 254 | 54,105 |
-  | Mac, 1× external display, full screen | 2560 × 1440 | 109 | 9,964 |
-- **The run matrix (K-26):** 3 classes × {Night, Day} × {light rain, snow} × {Reduce Motion off, on} = **24 runs**,
-  10 s each, 600 frames at 60 Hz.
+  | Mac, 1× external display, full screen | 2560 × 1440 | **72** (the class floor, D6; external 1× displays reach ~82 ppi, and 72 is ADR-0006 D7's "unknown" boundary) | 4,347 (`field_px` 148.8) |
+- **The run matrix:** the K-26 busy case, 3 classes × {Night, Day} × {light rain, snow} × {Reduce Motion off, on} =
+  24 runs, **plus a Title idle run per class** (10 s at Night in light rain, Reduce Motion off: the breathe, the title
+  creature's idle, the stardust twinkle and the weather together, none of which the busy case shows on the Title) =
+  **27 runs**, 10 s each, 600 frames at 60 Hz.
 - **Determinism:** a second G4 run on the same commit must give **identical per-frame hashes** for at least one run
   per class, or G4 is NOT ASSESSED.
 - **What G4 proves, and what it doesn't:** it proves the game's content and timing, on the rule's own clock, can't
@@ -212,12 +214,17 @@ ADR-0009 D6 deferred it, ADR-0004 calls F1/F2 "QC tools", and ADR-0011's gate li
   later ADR raises it.
 - **The 240 fps phone (P-3 b)** is a sanity spot check only; camera luminance isn't WCAG relative luminance.
 
-### D6. ppi for the flash field: the smallest in the class, never the largest
-- **The rule:** a smaller ppi gives a smaller `field_px` and a smaller `area_max`, which is **stricter**. G4 uses each
-  class's smallest supported ppi, and G5 uses the device's real ppi from ADR-0006 D7. **If D7 reports "unknown", the
-  detector takes the smallest ppi in the class.**
+### D6. ppi for the flash field: the class floor, never the largest
+- **The rule:** a smaller ppi gives a smaller `field_px` and a smaller `area_max`, which is **stricter**. Each class has
+  a **ppi floor**, the lowest ppi the game may meet in it: **264** for the iPad (every supported iPad), **254** for a Mac
+  2× display, **72** for a Mac 1× external display (external 1× displays reach ~82 ppi; 72 is ADR-0006 D7's
+  "unknown" boundary, so nothing real is lower). **G4 uses the floor.**
+- **G5 uses the device's real ppi** from ADR-0006 D7. That is at or above the floor, so G5 is never stricter than G4 for
+  the same frames. **If D7 reports "unknown", the detector takes the class floor.**
+- **AC-06 is unchanged:** its unit test still checks 264 / 254 / 109 ppi (the GDD's table); G3 adds 72 ppi
+  (`field_px` 148.8, `area_max` 4,347).
 - **The opposite of D7's touch-target rule:** that rule takes the largest ppi so that targets come out big enough. This
-  one takes the smallest so that flashes are judged over the smallest area. Both rules are conservative for what they
+  one takes the floor so that flashes are judged over the smallest area. Both rules are conservative for what they
   guard.
 - **New devices:** a new device class (a lower-ppi iPad, a new Mac display) adds a G4 row; nothing else changes
   (Accessibility Edge Cases).
@@ -228,8 +235,9 @@ ADR-0009 D6 deferred it, ADR-0004 calls F1/F2 "QC tools", and ADR-0011's gate li
 - **Not covered:** SwiftUI overlays drawn above the stage (the gate challenge, the grown-up panel) are outside the
   render. They must hold **no periodic animation** at all. G1 lints their rates when they come from data, and code
   review checks them (a review rule for the overlay stories).
-- **Title:** the Title screen isn't in the K-26 busy case. Its motion is the play button's breathe (0.38 Hz, App
-  Shell R2) and the title creature's idle (Cast Rendering, ≤ 1 Hz); G1 covers both. Adding a Title run to G4 is an open question for the Accessibility owner (below).
+- **Title:** the Title isn't in the K-26 busy case, so G4 adds a Title idle run per class (D3). Its motion (the play
+  button's breathe at 0.38 Hz, App Shell R2; the title creature's idle; the twinkle and weather) is all ≤ 1 Hz by G1, but
+  only a render shows whether they add up over an area (decided by the Accessibility owner, TASK-116 review).
 
 ### Architecture Diagram
 
@@ -240,7 +248,7 @@ ADR-0009 D6 deferred it, ADR-0004 calls F1/F2 "QC tools", and ADR-0011's gate li
                             │
  stage harness (test target)│
   synthetic clock t_k ─► tick(now:) ─► SKRenderer.update/render ─► texture ─┐
-  seeded mash, seeds        24 runs (3 classes × K-26 matrix)              │
+  seeded mash, seeds        27 runs (3 classes × K-26 + Title)              │
                                                                             ▼
                                                     F2 detector (apple/Tools) + red backstop
                                                                             ▲
@@ -267,7 +275,7 @@ protocol FlashDetector { mutating func add(_ frame: FlashFrame); func report() -
 - `PASS flash-rate-lint (Accessibility F1)`;
 - `PASS flash-palette (F2b): max 8-bit 0.604, linear 0.781`;
 - `PASS flash-detector self-test (AC-06, AC-07)`;
-- `PASS flash-busy-case 24/24 runs (worst 0 / 58449 px)` or `NOT ASSESSED flash-busy-case: not started (story …)`.
+- `PASS flash-busy-case 27/27 runs (worst 0 / 58449 px)` or `NOT ASSESSED flash-busy-case: not started (story …)`.
 
 ### Implementation Guidelines
 - G4 and G5 **must** use the one `apple/Tools` detector. A second implementation must never exist.
@@ -275,7 +283,7 @@ protocol FlashDetector { mutating func add(_ frame: FlashFrame); func report() -
 - The detector **must never** downsample, crop or skip frames.
 - G4 **must** drive KidCore only through `tick(now:)` on the synthetic clock, with every `RandomSource` seeded.
   Wall-clock time and unseeded randomness **must never** enter the harness.
-- G4 **must** render at each class's full native pixel size and use each class's smallest ppi (D6).
+- G4 **must** render at each class's full native pixel size and use each class's ppi floor (D6).
 - The dump **must** be compiled only in Debug. The Release bundle scan (ADR-0003 D8, ADR-0011 D4 step 5) **must**
   find no `FlashDump` symbol in the Release binary (V4).
 - The dump **must** read the frame from its own `SKRenderer` pass at the drawable's size, format and colour space,
@@ -314,9 +322,9 @@ protocol FlashDetector { mutating func add(_ frame: FlashFrame); func report() -
 - **Rejection Reason:** both GDD sections say F2 can't be replaced. G1/G2 stay as the fast first line.
 
 ### Alternative 4: Put G4 in every developer `verify.sh` run
-- **Description:** run all 24 offline runs on every push.
+- **Description:** run all 27 offline runs on every push.
 - **Pros:** catches a flash before it's pushed.
-- **Cons:** 14,400 native-resolution frames per run is minutes, not seconds, even with a compute kernel, which would
+- **Cons:** 16,200 native-resolution frames per run is minutes, not seconds, even with a compute kernel, which would
   slow every push.
 - **Rejection Reason:** QC runs G4 on every merge candidate that touches `apple/` or `content/` (where flashes come
   from), and `verify.sh --flash` lets a developer run it on demand.
@@ -367,12 +375,12 @@ protocol FlashDetector { mutating func add(_ frame: FlashFrame); func report() -
 | accessibility.md F2, AC-06, AC-07 | field math and detector behaviour, unit-tested | G3 (D1, D2) |
 | accessibility.md F2, AC-08 | the K-26 busy case, Night / Day, rain / snow, Reduce Motion off / on, at the display's rate; device run is the release gate | G4 every stage-touching merge candidate (D3); G5 per release candidate on iPad and Mac (D5), with the coverage rule and timestamp windows |
 | accessibility.md F2b, AC-09 | no colour with R/(R+G+B) ≥ 0.8 in palette, theme data, SVG fills; the frame backstop | G2 (D1); the red backstop in G4 / G5 (D4) |
-| accessibility.md Edge Cases | new animation fails F1 unless excepted; palette red means the red-flash rule must be implemented; a new ppi changes only `field_px` | G1; D4's fix order; D6 (smallest ppi, new class = new G4 row) |
+| accessibility.md Edge Cases | new animation fails F1 unless excepted; palette red means the red-flash rule must be implemented; a new ppi changes only `field_px` | G1; D4's fix order; D6 (the class's ppi floor; a new class = a new G4 row) |
 | accessibility.md Tuning Knobs | `viewing_distance_mm` 300 (lower is stricter); scenario length 10 s (≥ 5 s) | G4 / G5 use them as data; never raised to pass (Implementation Guidelines) |
 | cast-rendering.md AC-11 | shipped idles ≤ 1 Hz, a build check on the data | G1 (`TR-cast-007`) |
 
 ## Performance Implications
-- **CPU / GPU (tooling only):** G1–G3 take seconds. G4 is 24 runs × 600 frames at native size; a Metal compute pass
+- **CPU / GPU (tooling only):** G1–G3 take seconds. G4 is 27 runs × 600 frames at native size; a Metal compute pass
   for luminance and per-pixel state keeps it to minutes at `nice -n 10` (the detector story measures it and records
   the time in its evidence).
 - **Memory:** per-pixel state is a few floats per pixel at the largest class (~6 Mpx), about 100 MB.
@@ -411,13 +419,18 @@ Per K-34: headless runs need no MAC FREE; G5 on the Mac (M-12) does.
 - AC-08's last sentence: "The simulator run passes on every build" → "G4 passes on every stage-touching merge
   candidate".
 - F2 **Capture**: add "frames are timed by their recorded timestamps".
+- F2 **Scenario** and AC-08: add "**and a 10 s Title idle run** (Night, light rain, Reduce Motion off) per device
+  class".
+- AC-09: "the F2 capture's logged per-pixel maximum stays < 0.8" gains "**over pixels with R + G + B ≥ 0.1**
+  (normalised): near-black pixels are excluded as rounding noise, since (1,0,0) reads 1.0 and can't carry a saturated-red
+  transition". This excludes noise; it is **not** a threshold change (0.8 stays).
+- F2 **The 10° field** table: add the **Mac 1× floor, 72 ppi: `field_px` 148.8, `area_max` 4,347** (ADR-0013 D6), with
+  the note "G4 uses each class's floor; the device run uses its real ppi".
 
-This is a text change only; the rule and thresholds are unchanged. The owner (game-qc-ios) makes it in a follow-up once
+These are text changes; F2's rule and thresholds are unchanged (the 72 ppi row and the Title run are stricter, never looser). The owner (game-qc-ios) makes it in a follow-up once
 this ADR is reviewed.
 
 ## Open Questions
-- **Title run:** add a 10 s Title idle run to G4's matrix? It adds 3 runs; the Title moves only at ≤ 1 Hz (the breathe, the creature's idle).
-  Recommendation: yes, it's cheap. This is the Accessibility owner's call.
 - **120 Hz:** if a later ADR lifts ADR-0006 D3's 60 fps cap, G4 runs at the new cap and AC-07's 120 Hz tests become
   live input, not only unit tests.
 
