@@ -403,6 +403,12 @@ the glyph rises from where it was pressed with an ease-out.
   `jaw`, `wing`, `tail`), and **each group has a pivot point** in artboard coordinates. The per-part idles of
   Section 5 rotate or move these groups about their pivots. The group and pivot names are listed per family in
   the Cast Rendering data.
+- **SVG subset** *(amendment 2026-11-18, TASK-045)*: cast art uses **only Cast Rendering's SVG subset**
+  (`design/gdd/cast-rendering.md` R2, TASK-044). **Allowed:** paths (basic shapes and arcs are converted by the
+  bake tool), solid fill with fill opacity, strokes with round joins and caps, group opacity, and
+  translate / rotate / scale transforms. **Not allowed:** filters, masks, clip paths, gradients, text, CSS and
+  embedded images; the bake tool **rejects them loudly**. The one exception is the **Letter Gold gradient on the
+  glyph**.
 - **Naming** (`[category]_[theme]_[key]_[name]_[variant].[ext]`):
   - `cast_dino_c_triceratops_01.svg`, `sil_dino_c_triceratops_01.svg`
   - `glyph_<font>_<char>.json`
