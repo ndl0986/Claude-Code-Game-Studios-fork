@@ -20,3 +20,17 @@ Reviewed-Content-Hash: design/gdd/press-queue.md f73cb9bd44f9d6ca15ca48975e5a43d
 Reviewed-Content-Hash: design/gdd/audio-voice.md 1f3d8158975fa07f5bac347250674314dc0ac4f0
 Reviewed-Content-Hash: design/art/art-bible.md ff95ca81ce8e7a2adbf92f5ce92267c3fe355cda
 Reviewed-Content-Hash: production/team/decisions.md 23b7f9ecc504f023e181c4fea06d89a74ce731f4
+
+## Update — 2026-11-18 — game-dev-ios independent read: REVISE → addressed
+Review mode: lean · Workflow: standard
+Source: game-dev-ios's independent read of 7265545 (relayed by the leader): 2 required (both from K-20 arriving after the first review), 4 recommended. F2, F3's W + 250, the skip rule and the interface were confirmed.
+Findings:
+- [REQUIRED] F3 under K-20 (contain + extend, W ≥ 1280; wide Mac windows fit by height, so the visible rect starts left of stage x 0) → x_i = rect.minX − 100 + speed·pt − i·gap with W = rect.width; draw test −150 ≤ x − rect.minX ≤ W + 150; physical-speed table: fit-by-width rows (39 / 37 mm/s) plus one wide-Mac row (W 1920 → 274.5 u/s ≈ 80 mm/s, stated as the cost of the pinned 11 s); Interface 5 rewritten to K-20's visible rect; AC-6 extended (fixed)
+- [REQUIRED] K-20 gate freeze → new R6a: Reveal Stage freeze()/resume(); Walking pauses pt, the walkers and E12 and resumes where they stopped; Armed / Waiting for art do not count frozen time; R6's fade applies only after the correct answer opens the panel; Walking state row; AC-19 (fixed)
+- [RECOMMENDED] Lane y → "the lane y from Reveal Stage" (558 as played = 478 + GROUND_SHIFT 80, moving up with the keyboard row); 478 dropped (fixed)
+- [RECOMMENDED] Walker item → the batch stores {key, castId} from shown(...); no lastShown read (it resets on a theme change); AC-5 updated (fixed)
+- [RECOMMENDED] Horizon lift → Scene: Time of Day & Weather (#15) on the Parade's paradeWalking signal (Visual/Audio, Interactions, Dependencies, States) (fixed)
+- [RECOMMENDED] Cast Rendering parade_count follow-up closed: merged in e2d665e (F6, R10) (fixed)
+- New follow-up (open): Audio & Voice has no pause for E12; R6a asks for one on the gate freeze
+Reviewed-Content-Hash: design/gdd/parade.md 5362ec4651bfba78ada2d6524392ce1482ff2278
+Reviewed-Content-Hash: production/team/decisions.md 23b7f9ecc504f023e181c4fea06d89a74ce731f4

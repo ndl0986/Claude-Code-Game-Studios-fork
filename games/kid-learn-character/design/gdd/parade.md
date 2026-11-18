@@ -15,7 +15,7 @@ creatures count, when the parade starts, who walks and how, and what presses, th
 and missing art do to it. How each figure is drawn is Cast Rendering's; the tune is Audio & Voice's.
 
 > **Quick reference** — Layer: `Feature` · Priority: `MVP` · Key deps: `Reveal Stage`, `Cast Rendering` (also
-> reads Press Queue's `restingSince`, Key Table's `lastShown`; plays Audio & Voice E12)
+> reads Press Queue's `restingSince` and Reveal Stage's `shown`; plays Audio & Voice E12; drives the Scene's horizon lift)
 
 ## Overview
 
@@ -56,8 +56,9 @@ time, never a reward for doing something right, so it never asks the child to do
 - **One batch per theme**, in memory only (nothing is saved: Settings Store, Key Table "no saved progress"). A
   theme switch keeps each theme's batch; switching back resumes it. A parade never mixes themes (K-17).
 - **Batches reset at launch.** There is no cap: parades keep coming as long as the child plays (K-17).
-- Each walker's cast member is **the item last shown for that key** in that theme (Key Table `lastShown`). With
-  one item per key (MVP) it is always the same; with production variety it is the one the child last saw.
+- Each batch entry stores **`{key, castId}`** from the `shown(...)` that added it, and the parade walks **that**
+  castId. It never reads Key Table's `lastShown`, which resets on a theme change. With one item per key (MVP) it
+  is always the same; with production variety it is the one the child saw when the key joined the batch.
 
 **R2. Arming and start.**
 1. When the current theme's batch holds `parade_count` keys (6, K-17), the Parade is **Armed**.
@@ -82,8 +83,8 @@ member in Cast Rendering's `parade` role (R1 there: `body` and `outline` only, ~
 
 **R4. The walk.** All positions are in **stage units** (the 1280×720 design space; the one-shot's pixels are stage
 units).
-- **Lane:** the hill band behind the stage creature (the one-shot's ground line at y 478). The exact y is the
-  Reveal Stage's (Interface).
+- **Lane:** **the lane y from the Reveal Stage** (Interface 2): the ground line behind the stage creature (558 as
+  played, which moves up when the keyboard row shows).
 - **Positions:** F3. Walkers are spaced `gap` (150 u) apart; the leader enters at the left edge and the last
   walker leaves past the right edge as the walk ends.
 - **Fades:** the whole parade fades in over `fade_s` (0.6 s) and out over the last `fade_s` (F3).
@@ -103,10 +104,21 @@ units).
   is **not replayed**. The batch is already empty (R2.5).
 - **App goes to the background** while Walking: the parade is dropped at once (nothing is drawn in the
   background), counts as played, and is not replayed on return.
+- *(K-20)* The panel opens only after the gate's **correct answer**; the fade above applies then, not when the
+  gate challenge starts. The challenge itself **freezes** the parade (R6a).
 - While **Armed** or **Waiting for art**, the panel or background do not cancel the batch: the queue is cleared and
   the reveal settles (Press Queue R8, R9), which gives a rest, and the parade starts after the panel closes or
   the app returns, by R2.2. *Time in the background does not count toward the delay* (Press Queue R9: background
   time never counts).
+
+**R6a. Gate challenge freeze (K-20).** While the parent-gate number challenge shows, the Reveal Stage calls
+`freeze()`, and on a wrong answer or a timeout `resume()` (Interface 6).
+- **Walking:** `freeze` pauses the walk clock `pt` and every walker where it is, and asks Audio & Voice to
+  **pause E12**; `resume` continues the walk and the tune from where they stopped. A correct answer opens the
+  panel, and R6's fade-out applies.
+- **Armed or Waiting for art:** frozen time **does not count** toward the rest (F2) or the art wait, the same as
+  background time. The batch is kept.
+- **Counting:** nothing changes (no `shown` arrives while frozen).
 
 **R7. Reduce Motion (decided, K-17).** The same `parade_s` walk; Cast Rendering halves the step bob (its R8). No
 other change: same path, same fades. The reduced timing set changes the reveals (and so F2's start time), not the
@@ -147,7 +159,7 @@ it. A manual start while Walking is ignored. A manual parade empties the batch l
 | **Counting** | launch; after Ended | adds keys from `shown(kind: creature)` to the current theme's batch | the batch reaches `parade_count` → Armed |
 | **Armed** | batch full | checks R2.2 each tick; new distinct keys go to the **next** batch, in order (this one is full) | R2.2 holds → Waiting for art |
 | **Waiting for art** | the start condition held | prefetches; waits ≤ `art_wait_s` | ready, or the wait ran out → Walking (≥ 3 ready), or back to Armed (skip, R8.3); panel/background → Armed |
-| **Walking** | art ready | owns `pt`; draws the walkers; plays E12 at `pt = 0`; empties the batch | `pt ≥ parade_s`, panel (fade) or background (drop) → Ended |
+| **Walking** | art ready | owns `pt`; draws the walkers; plays E12 at `pt = 0`; empties the batch; signals the Scene's horizon lift | `pt ≥ parade_s`, panel (fade) or background (drop) → Ended; `freeze` pauses `pt` here (R6a) |
 | **Ended** | the walk ended | releases parade figures | at once → Counting (or Armed if the next batch is already full) |
 
 While Armed, extra distinct keys shown before the parade starts are **held for the next batch**, in order (the
@@ -161,11 +173,12 @@ batch is used from then on.
 | Reveal Stage | in | `shown(revealId, key, castId, kind)`; the lane y; draw order; tap routing on walkers; panel and background signals |
 | Press Queue | in | `restingSince` (R10); the current reveal's `formedS` and `revealLen` (R6) |
 | Cast Rendering | out / in | `drawCast(item, parade, x, y, i, pt)` per walker; `isResident`, `prefetch`, `release`; the step bob (its R8) |
-| Key Table & Theme Data | in | `lastShown[key]` per theme → the walker's item; the current theme id |
+| Key Table & Theme Data | in | the current theme id (the walker's castId comes from `shown`, R1) |
+| Scene: Time of Day & Weather | out | `paradeWalking` on / off (Walking state) → the warm horizon lift (art bible §2) |
 | Audio & Voice | out | parade start / end → E12 |
 | Accessibility | in | the Reduce Motion flag (passed on to Cast Rendering's step bob) |
 | Parent Gate & Grown-up Panel | in | panel open → fade out (R6) |
-| App Shell & Title | in | background → drop (R6); the visible stage width W (stage fit, Interface) |
+| App Shell & Title | in | background → drop (R6) |
 
 ### Interface needed from the Reveal Stage (for its author to restate)
 
@@ -173,15 +186,20 @@ batch is used from then on.
    morph or the creature fade-in) or `glyphOnly` (the sparkle-out fallback). Built from Cast Rendering's
    `willForm(item)` (its R9), which the Reveal Stage already asks at `startReveal`. This is **separate** from the
    Press Queue's `formed(revealId)`, which stays as it is.
-2. **The parade lane:** the y of the hill band in stage units, behind the stage creature.
+2. **The parade lane:** the ground-line y in stage units behind the stage creature (558 as played =
+   478 + `GROUND_SHIFT` 80), moving up with the keyboard row.
 3. **Draw order:** backdrop → **parade** → the leaving creature → the current reveal and creature → hints, tokens,
    sparkles.
 4. **Taps on a walker:** a touch on a walking figure is a `sparkle(point)`, never a `creatureTap` (K-17). Input's
    hit order (its R7) already falls through to a sparkle when the point is not on the stage creature; the Reveal
    Stage must not treat a parade figure as a creature.
-5. **Stage fit:** the visible stage width W (stage units) on the current screen. It depends on the stage-fit rule
-   (letterbox, crop or extended sky), which App Shell or the Reveal Stage owns. F3 takes W as an input.
-6. **Panel and background:** the same signals the Press Queue gets (its R8, R9).
+5. **Visible rect (K-20):** the Reveal Stage contains the 1280×720 safe stage and extends the sky and ground, so
+   the visible rect always holds the safe stage: `rect.width ≥ 1280`. iPads and 16:10 tablets fit by width
+   (`rect.minX = 0`, `rect.width = 1280`, the extension is vertical); wide Mac windows fit by height
+   (`rect.minX < 0`, `rect.width > 1280`: the hills extend sideways and the parade walks farther). F3 reads
+   `rect.minX` and `W = rect.width`.
+6. **Panel, background and the gate:** the same signals the Press Queue gets (its R8, R8a, R9), including
+   `freeze()` / `resume()` for the gate challenge (K-20), next to `settle`.
 
 ## Formulas
 
@@ -213,13 +231,14 @@ the margin is `form_s` (0.5 s normal, 0.3 s reduced). If the timeout marked the 
 ```
 n          = parade_count (walkers, including any missing ones: indices stay fixed, R8.2)
 speed      = (W + 200 + n · gap) / parade_s                   stage units per second
-x_i(pt)    = −100 + speed · pt − i · gap                      i = 0 is the leader
+x_i(pt)    = rect.minX − 100 + speed · pt − i · gap           i = 0 is the leader; W = rect.width (Interface 5)
 y_i(pt)    = lane_y − bob_i(pt)                               bob from Cast Rendering R8 (×0.5 Reduce Motion)
 alpha(pt)  = min(1, pt / fade_s, (parade_s − pt) / fade_s)
 ```
-- The leader starts at x = −100 (off the left edge), and at `pt = parade_s` the last walker (`i = n − 1`) is at
-  `−100 + W + 200 + n·gap − (n − 1)·gap = W + 100 + gap = W + 250`: off the right edge, for any n.
-- A walker is drawn only while `−150 ≤ x ≤ W + 150` (as played).
+- The leader starts 100 u left of the visible left edge, and at `pt = parade_s` the last walker (`i = n − 1`) is
+  at `rect.minX + W + 250` (`−100 + W + 200 + n·gap − (n − 1)·gap = W + 100 + gap`): off the right edge, for any n.
+- A walker is drawn only while `−150 ≤ x − rect.minX ≤ W + 150` (as played).
+- Under K-20, `W ≥ 1280` always; the 960 rows below are kept only to show how speed scales with W.
 
 | n | W | speed | across the screen |
 |---|---|---|---|
@@ -228,14 +247,17 @@ alpha(pt)  = min(1, pt / fade_s, (parade_s − pt) / fade_s)
 | 8 (the one-shot) | 1280 | 2680 / 11 = 243.6 u/s | 5.3 s |
 | 8 | 960 | 2360 / 11 = 214.5 u/s | 4.5 s |
 
-**Physical speed** (n = 6), which depends on the stage-fit rule (Interface 5):
+**Physical speed** (n = 6), under K-20's stage fit (Interface 5):
 
-| Device | Screen | Fit by width (W 1280) | Fit by height (W visible) |
+| Device | Fit | W | Speed |
 |---|---|---|---|
-| 11" iPad (2420×1668 px, 264 ppi) | 232.8 × 160.5 mm | 1 u = 0.182 mm → **39 mm/s** | 1 u = 0.223 mm, W ≈ 1044 → 194.9 u/s → **43 mm/s** |
-| 10.1" Android tablet, 16:10 | 217.5 × 136 mm | 1 u = 0.170 mm → **37 mm/s** | 1 u = 0.189 mm, W ≈ 1152 → 204.7 u/s → **39 mm/s** |
+| 11" iPad (2420×1668 px, 264 ppi; 232.8 × 160.5 mm) | by width | 1280 | 1 u = 0.182 mm → 216.4 u/s → **39 mm/s** |
+| 10.1" Android tablet, 16:10 (217.5 × 136 mm) | by width | 1280 | 1 u = 0.170 mm → 216.4 u/s → **37 mm/s** |
+| Wide Mac window, 2400 × 900 pt on a 27" 5K display (1 pt = 0.233 mm) | by height | 1920 (720 u = 900 pt, 1 u = 0.291 mm) | (1920 + 1100) / 11 = 274.5 u/s → **80 mm/s** |
 
-About 4 cm a second: a slow, easy walk for small eyes to follow.
+About 4 cm a second on a tablet: a slow, easy walk for small eyes to follow. On a wide Mac window the walk covers
+more ground in the same 11 s, so it is faster on the glass; that is the cost of K-20's "the parade walks farther"
+with a pinned `parade_s`.
 
 ## Edge Cases
 
@@ -264,13 +286,15 @@ About 4 cm a second: a slow, easy walk for small eyes to follow.
 ## Dependencies
 
 **Upstream (Parade reads):**
-- **Reveal Stage** (no GDD yet): `shown(...)`, the lane, draw order, tap routing, the stage width (Interface).
+- **Reveal Stage** (no GDD yet): `shown(...)`, the lane y, draw order, tap routing, the visible rect (K-20),
+  `freeze` / `resume` (Interface).
 - **Cast Rendering** (`design/gdd/cast-rendering.md`, TASK-044): the `parade` role, the 256 px tier, the step bob
-  (R8), `isResident` / `prefetch` / `release`. **Follow-up for that GDD:** its F6 residency says "8 × parade set";
-  with K-17 it becomes `parade_count` (6). The leader has sent this to game-dev-ios.
+  (R8), `isResident` / `prefetch` / `release`. Its F6 and R10 now count `parade_count` figures (merged in
+  e2d665e).
 - **Press Queue** (`design/gdd/press-queue.md`): `restingSince` (R10), the current reveal's `formedS` and
   `revealLen` (R6). Follow-up: its R10 example "`now ≥ restingSince + parade_delay_s`" is replaced by F2 here.
-- **Key Table & Theme Data:** `lastShown[key]` per theme, the current theme id.
+- **Key Table & Theme Data:** the current theme id.
+- **Scene: Time of Day & Weather (#15):** draws the warm horizon lift while Walking (`paradeWalking`).
 - **Accessibility:** the Reduce Motion flag.
 
 **Downstream (depend on Parade):**
@@ -301,7 +325,8 @@ with a fixed `gap` makes the line longer and the walk faster (F3); raise `parade
 ## Visual/Audio Requirements
 
 - The only energy-4 moment of the toy (art bible §2): sideways motion plus a warm horizon lift (peach in morning
-  and day, amber at dusk and night), drawn by the Scene / Reveal Stage while Walking.
+  and day, amber at dusk and night), drawn by **Scene: Time of Day & Weather** while the Parade signals
+  `paradeWalking` (Walking state).
 - Figures at parade size keep their outline trait, eye and body colour; spots, stripes and blush are dropped (art
   bible §5, Cast Rendering role `parade`).
 - No gold on the walkers (art bible §4).
@@ -318,7 +343,7 @@ None in release. Debug builds expose `startParade(manual)` (R11), for example in
 - `design/gdd/press-queue.md`: R6, R8–R10.
 - `design/gdd/cast-rendering.md` (TASK-044): R1 roles, R8 step bob, R9 `willForm`, R10 residency, F6.
 - `design/gdd/audio-voice.md`: E12, F2, F6.
-- `design/gdd/key-table-theme-data.md`: `lastShown`, numbers, the 0 item.
+- `design/gdd/key-table-theme-data.md`: numbers, the 0 item.
 - `production/team/decisions.md`: K-15, K-16, K-17.
 - `prototypes/letter-morph-dinosaur/index.html`: `startParade`, `drawParade`; `config.js`: `parade_delay_s`,
   `parade_s`.
@@ -334,10 +359,11 @@ Logic criteria use an injected clock and fake Reveal Stage, Press Queue and Cast
    empty queue: Waiting for art is entered at t = 4.45 s, not earlier. With the reduced set (1.2, 1.5): at 3.0 s.
 4. **AC-4 A press while Armed.** A press at t = 4.0 s (before 4.45) starts a reveal; no parade starts until the
    next rest plus F2.
-5. **AC-5 Order.** The walkers are the batch in the order met, leader first; their items are each key's
-   `lastShown`.
+5. **AC-5 Order.** The walkers are the batch in the order met, leader first, each with the castId stored from its
+   `shown(...)`; a theme switch and back (which resets Key Table's `lastShown`) does not change them.
 6. **AC-6 Walk positions.** With n 6, W 1280, gap 150, parade_s 11: speed 216.4 u/s ±0.1; x_0(0) = −100;
-   x_5(11) = 1530 (W + 250); alpha(0) = 0, alpha(0.6) = 1, alpha(11) = 0.
+   x_5(11) = 1530 (W + 250); alpha(0) = 0, alpha(0.6) = 1, alpha(11) = 0. With a wide-Mac rect (minX −320, W 1920):
+   speed 274.5 u/s ±0.1, x_0(0) = −420, x_5(11) = 1850 (minX + W + 250).
 7. **AC-7 Own clock.** After the walk starts, setting `restingSince` to none (a press) changes no walker's x; the
    walk still ends at `pt = 11`.
 8. **AC-8 Next batch.** Keys shown during the walk form the next batch; if it reaches 6 during the walk, the next
@@ -360,13 +386,19 @@ Logic criteria use an injected clock and fake Reveal Stage, Press Queue and Cast
 18. **AC-18 Looks right (device, screenshot).** A retained screenshot in `production/qa/evidence/` of a walk at
     `pt ≈ 5` on the iPad shows the 6 small figures on the hill band behind the stage creature, facing right, with no
     gold on them.
+19. **AC-19 Gate freeze (K-20).** Walking at `pt = 4`, `freeze()` for 20 s then `resume()`: every walker's x is
+    unchanged across the freeze, E12 was asked to pause and resume, and the walk ends at `pt = 11` (31 s after its
+    start). Armed with 0.5 s of rest left, a 20 s freeze followed by `resume()` starts the parade 0.5 s after the
+    resume, not at once. A correct answer during the freeze fades the parade out (R6).
 
 ## Open Questions
 
 None for Luan; K-17 answered all of them. Follow-ups for other GDDs (not blocking this one):
-- **Reveal Stage:** restate the Interface section (shown, lane, draw order, walker taps, stage width).
-- **App Shell / Reveal Stage:** the stage-fit rule that sets W (F3).
-- **Cast Rendering:** F6 "8 × parade set" → `parade_count` (sent to game-dev-ios by the leader).
+- **Reveal Stage:** restate the Interface section (shown, lane y, draw order, walker taps, visible rect,
+  freeze/resume).
+- **Audio & Voice:** pause and resume E12 on the gate freeze (R6a); its R6 names no pause today.
+- **Scene: Time of Day & Weather:** the horizon lift on `paradeWalking`.
+- *Closed:* the stage fit is K-20 (Interface 5); Cast Rendering's `parade_count` fix is merged (e2d665e).
 - **Press Queue:** R10's example start rule is superseded by F2 here.
 
 **Resolved (Luan, K-17, 2026-11-18):** P1 letters and digits count, digits walk as their group; P2 every 6 distinct
