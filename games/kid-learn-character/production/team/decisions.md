@@ -105,6 +105,16 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-45 The parade starts as soon as the batch is full (Luan, 2026-11-18)
+
+- **Cause found (leader, from the prototype code):** the parade only starts when the stage rests (queue empty, creature
+  formed, then `parade_delay_s` 1.5 s with no new reveal), about 4 s without a press. A child who keeps pressing (a new
+  reveal every ~3 s) never sees it. Parade GDD R2 has the same rule (as played), so production would repeat it.
+- **Decision:** the parade starts as soon as the batch's 6th creature has **finished forming**, with no rest needed.
+  Presses keep being answered in front of the walking parade (R5, unchanged). Parade R2 / F2 are rewritten in TASK-120.
+- **Prototype re-test:** the browser prototype is updated to the current design for a new playtest with the child:
+  6 instead of 8, this start rule, and a provisional K-44 meter (TASK-121).
+
 ### K-44 Parade meter: an energy bar in the top-right corner (Luan, 2026-11-18)
 
 - Luan wants the child to see progress toward the next parade: **a small energy bar in the top-right corner of the

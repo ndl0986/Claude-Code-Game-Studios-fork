@@ -109,6 +109,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-118 | DeviceSpike Audio pad: no white flash on press (safety, ADR-0013 note) + README 'not with the child watching' | spike | game-dev-ios (review: game-qc-ios) | MERGED (bdb9ffdb, code 0d1dce3e) | `fix/TASK-118-devicespike-no-flash` | 2026-11-18 |
 | TASK-119 | ADR-0013 follow-ups: GDD sync (accessibility.md F2/AC-08/AC-09, parent-gate-panel.md G3) + ADR-0011 D4 dated note; ADR-0009 D6 dated note | architecture | game-qc-ios (ADR-0009 note: game-dev-android) (review: game-dev-android / game-dev-ios) | ADR-0009 D6 note MERGED 50b893cd; GDD sync + ADR-0011 note IN REVIEW @ 18272f2d → game-dev-android | `docs/TASK-119-adr-0013-sync` | 2026-11-18 |
 | TASK-120 | K-44 parade meter: Parade GDD rules + art bible §7 exception + concept anti-pillar note + clearance (Hint Letters F4, Reveal Stage boxes) + contract impact | design | game-art-content (review: game-qc-android; render read game-dev-ios) | SENT | `design/TASK-120-parade-meter` | 2026-11-18 |
+| TASK-121 | Prototype re-test build: parade every 6, starts when the 6th has formed (K-45), provisional K-44 meter top-right | prototype | game-dev-ios (review: game-qc-android) | SENT | `proto/TASK-121-parade-meter` | 2026-11-18 |
 
 ## Leader log
 
