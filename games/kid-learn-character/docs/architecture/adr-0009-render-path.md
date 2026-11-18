@@ -111,8 +111,10 @@ is preferred to **B-build** (PNG tiers made at build time), because it keeps A's
 size; **B-build** is used if B-load's measured load time on the oldest iPad exceeds 1.2 s for a creature. The spike's
 option B **is** B-load (it rasterises at load, at 2.5×), so P-2 measures it directly; B-build would only load faster.
 
-**Apple.** P-2 and M-13 use `DeviceSpike` Render with TASK-077's art; the Metrics recorder gives p50 / p99 over the
-worst case per option, and the screen logs per-creature build ms per option.
+**Apple.** P-2 and M-13 use `DeviceSpike` Render with TASK-077's art, options **A-candidate** (D3: outline merged per
+part, fills per element; the A the rule judges), **B** (B-load) and, for information, the original per-element A; the
+Metrics recorder gives p50 / p99 over the worst case per option, and the screen logs per-creature build ms per
+option. *(The A-candidate option is game-dev-ios's DeviceSpike change; its sha is recorded here when it lands.)*
 
 ### D2. One structure, both options (platform-neutral)
 - Both options read **the same baked file** (ADR-0003 D4): parts with pivots, nested; inside each part the layers
@@ -244,11 +246,11 @@ KidCore render plan ── RenderSink.drawCast(castId, role, pose) ──▶ sta
   Rendering AC-17 on the Dinosaurs set; the bake tool reports shapes per figure so outliers show at build.
 - **"The oldest supported iPad" is not fixed.** Mitigation: P-2 records the model; a newer device's pass does not
   accept A for older ones (the row is re-run if the floor moves down).
-- **The spike's A is an upper bound** (one node per SVG element, every layer in the parade: about 15–25% more nodes
-  than D3's candidate) and its B is B-load at 2.5×. If A fails narrowly on the spike, D3's candidate may pass: P-2
-  records node counts so that call is made explicitly, by a re-run with the candidate rather than a switch to B on a
-  near miss. game-dev-ios has offered an "A-candidate" option in DeviceSpike so that P-2 measures D3 directly (the
-  leader's call).
+- **A near miss is a real signal.** The spike's original A (one node per SVG element, every layer in the parade) is
+  only about 15–25% above D3's candidate, so P-2 does not discount a narrow failure. DeviceSpike gains an
+  **A-candidate** option (game-dev-ios; the leader accepted it): outline merged per part, fills per element, roles
+  culled. **D1's A is the A-candidate's numbers**; the original A is recorded for information only. B is B-load at
+  2.5× (an upper bound for B-build's load).
 - **Texture upload stalls** on first draw (B) on an older GPU. Mitigation: textures created at load, off the main
   thread, before the figure is resident; P-2's frame log covers the first frames after a reveal starts.
 
@@ -297,8 +299,8 @@ Per K-34: headless runs need no MAC FREE; the Mac rows do.
 - Simulator frame times: **not taken** (leader, 2026-11-18): every boot pushed the Mac's load to 40–55, and Simulator
   numbers are never device evidence.
 
-**Device rows (pending; the decision rule above):** P-2 (`ipad-1/P-2/`: frame p50 / p99 per option over the worst
-case, per-creature load per role and per option, peak memory, the model and ProMotion, crispness at ~775 px on a 13"
+**Device rows (pending; the decision rule above):** P-2 (`ipad-1/P-2/`: frame p50 / p99 per option (A-candidate,
+B-load, and the original A for information) over the worst case, per-creature load per role and per option, peak memory, the model and ProMotion, crispness at ~775 px on a 13"
 if available), M-13 (`mac-1/M-13/`), and on the same build P-3 / M-12 (F2 rehearsal), P-11 / M-10, P-13, as in
 `production/qa/device-checks-plan.md`.
 
