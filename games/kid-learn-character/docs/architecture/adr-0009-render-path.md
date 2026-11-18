@@ -306,7 +306,7 @@ Per K-34: headless runs need no MAC FREE; the Mac rows do.
   **outline-overlap test** (D2, D3): an outline stroke that crosses itself, drawn by A and by B over a flat fill,
   reads one alpha (0.8 Ink) at the crossing, not two. It decided D3's group-alpha question before P-2 (game-qc-ios;
   leader's option a). **Result (2026-11-18, headless, game-dev-ios, 6e455bfc, `SKRenderer` offscreen; `tools/overlap-check.swift`,
-`production/qa/evidence/TASK-103/overlap-check/`):** one
+`production/qa/evidence/TASK-103/6e455bfc/`):** one
   `SKShapeNode` at 0.8 blends its self-overlap **twice** (crossing 0.961, arm 0.800; stroke alpha and node alpha
   alike); an `SKEffectNode` with `shouldRasterize` at 0.8 blends **once**. So D3's outline is the merged path inside an
   effect node per part. DeviceSpike's **Overlap check** button repeats it on the device as the first step of the
