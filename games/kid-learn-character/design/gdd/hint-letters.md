@@ -205,7 +205,7 @@ member).
 |---|---|---|
 | **Off** | the title screen, or before Play | Running (entering Play: the sequence plays) |
 | **Running** | `hintTime` advances; hints spawn, drift, age and fade | Frozen (gate challenge or panel), Dimmed (parade Walking), Off (background: cleared) |
-| **Frozen** | gate challenge or panel open; nothing moves or spawns | Running (challenge failed or timed out, panel closed: no replay) |
+| **Frozen** | gate challenge or panel open; nothing moves or spawns | Running, or **Dimmed** if `paradeWalking` is still on (challenge failed or timed out while a parade walks, Parade R6a); panel closed → Running (the parade has faded out); no replay |
 | **Dimmed** (K-26) | the parade is Walking: `hintTime` stopped (as in Frozen), so hints are still, not ageing, not pulsing, no spawns; drawn at `parade_hint_alpha`; still tappable | Running (parade Ended: no replay); Frozen (challenge or panel); Off (background) |
 
 Per hint: **Fading in** (age < 0.6) → **Shown** → **Fading out** (last 0.8 s) → removed; or **Consumed** (removed

@@ -38,3 +38,8 @@ Reviewed-Content-Hash: design/gdd/hint-letters.md 8a0fc351301575da6d305cdc3decd0
 Review mode: lean · Workflow: standard
 Change: game-qc-android's review: option (a), hintTime stops while the parade is Walking (Dimmed), as in Frozen; R6's hintTime definition, the R9 Parade rows and the Dimmed state say so; the first-press pulse holds; the dim fade runs on the play clock. Dependencies' Parade line is a plain cite (TASK-056d did it).
 Reviewed-Content-Hash: design/gdd/hint-letters.md 15d217671d25cf93d93b2145e8d681910b99493d
+
+## Update — 2026-11-18 — TASK-056a review fix 2 (no re-review)
+Review mode: lean · Workflow: standard
+Change: game-qc-android's review: the Frozen state now exits to Dimmed when the challenge fails or times out while the parade is still Walking (Parade R6a), and to Running when the panel closes (the parade has faded out); no replay.
+Reviewed-Content-Hash: design/gdd/hint-letters.md 037f138f95b20d96b97835fb35b03c0d8f4b44be
