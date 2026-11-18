@@ -82,3 +82,13 @@ Task: TASK-061
   - The Overview's "never flashes" wording.
 - Not changed: the systems-index dependency list (not ours to edit); iPad mini is out of MVP scope.
 Post-fix GDD hash: ebffd9e2a9f3953512b6913990b087950269a733
+
+## Update — 2026-11-18 — K-30 and the Keyboard Row (no re-review)
+Task: TASK-061
+Change:
+- Smart Invert now cites K-30.
+- A10/A9 drop the "proposed, to confirm" labels and cite K-30 (Reduce Transparency, Increase Contrast, Bold Text, captions).
+- F2b states the Letter Gold margin, which K-30 notes for the art bible owner.
+- A7 restores the keyboard-row row from onscreen-keyboard-row.md (444e2a9): a 144 × 134 u hit rect meets the 18 mm floor (its F2), and the word is capped at 8 letters (its V17, within K-29's ≤ 9).
+- AC-12 now cites Keyboard Row F2, and its follow-up row is removed.
+Reviewed-Content-Hash: design/gdd/accessibility.md 47a61c595bbae74d3740e75cac338093399daf17

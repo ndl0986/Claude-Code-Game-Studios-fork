@@ -148,7 +148,7 @@ diameter; scaled up by `k` if a device would go under it).
 | Target | Size | Source |
 |---|---|---|
 | Hint letter | hit diameter 27–31 mm on iPads, ≥ 22.5 mm on the smallest Mac window (k = 1 on every MVP device) | Hint Letters F5 |
-| On-screen keyboard row key | sized to the 18 mm floor; a random short common word or name, ≤ 9 distinct keys | K-29; the size will be cited from `onscreen-keyboard-row.md` (TASK-060) when it lands |
+| On-screen keyboard row key | hit rect 144 × 134 units (the drawn key plus 8 units a side), which meets the 18 mm floor; a short common word or name, at most 8 letters | `onscreen-keyboard-row.md` (hit rect, F2; its V17 caps the word at 8, within K-29's ≤ 9) |
 
 
 Not targets: the title play button (any tap except the moon starts play, App Shell R3), a tap on a
@@ -182,18 +182,18 @@ a sparkle), so they need no floor.
 - **Loudness targets** (K-13): voice −16 LUFS, cast −20, chime −26, ping −30, parade −22, ≤ −1 dBTP.
 - **Mono Audio (OS setting): no effect.** Audio R4 step 2 decodes every buffer "to the output's
   sample rate, mono", so there is no stereo information to lose.
-- **Captions: none** *(proposed, to confirm)*. The player can't read; the glyph and the creature are the visual equivalent of
+- **Captions: none** (K-30). The player can't read; the glyph and the creature are the visual equivalent of
   "D… diplodocus".
 - Hearing aids and other hearing devices are the OS's.
 
 **A10. Other OS settings** (out of scope, one line each).
-- **Reduce Transparency** (iOS, macOS) *(proposed, to confirm)*: no effect. The game uses no system blur or vibrancy; the
+- **Reduce Transparency** (iOS, macOS; K-30): no effect. The game uses no system blur or vibrancy; the
   panel's dim is a plain overlay. A system material added later follows the setting.
-- **Increase Contrast** (iOS, macOS) *(proposed, to confirm)*: not supported in the MVP; the A5 floors are the contrast design.
+- **Increase Contrast** (iOS, macOS; K-30): not supported in the MVP; the A5 floors are the contrast design.
 - **Differentiate Without Color** (iOS, macOS): no change needed; A6 already holds everywhere.
-- **Bold Text** (iOS) *(proposed, to confirm)*: the panel follows it through Dynamic Type and the system font as far as the
+- **Bold Text** (iOS; K-30): the panel follows it through Dynamic Type and the system font as far as the
   bundled family allows. **NOT ASSESSED:** whether the bundled family has a bold weight.
-- **Smart Invert** (iOS): **decided (leader, TASK-061 plan approval, from art bible §4; to be recorded as a K-id in decisions.md): the stage opts out**
+- **Smart Invert** (iOS): **decided (K-30, from art bible §4): the stage opts out**
   (`accessibilityIgnoresInvertColors = true` on the stage view), because inverting it would break the
   §4 contrast floors and colour meanings; the grown-up panel follows Smart Invert. Follow-up below.
 - **Classic Invert** (iOS) and **Invert colors** (macOS): can't be opted out of; the OS inverts
@@ -309,7 +309,8 @@ FAIL if ∃ t, ∃ field position F:  #{ p ∈ F : flashing(p, t) } > area_max
   modes; the frame backstop below covers those. The linear margin is thin (0.781), so the F2 capture also logs each frame's highest
   per-pixel R/(R+G+B) as a backstop, and any palette change re-runs F2b. **Scope:** F2b runs on the shipped palette, the theme data and
   every SVG fill (the build's colours, not only the art bible's: e.g. `#3b2f45`, `#d9a070`, `#ffd27a`
-  appear in GDDs), so a colour added outside the art bible is caught.
+  appear in GDDs), so a colour added outside the art bible is caught. The Letter Gold margin (0.781 against 0.8) is
+  noted for the art bible owner in K-30: any warmer gold must re-run F2b.
 
 Example: in a 10 s Night capture on an 11" iPad, if 60,000 px inside one field (a disc of diameter
 545.6 px) each show 7 transitions (3.5 flashes) within one second, F2 FAILs (60,000 > 58,449); if only
@@ -339,7 +340,7 @@ Example: in a 10 s Night capture on an 11" iPad, if 60,000 px inside one field (
   Queue, Cast Rendering, Hint Letters, Parade, Scene: Time of Day & Weather, App Shell & Title, Parent
   Gate & Grown-up Panel, Audio & Voice, Settings Store (R2), Privacy & Kids Compliance.
 - **Documents:** art bible §1–§4, §7; decisions K-08, K-13, K-15, K-16, K-17, K-20, K-24, K-25, K-26,
-  K-29; WCAG 2.2 SC 2.3.1 and its definitions (w3.org, read 2026-11-18).
+  K-29, K-30; WCAG 2.2 SC 2.3.1 and its definitions (w3.org, read 2026-11-18).
 
 **Follow-ups for other GDDs** (listed here, not edited):
 
@@ -349,7 +350,7 @@ Example: in a 10 s Night capture on an 11" iPad, if 60,000 px inside one field (
 | Reveal Stage | decide the sparkles under Reduce Motion (A3 flag) |
 | App Shell & Title / art bible | pick 0.38 or 0.48 Hz for the play button (A3 flag) |
 | App Shell & Title / Reveal Stage | set `accessibilityIgnoresInvertColors` on the stage view (A10, leader decision) |
-| On-screen Keyboard Row | cite the 18 mm floor (Hint Letters F5) when its GDD lands (A7) |
+
 | Every motion GDD | name "Accessibility's `reduceMotion`" as the flag's source in its Interactions (A1) |
 | Parent Gate & Grown-up Panel | record the Switch Control / AssistiveTouch acceptance (K-29) in its Edge Cases |
 | Privacy & Kids Compliance | extend PKC-14's release log scan to accessibility settings (A11) |
@@ -402,8 +403,8 @@ GDD's (A8).
     (build check on the palette).
 11. **AC-11 · no colour-only meaning:** for each A6 row, a desaturated (greyscale) screenshot still shows
     the backup cue (manual: retained screenshots of hint vs queued token, the moon ring).
-12. **AC-12 · child touch floor:** on every MVP device class, a hint's and a keyboard-row key's hit
-    diameter is ≥ 18 mm (Hint Letters AC; Keyboard Row when it lands).
+12. **AC-12 · child touch floor:** on every MVP device class, a hint's hit diameter and a keyboard-row key's hit rect are ≥ 18 mm
+    (Hint Letters F5; On-screen Keyboard Row F2).
 13. **AC-13 · grown-up targets:** every panel control is ≥ 44 pt and the keypad keys are 60 pt with
     12 pt gaps (UI test reading frames).
 14. **AC-14 · sound off:** with the device muted, a 2-minute seeded session's screenshots show a visual
