@@ -231,3 +231,10 @@ The author (game-qc-ios) folded in the re-review's items:
   - The scan matches whole names.
 - Still open by design: the TASK-032 reference stays local-only (the leader asked for it to be cited only as a draft).
 Post-fix GDD hash: 781bdd0d00f0912b5311275dff325631152fdbd8
+
+## Author follow-up — 2026-11-18 — game-qc-android text re-review (APPROVE except 3 Android fixes)
+Task: TASK-040
+- PKC-05: `apkanalyzer dex references` replaced by `dexdump -d` on classes*.dex for the named framework calls (Settings$Secure "android_id", TelephonyManager, Build.getSerial, WifiInfo, AdvertisingIdClient).
+- PKC-03 / AC-05 (and PKC-02's package check): `apkanalyzer dex packages --defined-only --proguard-mappings mapping.txt`, using the same release build's mapping, kept as evidence; without it the row is NOT ASSESSED.
+- Release APK route named: (b) the signed universal APK from Play Console's App bundle explorer, supplied by Luan; (a) `bundletool --mode=universal` only with Luan's OK; NOT ASSESSED until the Android ADR.
+- Nits: every Android cell now starts with "NOT ASSESSED: no Android build (K-03)". PKC-02 has a static dexdump backstop for VIEW intents and market:// / http(s) strings. PKC-08 reads `<queries>` with `aapt2 dump xmltree`, because `dump permissions` doesn't show it.
