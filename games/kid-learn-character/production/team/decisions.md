@@ -105,6 +105,15 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-21 Gate risk and Mac child lock (Luan, 2026-11-18, TASK-048 revised plan)
+
+- **Correction to K-20's risk figure:** with 4 number words and a 10 s moon sleep, the hourly pass
+  risk is ≤ ~0.1% at a realistic ≤ 10 accidental openings per hour, and ~3% per hour if a child mashes
+  the gate nonstop (~307 attempts/h). Luan keeps **4 words + 10 s**; F2 states both figures.
+- **Mac child lock turned OFF in the panel reverts to ON at the next launch** (it engages once the
+  app is ready, K-12). OFF lasts for this run only; closing the panel shows "Child lock is OFF" for
+  a few seconds. This changes Settings Store R1/R8 (`childLock` is not persisted as false).
+
 ### K-20 Reveal Stage and gate hardening (Luan, 2026-11-18, TASK-048 review + TASK-049 questions)
 
 - **Gate hardening (adds to K-19):** after a wrong answer or a timed-out challenge, the moon "sleeps"
