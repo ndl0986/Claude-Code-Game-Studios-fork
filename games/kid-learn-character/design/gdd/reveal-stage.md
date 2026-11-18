@@ -81,15 +81,16 @@ Reveal Stage, before returning:
 
 | Case | What plays | formedS | revealLen | hasWord |
 |---|---|---|---|---|
-| **Morph** (glyph, silhouette, valid set, `willForm` true) | glyph → stardust → creature | `T` | `T + form_s` | true |
-| **Glyph missing** | the creature fades in, no stardust | F5 | = formedS | true |
+| **Morph** (glyph, silhouette, valid set, `willForm` true) | glyph → stardust → creature | `T` | `T + form_s` | true if the item has a word line |
+| **Glyph missing** | the creature fades in, no stardust | F5 | = formedS | true if the item has a word line |
 | **Art or silhouette missing** (`willForm` false) | the glyph rises, glows, then sparkles out | `glow + sparkle_out_s` | = formedS | **false** |
-| **Invalid timing set** (MorphCore Rule 9) | the creature fades in, on the stage's own fallback timings | F5 | = formedS | true |
+| **Invalid timing set** (MorphCore Rule 9) | the creature fades in, on the stage's own fallback timings | F5 | = formedS | true if the item has a word line |
 
 5. builds the morph (MorphCore) in the morph case, and starts the leaving fade of the previous creature (R5).
 
-`hasWord` tells the Press Queue (its F1 word term) and Audio & Voice (E8, E9) whether a cast sound and word will
-play. Glyph-only reveals still say the letter (Key Table fallback).
+**`hasWord` = the case forms a creature AND the active locale has the item's word line** *(TASK-088b, RT-Q2)*. It
+tells the Press Queue (its F1 word term) and Audio & Voice (E9) whether the word will play. The cast sound (E8)
+has its own condition (R6). Glyph-only reveals still say the letter (Key Table fallback).
 
 **R4. `formed` and `shown`.** When the reveal's time first reaches `s ≥ formedS`, the Reveal Stage sends, once:
 - **`formed(revealId)`** to the Press Queue (its R7); never overloaded;
@@ -136,8 +137,9 @@ MorphCore F1).
 | `ignored` | a sparkle burst (8 specks, as played) | ping (E2) | the hint stays |
 | `sparkle(point)` from Input (empty stage) | a sparkle burst at the point | ping (E3) | — |
 
-- Reveal sounds: E6 at `s = 0`, E7 at `s = glow`, E8 at `s = formedS` and E9 at `formedS + word_offset_s`
-  (0.25 s), only when `hasWord`; the word is never cut by a waiting key (K-13; the Press Queue's hold covers it).
+- Reveal sounds: E6 at `s = 0`, E7 at `s = glow`, E8 at `s = formedS` when the case forms a creature (not art
+  missing) and the item's `sfx` is present, and E9 at `formedS + word_offset_s` (0.25 s) only when `hasWord`
+  *(TASK-088b, RT-Q1)*; the word is never cut by a waiting key (K-13; the Press Queue's hold covers it).
   E8 and E9 play on time during a late-art wait (Cast Rendering edge case). Ducking is Audio's.
 - The **queue tokens** are drawn from the Press Queue snapshot (its R11): small round cream bubbles with the key in
   Letter Gold ink, in a still row at the top right of the safe stage, 66 units apart from x 1214, y 58 (as
@@ -392,8 +394,8 @@ and Hint Letters. Screenshots are retained in `production/qa/evidence/`.
    (640, 700).
 4. **AC-4 Same callback:** for each outcome, Audio, Hint Letters and the starlight/sparkle are called inside the
    `press(p)` callback (a recording fake), never on a later frame.
-5. **AC-5 Event times:** with `hasWord`, E6 at 0, E7 at 0.8, E8 at 2.45, E9 at 2.70 (±1 ms); with `hasWord`
-   false, no E8 or E9.
+5. **AC-5 Event times:** with `hasWord`, E6 at 0, E7 at 0.8, E8 at 2.45, E9 at 2.70 (±1 ms); for an item with `sfx`
+   but no word line, E8 at 2.45 and no E9; for art missing, neither E8 nor E9 *(TASK-088b)*.
 6. **AC-6 No jump at the swap:** the glyph's outline and the specks' start points, and the creature's outline and
    the specks' end points, overlay within 1 px (same transforms, R5).
 7. **AC-7 Late art:** with Cast Rendering's seam delaying the art, `formed` fires at `formedS`, the fade-in starts
