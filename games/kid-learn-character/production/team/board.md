@@ -101,3 +101,4 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 - 2026-11-18: TASK-056 complete (W-1: single `kioskModeOn` signal; Quit shows exactly when ⌘Q is swallowed). Cross-review re-run → game-qc-android.
 - 2026-11-18: cross-review re-run PASS. Info notes R-1 (App Shell "ready" wording vs kioskModeOn), R-2 (⌘ swallowed from Waiting start, ≤ 5 s, Edge Case line), R-3 (Hint Letters "Key Table R4" cite) queued as small text fixes. Ready for /gate-check.
 - 2026-11-18: TASK-057 merged (K-14). Systems Design complete: 14/14 MVP + Scene approved, cross-review PASS. Next: /gate-check Systems Design → Technical Setup with Luan.
+- 2026-11-18: /gate-check Systems Design → Technical Setup: CONCERNS (review-log bookkeeping for morphcore, hint-letters, child-lock-in); TD READY, PR READY. Luan accepted the risk; STAGE → Technical Setup. Report: production/gate-checks/2026-11-18-systems-design-to-technical-setup.md.
