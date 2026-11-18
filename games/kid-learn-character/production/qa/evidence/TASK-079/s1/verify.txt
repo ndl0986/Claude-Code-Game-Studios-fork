@@ -1,0 +1,12 @@
+verify: Xcode 27.1, Swift 6.4
+PASS ban-grep (ADR-0002 V1)
+PASS api-surface (ADR-0002 V4)
+OBSERVED contracts: harness not wired until S2, 2 contracts unrun
+PASS swift test MorphCore
+PASS swift test KidCore
+PASS swift test Tools
+PASS xcodebuild build macOS
+PASS xcodebuild test macOS (hostless unit tests)
+PASS xcodebuild test iPad simulator (--dev, headless)
+SKIP bundle-content scan: no --app given (QC runs it on both Release .apps)
+verify: PASS at 0a135a92 (with local changes)

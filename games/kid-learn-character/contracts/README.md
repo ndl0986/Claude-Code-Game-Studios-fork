@@ -16,7 +16,7 @@ Cross-platform behaviour contracts for Kid Learn Character (ADR-0004). Each cont
 |---|---|---|---|---|
 | morph-contract-v1 | v1 | morphcore.md | MorphCore | Accepted. It lives at `docs/architecture/morph-contract-v1.md` and `content/fixtures/morph-contract-v1.json` and moves here only with a v2 |
 | key-table-schema-v1 | v1 | key-table-theme-data.md | model (KidCore), file (apple/Tools) | first cases (TASK-068) |
-| settings-record-v1 | v1 | settings-store.md | KidCore | superseded-by: settings-record-v2 (K-40; TASK-091: `F1-slider-release-7.5` contradicted R6a) |
+| settings-record-v1 | v1 | settings-store.md | KidCore | superseded by settings-record-v2 (see Registry; TASK-091: `F1-slider-release-7.5` contradicted R6a) |
 | settings-record-v2 | v2 | settings-store.md | KidCore | TASK-091: v1's slider case fixed; the non-finite slider cases added (F1, TASK-082) |
 | input-filter-v1 | v1 | input-key-filter.md | KidCore | superseded-by: input-filter-v2 (K-40; TASK-098 added `gateDigitUp`) |
 | input-filter-v2 | v2 | input-key-filter.md | KidCore | TASK-099: v1 + `gateDigitUp` (3 cases updated, 8 AC-1t cases) |
@@ -29,6 +29,39 @@ Cross-platform behaviour contracts for Kid Learn Character (ADR-0004). Each cont
 | app-shell-v1 | v1 | app-shell-title.md | KidCore | batch 5 (TASK-094) |
 
 Not yet written (ADR-0004 D8; order in `production/team/TASK-080-contracts-plan.md`): parade-v1, scene-look-v1.
+
+## Registry
+
+The **only** list of contracts and their states (K-40; ADR-0004 D5 note, 2026-11-18). Every `*-v*/` directory has
+exactly one row; the harnesses read this table and keep no list of their own. A row is one of:
+- `runner: <Name>[ + <Name>]`: run by that runner (a `Tools.` name runs in the apple/Tools harness, every other in
+  KidCore's `ContractTests`). Reported PASS or FAIL.
+- `not-started: <story id>`: the contract is accepted and its code is not written. Structure-checked, reported
+  `NOT ASSESSED <contract>: not started (story <id>); structure OK, 0 of <n> cases run`, never PASS. FAIL if a runner
+  is registered for it or its story is Done. The Production gate and every release-candidate verify FAIL while any
+  row is not-started.
+- `superseded-by: <contract-vN+1>`: replaced. The target must exist with its own runner or not-started row; reported
+  `SUPERSEDED <contract> → <next>: not run (<n> cases)`, never PASS; FAIL if a runner is still registered for it or
+  code cites it.
+
+`Cases` is the declared count; the file must hold exactly that many. **Story ids are placeholders**
+(`story:<system>`) until /create-epics and /create-stories write the real ones; a placeholder names no story file, so
+it is never Done.
+
+| Contract | Row | Cases |
+|---|---|---|
+| app-shell-v1 | not-started: story:app-shell | 26 |
+| audio-plan-v1 | not-started: story:audio-voice | 30 |
+| gate-logic-v1 | not-started: story:parent-gate | 48 |
+| hint-letters-v1 | not-started: story:hint-letters | 58 |
+| input-filter-v1 | superseded-by: input-filter-v2 | 86 |
+| input-filter-v2 | not-started: story:input | 95 |
+| key-table-schema-v1 | runner: KeyTableModelRunner + Tools.KeyTableFileLayer | 93 |
+| keyboard-row-v1 | not-started: story:keyboard-row | 36 |
+| press-queue-v1 | not-started: story:press-queue | 46 |
+| reveal-timing-v1 | not-started: story:reveal-stage | 60 |
+| settings-record-v1 | superseded-by: settings-record-v2 | 73 |
+| settings-record-v2 | runner: SettingsRecordRunner | 76 |
 
 ## Drift check
 

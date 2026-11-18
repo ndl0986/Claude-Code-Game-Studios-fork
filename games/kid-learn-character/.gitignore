@@ -3,3 +3,11 @@
 /production/session-logs/
 /project.local.yaml
 /CLAUDE.local.md
+
+# Build outputs (SwiftPM scratch, Xcode derived data)
+.build/
+# Local, per-machine files that are never committed (ADR-0011 D3; K-37 Q3: the team id)
+tools/dev/apple/sim.env
+tools/qa/apple/sim.env
+apple/Config/*.local.xcconfig
+apple/**/xcuserdata/

@@ -83,6 +83,12 @@ is the only built core; it already follows the contract. No `KidCore` code exist
   bundle.
 - Dependencies point down only. Platform types (UIKit, AppKit, SwiftUI, SpriteKit, AVFoundation, CoreGraphics
   types, JSON coding) appear only in `<App>`, `<App>Tests`, `<App>UITests` and `Tools`.
+- *Note 2026-11-18 (K-38, TASK-079):* `apple/ContractKit` is a test-only package (fixture loading and JSON
+  decoding for the contract harnesses, ADR-0004). Only test targets depend on it; it is never linked into `<App>` or
+  a core. The ban grep (V1) covers it with the **import and platform rule only**: it may import Foundation, Swift,
+  XCTest, Testing, `KidCore` and `MorphCore`, and no app, UI or platform-media framework and nothing from the app. The
+  D2 type, JSON-coding, String and rounding bans do not apply to it, since decoding JSON is its job and it never ships.
+  This adds no module to the bundle; the status stays Accepted.
 
 ### D2. Kotlin-mappable types in `KidCore` and `MorphCore`
 - **Imports:** the Swift standard library and `Foundation` only.
