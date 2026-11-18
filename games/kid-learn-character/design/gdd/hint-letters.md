@@ -117,8 +117,8 @@ the safe stage**.
 **R6. Life, spawning and the hint clock.**
 
 - **`hintTime`:** the monotonic uptime clock (Input R8, Press Queue R5), advancing **only in Play while nothing is
-  frozen** (R9): it stops while the panel or the gate challenge is open and does not count time in the
-  background. All hint ages and the spawn gap use it.
+  frozen** (R9): it stops while the panel or the gate challenge is open, **while the parade is Walking** (Dimmed,
+  K-26), and does not count time in the background. All hint ages and the spawn gap use it.
 - **Gap:** while fewer than `hint_count` hints are on screen, a spawn is attempted when the gap has run out, and
   the gap (`hint_gap_s`, 0.7 s) restarts from **that attempt**, whether it spawned or was skipped (one-shot
   `hintGap`). **Entering Play** (from the title) and **returning from the background** clear the hints and attempt a
@@ -169,8 +169,8 @@ Hint Letters acts in the same callback:
 | Return from the background | three fresh hints | resumes | **replayed** (K-18) |
 | **Entering Play** from the title | none before; fresh hints | starts | **played**; the pulse resets (R7) |
 | **Theme change** (only in the panel) | unchanged: hints are keys, and every theme has all 36 (Key Table); a hint's item resolves when its reveal starts (Key Table §4, Picking the item for a key; TASK-056 W-6) | — | — |
-| **Parade Walking** (`paradeWalking` on, K-26) | every hint **dims** to `parade_hint_alpha` (0.5) of its F2 alpha over `parade_hint_fade_s` (0.6 s, the parade's own `fade_s`) and **holds still**: no drift, ages, lives and the spawn gap do not advance, no new spawn. Hints **stay tappable** (R8 as usual; a dimmed hint still counts, like a fading one) | advances | — |
-| Parade Ended (`paradeWalking` off) | back to full opacity over the same 0.6 s; drift, ages, lives and the gap resume where they were | — | **not replayed** |
+| **Parade Walking** (`paradeWalking` on, K-26) | every hint **dims** to `parade_hint_alpha` (0.5) of its F2 alpha over `parade_hint_fade_s` (0.6 s, the parade's own `fade_s`) and **holds still**: `hintTime` stops, so drift, ages, lives, the spawn gap and the first-press pulse (R7) all hold; no new spawn. The dim fade itself runs on the play clock (Reveal Stage R8), not on `hintTime`. Hints **stay tappable** (R8 as usual; a dimmed hint still counts, like a fading one) | **stopped** | — |
+| Parade Ended (`paradeWalking` off) | back to full opacity over the same 0.6 s (play clock); drift, ages, lives, the gap and the pulse resume where they were | resumes | **not replayed** |
 | **Keyboard row turned on** | unchanged: hints stay in the sky (art bible §7 conflict 2) | — | — |
 | **Reduce Motion turned on** | applies at once to every hint: drift stops (offsets frozen), the pulse stops (R10) | — | — |
 
@@ -206,7 +206,7 @@ member).
 | **Off** | the title screen, or before Play | Running (entering Play: the sequence plays) |
 | **Running** | `hintTime` advances; hints spawn, drift, age and fade | Frozen (gate challenge or panel), Dimmed (parade Walking), Off (background: cleared) |
 | **Frozen** | gate challenge or panel open; nothing moves or spawns | Running (challenge failed or timed out, panel closed: no replay) |
-| **Dimmed** (K-26) | the parade is Walking: hints at `parade_hint_alpha`, still, not ageing, no spawns; still tappable | Running (parade Ended: no replay); Frozen (challenge or panel); Off (background) |
+| **Dimmed** (K-26) | the parade is Walking: `hintTime` stopped (as in Frozen), so hints are still, not ageing, not pulsing, no spawns; drawn at `parade_hint_alpha`; still tappable | Running (parade Ended: no replay); Frozen (challenge or panel); Off (background) |
 
 Per hint: **Fading in** (age < 0.6) → **Shown** → **Fading out** (last 0.8 s) → removed; or **Consumed** (removed
 at once with the burst or the Reduce Motion fade). An ignored touch puts it back at the start of Shown and makes it
@@ -336,8 +336,8 @@ from `k ≈ 1.044` the screen may show 2 hints rather than 3 (again, not reachab
     TASK-050 for `originFor`.
   - Press Queue (`design/gdd/press-queue.md`): the outcome in the callback (its R4 already says "Hint Letters
     consumes the touched hint for started and queued; for ignored the hint stays"), the snapshot (R11).
-  - Parade (`design/gdd/parade.md`): `paradeWalking` for the K-26 dim and hold (R9); the Parade should list Hint
-    Letters among the readers of `paradeWalking` (TASK-056).
+  - Parade (`design/gdd/parade.md`): `paradeWalking` for the K-26 dim and hold (R9); the Parade lists Hint Letters
+    among the readers of `paradeWalking` (Parade, TASK-056d).
 - **Peers / downstream (each must name Hint Letters):**
   - Reveal Stage (TASK-049): calls `originFor(key)` before `press(p)`; publishes `stage_to_px`, the safe stage and
     the cast member's box; passes the freeze signals.

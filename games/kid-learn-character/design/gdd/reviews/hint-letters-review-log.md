@@ -33,3 +33,8 @@ Reviewed-Content-Hash: design/gdd/hint-letters.md 5501526f0fbbf339c54132d0f52fc6
 Review mode: lean · Workflow: standard
 Change: K-26 (Luan): while the Parade is Walking (paradeWalking), hints dim to parade_hint_alpha 0.5 (proposal) over 0.6 s, hold still (no drift, ages, lives or spawns), stay tappable, and resume on Ended without the 0/0.7/1.4 replay: R9 rows, a Dimmed state, the Parade Interactions and Dependencies rows, two knobs, AC-18b. W-6: the R9 theme row cites Key Table §4. From design/gdd/gdd-cross-review-2026-11-18.md and K-26. Review: game-qc-android (diff re-run).
 Reviewed-Content-Hash: design/gdd/hint-letters.md 8a0fc351301575da6d305cdc3decd091f8a61016
+
+## Update — 2026-11-18 — TASK-056a review fix (no re-review)
+Review mode: lean · Workflow: standard
+Change: game-qc-android's review: option (a), hintTime stops while the parade is Walking (Dimmed), as in Frozen; R6's hintTime definition, the R9 Parade rows and the Dimmed state say so; the first-press pulse holds; the dim fade runs on the play clock. Dependencies' Parade line is a plain cite (TASK-056d did it).
+Reviewed-Content-Hash: design/gdd/hint-letters.md 15d217671d25cf93d93b2145e8d681910b99493d
