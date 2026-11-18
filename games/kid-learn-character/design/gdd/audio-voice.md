@@ -206,6 +206,15 @@ revision **`f3ff3571791e39611d31c381e3a41a3af07b4987`** (Privacy L-09, closed: A
 acknowledgements). Its espeak-ng fallback runs on the build machine only (K-36). Piper is not used. Hard names get a
 respelled script for that line only (K-35); the displayed and Key Table names keep their spelling, and each respelled
 line is approved by ear before it is baked. Open: whether to re-record with a human voice for release (Q7).
+**The voice script** *(TASK-110; K-35, K-41)* is the build-only file
+`content/themes/<id>/src/voice-scripts/<locale>.json` (ADR-0003 D1, D6). It holds the engine settings above and a
+`respell` map from line id (`word_<id>`, the same ids as `voiceDurations`) to the respelled TTS input. Every other
+line's input is its Key Table `say` / `word` text. Dinosaurs, `en-us`, as Luan picked by ear (K-41, all seven "r2"
+candidates of TASK-108): `word_ankylosaurus` "ankie low saurus", `word_juravenator` "joor uh vuh nay tor",
+`word_quetzalcoatlus` "kets all ko at lus", `word_tapejara` "tah pay jar ah", `word_wuerhosaurus` "wur hoe saurus",
+`word_xenoceratops` "zen oh sair uh tops", `word_zuniceratops` "zoo nee serra tops". Triceratops stays as spelled. The
+displayed name and the Key Table `name` / `word` are unchanged. A respelled line must still pass V15 (≤ 1.25 s,
+measured on the rendered file).
 
 ### States and Transitions
 
