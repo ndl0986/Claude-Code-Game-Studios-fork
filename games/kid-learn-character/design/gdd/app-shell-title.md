@@ -147,6 +147,11 @@ reset only at launch (Parade R1).
   panel the edge gestures are **not** deferred (a grown-up's swipe works at once); the status bar stays hidden
   throughout, so the safe area and the stage fit never jump when the panel opens or closes. This is a speed bump, not
   a lock: **Guided Access stays the real lock** (Child Lock-in); the Mac has no equivalent and uses its kiosk.
+  **Names** *(TASK-095)*: App Shell owns and publishes **`edgeDeferral {on}`** (emitted at the Title's first frame and
+  then only on a change: on in the Title and Play, off while the Parent Gate's **`gateOverlayShown`** is true, on again
+  when it turns false) and **`statusBarHidden {true}`** (emitted once at the first frame on iPadOS; never changes).
+  `gateOverlayShown` (true while the challenge or the panel shows) is the Parent Gate's output (its G13); App Shell
+  reads it. The Mac has neither output.
 - **Mac:** one resizable window, minimum `mac_min_window` 960 × 540 pt (proposal); full screen allowed. With the
   kiosk on, the window fills the screen and stays so (ADR-0001 Decision 9b; Child Lock-in). Whether that is native
   full screen (the options then go through `window(_:willUseFullScreenPresentationOptions:)`) or a borderless window
