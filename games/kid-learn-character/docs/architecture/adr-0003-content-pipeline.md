@@ -97,7 +97,7 @@ content/
     sfx/                            S
     voice/<locale>/                 S
   glyphs/<set>/                     S  glyphs.json + glyph_<font>_<char>.json
-  fonts/                            S  the OFL font file and OFL.txt (panel text, hint letters)
+  fonts/                            S  the OFL font file and OFL.txt (panel text, hint letters, keyboard row keys, queue tokens)
   data/                             S  timing and knob files (morph timing, cast idles, queue, hints, row, scene, gate)
   fixtures/                         B  contract fixtures (ADR-0004), never shipped
 ```
@@ -184,7 +184,9 @@ pivots, layers, paths, fills and strokes, in artboard units).
 - The artist edits `src/…svg`, runs one bake command, and commits the source and the baked files together.
 - Output is byte-stable: sorted keys, a fixed decimal format (up to 3 decimals, no exponent, no trailing zeros), LF
   line endings, and the tool name and version recorded in each file.
-- A build check re-bakes in memory and **fails if any committed baked file differs** from its source's bake.
+- A build check re-bakes in memory and **fails if any committed baked file differs** from its source's bake. It
+  also **re-measures `voiceDurations`**, the one tool-written field in `theme.json` (never edited by hand; D5),
+  and fails if any committed value differs from the measured one.
 - Android, which cannot run Swift Tools, uses the same committed files (D9).
 
 ### D5. Voice durations and loudness (Audio A7, F4; Key Table V15)
