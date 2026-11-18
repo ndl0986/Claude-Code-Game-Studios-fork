@@ -67,7 +67,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-085a | Follow-up batch A: Reveal Stage R10 row z35 + boxes + invert + sparkles RM; App Shell A1, breathe/touch floor; Privacy V1 clock | design | game-dev-ios (review: game-qc-ios) | DONE: MERGED (game-qc-ios APPROVE @ 239d105e) | `design/TASK-085a-followups` | 2026-11-18 |
 | TASK-085b | Follow-up batch B: Cast twinkle RM; Hint Letters row band + H1; Parent Gate P0/P1 moon; art bible breathe rate | design | game-art-content (review: game-dev-android) | DONE: MERGED (all 7 already landed; bookkeeping only) | `design/TASK-085b-followups` | 2026-11-18 |
 | TASK-086 | Contracts batch 3: reveal-timing-v1 + audio-plan-v1 | qa | game-qc-android (review: game-dev-ios / Audio owner) | DONE: MERGED (reveal 60 @ ecf6b69f, audio 30 @ f38b6013; both APPROVE) | `design/TASK-086-contracts-batch3` | 2026-11-18 |
-| TASK-087 | ADR-0010 audio (spike ADR) to Proposed; device rows pending | architecture | game-dev-ios (review: game-dev-android; rows check game-qc-ios) | REVISE (game-dev-android R1 phase sweep, R2 settle max, R3 resume-from-position, R4 state machine) → fixing | `design/TASK-087-adr-0010` | 2026-11-18 |
+| TASK-087 | ADR-0010 audio (spike ADR) to Proposed; device rows pending | architecture | game-dev-ios (review: game-dev-android; rows check game-qc-ios) | REVISION 2 @ 4754dff4 → game-dev-android re-review + game-qc-ios H-1/evidence | `design/TASK-087-adr-0010` | 2026-11-18 |
 | TASK-088a | Audio R1 E8/E9: s = formedS; E8 on sfx, E9 on hasWord; AU-Q answers | design | game-art-content (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 82f24b2b) | `design/TASK-088a-audio-e8e9` | 2026-11-18 |
 | TASK-088b | Reveal Stage R3/R6: hasWord definition; only-when-hasWord gates E9 only | design | game-dev-ios (review: game-qc-android) | DONE: MERGED 4d83b81e + 7d16be9d (game-qc-android APPROVE); R3 cell + letter_in nits queued | `design/TASK-088b-reveal-hasword` | 2026-11-18 |
 | TASK-088c | Reveal Stage nits: R3 cells 'in the active locale'; invalid-set rise knob fallback_rise_s 0.45 | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE) | `design/TASK-088c-reveal-nits` | 2026-11-18 |
@@ -79,6 +79,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-090b | Audio knob cut_settle_s 0.04 (≥ max(cut_fade_s, 0.03) + 0.01) for ADR-0010 R2 | design | game-art-content (review: game-dev-ios) | DONE: MERGED (game-dev-ios APPROVE @ 85770ed7) | `design/TASK-090b-audio-cut-settle` | 2026-11-18 |
 | TASK-091 | settings-record-v2: fix F1-slider-release-7.5 (5 → 8) + non-finite slider case; v1 superseded | qa | game-qc-android (review: game-dev-android) | DONE: MERGED (game-dev-android APPROVE @ 38d40df0) | `design/TASK-091-settings-record-v2` | 2026-11-18 |
 | TASK-092 | Parent Gate Interactions: stop deferring edge gestures while challenge/panel shows (R7, K-39) + AC; device-checks plan P-16 iPad overlays | design/qa | game-qc-ios (review: game-dev-ios) | DONE: MERGED (game-dev-ios APPROVE @ b993cc4f) | `design/TASK-092-gate-overlays-p16` | 2026-11-18 |
+| TASK-093 | Audio knob-row wording nit | design | game-art-content (review: game-dev-ios) | DONE: MERGED (APPROVE @ c724f9ec) | `design/TASK-093-audio-knob-nit` | 2026-11-18 |
 
 ## Leader log
 
