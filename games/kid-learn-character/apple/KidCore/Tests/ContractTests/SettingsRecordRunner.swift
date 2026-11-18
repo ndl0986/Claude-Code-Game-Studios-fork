@@ -26,9 +26,9 @@ final class CollectingLog: DebugLog {
     }
 }
 
-/// settings-record-v1 (Settings Store R1–R10, R6a, F1, F2; ADR-0004 D3: KidCore layer).
+/// settings-record-v2 (Settings Store R1–R10, R6a, F1, F2; ADR-0004 D3: KidCore layer). Supersedes v1 (K-40).
 struct SettingsRecordRunner: ContractRunner {
-    static let contract = "settings-record-v1"
+    static let contract = "settings-record-v2"
     static let declaration = ContractDeclaration(
         givenFields: ["platform", "settingsBytes"],
         events: ["read": [], "change": ["field", "value"], "sliderRelease": ["x"], "setChildLock": ["on"],

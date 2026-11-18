@@ -16,7 +16,7 @@ Cross-platform behaviour contracts for Kid Learn Character (ADR-0004). Each cont
 |---|---|---|---|---|
 | morph-contract-v1 | v1 | morphcore.md | MorphCore | Accepted. It lives at `docs/architecture/morph-contract-v1.md` and `content/fixtures/morph-contract-v1.json` and moves here only with a v2 |
 | key-table-schema-v1 | v1 | key-table-theme-data.md | model (KidCore), file (apple/Tools) | first cases (TASK-068) |
-| settings-record-v1 | v1 | settings-store.md | KidCore | superseded-by: settings-record-v2 (K-40; TASK-091: `F1-slider-release-7.5` contradicted R6a) |
+| settings-record-v1 | v1 | settings-store.md | KidCore | superseded by settings-record-v2 (see Registry; TASK-091: `F1-slider-release-7.5` contradicted R6a) |
 | settings-record-v2 | v2 | settings-store.md | KidCore | TASK-091: v1's slider case fixed; the non-finite slider cases added (F1, TASK-082) |
 | input-filter-v1 | v1 | input-key-filter.md | KidCore | batch 2 (TASK-081) |
 | press-queue-v1 | v1 | press-queue.md | KidCore | batch 2 (TASK-081) |
@@ -51,7 +51,8 @@ it is never Done.
 | key-table-schema-v1 | runner: KeyTableModelRunner + Tools.KeyTableFileLayer | 93 |
 | press-queue-v1 | not-started: story:press-queue | 46 |
 | reveal-timing-v1 | not-started: story:reveal-stage | 60 |
-| settings-record-v1 | runner: SettingsRecordRunner | 73 |
+| settings-record-v1 | superseded-by: settings-record-v2 | 73 |
+| settings-record-v2 | runner: SettingsRecordRunner | 76 |
 
 ## Drift check
 

@@ -39,7 +39,7 @@ public enum StructuralCheck {
     static let caseKeys: Set<String> = ["id", "source", "layer", "note", "given", "draws", "steps", "expect", "tolerance", "toleranceReason", "permute"]
     static let forbidden: Set<String> = ["play", "u", "seed"]
 
-    /// Every schema error in `root`, the decoded `cases.json` of directory `directory` (for example `settings-record-v1`).
+    /// Every schema error in `root`, the decoded `cases.json` of directory `directory` (for example `press-queue-v1`).
     /// With no `declaration` (a contract whose code is not started, K-40) the generic rules run and the
     /// `spec.md`-specific ones (S7's layer names, S8's given fields, S18's event types and fields) are skipped.
     public static func check(_ root: JSONValue, directory: String, file: String, declaration: ContractDeclaration?) -> [SchemaError] {
