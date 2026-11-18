@@ -2,7 +2,7 @@
 
 > **Status**: Approved (all 9 sections approved one by one by Luan, 2026-11-17)
 > **Owned By**: art-director
-> **Last Updated**: 2026-11-18 (clarification only: §8 says where silhouette path data lives)
+> **Last Updated**: 2026-11-18 (K-16 amendments in §2, §4, §5, §7, §8; earlier the same day: §8 says where silhouette path data lives)
 > **Art Director Sign-Off (AD-ART-BIBLE)**: SKIPPED 2026-11-17 — lean mode
 
 `/art-bible` writes these nine sections in this order and replaces each
@@ -107,6 +107,11 @@ to nothing inside the glyph's halo, and counts as sky for the brightness cap.
 5. **Only the parade has foreground sideways motion and a warm horizon.** Slow weather drift is
    background motion and is allowed.
 
+*(Amendment 2026-11-18, K-16: recorded exceptions to rule 2, alongside the glyph halo's ~2.2 Hz in rule 1.
+The **stardust twinkle (~1.4 Hz)** and the **parade's step bob** stay as played in the one-shot. Both are below
+the three-flashes-per-second threshold, and the twinkle changes the specks' size and alpha, not the scene's
+brightness. Every other pulse stays ≤ 1 Hz.)*
+
 | State | Emotional target | Light (time-of-day aware) | Energy (0–5) |
 |---|---|---|---|
 | Title | A door left ajar | Light gathers on the play button: a gold glow at dusk and night, carried by its amber outline in morning and day | 2 |
@@ -196,6 +201,11 @@ right, or gold for "well done": every press is answered the same way.
 Section 2's frame cap (L 0.88) applies to these tokens too: the prototype's stars `#fff6da`,
 stardust `#fff8e8`, hint bubble and eye whites (L 0.92–0.99) move to Starlight and highlight
 cream. The grown-up card is exempt: it sits under the 55% navy dim.
+
+*(Amendment 2026-11-18, K-16: the **stardust stays as played**: about **70% of the specks are gold**, the rest
+Starlight. This is a recorded exception to "Nothing else is gold" in the Letter Gold row: the stardust **is** the
+letter, broken up on its way to becoming the creature, so the gold still means "a letter lives here". Once the
+creature has formed, the stardust fades out and no gold stays on the cast member.)*
 
 ### Per-look stage palettes
 
@@ -288,6 +298,10 @@ with a peek, flyer wing flap; everyone has a breathing bob. Two moves are shared
 member: the **tap hop** (tap → hop → its own sound again, iteration 4) and the **parade walk**. No
 other actions: no eating, fighting or sleeping animations in the MVP.
 
+*(Amendment 2026-11-18, K-16: the **MVP keeps these per-part idles** as in the prototype (neck sway, jaw nod,
+wing flap…), so each cast SVG carries **named part groups with a pivot** (Section 8). Under Reduce Motion the
+idles soften (Section 7).)*
+
 **Pose:** side view, facing right, standing on the stage line, filling ≥ 60% of the stage box.
 Flyers are the one exception: a flyer may hover, anchored by its ground shadow.
 
@@ -358,7 +372,8 @@ the glyph rises from where it was pressed with an ease-out.
 - **Target size:** a hint is about 120 px on the stage, roughly 75–80 pt on an 11" iPad: well above
   44 pt and sized for small fingers.
 - **Reduce Motion (rule):** follow the iOS/macOS Reduce Motion setting with a shorter morph, no hint
-  drift and a calmer parade.
+  drift and a calmer parade. *(Amendment 2026-11-18, K-16: it also **softens**: idles at **half amplitude**, a
+  **smaller tap hop**, and the glyph halo **holds steady** with no pulse.)*
 - **Keyboard-only grown-ups on the Mac (rule):** the grown-up panel also opens from the parent key
   chord (as in the TASK-033 kiosk), not only by holding the moon with a mouse.
 
@@ -383,6 +398,17 @@ the glyph rises from where it was pressed with an ease-out.
   font; each silhouette baked to its own path file, `sil/sil_….json`, which the key table names in its
   `silhouette` field: Key Table & Theme Data). *(Clarification 2026-11-18: the wording was "silhouettes as SVG
   path data in the key table".)*
+- **Part groups** *(amendment 2026-11-18, K-16)*: on top of the `body`, `outline` and `detail` layers, each
+  cast SVG carries **named part groups**, one per moving part its family's idle needs (for example `neck`,
+  `jaw`, `wing`, `tail`), and **each group has a pivot point** in artboard coordinates. The per-part idles of
+  Section 5 rotate or move these groups about their pivots. The group and pivot names are listed per family in
+  the Cast Rendering data.
+- **SVG subset** *(amendment 2026-11-18, TASK-045)*: cast art uses **only Cast Rendering's SVG subset**
+  (`design/gdd/cast-rendering.md` R2, TASK-044). **Allowed:** paths (basic shapes and arcs are converted by the
+  bake tool), solid fill with fill opacity, strokes with round joins and caps, group opacity, and
+  translate / rotate / scale transforms. **Not allowed:** filters, masks, clip paths, gradients, text, CSS and
+  embedded images; the bake tool **rejects them loudly**. The one exception is the **Letter Gold gradient on the
+  glyph**.
 - **Naming** (`[category]_[theme]_[key]_[name]_[variant].[ext]`):
   - `cast_dino_c_triceratops_01.svg`, `sil_dino_c_triceratops_01.svg`
   - `glyph_<font>_<char>.json`
@@ -403,8 +429,9 @@ the glyph rises from where it was pressed with an ease-out.
 - **Memory rule:** on the largest iPad a stage creature is about 775 px tall, so ≤ 1024 px per
   creature texture if rasterized. All 26 loaded at once would be ≈ 100 MB, so **load on demand**:
   the current creature, the one leaving, and the parade at a small 256 px tier.
-- **Particles:** 420 per morph by default; TASK-033 measured the SpriteKit morph fine on the iPad
-  Simulator and the Mac. **On a real device: NOT ASSESSED** until Luan runs TASK-033's iPad
+- **Particles:** ~~420~~ **240 per morph by default** *(amendment 2026-11-18, K-11 via K-16: 240 is the count
+  TASK-033 measured; it is raised only after the real-iPad measurement)*; TASK-033 measured the SpriteKit morph
+  fine on the iPad Simulator and the Mac. **On a real device: NOT ASSESSED** until Luan runs TASK-033's iPad
   procedure.
 - **Audio:** AAC `.m4a` mono for storage, decoded to PCM at load so a press plays at once
   (TASK-033: stop + schedule + play costs 3–10 ms on the main thread).
