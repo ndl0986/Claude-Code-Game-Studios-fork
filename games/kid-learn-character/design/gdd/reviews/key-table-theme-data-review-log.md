@@ -88,3 +88,8 @@ Reviewed-Content-Hash: design/gdd/key-table-theme-data.md 3732afc4fa931107ff03ab
 Review mode: lean · Workflow: standard
 Change: K-22: new theme field `titleCastId` (the one cast member idling on the Title; Dinosaurs = the T-Rex, as played), validator rule V16 (must name an item in the theme), run-time fallback to the first item in canonical order (key A, item 0) with one debug log line, App Shell & Title rows in Interactions and Dependencies, AC-16. Verdict unchanged; review by game-dev-android.
 Reviewed-Content-Hash: design/gdd/key-table-theme-data.md 6878f022785a592f47c810effdde3d332360a3bc
+
+## Update — 2026-11-18 — TASK-050 item 9 fix (no re-review)
+Review mode: lean · Workflow: standard
+Change: mechanical fix from game-dev-android's check of ed7e812: the V16 row had been inserted inside the V15 row (after "48 "); V15 is whole again (its word ≤ 1.25 s and letter ≤ 1.0 s limits, cited by Audio F6/AC-6 and Press Queue F1) and V16 is its own row. No content change.
+Reviewed-Content-Hash: design/gdd/key-table-theme-data.md 640a8fc4bb90c1b95656ed32f90d046078e50488
