@@ -1,0 +1,6 @@
+# sources.lock for parade-v1 (cut 2026-11-18, TASK-101): the ## sections the cases cite.
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/parade.md#Detailed Design 416434a304ee81416c25b228d29ec2e1b5aedf65
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/parade.md#Formulas 7da5746b382a6d505bac72492d91b3a5dbe05a41
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/parade.md#Edge Cases 018fd04578bcc7c85f308ffeca96eeafaa3b3ebc
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/parade.md#Acceptance Criteria b71472510ae090f95c8b46c2dc09231f40f40b75
+Reviewed-Section-Hash: games/kid-learn-character/docs/architecture/adr-0002-modules-seams-types.md#Decision 20f4dafde70f9e0fe915e9154aff0c640178fb82
