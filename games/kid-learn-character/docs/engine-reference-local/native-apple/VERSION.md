@@ -1,5 +1,8 @@
 # Native Apple — Version Reference
 
+**Location:** `games/kid-learn-character/docs/engine-reference-local/native-apple/`, inside this game (Luan, K-28):
+the game's `docs/engine-reference/` is a symlink to the template's shared folder, which is not touched.
+
 `engine.name` is **unset on purpose** (ADR-0001; K-28): the stack is native Swift, which has no row in
 `.claude/engines/engines.tsv`. This folder exists so `/create-architecture` (Phase 0a) and later skills have a
 pinned, sourced reference instead of model memory. It is **not** an engine configuration: skills that check

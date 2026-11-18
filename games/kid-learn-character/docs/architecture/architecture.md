@@ -5,15 +5,17 @@
 - Last Updated: 2026-11-18
 - Engine: none from the template's engine table (`engine.name` unset on purpose, ADR-0001, K-28). Native Apple
   stack: Swift 6.4, Xcode 27.1 (27A9275), SDKs iOS 27.1 / macOS 27.0, deployment iPadOS 26 and macOS 26.
-  Reference: `docs/engine-reference/native-apple/` (K-28 Q3).
+  Reference: `docs/engine-reference-local/native-apple/`, inside this game's folder (K-28 Q3; Luan: kept out of the
+  template's shared `docs/engine-reference/`).
 - GDDs Covered (15, all Approved): input-key-filter, key-table-theme-data, morphcore, press-queue, settings-store,
   audio-voice, cast-rendering, reveal-stage, hint-letters, parade, parent-gate-panel, child-lock-in,
   app-shell-title, scene-time-weather, privacy-kids-compliance.
 - ADRs Referenced: ADR-0001 Native Apple (Accepted); morph-contract-v1 (Accepted with ADR-0001).
 - Author: game-dev-ios (TASK-059); plan reviewed by game-dev-android; decisions K-01…K-28.
 - Workflow: standard, `docs.density: balanced`, review mode lean.
-- **Deviation recorded:** Phase 0a reads `docs/engine-reference/native-apple/` in place of
-  `docs/engine-reference/[engine]/`, since no engine is configured (K-28 Q3). That folder states every API claim
+- **Deviation recorded:** Phase 0a read `docs/engine-reference-local/native-apple/` (game-local) in place of
+  `docs/engine-reference/[engine]/`, since no engine is configured (K-28 Q3). The game's `docs/engine-reference/` is
+  a symlink to the template's shared folder, which is left untouched (Luan). That folder states every API claim
   as PROVEN (TASK-033), SOURCED (an Apple URL) or NOT SOURCEABLE.
 - TD-ARCHITECTURE: 2026-11-18 — skipped — lean mode
 - LP-FEASIBILITY: 2026-11-18 — skipped — lean mode
@@ -29,7 +31,7 @@ kiosk) and is the only place platform types appear.
 
 ## Engine Knowledge Gap Summary
 
-From `docs/engine-reference/native-apple/` (Phase 0d):
+From `docs/engine-reference-local/native-apple/` (Phase 0d):
 
 | Domain | Risk | Why | What it blocks |
 |---|---|---|---|
@@ -52,7 +54,7 @@ Rule for all HIGH domains: no ADR decides from memory; each has a measurement or
    its GDD; the GDD decides any disagreement, never "Swift wins" (ADR-0004 below).
 3. **Platform types stay at the edge.** Only the app layer and build tools import UIKit, AppKit, SwiftUI,
    SpriteKit, AVFoundation or JSON decoding. `KidCore` and `MorphCore` use only Kotlin-mappable types.
-4. **Injected time and chance.** Four named clocks and one `RandomSource` are injected everywhere; tests and
+4. **Injected time and chance.** Four named clocks and one `RandomSource` per random stream are injected everywhere; tests and
    fixtures drive them, so every rule is deterministic under test.
 5. **Safe by design is structural.** No network code path exists (PKC-01); the kiosk can never engage before its
    way out works (Child Lock-in R3, R5); nothing about the child is stored (Settings Store R2).
@@ -121,8 +123,11 @@ type rules below. A build check enforces it (scaffold story check (d)).
 - **Wall time:** an injected `WallClock` returning `{minutesOfDay: Double (local, fractional), dayKey: Int
   (yyyymmdd local)}`.
 - **Ids:** `Int` or `String`. No `UUID`.
-- **Chance:** one injected `RandomSource`: `next() → UInt64`, `u = (x >> 11) · 2⁻⁵³` (Key Table's rule). Seeds are
-  a platform concern; contracts feed draws (below).
+- **Chance:** one injected `RandomSource` **per stream**: the Key Table variety pick, Hint Letters (key, slot,
+  jitter, life, phase), the On-screen Keyboard Row, and the morph seed from (key, revealId) (MorphCore Rule 5).
+  Each is `next() → UInt64`, `u = (x >> 11) · 2⁻⁵³` (Key Table's rule), with its own injected source and its own
+  debug-logged seed, so one stream's draws never shift another's. Seeds are a platform concern; contracts feed
+  draws per stream (below).
 - **Data:** plain value types (`struct`, `enum` with raw values, arrays, `Int`, `Double`, `String`, `Bool`). JSON
   is decoded at the edge (app or Tools); `KidCore` takes decoded models. No `Codable` JSON in `KidCore`.
 - **Concurrency:** none inside `KidCore`; the app calls it on the main thread and hands results to its own queues
@@ -130,10 +135,11 @@ type rules below. A build check enforces it (scaffold story check (d)).
 
 ## Data Flow
 
-**1. Launch (App Shell R1).** Settings read (backend → `KidCore` record, synchronous) → `themeId` to the Key
-Table load (app: off the main thread; decode JSON → `KidCore` validate; Audio decodes PCM) → first frame: the Title
-(Scene look from `WallClock`) → Mac: App Shell `ready` (first frame, chord installed, window covers display) →
-Child Lock-in Waiting (set at the settings read; sets Input's `kioskModeOn`) → Locked once its R3 holds.
+**1. Launch (App Shell R1).** Settings read (backend → `KidCore` record, synchronous); on the Mac with
+`childLockActive`, Child Lock-in enters **Waiting at this read** and sets Input's `kioskModeOn` → `themeId` to the
+Key Table load (app: off the main thread; decode JSON → `KidCore` validate; Audio decodes PCM) → first frame: the
+Title (Scene look from `WallClock`) → Mac: App Shell `ready` (first frame, chord installed, window covers display)
+→ Child Lock-in applies the kiosk (Locked) once `ready` and its R3 hold.
 
 **2. A press (one frame).**
 ```
@@ -173,9 +179,9 @@ All seams are protocols in `KidCore` (names provisional; ADR-0002 fixes them).
 |---|---|---|
 | `UptimeClock` | `now() → Double` (event and frame times; Input R8) | app: event `timestamp`, `targetTimestamp`, `systemUptime` |
 | `PlayClock` | derived: `uptime − frozenTotal` (Reveal Stage R8) | `KidCore` itself, from `UptimeClock` + freeze state |
-| `ContinuousClock` (seam) | `now() → Double`, counts sleep (App Shell R6) | app: Swift `ContinuousClock` / `mach_continuous_time` |
+| `AwayClock` | `now() → Double`, counts sleep (App Shell R6); named so it does not shadow Swift's `ContinuousClock` | app: Swift `ContinuousClock` / `mach_continuous_time` |
 | `WallClock` | `{minutesOfDay, dayKey}` (Scene R2) | app: the local calendar and time zone |
-| `RandomSource` | `next() → UInt64` | app: a per-launch seeded generator; tests and fixtures: a draw list |
+| `RandomSource` (one per stream) | `next() → UInt64` | app: one seeded generator per stream, seed logged in debug; tests and fixtures: a draw list per stream |
 | `KeyEvent`, `TouchEvent` | normalized events (input-filter-v1) | app input adapters |
 | `SettingsBackend` | `read() → bytes?`, `write(bytes) → ok?`, `remove()` | app: `UserDefaults` single key |
 | `KioskEffects` | `apply()`, `remove()`, `coverDisplays()`, `isActive`, `windowCoversDisplay` | app: `NSApplication` (Mac); no-op on iPad |
@@ -185,8 +191,8 @@ All seams are protocols in `KidCore` (names provisional; ADR-0002 fixes them).
 | `ResidencySink` | prefetch / release / isResident | app: Cast Rendering texture or path cache |
 
 **The three chains** (named because a mistake there traps or loses the child):
-- **Clocks:** uptime (events, frames) → play (everything in Play that must stop under a freeze) → continuous (App
-  Shell "away") → wall (Scene looks, the 1 s edge dissolve). No module reads a clock it does not name.
+- **Clocks:** uptime (events, frames) → play (everything in Play that must stop under a freeze) → away (`AwayClock`,
+  sleep-inclusive; App Shell) → wall (Scene looks, the 1 s edge dissolve). No module reads a clock it does not name.
 - **Freeze / settle:** Parent Gate → Reveal Stage (`freeze`/`resume`/`settle`) → Press Queue, Hint Letters
   (challenge; the panel signal comes from the Parent Gate), Parade, Audio plan, Scene motion.
 - **`kioskModeOn`:** Settings `childLockActive` → Child Lock-in Waiting (sets Input's `kioskModeOn` at the settings
@@ -198,7 +204,7 @@ All seams are protocols in `KidCore` (names provisional; ADR-0002 fixes them).
 - Clocks: uptime → `SystemClock.uptimeMillis()` / `MotionEvent.getEventTime()`; play derived the same way;
   continuous → `SystemClock.elapsedRealtime()`; wall → `System.currentTimeMillis()` + `ZoneId` →
   `{minutesOfDay, dayKey}`.
-- `RandomSource`: the same `UInt64 → u` contract (`ULong` in Kotlin).
+- `RandomSource`: the same `UInt64 → u` contract (`ULong` in Kotlin), one per stream as on Apple.
 - `settings-record-v1` is **the same bytes** on both platforms: UTF-8 JSON, sorted keys, no whitespace, integers
   as numbers.
 - Android-only gaps go to ADR-0012: DataStore vs SharedPreferences, screen pinning instead of the kiosk, gesture
@@ -218,12 +224,12 @@ Location: `games/kid-learn-character/contracts/<name>-vN/` with `spec.md` and `c
 | settings-record-v1 | records → decoded values, defaults, migration; exact written bytes |
 | input-filter-v1 | normalized key/touch events + state → outcomes: AC-1j (chord with Fn/Shift/Caps), AC-1k (kioskModeOn), k3 (stale ⌘ release), k4 (Title and challenge routing), k5 (moon slop) |
 | press-queue-v1 | press/tick sequences → outcomes, holdEff (F1), timeouts |
-| reveal-timing-v1 | startReveal cases → formedS, revealLen, hasWord; E6–E9 times; stage fit F1; published boxes |
+| reveal-timing-v1 | startReveal cases → formedS, revealLen, hasWord; stage fit F1; published boxes (the E6–E9 times are audio-plan-v1's) |
 | scene-look-v1 | WallClock + weather → look, lookBlend, skyMidL; Cast Rendering F8 factors and the edge switch |
 | parade-v1 | shown sequences → batches, F2 start, F3 positions, freeze |
 | app-shell-v1 | state machine, F3 30 min on the continuous clock, single pending start, the ready set |
 | hint-letters-v1 | F1–F5 with draws, slot validity with jittered clearances, the 0 / 0.7 / 1.4 s sequence, freeze and Dimmed with no replay |
-| audio-plan-v1 | E1–E12 times from formedS and hasWord, F1 gain chain, F3 mash, F6 word_end |
+| audio-plan-v1 | E1–E12 times (owns E6–E9) from formedS and hasWord, F1 gain chain, F3 mash, F6 word_end |
 | gate-logic-v1 | hold, slop, the 10 s sleep, timeout, keypad matching with injected words |
 
 **Excluded, with reasons:** Child Lock-in (Apple only; Android uses screen pinning); seeds and stardust looks
@@ -237,7 +243,8 @@ reveal-timing-v1 and scene-look-v1); audio graph (per platform).
 - (c) When platforms disagree, **the GDD decides**.
 - (d) A case file changes only with a version bump (`<name>-vN`).
 - (e) `UInt64` values are decimal strings.
-- (f) Cases feed **draws** (`"draws": [0.12, 0.87, …]`, consumed in a documented order), not seeds; only
+- (f) Cases feed **draws per stream** (`"draws": {"hints": [0.12, 0.87, …]}`, each consumed in a documented
+  order), not seeds; only
   morph-contract-v1 keeps its SplitMix64 seed, because the contract specifies the generator.
 - (g) Tolerances: 1e-9 s for time, 1e-6 for geometry in stage or unit space, 1e-3 for morph positions (contracted).
 
@@ -328,10 +335,9 @@ written before 0003 because the content validator's cases are contract cases.
 
 - **The iPadOS full-screen claim** (App Shell R7: an app can no longer require full screen) is NOT SOURCEABLE in
   the reference; ADR-0006 must source or disprove it. The design already supports any window shape.
-- **`docs/engine-reference/` is shared** with the template (a symlink to the repository root): the
-  `native-apple/` folder is visible to every game in the repository. Kept there because Phase 0a reads that path;
-  the leader may prefer a game-local location.
+- **One owner per fixture case:** each number lives in exactly one contract (audio-plan-v1 owns the E6–E9 times;
+  reveal-timing-v1 owns the startReveal outputs, stage fit and the boxes).
+- **The On-screen Keyboard Row** has no contract yet: its cases join key-table-schema-v1 or a keyboard-row-v1 when
+  its GDD lands (game-dev-android's note).
 - **Seam names** (`UptimeClock`, `WallClock`, …) are provisional until ADR-0002.
 - The ★ ADRs cannot be decided until their device runs; their GDD rules are written to work with every option.
-</content>
-</invoke>
