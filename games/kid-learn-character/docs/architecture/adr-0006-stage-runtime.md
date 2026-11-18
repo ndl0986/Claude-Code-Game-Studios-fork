@@ -145,6 +145,27 @@ window behaviour, two accessibility settings and pixel density, which ADR-0002's
 ### D4. Windows
 - **iPad:** every scene size is supported; `UIRequiresFullScreen` is **not** set (deprecated in 26.0 and not honoured
   as full screen under Windowed Apps, Sources). This confirms App Shell R7. Landscape first; any shape works through D2.
+  - *Note 2026-11-18 (K-39, K-42, TASK-115; TR-shell-004; status unchanged, Accepted):* **the iPad's system overlays
+    follow App Shell R7's two outputs**, on the root SwiftUI view of the one window (D1):
+    - **Status bar: hidden throughout**, Title, Play, the gate challenge and the grown-up panel alike
+      (`statusBarHidden {true}`, emitted once), so the safe area and the stage fit (D2) never move when an overlay
+      opens or closes. iPadOS 27: `.toolbarVisibility(.hidden, for: .statusBar)` (the `.statusBar` placement is
+      iOS 27+); iPadOS 26: `.statusBarHidden(true)`, which the 27.1 SDK marks for future deprecation in favour of the
+      former. One `#available` branch, as in ADR-0010. Both set the hosting controller's `prefersStatusBarHidden`.
+    - **Home indicator auto-hidden and system edge gestures deferred on every edge, in the Title and Play only**,
+      both following `edgeDeferral` (on in the Title and Play, off while the Parent Gate's `gateOverlayShown` is true):
+      `.persistentSystemOverlays(edgeDeferral ? .hidden : .automatic)` and
+      `.defersSystemGestures(on: edgeDeferral ? .all : [])` (iOS 16+), which set the hosting controller's
+      `prefersHomeIndicatorAutoHidden` and `preferredScreenEdgesDeferringSystemGestures`. In the gate and the panel
+      neither applies, so a grown-up sees the indicator and one swipe acts at once (App Shell AC-14).
+    - **If the root is ever a UIKit controller** instead (for example a hosting subclass), it overrides the three
+      properties, forwards them from a child through `childViewControllerFor…` where the view is a child, and calls
+      `setNeedsStatusBarAppearanceUpdate()`, `setNeedsUpdateOfHomeIndicatorAutoHidden()` and
+      `setNeedsUpdateOfScreenEdgesDeferringSystemGestures()` on every `edgeDeferral` change (UIKit header, Sources).
+    - **A speed bump, not a lock:** Guided Access stays the real lock (Child Lock-in, ADR-0008). Auto-hidden is the
+      system's call, not a guarantee, and deferral only asks for a second swipe; how each behaves on a device, and in a
+      window that is not full screen, is **not sourced** here and is what AC-14 measures (Simulator screenshots; the
+      swipes on a device). The Mac has neither output and nothing here applies to it.
 - **Mac, kiosk off:** one resizable window, minimum 960 × 540 pt (App Shell R7), native full screen allowed
   (`collectionBehavior` `.fullScreenPrimary`).
 - **Mac, kiosk on:** native full screen (options through `window(_:willUseFullScreenPresentationOptions:)`) or a
@@ -248,6 +269,7 @@ TR-IDs are provisional (architecture.md's baseline).
 |------------|-------------|--------------------------|
 | reveal-stage.md R10, F1 | TR-reveal-003: contain-and-extend fit; draw order | D1 layers; D2 transform and resize |
 | app-shell-title.md R7 | windows on iPad and Mac; overlays in the main window | D4; D1 overlays |
+| app-shell-title.md R7 (K-39), AC-14 | TR-shell-004: iPad status bar hidden; home indicator and edge deferral follow `edgeDeferral` | D4 note 2026-11-18 (TASK-115) |
 | child-lock-in.md R5 | never resign key for the gate or panel | D1 overlays; D4 constraints for ADR-0008 |
 | hint-letters.md F5, R11; parent-gate-panel.md (moon slop) | physical target sizes | D7 ppi rule |
 | accessibility (K-30); reveal-stage.md R9 | Smart Invert opt-out; Reduce Motion | D5; D6 |
@@ -285,5 +307,15 @@ never QC's E9F515E9….
 ## Related
 - ADR-0001 (9a, stage protocol); ADR-0002 (D3, D6; Risks amended per K-34); ADR-0008; ADR-0009.
 - Reveal Stage, Cast Rendering, Scene, App Shell & Title, Child Lock-in GDDs.
+- iOS 27.1 SDK interfaces, read 2026-11-18 (TASK-115): `UIKit.framework/Headers/UIViewController.h`
+  (`prefersStatusBarHidden`, "Defaults to NO", deprecated only on visionOS; `preferredScreenEdgesDeferringSystemGestures`,
+  "Default is UIRectEdgeNone", with `childViewControllerForScreenEdgesDeferringSystemGestures` and
+  `setNeedsUpdateOfScreenEdgesDeferringSystemGestures`; `prefersHomeIndicatorAutoHidden`, "the application's preferred
+  home indicator auto-hiding", with `childViewControllerForHomeIndicatorAutoHidden` and
+  `setNeedsUpdateOfHomeIndicatorAutoHidden`; all iOS 11+) and `SwiftUI.swiftmodule/arm64e-apple-ios.swiftinterface`
+  (`statusBarHidden(_:)`: iOS 13, `deprecated: 100000.0`, "Use .toolbarVisibility(_, for: .statusBar) instead";
+  `ToolbarPlacement.statusBar`: iOS 27.0; `toolbarVisibility(_:for:)`: iOS 18; `persistentSystemOverlays(_:)` on a
+  View: iOS 16; `defersSystemGestures(on:)`: iOS 16). The developer.apple.com pages render client-side and could not
+  be read as text.
 - `docs/engine-reference-local/native-apple/` (updated with the Sources above); `docs/registry/architecture.yaml`
   (`stage_view`).
