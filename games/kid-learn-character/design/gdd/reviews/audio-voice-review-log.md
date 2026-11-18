@@ -98,3 +98,8 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md 6b5e9ff8359ee2e8878794f49c9bcae
 Review mode: lean · Workflow: standard
 Change: leader's correction: the freeze no longer loses cut_settle_s. R6: the pause fades over cut_fade_s and settles over cut_settle_s (no click), and each sound resumes from the frame it had reached at the freeze moment, fading back in over cut_fade_s; nothing is lost (ADR-0010 resume-from-position, game-dev-ios). AC-21 back to "continue from where they paused", adding: the resume point equals the pause point and the fade-in takes cut_fade_s. The cut_settle_s knob row and R2.2 (cut replacements up to cut_settle_s late) are unchanged.
 Reviewed-Content-Hash: design/gdd/audio-voice.md 1dba2cd72a89be26a558e93092dc5bc5137d76ad
+
+## Update — 2026-11-18 — TASK-090b review (game-dev-ios): REVISE → addressed (no re-review)
+Review mode: lean · Workflow: standard
+Change: R6 and AC-21: a frozen sound resumes from the frame reached at the freeze moment or up to cut_settle_s earlier (a little heard again, nothing skipped; measured 0–17 ms, ADR-0010 H-1), testable as freezeFrame − cut_settle_s × rate ≤ resume ≤ freezeFrame. The nit: the players "stop playing" (API-neutral) instead of "are paused". Knob row reworded to match.
+Reviewed-Content-Hash: design/gdd/audio-voice.md 6f34636324f22949650cd130ff17dcfaed52bb56
