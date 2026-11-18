@@ -86,6 +86,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-097 | QC iPad simulator: sim-guard --qc accepts it, --dev refuses; ADR-0011 D3 dated note | tools | game-dev-android (review: game-qc-ios) | DONE: MERGED with TASK-079 (a4adca84) | `design/TASK-097-qc-ipad-sim` | 2026-11-18 |
 | TASK-098 | Input: digit key-up for the Gate (gateDigitUp or digitKeyHeld) so G13 B7 is expressible; input-filter-v2 later | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ bd9df8bc) | `design/TASK-098-input-gate-digit-up` | 2026-11-18 |
 | TASK-099 | input-filter-v2: v1 + AC-1t gateDigitUp cases; v1 superseded | qa | game-qc-android (review: game-dev-ios) | DONE: MERGED (95 cases, game-dev-ios APPROVE @ 94c776e3) | `design/TASK-099-input-filter-v2` | 2026-11-18 |
+| TASK-101 | Contracts batch 6 (Vertical Slice): parade-v1 + scene-look-v1, with K-40 registry rows | qa | game-qc-android (review: GDD owners) | SENT 2026-11-18 | `design/TASK-101-contracts-batch6` | 2026-11-18 |
 
 ## Leader log
 
