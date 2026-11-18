@@ -77,7 +77,7 @@ gentler. For a grown-up using VoiceOver: the panel reads every control by name.
 | Reveal Stage | glyph rises straight, no scale overshoot; creature appears with no pop overshoot; the leaving creature only fades, no sink | Reveal Stage R9, K-20 | next reveal |
 | Cast Rendering | halo steady at `halo_steady` 80% (× 0.7 at Night); idles × 0.5; hop 13 units; **stardust twinkle steady at alpha × 0.6, the term's mean (K-29; Cast Rendering R6, F3; done, TASK-062)** | Cast Rendering R5, R7, R8; K-16; K-29 | halo, hop: next reveal; idles: next frame; twinkle: next reveal (A2) |
 | Hint Letters | no drift, no pulse, no scale-in; a 0.3 s consume fade | Hint Letters R10 | next frame |
-| Parade | the same 11 s walk; step bob × 0.5 (Cast Rendering R8) | Parade R7, K-17 | next frame |
+| Parade | the same 11 s walk; step bob × 0.5 (Cast Rendering R8). **Parade meter** *(K-44/K-46, TASK-124)*: no meter light flies (the cell lights at the `shown` and still fills over 0.4 s); the full glow is **steady at 0.40**, no breathe | Parade R7, R12, R12a; K-17 | next frame |
 | Scene | clouds still; rain and snow at half count and half speed; stars steady; fades unchanged | Scene R8, K-24 | next frame |
 | App Shell & Title | the play button breathes at half amplitude; the title creature as Cast Rendering | App Shell R2, F2 | next frame |
 | Parent Gate & Panel | the ring fills (progress) with no pulse; challenge and panel appear with no fade; the dim is instant; the "Child lock is OFF" notice disappears with no fade | Parent Gate UI Requirements, G9 | next frame |
@@ -112,6 +112,8 @@ The pulses, collected:
 | Title play button | 0.38 Hz (App Shell R2; art bible amended, TASK-062) | scale ± 4% | App Shell | ≤ 1 Hz |
 | Star twinkle | ≤ 0.35 Hz | alpha | Scene; art bible §2 | ≤ 1 Hz |
 | Snow sway | ≤ 0.3 Hz | position | Scene | ≤ 1 Hz |
+| Parade meter full glow *(K-44, TASK-124)* | 0.5 Hz (`meter_pulse_hz`), only while full | glow alpha between 0.35 and 0.45 around the bar (swing below ΔL 0.1) | Parade R12, F4; art bible §7 | ≤ 1 Hz |
+| Parade meter light and cell fill *(K-46, TASK-124)* | not periodic: one per new creature in the batch, at most once per formed reveal | a 16-unit Starlight star flies 0.9 s to its cell and fades as the cell fills over 0.4 s; it passes each pixel once | Parade R12a, F4; art bible §7 | — (one-shot) |
 | Lightning, thunder flashes | never | — | Scene; art bible §2 | — |
 
 **A5. Contrast** (collected; the numbers are their owners').
@@ -133,6 +135,7 @@ The pulses, collected:
 | Hint vs waiting | the same gold on cream | a drifting rounded square vs a small circle in a still row |
 | Which creature | slot | silhouette trait and spoken name |
 | Moon gate progress | ring | ring length and hold time |
+| Parade meter count *(K-44, TASK-124)* | Starlight cells on an Ink track | how many of the 6 cells are lit, left to right (a count by position, never colour alone); full adds the glow, and the parade follows |
 
 Under deuteranopia the raptors R, U and V converge to one brown; their outline traits tell them apart
 (art bible §3, §4). Panel switches show On/Off text (Parent Gate).
@@ -149,7 +152,8 @@ diameter; scaled up by `k` if a device would go under it).
 
 
 Not targets: the title play button (any tap except the moon starts play, App Shell R3), a tap on a
-cast member and a tap on the empty stage. Any touch there answers (a hop or
+cast member, the **parade meter** (a touch on it is an empty-stage sparkle, Parade R12; K-44, TASK-124) and a
+tap on the empty stage. Any touch there answers (a hop or
 a sparkle), so they need no floor.
 
 (b) **Grown-up targets: ≥ 44 pt** (Apple's minimum).
@@ -267,6 +271,10 @@ area_max = 0.25 · (π/4) · field_px²   (the 10° field is a circle of diamete
 | 11" and 13" iPad | 264 | 545.6 | 58,449 |
 | Mac, 2× screen | 254 | 524.9 | 54,105 |
 | Mac, 1× external display | 109 | 225.3 | 9,964 |
+| Mac, 1× class floor *(ADR-0013 D6)* | 72 | 148.8 | 4,347 |
+
+The offline run (ADR-0013 G4) uses each device class's ppi **floor** (264 / 254 / 72); the device run uses the
+device's real ppi. A lower ppi is stricter, so the floor is never substituted for a known lower value.
 
 (Check: the 10° field is a cone of half-angle 5°, 2π(1 − cos 5°) ≈ 0.0239 sr, and 25% of it is
 ≈ 0.0060 sr, the WCAG figure; the on-screen disc of diameter `field_px` subtends the same 0.0239 sr to
@@ -289,12 +297,18 @@ FAIL if ∃ t, ∃ field position F:  #{ p ∈ F : flashing(p, t) } > area_max
 - **Capture:** at the display's refresh rate (60 Hz, or 120 Hz on ProMotion iPads; the rate is recorded
   per run), every frame, the full stage at the device's native resolution, sRGB values
   converted per WCAG; the field slides over every position (step ≤ `field_px` / 4) for every frame.
+  **Frames are timed by their recorded timestamps**, never by counting frames (a frame dump slows the frames it
+  records; ADR-0013 D5).
 - **Scenario:** the K-26 busy case: a seeded mash (the Press Queue's mash fixture) with a walking
-  parade, at Night and at Day, with light rain and with snow; once with Reduce Motion off and once on.
-  10 s per run.
-- **Where:** the simulator runs it on every build (the luminance math doesn't depend on the GPU); the
-  **release gate is the run on a real iPad and a real Mac** (frame timing does). **NOT ASSESSED** until
-  device time from Luan.
+  parade, at Night and at Day, with light rain and with snow; once with Reduce Motion off and once on;
+  **and a 10 s Title idle run** (Night, light rain, Reduce Motion off) per device class (ADR-0013 D3).
+  10 s per run. **Each busy-case window includes an Armed → Walking handover** (Parade R12: the 6th light landing,
+  the meter's full glow, then the glow fading out as the parade fades in), so the meter's full look, which shows
+  for only about 0.75 s, is always in the frames.
+- **Where (ADR-0013):** the **offline render (G4)** runs it on every merge candidate that touches `apple/` or
+  `content/`: the stage drawn headless on a synthetic clock, no Simulator (the luminance math doesn't depend on the
+  GPU). The **release gate is the run on a real iPad and a real Mac (G5)** (frame timing and the colour pipeline do).
+  **NOT ASSESSED** until device time from Luan.
 - **F2b, red flash (run on the palette):** every colour in the art bible (51 hex values, read
   2026-11-18) has R/(R+G+B) < 0.8, both on 8-bit sRGB values (highest 0.604, `#80450f`) and on linear
   values (highest 0.781, Letter Gold `#b9631c`). A blend of colours can't exceed its highest component's ratio **when the blend is done and measured in
@@ -389,11 +403,13 @@ GDD's (A8).
    full-screen flash FAILs; a ΔL = 0.08 flicker passes (below 10%); random noise of ±0.04 passes; a
    flicker between L 0.85 and 1.0 passes (darker ≥ 0.80) (unit tests on the detector).
 8. **AC-08 · F2 gate (NOT ASSESSED until device time):** the K-26 busy scenario, Night and Day, rain and
-   snow, Reduce Motion off and on, on a real iPad and a real Mac at the display's refresh rate: no FAIL. The simulator run
-   passes on every build.
+   snow, Reduce Motion off and on, plus a Title idle run, on a real iPad and a real Mac at the display's refresh rate:
+   no FAIL. The offline render (ADR-0013 G4) passes on every merge candidate touching `apple/` or `content/`.
 9. **AC-09 · F2b red flash:** the palette check over every hex in the art bible reports the highest
    R/(R+G+B) (8-bit 0.604, linear 0.781) and passes (< 0.8); adding `#ff0000` to a test palette fails it. It runs on the shipped palette, theme data and SVG fills.
-   The F2 capture's logged per-pixel maximum stays < 0.8.
+   The F2 capture's logged per-pixel maximum stays < 0.8 **over pixels with R + G + B ≥ 0.1** (normalised):
+   near-black pixels are excluded as rounding noise, since (1,0,0) reads 1.0 and can't carry a saturated-red
+   transition (ADR-0013 D4). This is not a threshold change; 0.8 stays.
 10. **AC-10 · contrast:** the Scene's 160-case check (K-25) passes; hints and panel controls meet A5
     (build check on the palette).
 11. **AC-11 · no colour-only meaning:** for each A6 row, a desaturated (greyscale) screenshot still shows
