@@ -20,6 +20,25 @@ The Kotlin port diffs its names and shapes against this file (ADR-0002).
 - `AppLifecycleEvent` (enum): `enum AppLifecycleEvent`
 - `AwayClock.now()` (method): `func now() -> Double`
 - `AwayClock` (protocol): `protocol AwayClock`
+- `CanonicalJSON.ReadError.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `CanonicalJSON.ReadError.duplicateKey` (enum.case): `case duplicateKey`
+- `CanonicalJSON.ReadError.empty` (enum.case): `case empty`
+- `CanonicalJSON.ReadError.invalidUTF8` (enum.case): `case invalidUTF8`
+- `CanonicalJSON.ReadError.syntax(_:)` (enum.case): `case syntax(Int)`
+- `CanonicalJSON.ReadError` (enum): `enum ReadError`
+- `CanonicalJSON.Value.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `CanonicalJSON.Value.==(_:_:)` (func.op): `static func == (a: Value, b: Value) -> Bool`
+- `CanonicalJSON.Value.array(_:)` (enum.case): `case array([Value])`
+- `CanonicalJSON.Value.bool(_:)` (enum.case): `case bool(Bool)`
+- `CanonicalJSON.Value.null` (enum.case): `case null`
+- `CanonicalJSON.Value.number(_:)` (enum.case): `case number(Double)`
+- `CanonicalJSON.Value.object(_:)` (enum.case): `case object([(key: String, value: Value)])`
+- `CanonicalJSON.Value.string(_:)` (enum.case): `case string(String)`
+- `CanonicalJSON.Value` (enum): `indirect enum Value`
+- `CanonicalJSON.appendInt(_:to:)` (type.method): `static func appendInt(_ n: Int, to out: inout [UInt8])`
+- `CanonicalJSON.appendString(_:to:)` (type.method): `static func appendString(_ s: String, to out: inout [UInt8])`
+- `CanonicalJSON.parse(_:)` (type.method): `static func parse(_ bytes: [UInt8]) throws -> Value`
+- `CanonicalJSON` (enum): `enum CanonicalJSON`
 - `ContentProbe.byteSize(_:)` (method): `func byteSize(_ path: String) -> Int64?`
 - `ContentProbe.decodedDuration(_:)` (method): `func decodedDuration(_ path: String) -> Double?`
 - `ContentProbe.exists(_:)` (method): `func exists(_ path: String) -> Bool`
@@ -54,6 +73,44 @@ The Kotlin port diffs its names and shapes against this file (ADR-0002).
 - `SettingsBackend.remove()` (method): `func remove()`
 - `SettingsBackend.write(_:)` (method): `func write(_ bytes: [UInt8]) -> Bool?`
 - `SettingsBackend` (protocol): `protocol SettingsBackend`
+- `SettingsChange.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `SettingsChange.keyboardRow(_:)` (enum.case): `case keyboardRow(Bool)`
+- `SettingsChange.muted(_:)` (enum.case): `case muted(Bool)`
+- `SettingsChange.themeId(_:)` (enum.case): `case themeId(String)`
+- `SettingsChange.volume(_:)` (enum.case): `case volume(Int)`
+- `SettingsChange.weather(_:)` (enum.case): `case weather(Weather)`
+- `SettingsChange.windy(_:)` (enum.case): `case windy(Bool)`
+- `SettingsChange` (enum): `enum SettingsChange`
+- `SettingsPlatform.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `SettingsPlatform.android` (enum.case): `case android`
+- `SettingsPlatform.iPadOS` (enum.case): `case iPadOS`
+- `SettingsPlatform.macOS` (enum.case): `case macOS`
+- `SettingsPlatform` (enum): `enum SettingsPlatform`
+- `SettingsRecord.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `SettingsRecord.canonicalBytes(platform:)` (method): `func canonicalBytes(platform: SettingsPlatform) -> [UInt8]`
+- `SettingsRecord.childLock` (property): `var childLock: Bool`
+- `SettingsRecord.currentSchemaVersion` (type.property): `static let currentSchemaVersion: Int`
+- `SettingsRecord.init()` (init): `init()`
+- `SettingsRecord.keyboardRow` (property): `var keyboardRow: Bool`
+- `SettingsRecord.muted` (property): `var muted: Bool`
+- `SettingsRecord.schemaVersion` (property): `var schemaVersion: Int`
+- `SettingsRecord.themeId` (property): `var themeId: String`
+- `SettingsRecord.volume` (property): `var volume: Int`
+- `SettingsRecord.weather` (property): `var weather: Weather`
+- `SettingsRecord.windy` (property): `var windy: Bool`
+- `SettingsRecord` (struct): `struct SettingsRecord`
+- `SettingsStore.apply(_:)` (method): `func apply(_ change: SettingsChange)`
+- `SettingsStore.childLockActive` (property): `var childLockActive: Bool { get }`
+- `SettingsStore.gain` (property): `var gain: Double { get }`
+- `SettingsStore.init(platform:backend:log:)` (init): `init(platform: SettingsPlatform, backend: SettingsBackend, log: DebugLog)`
+- `SettingsStore.onChange` (property): `var onChange: ((SettingsRecord, Bool) -> Void)?`
+- `SettingsStore.platform` (property): `let platform: SettingsPlatform`
+- `SettingsStore.read()` (method): `func read()`
+- `SettingsStore.record` (property): `var record: SettingsRecord { get }`
+- `SettingsStore.reset()` (method): `func reset()`
+- `SettingsStore.setChildLock(_:)` (method): `func setChildLock(_ on: Bool)`
+- `SettingsStore.sliderReleased(_:)` (method): `func sliderReleased(_ x: Double)`
+- `SettingsStore` (class): `final class SettingsStore`
 - `StageFit.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
 - `StageFit.init(width:height:)` (init): `init(width: Double, height: Double)`
 - `StageFit.offsetX` (property): `let offsetX: Double`
@@ -76,9 +133,20 @@ The Kotlin port diffs its names and shapes against this file (ADR-0002).
 - `WallTime.init(minutesOfDay:dayKey:)` (init): `init(minutesOfDay: Double, dayKey: Int)`
 - `WallTime.minutesOfDay` (property): `var minutesOfDay: Double`
 - `WallTime` (struct): `struct WallTime`
+- `Weather.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `Weather.clear` (enum.case): `case clear`
+- `Weather.cloudy` (enum.case): `case cloudy`
+- `Weather.hash(into:)` (method): `func hash(into hasher: inout Hasher)`
+- `Weather.hashValue` (property): `var hashValue: Int { get }`
+- `Weather.init(rawValue:)` (init): `init?(rawValue: String)`
+- `Weather.lightRain` (enum.case): `case lightRain`
+- `Weather.snow` (enum.case): `case snow`
+- `Weather` (enum): `enum Weather`
 - `asciiLetters(_:)` (func): `func asciiLetters(_ s: String) -> [String]`
 - `asciiUppercased(_:)` (func): `func asciiUppercased(_ s: String) -> String`
 - `isASCIIUpperLetters(_:)` (func): `func isASCIIUpperLetters(_ s: String) -> Bool`
 - `roundHalfAwayFromZero(_:)` (func): `func roundHalfAwayFromZero(_ x: Double) -> Double`
 - `scalarCount(_:)` (func): `func scalarCount(_ s: String) -> Int`
+- `settingsGain(volume:muted:)` (func): `func settingsGain(volume: Int, muted: Bool) -> Double`
+- `sliderLevel(_:)` (func): `func sliderLevel(_ x: Double) -> Int?`
 - `unitDraw(_:)` (func): `func unitDraw(_ x: UInt64) -> Double`
