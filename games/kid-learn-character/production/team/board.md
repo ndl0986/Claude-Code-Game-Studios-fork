@@ -62,8 +62,8 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-080 | Contracts batch 2 plan (input-filter-v1, press-queue-v1 first) | qa | game-qc-android (review: game-dev-android) | DONE: PLAN MERGED (game-dev-android APPROVE @ daf0850d) → batch 2 next | `design/TASK-080-contracts-batch2-plan` | 2026-11-18 |
 | TASK-081 | input-filter-v1 + press-queue-v1 contracts (batch 2, ~85 + ~55 cases) | qa | game-qc-android (review: game-dev-ios input / game-dev-android queue) | SENT 2026-11-18 | `design/TASK-081-contracts-batch2` | 2026-11-18 |
 | TASK-082 | Small GDD fixes: Press Queue R3 play-time line + PQ-Q2–Q4 as rules; Settings F1 non-finite + R7 missing-schemaVersion log | design | game-dev-android (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 143a4167); slider-NaN case → settings-record-v2 later (option b) | `design/TASK-082-pq-settings-nits` | 2026-11-18 |
-| TASK-083 | Input R8 new outputs gateDigit / gateCancel (IF-Q4) + Parent Gate hardware digits incl. iPad keyboard | design | game-dev-ios (review: game-qc-android) | SENT 2026-11-18 | `design/TASK-083-input-gate-outputs` | 2026-11-18 |
-| TASK-084 | ADR-0003 D4 + art bible §8 dated note: layer ids `<part>_<layer>` (K-37) | docs | game-art-content (review: game-dev-android) | SENT 2026-11-18 | `design/TASK-084-d4-layer-ids` | 2026-11-18 |
+| TASK-083 | Input R8 new outputs gateDigit / gateCancel (IF-Q4) + Parent Gate hardware digits incl. iPad keyboard | design | game-dev-ios (review: game-qc-android) | PLAN APPROVED (after TASK-078 fix) | `design/TASK-083-input-gate-outputs` | 2026-11-18 |
+| TASK-084 | ADR-0003 D4 + art bible §8 dated note: layer ids `<part>_<layer>` (K-37) | docs | game-art-content (review: game-dev-android) | IN REVIEW @ 6cc686bb → game-dev-android | `design/TASK-084-d4-layer-ids` | 2026-11-18 |
 
 ## Leader log
 
