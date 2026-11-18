@@ -57,3 +57,9 @@ Review mode: lean · Workflow: standard
 Task: TASK-085a
 Change: R10's draw order names the On-screen Keyboard Row (while on) between the current creature and the glyph or specks; the zPositions point to ADR-0006 D1's table (row at z 35) as the one source (TASK-070). Checked, already landed: R1 mashing/haloOn (TASK-054b), the keyboard row band and accessibilityIgnoresInvertColors, the sparkles' Reduce Motion rule (TASK-062). Review: game-qc-ios, from the diff.
 Reviewed-Content-Hash: design/gdd/reveal-stage.md 1001fdbc68023d7373858c6d2c8967e9cdcb1fa1
+
+## Update — 2026-11-18 — TASK-088b hasWord and E8 (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-088b
+Change: game-qc-android's RT-Q1/Q2 (reveal-timing-v1). R3: hasWord = the case forms a creature AND the active locale has the item's word line; the table's "true" cells read "true if the item has a word line"; hasWord gates the word (E9) only. R6: E8 plays at formedS when the case forms a creature (not art missing) and the item's sfx is present; E9 at formedS + word_offset_s only when hasWord. AC-5 follows (sfx but no word line: E8, no E9; art missing: neither). Matches Audio & Voice's E8/E9 wording (TASK-088a). Review: game-qc-android, from the diff.
+Reviewed-Content-Hash: design/gdd/reveal-stage.md 235ae45a25280bc1c55ecd200827f9201fa16653
