@@ -39,7 +39,7 @@ tools/device-build.sh ios production/qa/evidence/<run task>/<sha>/            # 
 tools/device-build.sh mac production/qa/evidence/<run task>/<sha>/            # the macOS .app run under MAC FREE
 tools/device-build.sh ios production/qa/evidence/<run task>/<sha>/ norive     # TASK-033 SpikeNoRive, P-1 baseline
 ```
-Each writes `build-<plat>.log`, `test.log` and `spike-check-<plat>.txt` (with the signature lines) into the run's
+Each writes `build-<plat>.txt`, `test.txt` (`.txt` so they are committed: `*.log` is gitignored) and `spike-check-<plat>.txt` (with the signature lines) into the run's
 evidence folder; exit 1 means **do not install**. Install that same `.app` (`build/device/…`), nothing rebuilt in
 between. Signing: automatic, Luan's Personal Team (K-28, K-37); the team ID comes from `$SPIKE_TEAM_ID` or
 `tools/team-id.local` (gitignored) and is masked as `<TEAM>` in the logs. Bundle id `com.galaxyandsun.devicespike`.
