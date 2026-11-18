@@ -1,6 +1,6 @@
 # Cast Rendering
 
-> **Status**: In Review
+> **Status**: Approved (independent read by game-dev-android, merged 2026-11-18)
 > **Author**: game-dev-ios for Luan (TASK-044); plan reviewed by game-dev-android
 > **Last Updated**: 2026-11-18
 > **Last Verified**: 2026-11-18, against the art bible §2–§5, §7, §8, MorphCore, Key Table & Theme Data, Press
