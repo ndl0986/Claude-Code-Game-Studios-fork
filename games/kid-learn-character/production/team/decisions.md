@@ -105,6 +105,18 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-40 ADR-0004 D5: a visible "not started" contract state (Luan, 2026-11-18)
+
+- Contracts are written before code, so ADR-0004 D5 gets a dated note (status stays Accepted). `contracts/README.md`
+  is the **only** registry: every `*-v*/` directory has exactly one row — `runner: <name>`, `not-started: <story id>`
+  or `superseded-by: <vN+1>`. A directory with no row is a FAIL.
+- Every cases.json is still structurally checked (case-schema-v1, unique ids, declared count, source tags) and reported
+  on its own `structure:` line. A not-started contract reports `NOT ASSESSED <contract>: not started (story <id>);
+  structure OK, 0 of <n> cases run` — never PASS.
+- FAIL also when: a not-started row has a registered runner; its owning story is Done. `/story-done` cannot close a
+  system's story while its contract is not-started. The Production gate and every release-candidate verify FAIL while
+  any row is not-started.
+
 ### K-39 iPad orientation and system overlays (Luan, 2026-11-18)
 
 - **Portrait is allowed on iPad.** iPadOS 26 no longer lets an app require full screen, so the stage follows any
