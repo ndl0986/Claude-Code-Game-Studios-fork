@@ -21,7 +21,7 @@ public enum SVGPath {
         case missingNumber(String)
     }
 
-    private static func isASCIILetter(_ v: UInt32) -> Bool { (v >= 65 && v <= 90) || (v >= 97 && v <= 122) }
+    private static func isASCIILetter(_ u: Unicode.Scalar) -> Bool { (u.value >= 65 && u.value <= 90) || (u.value >= 97 && u.value <= 122) }
 
     /// The path as polylines, one per subpath (a Z closes it back to its start point).
     public static func polylines(_ d: String) throws -> [[Pt]] {
@@ -33,7 +33,7 @@ public enum SVGPath {
         }
         for scalar in d.unicodeScalars {
             let v = scalar.value
-            if isASCIILetter(v) && v != 101 && v != 69 {                       // a letter other than e / E
+            if isASCIILetter(scalar) && v != 101 && v != 69 {                       // a letter other than e / E
                 flush(); tokens.append(String(scalar))
             } else if v == 32 || v == 44 || v == 10 || v == 9 {                 // space , \n \t
                 flush()
@@ -59,7 +59,7 @@ public enum SVGPath {
         func endSub() { if cur.count > 1 { out.append(cur) }; cur = [] }
         func isCommand(_ t: String) -> Bool {
             let s = t.unicodeScalars
-            return s.count == 1 && isASCIILetter(s.first!.value)
+            return s.count == 1 && isASCIILetter(s.first!)
         }
 
         while i < tokens.count {

@@ -1,0 +1,8 @@
+// Shared build settings for LetterMorph (TASK-079). Committed; holds no team id.
+// Signing (K-37 Q3): automatic, with Luan's Personal Team. The team id lives only in the untracked
+// Signing.local.xcconfig next to this file (see Signing.local.xcconfig.example); without it, builds for the
+// simulator and an ad-hoc-signed macOS build still work headless.
+CODE_SIGN_STYLE = Automatic
+CODE_SIGN_IDENTITY[sdk=macosx*] = -
+
+#include? "Signing.local.xcconfig"

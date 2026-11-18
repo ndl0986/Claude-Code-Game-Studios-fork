@@ -1,0 +1,3 @@
+// Copy to Signing.local.xcconfig (untracked, never committed) and set Luan's Personal Team id.
+DEVELOPMENT_TEAM = XXXXXXXXXX
+CODE_SIGN_IDENTITY[sdk=macosx*] = Apple Development

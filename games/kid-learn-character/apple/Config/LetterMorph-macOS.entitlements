@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- The PKC-01 allowlist (Privacy & Kids Compliance §Tuning Knobs): the App Sandbox and nothing else. No
+     com.apple.security.network.client: any network attempt is denied by the sandbox (ADR-0001 Decision 8). -->
+<plist version="1.0">
+<dict>
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+</dict>
+</plist>
