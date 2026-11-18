@@ -104,12 +104,17 @@ window behaviour, two accessibility settings and pixel density, which ADR-0002's
   | 10 | parade walkers | Parade |
   | 20 | leaving creature | Reveal Stage / Cast Rendering |
   | 30 | current creature | Reveal Stage / Cast Rendering |
+  | 35 | On-screen Keyboard Row (when on) | On-screen Keyboard Row |
   | 40 | glyph or specks | Reveal Stage / Cast Rendering |
   | 50 | starlights and sparkles | Reveal Stage |
   | 60 | hint letters | Hint Letters |
   | 70 | queue tokens | Reveal Stage (Press Queue snapshot) |
   | 80 | the moon | Parent Gate |
 
+- **The On-screen Keyboard Row** sits at z 35: above the current creature, below the rising glyph and the
+  starlight or sparkle that answers a row press (40, 50), with hints (60) and tokens (70) above it. Row touches stay
+  at Input's layer 2. Under `row_lift` the creature cannot overlap the row (anchor y 490; the row starts at y 582).
+  **Reveal Stage R10's draw-order line needs the same entry** (a GDD follow-up routed by the leader; not edited here).
 - **The gate challenge and the grown-up panel** (with its 55% dim) are **SwiftUI overlays above the `SKView` in the
   same window**: never a separate window, sheet or popover (App Shell R7, Child Lock-in R5).
 - The adapter only maps the render plan onto nodes; no rule lives in the scene.
@@ -118,6 +123,9 @@ window behaviour, two accessibility settings and pixel density, which ADR-0002's
 - The scene's `scaleMode` is `.resizeFill`, sized to the view in points. The stage root node carries KidCore's
   Reveal Stage F1 transform: scale `s_fit`, the centring offset, and the **y-axis flip** (KidCore is y-down,
   SpriteKit y-up).
+- **Touches:** the adapter converts each touch's view point to window pixels with the same `pxPerPt` it publishes
+  (`nativeScale` on iPad, `backingScaleFactor` on the Mac) and emits `TouchEvent` in px (ADR-0002 D5). It applies no
+  stage transform itself; KidCore applies F1.
 - `DisplayMetrics` (ADR-0002 D6) from the window and screen: `windowPx` = bounds × `nativeScale` (iPad) or
   `backingScaleFactor` (Mac); `pxPerPt`; safe-area insets in px; live gesture insets; `ppiX/ppiY` per D7.
 - Any resize, rotation, Split View / Stage Manager / Windowed Apps change, or Mac window or screen change emits
@@ -171,7 +179,7 @@ Device frame time p50 / p99 with the full stage, node counts per layer, 60 vs 12
 ### Architecture Diagram
 ```
 KidCore ──render plan──▶ RenderSink (SKView adapter) ──▶ stage root (F1 transform, y flip)
-   ▲                                                        ├─ z0 Scene … z80 moon (D1)
+   ▲                                                        ├─ z0 Scene … z35 Keyboard Row … z80 moon (D1)
    │ tick(now: targetTimestamp)
 display link (CADisplayLink / NSView.displayLink, ≤ 60 fps)
 SwiftUI window: [ SKView ] + overlays (gate challenge, panel) — one window
