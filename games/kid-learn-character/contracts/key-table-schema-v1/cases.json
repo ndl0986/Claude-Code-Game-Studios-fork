@@ -4160,7 +4160,7 @@
           ]
         }
       ],
-      "note": "Expected V2 only; whether V3's 'exactly' also fires on a missing key is question KT-Q3."
+      "note": "A missing key is V2 only; V3 is for extra or malformed keys (KT-Q3)."
     },
     {
       "id": "V3-fail-extra-key",
@@ -4621,7 +4621,7 @@
           ]
         }
       ],
-      "note": "Only castId uniqueness is asserted in v1; the castId naming pattern waits for ADR-0003's assetPrefix (spec.md, Pending)."
+      "note": "E takes D's castId: a duplicate. The naming pattern has its own V6-* cases."
     },
     {
       "id": "V7-fail-missing-voice-file",
