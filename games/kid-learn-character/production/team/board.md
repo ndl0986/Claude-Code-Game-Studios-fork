@@ -28,8 +28,9 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-046 | GDD: Parade (`design/gdd/parade.md`) via /design-system | design | game-art-content (review: game-dev-android) | REWORK: game-dev-ios read REVISE (K-20 visible rect in F3, gate freeze; lane y, {key,castId} in batch, horizon lift → Scene) | `design/TASK-046-gdd-parade` | 2026-11-18 |
 | TASK-047 | GDD: Hint Letters (`design/gdd/hint-letters.md`) via /design-system | design | game-dev-android (review: game-qc-android) | IN PROGRESS: PLAN APPROVED 2026-11-18 after 2 REVISE rounds (game-qc-android) | `design/TASK-047-gdd-hint-letters` | 2026-11-18 |
 | TASK-048 | GDD: Parent Gate & Grown-up Panel (`design/gdd/parent-gate-panel.md`) via /design-system | design | game-qc-ios (review: game-qc-android) | IN PROGRESS: PLAN APPROVED 2026-11-18 after REVISE (K-20, K-21) | `design/TASK-048-gdd-parent-gate-panel` | 2026-11-18 |
-| TASK-049 | GDD: Reveal Stage (`design/gdd/reveal-stage.md`) via /design-system | design | game-dev-ios (review: game-dev-android) | IN PROGRESS: PLAN APPROVED 2026-11-18 (K-20 stage fit + Reduce Motion) | `design/TASK-049-gdd-reveal-stage` | 2026-11-18 |
+| TASK-049 | GDD: Reveal Stage (`design/gdd/reveal-stage.md`) via /design-system | design | game-dev-ios (review: game-dev-android) | CODE REVIEW: done `b76fa21` (lean APPROVED); game-dev-android independent read (after TASK-047) | `design/TASK-049-gdd-reveal-stage` | 2026-11-18 |
 | TASK-050 | Cross-GDD follow-ups: Key Table peek resolve; Press Queue hasWord + Parade F2 + gate freeze; Input R8 origin + R6 exact chord + challenge; Audio late-art/hasWord; Settings Store childLock reverts ON at launch (K-21); Input gate-challenge state | design | game-art-content (review: game-dev-ios) | SENT 2026-11-18 | `design/TASK-050-cross-gdd-followups` | 2026-11-18 |
+| TASK-051 | GDD: App Shell & Title (`design/gdd/app-shell-title.md`) via /design-system | design | game-dev-ios (review: game-dev-android) | SENT 2026-11-18 | `design/TASK-051-gdd-app-shell-title` | 2026-11-18 |
 
 ## Leader log
 
