@@ -95,12 +95,15 @@ three layers, eight figures at once and the full Scene worst case.
 | Outcome on the oldest supported iPad (P-2; the Mac, M-13, must not contradict it) | Choice |
 |---|---|
 | **A misses p99 ≤ 16.7 ms** with the combined worst case, **or** one creature's load at a role exceeds **1.2 s** | **B** (textures) |
-| **A passes both**, and A's app size is smaller | **A** (live paths) |
+| **A passes both** | **A** (live paths). App size is only the tie-break against B-build, the fallback within B (below); B-load keeps A's size (leader, 2026-11-18, closing the gap B-load opened) |
 | **Only the parade fails under A** (stage and leaving pass; the 6-walker parade phase misses p99) | **Mix:** A for `stage` and `list`, B for `parade` |
 | B also misses p99 | neither is accepted: raise to Luan with the per-layer node counts and the split (the stage, not the cast, is then the budget problem) |
-Acceptance needs P-2 and M-13 run, or Luan accepting a recorded exception. **Headless status:** A's app size is
-smaller by ~6 MB over 36 items (H-1), so the second row's size condition already holds; the frame-time and load-time
-conditions are **pending P-2 / M-13**.
+Acceptance needs P-2 and M-13 run, or Luan accepting a recorded exception. **Headless status:** against B-build, A's
+app size is smaller by ~6 MB over 36 items (H-1, partial); against B-load the sizes are the same. The frame-time and
+load-time conditions are **pending P-2 / M-13**.
+**Spike rows decide this ADR. Cast Rendering AC-17 and MorphCore AC-11 are partial on the spike** (3 test creatures,
+not 36; no 240-speck raise) **and pass only on the production re-run. P-3 / M-12 rehearse Accessibility AC-08**
+(the release gate is the production K-26 busy case).
 
 **How "B" is built, once chosen** (a refinement within the rule, not a change to it): the rule picks the *family*
 (textures). Within it, **B-load** (each part rasterised once **on the device at load**, at the tier the screen needs)
@@ -245,12 +248,12 @@ KidCore render plan ── RenderSink.drawCast(castId, role, pose) ──▶ sta
 
 | GDD System | Requirement | How This ADR Addresses It |
 |------------|-------------|--------------------------|
-| cast-rendering.md R11, AC-17 | the render-path decision and its measurement | D1 (rule), D3, D4; rows P-2, M-13 |
+| cast-rendering.md R11, AC-17 | the render-path decision and its measurement | D1 (rule), D3, D4; rows P-2, M-13 (AC-17 partial on the spike: 3 creatures; passes only on the production re-run) |
 | cast-rendering.md R2, R3, R7 | one baked file; roles; idles about pivots | D2 |
 | cast-rendering.md R10, F6, AC-15 | resident set and memory | D5, H-1 |
 | cast-rendering.md R12, AC-16 | no platform types in the draw interface | D2, Key Interfaces |
 | cast-rendering.md F8 | per-look colour | D2, D3, D4 |
-| morphcore.md AC-11 | p99 ≤ one refresh with 240 specks | D1 (the same run) |
+| morphcore.md AC-11 | p99 ≤ one refresh with 240 specks | D1 (the same run); partial on the spike, passes only on the production re-run (no 240-speck raise here) |
 | art-bible.md §4, §8 | 80% outline; the render conflict; memory rule | D2, D3, D4, D5 |
 
 ## Performance Implications
@@ -269,7 +272,7 @@ Per K-34: headless runs need no MAC FREE; the Mac rows do.
 **Headless:**
 - **H-1 Size and memory (done, 2026-11-18, Mac CPU, not device evidence).** `option-b-size.swift`
   (in `production/qa/evidence/TASK-103/551108fd/`) parses TASK-077's three SVGs with the R2 subset and the a1 layer
-  ids, rasterises every part per tier with group opacity (PNGs to a temp folder only), and reports:
+  ids, rasterises every part per tier with group opacity (PNGs encoded in memory only), and reports:
   | Creature (parts, shapes) | SVG bytes (A) | B PNG bytes: stage 1024 / list 256 / parade 256 | Stage set texture | Part boxes / one image | Mac CPU raster ms (stage) |
   |---|---|---|---|---|---|
   | sauropod (4, 26) | 3,081 | 115,524 / 24,503 / 22,853 | 2.27 MB | 0.37 | 18.2 |
