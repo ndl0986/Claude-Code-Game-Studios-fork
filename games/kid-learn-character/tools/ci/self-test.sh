@@ -73,11 +73,12 @@ MD
 cr_planted_other() { sed 's/runner: BetaRunner/runnr BetaRunner/' "$T/cr.md" > "$T/cr2.md"; ! "$CR" --readme "$T/cr2.md" --system beta | grep -q 'kind=other'; }
 cr_has() { local want="$1"; shift; "$CR" --readme "$T/cr.md" "$@" | grep -qx -- "$want"; }
 cr_only() { local want="$1"; shift; [ "$("$CR" --readme "$T/cr.md" "$@")" = "$want" ]; }
-expect_pass "contract-rows: an owner's not-started row" cr_has 'ROW alpha-v2 kind=not-started owner=alpha story=story:alpha match=system row=not-started: story:alpha' --system alpha
+expect_pass "contract-rows: an owner's not-started row" cr_has 'ROW alpha-v2 kind=not-started owner=alpha,other story=story:alpha match=system row=not-started: story:alpha' --system alpha
 expect_pass "contract-rows: the superseded row is reported as superseded-by" cr_has 'ROW alpha-v1 kind=superseded-by owner=alpha story=- match=system row=superseded-by: alpha-v2' --system design/gdd/alpha.md
-expect_pass "contract-rows: a cited GDD owns nothing" cr_only 'NONE' --system other
-expect_pass "contract-rows: the owner is the first GDD, its note dropped" cr_only 'ROW beta-v1 kind=runner owner=beta story=- match=system row=runner: BetaRunner' --system beta
-expect_pass "contract-rows: matched by story id alone" cr_only 'ROW alpha-v2 kind=not-started owner=alpha story=story:alpha match=story row=not-started: story:alpha' --story story:alpha
+expect_pass "contract-rows: a cited GDD is blocked too (every stem in the Owner cell)" cr_only 'ROW alpha-v2 kind=not-started owner=alpha,other story=story:alpha match=system row=not-started: story:alpha' --system other
+expect_pass "contract-rows: a partial stem matches nothing" cr_only 'NONE' --system alph
+expect_pass "contract-rows: a note after the GDD is not a stem" cr_only 'ROW beta-v1 kind=runner owner=beta story=- match=system row=runner: BetaRunner' --system beta
+expect_pass "contract-rows: matched by story id alone" cr_only 'ROW alpha-v2 kind=not-started owner=alpha,other story=story:alpha match=story row=not-started: story:alpha' --story story:alpha
 expect_pass "contract-rows: a path never matches a placeholder" cr_only 'NONE' --story production/epics/alpha/alpha.md
 expect_pass "contract-rows: an owned contract with no Registry row" cr_only 'UNREGISTERED gamma-v1 owner=gamma' --system gamma
 expect_pass "contract-rows: a missing README is reported, not passed" cr_only "README MISSING $T/none.md" --readme "$T/none.md" --system alpha

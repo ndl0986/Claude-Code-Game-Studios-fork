@@ -209,8 +209,10 @@ Phase 1 GDD stem. It prints observations; this phase decides:
 - `ROW <contract> kind=not-started …`: **BLOCKING**, in every mode and at every
   gate level: "`<contract>` is not-started (`<row>`): register its runner
   (`runner: <Name>` in `contracts/README.md`'s Registry) and make `tools/ci/verify.sh`
-  run it". A placeholder id (`story:<system>`) still blocks the system's stories:
-  the match is on the owner GDD.
+  run it". The system matches when its GDD is **any** GDD the contract's Owner cell
+  names: the owning GDD and every GDD whose sections the contract cites (a Cast
+  Rendering story is blocked by a contract that cites `cast-rendering.md F8`). A
+  placeholder id (`story:<system>`) still blocks: the match is on the GDD.
 - `ROW … kind=superseded-by`: skipped; its successor has its own row.
 - `ROW … kind=runner`: note it ("`<contract>`: run by `<Name>`"); whether it passes
   is `verify.sh`'s, not this skill's.
@@ -220,7 +222,7 @@ Phase 1 GDD stem. It prints observations; this phase decides:
   completeness).
 - `README MISSING`: NOT ASSESSED, "`contracts/README.md` is missing: whether the
   system's contracts are run cannot be told". Never a pass.
-- `NONE`: the system owns no contract; nothing to report.
+- `NONE`: no contract names the system's GDD; nothing to report.
 
 ## Phase 5: Deviations and scope
 

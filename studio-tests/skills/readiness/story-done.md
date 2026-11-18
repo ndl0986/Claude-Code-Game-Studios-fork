@@ -329,6 +329,8 @@ step does not exist.
 - Variant B: as A, plus `light-pickup-v0 | superseded-by: light-pickup-v1`
 - Variant C: as A, but the row is `runner: LightPickupRunner`
 - Variant D: the helper exists and `contracts/README.md` does not
+- Variant E: as A, but the story's GDD is `design/gdd/lamp-render.md`, which the contract only cites
+  (its Owner cell reads `light-pickup.md; lamp-render.md F2`)
 
 **Input:** `/story-done production/epics/core/story-light-pickup.md`
 
@@ -341,6 +343,7 @@ step does not exist.
 3. Variant B: the superseded row is skipped; the verdict turns on the not-started row only
 4. Variant C: the runner row is noted, and the verdict is Case 1's
 5. Variant D: NOT ASSESSED, "`contracts/README.md` is missing", never a pass
+6. Variant E: BLOCKED as in A: a GDD the contract cites is matched like its owner
 
 **Assertions:**
 - [ ] No helper: no `contract-rows.sh` call, no contract line in the report, verdict as Case 1
@@ -349,6 +352,7 @@ step does not exist.
 - [ ] Variant B: `light-pickup-v0` does not appear as a blocker
 - [ ] Variant C: COMPLETE (or COMPLETE WITH NOTES for Case 1's own notes), with the runner noted; whether it passes is `verify.sh`'s
 - [ ] Variant D: verdict NOT ASSESSED, not COMPLETE
+- [ ] Variant E: verdict BLOCKED, naming `light-pickup-v1`; a cited GDD is not let through
 
 ---
 
