@@ -29,7 +29,9 @@ retired and rewritten here.
   - while Armed, the panel or background hold the start, and `armedAt` is re-set at the close or return. Background
     time doesn't count (AC-21).
 - **R8:**
-  - prefetch at Armed; 2 missing → walk at the 0.5 s wait's end with 4 at their indices; 4 missing → skip;
+  - prefetch once per batch at its first Armed entry, including Ended with a full next batch; a re-anchor of the same
+    batch doesn't repeat it (TASK-122 answers, R8.1);
+  - 2 missing → walk at the 0.5 s wait's end with 4 at their indices; 4 missing → skip;
   - the retry only after the next formed reveal (AC-12, AC-16); 3 ready walks; art arriving in the wait walks on that
     tick.
 - **R7** the bob amplitude (AC-13). **R6a:** a walk frozen 20 s ends 31 s after its start, and Armed with 0.5 s of
@@ -72,7 +74,7 @@ retired and rewritten here.
 | Event | Fields | Emits |
 |---|---|---|
 | `shown` | `key`, `castId`, `kind`, `from`? (the cast box's top centre, for the light's path) | `prefetch {castIds}` when it arms the Parade and art is missing |
-| `tick` | — | `E12 {op: play}`, `paradeWalking {on}`, `walkers [...]`; `skip {ready}`; `paradeWalking {on: false}`, `release` |
+| `tick` | — | `E12 {op: play}`, `paradeWalking {on}`, `walkers [...]`; `skip {ready}`; `paradeWalking {on: false}`, `release`, then `prefetch {castIds}` at Ended → Armed with missing art |
 | `resident` | `castId` | — |
 | `themeChanged` | `theme` | — |
 | `freeze`, `resume` | — | `E12 {op: pause/resume}` while Walking |

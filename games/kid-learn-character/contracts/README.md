@@ -62,7 +62,7 @@ it is never Done.
 | key-table-schema-v1 | runner: KeyTableModelRunner + Tools.KeyTableFileLayer | 93 |
 | keyboard-row-v1 | not-started: story:keyboard-row | 36 |
 | parade-v1 | superseded-by: parade-v2 | 30 |
-| parade-v2 | not-started: story:parade | 44 |
+| parade-v2 | not-started: story:parade | 46 |
 | press-queue-v1 | not-started: story:press-queue | 46 |
 | reveal-timing-v1 | not-started: story:reveal-stage | 60 |
 | scene-look-v1 | not-started: story:scene | 42 |
