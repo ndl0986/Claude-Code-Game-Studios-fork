@@ -23,3 +23,9 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md 1f3d8158975fa07f5bac34725067431
 Reviewed-Content-Hash: design/gdd/key-table-theme-data.md 6fa1ce3101c052754590905f734280abc25e3540
 Reviewed-Content-Hash: design/gdd/settings-store.md 6e2df80d2d4061d730f3e2cb322e8d9669e51359
 Reviewed-Content-Hash: production/team/decisions.md 36c2e5cc9c0c5ff4a437dc57012cb6ebb1a034e9
+
+## Re-review — 2026-11-18 — Verdict: APPROVED
+Reviewer: game-dev-ios (independent read, recorded by game-leader at merge)
+Summary: All nine of game-dev-ios's plan items are present (R2, R4–R11, AC-6, AC-9…AC-13, AC-22). The self-fixed F1 blocker is right (check 1 hold_s ≥ 2.45, check 2 hold_s ≥ 2.95). Agrees with the author's choices: the hold counts as passed after the panel closes; a theme change never clears the queue. Receipt a6a1d62 matches the file.
+Prior verdict resolved: Yes (NEEDS REVISION, fixed)
+Carried to Reveal Stage (non-blocking): (1) the glyph-sparkles-out fallback forms no creature, so startReveal should also return hasWord (or word_end) and F1 drops the word term then; (2) revealLen = T + form_s for a morph; Cast Rendering's late-art rule keeps formedS and revealLen fixed after startReveal.

@@ -1,6 +1,6 @@
 # Press Queue
 
-> **Status**: In Review
+> **Status**: Approved (independent re-review by game-dev-ios, merged 2026-11-18)
 > **Author**: game-dev-android for Luan (TASK-043); plan reviewed by game-dev-ios
 > **Last Updated**: 2026-11-18
 > **Last Verified**: 2026-11-18, against Input & Key Filter R8, MorphCore F5/F6, Audio & Voice F6/E1/E2, Key Table
