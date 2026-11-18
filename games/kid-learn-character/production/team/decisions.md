@@ -105,6 +105,19 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-42 Pre-Production gate calls (Luan, 2026-11-18)
+
+- **CI: local only.** `tools/ci/verify.sh` run on the Mac is the "equivalent" test workflow; no GitHub Actions workflow is
+  added. The gate report records it as the equivalent (no automatic run on push).
+- **Accessibility tier: Standard** (`design/accessibility-requirements.md`, TASK-112).
+- **One volume control kept** (Settings Store R1: one volume + mute). The template's separate music/SFX/voice volumes
+  are a recorded, deliberate limitation (toddler game, voice is the content, simple panel); no GDD change.
+- **K-40 /story-done refusal goes in the shared studio skill**, guarded so it runs only when the project has
+  `tools/ci/contract-rows.sh` (this game's `.claude` is a symlink to the studio's; other projects are unaffected).
+- **Dated notes on Accepted ADRs (status stays Accepted):** ADR-0004 and ADR-0005 name the current contracts
+  (settings-record-v2, input-filter-v2); ADR-0006 records K-39's iPad presentation (status bar and home indicator hidden,
+  edge gestures deferred via `edgeDeferral`) for TR-shell-004.
+
 ### K-41 TTS voice: Kokoro (Luan, 2026-11-18, K-33 pick)
 
 - After listening to the TASK-073 samples, Luan picked **Kokoro-82M, voice `af_heart`, American English
