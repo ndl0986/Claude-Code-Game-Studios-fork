@@ -1,0 +1,23 @@
+verify: Xcode 27.1, Swift 6.4
+PASS ban-grep (ADR-0002 V1)
+PASS api-surface (ADR-0002 V4)
+PASS kidtools validate content (ADR-0003 D3)
+PASS swift test MorphCore
+PASS swift test KidCore
+OBSERVED structure: 7/7 contracts OK (464 cases well-formed)
+OBSERVED key-table-schema-v1 [model]: 86 pass, 0 fail
+OBSERVED settings-record-v2: 76 pass, 0 fail
+OBSERVED NOT ASSESSED audio-plan-v1: not started (story story:audio-voice); structure OK, 0 of 30 cases run
+OBSERVED NOT ASSESSED input-filter-v1: not started (story story:input-key-filter); structure OK, 0 of 86 cases run
+OBSERVED NOT ASSESSED press-queue-v1: not started (story story:press-queue); structure OK, 0 of 46 cases run
+OBSERVED NOT ASSESSED reveal-timing-v1: not started (story story:reveal-stage); structure OK, 0 of 60 cases run
+OBSERVED SUPERSEDED settings-record-v1 → settings-record-v2: not run (73 cases)
+OBSERVED contracts: 2 run PASS (key-table-schema-v1, settings-record-v2), 4 NOT ASSESSED (not-started: audio-plan-v1, input-filter-v1, press-queue-v1, reveal-timing-v1), 1 SUPERSEDED, 0 FAIL
+PASS swift test ContractKit
+PASS swift test Tools
+OBSERVED key-table-schema-v1 [file]: 7 pass, 0 fail
+PASS xcodebuild build macOS
+PASS xcodebuild test macOS (hostless unit tests)
+PASS xcodebuild test iPad simulator (--dev, headless)
+SKIP bundle-content scan: no --app given (QC runs it on both Release .apps)
+verify: PASS at 5e06b721

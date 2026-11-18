@@ -1,0 +1,16 @@
+ok     ban-grep clean tree
+caught ban-grep planted: let plantedDate = Date()
+caught ban-grep planted: import UIKit
+caught ban-grep planted: let plantedChar: Character = "a"
+caught ban-grep planted: let plantedRound = round(2.5)
+caught ban-grep planted: let n = key.count
+caught ban-grep planted in ContractKit: import UIKit
+caught ban-grep planted in ContractKit: import LetterMorph
+ok     ban-grep allows JSONDecoder in ContractKit
+caught api-surface stale file
+caught sim-guard --dev refuses QC's simulator
+caught sim-guard --dev refuses empty
+caught sim-guard --qc refuses another simulator
+caught sim-guard --qc refuses empty
+ok     sim-guard --qc accepts QC's simulator
+self-test: PASS
