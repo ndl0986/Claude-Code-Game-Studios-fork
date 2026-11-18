@@ -50,5 +50,11 @@ expect_fail "sim-guard --qc refuses QC's iPhone simulator (this game is iPad-onl
 echo "QC_SIM_UDID=475D45B4-557A-4594-B121-60D7F402D033" > "$T/g/tools/qa/apple/sim.env"
 expect_pass "sim-guard --qc accepts QC's iPad simulator" "$T/g/tools/ci/sim-guard.sh" --qc
 
+# verify.sh: a run stopped by the load check is never reported as PASS (exit 4, a STOPPED summary)
+vout="$(LOAD_MAX=-1 "$ROOT/tools/ci/verify.sh" --dev --no-xcode 2>&1)"; vrc=$?
+if [ "$vrc" = 4 ] && printf '%s\n' "$vout" | grep -q '^verify: STOPPED (load), not a pass' && ! printf '%s\n' "$vout" | grep -q '^verify: PASS'; then
+  echo "caught verify stopped by load is not a PASS"
+else echo "MISSED verify stopped by load is not a PASS (exit $vrc)"; bad=$((bad + 1)); fi
+
 echo "self-test: $( [ "$bad" -eq 0 ] && echo PASS || echo "FAIL ($bad)")"
 [ "$bad" -eq 0 ]

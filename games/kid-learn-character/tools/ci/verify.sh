@@ -20,11 +20,11 @@ while [ $# -gt 0 ]; do
 done
 LOAD_MAX="${LOAD_MAX:-40}"
 BUILD="$ROOT/.build"
-OUT="$(mktemp)"; fails=0
+OUT="$(mktemp)"; fails=0; stopped=0
 say() { printf '%s\n' "$*" | sed "s#$HOME#~#g" | tee -a "$OUT"; }
 load_ok() {
   local l; l="$(sysctl -n vm.loadavg | awk '{print $2}')"
-  if awk "BEGIN{exit !($l > $LOAD_MAX)}"; then say "STOP load $l > $LOAD_MAX: verify paused (re-run when the load is down)"; finish 4; fi
+  if awk "BEGIN{exit !($l > $LOAD_MAX)}"; then say "STOP load $l > $LOAD_MAX: verify paused (re-run when the load is down)"; stopped=1; finish 4; fi
 }
 gate() { # name, command...
   local name="$1"; shift; load_ok
@@ -33,7 +33,11 @@ gate() { # name, command...
   rm -f "$log"
 }
 finish() {
-  say "verify: $( [ "$fails" -eq 0 ] && echo PASS || echo "FAIL ($fails)") at $(git rev-parse --short HEAD 2>/dev/null)$(git diff --quiet 2>/dev/null || echo ' (with local changes)')"
+  local verdict
+  # A run the load check stopped is never a pass, whatever ran before it (game-qc-ios, TASK-079 QC run).
+  if [ "$stopped" = 1 ]; then verdict="STOPPED (load), not a pass"
+  elif [ "$fails" -eq 0 ]; then verdict=PASS; else verdict="FAIL ($fails)"; fi
+  say "verify: $verdict at $(git rev-parse --short HEAD 2>/dev/null)$(git diff --quiet 2>/dev/null || echo ' (with local changes)')"
   if [ -n "$EVIDENCE" ]; then mkdir -p "$EVIDENCE"; cp "$OUT" "$EVIDENCE/verify.txt"; fi
   rm -f "$OUT"; exit "${1:-$([ "$fails" -eq 0 ] && echo 0 || echo 1)}"
 }
