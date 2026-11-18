@@ -226,8 +226,8 @@ Effort: S = 1 session, M = 2–3 sessions.
 | Metric | Count |
 |--------|-------|
 | Total systems identified | 20 |
-| Design docs started | 14 |
-| Design docs reviewed | 14 |
+| Design docs started | 13 |
+| Design docs reviewed | 13 |
 | Design docs approved | 13 |
 | MVP systems designed | 13/14 |
 | Vertical Slice systems designed | 0/3 |
