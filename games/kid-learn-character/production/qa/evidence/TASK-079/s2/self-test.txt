@@ -8,9 +8,12 @@ caught ban-grep planted in ContractKit: import UIKit
 caught ban-grep planted in ContractKit: import LetterMorph
 ok     ban-grep allows JSONDecoder in ContractKit
 caught api-surface stale file
-caught sim-guard --dev refuses QC's simulator
+caught sim-guard --dev refuses QC's iPad simulator
+caught sim-guard --dev refuses QC's iPhone simulator (any case)
+ok     sim-guard --dev accepts a developer simulator
 caught sim-guard --dev refuses empty
 caught sim-guard --qc refuses another simulator
 caught sim-guard --qc refuses empty
-ok     sim-guard --qc accepts QC's simulator
+caught sim-guard --qc refuses QC's iPhone simulator (this game is iPad-only)
+ok     sim-guard --qc accepts QC's iPad simulator
 self-test: PASS
