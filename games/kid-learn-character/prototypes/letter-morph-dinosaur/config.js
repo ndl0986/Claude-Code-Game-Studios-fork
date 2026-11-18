@@ -36,7 +36,17 @@ window.CONFIG = {
   roar_volume: { value: 0.35, min: 0, max: 1, step: 0.05 },      // creature sounds stay gentle (Calm Magic)
   chime_volume: { value: 0.12, min: 0, max: 0.5, step: 0.01 },
   // --- Parade and the grown-up gate ---
-  parade_delay_s: { value: 1.5, min: 0, max: 5, step: 0.25 },    // s after the 8th creature forms
+  parade_count: { value: 6, min: 2, max: 12, step: 1 },          // new creatures per parade (K-17: every 6; letters and digits count; a key again in the batch counts once)
+  parade_delay_s: { value: 1.5, min: 0, max: 5, step: 0.25 },    // s after the batch's 6th creature has finished forming, with no rest needed (K-45 removed only the rest; the 1.5 s beat stays, K-46)
+  // --- The parade meter (K-44, K-46; art bible §7 at TASK-120 baad1961; the flying light is provisional) ---
+  meter_step_s: { value: 0.4, min: 0.1, max: 1.5, step: 0.05 },    // s: a cell's ease-out from unlit to lit; also the full glow's ramp
+  meter_empty_alpha: { value: 0.25, min: 0, max: 0.6, step: 0.05 }, // an unlit cell's Starlight alpha
+  meter_track_alpha: { value: 0.7, min: 0.3, max: 1, step: 0.05 },  // the Ink track's alpha (70%: 3:1 for a lit cell in either blend space)
+  meter_pulse_hz: { value: 0.5, min: 0, max: 1, step: 0.05 },       // the full glow's breathe (<= 1 Hz, ADR-0013 F1)
+  meter_glow: { value: 0.4, min: 0, max: 0.6, step: 0.05 },         // the full glow's middle alpha (it swings +-0.05)
+  meter_fade_s: { value: 0.6, min: 0.2, max: 1.5, step: 0.05 },     // s: the drain and the glow's fade when the parade starts
+  flight_s: { value: 0.6, min: 0.2, max: 1.5, step: 0.05 },         // s: the light flying from a new creature to its cell (K-46 MT-Q3, provisional)
+  reduce_motion: { value: 0, min: 0, max: 1, step: 1 },             // 1 = Reduce Motion (also on when the browser prefers reduced motion): the full glow is steady
   parade_s: { value: 11, min: 4, max: 25, step: 0.5 },           // s: the parade's walk across
   gate_hold_s: { value: 1.5, min: 0.5, max: 4, step: 0.25 },     // s: hold the moon to open the grown-up panel
 };

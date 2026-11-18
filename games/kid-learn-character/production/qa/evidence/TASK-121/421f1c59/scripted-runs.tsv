@@ -1,0 +1,132 @@
+## run: meter-3of6
+browser	/Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+time	2026-11-18 21:51:29
+render	cheap
+ua	HeadlessChrome/157.0.0.0
+scene	0	title
+state	0	title	{"t":0,"score":0,"gained":"","cur":null,"prev":null,"queue":[],"hints":[],"seen":[],"batch":[],"batchFullAt":null,"meter":{"litAt":[],"armedAt":null,"fullAt":null,"drainAt":null,"drainFrom":[],"glowAt
+scene	1	play
+state	1	play	{"t":0,"score":0,"gained":"","cur":null,"prev":null,"queue":[],"hints":[],"seen":[],"batch":[],"batchFullAt":null,"meter":{"litAt":[],"armedAt":null,"fullAt":null,"drainAt":null,"drainFrom":[],"glowAt
+playinput	148	KeyB
+state	708	play	{"t":11.78,"score":0,"gained":"","cur":{"letter":"E","t":0.28,"parts":"[420 items]","fired":{},"from":{"x":640,"y":700}},"prev":{"letter":"D","t":3.32,"fade":0.3},"queue":[],"hints":[{"L":"F","x":1133
+loop	log	none	no loop() step was marked
+first	log	none	no state.beat
+pressure	none	the game set no number state.margin in play
+steptime	708	0.006	1.000
+frametime	11	3.7	4.6	180	0	0
+done	708	play	stop	11.8	166
+measured	1280x720
+screen	708	play	b86de84f	drawn
+uncaught	0
+shot	<worktree>/games/kid-learn-character/prototypes/letter-morph-dinosaur/evidence/iteration-6-meter-3of6.png	193337
+
+## run: flight-midair
+browser	/Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+time	2026-11-18 21:51:30
+render	cheap
+ua	HeadlessChrome/157.0.0.0
+scene	0	title
+state	0	title	{"t":0,"score":0,"gained":"","cur":null,"prev":null,"queue":[],"hints":[],"seen":[],"batch":[],"batchFullAt":null,"meter":{"litAt":[],"armedAt":null,"fullAt":null,"drainAt":null,"drainFrom":[],"glowAt
+scene	1	play
+state	1	play	{"t":0,"score":0,"gained":"","cur":null,"prev":null,"queue":[],"hints":[],"seen":[],"batch":[],"batchFullAt":null,"meter":{"litAt":[],"armedAt":null,"fullAt":null,"drainAt":null,"drainFrom":[],"glowAt
+playinput	148	KeyB
+state	1197	play	{"t":19.93,"score":0,"gained":"","cur":{"letter":"G","t":2.4,"parts":"[420 items]","fired":{"dust":true,"form":true},"from":{"x":937.87,"y":170.49},"completesBatch":true},"prev":null,"queue":[{"L":"H"
+loop	log	none	no loop() step was marked
+first	log	none	no state.beat
+pressure	none	the game set no number state.margin in play
+steptime	1197	0.005	1.100
+frametime	19	3.7	4.7	180	0	0
+done	1197	play	stop	19.9	232
+measured	1280x720
+screen	1197	play	7699b70d	drawn
+uncaught	0
+shot	<worktree>/games/kid-learn-character/prototypes/letter-morph-dinosaur/evidence/iteration-6-flight-midair.png	153219
+
+## run: full-glow
+browser	/Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+time	2026-11-18 21:52:12
+render	cheap
+ua	HeadlessChrome/157.0.0.0
+scene	0	title
+state	0	title	{"t":0,"score":0,"gained":"","cur":null,"prev":null,"queue":[],"hints":[],"seen":[],"batch":[],"batchFullAt":null,"meter":{"litAt":[],"armedAt":null,"fullAt":null,"drainAt":null,"drainFrom":[],"glowAt
+scene	1	play
+state	1	play	{"t":0,"score":0,"gained":"","cur":null,"prev":null,"queue":[],"hints":[],"seen":[],"batch":[],"batchFullAt":null,"meter":{"litAt":[],"armedAt":null,"fullAt":null,"drainAt":null,"drainFrom":[],"glowAt
+playinput	148	KeyB
+state	1260	play	{"t":20.98,"score":0,"gained":"","cur":{"letter":"H","t":0.43,"parts":"[420 items]","fired":{},"from":{"x":154.37,"y":252.1}},"prev":{"letter":"G","t":3.47,"fade":0.45},"queue":[{"L":"I","from":{"x":6
+loop	log	none	no loop() step was marked
+first	log	none	no state.beat
+pressure	none	the game set no number state.margin in play
+steptime	1260	0.005	0.900
+frametime	21	3.6	4.7	180	0	0
+done	1260	play	stop	21.0	257
+measured	1280x720
+screen	1260	play	664ed806	drawn
+uncaught	0
+shot	<worktree>/games/kid-learn-character/prototypes/letter-morph-dinosaur/evidence/iteration-6-full-glow.png	203078
+
+## run: just-before-start
+browser	/Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+time	2026-11-18 21:52:34
+render	cheap
+ua	HeadlessChrome/157.0.0.0
+scene	0	title
+state	0	title	{"t":0,"score":0,"gained":"","cur":null,"prev":null,"queue":[],"hints":[],"seen":[],"batch":[],"batchFullAt":null,"meter":{"litAt":[],"armedAt":null,"fullAt":null,"drainAt":null,"drainFrom":[],"glowAt
+scene	1	play
+state	1	play	{"t":0,"score":0,"gained":"","cur":null,"prev":null,"queue":[],"hints":[],"seen":[],"batch":[],"batchFullAt":null,"meter":{"litAt":[],"armedAt":null,"fullAt":null,"drainAt":null,"drainFrom":[],"glowAt
+playinput	148	KeyB
+state	1296	play	{"t":21.58,"score":0,"gained":"","cur":{"letter":"H","t":1.03,"parts":"[420 items]","fired":{"dust":true},"from":{"x":154.37,"y":252.1}},"prev":null,"queue":[{"L":"I","from":{"x":640,"y":700}}],"hints
+loop	log	none	no loop() step was marked
+first	log	none	no state.beat
+pressure	none	the game set no number state.margin in play
+steptime	1296	0.005	1.100
+frametime	21	3.7	4.9	180	0	0
+done	1296	play	stop	21.6	263
+measured	1280x720
+screen	1296	play	659ee955	drawn
+uncaught	0
+shot	<worktree>/games/kid-learn-character/prototypes/letter-morph-dinosaur/evidence/iteration-6-just-before-start.png	242859
+
+## run: parade-start
+browser	/Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+time	2026-11-18 21:51:33
+render	cheap
+ua	HeadlessChrome/157.0.0.0
+scene	0	title
+state	0	title	{"t":0,"score":0,"gained":"","cur":null,"prev":null,"queue":[],"hints":[],"seen":[],"batch":[],"batchFullAt":null,"meter":{"litAt":[],"armedAt":null,"fullAt":null,"drainAt":null,"drainFrom":[],"glowAt
+scene	1	play
+state	1	play	{"t":0,"score":0,"gained":"","cur":null,"prev":null,"queue":[],"hints":[],"seen":[],"batch":[],"batchFullAt":null,"meter":{"litAt":[],"armedAt":null,"fullAt":null,"drainAt":null,"drainFrom":[],"glowAt
+playinput	148	KeyB
+state	1344	play	{"t":22.38,"score":0,"gained":"","cur":{"letter":"H","t":1.83,"parts":"[420 items]","fired":{"dust":true},"from":{"x":154.37,"y":252.1}},"prev":null,"queue":[{"L":"I","from":{"x":640,"y":700}},{"L":"J
+loop	log	none	no loop() step was marked
+first	log	none	no state.beat
+pressure	none	the game set no number state.margin in play
+steptime	1344	0.004	1.000
+frametime	22	3.6	4.7	180	0	0
+done	1344	play	stop	22.4	254
+measured	1280x720
+screen	1344	play	d64141ab	drawn
+uncaught	0
+shot	<worktree>/games/kid-learn-character/prototypes/letter-morph-dinosaur/evidence/iteration-6-parade-start.png	172704
+
+## run: play
+browser	/Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+time	2026-11-18 21:51:28
+render	cheap
+ua	HeadlessChrome/157.0.0.0
+scene	0	title
+state	0	title	{"t":0,"score":0,"gained":"","cur":null,"prev":null,"queue":[],"hints":[],"seen":[],"batch":[],"batchFullAt":null,"meter":{"litAt":[],"armedAt":null,"fullAt":null,"drainAt":null,"drainFrom":[],"glowAt
+scene	1	play
+state	1	play	{"t":0,"score":0,"gained":"","cur":null,"prev":null,"queue":[],"hints":[],"seen":[],"batch":[],"batchFullAt":null,"meter":{"litAt":[],"armedAt":null,"fullAt":null,"drainAt":null,"drainFrom":[],"glowAt
+playinput	148	KeyB
+state	1806	play	{"t":30.08,"score":0,"gained":"","cur":{"letter":"K","t":0.48,"parts":"[420 items]","fired":{},"from":{"x":640,"y":700}},"prev":null,"queue":[{"L":"L","from":{"x":640,"y":700}}],"hints":[{"L":"B","x":
+loop	log	none	no loop() step was marked
+first	log	none	no state.beat
+pressure	none	the game set no number state.margin in play
+steptime	1806	0.004	0.900
+frametime	30	3.7	4.7	180	0	0
+done	1806	play	stop	30.1	341
+measured	1280x720
+screen	1806	play	4fa6d41	drawn
+uncaught	0
+shot	<worktree>/games/kid-learn-character/prototypes/letter-morph-dinosaur/evidence/iteration-6-play.png	265570
+
