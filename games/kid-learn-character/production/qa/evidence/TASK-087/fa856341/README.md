@@ -10,3 +10,5 @@
   position) from a tree identical to fa856341; BUILD SUCCEEDED, no warnings; headless, no boot, no launch; `$HOME`
   masked as `~`.
 - Not device evidence: the rows P-1, P-7, P-8, P-9, M-14 decide ADR-0010.
+
+- **Superseded by \`../0b59653a/\`** (TASK-087): this folder's chord/voice gain metric missed a hard stop at some phases (game-qc-ios).
