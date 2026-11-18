@@ -56,7 +56,10 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-074 | One device-checks plan: every NOT ASSESSED Mac/iPad check grouped into sessions for Luan (docs only) | qa | game-qc-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ bb52946e) | `design/TASK-074-device-checks` | 2026-11-18 |
 | TASK-075 | Plan for ★ spike ADRs 0007 input / 0008 kiosk / 0009 render / 0010 audio, tied to device-checks rows | architecture | game-dev-ios (review: game-qc-ios) | DONE: MERGED (game-qc-ios APPROVE @ ec4f9d44) | `design/TASK-075-spike-plan` | 2026-11-18 |
 | TASK-076 | Device-checks plan: add P-15 (iPad hardware keyboard) + "Spike run / ADR evidence" column with production re-runs | qa | game-qc-ios (review: game-dev-ios) | DONE: MERGED (game-dev-ios APPROVE @ 7e439190, nit 55fc0e8a) | `design/TASK-076-device-checks-spike` | 2026-11-18 |
-| TASK-077 | Three layered test creature SVGs (sauropod neck, rex jaw, flyer wings) in the Cast Rendering subset for the ADR-0009 render spike | art | game-art-content (review: game-dev-ios) | SENT 2026-11-18 | `design/TASK-077-spike-creatures` | 2026-11-18 |
+| TASK-077 | Three layered test creature SVGs (sauropod neck, rex jaw, flyer wings) in the Cast Rendering subset for the ADR-0009 render spike | art | game-art-content (review: game-dev-ios) | IN REVIEW @ 1b8d8510 → game-dev-ios (+ ADR-0003 D4 layer-id finding: id suffix vs data-layer) | `design/TASK-077-spike-creatures` | 2026-11-18 |
+| TASK-078 | DeviceSpike v1 under prototypes/ (Audio, Keys, Lock/GA, Render A/B + frame dump), headless; no-Rive TASK-033 build for P-1 | spike | game-dev-ios (review: game-qc-ios) | SENT 2026-11-18 | `design/TASK-078-devicespike-v1` | 2026-11-18 |
+| TASK-079 | Scaffold plan: apple/ packages + app targets, contract harness, ban grep, tools/ci verify.sh + pkc-scan --static, validator stub | architecture | game-dev-android (review: game-qc-ios) | SENT 2026-11-18 (plan only) | `design/TASK-079-scaffold-plan` | 2026-11-18 |
+| TASK-080 | Contracts batch 2 plan (input-filter-v1, press-queue-v1 first) | qa | game-qc-android (review: game-dev-android) | SENT 2026-11-18 (plan only) | `design/TASK-080-contracts-batch2-plan` | 2026-11-18 |
 
 ## Leader log
 
