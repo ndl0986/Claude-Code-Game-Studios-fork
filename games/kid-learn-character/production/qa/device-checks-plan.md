@@ -13,11 +13,13 @@
 - **Luan does** = it needs Luan's hands, Apple ID, eyes on a physical screen, or a second device. **Worker does** =
   a QC or dev session drives it once Luan has granted MAC FREE or handed over the iPad.
 - Durations are estimates for planning, including set-up, not measured.
-- Evidence follows ADR-0011 D6 (Proposed): `production/qa/evidence/<run task id>/<short-sha of the build under
-  test>/<check-id>/` as raw files (screenshots, logs, tool output, videos), plus one `results.md` per session with a
-  PASS / FAIL / NOT ASSESSED line per check. ADR-0011 is still Proposed, so this path may change when it is
-  accepted. The table's `mac-1/M-1/`-style names below are the `<check-id>` folders
+- Evidence follows ADR-0011 D6 (Accepted, fd35c14f): `production/qa/evidence/<run task id>/<short-sha of the build
+  under test>/<check-id>/` as raw files (screenshots, logs, tool output, videos), plus one `results.md` per session
+  with a PASS / FAIL / NOT ASSESSED line per check. The table's `mac-1/M-1/`-style names below are the `<check-id>` folders
   inside that path.
+- **Spike runs are ADR evidence, not AC evidence** (TASK-075 review). A row run on the `DeviceSpike` app (or the
+  TASK-033 app) decides an ADR option; it never marks a GDD acceptance criterion PASS. The "Spike run / ADR evidence"
+  column in § Spike runs names, per row, which ADR it feeds and the production re-run that gives the AC its verdict.
 - QC's simulator (E9F515E9…) is never used for the dev-only kill tests (ADR-0005 D3).
 
 ## Flags: Apple ID and device settings
@@ -54,7 +56,7 @@
 | S-1 | **Stage fit and Reduce Motion in a visible Simulator:** 11" and 13" iPad simulators and a Split View / Windowed Apps size; toggling Reduce Motion emits `accessibilityChanged` and the next reveal uses the reduced set. **Simulator: QC's E9F515E9** (a QC run); the window is needed for the screenshots and the Split View sizes | ADR-0006 V1, V5 (Accepted) | Mac (a visible Simulator window) | MAC FREE only | the whole run | 20 min | ADR-0006 stage code | `sim-1/S-1/` |
 | S-2 | **One app-written key (Simulator), headless:** `simctl launch` on ADR-0005's **dev simulator** booted headless (no Simulator.app window; ADR-0005 D5), change every setting through a test seam, terminate, `killall cfprefsd` in the simulator, read the plist in the data container (`simctl get_app_container <dev sim> <bundle id> data`); fills the Simulator allowlist (an ADR-0005 edit). **No MAC FREE** (K-34: headless), so it is listed here for completeness and runs outside the sessions | ADR-0005 V2, D5; PKC-05 | the dev simulator, headless | none | the whole run | 10 min | ADR-0005 backend | `sim/S-2/plist.txt` |
 | P-0 | **First launch on a real iPad, observed:** the app installs, launches to the Title, a press starts play and a reveal answers; retained screenshot (the run-and-observe standard; ADR-0001: no real iPad has run it yet) | ADR-0001 (Validation); coding standards "A parse check is not a run" | the child's iPad | hand over the iPad; tap | install, launch, screenshot | 10 min | Setup (F-1 to F-3); the app build | `ipad-1/P-0/` |
-| P-1 | **Press → picture and press → sound latency** (the TASK-033 iPad procedure, ~20 min) | `production/qa/evidence/TASK-033/procedure-ipad.md`; `design/tech/TASK-033-anim-runtime.md`; Audio AC-16 (latency); Reveal Stage AC-16 (the device run; its feel part is a playtest item, below) | **the child's iPad** (note model and iPadOS) + a 240 fps phone (F-8) | **films and taps** (the procedure is hands-on) | sets up the build, steps the video frames, fills the tables | 30 min | the spike app signed with the Personal Team (F-1–F-3) | `ipad-1/P-1/` videos + tables |
+| P-1 | **Press → picture and press → sound latency** (the TASK-033 iPad procedure, ~20 min), **run twice**: (1) a **baseline** on the TASK-033 app built **without Rive** (or proven `loadCdn: false`), **option A (SpriteKit) only**; (2) the **candidate** audio graph on `DeviceSpike`. Both builds' shas go in `results.md` | `production/qa/evidence/TASK-033/procedure-ipad.md`; `design/tech/TASK-033-anim-runtime.md`; Audio AC-16 (latency); Reveal Stage AC-16 (the device run; its feel part is a playtest item, below) | **the child's iPad** (note model and iPadOS) + a 240 fps phone (F-8) | **films and taps** (the procedure is hands-on) | sets up the build, steps the video frames, fills the tables | 30 min | (1) the TASK-033 app without Rive, signed with the Personal Team (F-1–F-3), passing the minimal spike check; (2) `DeviceSpike` v1 | `ipad-1/P-1/` videos + tables |
 | P-2 | **Cast Rendering + MorphCore measurement (iPad):** the R11 plan combined with Scene F6's worst case on the oldest supported iPad; frame time, load time per role (within the reduced T 1.2 s), peak memory, app-size delta, crispness at ~775 px (13"); **plus the Settings Store's real read time** (expected well under one frame) | Cast Rendering AC-17, R11; MorphCore AC-11 (240 specks raised only after this); Settings Store NOT ASSESSED (read time) | the oldest supported iPad (and a 13" if available, for crispness) | hand over the iPad | Metrics recorder run | 15 min | both SVG options built | `ipad-1/P-2/` |
 | P-3 | **Flash gate (iPad):** F2 over the K-26 busy case, Reduce Motion off and on, at the display's refresh rate (120 Hz on ProMotion). **Gate input (leader decision): (a) an in-app frame dump at the display-link rate in a debug build**, the rendered frames fed straight to the F2 detector (frame-accurate, no capture cap). **(b) the 240 fps phone (F-8) is a sanity spot-check only** (camera luminance is not WCAG relative luminance). A cable screen recording may cap at 60 fps and is **not** used for the gate | Accessibility AC-08, F2 | iPad (note ProMotion or not) | hand over the iPad; toggle Reduce Motion (F-9); film the spot-check | run the frame-dump build and the detector | 20 min | as M-12, plus the debug frame-dump build | `ipad-1/P-3/` |
 | P-4 | **Guided Access:** start with a triple-click (F-4); the panel's lock page shows "Guided Access is on" / "off"; hardware-keyboard shortcuts (⌘Tab, ⌘H / Globe+H, ⌘Space) recorded escaping or not under Guided Access | Child Lock-in AC-12, R8 (NOT ASSESSED: shortcuts under Guided Access); Input R5 (NOT ASSESSED: iPad hardware-keyboard media keys) | the child's iPad + its hardware keyboard | set up and start Guided Access, press the shortcuts; **press the hardware keyboard's media keys** (volume, mute, brightness, play/pause) in Play | screenshots, fill the table; media keys must never be presses and keep their system function | 20 min | the app with the panel and Child Lock-in R8 | `ipad-1/P-4/` |
@@ -74,6 +76,39 @@
 | P-12 | **Settings survive a relaunch:** volume 3, theme Dinosaurs, light rain + windy, keyboard row on; quit and relaunch; the panel shows the same values, the stage shows rain with wind and the row | Settings AC-17 | iPad | quits the app (app switcher) | retained screenshots before and after | 10 min | the app with the panel, Scene and the row | `ipad-1/P-12/` |
 | P-13 | **Smart Invert pair:** with Smart Invert on (F-9), the stage's pixels are unchanged and the panel is inverted | Accessibility AC-15; Reveal Stage R1 (K-30) | iPad | toggles Smart Invert | the retained screenshot pair | 5 min | the stage view with the opt-out | `ipad-1/P-13/` |
 | P-14 | **VoiceOver on the grown-up path (iPad):** double-tap-and-hold "Grown-ups" opens the challenge; focus lands on the code ("Enter four, one, seven, two"); four double-taps on the keys open the panel; focus returns to the stage on close | Parent Gate AC-24 | iPad | toggles VoiceOver, does the gestures | screenshots, the focus log | 15 min (with P-6) | the gate and panel | `ipad-1/P-14/` |
+| P-15 | **iPad hardware keyboard on a real iPad:** all 36 keys, the numpad, Shift / Caps / ⌘ / ⌥ / ⌃ (and Fn / Globe where reported) through `pressesBegan`; the normalized events match input-filter-v1's expectations | Input R1–R4; ADR-0007 | iPad + its hardware keyboard | **presses every key and modifier** | reads the Keys screen's event log, compares with input-filter-v1 | 10 min | `DeviceSpike` v1 (Keys screen) | `ipad-1/P-15/` |
+
+## Spike runs (`DeviceSpike` and the TASK-033 app)
+
+From TASK-075 (game-dev-ios's spike plan). **Spike run / ADR evidence** names the spike build and the ADR a row
+feeds; **Production re-run** is what gives the GDD AC its verdict.
+
+| Row | Spike run / ADR evidence | Production re-run (AC evidence) |
+|---|---|---|
+| P-1 | baseline on the TASK-033 app (no Rive, option A) and the candidate on `DeviceSpike` Audio → ADR-0010 | Audio AC-16 and Reveal Stage AC-16 (timing) on the production app before release |
+| P-2 | `DeviceSpike` Render (A/B) → ADR-0009 | Cast Rendering AC-17 and MorphCore AC-11 are **partial** on the spike (three test creatures, not 36: the app-size delta and the 240-speck raise wait); full run on the production app with the Dinosaurs theme |
+| P-3 | `DeviceSpike` Render with the debug frame dump → ADR-0009, F2 rehearsal | Accessibility AC-08 on the production app's K-26 busy case (the release gate) |
+| P-4 | `DeviceSpike` Guided Access page → ADR-0008 | Child Lock-in AC-12 and the shortcuts / media keys on the production app (the panel's real status line) |
+| P-7, P-8, P-9 | `DeviceSpike` Audio → ADR-0010 | Audio AC-9, AC-15, AC-20 on the production app |
+| P-11 | `DeviceSpike` Render, using ADR-0006 D2 as written → **closes ADR-0006's row** | App Shell's multitasking NOT ASSESSED on the production app |
+| P-13 | `DeviceSpike` Render (stage half only: pixels unchanged) → Reveal Stage R1 | Accessibility AC-15 on the production app (the panel-inverts half needs the panel) |
+| P-15 | `DeviceSpike` Keys → ADR-0007 | Input R1–R4 cases on the production app (a short repeat) |
+| M-1 | `DeviceSpike` Lock / Keys (the key-state read behind a switch) → ADR-0007 (`KeyStateQuery` in or out) | **Input AC-1k6 on the production macOS app** (release-blocking; TCC is per bundle ID) |
+| M-2 | `DeviceSpike` Lock launch log → ADR-0008 | Child Lock-in's ⌘-window edge case on the production app |
+| M-3 to M-7 | `DeviceSpike` Lock (both full-screen modes, stub gate) → ADR-0008's mode choice | Child Lock-in AC-13 to AC-17 and Parent Gate AC-20/27/34 on the production app (a shorter subset, with the real gate, panel and Quit) |
+| M-10 | `DeviceSpike` Render (ppi readout, window) → **closes ADR-0006 V6/V7** | App Shell R7 on the production app |
+| M-12, M-13 | `DeviceSpike` Render → ADR-0009 (and the F2 rehearsal) | Accessibility AC-08 and Cast Rendering AC-17 on the production app |
+| M-14 | `DeviceSpike` Audio → ADR-0010 | Audio AC-9 on the production app |
+
+Every other row (P-0, P-5, P-6, P-10, P-12, P-14, M-8, M-9, M-11, M-15, M-16, S-1 to S-4) runs only on the
+production app.
+
+**The minimal spike check before any spike install** (TASK-075, extended by the review): it builds headless and its
+unit tests pass; no network entitlement and no `URLSession` / `NWConnection` / web view; **no Rive** (also for the
+TASK-033 install); no remote Swift package; **no `NS*UsageDescription`, no location / camera / microphone
+entitlement, no URL schemes** (nothing that could put a prompt or a link in front of the child); **the Mac key-state
+read off by default** (the Keys screen's switch, so M-1 sees a clean first launch); the build's short sha
+recorded in `results.md`.
 
 ## Sessions
 
@@ -83,15 +118,17 @@ only the checks whose build exists, and the rest stay NOT ASSESSED for a later s
 | Session | Device | Time | Checks | Luan's part | Needs first |
 |---|---|---|---|---|---|
 | **Setup** | Mac + iPad | ~20 min, once | F-1 to F-4 | sign into Xcode; Developer Mode; trust; Guided Access passcode | nothing |
-| **iPad session 1** | the child's iPad (+ the oldest supported iPad for P-2 and P-10 if different), a 240 fps phone, headphones, the Mac for P-5 | **~2 h**, split into **1a** (~60 min: P-0, P-1, P-7, P-8, P-9, P-12, P-4) and **1b** (~60 min: P-2 + P-5, P-3, P-6 + P-14, P-10, P-11, P-13) | P-0 to P-14 | film P-1; Guided Access, the keyboard shortcuts and media keys; toggle Reduce Motion, VoiceOver, Smart Invert and silent mode; listen for clicks; trigger interruptions; multitasking gestures; quit and relaunch | Setup; the spike app (P-1, now); the app build (P-0, P-4, P-7 to P-14); both SVG options (P-2); the debug frame-dump build and the F2 tool (P-3) |
+| **iPad session 1** | the child's iPad (+ the oldest supported iPad for P-2 and P-10 if different), a 240 fps phone, headphones, the Mac for P-5 | **~2 h**, split into **1a** (~70 min: P-0, P-1, P-7, P-8, P-9, P-12, P-4, P-15) and **1b** (~60 min: P-2 + P-5, P-3, P-6 + P-14, P-10, P-11, P-13) | P-0 to P-15 | film P-1; Guided Access, the keyboard shortcuts and media keys; every hardware key for P-15; toggle Reduce Motion, VoiceOver, Smart Invert and silent mode; listen for clicks; trigger interruptions; multitasking gestures; quit and relaunch | Setup; the spike app (P-1, now); the app build (P-0, P-4, P-7 to P-14); both SVG options (P-2); the debug frame-dump build and the F2 tool (P-3) |
 | **Mac session 1** | Luan's Mac (+ a second display, a trackpad) | **~2 h 30 min** (MAC FREE throughout) | M-1, M-2, M-3, M-4, M-5, M-6, M-7, M-8, M-9, M-10, M-11 + M-12 (together), M-13, M-14, M-15, M-16 | the physical keys and gestures (M-3); connect a display (M-4); close the lid and log in (M-6); type codes (M-7, M-16); listen for clicks (M-14); VoiceOver (M-16); OK for `tccutil` (M-1) | the macOS app with Input R6, the gate, Child Lock-in and the kiosk (ADR-0008), ADR-0005's backend, ADR-0006 accepted; a release-configuration build (M-11); the F2 tool (M-12); both SVG options (M-13) |
 | **Simulator session 1** | Luan's Mac (visible Simulator windows, QC's E9F515E9) | **~50 min** (MAC FREE) | S-1, S-3, S-4 (S-2 is headless and runs outside the sessions) | none beyond granting MAC FREE | ADR-0006 stage code; the stage with hints and the gate |
 
-**Can be split** if the builds arrive at different times: P-1 can run now (the spike app exists, TASK-033). Mac session 1 can split at M-9 into "lock and keys" (M-1 to M-7, M-16) and "settings, stage, audio, measurement" (M-8 to M-15). iPad session 1 splits into 1a (P-1 needs only the spike app, so 1a can start before the stage builds exist) and 1b.
+**Can be split** if the builds arrive at different times: P-1's baseline can run now on the TASK-033 app once it is built without Rive (or proven `loadCdn: false`) and passes the minimal spike check. Mac session 1 can split at M-9 into "lock and keys" (M-1 to M-7, M-16) and "settings, stage, audio, measurement" (M-8 to M-15). iPad session 1 splits into 1a (P-1 needs only the spike app, so 1a can start before the stage builds exist) and 1b.
 Simulator session 1 is the easiest to fit in: it can run in any MAC FREE window.
 
 ## What each session must produce
 
+- **After every iPad session: remove `DeviceSpike` (and the TASK-033 app) from the iPad** (leader's choice, TASK-075
+  item 4): it has an ungated debug menu and is not the child's app. `results.md` records "removed, <time>".
 - `results.md` with one line per check: PASS / FAIL / NOT ASSESSED, the build's commit hash, the device model and OS
   version, the date.
 - The raw evidence named in the table; no desktop screen captures outside the app's own windows are committed
