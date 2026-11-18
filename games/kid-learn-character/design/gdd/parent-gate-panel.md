@@ -81,8 +81,8 @@ For the child the gate is invisible. The moon is just the moon.
 It counts only when **exactly ⌃, ⌥, ⌘ and Q are down and no other key is held** (a palm across the
 corner of a keyboard holds more keys; game-qc-android item 3).
 - **Input R6 owns the chord rule** (K-26): exactly ⌃⌥⌘ + Q; Shift is ignored (Input R6), as are Caps Lock and Num
-  Lock (Input R3); **Fn
-  disqualifies** it (a palm on a laptop's bottom-left row hits fn next to ⌃), like any other extra key.
+  Lock (Input R3); **Fn disqualifies** it (a palm on a laptop's bottom-left row hits fn next to ⌃), like any other extra key
+  (Input R6 and AC-1j, TASK-056a).
 - "No other key held" is judged from **the OS's current key state at the moment Q goes down** (for
   example `CGEventSource.keyState`), not from Input's tracked downs, because macOS can drop the key-up
   of a key pressed while ⌘ is held; a stale tracked key must never disable the way out under the kiosk.
@@ -171,7 +171,7 @@ centred over the dimmed stage; it scrolls when Dynamic Type makes it taller than
 | Theme | Theme list | `themeId`; the next reveal uses it (Key Table §4, the item pick) | more than one theme bundled (hidden in the MVP: Dinosaurs only) |
 | Weather | Clear · Cloudy · Light rain · Snow, and a Windy switch | `weather`, `windy` (Windy enabled only with Light rain or Snow; kept otherwise, Settings Store R1) | once Scene: Time of Day & Weather (#15) ships |
 | Keyboard | On-screen keyboard row switch | `keyboardRow` | once On-screen Keyboard Row (#16) ships |
-| Child lock | Child lock switch; "Quit" button | `childLock` / `childLockActive` → Child Lock-in (G11); Quit = Child Lock-in disengages (options removed, extra-display covers removed, then Input's kiosk mode off; its R4), then the app terminates | macOS (Quit only while the lock is on) |
+| Child lock | Child lock switch; "Quit" button | `childLock` / `childLockActive` → Child Lock-in (G11); Quit = Child Lock-in disengages (options removed, extra-display covers removed, then Input's kiosk mode off; its R4), then the app terminates | macOS. **Quit shows exactly while `kioskModeOn` is on** (Input's kiosk-on mode, published by Child Lock-in: on in Waiting, Locked and Suspended; Child Lock-in R7, Input R5), i.e. exactly when ⌘Q doesn't work. After an engage timeout `kioskModeOn` is off, so ⌘Q works and there is no Quit row; the switch still shows ON (`childLockActive`) with "Child lock couldn't turn on" |
 | Child lock | "Lock the iPad to this app" text: the Guided Access steps (ADR-0001 9c) | — (text only; no link to Settings, which would leave the app). A state line reads Child Lock-in's published `guidedAccessEnabled`: "Guided Access is on" / "Guided Access is off" (K-23) | iPadOS |
 | Privacy | "Privacy" row → a page of bundled text inside the panel | — (PKC-07, L-04) | always |
 | Debug | "Play the parade now" | Parade manual start (K-17); closes the panel | **debug builds only** (K-19); absent from release |
@@ -214,7 +214,7 @@ still act on controls). A slider drag resets it at its start. Touches on the car
 reset it. **Hard cap:** the panel closes `panel_max_s` (300 s) after it opened, whatever the input, so slow tapping can't keep it open; a slider drag or confirm hold in progress
 finishes first. `panel_max_s` ≥ `panel_idle_s` always. A "Hold to confirm" has its own timer (G8).
 
-**G11. The Child Lock-in interface** (#13 is the next GDD; this is what it can rely on).
+**G11. The Child Lock-in interface** (`design/gdd/child-lock-in.md`, #13; this is what it relies on).
 - The panel owns the **Child lock switch**, macOS only. **On** → writes `childLock = true`. **Off** (after G8's hold) → turns the lock off **for this run only**: the stored value is not set to
   false, so at the next launch the lock engages again once the app is ready (K-21, K-12, Settings Store
   R8). If the lock was never turned on, it stays off.
@@ -230,8 +230,10 @@ finishes first. `panel_max_s` ≥ `panel_idle_s` always. A "Hold to confirm" has
   challenge and Panel open, so ⌘Q or ⌥⌘Esc typed in the panel can't skip Quit's hold (Input R5/states, **TASK-054 I3 (safety), landed in TASK-054a (5e1c365)**).
 - **The way out with the lock on:** ⌃⌥⌘Q (works with the kiosk on, Input R6) or the moon → step 2 →
   panel → **Quit** (G8 hold), or turn the lock off (G8 hold) and then ⌘Q works again (Input R5).
-- Events for #13: `panelWillOpen`, `panelDidClose`, and the `childLockActive` changes (via Settings Store
-  R10). From #13 the panel reads `guidedAccessEnabled` (iPadOS) and the engage-failure flag (macOS).
+- Events for #13: `panelDidClose` (Child Lock-in doesn't use `panelWillOpen`, its W-10; the panel still
+  publishes it for others), and the `childLockActive` changes (via Settings Store
+  R10). From #13 the panel reads `guidedAccessEnabled` (iPadOS), the engage-failure flag and `kioskModeOn`
+  (macOS; the Quit row, G7) (TASK-056a).
 - #13 owns `presentationOptions`, the ⌘-swallow switch (Input R5), observing Guided Access on iPad and
   the wording of the Guided Access text.
 
@@ -499,7 +501,9 @@ All timers use an injected clock and the code an injected seed, so every criteri
     held but up in the OS key state), WHEN exactly ⌃⌥⌘Q go down THEN the challenge opens. GIVEN the
     challenge or panel showing, the chord does nothing. Evidence: Input AC-1k3 (stale key) and AC-1k6
     (real Mac, release-blocking for macOS, NOT ASSESSED until run).
-28. **AC-28 · Quit and lock rows:** with the lock off, the panel shows no Quit; with it on, Quit is shown.
+28. **AC-28 · Quit row follows `kioskModeOn`:** GIVEN `kioskModeOn` on (Waiting, Locked or Suspended), the
+    panel shows Quit; GIVEN it off (lock off, or after an engage timeout with the switch still ON), no Quit
+    row, and ⌘Q quits.
 29. **AC-29 · hard cap:** GIVEN the panel open and a control tapped every 50 s, THEN it closes at 300 s.
 30. **AC-30 · no code in logs (PKC-14):** in a release build, the code scan finds no log call carrying
     the code, an entered digit or the words outside `#if DEBUG`.

@@ -198,3 +198,13 @@ Change (TASK-055 report gdd-cross-review-2026-11-18.md; K-26):
 - W-9: the stale "emits only began/ended today" and "exact chord (from the held set)" lines are fixed.
 - W-1 (Quit visibility, "lock on") is pending game-dev-android's TASK-056a engaged state, to be aligned in a follow-up commit.
 Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 74f6e6c0423e745636546daf69932f566f17272c
+
+## Update — 2026-11-18 — TASK-056b W-1 follow-up (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-056
+Change:
+- W-1: the G7 Quit row shows exactly while kioskModeOn is on (Input's kiosk-on mode, published by Child Lock-in; on in Waiting, Locked and Suspended; Child Lock-in R7 / Input R5, TASK-056a ed68d7b). After an engage timeout there is no Quit row, ⌘Q works, and the switch still shows ON with "couldn't turn on". AC-28 is rewritten to match.
+- G11 now reads kioskModeOn. Child Lock-in doesn't use panelWillOpen (its W-10); the panel still publishes it.
+- G2 cites Input R6 / AC-1j for Fn.
+- G11's header now cites design/gdd/child-lock-in.md, not "the next GDD".
+Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 0576d85a17b704c4e8909134524c669e51c43024
