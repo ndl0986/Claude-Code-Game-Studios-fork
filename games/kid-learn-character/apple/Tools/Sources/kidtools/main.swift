@@ -2,8 +2,9 @@
 //
 //   kidtools api-surface <symbol-graph-dir> <module> <out.md>   write a module's public API surface
 //   kidtools api-surface --check <symbol-graph-dir> <module> <file.md>   exit 1 if <file.md> is stale
-//   kidtools validate <content-dir> [--load]   V1–V18 over every theme plus the staleness stub (ADR-0003 D3); exit 1
-//                                              on any finding. --load drops the build-only singleItemPerKey check (V2).
+//   kidtools validate <content-dir> [--load] [--release]   V1–V18 over every theme plus the staleness stub (ADR-0003
+//        D3); exit 1 on any finding. --load drops the build-only singleItemPerKey check (V2). A theme folder holding
+//        only src/ is a theme in progress: NOT ASSESSED, not a finding; --release exits 1 on any (TASK-125).
 import Foundation
 import ToolsCore
 
@@ -29,13 +30,17 @@ case "api-surface":
         print("wrote \(path)")
     }
 case "validate":
-    var rest = Array(args.dropFirst()), load = false
+    var rest = Array(args.dropFirst()), load = false, release = false
     if let i = rest.firstIndex(of: "--load") { load = true; rest.remove(at: i) }
-    guard rest.count == 1 else { fail("usage: kidtools validate <content-dir> [--load]") }
+    if let i = rest.firstIndex(of: "--release") { release = true; rest.remove(at: i) }
+    guard rest.count == 1 else { fail("usage: kidtools validate <content-dir> [--load] [--release]") }
     let r = ContentValidator.run(contentDir: URL(fileURLWithPath: rest[0]), singleItemPerKey: !load)
     for f in r.findings { print(f) }
-    print("validate: \(r.themes.count) theme(s)\(r.themes.isEmpty ? "" : " (" + r.themes.joined(separator: ", ") + ")"), \(r.findings.count) finding(s): \(r.pass ? "PASS" : "FAIL")")
-    exit(r.pass ? 0 : 1)
+    for t in r.inProgress { print("NOT ASSESSED theme \(t): in progress (src/ only, no theme.json yet)") }
+    let releaseBlocked = release && !r.inProgress.isEmpty
+    let verdict = !r.pass ? "FAIL" : (releaseBlocked ? "FAIL (release: \(r.inProgress.count) theme(s) in progress)" : "PASS")
+    print("validate: \(r.themes.count) theme(s)\(r.themes.isEmpty ? "" : " (" + r.themes.joined(separator: ", ") + ")"), \(r.inProgress.count) in progress, \(r.findings.count) finding(s): \(verdict)")
+    exit(r.pass && !releaseBlocked ? 0 : 1)
 default:
     fail("unknown command \(cmd)")
 }

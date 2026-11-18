@@ -56,7 +56,9 @@ api_check() {
 }
 gate "api-surface (ADR-0002 V4)" api_check
 # 3a. Content (ADR-0003 D3): V1–V18 and the staleness stub over content/themes ("0 themes" passes until a theme lands)
-gate "kidtools validate content (ADR-0003 D3)" "$BUILD/swiftpm/Tools/debug/kidtools" validate content
+if [ "$RELEASE" = 1 ]; then VALIDATE_RELEASE=--release; else VALIDATE_RELEASE=; fi
+gate "kidtools validate content (ADR-0003 D3)" "$BUILD/swiftpm/Tools/debug/kidtools" validate content $VALIDATE_RELEASE
+"$BUILD/swiftpm/Tools/debug/kidtools" validate content 2>/dev/null | grep '^NOT ASSESSED theme' | while IFS= read -r l; do say "OBSERVED ${l}"; done
 # 3. Contracts (ADR-0004 D5): the KidCore harness (ContractTests) and the Tools "file" layer run inside step 4's
 #    swift test; their per-contract counts are echoed here from that run.
 # 4. swift test
