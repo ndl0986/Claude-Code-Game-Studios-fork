@@ -198,7 +198,7 @@ R7, K-39, K-20).
 
 ## Accessibility
 
-Against `design/accessibility-requirements.md` (proposed tier: Standard, Luan to confirm):
+Against `design/accessibility-requirements.md` (tier: Standard, Luan, K-42):
 - **No text** on the Title (App Shell R2; K-22), so nothing needs text sizing or captions.
 - **Reduce Motion:** breathe amplitude halves; the creature's idle softens (A3); applied on the next frame (A2).
 - **Motor:** no touch floor needed for the play button (any tap starts, A7); the moon is ≥ 44 pt with 20 pt slop

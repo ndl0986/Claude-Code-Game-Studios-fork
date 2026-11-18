@@ -1,9 +1,9 @@
 # Accessibility Requirements
 
-> **Status**: In Design (tier proposed; Luan to confirm)
+> **Status**: Committed (tier: Luan, K-42)
 > **Author**: game-dev-android (TASK-112), from the Accessibility GDD and K-26 / K-29 / K-30
 > **Last Updated**: 2026-11-18
-> **Accessibility Tier Target**: **Proposed tier: Standard (Luan to confirm)**
+> **Accessibility Tier Target**: **Standard (Luan, K-42)**
 > **Platform(s)**: iPadOS 26+, macOS 26+ (ADR-0001); Android later (its own ADR, NOT ASSESSED)
 > **External Standards Targeted**:
 > - WCAG 2.2: SC 2.3.1 Three Flashes or Below Threshold (Level A) is the photosensitivity gate (Accessibility F2); contrast floors per Accessibility A5
@@ -32,18 +32,18 @@
 
 ### This Project's Commitment
 
-**Target Tier**: **Proposed tier: Standard (Luan to confirm)**
+**Target Tier**: **Standard (Luan, K-42)**
 
 **Rationale**: The player is 2.5–3 and cannot read, and a grown-up sets the device up (Accessibility Overview), so
 the template's tiers fit only partly: the child's side has no text at all (art bible §7, K-22), so subtitles, text
 size and remapping have nothing to act on there, and the design already meets several *Comprehensive* items (a
 Reduce Motion mode that follows the OS, A1–A3; VoiceOver on the grown-up panel, A8; a visual answer for every sound,
-A9; no meaning by colour alone, A6; the WCAG 2.3.1 flash gate, A4 / F2). **Standard** is proposed because its intent
+A9; no meaning by colour alone, A6; the WCAG 2.3.1 flash gate, A4 / F2). **Standard** was chosen (Luan, K-42) because its intent
 holds once each item is read for this game: every key and tap answers, so there is no binding to remap (Input R2–R3);
 no colour carries meaning alone, so no colourblind mode is needed (A6); text is only on the grown-up side, where
 Dynamic Type applies (A8); the one timed input (the 1.5 s moon hold) has the Mac chord and Switch Control pause as
 documented alternatives (A8, K-29). Two template baselines are **not** met by the GDDs and are recorded as
-limitations for Luan rather than changed here: independent volume per bus (Basic) and captions (K-30).
+deliberate limitations: one volume control, not one per bus (Basic; kept by Luan, K-42), and captions (K-30).
 
 **Features explicitly in scope (beyond tier baseline)**:
 - Reduce Motion, read live from the OS, never an in-app switch (A1; art bible §7); per-system rules (A3).
@@ -55,7 +55,7 @@ limitations for Luan rather than changed here: independent volume per bus (Basic
 **Features explicitly out of scope**:
 - Captions (K-30; A9): the child cannot read; the glyph and creature are the visual equivalent.
 - Increase Contrast (K-30; A10): not in the MVP; the A5 floors are the contrast design.
-- Independent volume per bus: one volume and mute only (Settings Store R1) — see Known Intentional Limitations.
+- Independent volume per bus: one volume and mute only (Settings Store R1; kept, K-42) — see Known Intentional Limitations.
 - An in-app Reduce Motion switch (A1: follow the OS; Settings Store R1 is closed).
 
 ---
@@ -120,7 +120,7 @@ limitations for Luan rather than changed here: independent volume per bus (Basic
 | Captions / subtitles | Basic | Voice lines | Out of scope (K-30) | The child cannot read; the glyph and creature show what the voice says (A9). |
 | Visual answer for every sound | Comprehensive | Every Audio R1 event | Designed | Audio R5; art bible §7; AC-14 (sound-off screenshots). |
 | Silent mode | — | iPad | Designed | Respected (K-13; Audio R6); a static hint in the panel (App Shell R5). |
-| Independent volume per bus | Basic | Music / SFX / voice | **Not met** | One volume (0–10) and mute (Settings Store R1). Recorded below for Luan. |
+| Independent volume per bus | Basic | Music / SFX / voice | **Not met (deliberate, K-42)** | One volume (0–10) and mute (Settings Store R1), kept by Luan (K-42). |
 | Mono audio | Comprehensive | Output | Met by design | Every buffer is decoded mono (Audio R4; A9). |
 | Loudness | — | All sounds | Designed | voice −16 LUFS, cast −20, chime −26, ping −30, parade −22, ≤ −1 dBTP (K-13; A9). |
 
@@ -195,7 +195,7 @@ limitations for Luan rather than changed here: independent volume per bus (Basic
 | Feature | Tier Required | Why Not Included | Risk / Impact | Mitigation |
 |---------|--------------|-----------------|--------------|------------|
 | Captions | Basic | The child cannot read (K-30) | none for the child; a hearing grown-up loses nothing actionable | glyph + creature are the visual equivalent (A9) |
-| Independent volume per bus | Basic | Settings Store R1 has one volume and mute | a grown-up cannot lower music without lowering the voice | **Open for Luan** (OQ-1); one slider + mute today |
+| Independent volume per bus | Basic | Settings Store R1 has one volume and mute; **kept deliberately (Luan, K-42)** | a grown-up cannot lower music without lowering the voice | one slider + mute; Audio & Voice balances the buses (its F1 trims) |
 | Increase Contrast | — | K-30: not in the MVP | low; A5 floors are designed | revisit after the MVP |
 | Switch Control / AssistiveTouch on the moon hold | Standard | K-29: accepted for the MVP | an iPad grown-up must pause Switch Control to open the gate | documented; the Mac chord replaces the hold |
 | VoiceOver on the child's stage | — | the child side has no text (A8) | unknown behaviour of VoiceOver gestures during play | NOT ASSESSED (Accessibility Q4) |
@@ -225,8 +225,8 @@ limitations for Luan rather than changed here: independent volume per bus (Basic
 
 | Question | Owner | Deadline | Resolution |
 |----------|-------|----------|-----------|
-| OQ-0 Confirm the accessibility tier (proposed: Standard) | Luan | before the Pre-Production gate | — |
-| OQ-1 Independent volume per bus (Basic baseline) vs today's single volume + mute (Settings Store R1) | Luan (Settings Store owner) | before the Pre-Production gate | — |
+| OQ-0 Confirm the accessibility tier | Luan | before the Pre-Production gate | **Resolved: Standard (K-42)** |
+| OQ-1 Independent volume per bus (Basic baseline) vs today's single volume + mute (Settings Store R1) | Luan | before the Pre-Production gate | **Resolved: one volume control kept, a recorded limitation (K-42)** |
 | Device time for the flash gate on a real iPad and Mac (Accessibility Q3, AC-08) | Luan | before release | — |
 | VoiceOver left on during play (Accessibility Q4) | QC, on a device | before release | — |
 | Bold weight in the bundled font (Accessibility Q5) | art / lead programmer | before the panel story | — |
