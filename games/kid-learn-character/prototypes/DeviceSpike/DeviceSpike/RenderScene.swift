@@ -13,7 +13,10 @@ import UIKit
 import AppKit
 #endif
 
-enum RenderOption: String, CaseIterable, Identifiable { case a = "A: live paths", b = "B: per-part textures"; var id: String { rawValue } }
+enum RenderOption: String, CaseIterable, Identifiable {
+    case a = "A: per element", aCandidate = "A: candidate (ADR-0009 D3)", b = "B: per-part textures"
+    var id: String { rawValue }
+}
 
 final class FrameStats: @unchecked Sendable {
     private var last = 0.0
@@ -105,7 +108,8 @@ final class RenderScene: SKScene {
         var own: [Shape] = []
         for item in part.items {
             switch item {
-            case .layer(let l): own.append(contentsOf: l.shapes)
+            case .layer(let l):
+                if option == .aCandidate { n.addChild(candidate(l, pivot: part.pivot)) } else { own.append(contentsOf: l.shapes) }
             case .part(let child):
                 if !own.isEmpty { n.addChild(content(own, pivot: part.pivot)); own = [] }
                 n.addChild(node(for: child, parentPivot: part.pivot, name: name))
@@ -115,10 +119,61 @@ final class RenderScene: SKScene {
         return n
     }
 
+    /// ADR-0009 D3's candidate A (game-dev-ios review): the outline layer of a part is ONE merged path stroked by ONE
+    /// node at the layer's opacity (group-opacity look); body and detail fills stay one node per element, because
+    /// merging fills under nonzero winding can cut holes where shapes overlap with opposite winding.
+    func candidate(_ l: Layer, pivot: (Double, Double)) -> SKNode {
+        if l.name == "outline", let first = l.shapes.first {
+            let merged = CGMutablePath()
+            for sh in l.shapes { merged.addPath(Self.cgPath(sh.ops, dx: pivot.0, dy: pivot.1)) }
+            let s = SKShapeNode(path: merged)
+            s.fillColor = .clear
+            s.strokeColor = Self.color(first.style.stroke, first.style.opacity)
+            s.lineWidth = CGFloat(first.style.strokeWidth)
+            s.lineJoin = .round; s.lineCap = .round; s.isAntialiased = true
+            return s
+        }
+        let g = SKNode()
+        for sh in l.shapes {
+            let s = SKShapeNode(path: Self.cgPath(sh.ops, dx: pivot.0, dy: pivot.1))
+            s.fillColor = Self.color(sh.style.fill, sh.style.fillOpacity * sh.style.opacity)
+            s.strokeColor = Self.color(sh.style.stroke, sh.style.opacity)
+            s.lineWidth = sh.style.stroke == nil ? 0 : CGFloat(sh.style.strokeWidth)
+            s.lineJoin = .round; s.lineCap = .round; s.isAntialiased = true
+            g.addChild(s)
+        }
+        return g
+    }
+
+    /// ADR-0009 H-2 on the device: does ONE SKShapeNode's self-overlapping stroke darken (blend twice) at alpha 0.8?
+    /// Renders an X (two crossing strokes in one path) white over black, two ways, samples the crossing and an arm, logs.
+    func overlapCheck() {
+        guard let view else { onLog("overlap check: no view"); return }
+        func sample(_ node: SKNode) -> (cross: Double, arm: Double)? {
+            let bg = SKSpriteNode(color: .black, size: CGSize(width: 200, height: 200)); bg.addChild(node)
+            guard let img = view.texture(from: bg)?.cgImage(), let data = img.dataProvider?.data, let b = CFDataGetBytePtr(data) else { return nil }
+            let bpr = img.bytesPerRow, bpp = img.bitsPerPixel / 8
+            func lum(_ x: Int, _ y: Int) -> Double { let o = y * bpr + x * bpp; return (Double(b[o]) + Double(b[o + 1]) + Double(b[o + 2])) / (3 * 255) }
+            let cx = img.width / 2, cy = img.height / 2
+            return (lum(cx, cy), lum(cx + img.width / 5, cy + img.height / 5))   // the crossing, and a point on one arm
+        }
+        let x = CGMutablePath(); x.move(to: CGPoint(x: -70, y: -70)); x.addLine(to: CGPoint(x: 70, y: 70))
+        x.move(to: CGPoint(x: -70, y: 70)); x.addLine(to: CGPoint(x: 70, y: -70))
+        let v1 = SKShapeNode(path: x); v1.strokeColor = SKColor(white: 1, alpha: 0.8); v1.lineWidth = 12; v1.lineCap = .round
+        let v2 = SKShapeNode(path: x); v2.strokeColor = .white; v2.lineWidth = 12; v2.lineCap = .round; v2.alpha = 0.8
+        for (name, n) in [("stroke alpha 0.8", v1), ("node alpha 0.8", v2)] {
+            if let r = sample(n) {
+                let darkens = r.cross > r.arm + 0.02                       // over black, a double blend reads brighter (0.96 vs 0.8)
+                onLog(String(format: "overlap check (%@): crossing %.3f, arm %.3f → %@", name, r.cross, r.arm,
+                              darkens ? "BLENDS TWICE (the outline needs an effect node or a texture)" : "blends once (group look holds)"))
+            } else { onLog("overlap check (\(name)): no image") }
+        }
+    }
+
     /// Option A: one SKShapeNode per shape. Option B: the shapes rasterised once into one sprite.
     func content(_ shapes: [Shape], pivot: (Double, Double)) -> SKNode {
         switch option {
-        case .a:
+        case .a, .aCandidate:
             let g = SKNode()
             for sh in shapes {
                 let s = SKShapeNode(path: Self.cgPath(sh.ops, dx: pivot.0, dy: pivot.1))
