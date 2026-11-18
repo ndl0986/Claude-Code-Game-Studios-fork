@@ -28,3 +28,14 @@ Reviewed-Content-Hash: design/compliance/TASK-034-kids-weather-rules.md efc8d1ec
 Review mode: lean · Workflow: standard
 Change: game-dev-ios's independent read of 4b03332 is APPROVE (all 7 plan items in). His F4 fix: A_ratio divides by the safe sky band 1280 × 320 (y 0…320), not 1280 × 300; A_ratio is now 1.00 / 1.27 / 1.375 / 1.34 for the four rects; stars unchanged (capped); a clouds column added (11" iPad: 3 cloudy, 2 with rain or snow; 13" and 21:9: 4 / 3). No AC used the old figures.
 Reviewed-Content-Hash: design/gdd/scene-time-weather.md 1c442e010786ec085de1240405a13529ce8406cd
+
+## Update — 2026-11-18 — TASK-054c K-25 (no re-review)
+Review mode: lean · Workflow: standard
+Change: R3/F3d read the halo's current glow radius published by Cast Rendering R5 (230 u, 161 u at full Night) and the Reveal Stage's haloOn. R5/F2/AC-5 restated for K-25: the same edge model as Cast Rendering F8 (cream #f8efdc at 100% below sky-mid L_x ≈ 0.308, amber #80450f at or above, 1 s wall-clock switch dissolve excluded from the check); ≥ 3:1 at w 0 and 1, ≥ 2.5:1 at the inside samples, plus an analytic assertion at L_x (the crossover can fall between samples). Computed with the shipped data: lowest look 4.36:1, lowest sample 2.68:1, at L_x 2.57:1; the old edge (#8a4b12, cream 85%) gives 2.32:1 and fails. Review by game-dev-ios.
+Reviewed-Content-Hash: design/gdd/scene-time-weather.md 14e09364ce6808a3f715654f3c8f9e8b6a1a5983
+Reviewed-Content-Hash: production/team/decisions.md 91dfbeea83b146e126e09a893a0d23a42d17329c
+
+## Update — 2026-11-18 — TASK-054c skyMidL (no re-review)
+Review mode: lean · Workflow: standard
+Change: interface ask from game-dev-ios (Cast Rendering b2277cf): R1 publishes skyMidL (the drawn sky-mid luminance after the weather tint and any jump fade, on the wall clock), defined in F2; R5's build check reads the same value and, inside the switch's hysteresis band 0.303–0.313, takes the worse of the two edges (2.53:1 cream at 0.313, 2.54:1 amber at 0.303; both ≥ 2.5).
+Reviewed-Content-Hash: design/gdd/scene-time-weather.md 2ddea70359c94efef29a7dc93a63827057dee964
