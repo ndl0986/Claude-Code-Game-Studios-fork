@@ -102,7 +102,8 @@ not a press, not a repeat and not the parent chord:
 **R6. The parent chord** (Luan, 2026-11-18). "Open the grown-up panel" is an abstract action with a binding per
 platform.
 - **macOS:** **⌃⌥⌘Q**, exactly those three modifiers plus Q (Shift ignored), as in the TASK-033 kiosk. It counts
-  **only when no other key is held** (the held set, R4, holds nothing but these): ⌃⌥⌘Q with D still down is not
+  **only when no other key is held**: the held set (R4) is **empty when Q goes down** (⌃⌥⌘ are read from the
+  modifier flags; on the Mac they arrive as `flagsChanged` and are not in the held set). ⌃⌥⌘Q with D still down is not
   the chord *(TASK-050)*. The chord replaces the moon hold only: the gate's second step (the number in words)
   still shows (K-19).
 - **iPadOS: no chord**, even with a hardware keyboard. Holding the moon is the only way in. ⌃⌥⌘Q on an iPad is

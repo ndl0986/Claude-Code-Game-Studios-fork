@@ -145,7 +145,8 @@ run, and nothing is cleared. Input sends no presses during the challenge (Input 
 timeout**, the queue **resumes** exactly where it stopped. Only a **correct answer** opens the panel, and R8's
 clear and settle apply then (K-15, K-20).
 - **The play clock.** All the queue's times (`now` in `tick`, `r0`, `formedAt`, `restingSince`, the hold and the
-  formed timeout) run on the **play clock = uptime − total frozen time** (Reveal Stage `freeze()` / `resume()`).
+  formed timeout) run on the **play clock = uptime − total frozen or background time** (as in Reveal Stage R8:
+  `freeze()` / `resume()`, and background).
   While frozen the play clock stands still, so the frozen time never counts and nothing sees a gap. A press's
   `p.time` (uptime, Input R8) is turned into play-clock time when it arrives; no press arrives while frozen.
   With no freeze since launch the play clock equals uptime, so every other rule reads the same.
@@ -178,6 +179,7 @@ hard-coded.
 | **Revealing** | `current` not yet formed | Holding (on `formed` or the timeout) |
 | **Holding** | `current` formed, `now < r0 + holdEff` | Revealing (queue non-empty and hold passed → advance) or Resting (hold passes with an empty queue) |
 | **Resting** | `current` formed, hold passed, queue empty | Revealing (a press starts at once) |
+| **Frozen** | the gate challenge shows (R8a, K-20): no tick, no press | `resume()` returns to the state it froze in; a correct answer opens the panel (R8: clear + settle → Resting) |
 
 The queue's contents are independent of these states except that rule R3.1 can only apply in Empty and Resting.
 Panel open and background (R8, R9) move to Resting with an empty queue.

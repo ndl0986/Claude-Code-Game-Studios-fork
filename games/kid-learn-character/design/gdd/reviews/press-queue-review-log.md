@@ -39,3 +39,8 @@ Reviewed-Content-Hash: design/gdd/press-queue.md e3f251e964d1741a83ea0ab55fa7bd1
 Review mode: lean · Workflow: standard
 Change: R8a restated on the play clock (uptime minus total frozen time, Reveal Stage freeze/resume, K-20) instead of shifting r0/formedAt; AC-23 updated. Verdict unchanged; review by game-dev-ios.
 Reviewed-Content-Hash: design/gdd/press-queue.md 74baa26023078384bde9b731ff69dcfd30c25fff
+
+## Update — 2026-11-18 — TASK-050 wording notes from game-dev-android (no re-review)
+Review mode: lean · Workflow: standard
+Change: R8a's play clock now reads uptime − total frozen or background time (as Reveal Stage R8); States table gains a Frozen row (no tick, no press; resume returns to the state it froze in). Optional notes from game-dev-android's APPROVE of c4ae20d. Verdict unchanged.
+Reviewed-Content-Hash: design/gdd/press-queue.md a4fc49fbda37a95a7730b76bb1405430f515b984
