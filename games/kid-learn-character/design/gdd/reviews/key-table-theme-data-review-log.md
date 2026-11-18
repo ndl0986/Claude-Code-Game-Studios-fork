@@ -93,3 +93,8 @@ Reviewed-Content-Hash: design/gdd/key-table-theme-data.md 6878f022785a592f47c810
 Review mode: lean · Workflow: standard
 Change: mechanical fix from game-dev-android's check of ed7e812: the V16 row had been inserted inside the V15 row (after "48 "); V15 is whole again (its word ≤ 1.25 s and letter ≤ 1.0 s limits, cited by Audio F6/AC-6 and Press Queue F1) and V16 is its own row. No content change.
 Reviewed-Content-Hash: design/gdd/key-table-theme-data.md 640a8fc4bb90c1b95656ed32f90d046078e50488
+
+## Update — 2026-11-18 — TASK-060 schema 2 and rowWords (no re-review)
+Review mode: lean · Workflow: standard
+Change: schemaVersion 2 adds the required theme field `rowWords` (K-29: the keyboard row's word pool; Dinosaurs = 16 words, no given names) and validator rule V17 (≥ 8 unique entries, 2–8 letters A–Z, every letter a theme key, toddler-safe review). The app knows majors 1 and 2; a v1 theme (or a pool failing V17 at load) loads with the row fallback: the first cast name of 2–8 letters in canonical order (Dinosaurs: FOSSIL), else ABC, one debug line. AC-6 now tests an unknown major 3 and the v1 fallback; AC-17 added; Interactions and Dependencies name the On-screen Keyboard Row. Review: game-dev-android (with TASK-060).
+Reviewed-Content-Hash: design/gdd/key-table-theme-data.md c73c0a8e9abbb3b520ef953760a39bce3fc12eb8
