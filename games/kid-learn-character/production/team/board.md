@@ -68,7 +68,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-085b | Follow-up batch B: Cast twinkle RM; Hint Letters row band + H1; Parent Gate P0/P1 moon; art bible breathe rate | design | game-art-content (review: game-dev-android) | DONE: MERGED (all 7 already landed; bookkeeping only) | `design/TASK-085b-followups` | 2026-11-18 |
 | TASK-086 | Contracts batch 3: reveal-timing-v1 + audio-plan-v1 | qa | game-qc-android (review: game-dev-ios / Audio owner) | SENT 2026-11-18 | `design/TASK-086-contracts-batch3` | 2026-11-18 |
 | TASK-087 | ADR-0010 audio (spike ADR) to Proposed; device rows pending | architecture | game-dev-ios (review: game-dev-android; rows check game-qc-ios) | SENT 2026-11-18 | `design/TASK-087-adr-0010` | 2026-11-18 |
-| TASK-088a | Audio R1 E8/E9: s = formedS; E8 on sfx, E9 on hasWord; AU-Q answers | design | game-art-content (review: game-qc-android) | IN REVIEW @ ff8b8151 → game-qc-android | `design/TASK-088a-audio-e8e9` | 2026-11-18 |
+| TASK-088a | Audio R1 E8/E9: s = formedS; E8 on sfx, E9 on hasWord; AU-Q answers | design | game-art-content (review: game-qc-android) | REVISE (F3 same-batch window; E7 in invalid-set fallback) → fixing | `design/TASK-088a-audio-e8e9` | 2026-11-18 |
 | TASK-088b | Reveal Stage R3/R6: hasWord definition; only-when-hasWord gates E9 only | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 4d83b81e; R3 cell nit queued) | `design/TASK-088b-reveal-hasword` | 2026-11-18 |
 
 ## Leader log
