@@ -47,3 +47,8 @@ Reviewed-Content-Hash: design/gdd/app-shell-title.md 02d7c90895449c9ad40a1dbbe99
 Review mode: lean · Workflow: standard
 Change: from /review-all-gdds 2026-11-18 (design/gdd/gdd-cross-review-2026-11-18.md): W-2: Cancel and Esc on a gate opened from the Title return to the Title (R5, States, an edge case; Parent Gate §G9); W-10: Interactions and F1 name the run value childLockActive where they mean it. Text only; no rule changed.
 Reviewed-Content-Hash: design/gdd/app-shell-title.md 09dc4b56bb283e6dfb84ff83b5b494070234a3e1
+
+## Update — 2026-11-18 — TASK-057b ready wording (no re-review)
+Review mode: lean · Workflow: standard
+Change: R-1: since TASK-056a, Input's kiosk-on mode (kioskModeOn) is Child Lock-in's own output on entering Waiting, so App Shell's "ready" (R1 step 5, F1) is now first frame + chord installed + window covering its display; Child Lock-in sets kioskModeOn on Waiting and applies the options once its R3 preconditions hold. AC-3 aligned (ready fires with the lock off too). Text only.
+Reviewed-Content-Hash: design/gdd/app-shell-title.md 973139da5486e46e4a0fc9ed5a06df34f66a397a
