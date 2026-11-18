@@ -49,7 +49,7 @@ locked in a way they can't undo.
 | 2 | Hand `themeId` to the Key Table, which loads and checks the theme off the main thread, including decoding its audio. A stored theme that fails (or is not bundled) loads Dinosaurs in memory and keeps the stored id | Key Table §5, Audio R4.1 |
 | 3 | In parallel with 2: start the audio engine, silent; install Input's handlers, including the Mac's ⌃⌥⌘Q chord | Audio R2.1, Input R6 |
 | 4 | **First frame: the Title**, already in the clock's look (art bible §2: "the first frame is already in the right look") | this GDD (R2) |
-| 5 | **Mac only:** App Shell signals **"the app is ready"** when all of these hold: the first frame has been drawn, the ⌃⌥⌘Q chord handler is installed, Input's kiosk-on mode is on, and the window covers its display. If `childLock` is stored true, Child Lock-in then engages the kiosk once its own preconditions also hold: the app is active and `childLockActive` is on (Child Lock-in R3, TASK-052). Turning it off in the panel lasts for this run only; it comes back at the next launch (K-21) | Settings Store R8, K-12, K-21, Child Lock-in R3 |
+| 5 | **Mac only:** App Shell signals **"the app is ready"** when all of these hold: the first frame has been drawn, the ⌃⌥⌘Q chord handler is installed, and the window covers its display. Separately, Child Lock-in sets Input's kiosk-on mode (`kioskModeOn`, its own output since TASK-056a) on entering Waiting, which starts at the settings read and so can come before "ready"; it applies the kiosk options only after "ready" and once its R3 preconditions hold: the app is active and `childLockActive` is on (Child Lock-in R3, TASK-052). So "ready" fires with the lock off too. Turning it off in the panel lasts for this run only; it comes back at the next launch (K-21) | Settings Store R8, K-12, K-21, Child Lock-in R3 |
 | 6 | When the Key Table reports the theme ready, play may start (R3) | this GDD |
 
 - **Launch screen** (the static image the OS shows before step 4): a plain field of the **Dusk sky's mid colour**
@@ -193,8 +193,8 @@ rebuilt, in this order:
 **F1. Launch timeline.**
 ```
 t_settings ≤ t_firstFrame ≤ t_ready_theme     (the Title can show before the theme is ready)
-t_ready    = max(t_firstFrame, t_chordInstalled, t_kioskModeOn, t_windowCoversDisplay)     (Mac)
-t_kiosk    ≥ max(t_ready, t_appActive, t_childLockActiveOn)          (Child Lock-in R3; childLockActive true)
+t_ready    = max(t_firstFrame, t_chordInstalled, t_windowCoversDisplay)                     (Mac)
+t_kiosk    ≥ max(t_ready, t_kioskModeOn, t_appActive, t_childLockActiveOn)   (Child Lock-in R3; kioskModeOn is set by Child Lock-in on Waiting)
 t_playable = t_ready_theme
 ```
 The read is a few milliseconds (Settings Store R5). Device times are NOT ASSESSED (Cast Rendering's measurement
@@ -282,8 +282,10 @@ Parade and Child Lock-in. Screenshots are retained in `production/qa/evidence/`.
    started after the read, and "playable" only after "theme ready".
 2. **AC-2 First frame:** at 06:30, 12:00, 17:00 and 21:00 (injected clock) the first frame is the matching look
    (screenshots), with no text on screen.
-3. **AC-3 Mac kiosk order:** with `childLock` stored true, the kiosk options are applied only after the first frame,
-   the chord handler, Input's kiosk-on mode **and the window covering its display** (a test seam logs all four, in any order of arrival, before the options) *(TASK-054 A1)*; ⌃⌥⌘Q opens the gate right after. The gate and panel open as overlays in the same
+3. **AC-3 Mac kiosk order:** with `childLock` stored true, App Shell's "ready" is signalled only after the first frame,
+   the chord handler **and the window covering its display** (a test seam logs all three, in any order of arrival,
+   before "ready") *(TASK-054 A1; TASK-057 R-1)*; Child Lock-in sets `kioskModeOn` on entering Waiting (possibly
+   before "ready") and applies the options only after "ready" plus its R3 preconditions; with `childLock` false, "ready" still fires and no options are applied; ⌃⌥⌘Q opens the gate right after. The gate and panel open as overlays in the same
    window (no window resigns key).
 4. **AC-4 K-21:** child lock turned off in the panel, then a relaunch: the kiosk engages again once ready.
 5. **AC-5 Title starts:** D, 7 and a tap at (200, 200) each start play; Space, Esc and a tap on the moon do not.
