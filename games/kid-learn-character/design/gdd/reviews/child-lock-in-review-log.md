@@ -31,3 +31,8 @@ Reviewed-Content-Hash: design/gdd/child-lock-in.md 4f3fefd7aacd007bb5d0b41c207f8
 Review mode: lean · Workflow: standard
 Change: L1: R5's chord bullet matches the merged build decision: judged from the OS key state (if Input AC-1k6 passes), otherwise from the held set kept honest by the ⌘-release rule (Input R6, TASK-054a). Also the Dependencies and the release-blocking note now say S1/S2, I1 and I3 landed in TASK-054a (5e1c365): AC-3 and AC-6 are no longer blocked by design but stay NOT ASSESSED until run; AC-17's chord path depends on Input AC-1k6 (real Mac, release-blocking, NOT ASSESSED). Text only; no rule changed. Review: game-qc-ios, from the diff.
 Reviewed-Content-Hash: design/gdd/child-lock-in.md 7298161cfbdbff84d6d83627661100951de6560b
+
+## Update — 2026-11-18 — TASK-056a cross-review fixes (no re-review)
+Review mode: lean · Workflow: standard
+Change: W-1: one signal kioskModeOn (Input's kiosk-on mode): on in Waiting, Locked and Suspended, off in Off; on the engage timeout it goes off (⌘Q works, no Quit row) while childLockActive stays true; Parent Gate G7 shows Quit whenever it is on; States, Interactions and AC-8 updated. W-10: R2 lists the Title; panelWillOpen dropped (unused). W-9: AC-6 marker refreshed. From design/gdd/gdd-cross-review-2026-11-18.md and K-26. Review: game-qc-android (diff re-run).
+Reviewed-Content-Hash: design/gdd/child-lock-in.md c04c66982c334222b5c9d9fa82323e534dd0687c

@@ -2,11 +2,10 @@
 
 > **Status**: Approved (independent read by game-qc-ios, merged 2026-11-18; TASK-054a merged 2026-11-18 — Mac release ACs NOT ASSESSED until a Mac build runs AC-1k6 and the real-Mac ACs)
 > **Author**: game-dev-android for Luan (TASK-052); plan reviewed by game-qc-ios
-> **Last Updated**: 2026-11-18 (TASK-054b text)
+> **Last Updated**: 2026-11-18 (TASK-056a cross-review fixes)
 > **Last Verified**: 2026-11-18, against ADR-0001 Decision 9 (a–c), the TASK-033 spike report (Child lock-in),
 > Input & Key Filter R5/R6 and its Gate challenge state, Settings Store R1/R8 (TASK-050, K-21; `childLockActive` landed in TASK-054a, 5e1c365), App Shell & Title
-> (TASK-051) R1/R7, the Parent Gate & Grown-up Panel interface (TASK-048: G2, G7, G8, G11, `panelWillOpen` /
-> `panelDidClose`), Privacy & Kids Compliance PKC-07, decisions K-10, K-12, K-19, K-21, K-23
+> (TASK-051) R1/R7, the Parent Gate & Grown-up Panel interface (TASK-048: G2, G7, G8, G11, `panelDidClose`), Privacy & Kids Compliance PKC-07, decisions K-10, K-12, K-19, K-21, K-23
 > **Implements Pillar**: Pillar 5 (Safe by Design)
 
 ## Summary
@@ -57,8 +56,9 @@ gives up quietly if it can't start, and comes off the moment they turn it off or
 - `NSApplication.presentationOptions = [.hideDock, .hideMenuBar, .disableProcessSwitching, .disableForceQuit,
   .disableSessionTermination, .disableHideApplication, .disableAppleMenu]`, plus `.disableScreenCornerInteractions`
   on macOS 27 and later.
-- Input's **kiosk-on mode**: ⌘-combinations are swallowed too (Input R5). **While `childLockActive` is true they are
-  swallowed in every Input state**, Play, the Gate challenge and Panel open, so ⌘Q in the panel can never skip the
+- Input's **kiosk-on mode**: ⌘-combinations are swallowed too (Input R5). **While Input's kiosk-on mode is on** (`kioskModeOn`, R7: set on
+  entering Waiting, cleared on Off) **they are swallowed in every Input state**: Play, the Title, the Gate challenge
+  and Panel open *(TASK-056 W-1, W-10)*, so ⌘Q in the panel can never skip the
   Quit button's 1.5 s hold (Parent Gate G8/G11). *(Input R5: **TASK-054 I3**, safety, landed in TASK-054a,
   5e1c365.)*
 - The main window covers its display (App Shell R7). If App Shell uses native full screen, the options are supplied
@@ -80,7 +80,7 @@ four; Child Lock-in adds 5 and 6):
 
 1. the first frame has been drawn;
 2. the ⌃⌥⌘Q chord handler is installed (Input R6);
-3. Input's kiosk-on mode is set;
+3. Input's kiosk-on mode is set (Child Lock-in sets it when it enters Waiting, R7);
 4. the main window covers its display (App Shell R7);
 5. the app is active (frontmost);
 6. `childLockActive` is true (Settings Store R8).
@@ -149,7 +149,16 @@ before the keys are released, so there is never a moment with ⌘-keys live and 
 - `engage_timeout_s` (5 s) counts from when Waiting begins (at launch: the settings read; after the panel:
   `panelDidClose`) and **only while the app is active**. An app that is inactive (launched behind another app, or the
   grown-up clicked away) is **Suspended**, not failing: its timer pauses.
-- When the timer passes with R3 still unmet: the state goes to **Off** with the **failure flag** set. The flag is
+- **One signal, `kioskModeOn`** *(TASK-056 W-1)*: Input's kiosk-on mode, published by Child Lock-in. It is **on in
+  Waiting, Locked and Suspended**, and **off in Off**. Input keys all ⌘ swallowing on it (Input R5), and the Parent
+  Gate's G7 shows **Quit whenever it is on**, i.e. whenever ⌘Q doesn't work. `childLockActive` keeps meaning what the
+  grown-up asked for (the switch shows it); it never drives ⌘ or Quit directly.
+- When the timer passes with R3 still unmet: the state goes to **Off** with the **failure flag** set, and
+  **`kioskModeOn` goes off**, so ⌘-keys work as on any Mac (⌘Q quits) and the Mac looks and behaves unlocked; the
+  panel shows no Quit row and the switch shows ON with the failure notice. `childLockActive` **stays true**. The next
+  engage attempt (the next launch, or the switch turned ON again) clears the flag and starts Waiting again. The
+  grown-up is never trapped: with `kioskModeOn` off there are no presentation options and no ⌘ swallowing; with it on,
+  Quit is in the panel. The flag is
   **in memory only** (Settings Store R2: nothing else is stored), and it is cleared on the next engage attempt (the
   next launch, or the lock turned ON again).
 - The child sees nothing. The next time the panel opens it reads the flag and shows "Child lock couldn't turn on"
@@ -186,10 +195,10 @@ chooses. Back is already a no-op callback (Input R5). **NOT ASSESSED.**
 
 | State | Meaning | Leaves to |
 |---|---|---|
-| **Off** | `childLockActive` false, or the engage timeout passed (failure flag set) | Waiting (`childLockActive` becomes true: launch, or `panelDidClose` after ON) |
-| **Waiting** | `childLockActive` true; some R3 precondition missing; the timer runs while active | Locked (R3 met); Off + flag (timer passes); Off (turned OFF, Reset) |
-| **Locked** | the options and covers applied; Input's kiosk-on mode set | Suspended (app resigns active); Off (OFF, Reset, Quit) |
-| **Suspended** | locked, but the app is inactive: options and covers removed, Input's mode kept | Locked (`didBecomeActive`, R3 met); Off (OFF, Reset) |
+| **Off** | `childLockActive` false; or true with the failure flag set after the engage timeout. `kioskModeOn` off | Waiting (`childLockActive` becomes true at launch or `panelDidClose` after ON; with the flag set, only at the next launch or the switch turned ON again) |
+| **Waiting** | `childLockActive` true; `kioskModeOn` on; some R3 precondition missing; the timer runs while active | Locked (R3 met); Off + flag (timer passes); Off (turned OFF, Reset) |
+| **Locked** | the options and covers applied; `kioskModeOn` on | Suspended (app resigns active); Off (OFF, Reset, Quit) |
+| **Suspended** | locked, but the app is inactive: options and covers removed; `kioskModeOn` stays on | Locked (`didBecomeActive`, R3 met); Off (OFF, Reset) |
 
 ### Interactions with Other Systems
 
@@ -197,8 +206,8 @@ chooses. Back is already a no-op callback (Input R5). **NOT ASSESSED.**
 |---|---|---|
 | Settings Store | in | `childLockActive` and its change notification (R8 there); never writes |
 | App Shell & Title | in | "ready" (first frame, chord, kiosk mode, window covering its display; its R1); the window and full-screen mode (R7); `didResignActive` / `didBecomeActive` |
-| Input & Key Filter | out / in | sets and clears the kiosk-on mode; relies on the chord (R6) and on ⌘ swallowing in every state while locked |
-| Parent Gate & Grown-up Panel | in / out | in: the switch (ON, OFF), Quit, `panelWillOpen` / `panelDidClose`; out: the failure flag, `guidedAccessEnabled` (G7), the guidance text |
+| Input & Key Filter | out / in | `kioskModeOn`: set on Waiting, cleared on Off (R4, R7); relies on the chord (R6) and on ⌘ swallowing in every state while it is on (Input R5's one signal) |
+| Parent Gate & Grown-up Panel | in / out | in: the switch (ON, OFF), Quit, `panelDidClose`; out: `kioskModeOn` (G7: Quit shown whenever it is on), the failure flag, `guidedAccessEnabled` (G7), the guidance text. `panelWillOpen` is not used: a lock already on stays on while the panel is open (R3) *(TASK-056 W-10)* |
 | Privacy & Kids Compliance | evidence | the kiosk exit is behind the gate (PKC-07); no entitlement beyond the allowlist |
 | Reveal Stage, Audio, everything in Play | none | the kiosk never changes play |
 
@@ -245,7 +254,8 @@ failed (the timer counted 0.2 s).
   - Input & Key Filter (`design/gdd/input-key-filter.md`): the chord (R6, exactly ⌃⌥⌘Q with nothing else held,
     TASK-050), the kiosk-on mode (R5), the Gate challenge state. **Landed in TASK-054a (5e1c365):** I1
     (safety: the chord judged from the OS key state if Input AC-1k6 passes, else from the held set kept honest by the
-    ⌘-release rule) and I3 (safety: ⌘-combinations swallowed in every state while `childLockActive` is true).
+    ⌘-release rule) and I3 (safety: ⌘-combinations swallowed in every state while `kioskModeOn`, Input R5's one
+    signal, TASK-056 W-1).
   - App Shell & Title (TASK-051): "ready" and the window (its R1, R7); **requirement:** overlays only while the lock
     can be on (R5), and the full-screen choice (R2).
 - **Peers / downstream (each must name Child Lock-in):**
@@ -280,12 +290,13 @@ retained in `production/qa/evidence/`.
 - **AC-5 Panel while locked:** with the lock on, open the challenge, then the panel, then its confirm: the options
   stay applied at every step (the seam logs them); `didResignKey` without `didResignActive` changes nothing.
 - **AC-6 ⌘ in the panel:** with the lock on and the panel open, ⌘Q, ⌘H and ⌘Tab do nothing; the app stays open and
-  frontmost (integration, after the Input follow-up).
+  frontmost (integration; Input R5, landed in TASK-054a).
 - **AC-7 Suspend:** `didResignActive` removes the options and covers; `didBecomeActive` re-applies them when R3
   holds; Input's kiosk-on mode stays set throughout.
 - **AC-8 Timeout:** with precondition 2 (chord handler) missing, at 5.0 s of active time the state is Off, the
   failure flag is set and no options were ever applied; with the app inactive for those 5 s it is still Waiting; the
-  flag clears on the next engage attempt.
+  flag clears on the next engage attempt. After the timeout, `kioskModeOn` is off, ⌘Q passes to the system, the panel
+  shows no Quit row, and `childLockActive` is still true (TASK-056 W-1).
 - **AC-9 F1 examples:** the three F1 cases give engaged at 0.60 s, Off with the flag at 5.00 s, and engaged at
   10.2 s.
 - **AC-10 Covers:** with two fake screens, engaging creates one cover on the non-main screen with `canBecomeKey` and

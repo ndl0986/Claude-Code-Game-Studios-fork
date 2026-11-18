@@ -28,3 +28,8 @@ Reviewed-Content-Hash: production/team/decisions.md cef7e6d8add4a57c0f8df35531c2
 Review mode: lean · Workflow: standard
 Change: H1: F5's Mac 700-pt row replaced by App Shell's 960 × 540 pt minimum (2× 254 ppi: stage_to_px 1.5, 22.5 mm; 1× 109 ppi: 26.2 mm; k = 1); the capacity notes say k > 1 cannot occur in the MVP (phones only); AC-7 keeps 1.10 and 1.2 as simulated factors. Wording and rule edits from the TASK-054 follow-up list (production/team/TASK-054-followups.md @ 84f7ea2); Parent Gate G-numbers cited as given by game-qc-ios (TASK-048 not merged). Review: game-qc-ios, from the diff.
 Reviewed-Content-Hash: design/gdd/hint-letters.md 5501526f0fbbf339c54132d0f52fc61939a8ad8d
+
+## Update — 2026-11-18 — TASK-056a cross-review fixes (no re-review)
+Review mode: lean · Workflow: standard
+Change: K-26 (Luan): while the Parade is Walking (paradeWalking), hints dim to parade_hint_alpha 0.5 (proposal) over 0.6 s, hold still (no drift, ages, lives or spawns), stay tappable, and resume on Ended without the 0/0.7/1.4 replay: R9 rows, a Dimmed state, the Parade Interactions and Dependencies rows, two knobs, AC-18b. W-6: the R9 theme row cites Key Table §4. From design/gdd/gdd-cross-review-2026-11-18.md and K-26. Review: game-qc-android (diff re-run).
+Reviewed-Content-Hash: design/gdd/hint-letters.md 8a0fc351301575da6d305cdc3decd091f8a61016

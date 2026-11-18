@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent read by game-qc-android, merged 2026-11-18)
 > **Author**: game-dev-android for Luan (TASK-047); plan reviewed by game-qc-android
-> **Last Updated**: 2026-11-18 (TASK-054a follow-ups)
+> **Last Updated**: 2026-11-18 (TASK-056a cross-review fixes)
 > **Last Verified**: 2026-11-18, against Input & Key Filter R7/F1, Press Queue R3/R4/R11, Key Table (36 keys), art
 > bible §2–§4, §6, §7, the one-shot (`config.js` hint_*, `index.html` spawnHint / hintAt / takeHint / drawHints),
 > decisions K-06, K-08, K-10, K-15, K-16, K-18, K-20
@@ -168,7 +168,9 @@ Hint Letters acts in the same callback:
 | **App to background** | cleared | not counted | — |
 | Return from the background | three fresh hints | resumes | **replayed** (K-18) |
 | **Entering Play** from the title | none before; fresh hints | starts | **played**; the pulse resets (R7) |
-| **Theme change** (only in the panel) | unchanged: hints are keys, and every theme has all 36 (Key Table); a hint's item resolves when its reveal starts (Key Table R3) | — | — |
+| **Theme change** (only in the panel) | unchanged: hints are keys, and every theme has all 36 (Key Table); a hint's item resolves when its reveal starts (Key Table §4, Picking the item for a key; TASK-056 W-6) | — | — |
+| **Parade Walking** (`paradeWalking` on, K-26) | every hint **dims** to `parade_hint_alpha` (0.5) of its F2 alpha over `parade_hint_fade_s` (0.6 s, the parade's own `fade_s`) and **holds still**: no drift, ages, lives and the spawn gap do not advance, no new spawn. Hints **stay tappable** (R8 as usual; a dimmed hint still counts, like a fading one) | advances | — |
+| Parade Ended (`paradeWalking` off) | back to full opacity over the same 0.6 s; drift, ages, lives and the gap resume where they were | — | **not replayed** |
 | **Keyboard row turned on** | unchanged: hints stay in the sky (art bible §7 conflict 2) | — | — |
 | **Reduce Motion turned on** | applies at once to every hint: drift stops (offsets frozen), the pulse stops (R10) | — | — |
 
@@ -202,8 +204,9 @@ member).
 | State | Meaning | Leaves to |
 |---|---|---|
 | **Off** | the title screen, or before Play | Running (entering Play: the sequence plays) |
-| **Running** | `hintTime` advances; hints spawn, drift, age and fade | Frozen (gate challenge or panel), Off (background: cleared) |
+| **Running** | `hintTime` advances; hints spawn, drift, age and fade | Frozen (gate challenge or panel), Dimmed (parade Walking), Off (background: cleared) |
 | **Frozen** | gate challenge or panel open; nothing moves or spawns | Running (challenge failed or timed out, panel closed: no replay) |
+| **Dimmed** (K-26) | the parade is Walking: hints at `parade_hint_alpha`, still, not ageing, no spawns; still tappable | Running (parade Ended: no replay); Frozen (challenge or panel); Off (background) |
 
 Per hint: **Fading in** (age < 0.6) → **Shown** → **Fading out** (last 0.8 s) → removed; or **Consumed** (removed
 at once with the burst or the Reduce Motion fade). An ignored touch puts it back at the start of Shown and makes it
@@ -222,7 +225,7 @@ at once with the burst or the Reduce Motion fade). An ignored touch puts it back
 | App Shell & Title | in | Play entered; background and return (R9) |
 | Accessibility | in | the Reduce Motion flag, read live (R10) |
 | On-screen Keyboard Row | none | hints stay in the sky either way |
-| Parade | none | the parade walks the hill line, below the sky band |
+| Parade | in | `paradeWalking` (its Walking state): hints dim and hold still while it is on (R9, K-26); the parade walks the hill line, below the sky band |
 | Settings Store | none | nothing is stored (Settings Store R2) |
 
 ## Formulas
@@ -333,6 +336,8 @@ from `k ≈ 1.044` the screen may show 2 hints rather than 3 (again, not reachab
     TASK-050 for `originFor`.
   - Press Queue (`design/gdd/press-queue.md`): the outcome in the callback (its R4 already says "Hint Letters
     consumes the touched hint for started and queued; for ignored the hint stays"), the snapshot (R11).
+  - Parade (`design/gdd/parade.md`): `paradeWalking` for the K-26 dim and hold (R9); the Parade should list Hint
+    Letters among the readers of `paradeWalking` (TASK-056).
 - **Peers / downstream (each must name Hint Letters):**
   - Reveal Stage (TASK-049): calls `originFor(key)` before `press(p)`; publishes `stage_to_px`, the safe stage and
     the cast member's box; passes the freeze signals.
@@ -358,6 +363,8 @@ fails the build.
 | `hint_jitter` | 10 units | 0–12 | this GDD | how loose the clusters look; above 12 the slot spacing (≥ 185.6) fails |
 | drift amplitude / rates | ±10, ±8 / 0.7, 1.3 rad/s | ≤ ±12 / ≤ 6.28 rad/s (≤ 1 Hz) | one-shot, art bible §2 | the float; clearances include it |
 | pulse | 4 rad/s, ±6% | ≤ 6.28 rad/s | one-shot | the invitation before the first press |
+| `parade_hint_alpha` | 0.5 | 0.3–0.8 | K-26 ("a lower opacity"; proposal) | how much hints step back while a parade walks; below 0.3 they read as gone, above 0.8 they compete with the walkers |
+| `parade_hint_fade_s` | 0.6 s | 0.3–1.0 | the Parade's `fade_s` | how softly hints dim and return |
 | `consume_fade_s` | 0.3 | 0.15–0.6 | this GDD (proposal) | the Reduce Motion consume |
 | `hit_floor_mm` | 18 | 15–25 | game-qc-android's review | the smallest physical touch target |
 | slots | 8, R5 table | each must pass F4 statically | this GDD | where hints may appear (build check) |
@@ -406,6 +413,10 @@ a fake Reveal Stage (cast box, `stage_to_px`, freezes) and the slot table. No wa
 - **AC-16 Background:** WHEN the app goes to the background and returns, THEN the old hints are gone and three new
   ones spawn at 0, 0.7, 1.4 s of hintTime after the return.
 - **AC-17 Title:** no hint exists or spawns on the title screen.
+- **AC-18b Parade (K-26):** GIVEN 3 hints at ages 1, 2, 3 s, WHEN `paradeWalking` turns on for 11 s, THEN each hint's
+  alpha is 0.5 × its F2 alpha after 0.6 s, their positions and ages do not change and no hint spawns or expires
+  during the walk; a touch on a dimmed hint is a press; WHEN `paradeWalking` turns off, THEN alpha returns to F2
+  over 0.6 s, the ages resume from 1, 2, 3 s, and the 0 / 0.7 / 1.4 sequence does not replay.
 - **AC-18 Reduce Motion (R10):** no drift, no pulse, scale 1 from the first frame, and a consume fades over 0.3 s
   without sparks; turning it on mid-life freezes the offsets at once.
 - **AC-19 Size floor (F5):** for each F5 row, `hit_d_mm` and `k` match within 0.1 mm / 0.01; at `k > 1` the bubble,

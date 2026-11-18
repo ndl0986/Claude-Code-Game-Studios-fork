@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent review by game-dev-ios, 2026-11-18)
 > **Author**: game-dev-android for Luan (TASK-039); plan reviewed by game-dev-ios
-> **Last Updated**: 2026-11-18 (TASK-054a follow-ups)
+> **Last Updated**: 2026-11-18 (TASK-056a cross-review fixes)
 > **Last Verified**: 2026-11-18, against ADR-0001 (Accepted) Decisions 8 and 9, art bible §2, §4 and §7, TASK-034
 > **Implements Pillar**: Pillar 5 (Safe by Design)
 
@@ -63,7 +63,7 @@ about, and "Start over" really does return the app to how it was on day one.
 record or anywhere else on the device. In particular, never:
 
 - play history, seen letters or cast members, the parade's "8 met" count (art bible §4: no "seen" marks);
-- press, reveal or session counts, the morph's reveal count (K-11), Key Table's `lastShown` (its R3);
+- press, reveal or session counts, the morph's reveal count (K-11), Key Table's `lastShown` (its §4, Picking the item for a key);
 - the variety seed or any morph seed;
 - any timestamp or date (first launch, last launch, when a setting changed, weather pick date);
 - analytics, events, logs written to disk, crash reports;
@@ -232,7 +232,7 @@ is already the new one.
 |---|---|---|
 | Parent Gate & Grown-up Panel | writes | sets each R1 field; calls Reset (R9); previews the volume gain to Audio while the slider is dragged (R4) |
 | App Shell & Title | reads | runs the launch order (R5); **holds play until the theme is loaded** |
-| Key Table & Theme Data | reads | `themeId` at launch and on change; falls back to Dinosaurs in memory (R6); saves nothing of its own state (its R3) |
+| Key Table & Theme Data | reads | `themeId` at launch and on change; falls back to Dinosaurs in memory (R6); saves nothing of its own state (its §4) |
 | Audio & Voice | reads | `volume` (0–10, F2) and `muted`; also takes a preview gain from the panel during a slider drag (R4) |
 | Scene: Time of Day & Weather | reads | `weather` and `windy`; time of day comes from the clock, not the store |
 | On-screen Keyboard Row | reads | `keyboardRow` |
@@ -301,11 +301,11 @@ perceptual curve; that curve is its own and the store only hands over `gain`.
 ## Dependencies
 
 - **Upstream:** none. The store reads no other system's data.
-- **Downstream (each must name the Settings Store in its own GDD; none of their GDDs exist yet except Key Table
-  and Input & Key Filter):**
+- **Downstream (each names the Settings Store in its own GDD; all are written now except the On-screen Keyboard
+  Row, a Vertical Slice system, TASK-056 W-9):**
   - Parent Gate & Grown-up Panel (writes every field, calls Reset).
   - App Shell & Title (launch order, holds play until the theme is loaded).
-  - Key Table & Theme Data (`themeId`; its R3 and Interactions table already name the Settings Store).
+  - Key Table & Theme Data (`themeId`; its §4 and Interactions table already name the Settings Store).
   - Audio & Voice (`volume`, `muted`).
   - Scene: Time of Day & Weather (`weather`, `windy`).
   - On-screen Keyboard Row (`keyboardRow`).
@@ -374,8 +374,10 @@ All are unit tests against an in-memory or temporary store unless stated.
 - **AC-14 Notifications:** WHEN one field changes, THEN exactly one notification, on the main thread, carrying
   the whole record; WHEN the store is read at launch, THEN none.
 - **AC-15 Mac child lock order (integration, macOS):** GIVEN `childLock` true stored, WHEN the app launches, THEN
-  the kiosk presentation options are applied only after the first frame AND after the ⌃⌥⌘Q handler and Input's
-  kiosk-on mode are active (checked by a launch-order log or test seam), AND ⌃⌥⌘Q opens the panel right after.
+  `childLockActive` is true AND the kiosk presentation options are applied only after **all six** of Child Lock-in
+  R3's preconditions hold (first frame, ⌃⌥⌘Q handler, Input's kiosk-on mode, the window covering its display, the
+  app active, `childLockActive`), in any order of arrival (the same permutation test as Child Lock-in AC-1, checked
+  by a launch-order log or test seam), AND ⌃⌥⌘Q opens the gate right after *(TASK-056 W-10)*.
 - **AC-15b Child lock OFF is for this run (macOS, K-21):** GIVEN `childLock` true stored, WHEN the grown-up turns it
   OFF in the panel, THEN `childLockActive` is false, exactly one notification is delivered, **no write happens** (the
   bytes on disk are unchanged), and the kiosk turns off now; AND after any other field's write the record still

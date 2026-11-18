@@ -83,3 +83,8 @@ Reviewed-Content-Hash: design/gdd/input-key-filter.md aa441ae5b394c020fb3156b879
 Review mode: lean · Workflow: standard
 Change: I5: R6's sentence "The chord replaces the moon hold only…" moved off the end of the held-set-limit bullet onto its own R6-level line. Text only; no rule changed. Review: game-qc-ios, from the diff.
 Reviewed-Content-Hash: design/gdd/input-key-filter.md 8bf6b260a886d63f988e59a5dc2c719809a79c37
+
+## Update — 2026-11-18 — TASK-056a cross-review fixes (no re-review)
+Review mode: lean · Workflow: standard
+Change: B-1: R6 says Shift and Caps Lock are ignored and Fn disqualifies the chord (K-26 leader call), AC-1j adds the Fn and Shift cases. W-1: one ⌘ signal, Input's kiosk-on mode kioskModeOn (set by Child Lock-in from Waiting to Off, so off after an engage timeout); AC-1k and k2 merged with the timeout case. W-2: Cancel and Esc return to the gate's origin (States, AC-1k4). W-8: moon_slop_pt owned by Input (10–40). W-9: App Shell in Downstream; the leader's index note marked done. From design/gdd/gdd-cross-review-2026-11-18.md and K-26. Review: game-qc-android (diff re-run).
+Reviewed-Content-Hash: design/gdd/input-key-filter.md d72642557b630aff374132b13c6085e033de2bab

@@ -44,3 +44,8 @@ Reviewed-Content-Hash: design/gdd/press-queue.md 74baa26023078384bde9b731ff69dcf
 Review mode: lean · Workflow: standard
 Change: R8a's play clock now reads uptime − total frozen or background time (as Reveal Stage R8); States table gains a Frozen row (no tick, no press; resume returns to the state it froze in). Optional notes from game-dev-android's APPROVE of c4ae20d. Verdict unchanged.
 Reviewed-Content-Hash: design/gdd/press-queue.md a4fc49fbda37a95a7730b76bb1405430f515b984
+
+## Update — 2026-11-18 — TASK-056a cross-review fixes (no re-review)
+Review mode: lean · Workflow: standard
+Change: W-6: four Key Table cites point at its §4 (the pick rule). W-9: the peers list is no longer 'not written yet'. From design/gdd/gdd-cross-review-2026-11-18.md and K-26. Review: game-qc-android (diff re-run).
+Reviewed-Content-Hash: design/gdd/press-queue.md d8d2ac774eeff254e1e18f65d9ab9b76ec0d80e5
