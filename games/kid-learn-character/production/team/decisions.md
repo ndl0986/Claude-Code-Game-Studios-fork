@@ -105,11 +105,31 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-40 ADR-0004 D5: a visible "not started" contract state (Luan, 2026-11-18)
+
+- Contracts are written before code, so ADR-0004 D5 gets a dated note (status stays Accepted). `contracts/README.md`
+  is the **only** registry: every `*-v*/` directory has exactly one row — `runner: <name>`, `not-started: <story id>`
+  or `superseded-by: <vN+1>`. A directory with no row is a FAIL.
+- Every cases.json is still structurally checked (case-schema-v1, unique ids, declared count, source tags) and reported
+  on its own `structure:` line. A not-started contract reports `NOT ASSESSED <contract>: not started (story <id>);
+  structure OK, 0 of <n> cases run` — never PASS.
+- FAIL also when: a not-started row has a registered runner; its owning story is Done. `/story-done` cannot close a
+  system's story while its contract is not-started. The Production gate and every release-candidate verify FAIL while
+  any row is not-started.
+
+### K-39 iPad orientation and system overlays (Luan, 2026-11-18)
+
+- **Portrait is allowed on iPad.** iPadOS 26 no longer lets an app require full screen, so the stage follows any
+  window shape: the 1280×720 safe stage is contained and the sky and ground extend (K-20), never letterboxed. App Shell
+  R7's "landscape when full screen" is amended accordingly.
+- **During play the status bar is hidden and system edge gestures are deferred** (`prefersStatusBarHidden`,
+  `.persistentSystemOverlays(.hidden)`, `preferredScreenEdgesDeferringSystemGestures`). Guided Access stays the real lock.
+
 ### K-38 Test-only ContractKit package (Luan, 2026-11-18)
 
 - A fifth Swift package `apple/ContractKit` is allowed **for tests only**: the shared contract discovery and strict
   structural check used by both the KidCore and Tools harnesses. It is never linked into the app. ADR-0002 D1 gets a
-  dated note (status stays Accepted); the ban grep covers it; PKC-03(a) reads the app project's package references and
+  dated note (status stays Accepted); the ban grep applies its import/platform rules to it, but not the JSON/decoding ban (test-only, never linked; leader clarification 2026-11-18 after TASK-079 S1 review); PKC-03(a) reads the app project's package references and
   the app's Package.resolved, so ContractKit is not a finding.
 
 ### K-37 App identifiers, signing and the SVG layer-id note (Luan, 2026-11-18)

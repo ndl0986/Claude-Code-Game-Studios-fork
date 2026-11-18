@@ -10,3 +10,5 @@ run's `<run task>/<sha>/` folder. This folder only shows that the tool chain wor
   tests pass.
 - Logs are `.txt` because `*.log` is gitignored (849dd1d0's were never committed; that folder is replaced by this).
 - Not run here: the signed iphoneos build (the team ID stays local; the device session runs it).
+- TASK-078b: the local home path in these files was replaced with `~` (text only; the builds, checks and verdicts
+  are unchanged, so the evidence stays valid). `device-build.sh` now does this itself.

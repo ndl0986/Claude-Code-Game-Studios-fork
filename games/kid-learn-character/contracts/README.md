@@ -16,10 +16,13 @@ Cross-platform behaviour contracts for Kid Learn Character (ADR-0004). Each cont
 |---|---|---|---|---|
 | morph-contract-v1 | v1 | morphcore.md | MorphCore | Accepted. It lives at `docs/architecture/morph-contract-v1.md` and `content/fixtures/morph-contract-v1.json` and moves here only with a v2 |
 | key-table-schema-v1 | v1 | key-table-theme-data.md | model (KidCore), file (apple/Tools) | first cases (TASK-068) |
-| settings-record-v1 | v1 | settings-store.md | KidCore | first cases (TASK-068) |
+| settings-record-v1 | v1 | settings-store.md | KidCore | first cases (TASK-068). **Pending v2:** the non-finite slider case (settings-store F1, TASK-082), batched with the next settings change |
+| input-filter-v1 | v1 | input-key-filter.md | KidCore | batch 2 (TASK-081) |
+| press-queue-v1 | v1 | press-queue.md | KidCore | batch 2 (TASK-081) |
+| reveal-timing-v1 | v1 | reveal-stage.md; cast-rendering.md F1, F2, F4, F5, F7 | KidCore | batch 3 (TASK-086) |
+| audio-plan-v1 | v1 | audio-voice.md | KidCore | batch 3 (TASK-086) |
 
-Not yet written (ADR-0004 D8, each landing with its system's story): input-filter-v1, press-queue-v1,
-reveal-timing-v1, audio-plan-v1, hint-letters-v1, parade-v1, gate-logic-v1, app-shell-v1, scene-look-v1,
+Not yet written (ADR-0004 D8; order in `production/team/TASK-080-contracts-plan.md`): hint-letters-v1, parade-v1, gate-logic-v1, app-shell-v1, scene-look-v1,
 keyboard-row-v1.
 
 ## Drift check

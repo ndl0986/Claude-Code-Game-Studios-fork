@@ -51,3 +51,27 @@ Reviewed-Content-Hash: design/gdd/reveal-stage.md 09269c33e01e5c4e95b0aa6898201b
 Review mode: lean · Workflow: standard
 Change: R1: the stage view sets accessibilityIgnoresInvertColors = true (K-30; App Shell owns the window). R9: the tap and ignored-press sparkles stay unchanged under Reduce Motion (leader's call, Accessibility A3 flag), and the flag is Accessibility's reduceMotion (A1). R10: the keyboard row band listed with the published boxes. Follow-ups from the Keyboard Row (TASK-060) and Accessibility (TASK-061) GDDs; verdict unchanged; review by game-qc-ios from the diff.
 Reviewed-Content-Hash: design/gdd/reveal-stage.md f9058fb25faf2264bdf788984eb18fe3ff57819b
+
+## Update — 2026-11-18 — TASK-085a follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-085a
+Change: R10's draw order names the On-screen Keyboard Row (while on) between the current creature and the glyph or specks; the zPositions point to ADR-0006 D1's table (row at z 35) as the one source (TASK-070). Checked, already landed: R1 mashing/haloOn (TASK-054b), the keyboard row band and accessibilityIgnoresInvertColors, the sparkles' Reduce Motion rule (TASK-062). Review: game-qc-ios, from the diff.
+Reviewed-Content-Hash: design/gdd/reveal-stage.md 1001fdbc68023d7373858c6d2c8967e9cdcb1fa1
+
+## Update — 2026-11-18 — TASK-088b hasWord and E8 (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-088b
+Change: game-qc-android's RT-Q1/Q2 (reveal-timing-v1). R3: hasWord = the case forms a creature AND the active locale has the item's word line; the table's "true" cells read "true if the item has a word line"; hasWord gates the word (E9) only. R6: E8 plays at formedS when the case forms a creature (not art missing) and the item's sfx is present; E9 at formedS + word_offset_s only when hasWord. AC-5 follows (sfx but no word line: E8, no E9; art missing: neither). Invalid-set fallback spelled out (game-art-content's question for E7): the glyph rises and glows until fallback_glow_s, then crossfades into the creature over fallback_fade_s, no stardust; E7 at fallback_glow_s. Matches Audio & Voice's E7/E8/E9 wording (TASK-088a). Review: game-qc-android, from the diff.
+Reviewed-Content-Hash: design/gdd/reveal-stage.md 9d302d1d1d52d8e6059d9b786e36306ee30e80f3
+
+## Update — 2026-11-18 — TASK-088c nits (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-088c
+Change: R3's table cells read "true if the item has a word line in the active locale", matching the prose (game-qc-android's nit). The invalid-set row: the glyph rises over the new knob fallback_rise_s (0.45 s, the normal set's letter_in), since the invalid set's own values are not used; the knob row lists fallback_rise_s with fallback_glow_s and fallback_fade_s. Review: game-qc-android, from the diff.
+Reviewed-Content-Hash: design/gdd/reveal-stage.md bba04d187103932c1475f2935a7ed45de045717f
+
+## Update — 2026-11-18 — TASK-088d F3 fadeStart for the invalid set (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-088d
+Change: F3: for the invalid-set fallback, form_s is replaced by fallback_fade_s in both places, fadeStart (formedS − fallback_fade_s) and the fade length in u (game-qc-android's REVISE: the denominator too); glyph missing keeps formedS − form_s (its set is valid). The values happen to be equal today (0.5), which hid the error; found reviewing reveal-timing-v1. Review: game-qc-android, from the diff.
+Reviewed-Content-Hash: design/gdd/reveal-stage.md e9f98355e1a2e2ae14efcb1613bd2a4219016964

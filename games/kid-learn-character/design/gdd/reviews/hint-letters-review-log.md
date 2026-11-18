@@ -77,3 +77,13 @@ Reviewed-Content-Hash: design/gdd/hint-letters.md 61ee882c83b3075f1b3221a6167fdb
 Review mode: lean · Workflow: standard
 Change: R5/F4: the keyboard row band (y ≥ 582, while the row is on) is a clearance box like the cast and glyph boxes (every slot passes; the bottom slots are 172 away); a note that with the row on the parade lane (448) visually crosses the bottom slots, accepted under K-26; the Interactions row names Accessibility's reduceMotion (A1). Follow-ups from the Keyboard Row (TASK-060) and Accessibility (TASK-061) GDDs; verdict unchanged; review by game-qc-ios from the diff.
 Reviewed-Content-Hash: design/gdd/hint-letters.md 12ae0610d107d6c5ff6d21ae3f8d4ec418a89cc7
+
+## Update — 2026-11-18 — TASK-089b R13 draw and tick order (review pending)
+Review mode: lean · Workflow: standard
+Change: new R13 pins the hints-stream draw order (key, lazy slot pick in base order L1–L4, R1–R4, 5 jittered tries
+then zero jitter, life, phase; no draw for a pool or free list of 1), hint ids per launch, the inclusive gap test, the
+per-frame tick (expire, then attempt unless a hint was removed this frame), the Reduce Motion consume fade as
+drawing only, originFor's drawn centre, the pulse's first press including Dimmed, and the dim fade's constant rate.
+F4: every check inclusive on exact values; R5's 148 / 138 marked as rounded. New AC-23 for the contract. Answers
+game-qc-android's HL-Q1–12 (TASK-089). Normative change: needs game-qc-android's review (leader, TASK-089b).
+Reviewed-Content-Hash: (pending review) design/gdd/hint-letters.md a557920dc32a071d9b55b97b80b598552a068e74

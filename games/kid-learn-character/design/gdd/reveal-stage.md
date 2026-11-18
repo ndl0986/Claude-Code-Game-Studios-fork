@@ -81,15 +81,16 @@ Reveal Stage, before returning:
 
 | Case | What plays | formedS | revealLen | hasWord |
 |---|---|---|---|---|
-| **Morph** (glyph, silhouette, valid set, `willForm` true) | glyph → stardust → creature | `T` | `T + form_s` | true |
-| **Glyph missing** | the creature fades in, no stardust | F5 | = formedS | true |
+| **Morph** (glyph, silhouette, valid set, `willForm` true) | glyph → stardust → creature | `T` | `T + form_s` | true if the item has a word line in the active locale |
+| **Glyph missing** | the creature fades in, no stardust | F5 | = formedS | true if the item has a word line in the active locale |
 | **Art or silhouette missing** (`willForm` false) | the glyph rises, glows, then sparkles out | `glow + sparkle_out_s` | = formedS | **false** |
-| **Invalid timing set** (MorphCore Rule 9) | the creature fades in, on the stage's own fallback timings | F5 | = formedS | true |
+| **Invalid timing set** (MorphCore Rule 9) | the glyph rises over `fallback_rise_s` (the invalid set's own values are not used) and glows until `fallback_glow_s`, then fades out over `fallback_fade_s` while the creature fades in (a crossfade, no stardust) | F5 | = formedS | true if the item has a word line in the active locale |
 
 5. builds the morph (MorphCore) in the morph case, and starts the leaving fade of the previous creature (R5).
 
-`hasWord` tells the Press Queue (its F1 word term) and Audio & Voice (E8, E9) whether a cast sound and word will
-play. Glyph-only reveals still say the letter (Key Table fallback).
+**`hasWord` = the case forms a creature AND the active locale has the item's word line** *(TASK-088b, RT-Q2)*. It
+tells the Press Queue (its F1 word term) and Audio & Voice (E9) whether the word will play. The cast sound (E8)
+has its own condition (R6). Glyph-only reveals still say the letter (Key Table fallback).
 
 **R4. `formed` and `shown`.** When the reveal's time first reaches `s ≥ formedS`, the Reveal Stage sends, once:
 - **`formed(revealId)`** to the Press Queue (its R7); never overloaded;
@@ -136,8 +137,9 @@ MorphCore F1).
 | `ignored` | a sparkle burst (8 specks, as played) | ping (E2) | the hint stays |
 | `sparkle(point)` from Input (empty stage) | a sparkle burst at the point | ping (E3) | — |
 
-- Reveal sounds: E6 at `s = 0`, E7 at `s = glow`, E8 at `s = formedS` and E9 at `formedS + word_offset_s`
-  (0.25 s), only when `hasWord`; the word is never cut by a waiting key (K-13; the Press Queue's hold covers it).
+- Reveal sounds: E6 at `s = 0`, E7 at `s = glow`, E8 at `s = formedS` when the case forms a creature (not art
+  missing) and the item's `sfx` is present, and E9 at `formedS + word_offset_s` (0.25 s) only when `hasWord`
+  *(TASK-088b, RT-Q1)*; the word is never cut by a waiting key (K-13; the Press Queue's hold covers it).
   E8 and E9 play on time during a late-art wait (Cast Rendering edge case). Ducking is Audio's.
 - The **queue tokens** are drawn from the Press Queue snapshot (its R11): small round cream bubbles with the key in
   Letter Gold ink, in a still row at the top right of the safe stage, 66 units apart from x 1214, y 58 (as
@@ -213,9 +215,11 @@ MorphCore F1).
     happened in the last `mash_window_s` (1 s, the Scene's knob); false otherwise. It stops changing under a
     freeze (play clock) and is false after a settle (the queue is empty).
 - **Draw order** (back to front): Scene backdrop (sky, hills, ground, weather) → parade walkers → the leaving
-  creature → the current creature → the glyph or the specks → starlights and sparkles → hint letters → queue
+  creature → the current creature → **the On-screen Keyboard Row** (while it is on) → the glyph or the specks → starlights and sparkles → hint letters → queue
   tokens → the moon → the gate and panel. During a parade the stage creature stays where it is, in front of the
-  walkers (Parade R5).
+  walkers (Parade R5). The `zPosition` of each layer is ADR-0006 D1's table (the keyboard row at z 35: above the
+  current creature at 30, below the glyph or specks at 40) *(TASK-085a; TASK-070)*; this line gives the order only,
+  and D1's table is the one source for the numbers.
 
 ### States and Transitions
 
@@ -274,8 +278,10 @@ alpha    = u
 pop(u)   = 0.92 + 0.08·u + 0.03·sin(π·u)         normal (as played)
 pop(u)   = 0.92 + 0.08·u                          Reduce Motion (no overshoot)
 ```
-`fadeStart = formedS` for the morph (later with late art); `fadeStart = formedS − form_s` for the two fade-in
-fallbacks, whose `formedS` is the fade-in's end (Press Queue R6). Example: u = 0.5 → pop 0.99 normal
+`fadeStart = formedS` for the morph (later with late art); for the two fade-in fallbacks, whose `formedS` is the
+fade-in's end (Press Queue R6): `fadeStart = formedS − form_s` for glyph missing (the set is valid). For an
+invalid set, whose own `form_s` is not trusted, **`form_s` is replaced by `fallback_fade_s` in both places**: in
+`fadeStart = formedS − fallback_fade_s` and as the fade's length in `u` *(TASK-088d)*. Example: u = 0.5 → pop 0.99 normal
 (0.96 + 0.03), 0.96 reduced. The normal pop peaks just above 1 (≈ 1.002 near u = 0.8) and settles at 1.0; the
 reduced one never exceeds 1.0.
 
@@ -318,7 +324,7 @@ Example: taps at 10.0, 10.5 and 11.0 → the first and third count (0.5 < 0.9; 1
 | **Art not loaded at `formedS`** | Cast Rendering's late-art wait (R5); `formed` is not moved; sound plays on time. |
 | **Glyph missing** | The creature fades in on F5's time; no stardust; letter voice, cast sound and word as usual. |
 | **Art missing (`willForm` false)** | The glyph glows and sparkles out; `hasWord` false; no cast sound or word; `shown(glyphOnly)`. |
-| **Timing set invalid** | No morph; the creature fades in on the stage's fallback timings (F5); one log line. |
+| **Timing set invalid** | No morph; the glyph glows until `fallback_glow_s`, then crossfades into the creature over `fallback_fade_s` (F5); E7 at `fallback_glow_s` *(TASK-088b)*; one log line. |
 | **A tap during the fade-in** | Counts (the hit shape exists from `formedS`). |
 | **A tap on the leaving creature or a walker** | A sparkle only (R7, K-17). |
 | **Taps faster than the cooldown** | Only one per 0.9 s hops and sounds; the others sparkle (F6). |
@@ -370,7 +376,7 @@ All values are bundled data, checked at build.
 | `form_s` | 0.5 s (reduced 0.3) | 0.1–1.5 | one-shot, MorphCore F5 | the creature's fade-in |
 | `leave_s` | 0.45 s | 0.2–1.0 | one-shot | the previous creature's exit |
 | `sparkle_out_s` | 0.6 s | 0.3–1.0 | proposal (one-shot burst life 0.6–1.0) | the art-missing glyph's exit |
-| `fallback_glow_s`, `fallback_fade_s` | 0.8, 0.5 s | — | the normal set's values | the invalid-set fallback |
+| `fallback_rise_s`, `fallback_glow_s`, `fallback_fade_s` | 0.45, 0.8, 0.5 s | — | the normal set's values (`letter_in`, `glow`, `form_s`) | the invalid-set fallback: rise, glow end, crossfade *(TASK-088c)* |
 | `tap_cooldown_s` | 0.9 s | 0.2–3 | one-shot | how often a tap hops and sounds |
 | burst sizes | ignored 8, tap 6, cooldown tap 4 | 2–12 | one-shot | sparkle answers |
 | token row | x 1214, step 66, y 58 | inside the safe stage | one-shot | where queued letters wait |
@@ -390,8 +396,8 @@ and Hint Letters. Screenshots are retained in `production/qa/evidence/`.
    (640, 700).
 4. **AC-4 Same callback:** for each outcome, Audio, Hint Letters and the starlight/sparkle are called inside the
    `press(p)` callback (a recording fake), never on a later frame.
-5. **AC-5 Event times:** with `hasWord`, E6 at 0, E7 at 0.8, E8 at 2.45, E9 at 2.70 (±1 ms); with `hasWord`
-   false, no E8 or E9.
+5. **AC-5 Event times:** with `hasWord`, E6 at 0, E7 at 0.8, E8 at 2.45, E9 at 2.70 (±1 ms); for an item with `sfx`
+   but no word line, E8 at 2.45 and no E9; for art missing, neither E8 nor E9 *(TASK-088b)*.
 6. **AC-6 No jump at the swap:** the glyph's outline and the specks' start points, and the creature's outline and
    the specks' end points, overlay within 1 px (same transforms, R5).
 7. **AC-7 Late art:** with Cast Rendering's seam delaying the art, `formed` fires at `formedS`, the fade-in starts

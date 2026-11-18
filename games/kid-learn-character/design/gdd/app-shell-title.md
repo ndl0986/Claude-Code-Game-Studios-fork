@@ -115,8 +115,11 @@ reset only at launch (Parade R1).
 - **Clock note:** "away" is measured on a monotonic clock **that keeps counting while the device sleeps** (Apple:
   the continuous clock, `ContinuousClock` / `mach_continuous_time`; Android: `SystemClock.elapsedRealtime`), not
   the uptime clock of Input R8, which stops during sleep, so an iPad put to sleep overnight still counts as away.
-  It is held in memory only; nothing is stored (Settings Store R2). Privacy follow-up: confirm this clock's
-  required-reason entry with PKC-09 (35F9.1, "time elapsed between events in the app").
+  It is held in memory only; nothing is stored (Settings Store R2). **It is ADR-0002 D3's `AwayClock`**
+  (`AwayClock.now()`; Apple `ContinuousClock` / `mach_continuous_time`, Android `SystemClock.elapsedRealtime()`)
+  *(TASK-085a, Privacy V1)*. `mach_continuous_time` is not one of Apple's SystemBootTime required-reason APIs
+  (`systemUptime`, `mach_absolute_time`), so this clock adds no manifest entry of its own; whether `35F9.1` is
+  declared is decided by Privacy PKC-09 / its AC-09 symbol check on the built app (the uptime clock may need it).
 - **The Mac's window losing key focus** (another app in front, with the kiosk off) is Input's Inactive state, not
   the background: nothing settles; play simply receives no keys.
 - **Cold launch** (the OS ended the process, a crash, or a quit): always the Title (R1), with nothing restored,
