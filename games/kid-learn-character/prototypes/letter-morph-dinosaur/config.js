@@ -36,7 +36,9 @@ window.CONFIG = {
   roar_volume: { value: 0.35, min: 0, max: 1, step: 0.05 },      // creature sounds stay gentle (Calm Magic)
   chime_volume: { value: 0.12, min: 0, max: 0.5, step: 0.01 },
   // --- Parade and the grown-up gate ---
-  parade_delay_s: { value: 1.5, min: 0, max: 5, step: 0.25 },    // s after the 8th creature forms
+  parade_count: { value: 6, min: 2, max: 12, step: 1 },          // new creatures per parade (K-17: every 6; letters and digits count; a key again in the batch counts once)
+  parade_delay_s: { value: 0, min: 0, max: 5, step: 0.25 },      // s after the batch's last creature has finished forming; 0 = at once (K-45: no rest needed; was 1.5 after a rest)
+  meter_fill_s: { value: 0.5, min: 0.1, max: 2, step: 0.05 },    // s: a meter step's gentle fill (and the meter's empty) ease; provisional K-44 meter
   parade_s: { value: 11, min: 4, max: 25, step: 0.5 },           // s: the parade's walk across
   gate_hold_s: { value: 1.5, min: 0.5, max: 4, step: 0.25 },     // s: hold the moon to open the grown-up panel
 };

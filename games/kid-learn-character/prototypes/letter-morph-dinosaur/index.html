@@ -624,8 +624,11 @@ function reset() {
     queue: [],          // presses waiting their turn (at most queue_max): { L, from }
     hints: [],          // glowing letters drifting on screen: { L, x, y, age, life, ph }
     seen: [],           // letters met this session
+    batch: [],          // new creatures met since the last parade, in the order met (K-17: a key again in the batch counts once)
+    batchFullAt: null,  // state.t when the batch's last creature finished forming (K-45: the parade starts from here)
+    meter: [],          // the K-44 meter's per-step fill, 0..1, eased toward its target
     firstPress: false,
-    parade: null, paradeAt: 0,      // a parade of the last 8 new creatures, every 8 met
+    parade: null,       // a parade of the batch, every parade_count new creatures (K-17, K-45)
     reveals: 0, queued: 0, ignored: 0,
   };
   keyFlash = {}; sparks.length = 0;
@@ -743,14 +746,21 @@ const scenes = {
         if (!cur.fired.form && cur.t >= ph.flowEnd) {
           cur.fired.form = true; creatureSound(cur.letter); say(KEY_TABLE[cur.letter].word, false);
           if (!state.seen.includes(cur.letter)) state.seen.push(cur.letter);
+          if (!state.batch.includes(cur.letter) && state.batch.length < Math.round(tune.parade_count)) {
+            state.batch.push(cur.letter);                                   // the meter fills one step as it appears
+            if (state.batch.length === Math.round(tune.parade_count)) cur.completesBatch = true;
+          }
           events.push({ type: 'formed', letter: cur.letter });
         }
         if (cur.hop !== undefined) { cur.hop += dt; if (cur.hop > tune.hop_s) cur.hop = undefined; }
         if (state.queue.length && cur.t >= holdTime()) { const q = state.queue.shift(); startReveal(q.L, q.from); }
       }
       if (state.prev) { state.prev.t += dt; state.prev.fade += dt; if (state.prev.fade > 0.45) state.prev = null; }
-      // the parade, once all 8 have been met
-      if (state.seen.length >= state.paradeAt + 8 && cur && cur.fired.form && !state.queue.length && cur.t >= ph.formEnd + tune.parade_delay_s) startParade();
+      // the parade (K-45): as soon as the batch's last creature has finished forming, with no rest needed. Presses keep
+      // being answered in front of it while it walks. A batch filled during a walk waits for that walk to end.
+      if (cur && cur.completesBatch && !cur.fired.formDone && cur.t >= ph.formEnd) { cur.fired.formDone = true; state.batchFullAt = state.t; }
+      if (state.batchFullAt !== null && !state.parade && state.t >= state.batchFullAt + tune.parade_delay_s) startParade();
+      updateMeter(dt);
       if (state.parade) { state.parade.t += dt; if (state.parade.t > tune.parade_s) state.parade = null; }
       for (const k in keyFlash) { keyFlash[k] -= dt; if (keyFlash[k] <= 0) delete keyFlash[k]; }
       for (let i = sparks.length - 1; i >= 0; i--) {
@@ -763,16 +773,51 @@ const scenes = {
       if (state.parade) drawParade();
       if (state.prev) drawPrev();
       if (state.cur) drawReveal();
+      drawMeter();      // behind the hint letters (TASK-121)
       drawHints();
       drawQueue();
       drawSparks();
     },
   },
 };
-function startParade() {
-  state.paradeAt = state.seen.length; state.parade = { t: 0, who: state.seen.slice(-8) };
-  if (state.parade.who.length < 8) state.parade.who = KEY_ORDER.filter(k => /[A-Z]/.test(k)).slice(0, 8);
-  events.push({ type: 'parade' }); paradeTune();
+function startParade() { // the batch walks, in the order met; the batch and the meter start again
+  const n = Math.round(tune.parade_count);
+  let who = state.batch.slice();
+  if (who.length < n) who = KEY_ORDER.filter(k => /[A-Z]/.test(k)).slice(0, n); // the grown-up button before a batch is full
+  state.parade = { t: 0, who };
+  events.push({ type: 'parade', who: who.join(''), batchFull: state.batch.length >= n });
+  state.batch = []; state.batchFullAt = null;
+  paradeTune();
+}
+
+// ---- The parade meter: PROVISIONAL (TASK-120 designs the real one; K-44) ---------------------
+// A small bar at the top right, one step per new creature in the batch, no number or text. Starlight #fbeec8 on a soft
+// dark track (gold is for letters only). Each step eases in over meter_fill_s when its creature appears, and the whole
+// bar eases out when the parade starts. Nothing in it blinks or pulses: every change is one ease, never periodic, and
+// the bar is a few small segments, far under any flash area (ADR-0013 spirit). At the top edge, above the queue tokens
+// (discs from y 32) and clear of the hint bubbles (which reach up to y ~90); drawn behind the hint letters.
+const METER = { right: 1250, y: 14, seg: 18, h: 10, gap: 5 };
+function updateMeter(dt) {
+  const n = Math.round(tune.parade_count), k = dt / Math.max(0.05, tune.meter_fill_s);
+  state.meter.length = n;
+  for (let i = 0; i < n; i++) {
+    const target = i < state.batch.length ? 1 : 0, v = state.meter[i] || 0;
+    state.meter[i] = target > v ? Math.min(target, v + k) : Math.max(target, v - k);
+  }
+}
+function drawMeter() {
+  const n = state.meter.length, { right, y, seg, h, gap } = METER, x0 = right - n * seg - (n - 1) * gap;
+  ctx.save();
+  for (let i = 0; i < n; i++) {
+    const x = x0 + i * (seg + gap), f = smooth(state.meter[i] || 0);
+    ctx.fillStyle = 'rgba(28, 32, 64, 0.32)'; roundRect(x, y, seg, h, h / 2); ctx.fill();            // the soft dark track
+    if (f > 0) { ctx.globalAlpha = f; ctx.fillStyle = '#fbeec8'; roundRect(x, y, seg, h, h / 2); ctx.fill(); ctx.globalAlpha = 1; }
+  }
+  ctx.restore();
+}
+function roundRect(x, y, w, h, r) {
+  ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
 }
 
 // ---- Drawing the world -------------------------------------------------------------------
@@ -918,7 +963,7 @@ function drawSparks() {
   for (const s of sparks) { ctx.globalAlpha = 1 - s.age / s.life; ctx.fillStyle = '#ffe9a8'; star4(s.x, s.y, s.size * 0.5); }
   ctx.restore();
 }
-function drawParade() { // all eight walk across the hills, small, once
+function drawParade() { // the batch walks across the hills, small, once
   const p = state.parade, n = p.who.length, gap = 150, speed = (W + 200 + n * gap) / tune.parade_s;
   const fadeIn = clamp01(p.t / 0.6), fadeOut = clamp01((tune.parade_s - p.t) / 0.6);
   p.who.forEach((L, i) => {
