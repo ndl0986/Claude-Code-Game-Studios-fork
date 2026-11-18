@@ -203,7 +203,7 @@ lowercase with underscores:
 | V12 | Every sfx is ≤ 2.0 s long (art bible §8). |
 | V13 | `family` exists in the theme's `families`. |
 | V14 | Every `weight`, when present, is > 0 (F1 needs a positive total). |
-| V15 | `voiceDurations` has an entry for **every** voice line of every item, for every locale in `voiceLocales`, and no other entries. Each value **matches its file's decoded duration within ±0.01 s**. **Word lines ≤ 1.25 s** (Audio & Voice `word_len_max_s`, F6) and **letter and number lines ≤ 1.0 s** (`letter_len_max_s`, Audio A3). |
+| V15 | `voiceDurations` has an entry for **every** voice line of every item, for every locale in `voiceLocales`, and no other entries. Each value **matches its file's decoded duration within ±0.01 s**: the **decoded length with the AAC encoder priming and end padding removed** (the sample count the app's decoder returns, which Audio & Voice schedules), **not** the container's duration; AAC priming alone is about 2112 samples, ≈ 44 ms at 48 kHz, which would break ±0.01 s. The build tool measures it with the same trimming the app's decoder applies. **Word lines ≤ 1.25 s** (Audio & Voice `word_len_max_s`, F6) and **letter and number lines ≤ 1.0 s** (`letter_len_max_s`, Audio A3). |
 
 #### 7. Toddler-safe content rules (every theme)
 
