@@ -668,7 +668,7 @@ removed the rest, not the beat (R2). The questions as they were asked:
 |---|---|---|
 | MT-Q1 | Show the meter from Play entry (empty at first), or hide it until the first creature joins the batch? | **From Play entry**, empty: an empty bar says "something fills here" before the first creature, which is the gap Luan's playtest found. Not on the Title either way. |
 | MT-Q2 | A sound when the meter fills? | **No.** The parade tune E12 starts 1.5 s later and is the full moment's sound; an extra sting would be a reward sound (anti-pillars). |
-| MT-Q3 | A small light that flies from the new creature to its cell? | **No, not for the MVP:** it crosses the stage over the glyph and creature on every new key. The cell lighting as the creature forms carries the link. |
+| MT-Q3 | A small light that flies from the new creature to its cell? | *(Superseded: Luan chose **yes**, K-46; see R12a.)* Was: **No, not for the MVP:** it crosses the stage over the glyph and creature on every new key. The cell lighting as the creature forms carries the link. |
 | MT-Q4 | The very corner for the meter, moving the queue tokens left of it, instead of the meter left of the tokens? | **Keep the tokens where they are** (meter at x 846–1022 at the default `queue_max` 3, art bible §7): no change to the Reveal Stage's token row or Hint Letters' token clearances; both are still the top right. |
 | MT-Q5 | K-45's beat: 1.5 s after the 6th creature has formed, or the parade at its fade-in end (0.5 s)? | **1.5 s** (`parade_delay_s`, the brief's pinned value): the child hears the creature's name first, and the tune never starts under it (F2). 0.5 s would duck the tune under the name. |
 

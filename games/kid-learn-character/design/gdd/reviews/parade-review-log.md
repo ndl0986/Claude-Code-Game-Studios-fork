@@ -74,3 +74,8 @@ Reviewed-Content-Hash: design/gdd/parade.md c60bccd6a9ed8ddecc5613a80a51ca2be767
 Review mode: lean · Workflow: standard
 Change: Luan's K-46 closes MT-Q1–Q5: from Play entry, no sound, beside the tokens, the 1.5 s beat kept (R2 now says K-45 removed the rest, not the beat), and MT-Q3 yes: new R12a, the meter light. A 16-unit Starlight star launched at the counting shown from the cast box's top centre, a quadratic rise-then-glide to its cell over meter_fly_s 0.9 s (sine ease-in-out), fading over the last 0.15 s; the cell lights on arrival (litAt = launch + 0.9; fullAt and the glow move with it; 6th cell full at armedAt + 1.3 < 1.5). One at a time; none for held keys or under Reduce Motion; removed with the cell lit at once on the gate, panel or background; next-batch cells during a walk; z 70 above the meter. F4: path formula and hint check, flash bounds (each pixel ≤ 2 transitions per 1 s, swept strip 26,800 px on iPad). Snapshot adds fullAt and flight. Knobs meter_fly_s, meter_land_s. ACs 22, 23 updated; AC-31–AC-35 added. Review: game-qc-android (cross-GDD) and game-dev-ios (render read of the flight), baad1961..tip.
 Reviewed-Content-Hash: design/gdd/parade.md 76dafbae4a08a832dc47472eefa7928fc7070dc2
+
+## Update — 2026-11-18 — TASK-120 MT-Q3 history row marked superseded (no re-review)
+Review mode: lean · Workflow: standard
+Change: The resolved-questions history row for MT-Q3 now leads with "Superseded: Luan chose yes, K-46; see R12a" so the old recommendation cannot be read as current.
+Reviewed-Content-Hash: design/gdd/parade.md 8b9d74d6d67df241f4103add12585e5af607ab54
