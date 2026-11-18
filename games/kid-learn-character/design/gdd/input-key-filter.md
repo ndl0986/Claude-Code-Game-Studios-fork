@@ -1,6 +1,6 @@
 # Input & Key Filter
 
-> **Status**: Designed (lean review APPROVED 2026-11-18, TASK-037)
+> **Status**: Designed (lean review APPROVED 2026-11-18, TASK-037; independent read by game-dev-android, Android items applied)
 > **Author**: game-dev-ios (TASK-037); decisions by Luan; plan reviewed by game-dev-android
 > **Last Updated**: 2026-11-18
 > **Last Verified**: 2026-11-18, against ADR-0001 (Accepted), art bible §7, the TASK-033 spike
@@ -37,7 +37,7 @@ below decide what it becomes.
 
 | Source | iPadOS | macOS | Android (for its own ADR) |
 |---|---|---|---|
-| Hardware key down / up | `pressesBegan` / `pressesEnded` on the first responder | a local `keyDown` / `keyUp` monitor | `onKeyDown` / `onKeyUp` |
+| Hardware key down / up | `pressesBegan` / `pressesEnded` on the first responder | a local `keyDown` / `keyUp` monitor | `onKeyDown` / `onKeyUp` (the Android ADR should catch keys in the Activity's `dispatchKeyEvent`, before focus and IME routing) |
 | Touch down | `touchesBegan` (each `UITouch`) | `mouseDown`, `rightMouseDown`, `otherMouseDown` (each counts as a touch down) | `ACTION_DOWN` / `ACTION_POINTER_DOWN` (each pointer id) |
 | Cancel / focus loss | `pressesCancelled`, `touchesCancelled`, scene leaves foreground | window resigns key, app resigns active | `onWindowFocusChanged(false)`, `onPause`, `FLAG_CANCELED`, `ACTION_CANCEL` |
 
@@ -55,7 +55,8 @@ fallback). For each key-down, in this order:
    character and, after ASCII upper-casing, it is `A`–`Z` or `0`–`9`, that is the key. Accents are not stripped:
    `é` is not `E`.
 3. **Position fallback (US QWERTY):** otherwise, if the key sits where a US QWERTY keyboard has a letter or a
-   top-row digit, use that letter or digit. This gives the AZERTY digit row (`&é"'(`… → 1 2 3 4 5…) and
+   top-row digit, use that letter or digit. The position comes from iPadOS `UIKeyboardHIDUsage`, macOS `keyCode`,
+   and Android `scanCode` read through the US evdev map (`KEY_A` = 30 → A …), or `keyCode` when `scanCode` is 0. This gives the AZERTY digit row (`&é"'(`… → 1 2 3 4 5…) and
    non-Latin layouts (Cyrillic `в` → D) all 36 keys.
 4. Otherwise the key resolves to **nothing** (Space, Esc, Tab, Return, arrows, F-keys, punctuation, dead keys,
    Globe).
@@ -69,7 +70,10 @@ So the child gets the letter printed on the keycap: AZERTY's A key is A, and QWE
 
 **R4. Held keys and repeats.** A press is **the first down of a key**.
 - The filter keeps a **held set** of physical key ids (iPad `UIKeyboardHIDUsage`, Mac `keyCode`, Android
-  `scanCode`). It uses physical ids, not characters, because the character can change between down and up.
+  `scanCode` if non-zero, else `keyCode`). It uses physical ids, not characters, because the character can change
+  between down and up. Android's fallback exists because injected keys (`adb input keyevent`, accessibility
+  services, IMEs, some virtual keyboards) often carry `scanCode` 0, and would otherwise all share id 0. The id
+  records which of the two it is (scan or key), so a `scanCode` and a `keyCode` with the same number never match.
 - A down whose key is already in the held set, or that the platform marks as a repeat (`NSEvent.isARepeat`,
   Android `repeatCount > 0`), is **ignored**: no press, nothing emitted, and it is not passed on.
 - A down for a key that is still in the held set because its up was missed is ignored until that key's up or a
@@ -87,6 +91,10 @@ not a press, not a repeat and not the parent chord:
   Android `onKeyDown` returns `true`.
 - **Exception, macOS with the kiosk off:** ⌘-combinations go on to the menus (⌘Q quits, as any Mac app) and are
   not presses (ADR-0001 Decision 9). With the kiosk on, they are swallowed too.
+- **Hardware system keys always pass:** volume up/down, mute, power, camera and brightness are never presses
+  and never swallowed; they go to the system untouched (Android `onKeyDown` returns `false` / calls `super`, so
+  the volume rocker keeps working; iPadOS calls `super`). On the Mac, media keys arrive as system-defined events,
+  not `keyDown`, so the monitor likely never sees them. iPad hardware-keyboard media keys: NOT ASSESSED.
 - **Not this system's job:** keys the operating system keeps before the app sees them (iPad ⌘Tab, ⌘H, Globe; Mac
   Mission Control; Android Home and Recents) belong to Child Lock-in and the platform. Android Back is handled
   there as an `OnBackPressedCallback` that does nothing.
@@ -98,7 +106,8 @@ platform.
   an ordinary disqualified key: swallowed (R3, R5).
 - **Android:** chosen by its ADR.
 - The chord works with the kiosk on and off. It is never a press and emits only `openPanel`.
-- **Order of checks for a key-down:** repeat / held (R4) → parent chord (R6) → disqualifying modifiers, with the
+- **Order of checks for a key-down:** hardware system key → pass to the system (R5) → repeat / held (R4) →
+  parent chord (R6) → disqualifying modifiers, with the
   macOS kiosk-off ⌘ exception (R3, R5) → resolve the key (R2). So ⌃⌥⌘Q opens the panel even with the kiosk off,
   where other ⌘-combinations go to the menus.
 
@@ -114,6 +123,9 @@ platform.
 
 - **Multi-touch:** every touch down (each pointer id) is classified on its own. Two fingers on two hints are two
   presses.
+- **Order within one touch batch:** iPadOS `touchesBegan` delivers an unordered `Set`, so the adapter sorts the
+  batch by timestamp, then stage x, then stage y, before classifying. Android delivers one pointer down per event
+  and the Mac one click per event, so their order is the delivery order.
 - **A hint touched again** while it is still on stage is another press of its key, like pressing a key twice. The
   Press Queue decides what plays.
 - **Overlapping hints:** the hint whose centre is nearest the touch wins.
@@ -187,6 +199,10 @@ first counts; at 10.00 s and 10.10 s → both count.
 - **If an up is missed without a cancel** (a rare platform quirk): that key's downs are ignored until its up or
   the next clear. Any focus change recovers it.
 - **If two keys go down in the same event batch:** each is its own press, in delivery order (R8).
+- **If the child presses the volume rocker or another hardware system key:** the system handles it (volume
+  changes); no press, no sparkle (R5).
+- **If keys are injected** (`adb input keyevent`, an accessibility service) on Android with `scanCode` 0: the
+  held set uses `keyCode` (R4), and the position fallback uses `keyCode` (R2.3).
 - **If one key is held and another is pressed repeatedly:** the held key stays ignored; each new down of the
   other key is a press.
 - **If the child mashes ten keys at once:** ten presses go to the Press Queue, which keeps 3 and sparkles the rest.
@@ -272,7 +288,7 @@ The two provisional values are tuned in play (leader, 2026-11-18).
     each resolves to its key ("a" → "A") and emits exactly one press.
   - **b.** GIVEN no modifiers, WHEN each of Space, Esc, Tab, Return, Backspace, the four arrows, F1–F12, `-`,
     `=`, `[`, `;`, `'`, `,`, `.`, `/` and a dead key goes down, THEN nothing is emitted and each is marked
-    swallowed (not passed on).
+    swallowed (not passed on). (Hardware system keys are not in this list; see m.)
   - **c.** GIVEN the letter D, WHEN it goes down with each of Ctrl, Option, ⌘ and Fn, alone and in pairs, THEN
     nothing is emitted (swallowed); WHEN it goes down with Shift or Caps Lock, THEN one press of "D".
   - **d.** GIVEN D is down, WHEN a repeat-flagged down or a second down of D arrives before its up, THEN nothing
@@ -292,6 +308,11 @@ The two provisional values are tuned in play (leader, 2026-11-18).
   - **l.** GIVEN `repress_min_s = 0.08`, WHEN D is pressed at 10.00 s and 10.05 s, THEN one press; at 10.00 s and
     10.10 s, THEN two; at 10.000 s and 10.080 s, THEN two (F2 boundary: a gap equal to `repress_min_s` counts; the
     test compares with a 1e-9 s tolerance so floating-point rounding can't flip it).
+  - **m.** GIVEN Play, WHEN volume up, volume down, mute, power, camera or brightness goes down, with or without
+    modifiers, THEN no press and the filter returns "pass to system".
+  - **n.** GIVEN Android ids, WHEN key-downs arrive with `scanCode` 0 and `keyCode`s for D and B, THEN two
+    presses (D, B); WHEN D's second down arrives before its up, THEN nothing; WHEN a key with `scanCode` 32 and one
+    with `scanCode` 0 / `keyCode` 32 are both down, THEN they are two different held keys.
 - **AC-2 Order:** GIVEN three key-downs delivered in the order D (t = 5.002), B (t = 5.001), 3 (t = 5.001), WHEN
   they are filtered, THEN the presses come out D, B, 3 in delivery order with their own `time` values, none
   dropped.
@@ -303,7 +324,8 @@ The two provisional values are tuned in play (leader, 2026-11-18).
     touched.
   - **c.** GIVEN a hint overlapping the moon, WHEN the overlap is touched, THEN a press, no `gateTouch`.
   - **d.** GIVEN no hint, row key, moon or cast member at the point, WHEN touched, THEN `sparkle(point)`.
-  - **e.** GIVEN two pointers going down on two hints in one event, THEN two presses in delivery order.
+  - **e.** GIVEN two pointers going down on two hints in one event, THEN two presses in delivery order; GIVEN
+    an unordered iPad batch with equal timestamps, THEN they come out sorted by stage x, then y (R7).
   - **f.** GIVEN the keyboard row off, WHEN its (hidden) area is touched, THEN it is not a row press.
 - **AC-4 Contract:** every emitted press has `key` in "A"–"Z" / "0"–"9" (one character), a `source`, a finite
   `time`, and `origin` `nil` exactly when `source = hardwareKey`.
@@ -327,7 +349,10 @@ The two provisional values are tuned in play (leader, 2026-11-18).
 - IME / input sources active while playing (incl. Vietnamese Telex, Japanese).
 - Bluetooth keyboard connect/disconnect mid-session; two keyboards at once.
 - Android: `keyCode` as a position on an AZERTY device (`scanCode` is the physical one; check on a device);
-  Back/Home handling (Child Lock-in).
+  which real devices and keyboards send `scanCode` 0 (the `keyCode` fallback of R2.3 and R4); the US evdev map
+  on non-US hardware keyboards; Back/Home handling (Child Lock-in).
+- Hardware system keys: iPad hardware-keyboard media keys; Mac media keys (expected to arrive as system-defined
+  events, outside the key monitor).
 
 ## Open Questions
 

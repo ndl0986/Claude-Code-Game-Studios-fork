@@ -32,3 +32,21 @@ Reviewed-Content-Hash: design/gdd/game-concept.md e525c154ca1b014fe3ca0024ba5a33
 Reviewed-Content-Hash: design/gdd/systems-index.md 6652c64909266be6f7de820ddfbff3a731c77c7d
 Reviewed-Content-Hash: docs/architecture/adr-0001-native-apple.md 9bd960cdffd4bec53f0f2875d6f4c7a33f873a70
 Reviewed-Content-Hash: design/art/art-bible.md a01094340e7e5b7bdae636f4cc879d0f84b472b5
+
+## Revision — 2026-11-18 — Independent read: game-dev-android (via the leader) — Verdict: APPROVE once A and B are in
+Review mode: lean · Workflow: standard
+Note: the reader's verdict, relayed by the leader; the author applied the changes below in the same session.
+Blocking items: 2 (applied) | Recommended: 2 (applied)
+Findings:
+- [BLOCKING, applied] A. R4: Android injected keys often carry `scanCode` 0, so all would share held-set id 0.
+  Id is now `scanCode` if non-zero, else `keyCode`, tagged by kind so the two never collide. R2.3 names each
+  platform's position source (Android: `scanCode` through the US evdev map, else `keyCode`). Edge case,
+  AC-1n and the Android NOT ASSESSED line added.
+- [BLOCKING, applied] B. R5: hardware system keys (volume, mute, power, camera, brightness) always pass to the
+  system and are never presses (on Android, returning `true` would kill the volume rocker). First in R6's order
+  of checks; excluded from AC-1b; AC-1m added; Mac media keys noted as system-defined events; iPad keyboard media
+  keys NOT ASSESSED.
+- [RECOMMENDED, applied] R7: stable order within one iPad touch batch (timestamp, then stage x, then y); AC-3e
+  extended.
+- [RECOMMENDED, applied] R1: the Android ADR should catch keys in `dispatchKeyEvent`.
+Reviewed-Content-Hash: design/gdd/input-key-filter.md 1f1562cec168b748178fd42b5f0d5160f195a5d1
