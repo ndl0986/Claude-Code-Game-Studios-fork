@@ -73,3 +73,9 @@ Review mode: lean · Workflow: standard
 Task: TASK-085a
 Change: Privacy V1: R6's clock note names ADR-0002 D3 AwayClock (ContinuousClock / mach_continuous_time; Android elapsedRealtime); mach_continuous_time is not a SystemBootTime required-reason API, so App Shell adds no manifest entry and 35F9.1 stays PKC-09 / AC-09's call. Replaces the open "Privacy follow-up" sentence. Checked, already landed: A1 wording (TASK-054a), breathe 0.38 Hz and no physical touch floor for the play button (TASK-062). Review: game-qc-ios, from the diff.
 Reviewed-Content-Hash: design/gdd/app-shell-title.md ad0e7f50e3b9d4760c0b5e07c84ae370135f0453
+
+## Update — 2026-11-18 — TASK-090 K-39 portrait and system overlays (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-090
+Change: R7 (K-39): iPad allows every orientation, portrait included, and any window shape; the stage is contained and extends, never letterboxed (K-20). New R7 rule: on the Title and in Play the status bar and home indicator are hidden and system edge gestures are deferred on every edge (prefersStatusBarHidden, .persistentSystemOverlays(.hidden), preferredScreenEdgesDeferringSystemGestures); in the gate challenge and the grown-up panel edge gestures are not deferred, and the status bar stays hidden throughout so the stage fit never jumps; Guided Access stays the real lock. Author's reading of K-39's "during play": the child-facing Title and Play, not the grown-up's screens. AC-10 adds both portrait directions; new AC-14 (overlays, device swipes NOT ASSESSED until run); an Edge Cases row for rotation mid-reveal. Review: game-qc-ios, from the diff.
+Reviewed-Content-Hash: design/gdd/app-shell-title.md 4b7c340a6bd8134c6f9753c231d3d4a2ff497802
