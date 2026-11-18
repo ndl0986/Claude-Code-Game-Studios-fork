@@ -78,7 +78,7 @@ state_ownership:
     status: active
     owner_system: child-lock-in
     adr: docs/architecture/adr-0002-modules-seams-types.md
-    interface: "set by Child Lock-in on entering Waiting; read by Input's cmd exception (Input R5)"
+    interface: "set by Child Lock-in on entering Waiting, cleared on Off (including Off after the engage timeout, Child Lock-in R7); read by Input's cmd exception (Input R5), Child Lock-in, and the Parent Gate panel, which shows Quit while it is on (G7)"
     write_access: child-lock-in-only
     referenced_by:
       - docs/architecture/adr-0002-modules-seams-types.md
@@ -146,7 +146,7 @@ interfaces:
     consumers:
       - input-key-filter
     adr: docs/architecture/adr-0002-modules-seams-types.md
-    signal_signature: "KeyEvent {character: String?, positionKey: String?, modifiers: Int bitmask, isRepeat, physicalId: String, kind, time}; TouchEvent {pointerId, phase, xPx, yPx, time}"
+    signal_signature: "KeyEvent {character: String?, positionKey: String?, modifiers: Int bitmask, isRepeat, physicalId: String, kind: down|up|cancel|modifiersChanged, time}; TouchEvent {pointerId, phase, xPx, yPx, time}"
     referenced_by:
       - docs/architecture/adr-0002-modules-seams-types.md
     added: 2026-11-18
@@ -171,7 +171,7 @@ interfaces:
     consumers:
       - app
     adr: docs/architecture/adr-0002-modules-seams-types.md
-    signal_signature: "SettingsBackend, KioskEffects, AudioOutput, RenderSink, ResidencySink, ThemeSource, DisplayMetrics, AccessibilityState, AppLifecycle, DebugLog, KeyStateQuery (optional)"
+    signal_signature: "SettingsBackend, KioskEffects, AudioOutput, RenderSink, ResidencySink, ThemeSource, DisplayMetrics, AccessibilityState, AppLifecycle, DebugLog, KeyStateQuery (optional: anyNonModifierDown(except:))"
     referenced_by:
       - docs/architecture/adr-0002-modules-seams-types.md
     added: 2026-11-18
@@ -201,8 +201,9 @@ interfaces:
       - child-lock-in
       - app-shell-title
       - input-key-filter
+      - parent-gate-panel
     adr: docs/architecture/adr-0002-modules-seams-types.md
-    signal_signature: "settings read -> Child Lock-in Waiting sets kioskModeOn -> App Shell ready -> Child Lock-in R3 -> KioskEffects.apply()"
+    signal_signature: "settings read -> Child Lock-in Waiting sets kioskModeOn -> App Shell ready -> Child Lock-in R3 -> KioskEffects.apply(); kioskModeOn cleared on Off (incl. after the engage timeout); read by Input, Child Lock-in, Parent Gate G7"
     referenced_by:
       - docs/architecture/adr-0002-modules-seams-types.md
     added: 2026-11-18
@@ -319,7 +320,7 @@ forbidden_patterns:
     added: 2026-11-18
   - pattern: core_character_and_narrow_numbers
     status: active
-    description: "Character, Float, CGFloat, Int32 or Int8 in the cores; UInt64 outside RandomSource"
+    description: "Character, Float, CGFloat, Int32 or Int8 in the cores; UInt64 outside RandomSource, the MorphCore contract types and the morph-seed derivation; iterating or counting a String directly instead of via unicodeScalars/utf8 helpers"
     why: "Kotlin mapping and cross-platform fixtures (ADR-0002 D2)"
     adr: docs/architecture/adr-0002-modules-seams-types.md
     added: 2026-11-18

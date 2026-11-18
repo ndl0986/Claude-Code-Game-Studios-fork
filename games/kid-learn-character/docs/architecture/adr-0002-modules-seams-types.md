@@ -88,11 +88,17 @@ is the only built core; it already follows the contract. No `KidCore` code exist
 - **Imports:** the Swift standard library and `Foundation` only.
 - **Time:** `Double` seconds. **Banned:** `Date`, `Calendar`, `Decimal`, `Duration`, `DispatchTime`.
 - **Integers:** `Int` only for values that fit in 32 bits (counts, indexes, `dayKey` yyyymmdd). `Int64` where a
-  value may not fit (byte sizes, long counters). `UInt64` only inside `RandomSource`. **Banned:** `Float`,
+  value may not fit (byte sizes, long counters). `UInt64` only in `RandomSource`, in `MorphCore`'s contract types
+  (SplitMix64, morph-contract-v1 seeds) and in the morph-seed derivation from (key, revealId). **Banned:** `Float`,
   `CGFloat`, `Int32`, `Int8` (and the other sized integers).
 - **Text:** `String` for every key and character; **`Character` is banned**. Case folding uses one ASCII-only
   helper per core (`asciiUppercased`); **banned:** `uppercased(with:)`, `localizedUppercase`, and Unicode-aware
   `uppercased()` / `lowercased()`.
+- **String inspection** goes only through `unicodeScalars` or `utf8`, via helpers (`asciiLetters(_:)`,
+  `scalarCount(_:)`), because iterating a `String` yields `Character`s (grapheme clusters, unlike Kotlin's UTF-16
+  `Char`s). **Review rule:** no `.count`, `.first`, `.last` or `for … in` directly on a `String` in the cores; the ban
+  grep catches `.count` on the key-typed names it can see (`key.count`, `character.count`, `word.count`). This
+  matters for Input AC-4 ("one character") and Key Table V17 ("2–8 letters").
 - **Ids:** `Int` or `String`. **Banned:** `UUID`.
 - **Data:** plain value types (`struct`, raw-value `enum`, arrays, `Int`, `Double`, `String`, `Bool`). JSON is
   decoded at the edge (app or Tools). **Banned:** `JSONDecoder`, `JSONEncoder` and JSON `Codable` conformances in
@@ -130,13 +136,16 @@ Each module names the clock it reads; no module reads one it does not name.
 KeyEvent   { character: String?, positionKey: String?,      // "A"–"Z", "0"–"9", or nil
              modifiers: Int,                                  // bitmask: shift, caps, ctrl, alt, cmd, fn, numLock
              isRepeat: Bool, physicalId: String,             // opaque, per platform
-             kind: down | up | cancel, time: Double }        // uptime
+             kind: down | up | cancel | modifiersChanged,     // modifiersChanged carries the new mask
+             time: Double }                                  // uptime
 TouchEvent { pointerId: Int, phase: began | moved | ended | cancelled,
              xPx: Double, yPx: Double,                       // window pixels
              time: Double }                                  // uptime
 ```
 `KidCore` converts touch pixels to stage units through Reveal Stage F1 and point-based slop (`moon_slop_pt`)
-through `DisplayMetrics.pxPerPt`. The adapters own every platform mapping (UIKey/HID, NSEvent, KeyEvent/scanCode).
+through `DisplayMetrics.pxPerPt`. The adapters own every platform mapping (UIKey/HID, NSEvent, KeyEvent/scanCode). A `modifiersChanged` event (macOS
+`flagsChanged`, Android meta-state changes) lets Input's ⌘-release rule (Input I1) live in `KidCore`, not in an
+adapter.
 
 ### D6. Seams (final names)
 | Seam | Shape | Apple implementation |
@@ -151,7 +160,7 @@ through `DisplayMetrics.pxPerPt`. The adapters own every platform mapping (UIKey
 | `AccessibilityState` | `reduceMotion` (read live), `guidedAccessEnabled` | `UIAccessibility` / `NSWorkspace` accessibility |
 | `AppLifecycle` (events into `KidCore`) | foreground / background, active / inactive, window key gained / lost, screen parameters changed, memory warning | scene and app delegates |
 | `DebugLog` | `log(line: String)`; the one-line logs and per-stream seed logs | `Logger` at `.debug` level; nothing to disk; release builds log no child input (PKC-14) |
-| `KeyStateQuery` (optional) | `isDown(physicalId) → Bool` | the Mac OS key state, wired only if Input AC-1k6 passes (ADR-0007); otherwise absent and Input uses the ⌘-release rule |
+| `KeyStateQuery` (optional) | `anyNonModifierDown(except physicalId: String) → Bool`; the adapter enumerates the platform key codes, which `KidCore` cannot know | the Mac OS key state, wired only if Input AC-1k6 passes (ADR-0007); otherwise absent and Input uses the ⌘-release rule |
 | Frames | no protocol: one entry point `tick(now:)` on the uptime clock | display link `targetTimestamp` |
 
 ### D7. The three chains (call orders that must not change)
@@ -161,7 +170,9 @@ through `DisplayMetrics.pxPerPt`. The adapters own every platform mapping (UIKey
    Scene motion.
 3. **`kioskModeOn`:** the settings read → Child Lock-in Waiting (if `childLockActive`), which sets Input's
    `kioskModeOn` → App Shell `ready` (first frame, chord installed, window covers its display) → Child Lock-in R3
-   → `KioskEffects.apply()`. Input's ⌘ exception reads `kioskModeOn`.
+   → `KioskEffects.apply()`. `kioskModeOn` is **cleared on Off** (including Off after the engage timeout, Child
+   Lock-in R7). It has three readers: Input's ⌘ exception, Child Lock-in itself, and the Parent Gate's panel, which
+   shows Quit while it is on (G7; TASK-056 W-1).
 
 ### D8. The Android mirror
 - Gradle modules `kidcore` and `morphcore`: **pure JVM, no `android.*` imports**, with the D6 seam names; `app`
@@ -281,7 +292,8 @@ The scaffold story implements and must pass:
 1. **Ban grep** over `KidCore/Sources` and `MorphCore/Sources`, failing the build with file and line, for: imports
    other than the Swift standard library and `Foundation`; `Date`, `Calendar`, `Decimal`, `Duration`,
    `DispatchTime`, `UUID`; `JSONDecoder`, `JSONEncoder`, JSON `Codable`; `Character`, `Float`, `CGFloat`, `Int32`,
-   `Int8`; `.uppercased(with:`, `localizedUppercase`, `.uppercased()` / `.lowercased()` outside the ASCII helper;
+   `Int8`; `UInt64` outside `RandomSource`, the `MorphCore` contract types and the morph-seed derivation;
+   `key.count`, `character.count`, `word.count` (use the scalar helpers); `.uppercased(with:`, `localizedUppercase`, `.uppercased()` / `.lowercased()` outside the ASCII helper;
    `round(`, `lround(`, `rint(`, `.rounded(` outside `roundHalfAwayFromZero`. A planted `Date`, `UIKit` import and
    `Character` each fail it; the clean tree passes.
 2. **Rounding test:** `roundHalfAwayFromZero` gives 2.5 → 3, −2.5 → −3, 7.5 → 8, 0.5 → 1; Settings F1's cases
