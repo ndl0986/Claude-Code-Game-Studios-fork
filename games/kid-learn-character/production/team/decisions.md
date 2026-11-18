@@ -105,6 +105,25 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-34 Device-time rule and an ADR-0002 correction (Luan, 2026-11-18)
+
+- **MAC FREE applies to anything that takes the Mac's screen, keyboard or focus** (launching the macOS app, macOS
+  UI tests, the kiosk, key injection, nettop / log stream sessions, Simulator windows). **Headless runs do not need
+  it:** swift test, xcodebuild build, and tests on the developer's own headless simulator, at nice 10 and stopping
+  if load exceeds ~40.
+- **ADR-0002's unknown-device ppi rule was inverted:** to never shrink a physical target, assume the **highest** ppi
+  in the device class, not the lowest. Recorded as a dated amendment note in ADR-0002 (status stays Accepted); ADR-0006
+  D7 states the corrected rule.
+
+### K-33 TTS engine for the pre-rendered voice (Luan, 2026-11-18)
+
+- From a licence survey (code AND voice-model licences; non-commercial licences excluded): Luan wants **both
+  Kokoro-82M `af_heart` (Apache-2.0 code and weights) and Piper `en_US-ljspeech` (MIT code, public-domain LJSpeech
+  data; pin the archived MIT rhasspy/piper, not the GPL fork) tried**; sample clips of both, then Luan picks.
+- Rejected on licence: Coqui XTTS-v2 (CPML), F5-TTS (CC-BY-NC), Piper `lessac` (research-only data), StyleTTS2
+  (synthetic-speech disclosure condition), Chatterbox (watermark). Attribution line goes in the app's acknowledgements.
+  L-09 closes once Luan picks and the chosen licence and commit are recorded.
+
 ### K-32 Monetisation and voice licence (Luan, 2026-11-18)
 
 - **No ads, reaffirmed.** Luan asked about a free release with ads; after the conflicts were laid out (concept
