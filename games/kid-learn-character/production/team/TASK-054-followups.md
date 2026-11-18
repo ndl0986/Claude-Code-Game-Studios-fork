@@ -72,3 +72,4 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
 - **Done (TASK-062, b384818b: all ten motion GDDs name "Accessibility's `reduceMotion` (its A1; never the OS API)"; checked in TASK-085b):** Every motion GDD: read Accessibility's `reduceMotion` flag, not the OS API.
 - **Done (TASK-085a: R10's draw order names the row; the z values point to ADR-0006 D1's table):** Reveal Stage R10: add the On-screen Keyboard Row at z 35 (above the current creature, below glyph/specks) to the draw-order line (ADR-0006 D1, TASK-070).
 - Reveal Stage R3 table cells: "true if the item has a word line" → "…in the active locale" to match the prose (TASK-088b nit, game-qc-android).
+- Reveal Stage F5 invalid-set row: state the glyph is drawn and fades out at fallback_glow_s (matches Audio E7 at 0.8 s, TASK-088a) — game-dev-ios.
