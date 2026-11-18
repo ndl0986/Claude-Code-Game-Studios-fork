@@ -18,7 +18,8 @@ Cross-platform behaviour contracts for Kid Learn Character (ADR-0004). Each cont
 | key-table-schema-v1 | v1 | key-table-theme-data.md | model (KidCore), file (apple/Tools) | first cases (TASK-068) |
 | settings-record-v1 | v1 | settings-store.md | KidCore | superseded-by: settings-record-v2 (K-40; TASK-091: `F1-slider-release-7.5` contradicted R6a) |
 | settings-record-v2 | v2 | settings-store.md | KidCore | TASK-091: v1's slider case fixed; the non-finite slider cases added (F1, TASK-082) |
-| input-filter-v1 | v1 | input-key-filter.md | KidCore | batch 2 (TASK-081) |
+| input-filter-v1 | v1 | input-key-filter.md | KidCore | superseded-by: input-filter-v2 (K-40; TASK-098 added `gateDigitUp`) |
+| input-filter-v2 | v2 | input-key-filter.md | KidCore | TASK-099: v1 + `gateDigitUp` (3 cases updated, 8 AC-1t cases) |
 | press-queue-v1 | v1 | press-queue.md | KidCore | batch 2 (TASK-081) |
 | reveal-timing-v1 | v1 | reveal-stage.md; cast-rendering.md F1, F2, F4, F5, F7 | KidCore | batch 3 (TASK-086) |
 | audio-plan-v1 | v1 | audio-voice.md | KidCore | batch 3 (TASK-086) |
