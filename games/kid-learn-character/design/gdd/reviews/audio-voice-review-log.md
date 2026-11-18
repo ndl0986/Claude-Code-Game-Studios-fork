@@ -27,3 +27,14 @@ Review mode: lean · Workflow: standard
 Change: the leader flagged a mismatch with the merged Settings Store GDD (K-12): `volume` is an integer 0–10, default 8, handed to Audio as `gain = muted ? 0 : level/10`, with a slider preview from the panel. R5, F1 (v is that gain; a fixed −3 dB headroom trim `g_head` added so the aligned worst case stays below full scale at the default level 8: 0.88), Interactions, Dependencies, Tuning Knobs, AC-13 and AC-14 updated. The recommended Settings Store finding from the first entry is resolved. Verdict unchanged; game-dev-ios's independent read is in progress.
 Reviewed-Content-Hash: design/gdd/audio-voice.md 22672ded5e7e1f5475dafc4113cbe7a0ebd0db79
 Reviewed-Content-Hash: design/gdd/settings-store.md 6e2df80d2d4061d730f3e2cb322e8d9669e51359
+
+## Update — 2026-11-18 — game-dev-ios independent read: REVISE, addressed
+Review mode: lean · Workflow: standard
+Source: game-dev-ios's independent read of 6cfd991 (relayed by the leader). Required 1–2 were already in 29818c8; recommended 3–5 are in this revision.
+Findings:
+- [REQUIRED] Volume must follow the merged Settings Store (0–10, default 8, gain = muted ? 0 : level/10, slider preview) → done in 29818c8 (R5, F1, knobs, Interactions, Dependencies, AC-13, AC-14). The first entry's Recommended item "Settings Store must list master volume (0–1, default 0.5)" is **superseded** by K-12 and closed (fixed)
+- [REQUIRED] Headroom at the default level 8: the aligned worst case 1.94 × 0.64 = 1.24 exceeded full scale → a fixed −3 dB headroom trim (g_head) brings it to 0.88 at level 8, so AC-13 holds "no gain reduction at level 8"; the limiter acts only at levels 9–10 in the all-peaks-aligned case (fixed, 29818c8)
+- [RECOMMENDED] Silent mode: "obeys silent mode, does not mix" is .soloAmbient (not .ambient); current iPads have silent mode in Control Center; iOS cannot read silent mode; macOS has none → R6 names .soloAmbient as the requirement (the audio ADR confirms), says "not detectable" with a static panel hint, AC-20 is iPad-only and checks no mixing. The first entry's panel item now reads "static hint" (fixed)
+- [RECOMMENDED] Engine start: R2.1 (runs from start-up) conflicted with the "Not started" state (starts on first input) → the engine starts silent at launch; "no sound before the first input" means nothing is scheduled (R2.1, R6, States) (fixed)
+- [RECOMMENDED] AC-6 tied letter lines to MorphCore's provisional reduced T → a fixed letter_len_max_s = 1.0 s (A3, knobs, AC-6) (fixed)
+Reviewed-Content-Hash: design/gdd/audio-voice.md 5f743e882a62b62e7206eaa670419154889d6d9a

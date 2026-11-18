@@ -81,7 +81,8 @@ theme (K-09). A creature tap never replays the word; only its sound (as played i
 | 2.70 | "triceratops" (E9), grumble ducked; ends at 3.60 |
 
 **R2. Players, buses and cuts.**
-1. **Fixed players, created once.** The engine and every player are created at start-up and **keep running**.
+1. **Fixed players, created once.** The engine and every player are created **and started at launch**, silent, and
+   **keep running**.
    Nothing is created, stopped or torn down on a press. A sound is started by scheduling a primed buffer that
    interrupts whatever that player was playing (on Apple, `scheduleBuffer(_:at:options: .interrupts)`); the
    mechanism is the audio ADR's.
@@ -140,11 +141,13 @@ never more brightness"; Pillar 3).
   owned by Reveal Stage.
 
 **R6. Session, interruptions and configuration changes.** (Apple names; the Android ADR maps them.)
-- **The silent switch is respected** (decided, Luan Q4): ambient-style behaviour, so when the device is silenced
-  the toy is silent. No other app's audio is mixed in. **Consequence:** with the switch on, the child hears
-  nothing, so every event must still read visually (R5, art bible §7). The grown-up panel should show that the
-  device is silenced if the platform lets the app detect it (open for the Parent Gate & Grown-up Panel GDD).
-  Android audio focus and usage stay with its ADR.
+- **Silent mode is respected** (decided, Luan Q4): when the iPad is in silent mode (the side switch on older
+  iPads, Control Center on current ones), the toy is silent, and **no other app's audio is mixed in**. On Apple
+  that requirement is the `.soloAmbient` session category (`.ambient` would mix); the audio ADR confirms it by
+  build and run. macOS has no silent mode. **Consequence:** in silent mode the child hears nothing, so every event
+  must still read visually (R5, art bible §7). iOS has **no public API to read silent mode**, so the app cannot
+  detect it: the grown-up panel shows a **static hint** instead ("No sound? Check silent mode and the volume";
+  wording and layout are the Parent Gate & Grown-up Panel GDD's). Android audio focus and usage stay with its ADR.
 - **Interruption** (a call, Siri, an alarm): the engine stops. When it ends with "should resume", the engine is
   restarted and the buffers re-primed at once. Without that flag, it is restarted on the **next press**; that
   press's chime may come late by the engine's start time (NOT ASSESSED) or be skipped. The visual answer is never
@@ -156,7 +159,8 @@ never more brightness"; Pillar 3).
 - **Background / the panel:** going to the background cuts every player and pauses the engine; coming back
   follows the interruption rule. Opening the grown-up panel cuts the voice, cast and music players; the panel is
   quiet.
-- **No sound before the first input** at launch: the title screen is silent until a key or a tap.
+- **No sound before the first input** at launch: the engine is already running (R2.1), but **nothing is
+  scheduled** until a key or a tap, so the title screen is silent and the first chime pays no engine-start time.
 
 **R7. Toddler-safe audio rules.** Content review checks A1–A6 by ear; A7–A8 are build checks.
 
@@ -164,7 +168,7 @@ never more brightness"; Pillar 3).
 |---|---|
 | A1 | **No sudden loud.** No sound starts at full level: an attack of at least 10 ms, and nothing is louder than the voice (F4). |
 | A2 | **No scary sounds.** Roars stay low, soft and short: a grumble, not a scream. No growl peaks, no shrieks, no human screams, no thunder (art bible §2: no lightning). |
-| A3 | **Short.** Cast sounds ≤ 2.0 s (art bible §8, Key Table V12). Word lines ≤ `word_len_max_s` (F6). |
+| A3 | **Short.** Cast sounds ≤ 2.0 s (art bible §8, Key Table V12). Word lines ≤ `word_len_max_s` (F6). Letter and number lines ≤ `letter_len_max_s` (1.0 s). |
 | A4 | **No reward for mashing.** Extra presses get quieter, never louder (R3). |
 | A5 | **No music bed under play.** The only music is the parade tune (E12). |
 | A6 | **Calm voice.** The voice says the letter name, then the word (K-05, Key Table T6), at a steady, warm pace; never "letter C", never a shout. |
@@ -182,8 +186,8 @@ and that the TTS licence allows a commercial kids' app (Open Questions).
 
 | State | Entered when | Sounds | Left when |
 |---|---|---|---|
-| **Not started** | launch | none (R6: no sound before input) | the first key or tap: the engine starts (it was primed at start-up) |
-| **Running** | engine started | every R1 event | interruption, background, media reset |
+| **Running, nothing scheduled yet** | launch: the engine is started and primed (R2.1, R4.1) | none (R6: no sound before input) | the first key or tap schedules its sound → Running |
+| **Running** | the first input | every R1 event | interruption, background, media reset |
 | **Interrupted** | an interruption began, or background | none; events are skipped | "should resume" → Running (re-prime); otherwise the next press restarts it |
 | **Re-priming** | a format change or a media reset | none; events are skipped and logged | buffers ready → Running |
 | **Muted** | mute on (Settings Store) | none; the engine keeps running | mute off → Running |
@@ -361,6 +365,7 @@ All values are bundled data (ADR-0001 Decision 6). "One-shot" means Luan played 
 | `g_head` | −3 dB | −6 – 0 dB | F1 | headroom so the limiter is idle at the default level |
 | `word_offset_s` | 0.25 | 0–0.6 | decided (Luan Q1) | gap between the cast sound and the word; larger = longer hold (F6) |
 | `word_len_max_s` | 1.25 | 0.8–1.25 | F6 | longest word line allowed; above 1.25 the cap would cut words |
+| `letter_len_max_s` | 1.0 | 0.6–1.0 | proposed | longest letter or number line ("double you" is the longest); fixed, so it does not move with MorphCore's provisional reduced set. At 1.0 it ends before the reduced T (1.2 s) and well before the normal T (2.45 s) |
 | `hold_ext_max_s` | 1.5 | 0–1.5 | decided (Luan Q1) | longest hold extension for a word (Press Queue constraint) |
 | `tap_cooldown_s` | 0.9 | 0.2–3 | one-shot | taps closer than this only sparkle (owned by Reveal Stage; listed for the sound) |
 | `duck_db` | −9 | −15 – −3 | proposed | how far the cast sound and music drop under the voice |
@@ -419,8 +424,8 @@ Logic criteria run with an injected clock and a fake player layer (no audio hard
    stops any line still playing, without a click (AC-9).
 5. **AC-5 Player cap.** Under 10 presses/s for 60 s (logic test), never more than 7 sounds play at once, never more
    than 4 on the ui bus, and the oldest ui sound is the one reused.
-6. **AC-6 Word length (build).** The build fails if any word line is longer than `word_len_max_s` (1.25 s) or any
-   letter/number line is longer than the reduced T (1.2 s), for every locale.
+6. **AC-6 Line length (build).** The build fails if any word line is longer than `word_len_max_s` (1.25 s) or any
+   letter/number line is longer than `letter_len_max_s` (1.0 s), for every locale.
 7. **AC-7 Hold constraint.** With the Press Queue in the loop (integration test), a key queued during the word of
    "quetzalcoatlus" (1.15 s) starts its reveal no earlier than s = 3.85 and no later than s = 4.5; the word is
    never cut.
@@ -453,8 +458,9 @@ Logic criteria run with an injected clock and a fake player layer (no audio hard
     visual answers (screenshot evidence, Reveal Stage).
 19. **AC-19 Number chirps (content + build).** Each digit item's sfx for 1–9 has exactly that many chirps (checked by
     ear in the content review) and is ≤ 2.0 s; the 0 item has one soft chirp.
-20. **AC-20 Silent switch (device).** With the iPad's silent switch on, no sound is heard for any event, and a full
-    reveal still shows every visual answer.
+20. **AC-20 Silent mode (iPad only).** With the iPad in silent mode, no sound is heard for any event, a full reveal
+    still shows every visual answer, and music playing in another app is stopped, not mixed (`.soloAmbient`
+    behaviour). macOS has no silent mode and is not tested here.
 
 ## Open Questions
 
@@ -466,6 +472,7 @@ Logic criteria run with an injected clock and a fake player layer (no audio hard
 
 **Resolved (Luan, 2026-11-18), now in the rules:** Q1 the word plays 0.25 s after the cast sound, ducked over it,
 and a waiting key does not cut it (E9, F6); Q2 an overflow press gets the softer ping (E2); Q3 the MVP voice is
-TTS pre-rendered at build time (R8); Q4 the silent switch is respected (R6); Q5 the loudness targets as
+TTS pre-rendered at build time (R8); Q4 silent mode is respected (R6); Q5 the loudness targets as
 proposed, tuned in play (F4); Q6 one chirp per baby, counting along up to 9 (E11).
-**Panel follow-up:** show that the device is silenced, if detectable (Parent Gate & Grown-up Panel GDD).
+**Panel follow-up:** silent mode is not detectable on iOS, so the panel shows a static hint (Parent Gate & Grown-up
+Panel GDD).
