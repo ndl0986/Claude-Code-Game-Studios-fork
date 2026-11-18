@@ -156,3 +156,20 @@ Task: TASK-048
   These are covered by AC-34 and AC-35, and the Android AC is now AC-36.
 - Still open by decision: Q5 (overlap grace), Q6 (chord hold).
 Post-fix GDD hash: b0a5f62ef9d271ca2ab3c970cfe8d52b41752cae
+
+## Author follow-up — 2026-11-18 — game-qc-android independent read (REVISE, 1 must-fix: bookkeeping)
+Task: TASK-048
+- Must-fix: four changes were credited to the merged TASK-050 but aren't in the merged docs. They are now the open follow-up **TASK-054** (owner game-art-content):
+  - S1/S2: childLockActive and its write-free OFF notification;
+  - I1 (safety): the chord judged from OS key state;
+  - I2: the moon slop gateTouch(ended);
+  - I3 (safety): ⌘ swallowed in every state while locked;
+  - I4: the chord on Title, and returning to the origin state.
+
+  The Dependencies have a release-blocking note: AC-27 and AC-34 can't pass until I1 and I3 land, and AC-15/19, AC-26 and AC-31 depend on S1/S2, I2 and I4. These were checked as actually merged in TASK-050: Press Queue freeze, the Audio parade-tune pause, the Input Gate challenge state, and the exact chord from the held set. G11 and AC-15 stay as written (the leader's childLockActive model).
+- Q5 is closed: game-qc-android's lift grace is in. A second keypad down counts if the first lifts within overlap_grace_s 0.15 s; otherwise it is wrong. A third pointer is wrong. F2 is unchanged. Added the knob and AC-36.
+- Q6 is closed as (a); F2 already states ~3.4%/h.
+- Nits:
+  - The hint-over-moon edge case is now a fallback that Hint Letters F4 prevents.
+  - Moon sleep runs on the continuous monotonic clock across the background. Added AC-37; the Android AC is now AC-38.
+Post-fix GDD hash: 5aaead63265fa8072bf415160a669e1607cd8665

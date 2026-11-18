@@ -54,7 +54,7 @@ For the child the gate is invisible. The moon is just the moon.
 **G1. Step 1: the moon hold.**
 - **This GDD owns the moon's hit region** and publishes it to Input as touch layer 3 (Input R7): a
   circle of `moon_hit_px` (50 stage px radius, as in the one-shot's `GATE.r`; ≥ 44 pt **diameter** on every supported screen) around the drawn crescent. A touch down on it emits `gateTouch(began, pointerId)`;
-  its up or cancel emits `gateTouch(ended, pointerId)`. **Input change (TASK-050):** Input also emits
+  its up or cancel emits `gateTouch(ended, pointerId)`. **Input change (TASK-054 I2, open):** Input also emits
   `gateTouch(ended, pointerId)` when that pointer leaves the region grown by `moon_slop_pt` (20 pt), so
   a finger that drifts a little keeps its hold and one that slides away resets. Input R7 emits only
   began/ended today.
@@ -71,7 +71,10 @@ For the child the gate is invisible. The moon is just the moon.
 - **Moon sleep:** for `moon_sleep_s` (10 s, K-20) after the challenge closes by a **wrong answer** (a
   wrong digit or a second pointer) **or a timeout**, a hold does not fill the ring (F1 stays 0).
   **Cancel and Esc start no sleep**: they make no guess, and the next challenge draws a new code, so
-  F2 is unchanged and a parent who backs out isn't made to wait. The moon looks the
+  F2 is unchanged and a parent who backs out isn't made to wait. **Clock:** the sleep runs on the
+  injected **continuous monotonic clock**, so it keeps counting while the app is in the background
+  (sending the app away and back never shortens or lengthens it). A challenge closed *by*
+  backgrounding starts no sleep (Edge Cases). The moon looks the
   same; there is no visible lockout and nothing is stored or counted. A hold that began during sleep counts only from the moment sleep ends (`t_held` starts at 0 then),
   so a finger kept down through sleep opens the challenge at sleep end + 1.5 s.
 
@@ -82,7 +85,7 @@ corner of a keyboard holds more keys; game-qc-android item 3).
 - "No other key held" is judged from **the OS's current key state at the moment Q goes down** (for
   example `CGEventSource.keyState`), not from Input's tracked downs, because macOS can drop the key-up
   of a key pressed while ⌘ is held; a stale tracked key must never disable the way out under the kiosk.
-  Input change: **TASK-050**.
+  Input change: **TASK-054 I1 (open, safety)**. Merged Input R6 (TASK-050) still judges from the held set.
 - **Moon sleep applies to the chord too:** during sleep the chord does nothing. The chord
   has no 1.5 s hold, so its fastest attempt is a little quicker than the moon's (F2 gives its figure). (A
   grown-up who mistyped waits 10 s.)
@@ -91,7 +94,8 @@ corner of a keyboard holds more keys; game-qc-android item 3).
   is App Shell & Title's (#14); the chord must work there because the Mac lock can be on at launch
   (K-12).
 - There is no chord on iPadOS (Input R6) or, for now, Android.
-- Input's `openPanel` output now means "open the challenge"; TASK-050 may rename it `openGate`.
+- Input's `openPanel` output means "start the gate's second step" (Input R6 as merged in TASK-050).
+- Working on Title, and returning to the state the gate opened from: **TASK-054 I4 (open)**.
 
 **G3. Step 2: the number challenge.**
 - **Code:** four digits `d1 d2 d3 d4`, each drawn uniformly from 0–9 with an **injected seed**, a new
@@ -104,8 +108,12 @@ corner of a keyboard holds more keys; game-qc-android item 3).
   (60 pt) with gaps ≥ `key_gap_pt` (12 pt), for an adult finger. Below the code, 4 empty slots fill
   with dots as digits are entered (the digits themselves are never shown). A **Cancel** button sits
   apart from the keypad.
-- **One touch at a time:** a second pointer down while one keypad pointer is down = **wrong**
-  (a palm can't enter an ordered sequence; item 2). A digit is entered on its touch *down*, or on
+- **One touch at a time, with a lift grace** (game-qc-android's choice for Q5): a second keypad pointer
+  down while the first is still down is held pending. If **the first pointer lifts within
+  `overlap_grace_s` (0.15 s) of that second down**, the second counts as the next digit (entered at
+  the first's lift); otherwise, at 0.15 s, it is **wrong**. A palm that stays down is therefore wrong,
+  and **any third simultaneous pointer is wrong at once** (a palm can't enter an ordered sequence;
+  item 2). F2 is unchanged: random digits still pass with p = 10⁻⁴. A digit is otherwise entered on its touch *down*, or on
   accessibility activation (VoiceOver double-tap, Switch Control) of the key.
 - **Mac hardware digits:** keys 0–9 on the main row and the numeric keypad enter digits too
   (keyboard-only grown-ups, art bible §7). Two digit keys down at once = wrong. A key already held
@@ -203,17 +211,17 @@ finishes first. `panel_max_s` ≥ `panel_idle_s` always. A "Hold to confirm" has
 - The panel owns the **Child lock switch**, macOS only. **On** → writes `childLock = true`. **Off** (after G8's hold) → turns the lock off **for this run only**: the stored value is not set to
   false, so at the next launch the lock engages again once the app is ready (K-21, K-12, Settings Store
   R8). If the lock was never turned on, it stays off.
-- **Runtime state for "off for this run" (TASK-050, Settings Store owner):** next to the stored
+- **Runtime state for "off for this run" (TASK-054 S1/S2, open, Settings Store owner):** next to the stored
   `childLock`, the store keeps an in-memory `childLockActive` (starts equal to `childLock` at launch).
   Turning the lock off sets `childLockActive = false`, **sends one R10 notification and writes
-  nothing**; turning it on sets both and writes. Reset (R9) sets both to false. Child Lock-in applies
-  `childLockActive`. Today's R10 fires only on a write, so this is a Settings Store change.
+  nothing**; turning it on sets both and writes. Reset (R9) sets both to false. Child Lock-in applies `childLockActive`. Merged Settings Store R8 (TASK-050) keeps OFF in memory but
+  doesn't yet name `childLockActive` or define its write-free notification, and its AC-15b differs
+  from this GDD's AC-15 until S1/S2 land.
 - Child Lock-in applies `childLockActive`: a lock **already on stays on while the panel is open** (the
   panel is inside the full-screen app); turning it **off** disengages at once, with the panel still
   open; turning it **on** in the panel engages on `panelDidClose` (TASK-052).
 - **While the lock is on, ⌘-combinations stay swallowed in every Input state**, including Gate
-  challenge and Panel open, so ⌘Q or ⌥⌘Esc typed in the panel can't skip Quit's hold (Input change,
-  TASK-050).
+  challenge and Panel open, so ⌘Q or ⌥⌘Esc typed in the panel can't skip Quit's hold (Input change, **TASK-054 I3, open, safety**).
 - **The way out with the lock on:** ⌃⌥⌘Q (works with the kiosk on, Input R6) or the moon → step 2 →
   panel → **Quit** (G8 hold), or turn the lock off (G8 hold) and then ⌘Q works again (Input R5).
 - Events for #13: `panelWillOpen`, `panelDidClose`, and the `childLockActive` changes (via Settings Store
@@ -241,8 +249,8 @@ Moon sleep is a timer on Idle, not a state the grown-up sees.
 
 | System | Direction | What |
 |---|---|---|
-| Input & Key Filter (#2) | in / out | in: `gateTouch`, `openPanel` (chord), touches and keys in Challenge and Panel. out: enter/leave **Gate challenge** and **Panel open**. **TASK-050** for Input: the Gate challenge state; the "nothing else held" chord rule from OS key state; `gateTouch(ended)` on leaving the slop region; the chord on Title, ignored in Challenge/Panel; optionally renaming `openPanel` |
-| Settings Store (#4) | out | writes `volume`, `muted`, `themeId`, `weather`, `windy`, `keyboardRow`, `childLock`; Reset (R9). K-21's "off for this run" changes R1/R8 and adds the runtime `childLockActive` with a write-free R10 notification (G11), **TASK-050** |
+| Input & Key Filter (#2) | in / out | in: `gateTouch`, `openPanel` (chord), touches and keys in Challenge and Panel. out: enter/leave **Gate challenge** and **Panel open**. Done in **TASK-050**: the Gate challenge state, the exact chord (held set), the chord ignored during the challenge. Open in **TASK-054**: I1 the chord judged from OS key state (safety), I2 `gateTouch(ended)` on leaving the slop region, I3 ⌘ swallowed in every state while locked (safety), I4 the chord on Title and return to the origin state |
+| Settings Store (#4) | out | writes `volume`, `muted`, `themeId`, `weather`, `windy`, `keyboardRow`, `childLock`; Reset (R9). K-21's "off for this run" changes R1/R8 and adds the runtime `childLockActive` with a write-free R10 notification (G11): **TASK-054 S1/S2 (open)**; TASK-050 made OFF run-only |
 | Press Queue (#7) | out | challenge open → **freeze**, close → **resume** (TASK-050); panel open → clear and settle (R8, K-15) |
 | Reveal Stage (#9) | out | challenge open → **freeze/resume** pair next to settle (**TASK-049**); panel open → settle to formed |
 | Hint Letters (#10) | out | challenge open → **freeze `hintTime`**, close → resume (**TASK-047**) |
@@ -299,8 +307,9 @@ leader (Open Questions Q6).
 
 - **The hold starts during a reveal or a parade:** play continues while the moon is held (step 1 is
   not a freeze); the freeze begins only when the challenge opens.
-- **A hint drifts over the moon:** the hint wins the touch (Input R7). The moon is free again a moment
-  later; the grown-up holds again.
+- **A hint over the moon** (fallback only): Hint Letters F4 already keeps hints off the moon, so this
+  shouldn't happen. If it ever did, the hint wins the touch (Input R7) and the grown-up holds again a
+  moment later.
 - **The app leaves the foreground during a hold:** `t_held` resets. **During the challenge:** the
   challenge closes as Cancel without moon sleep, then K-15's background rule applies to play (Press
   Queue R9). **During the panel:** the panel closes (G9) so a child picking up the device later never
@@ -325,18 +334,25 @@ leader (Open Questions Q6).
 - **Switch Control or AssistiveTouch users** may not be able to hold the moon for 1.5 s or hold a
   confirm button. Not solved here; noted for the Accessibility GDD (#17). Keypad keys accept
   accessibility activation (G3).
-- **Two-thumb typing on an iPad** can overlap two keypad touches, which counts as wrong (G3). This
-  follows game-qc-android item 2 as approved; a short overlap grace would soften it (Open Questions Q5).
+- **Two-thumb typing on an iPad** can overlap two keypad touches: accepted when the first thumb lifts
+  within 0.15 s of the second's down (G3); a longer overlap is wrong.
 
 ## Dependencies
 
-- **Settings Store** (Approved): R1 fields, R4 writes and preview, R8, R9 Reset, R10, R11. **K-21
-  changes R1/R8** (the lock turned off is not stored as false): TASK-050, Settings Store owner.
-- **Input & Key Filter** (Approved): R5, R6 (chord), R7 (moon layer), states. **TASK-050** adds: the Gate
-  challenge state; the "no other key held" chord rule from OS key state; `gateTouch(ended)` on leaving
-  the slop region; the chord on Title and ignored in Challenge/Panel; ⌘ swallowed in every state while
-  locked; optionally renaming `openPanel`. **Audio** (TASK-050 line): the parade tune pauses and resumes
-  with the walk.
+- **Settings Store** (Approved): R1 fields, R4 writes and preview, R8, R9 Reset, R10, R11. TASK-050 made
+  the lock's OFF run-only (R8, K-21).
+- **Input & Key Filter** (Approved): R5, R6 (chord), R7 (moon layer), states. TASK-050 added the Gate
+  challenge state, the exact chord (from the held set) and the chord ignored during the challenge.
+  **Audio:** the parade tune pauses and resumes with the walk (TASK-050, done).
+- **Open follow-up TASK-054** (owner game-art-content; queued in `production/team/TASK-054-followups.md`):
+  - **S1** an R10 notification for a run-only OFF with no write; **S2** the run value `childLockActive`
+    defined in the Settings Store (at launch = stored `childLock`; OFF changes only the run value);
+  - **I1 (safety)** the chord's "no other key held" judged from the OS key state;
+  - **I2** `gateTouch(ended)` when the pointer leaves the moon slop region;
+  - **I3 (safety)** ⌘-combinations swallowed in every Input state while the lock is on;
+  - **I4** the chord on Title, and a closed gate returning to the state it opened from.
+- **Release-blocking:** AC-27 and AC-34 can't pass until I1 and I3 land in Input; AC-15's no-write
+  exception and AC-19 depend on S1/S2; AC-26's drift case depends on I2; AC-31 depends on I4.
 - **Press Queue** R8 (K-15) and its new freeze/resume (TASK-050); **Reveal Stage** freeze/resume
   (TASK-049); **Hint Letters** `hintTime` freeze (TASK-047); **Parade** walk pause and debug start
   (TASK-046, K-17).
@@ -357,6 +373,7 @@ leader (Open Questions Q6).
 | `moon_sleep_s` | 10 (K-20) | 10–30 | maximum attempt rate; below 10 breaks K-21 (5 s → ≈ 5.2%/h). At 30: max P ≈ 1.1%/h |
 | `moon_hit_px`, `moon_slop_pt` | 50 stage px, 20 pt | ≥ 44 pt; 10–30 pt | how easy the moon is to hold for an adult; a bigger region catches more stray child touches |
 | `challenge_timeout_s` | 20 | 10–60 | how long an abandoned challenge keeps play frozen |
+| `overlap_grace_s` | 0.15 | 0.05–0.25 | how much two-thumb overlap an adult gets on the keypad; longer lets a rolling palm enter digits |
 | `key_size_pt`, `key_gap_pt` | 60, 12 | ≥ 44, ≥ 8 | adult accuracy; larger keys need a taller card |
 | `panel_idle_s` | 60 (K-19) | 30–300 | how long an unattended panel stays open |
 | `panel_max_s` | 300 | 120–900 | hard cap on one panel opening |
@@ -477,7 +494,13 @@ All timers use an injected clock and the code an injected seed, so every criteri
     ends. GIVEN Child Lock-in's failure flag set, the next panel open shows "Child lock couldn't turn on".
 35. **AC-35 · Guided Access line (iPadOS):** with `guidedAccessEnabled` true the lock row reads "Guided
     Access is on"; false → "Guided Access is off".
-36. **AC-36 · Android (NOT ASSESSED: no Android build, K-03):** Back closes the challenge as Cancel and
+36. **AC-36 · overlap grace:** GIVEN the code 4172 and 4 entered, WHEN 1 goes down while the 4-pointer
+    is still down and the 4-pointer lifts 0.10 s later THEN 1 is accepted; WHEN instead it lifts 0.5 s
+    later THEN wrong at 0.15 s after the 1-down. WHEN three keypad pointers are down at once THEN wrong.
+37. **AC-37 · sleep across background:** GIVEN a wrong answer at t = 0 and the app in the background
+    from 2 s to 6 s, THEN a hold from 8.5 s to 10.0 s does not open, and a hold from 10.0 s to 11.5 s
+    does.
+38. **AC-38 · Android (NOT ASSESSED: no Android build, K-03):** Back closes the challenge as Cancel and
     closes the panel; no chord exists; the lock row shows screen-pinning text.
 
 ---
@@ -490,5 +513,5 @@ All timers use an injected clock and the code an injected seed, so every criteri
 | Q2 | The number words for the Vietnamese voice release (K-02) | Localization (#19) |
 | Q3 | Android: Back behaviour and screen-pinning wording | Android ADR |
 | Q4 | ~~`t_tap` in F2~~ closed: with `t_tap` = 0 the maximum risk moves only from 3.0% to 3.1% per hour | — |
-| Q6 | The Mac chord's fastest-attempt risk is ~3.4%/h (F2), a little above K-21's ~3%. Accept, or require the chord to be held 1.5 s like the moon (→ ≈ 300/h, 2.96%)? | leader / Luan |
-| Q5 | An `overlap_grace_s` (~0.15 s) so overlapping adult thumbs on the keypad aren't "wrong"? It softens game-qc-android item 2 | leader / Luan |
+| Q6 | ~~Chord hold~~ closed: (a) accepted by the leader, F2 states ~3.4%/h. Was: the Mac chord's fastest-attempt risk is ~3.4%/h (F2), a little above K-21's ~3%. Accept, or require the chord to be held 1.5 s like the moon (→ ≈ 300/h, 2.96%)? | leader / Luan |
+| Q5 | ~~Overlap grace~~ closed: game-qc-android chose a lift grace of 0.15 s (G3, AC-36) | — |
