@@ -105,6 +105,16 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-46 Parade meter details (Luan, 2026-11-18, TASK-120 MT-Q1..Q5)
+
+- **MT-Q5 beat:** the parade starts **1.5 s** after the 6th creature has formed (`armedAt + parade_delay_s`, 1.5 s
+  kept), so the tune follows the 6th name. K-45 removed only the rest, not the beat.
+- **MT-Q1:** the meter shows **from Play entry**, empty.
+- **MT-Q2:** **no sound** on full.
+- **MT-Q3:** **yes, a light flies from each new creature to its cell** (Luan chose this over the recommendation).
+  Designed in TASK-120 within ADR-0013's bounds.
+- **MT-Q4:** the meter sits **beside the queue tokens**, left of them on the same row (tokens stay in the corner).
+
 ### K-45 The parade starts as soon as the batch is full (Luan, 2026-11-18)
 
 - **Cause found (leader, from the prototype code):** the parade only starts when the stage rests (queue empty, creature
