@@ -2,7 +2,7 @@
 
 > **Status**: Approved (all 9 sections approved one by one by Luan, 2026-11-17)
 > **Owned By**: art-director
-> **Last Updated**: 2026-11-18 (K-25 glyph edge and crossfade contrast in §2, §4; K-16 amendments in §2, §4, §5, §7, §8; earlier the same day: §8 says where silhouette path data lives)
+> **Last Updated**: 2026-11-18 (TASK-069: §8 SVG subset per ADR-0003 D4, `data-pivot`, baked names; K-25 glyph edge and crossfade contrast in §2, §4; K-16 amendments in §2, §4, §5, §7, §8; earlier the same day: §8 says where silhouette path data lives)
 > **Art Director Sign-Off (AD-ART-BIBLE)**: SKIPPED 2026-11-17 — lean mode
 
 `/art-bible` writes these nine sections in this order and replaces each
@@ -414,17 +414,34 @@ the glyph rises from where it was pressed with an ease-out.
   path data in the key table".)*
 - **Part groups** *(amendment 2026-11-18, K-16)*: on top of the `body`, `outline` and `detail` layers, each
   cast SVG carries **named part groups**, one per moving part its family's idle needs (for example `neck`,
-  `jaw`, `wing`, `tail`), and **each group has a pivot point** in artboard coordinates. The per-part idles of
+  `jaw`, `wing`, `tail`), and **each group has a pivot point** in artboard coordinates, written as
+  **`data-pivot="x y"`** on the group (ADR-0003 D4; TASK-069). The per-part idles of
   Section 5 rotate or move these groups about their pivots. The group and pivot names are listed per family in
   the Cast Rendering data.
-- **SVG subset** *(amendment 2026-11-18, TASK-045)*: cast art uses **only Cast Rendering's SVG subset**
+- **SVG subset, exact** *(amendment 2026-11-18, TASK-069; ADR-0003 D4, which the bake tool enforces)*:
+  - **Elements:** `svg`, `g`, `path`, `circle`, `ellipse`, `rect`, `line`, `polyline`, `polygon`. `<title>`,
+    `<desc>`, `<metadata>` and an empty `<defs>` are ignored (normal export noise). **Rejected:** anything inside
+    `<defs>`, **`use` and `symbol`**, **`pattern`**, `mask`, `clipPath`, `filter`, every gradient, `text`, `image`,
+    `foreignObject`, and any other element.
+  - **Attributes:** `d` and each shape's geometry, `fill`, `fill-opacity`, `stroke`, `stroke-width`,
+    `stroke-linejoin` and `stroke-linecap` (`round` only), `opacity` on `g`, `transform`, `id` (part and layer
+    names), `data-pivot`; the root's `xmlns`, `version`, `width`, `height`, `viewBox`. **Rejected:** `style`,
+    `class` (no CSS) and every other attribute.
+  - **Values:** colours as hex or `rgb(r, g, b)`, or `none` for `fill` and `stroke` (an outline layer is usually
+    stroke-only). **Rejected:** `url(#…)` paints, named colours, `currentColor`. Transforms: `translate`,
+    `rotate`, `scale` only; **rejected: `skewX`, `skewY`**, and a `matrix` with any skew. Plain numbers, no units.
+  - **Structure:** every part group holds the `body`, `outline` and `detail` layer groups, and every part the
+    family's idle moves carries its `data-pivot`; the part names are the Cast Rendering data's.
+  - Every rejection names the element, the attribute and the line; the bake fails loudly.
+- *Earlier wording* **SVG subset** *(amendment 2026-11-18, TASK-045)*: cast art uses **only Cast Rendering's SVG subset**
   (`design/gdd/cast-rendering.md` R2, TASK-044). **Allowed:** paths (basic shapes and arcs are converted by the
   bake tool), solid fill with fill opacity, strokes with round joins and caps, group opacity, and
   translate / rotate / scale transforms. **Not allowed:** filters, masks, clip paths, gradients, text, CSS and
   embedded images; the bake tool **rejects them loudly**. The one exception is the **Letter Gold gradient on the
   glyph**.
 - **Naming** (`[category]_[theme]_[key]_[name]_[variant].[ext]`):
-  - `cast_dino_c_triceratops_01.svg`, `sil_dino_c_triceratops_01.svg`
+  - `cast_dino_c_triceratops_01.svg`, `sil_dino_c_triceratops_01.svg` (sources in `src/art/`, `src/sil/`; baked
+    to `cast/…json` and `sil/…json`, ADR-0003 D1; the `[theme]` part is the theme's `assetPrefix`, `dino`)
   - `glyph_<font>_<char>.json`
   - `sfx_dino_c_triceratops_01.m4a`
   - `vo_en-us_letter_c.m4a`, `vo_en-us_word_triceratops.m4a`

@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent review by game-dev-ios, merged 2026-11-18)
 > **Author**: game-art-content (TASK-036), with Luan's answers via game-leader; plan reviewed by game-dev-ios
-> **Last Updated**: 2026-11-18 (TASK-060: schema 2, `rowWords`, V17; earlier: TASK-050, K-22 `titleCastId`)
+> **Last Updated**: 2026-11-18 (TASK-069: ADR-0003 id/`assetPrefix`/baked `art`/exact case, V18; TASK-060: schema 2, `rowWords`, V17; earlier: TASK-050, K-22 `titleCastId`)
 > **Last Verified**: 2026-11-18
 > **Implements Pillar**: Pillar 1 (Every Press Answers), Pillar 4 (Things the Child Loves), Pillar 5 (Safe by Design)
 
@@ -68,7 +68,8 @@ There are three kinds of file, all JSON, bundled in the app, and read with plain
 |---|---|---|
 | `schemaVersion` | integer | The data format's major version. The app **refuses** a value it doesn't know (Edge Cases). Started at `1`; **`2`** adds `rowWords` (TASK-060). The app knows **1 and 2**; a v1 theme loads with the `rowWords` fallback (Edge Cases). |
 | `contentVersion` | string | The theme's content version, e.g. `"1.0.0"`. Informational: the app never rejects on it. |
-| `id` | string | Lowercase, `[a-z]+`. Used in asset names (`dino`). |
+| `id` | string | Lowercase, `[a-z]+`. The theme's **folder** (`content/themes/<id>/`) and the Settings Store **`themeId`**: Dinosaurs = **`dinosaurs`** (ADR-0003 D1; TASK-069). |
+| `assetPrefix` | string | Lowercase, `[a-z]{2,8}`: the `[theme]` part of every castId and asset file name (art bible §8). Dinosaurs = **`dino`**. Checked by V18 (ADR-0003 D1; TASK-069; no schema bump, v2 has not shipped). |
 | `name` | string | The grown-up panel name ("Dinosaurs"). |
 | `voiceLocales` | string[] | Locales this theme has voice for, e.g. `["en-us"]` (K-02, K-05). The first is the default. |
 | `glyphSet` | string | The id of the glyph set the theme uses (c below). |
@@ -87,7 +88,7 @@ A key entry is `{ "items": [ item, … ] }`. The demo and MVP have exactly 1 ite
 
 | Field | Type | Rule |
 |---|---|---|
-| `castId` | string | `<theme>_<key>_<name>_<variant>`, e.g. `dino_c_triceratops_01`. Unique within the theme. Stable: the Parade counts cast members by this id. |
+| `castId` | string | `<assetPrefix>_<key>_<name>_<variant>`, e.g. `dino_c_triceratops_01`. Unique within the theme. Stable: the Parade counts cast members by this id. |
 | `name` | string | Display name for the grown-up list ("Triceratops"). The child never needs to read it. |
 | `word` | string | The words the voice says after the letter, e.g. `"triceratops"`, `"three baby dinosaurs"`. |
 | `say` | string | The letter or number name spelled the way it sounds, the script for recording and for any TTS fallback: `"see"`, `"double you"`, `"zee"` (US, K-05), `"three"`. A is `"A."` because the prototype's voice read "ay" as "eye". Never "letter C" (concept §3). |
@@ -95,8 +96,8 @@ A key entry is `{ "items": [ item, … ] }`. The demo and MVP have exactly 1 ite
 | `family` | string | A family id from the theme (`horned`, `sauropod`…; art bible §3). |
 | `variant` | string | The family variant: the one outline trait (`tri-horn`, `neck-up`…). Siblings in a family never share one. |
 | `hueSlot` | string | One of `rose coral ochre leaf mint teal blue violet`, or `shared` for objects that use the shared constants (art bible §4). |
-| `art` | string | Relative path of the layered SVG: `art/cast_dino_c_triceratops_01.svg`. |
-| `silhouette` | string | Relative path of the baked silhouette path file: `sil/sil_dino_c_triceratops_01.json`. It holds one compound path in the morph-v1 subset (contract §2, §8). |
+| `art` | string | Relative path of the **baked cast file**, the only art the app reads: `cast/cast_dino_c_triceratops_01.json` (ADR-0003 D1, D4; Cast Rendering R2). Its **source** is found by rule, not stored: `src/art/` + the same stem + `.svg` (`src/art/cast_dino_c_triceratops_01.svg`, build-only, the layered SVG of art bible §8). |
+| `silhouette` | string | Relative path of the baked silhouette path file: `sil/sil_dino_c_triceratops_01.json`. It holds one compound path in the morph-v1 subset (contract §2, §8). Its source is `src/sil/` + the same stem + `.svg` (the artist's export, build-only; ADR-0003 D1, D4). |
 | `sfx` | string \| null | Relative path of the cast member's own sound: `sfx/sfx_dino_c_triceratops_01.m4a`; `null` means none. |
 | `voice` | object | Voice **line ids**, not paths: `{ "letter": "c", "word": "triceratops" }`. For digits: `{ "number": "3", "word": "three_baby_dinosaurs" }`. |
 | `weight` | number | Optional, production only; default `1` (Formulas). |
@@ -107,7 +108,8 @@ A key entry is `{ "items": [ item, … ] }`. The demo and MVP have exactly 1 ite
 same in every theme. Word lines belong to the theme. Adding a locale (K-02, Localization) adds files
 and one `voiceLocales` entry, without editing any item.
 
-**Asset formats:** SVG for art, JSON for path data, mono AAC `.m4a` for sound and voice. These are
+**Asset formats:** SVG for the art **sources** (build-only), baked JSON for art and path data (shipped), mono AAC
+`.m4a` for sound and voice (ADR-0003 D1, D8). These are
 platform-neutral: the same files serve iOS, macOS and later Android (game-dev-ios point 11).
 
 **c. Glyph set** (`content/glyphs/<glyph_set_id>/glyphs.json`)
@@ -124,8 +126,10 @@ MorphCore / tools (contract §8).
 | `glyphs` | Key → relative path `glyph_<font>_<char>.json` (art bible §8). All 36 keys are required. |
 
 **d. Asset naming** follows art bible §8, `[category]_[theme]_[key]_[name]_[variant].[ext]`, in
-lowercase with underscores:
-- letters: `cast_dino_c_triceratops_01.svg`, `sil_dino_c_triceratops_01.json`, `sfx_dino_c_triceratops_01.m4a`;
+lowercase with underscores; `[theme]` is the theme's **`assetPrefix`** (`dino`), not its `id`:
+- letters: `cast_dino_c_triceratops_01.json` (baked; source `src/art/cast_dino_c_triceratops_01.svg`),
+  `sil_dino_c_triceratops_01.json` (baked; source `src/sil/sil_dino_c_triceratops_01.svg`),
+  `sfx_dino_c_triceratops_01.m4a`;
 - digits, under the same pattern: `sil_dino_3_babies_01.json` is **three babies as one compound path**, and `sil_dino_0_nest_01.json` is the empty nest (game-dev-ios point 5);
 - voice: `vo_en-us_letter_c.m4a`, `vo_en-us_number_3.m4a`, `vo_en-us_word_triceratops.m4a`.
 
@@ -135,7 +139,7 @@ lowercase with underscores:
 "C": { "items": [ {
   "castId": "dino_c_triceratops_01", "name": "Triceratops", "word": "triceratops",
   "say": "see", "sound": "inside", "family": "horned", "variant": "tri-horn", "hueSlot": "coral",
-  "art": "art/cast_dino_c_triceratops_01.svg",
+  "art": "cast/cast_dino_c_triceratops_01.json",
   "silhouette": "sil/sil_dino_c_triceratops_01.json",
   "sfx": "sfx/sfx_dino_c_triceratops_01.m4a",
   "voice": { "letter": "c", "word": "triceratops" }
@@ -198,22 +202,23 @@ lowercase with underscores:
 | # | Rule |
 |---|---|
 | V1 | `schemaVersion` is a known major. |
-| V2 | All 36 keys are present, each with ≥ 1 item; MVP themes have exactly 1. |
-| V3 | Keys are exactly `A`–`Z`, `0`–`9`; no other key appears. |
+| V2 | All 36 keys are present, each with ≥ 1 item. **At build, with the build setting `singleItemPerKey` on (the MVP bundle), each key has exactly 1**; the theme file carries no edition flag, and the load-time run does not check it (KT-Q4). A missing key fails **V2 only** (KT-Q3). |
+| V3 | No key other than `A`–`Z`, `0`–`9` appears (an extra or malformed key, e.g. `a`, `AA`). A **missing** key is V2's, not V3's (KT-Q3). |
 | V4 | Every letter item's `word` contains its letter (case-insensitive) **and** its `sound` field is set (K-07, K-09). `"exception"` is allowed only for a key listed in the theme's `soundExceptions`. Whether the sound is really audible is a human content check (Toddler-safe rule T5); the field records the reviewer's answer. |
-| V5 | Every digit item's `word` begins with the number word (`one`…`nine`) and contains `countedItem.singular` for 1 and `.plural` for 2–9 (MVP edition); key `0`'s item is `countedItem.emptyCastId` with `emptyWord`. |
-| V6 | `castId` is unique in the theme and follows the naming pattern; `art`, `silhouette`, `sfx` follow art bible §8 naming. |
-| V7 | Every referenced file exists: art, silhouette, sfx (if not null), and every voice line for **every** locale in `voiceLocales`. |
+| V5 | Every digit item's `word` is **exactly** `<number word> <countedItem.singular>` for 1 and `<number word> <countedItem.plural>` for 2–9 (one space; "one baby dinosaur", "three baby dinosaurs"), so a plural can never pass as the singular (KT-Q5); key `0`'s item is `countedItem.emptyCastId` with `emptyWord`. |
+| V6 | `castId` is unique in the theme and matches **`^<prefix>_<key>_<name>_<nn>$`**: `<prefix>` is the theme's `assetPrefix` (for a **v1** theme, which has none, its `id`), `<key>` the key in lower case, `<name>` `[a-z][a-z0-9]*` (one token: `trex`, `babies`), and `<nn>` the **two-digit edition index** `01`, `02`… (the item's position in its key, from 1), **not** the item's `variant` field (KT-Q6); `art` (`cast/cast_….json`), `silhouette` (`sil/sil_….json`) and `sfx` follow art bible §8 naming with the same prefix. |
+| V7 | Every referenced file exists **in exact case** (macOS file systems are case-insensitive, Android assets are not; ADR-0003 D1, D3 `ContentProbe.exists`): art, silhouette, sfx (if not null), and every voice line for **every** locale in `voiceLocales`. **At build only** (Tools), each baked file's source exists by the stem rule (`src/art/…svg`, `src/sil/…svg`). |
 | V8 | Every silhouette and every glyph **parses with a morph-v1 parser** and has **≥ 1 subpath of 2+ points** and **total length > 0** (contract §2–3; game-dev-ios point 4). The bake tool's rule stays: plain decimals, `M` after every `Z`. |
 | V9 | The glyph set has all 36 keys and records font name, version and licence. |
-| V10 | Hue slots: at most **4 items per slot** per theme; family siblings never share a slot; leaf and mint never in one family (art bible §4). Counted over the items in one "edition" (Edge Cases: production variety). |
+| V10 | Hue slots: at most **4 items per slot** per theme; family siblings never share a slot; leaf and mint never in one family (art bible §4). **`shared` is not one of the eight hue slots** (it marks the shared constants of art bible §4: fossil, nest, the number groups) and is **outside the cap and the sibling rule** (KT-Q7). Counted over the items in one "edition" (Edge Cases: production variety). |
 | V11 | Family + variant pairs are unique within a theme. |
 | V12 | Every sfx is ≤ 2.0 s long (art bible §8). |
 | V13 | `family` exists in the theme's `families`. |
 | V14 | Every `weight`, when present, is > 0 (F1 needs a positive total). |
 | V15 | `voiceDurations` has an entry for **every** voice line of every item, for every locale in `voiceLocales`, and no other entries. Each value **matches its file's decoded duration within ±0.01 s**: the **decoded length with the AAC encoder priming and end padding removed** (the sample count the app's decoder returns, which Audio & Voice schedules), **not** the container's duration; AAC priming alone is about 2112 samples, ≈ 44 ms at 48 kHz, which would break ±0.01 s. The build tool measures it with the same trimming the app's decoder applies. **Word lines ≤ 1.25 s** (Audio & Voice `word_len_max_s`, F6) and **letter and number lines ≤ 1.0 s** (`letter_len_max_s`, Audio A3). |
 | V16 | `titleCastId` is present and equals the `castId` of an item in this theme (K-22). |
-| V17 | *(schema 2 and later)* `rowWords` has **≥ 8 entries**, all **unique**, each **2–8 letters**, only `A`–`Z`, and every letter is a key of this theme (K-29; On-screen Keyboard Row R2). Each entry passes the toddler-safe content review (T-rules: no rude, scary or confusing word; no people's given names). |
+| V17 | *(schema 2 and later)* `rowWords` has **≥ 8 entries**, all **unique**, each **2–8 letters**, only `A`–`Z`, and every letter is a key of this theme (K-29; On-screen Keyboard Row R2; this clause is a deliberate guard for a future theme that covers fewer keys and cannot fail while V2 holds, so it needs no case, KT-Q8). Each entry passes the toddler-safe content review (T-rules: no rude, scary or confusing word; no people's given names). |
+| V18 | *(schema 2)* `assetPrefix` is present, matches `[a-z]{2,8}`, and is **unique across the bundled themes**, checked over **the full theme list** at build and at launch **before any theme loads** (a clash fails both themes); the theme's `id` matches its folder name (ADR-0003 D1; TASK-069). |
 
 #### 7. Toddler-safe content rules (every theme)
 
@@ -276,8 +281,9 @@ Inputs:
 Rule (**uniform, no immediate repeat**; Luan, Q1, 2026-11-18):
 
 ```
-if n == 1:            pick 0
+if n == 1:            pick 0                                     (no draw)
 C = all i in 0..n-1, except last (if last is set and n >= 2)
+if |C| == 1:          pick that one                              (no draw: n = 2 with last set; KT-Q2)
 W = sum of w_i over C
 pick the first i in C (in data order) where (sum of w_j for j in C up to and including i) > u * W
 ```
@@ -285,9 +291,10 @@ pick the first i in C (in data order) where (sum of w_j for j in C up to and inc
 With all weights 1, every candidate has probability `1 / |C|`: `1/(n−1)` after the first reveal, and
 `1/n` on the first reveal of that key in this run.
 
-Random numbers: **SplitMix64**, the same generator as morph contract §4. It is seeded with the
-per-launch variety seed, and its 64-bit output is turned into `u = (x >> 11) * 2^-53`. Using the same
-generator lets a shared test fixture check both apps with one seed.
+Random numbers: a **draw is consumed only when |C| ≥ 2** (KT-Q2). Each platform seeds its own `key-variety`
+stream once per launch (injectable in tests; ADR-0002 D4, ADR-0004 D4); a 64-bit draw becomes
+`u = (x >> 11) * 2^-53` (ADR-0002 D4). The shared fixture (`key-table-schema-v1`) **feeds raw draws, not seeds**,
+so both apps are checked without sharing a generator (KT-Q1).
 
 Examples:
 - `n = 1`: always item 0. No random number is drawn.
@@ -311,6 +318,7 @@ whenever C is non-empty. C is never empty: n ≥ 1, and `last` is only excluded 
 | A theme fails the load check when picked in the panel | It is not shown. The current theme stays, with one debug log line. No message to the child. The grown-up panel may grey out the theme (Parent Gate GDD's call). |
 | The stored theme fails the check **at launch** (or is not bundled) | Dinosaurs loads in memory; the stored `themeId` is kept, not rewritten (Settings Store R6). One debug log line. The next launch tries the stored theme again. |
 | `titleCastId` missing or naming no cast member at theme load (despite V16) | The theme still loads. The Title shows the **first item in canonical order** (key `A`, item 0: Ankylosaurus in Dinosaurs) instead; one debug log line (K-22). |
+| **Decoding the theme file** (ADR-0003 D2, D7; KT-Q9) | An **unknown field** and a **missing required field** are both **decode errors** naming the field, at build and at load. The loader treats any decode error as the theme failing V1 (Dinosaurs fallback at load, a failed build at build). Fields that are **schema-dependent** decode as absent and are checked by their V-rule, not by the decoder: `rowWords` (V17) and `assetPrefix` (V18) are required from schema 2. Optional fields (`sfx` null, `weight`) absent are not errors. |
 | A **v1** theme (no `rowWords`), or `rowWords` failing V17 at load | The theme still loads. The keyboard row uses the **first cast `name` of 2–8 letters** (uppercased, letters only) in canonical order (Dinosaurs: `FOSSIL`, key F; A–E are too long), else `"ABC"`; one debug log line (On-screen Keyboard Row R2). |
 | A `voiceDurations` entry is missing or wrong at run time (despite V15) | The Press Queue uses the bound `T + 1.5 s` for that word (Audio & Voice F6). One debug log line. Playback never measures the file. |
 | Silhouette or art missing at run time (despite the gate) | Per asset, nothing shown to the child, one debug log line. **The glyph glows and sparkles out** instead of morphing, and the letter voice plays if present (game-dev-ios point 6). |
@@ -335,6 +343,8 @@ whenever C is non-empty. C is never empty: n ≥ 1, and `last` is only excluded 
 - **art bible** §3 (families, one outline trait), §4 (hue slots, baby pastels), §5 (cast, friendly
   faces, numbers), §8 (asset naming, SVG source, silhouette export, sfx ≤ 2 s);
 - **ADR-0001** Decision 6 (bundled JSON, baked glyphs, silhouettes, reduced set kept elsewhere).
+- **ADR-0003** (Accepted): the `content/` layout, the bake tool and the SVG subset (D1, D4), one validator with an
+  exact-case `ContentProbe` (D3), voice durations and loudness (D5).
 
 **Depended on by** (each GDD must link back to this one when written; noted, not edited here):
 
@@ -499,9 +509,9 @@ Each criterion is checked by the validator on the data, or by a unit test with f
    keeps the current theme; a v1 test theme without `rowWords` loads with the row fallback (unit test).
 7. **Load off the main thread:** loading a theme runs off the main thread (test asserts the thread),
    and a theme that fails the check is never made active (unit test with a broken fixture).
-8. **Pick rule:** with seed S from the shared fixture, `n = 5` and no weights, 10,000 reveals of one
-   key give no immediate repeat and each item between 18% and 22% (unit test, both apps; F1).
-   With `n = 1`, no random number is drawn.
+8. **Pick rule:** the `key-table-schema-v1` F1 cases (raw draws) pass on both apps. Per platform, a unit test
+   with a fixed injected seed, `n = 5` and no weights: 10,000 reveals of one key give no immediate repeat and
+   each item between 18% and 22%. With `n = 1`, or `n = 2` with `last` set, no draw is consumed.
 9. **No saved progress:** after quitting and relaunching, no file written by this system exists
    (`lastShown` is in memory only).
 10. **Theme switch:** with key D queued and the theme switched in the panel, the next reveal shows the
@@ -526,3 +536,7 @@ Each criterion is checked by the validator on the data, or by a unit test with f
 17. **Row words (V17):** the validator passes Dinosaurs' 16 `rowWords`, and fails test themes with 7 entries, a
     duplicate, a 9-letter word, a word with a digit or lowercase letter, and a schema-2 theme without `rowWords`,
     each naming the theme and the rule (validator test).
+18. **Prefix, folder and case (V18, V7):** the validator passes Dinosaurs (`id` "dinosaurs" in folder
+    `themes/dinosaurs/`, `assetPrefix` "dino"), and fails a test theme whose prefix is "Dino", one whose folder and
+    `id` differ, two themes sharing a prefix, and an `art` path `cast/Cast_dino_c_triceratops_01.json` whose file
+    exists only in lower case, each naming the rule (validator test, both runners).
