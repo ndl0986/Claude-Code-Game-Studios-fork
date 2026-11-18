@@ -105,10 +105,20 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-23 Child Lock-in (Luan, 2026-11-18, TASK-052 questions)
+
+- **Extra displays on a locked Mac** are each covered by a plain dusk window that swallows clicks.
+- **iPad with Guided Access on:** the moon and the gate stay as they are; the panel's lock page
+  shows "Guided Access is on".
+- **The Mac lock can't engage** (a precondition still missing after ~5 s): stay unlocked, show the
+  child nothing; the next panel open shows "Child lock couldn't turn on". Never lock without a way out.
+- **App goes inactive while locked** (system alert, Notification Center): the options are released
+  and re-applied on return, with nothing shown to the child.
+
 ### K-22 App Shell & Title (Luan, 2026-11-18, TASK-051 questions)
 
-- **Long background:** returning after more than 30 min away (process still alive, uptime clock, in
-  memory only) goes to the Title; a shorter absence returns to Play with the settled creature (K-15).
+- **Long background:** returning after more than 30 min away (process still alive; measured on the
+  continuous clock, which counts device sleep, in memory only) goes to the Title; a shorter absence returns to Play with the settled creature (K-15).
 - **Title start by touch: any tap except the moon** (as played); letter and digit keys too (K-10).
 - **No text on the Title** (no wordmark, no control hints); only the grown-up panel has text.
 - **One title creature per theme** (Dinosaurs: T-Rex, as played): a Key Table field `titleCastId`.
