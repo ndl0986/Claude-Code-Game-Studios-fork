@@ -193,6 +193,12 @@ sprite's `color` with `colorBlendFactor` 1 multiplies the texture by F8's factor
 - P-3 / M-12 rehearse Accessibility F2 on the spike's frame dump; the release gate is the production busy case.
 - P-11 / M-10 close ADR-0006's window and ppi rows; P-13 checks the stage half of Smart Invert (ADR-0006 D5).
 None of these changes the choice in D1.
+- *Note 2026-11-18 (K-43, TASK-119b; status stays Proposed):* **the flash gate is decided in ADR-0013** (Accepted).
+  Its G4 (the offline busy case and Title runs, rendered headless through `SKRenderer`) gates merge candidates that
+  touch the stage, and its G5 (the device run on a Debug frame dump, per ADR-0013 D5: render-only, windowed by
+  `targetTimestamp`) is the release gate. The P-3 / M-12 rehearsal above now uses DeviceSpike's render-only
+  **FrameDump** (TASK-118, merged ae2aa92f), not the earlier `texture(from:)` dump; it is still a rehearsal, not
+  AC-08. Nothing here changes D1's choice.
 
 ### Architecture Diagram
 ```
