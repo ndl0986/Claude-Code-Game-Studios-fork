@@ -31,3 +31,8 @@ Reviewed-Content-Hash: production/team/decisions.md ca25cf70d2a5b72aa5a11df2ff98
 Review mode: lean · Workflow: standard
 Change: from game-dev-android's read of b76fa21 (APPROVE): R10 and the Hint Letters row now publish the cast box, glyph box and token circles in stage units for Hint Letters R5's clearances (the moon rect is the Parent Gate's); the Hint Letters row says hints take panel open / close from the Parent Gate directly (K-18), while freeze / resume for the challenge comes from here.
 Reviewed-Content-Hash: design/gdd/reveal-stage.md 713b8b7789dc2e66dd68291fedd52a7b26e4d0b7
+
+## Update — 2026-11-18 — TASK-054b Scene flags (no re-review)
+Review mode: lean · Workflow: standard
+Change: R1 (TASK-054b): R10 publishes `haloOn` (the Glow phase) and `mashing` (queue length ≥ 1 or an ignored outcome in the last 1 s, on the play clock) for the Scene's R3/R3a; the Scene row in Interactions lists what it reads; AC-17 added.
+Reviewed-Content-Hash: design/gdd/reveal-stage.md aa1099094a5009d3cf2291bf7687d1aa08eaee1a

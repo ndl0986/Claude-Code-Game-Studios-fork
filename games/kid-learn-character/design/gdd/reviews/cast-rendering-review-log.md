@@ -41,3 +41,8 @@ Findings:
 - [RECOMMENDED] MorphCore ownership row split when / look (73e9c9a, its log) (fixed)
 - [RECOMMENDED] F6/R10 parade_count 6 (K-17, ≈ 1.1 MB) and a separate parade copy of a walker that is the stage creature (febd066) (fixed)
 Reviewed-Content-Hash: design/gdd/cast-rendering.md 8a503e2f8257d53ce8cf3c406690e6b420f6b43b
+
+## Update — 2026-11-18 — TASK-054b per-look glyph and the Scene worst case (no re-review)
+Review mode: lean · Workflow: standard
+Change: C1: R4, R5, R7 and new F8 key the glyph edge (amber #8a4b12 6 u in Morning/Day), the halo (saturated amber in Morning/Day, proposal #f6a93b; 70% size at Night, radius 230 → 161), the Night top stop (#fff1b8 → #ffd36e) and the creature's 15% Night dim to the Scene's look and lookBlend, blended in linear RGB so the Scene's 160-case check shares one edge model; F4's cap uses the current top stop; the halo's current radius is published for the Scene; Interactions, two edge cases and AC-18 added. C2: R11's measurement run includes the Scene's worst case (Night, snow 60 + windy, 3 clouds, 50 stars).
+Reviewed-Content-Hash: design/gdd/cast-rendering.md 633aa4552182f511e341012e2786923fe3adfe4e

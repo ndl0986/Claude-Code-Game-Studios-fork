@@ -113,6 +113,11 @@ points, so when the Reveal Stage swaps the glyph for the specks at `s > glow` th
 - Edge: a cream stroke, 6 units, highlight cream `#f8efdc` at 85%. (The one-shot's `rgba(255,250,235,0.85)` is
   L ≈ 0.96, above the art bible's frame cap of L 0.88; highlight cream is L 0.87.)
 - Alpha and position come from the Reveal Stage.
+- **Per look** (art bible §2; the Scene's `look` and `lookBlend`, Scene R1; F8): in **Morning and Day** the edge is
+  a **deep amber outline** `#8a4b12` at 100%, 6 units, instead of the cream one, so the glyph stays the warmest
+  thing against a pale sky; at **Night** the glyph **drops its palest stop** (the top stop becomes `#ffd36e`, so
+  the gradient runs `#ffd36e` → `#f6a93b`). At Dusk it is as above. Both changes blend with `lookBlend` (F8). The
+  glyph itself never dims. This is the edge model the Scene's 160-case build check uses (Scene R5, F2).
 
 **R5. The halo.** A warm glow behind the glyph while it glows (art bible §2 rule 1, K-08).
 - Only the **blur** changes: it pulses between 60% and 100% of `halo_blur_max`, at **~2.2 Hz** (F2; one-shot
@@ -122,6 +127,11 @@ points, so when the Reveal Stage swaps the glyph for the specks at `s > glow` th
   `rgba(255, 214, 110, 0.25 × alpha)` (one-shot `glowDisk`). It is part of the glyph, so it is the one glow a
   figure has; cast members never glow (art bible §5).
 - The one-shot's blur ran 44–60 units (73–100%); this GDD uses the art bible's 60–100%.
+- **Per look** (art bible §2; F8): in **Morning and Day** the halo is a **saturated amber**, `rgba(246, 169, 59,
+  0.95)` (`#f6a93b`, the glyph's own bottom stop; proposal, the art bible names no hex); at **Night** the halo
+  **shrinks to 70%**: `halo_blur_max` and the glow disk's radius × 0.7 (230 → 161 units). Blended with `lookBlend`.
+- **Published:** the halo's current glow radius (230 units, down to 161 at full Night), which the Scene's weather
+  fade reads (Scene R3, F3d).
 
 **R6. Stardust specks.** Kept **as played** (K-16), a recorded exception to the art bible's "gold only for
 letters" and "other pulses ≤ 1 Hz" rules, because the stardust *is* the letter in motion.
@@ -151,6 +161,10 @@ letters" and "other pulses ≤ 1 Hz" rules, because the stardust *is* the letter
 - **Phase 0 at formed:** `idleTime = s − formedS`, and every idle is at its rest pose at `idleTime = 0`. The
   silhouette is baked at that rest pose, so the creature that fades in matches the shape the stardust drew.
 - **Reduce Motion (K-16):** every idle amplitude × `reduce_motion_scale` (0.5).
+- **Night dim** (art bible §2: "the creature and ground take a 15% ambient dim"): at **Night** every cast drawing
+  (the stage creature, the leaving one, the title creature, parade walkers) and its ground shadow is multiplied by
+  0.85 in colour (F8), blended with `lookBlend`. The ground is the Scene's. The glyph and the stardust are not
+  dimmed.
 
 **R8. Tap hop and parade step.**
 - **Tap hop:** the whole figure rises on a sine arch, `hop_px` (26 units) over `hop_s` (0.45 s) (one-shot). The
@@ -210,6 +224,8 @@ bible's conflict (§8) is recorded, not decided, here.
 **Measurement plan for that ADR** (the oldest supported real iPad, and a Mac):
 1. A stage creature idling, a leaving creature fading out, 240 specks flying with the cap, the glyph with its
    halo, over the Dusk scene; then a parade of `parade_count` (6) figures.
+   **Combined with the Scene's worst case** (Scene F6) in the same run: Night, snow 60 + windy, 3 clouds, 50 stars,
+   mashing halving off and Reduce Motion off, so one device measurement covers the whole stage.
 2. Measure: frame time p50 / p99 (target p99 ≤ 16.7 ms, art bible §8), the load time of one creature at each
    role (it must fit well within the reduced T, 1.2 s), peak memory, app-size delta for the 36 Dinosaurs items,
    and crispness at ~775 px on screen (a 13" iPad).
@@ -245,7 +261,7 @@ A figure's art has a load state; drawing itself is stateless (a pure function of
 | Audio & Voice | none directly | `willForm` reaches it through the Reveal Stage (`hasWord`) |
 | Parade | in | `drawCast(…, parade, …)` for each walker; the step bob (R8) |
 | Accessibility | in | the Reduce Motion flag, read live; applied at the next reveal (R5, R7, R8) |
-| Scene | none | the Scene draws behind; Cast Rendering never changes the sky |
+| Scene: Time of Day & Weather | in / out | in: `look`, `lookBlend` (Scene R1, F1) for the per-look glyph, halo and Night dim (R4, R5, R7, F8); out: the halo's current glow radius (R5). The Scene draws behind; Cast Rendering never changes the sky |
 | Mash World (Full Vision) | in | the same draw calls |
 
 ## Formulas
@@ -327,6 +343,30 @@ wait   = min(late_art_wait_s, max(0, bound))             from the moment a key i
 So with keys waiting in the normal set, Luan's 0.5 s applies only when the word extends the hold. With nothing
 waiting, nothing can replace the creature, so the full 0.5 s is safe.
 
+**F8. Per-look factors** (from the Scene's `lookBlend = (prev, P, w)`, Scene F1).
+```
+md(X) = 1 if X ∈ {Morning, Day} else 0;      nt(X) = 1 if X = Night else 0
+d     = (1 − w)·md(prev) + w·md(P)          the Morning/Day share
+n     = (1 − w)·nt(prev) + w·nt(P)          the Night share
+edge      = mixLin(cream #f8efdc at 85%,  amber #8a4b12 at 100%,  d)        6 units either way
+haloColour = mixLin(rgba(255,200,90,0.95),  rgba(246,169,59,0.95),  d)
+haloScale  = 1 − 0.3·n          × halo_blur_max and × the glow-disk radius (230)
+topStop    = mixLin(#fff1b8, #ffd36e, n)                                     the glyph's (and F4's C_cap)
+castDim    = 1 − 0.15·n         × every cast drawing's colour and its shadow
+```
+`mixLin` blends in linear RGB (Scene F2), so the Scene's build check and this drawing agree on every in-between
+frame.
+
+| Wall time (Scene F1) | lookBlend | d | n | edge | haloScale | castDim |
+|---|---|---|---|---|---|---|
+| 12:00 | (Morning, Day, 1) | 1 | 0 | amber | 1.0 | 1.0 |
+| 16:07 | (Day, Dusk, 0.467) | 0.533 | 0 | 53% amber | 1.0 | 1.0 |
+| 18:00 | (Day, Dusk, 1) | 0 | 0 | cream | 1.0 | 1.0 |
+| 23:00 | (Dusk, Night, 1) | 0 | 1 | cream | 0.7 (161 u) | 0.85 |
+| 06:05 | (Night, Morning, 0.333) | 0.333 | 0.667 | 33% amber | 0.8 | 0.9 |
+
+The stardust cap of F4 uses the current `topStop`, so at Night the specks never outshine the two-stop glyph.
+
 ## Edge Cases
 
 | Case | What happens |
@@ -347,6 +387,8 @@ waiting, nothing can replace the creature, so the full 0.5 s is safe.
 | **The parade starts while a stage figure is resident** | Both are allowed; the resident cap includes the parade set (F6). If the stage creature is also a walker, its parade-role copy is loaded as well. |
 | **A flyer that hovers** | Its shadow stays on the ground line (R7). |
 | **Number 3 (three babies in one file)** | Each baby is a part with its own bob phase (R7); the silhouette is the three together (MorphCore). |
+| **The look changes during a reveal** (a 15-min crossfade, or the Scene's 3 s clock-jump fade) | The edge, halo and dim follow `lookBlend` frame by frame (F8); nothing snaps. |
+| **Night with Reduce Motion** | The halo holds steady at `halo_steady` × 0.7 of its size (R5, F8). |
 | **Mac window resized** | The tier is chosen again from the new physical height (R3); a change loads the new tier and swaps when ready. |
 
 ## Dependencies
@@ -433,6 +475,9 @@ Logic tests use an injected clock and a fake drawing surface; screenshots are re
 16. **AC-16 No platform types:** the draw interface (R12) uses only stage units, seconds and ids (code review).
 17. **AC-17 Measurement (device, NOT ASSESSED):** the R11 measurement plan run on the oldest supported iPad and a
     Mac for both options; results recorded for the SVG-rendering ADR.
+18. **AC-18 Per look (F8):** at the F8 table's five times (injected wall clock through the Scene), the glyph's
+    edge colour, the halo colour and scale, the top stop and the creature's colour factor equal the table within
+    1/255 per channel; the glyph's fill is never dimmed; the Scene's 160-case check passes with this edge model.
 
 **NOT ASSESSED:** every device performance figure (frame time, load time, memory, app size) until AC-17 runs; the
 look of either option on a real iPad screen.

@@ -193,6 +193,12 @@ MorphCore F1).
   creature): the **cast box** (the current creature's box at its anchor), the **glyph box** (the glyph's drawn
   box at full size) and the **token circles** (the queue row). Hint Letters reads them for its clearances (its R5);
   the moon's rect comes from the Parent Gate.
+- And two flags, for the Scene (its R3, R3a), on the play clock:
+  - **`haloOn`**: true while the glyph's halo is on, through the Glow phase (R5: `letter_in < s ≤ glow`), false
+    otherwise and while a reveal is settled or there is none;
+  - **`mashing`**: true while the Press Queue snapshot's queue length is ≥ 1 (its R11), **or** an `ignored` outcome
+    happened in the last `mash_window_s` (1 s, the Scene's knob); false otherwise. It stops changing under a
+    freeze (play clock) and is false after a settle (the queue is empty).
 - **Draw order** (back to front): Scene backdrop (sky, hills, ground, weather) → parade walkers → the leaving
   creature → the current creature → the glyph or the specks → starlights and sparkles → hint letters → queue
   tokens → the moon → the gate and panel. During a parade the stage creature stays where it is, in front of the
@@ -223,7 +229,7 @@ The Reveal Stage's own state follows the Press Queue's, plus freeze:
 | Parade | out | `shown(revealId, key, castId, kind)`; the lane y; the visible rect; draw order; freeze / settle |
 | Parent Gate & Grown-up Panel | in | `freeze` (challenge open), `resume` (wrong or timeout), `settle` (correct → panel) |
 | App Shell & Title | in | enters Play; background → settle; the window size and safe area |
-| Scene: Time of Day & Weather | out | the visible rect to fill (sky and ground extension) |
+| Scene: Time of Day & Weather | out | the visible rect to fill (sky and ground extension), the ground line, the play clock and freeze / resume, the glyph box, `haloOn` and `mashing` (R8, R10) |
 | Accessibility | in | the Reduce Motion flag, read at reveal start (R9) |
 
 ## Formulas
@@ -395,6 +401,9 @@ and Hint Letters. Screenshots are retained in `production/qa/evidence/`.
 15. **AC-15 Prefetch:** a queued key's item is peeked without changing `lastShown`, prefetched, and released if the
     real resolve at start picks another.
 16. **AC-16 Feel (device, NOT ASSESSED):** the reveal and its sounds on a real iPad (TASK-033 procedure).
+17. **AC-17 Scene flags:** `haloOn` is true exactly for frames with `letter_in < s ≤ glow` of the current reveal;
+    `mashing` turns true on a `queued` outcome, stays true while the queue is non-empty, and turns false 1 s after
+    the last `ignored` outcome with an empty queue; under a freeze neither changes; after a settle both are false.
 
 **NOT ASSESSED:** how the reveal and the stage fit feel and read on a real iPad and Mac; device frame time (Cast
 Rendering's measurement plan).
