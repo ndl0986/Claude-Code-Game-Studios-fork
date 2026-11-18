@@ -65,7 +65,7 @@ Task: TASK-061
 - R1:
   - The twinkle is classified as reveal-locked (author's classification; K-29 doesn't list it), in A2, A3, Interactions and AC-03.
   - "At once" is unified to "next frame".
-- R2:  replaces the pipes that broke the tables.
+- R2: abs(sin(...)) replaces |sin(...)|, whose pipes broke the tables.
 - R3: the play-button floor row and its follow-up are dropped, because any tap except the moon starts play (App Shell R3). The 0.38/0.48 flag stays.
 - R4: the keyboard-row "128 units" is removed; it will be cited from onscreen-keyboard-row.md when that lands.
 - R5: A11 and AC-16 are scoped to release builds with PKC-01/05, and a PKC-14 extension follow-up is added.
