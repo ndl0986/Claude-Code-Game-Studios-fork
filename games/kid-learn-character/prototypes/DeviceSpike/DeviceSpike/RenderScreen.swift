@@ -40,7 +40,7 @@ final class RenderModel: ObservableObject {
                          scene.stats.percentile(0.5), scene.stats.percentile(0.99), scene.stats.deltas.count, f.scale, f.visibleX, f.visibleY, f.visibleW, f.visibleH,
                          Double(scene.pxPerPt), ppi, "\(src)", "\(reduce)", "\(invert)")
     }
-    func logStats() { refresh(); SpikeLog.shared.line("[render] option=\(option.rawValue) fps120=\(fps120) \(readout)") }
+    func logStats() { refresh(); SpikeLog.shared.line("[render] option=\(option.rawValue) outline=\(scene.outlineVariant.rawValue) fps120=\(fps120) \(readout)") }
     func overlapCheck() { scene.overlapCheck() }
 
     static func ppi() -> (Double, PPI.Source) {
