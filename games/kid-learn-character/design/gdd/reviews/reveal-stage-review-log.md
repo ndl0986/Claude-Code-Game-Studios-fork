@@ -26,3 +26,8 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md 1f3d8158975fa07f5bac34725067431
 Reviewed-Content-Hash: design/gdd/key-table-theme-data.md e108179924cb3f53191a26f006791f88e7e342bd
 Reviewed-Content-Hash: design/gdd/input-key-filter.md 14c4a9a102f93f6ed093d038b3dcc1387550e738
 Reviewed-Content-Hash: production/team/decisions.md ca25cf70d2a5b72aa5a11df2ff9847764c557c2a
+
+## Update — 2026-11-18 — game-dev-android independent read: APPROVE, two additions
+Review mode: lean · Workflow: standard
+Change: from game-dev-android's read of b76fa21 (APPROVE): R10 and the Hint Letters row now publish the cast box, glyph box and token circles in stage units for Hint Letters R5's clearances (the moon rect is the Parent Gate's); the Hint Letters row says hints take panel open / close from the Parent Gate directly (K-18), while freeze / resume for the challenge comes from here.
+Reviewed-Content-Hash: design/gdd/reveal-stage.md 713b8b7789dc2e66dd68291fedd52a7b26e4d0b7

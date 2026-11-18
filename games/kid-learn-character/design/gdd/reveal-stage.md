@@ -189,6 +189,10 @@ MorphCore F1).
   **visible rect** in stage units (it extends past 0…1280 or 0…720). Cast Rendering (its F1), the Scene, the
   Parade (its F3: `W` = the visible width, starting at the rect's left edge), Hint Letters and Input's hit testing
   use it. App Shell owns the window and the safe-area insets it hands over.
+- It also publishes, in stage units and updated whenever they move (`row_lift`, a token-row change, a new
+  creature): the **cast box** (the current creature's box at its anchor), the **glyph box** (the glyph's drawn
+  box at full size) and the **token circles** (the queue row). Hint Letters reads them for its clearances (its R5);
+  the moon's rect comes from the Parent Gate.
 - **Draw order** (back to front): Scene backdrop (sky, hills, ground, weather) → parade walkers → the leaving
   creature → the current creature → the glyph or the specks → starlights and sparkles → hint letters → queue
   tokens → the moon → the gate and panel. During a parade the stage creature stays where it is, in front of the
@@ -211,7 +215,7 @@ The Reveal Stage's own state follows the Press Queue's, plus freeze:
 |---|---|---|
 | Input & Key Filter | in | press, `sparkle(point)`, `creatureTap(point)` (its R8); out: the creature hit shape (its R7 layer 4), the stage transform for hit tests |
 | Press Queue | out / in | `press(p)` and `tick(now)` on the play clock; in: `startReveal(...)` → `{formedS, revealLen, hasWord}`; out: `formed(revealId)` once; reads the snapshot (R11 there); `settle` on panel and background |
-| Hint Letters | out / in | `originFor(key)` before a hardware press; the outcome (consume / keep); freeze / resume |
+| Hint Letters | out / in | `originFor(key)` before a hardware press; the outcome (consume / keep); freeze / resume for the gate challenge; the cast box, glyph box and token circles (R10). Hints also freeze while the **panel** is open (K-18): Hint Letters takes panel open / close from the Parent Gate & Grown-up Panel directly, not from the Reveal Stage |
 | Key Table & Theme Data | in | `resolve(key)` at start; a peek for prefetch (no `lastShown` change); the fallbacks |
 | MorphCore | in | the morph per reveal (glyph path, silhouette, spec, seed); `position(i, s)`, T, phase |
 | Cast Rendering | out / in | `drawGlyph`, `drawDust`, `drawCast` each frame with the halo on/off, alphas, `idleTime`, `hop`; `willForm`, `isResident`, `prefetch`, `release` |
