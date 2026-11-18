@@ -73,7 +73,10 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-088c | Reveal Stage nits: R3 cells 'in the active locale'; invalid-set rise knob fallback_rise_s 0.45 | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE) | `design/TASK-088c-reveal-nits` | 2026-11-18 |
 | TASK-088d | Reveal Stage F3: invalid-set fadeStart = formedS − fallback_fade_s | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 45809435) | `design/TASK-088d-reveal-f3` | 2026-11-18 |
 | TASK-089 | Contracts batch 4: hint-letters-v1 + keyboard-row-v1 | qa | game-qc-android (review: GDD authors) | SENT 2026-11-18 | `design/TASK-089-contracts-batch4` | 2026-11-18 |
-| TASK-089a | Keyboard Row GDD: KR-Q1–Q11 answers as rules | design | game-art-content (review: game-qc-android) | IN REVIEW @ d4a33f71 | `design/TASK-089-row-answers` | 2026-11-18 |
+| TASK-089a | Keyboard Row GDD: KR-Q1–Q11 answers as rules | design | game-art-content (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 1525bd52) | `design/TASK-089-row-answers` | 2026-11-18 |
+| TASK-089b | Hint Letters R13 draw and tick order (HL-Q answers) + rounded 148/138 marked | design | game-dev-android (review: game-qc-android) | SENT 2026-11-18 | `design/TASK-089b-hint-r13` | 2026-11-18 |
+| TASK-090 | App Shell R7: portrait allowed (contain + extend), hidden status bar + deferred edge gestures (K-39) | design | game-dev-ios (review: game-qc-ios) | SENT 2026-11-18 | `design/TASK-090-appshell-k39` | 2026-11-18 |
+| TASK-090b | Audio knob cut_settle_s 0.04 (≥ max(cut_fade_s, 0.03) + 0.01) for ADR-0010 R2 | design | game-art-content (review: game-dev-ios) | SENT 2026-11-18 | `design/TASK-090b-audio-cut-settle` | 2026-11-18 |
 
 ## Leader log
 

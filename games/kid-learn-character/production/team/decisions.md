@@ -105,6 +105,14 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-39 iPad orientation and system overlays (Luan, 2026-11-18)
+
+- **Portrait is allowed on iPad.** iPadOS 26 no longer lets an app require full screen, so the stage follows any
+  window shape: the 1280×720 safe stage is contained and the sky and ground extend (K-20), never letterboxed. App Shell
+  R7's "landscape when full screen" is amended accordingly.
+- **During play the status bar is hidden and system edge gestures are deferred** (`prefersStatusBarHidden`,
+  `.persistentSystemOverlays(.hidden)`, `preferredScreenEdgesDeferringSystemGestures`). Guided Access stays the real lock.
+
 ### K-38 Test-only ContractKit package (Luan, 2026-11-18)
 
 - A fifth Swift package `apple/ContractKit` is allowed **for tests only**: the shared contract discovery and strict
