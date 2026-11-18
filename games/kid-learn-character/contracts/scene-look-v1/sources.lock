@@ -1,0 +1,8 @@
+# sources.lock for scene-look-v1 (cut 2026-11-18, TASK-101): the ## sections the cases cite.
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/scene-time-weather.md#Detailed Design 2b746aa3cb1fde09f9bc55494724f31aaa20d241
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/scene-time-weather.md#Formulas d582a131dbb5250cbc9ee840134b625b1bc69c8c
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/scene-time-weather.md#Edge Cases eec016b7fbced4ed40f9f72cba884c931fdfd6ca
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/scene-time-weather.md#Acceptance Criteria 0d4fa72629e034d0b0d026382f812cc84caf5028
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/cast-rendering.md#Formulas 8cf723e86ebdc6c3e1b0fb81710844053e52e7fd
+Reviewed-Section-Hash: games/kid-learn-character/design/art/art-bible.md#2. Mood & Atmosphere 265eb207bb35f6c80c040d0ec3e853cd34482da0
+Reviewed-Section-Hash: games/kid-learn-character/docs/architecture/adr-0002-modules-seams-types.md#Decision 20f4dafde70f9e0fe915e9154aff0c640178fb82

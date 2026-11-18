@@ -1,0 +1,6448 @@
+{
+  "contract": "parade-v1",
+  "schema": 1,
+  "uint64AsString": true,
+  "units": {
+    "time": "s",
+    "space": "stage units"
+  },
+  "tolerance": {
+    "time": 1e-09,
+    "geometry": 1e-06
+  },
+  "streams": [],
+  "cases": [
+    {
+      "id": "AC1-distinct-keys",
+      "source": "gdd: parade.md R1; F1 example; AC-1",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Armed",
+            "batch": [
+              "D",
+              "C",
+              "T",
+              "3",
+              "A",
+              "B"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC2-glyph-only-does-not-count",
+      "source": "gdd: parade.md R1 (glyph-only); AC-2",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "E",
+            "castId": "di_e_item_01",
+            "kind": "glyphOnly"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Counting",
+            "batch": [
+              "D",
+              "C",
+              "T",
+              "3",
+              "A"
+            ]
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "E",
+            "castId": "di_e_item_01",
+            "kind": "creature"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Armed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC3-start-exact-boundary",
+      "source": "gdd: parade.md R2.2; F2; Precise rules (TASK-101a) PA-Q1 (inclusive)",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 2.5,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 4.4375
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Armed"
+          }
+        },
+        {
+          "t": {
+            "uptime": 4.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "D",
+                  "castId": "di_d_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "C",
+                  "castId": "di_c_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "T",
+                  "castId": "di_t_item_01",
+                  "i": 2
+                },
+                {
+                  "key": "3",
+                  "castId": "di_3_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ],
+          "expectState": {
+            "state": "Walking",
+            "batch": [],
+            "pt": 0.0
+          }
+        }
+      ],
+      "note": "Dyadic stand-ins (formedS 2.5, revealLen 3.0, restingSince 2.5): start at 2.5 + 0.5 + 1.5 = 4.5, inclusive."
+    },
+    {
+      "id": "AC3-start-normal-set",
+      "source": "gdd: parade.md F2 table (normal set); AC-3",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.45
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 2.45,
+            "formedS": 2.45,
+            "revealLen": 2.95
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 4.4375
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Armed"
+          }
+        },
+        {
+          "t": {
+            "uptime": 4.46875
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "D",
+                  "castId": "di_d_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "C",
+                  "castId": "di_c_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "T",
+                  "castId": "di_t_item_01",
+                  "i": 2
+                },
+                {
+                  "key": "3",
+                  "castId": "di_3_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ],
+          "expectState": {
+            "state": "Walking"
+          }
+        }
+      ],
+      "note": "r0 = 0: the start is due at 4.45; the first tick after it starts the parade."
+    },
+    {
+      "id": "AC3-start-reduced-set",
+      "source": "gdd: parade.md F2 table (reduced set); AC-3",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.125
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.375
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.625
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.2
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 1.2,
+            "formedS": 1.2,
+            "revealLen": 1.5
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.96875
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Armed"
+          }
+        },
+        {
+          "t": {
+            "uptime": 3.03125
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "D",
+                  "castId": "di_d_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "C",
+                  "castId": "di_c_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "T",
+                  "castId": "di_t_item_01",
+                  "i": 2
+                },
+                {
+                  "key": "3",
+                  "castId": "di_3_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC4-press-while-armed",
+      "source": "gdd: parade.md R2.3; AC-4",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 2.5,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 4.0
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": null,
+            "formedS": null,
+            "revealLen": null
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 5.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Armed"
+          }
+        },
+        {
+          "t": {
+            "uptime": 7.0
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 7.0,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 8.9375
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Armed"
+          }
+        },
+        {
+          "t": {
+            "uptime": 9.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "D",
+                  "castId": "di_d_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "C",
+                  "castId": "di_c_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "T",
+                  "castId": "di_t_item_01",
+                  "i": 2
+                },
+                {
+                  "key": "3",
+                  "castId": "di_3_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "note": "The press at 4.0 clears restingSince; the next rest is at 7.0, so the start is 9.0."
+    },
+    {
+      "id": "AC5-order-and-castIds-across-theme-switch",
+      "source": "gdd: parade.md R1 (castId from shown), R3; AC-5",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "themeChanged",
+            "theme": "test"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.25
+          },
+          "event": {
+            "type": "themeChanged",
+            "theme": "dinosaurs"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Counting",
+            "batch": [
+              "D",
+              "C",
+              "T",
+              "3",
+              "A"
+            ]
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Armed"
+          }
+        },
+        {
+          "t": {
+            "uptime": 3.0
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 3.0,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 6.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "D",
+                  "castId": "di_d_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "C",
+                  "castId": "di_c_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "T",
+                  "castId": "di_t_item_01",
+                  "i": 2
+                },
+                {
+                  "key": "3",
+                  "castId": "di_3_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "note": "The walkers keep the castIds stored from their shown(...), first met first."
+    },
+    {
+      "id": "AC6-walk-start-1280",
+      "source": "gdd: parade.md F3; Precise rules (TASK-101a) PA-Q6; AC-6",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "walkAt",
+            "n": 6,
+            "W": 1280.0,
+            "minX": 0.0,
+            "pt": 0.0
+          },
+          "expect": [
+            {
+              "out": "walk",
+              "speed": 216.36363636363637,
+              "x": [
+                -100.0,
+                -250.0,
+                -400.0,
+                -550.0,
+                -700.0,
+                -850.0
+              ],
+              "alpha": 0.0,
+              "drawn": [
+                true,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC6-walk-end-1280",
+      "source": "gdd: parade.md F3; Precise rules (TASK-101a) PA-Q6; AC-6",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "walkAt",
+            "n": 6,
+            "W": 1280.0,
+            "minX": 0.0,
+            "pt": 11.0
+          },
+          "expect": [
+            {
+              "out": "walk",
+              "speed": 216.36363636363637,
+              "x": [
+                2280,
+                2130,
+                1980,
+                1830,
+                1680,
+                1530
+              ],
+              "alpha": 0.0,
+              "drawn": [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC6-walk-fade-in-done-0.6",
+      "source": "gdd: parade.md F3; Precise rules (TASK-101a) PA-Q6; AC-6",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "walkAt",
+            "n": 6,
+            "W": 1280.0,
+            "minX": 0.0,
+            "pt": 0.6
+          },
+          "expect": [
+            {
+              "out": "walk",
+              "speed": 216.36363636363637,
+              "x": [
+                29.818181818181813,
+                -120.18181818181819,
+                -270.1818181818182,
+                -420.1818181818182,
+                -570.1818181818182,
+                -720.1818181818182
+              ],
+              "alpha": 1.0,
+              "drawn": [
+                true,
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC6-walk-wide-mac",
+      "source": "gdd: parade.md F3; Precise rules (TASK-101a) PA-Q6; AC-6",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "walkAt",
+            "n": 6,
+            "W": 1920.0,
+            "minX": -320.0,
+            "pt": 0.0
+          },
+          "expect": [
+            {
+              "out": "walk",
+              "speed": 274.54545454545456,
+              "x": [
+                -420.0,
+                -570.0,
+                -720.0,
+                -870.0,
+                -1020.0,
+                -1170.0
+              ],
+              "alpha": 0.0,
+              "drawn": [
+                true,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC6-walk-wide-mac-end",
+      "source": "gdd: parade.md F3; Precise rules (TASK-101a) PA-Q6; AC-6",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "walkAt",
+            "n": 6,
+            "W": 1920.0,
+            "minX": -320.0,
+            "pt": 11.0
+          },
+          "expect": [
+            {
+              "out": "walk",
+              "speed": 274.54545454545456,
+              "x": [
+                2600,
+                2450,
+                2300,
+                2150,
+                2000,
+                1850
+              ],
+              "alpha": 0.0,
+              "drawn": [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC6-walk-draw-edge-inclusive",
+      "source": "gdd: parade.md F3; Precise rules (TASK-101a) PA-Q6; AC-6",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "walkAt",
+            "n": 6,
+            "W": 1280.0,
+            "minX": 0.0,
+            "pt": 2.542016806722689
+          },
+          "expect": [
+            {
+              "out": "walk",
+              "speed": 216.36363636363637,
+              "x": [
+                450.0,
+                300.0,
+                150.0,
+                0.0,
+                -150.0,
+                -300.0
+              ],
+              "alpha": 1.0,
+              "drawn": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                false
+              ]
+            }
+          ]
+        }
+      ],
+      "note": "pt chosen so x_4 = −150 exactly (drawn, inclusive) and x_5 = −300 (not drawn)."
+    },
+    {
+      "id": "AC7-own-clock-and-end",
+      "source": "gdd: parade.md R2.4, R4; Precise rules (TASK-101a) PA-Q5; AC-7",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 2.5,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 5.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "D",
+                  "castId": "di_d_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "C",
+                  "castId": "di_c_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "T",
+                  "castId": "di_t_item_01",
+                  "i": 2
+                },
+                {
+                  "key": "3",
+                  "castId": "di_3_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 6.0
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": null,
+            "formedS": null,
+            "revealLen": null
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "pt": 4.5
+          }
+        },
+        {
+          "t": {
+            "uptime": 16.4375
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Walking"
+          }
+        },
+        {
+          "t": {
+            "uptime": 16.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "paradeWalking",
+              "on": false
+            },
+            {
+              "out": "release"
+            }
+          ],
+          "expectState": {
+            "state": "Counting"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC8-next-batch-fills-during-walk",
+      "source": "gdd: parade.md R2.5; Precise rules (TASK-101a) PA-Q4; AC-8",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 2.5,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 5.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "D",
+                  "castId": "di_d_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "C",
+                  "castId": "di_c_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "T",
+                  "castId": "di_t_item_01",
+                  "i": 2
+                },
+                {
+                  "key": "3",
+                  "castId": "di_3_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 6.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "E",
+            "castId": "di_e_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 6.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "F",
+            "castId": "di_f_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 6.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "G",
+            "castId": "di_g_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 6.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "H",
+            "castId": "di_h_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 7.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "I",
+            "castId": "di_i_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 7.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "J",
+            "castId": "di_j_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 8.0
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": null,
+            "formedS": null,
+            "revealLen": null
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 9.0
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 9.0,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 12.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Walking"
+          }
+        },
+        {
+          "t": {
+            "uptime": 16.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "paradeWalking",
+              "on": false
+            },
+            {
+              "out": "release"
+            }
+          ],
+          "expectState": {
+            "state": "Armed",
+            "batch": [
+              "E",
+              "F",
+              "G",
+              "H",
+              "I",
+              "J"
+            ]
+          }
+        },
+        {
+          "t": {
+            "uptime": 16.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "E",
+                  "castId": "di_e_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "F",
+                  "castId": "di_f_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "G",
+                  "castId": "di_g_item_01",
+                  "i": 2
+                },
+                {
+                  "key": "H",
+                  "castId": "di_h_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "I",
+                  "castId": "di_i_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "J",
+                  "castId": "di_j_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ],
+          "expectState": {
+            "state": "Walking"
+          }
+        }
+      ],
+      "note": "Armed only at Ended; the rest at 9.0 already meets F2, so the next parade starts on the next tick after Ended."
+    },
+    {
+      "id": "PA-Q4-held-keys-while-armed",
+      "source": "gdd: parade.md States (Armed: held for the next batch); Precise rules (TASK-101a) PA-Q4",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": [],
+          "expectState": {
+            "held": []
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "E",
+            "castId": "di_e_item_01",
+            "kind": "creature"
+          },
+          "expect": [],
+          "expectState": {
+            "held": [
+              "E"
+            ]
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "E",
+            "castId": "di_e_item_01",
+            "kind": "creature"
+          },
+          "expect": [],
+          "expectState": {
+            "held": [
+              "E"
+            ]
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.75
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 2.75,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 5.75
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "D",
+                  "castId": "di_d_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "C",
+                  "castId": "di_c_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "T",
+                  "castId": "di_t_item_01",
+                  "i": 2
+                },
+                {
+                  "key": "3",
+                  "castId": "di_3_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ],
+          "expectState": {
+            "batch": [
+              "E"
+            ],
+            "held": []
+          }
+        },
+        {
+          "t": {
+            "uptime": 6.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": [],
+          "expectState": {
+            "batch": [
+              "E",
+              "D"
+            ]
+          }
+        },
+        {
+          "t": {
+            "uptime": 6.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "E",
+            "castId": "di_e_item_01",
+            "kind": "creature"
+          },
+          "expect": [],
+          "expectState": {
+            "batch": [
+              "E",
+              "D"
+            ]
+          }
+        }
+      ],
+      "note": "D is in the full batch (not held); E is held once; the next batch starts as [E]; D counts again after the parade starts."
+    },
+    {
+      "id": "AC9-panel-ends-at-once",
+      "source": "gdd: parade.md R6; Precise rules (TASK-101a) PA-Q5; AC-9",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 2.5,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 5.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "D",
+                  "castId": "di_d_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "C",
+                  "castId": "di_c_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "T",
+                  "castId": "di_t_item_01",
+                  "i": 2
+                },
+                {
+                  "key": "3",
+                  "castId": "di_3_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "panelOpen"
+          },
+          "expect": [
+            {
+              "out": "paradeWalking",
+              "on": false
+            }
+          ],
+          "expectState": {
+            "state": "Counting"
+          }
+        },
+        {
+          "t": {
+            "uptime": 10.96875
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 11.125
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "release"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 20.0
+          },
+          "event": {
+            "type": "panelClose"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 25.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Counting"
+          }
+        }
+      ],
+      "note": "pt 5: Ended at once; the 0.6 s fade is visual; the figures are released when the fade is done (11.1); no replay."
+    },
+    {
+      "id": "AC10-background-drops",
+      "source": "gdd: parade.md R6; AC-10",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 2.5,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 5.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "D",
+                  "castId": "di_d_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "C",
+                  "castId": "di_c_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "T",
+                  "castId": "di_t_item_01",
+                  "i": 2
+                },
+                {
+                  "key": "3",
+                  "castId": "di_3_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "background"
+          },
+          "expect": [
+            {
+              "out": "paradeWalking",
+              "on": false
+            },
+            {
+              "out": "release"
+            }
+          ],
+          "expectState": {
+            "state": "Counting"
+          }
+        },
+        {
+          "t": {
+            "uptime": 30.0
+          },
+          "event": {
+            "type": "foreground"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 31.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Counting"
+          }
+        }
+      ]
+    },
+    {
+      "id": "R6-panel-while-armed-keeps-batch",
+      "source": "gdd: parade.md R6 (Armed: the batch is kept); Precise rules (TASK-101a) PA-Q9",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "panelOpen"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Armed"
+          }
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "panelClose"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 10.0,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 13.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "D",
+                  "castId": "di_d_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "C",
+                  "castId": "di_c_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "T",
+                  "castId": "di_t_item_01",
+                  "i": 2
+                },
+                {
+                  "key": "3",
+                  "castId": "di_3_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC11-per-theme",
+      "source": "gdd: parade.md R1 (one batch per theme); Precise rules (TASK-101a) PA-Q8; AC-11",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "themeChanged",
+            "theme": "test"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "X",
+            "castId": "te_x_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "Y",
+            "castId": "te_y_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "Z",
+            "castId": "te_z_item_01",
+            "kind": "creature"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Counting",
+            "batch": [
+              "X",
+              "Y",
+              "Z"
+            ]
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "themeChanged",
+            "theme": "dinosaurs"
+          },
+          "expect": [],
+          "expectState": {
+            "batch": [
+              "D",
+              "C",
+              "T"
+            ]
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Armed",
+            "batch": [
+              "D",
+              "C",
+              "T",
+              "3",
+              "A",
+              "B"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC12-two-missing-walk-with-four",
+      "source": "gdd: parade.md R8; Precise rules (TASK-101a) PA-Q2; AC-12",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 2.5,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 5.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "prefetch",
+              "castIds": [
+                "di_t_item_01",
+                "di_3_item_01"
+              ]
+            }
+          ],
+          "expectState": {
+            "state": "Waiting"
+          }
+        },
+        {
+          "t": {
+            "uptime": 5.96875
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Waiting"
+          }
+        },
+        {
+          "t": {
+            "uptime": 6.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "D",
+                  "castId": "di_d_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "C",
+                  "castId": "di_c_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ],
+          "expectState": {
+            "state": "Walking"
+          }
+        }
+      ],
+      "note": "T and 3 never arrive: the walk starts at the wait's end (0.5 s, inclusive) with 4 walkers at indices 0, 1, 4, 5."
+    },
+    {
+      "id": "AC12-four-missing-skip-and-new-rest",
+      "source": "gdd: parade.md R8.3; Precise rules (TASK-101a) PA-Q2 (a skip needs a new rest); AC-12, AC-16",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 2.5,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 5.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "prefetch",
+              "castIds": [
+                "di_d_item_01",
+                "di_c_item_01",
+                "di_t_item_01",
+                "di_3_item_01"
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 6.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "skip",
+              "ready": 2
+            }
+          ],
+          "expectState": {
+            "state": "Armed"
+          }
+        },
+        {
+          "t": {
+            "uptime": 9.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Armed"
+          }
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 10.0,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 13.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "prefetch",
+              "castIds": [
+                "di_d_item_01",
+                "di_c_item_01",
+                "di_t_item_01",
+                "di_3_item_01"
+              ]
+            }
+          ],
+          "expectState": {
+            "state": "Waiting"
+          }
+        }
+      ],
+      "note": "2 ready < 3: skipped, no E12; the same rest doesn't retry; the new rest at 10.0 tries again."
+    },
+    {
+      "id": "R8-three-ready-walks",
+      "source": "gdd: parade.md R8.3; Precise rules (TASK-101a) PA-Q2 (3 → walk)",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 2.5,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 5.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "prefetch",
+              "castIds": [
+                "di_d_item_01",
+                "di_c_item_01",
+                "di_t_item_01"
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 6.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "3",
+                  "castId": "di_3_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R8-art-arrives-mid-wait",
+      "source": "gdd: parade.md R8.2; Precise rules (TASK-101a) PA-Q2 (all resident → walk on that tick)",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 2.5,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 5.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "prefetch",
+              "castIds": [
+                "di_t_item_01"
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 5.75
+          },
+          "event": {
+            "type": "resident",
+            "castId": "di_t_item_01"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 5.8125
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "D",
+                  "castId": "di_d_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "C",
+                  "castId": "di_c_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "T",
+                  "castId": "di_t_item_01",
+                  "i": 2
+                },
+                {
+                  "key": "3",
+                  "castId": "di_3_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC13-reduce-motion-bob",
+      "source": "gdd: parade.md R7; Precise rules (TASK-101a) PA-Q7; AC-13",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 2.5,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 5.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "D",
+                  "castId": "di_d_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "C",
+                  "castId": "di_c_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "T",
+                  "castId": "di_t_item_01",
+                  "i": 2
+                },
+                {
+                  "key": "3",
+                  "castId": "di_3_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 6.0
+          },
+          "event": {
+            "type": "reduceMotion",
+            "value": true
+          },
+          "expect": [],
+          "expectState": {
+            "bobAmp": 5.0
+          }
+        },
+        {
+          "t": {
+            "uptime": 6.0625
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "bobAmp": 2.5,
+            "pt": 0.5625
+          }
+        },
+        {
+          "t": {
+            "uptime": 16.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "paradeWalking",
+              "on": false
+            },
+            {
+              "out": "release"
+            }
+          ]
+        }
+      ],
+      "note": "The path and parade_s are unchanged; the amplitude halves from the next tick."
+    },
+    {
+      "id": "AC19-freeze-walking",
+      "source": "gdd: parade.md R6a; AC-19",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 2.5,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 5.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "D",
+                  "castId": "di_d_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "C",
+                  "castId": "di_c_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "T",
+                  "castId": "di_t_item_01",
+                  "i": 2
+                },
+                {
+                  "key": "3",
+                  "castId": "di_3_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 9.5
+          },
+          "event": {
+            "type": "freeze"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "pause"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 29.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "pt": 4.0
+          }
+        },
+        {
+          "t": {
+            "uptime": 29.5
+          },
+          "event": {
+            "type": "resume"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "resume"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 36.4375
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Walking"
+          }
+        },
+        {
+          "t": {
+            "uptime": 36.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "paradeWalking",
+              "on": false
+            },
+            {
+              "out": "release"
+            }
+          ]
+        }
+      ],
+      "note": "Walking at pt 4, frozen 20 s: pt holds; the walk ends 31 s after its start."
+    },
+    {
+      "id": "AC19-freeze-armed-rest-left",
+      "source": "gdd: parade.md R6a (frozen time doesn't count); AC-19",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 2.5,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 4.0
+          },
+          "event": {
+            "type": "freeze"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 25.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Armed"
+          }
+        },
+        {
+          "t": {
+            "uptime": 25.0
+          },
+          "event": {
+            "type": "resume"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 25.4375
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Armed"
+          }
+        },
+        {
+          "t": {
+            "uptime": 25.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "D",
+                  "castId": "di_d_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "C",
+                  "castId": "di_c_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "T",
+                  "castId": "di_t_item_01",
+                  "i": 2
+                },
+                {
+                  "key": "3",
+                  "castId": "di_3_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "note": "0.5 s of rest left at the freeze: the parade starts 0.5 s after the resume."
+    },
+    {
+      "id": "PA-Q9-freeze-holds-art-wait",
+      "source": "gdd: parade.md R6a; Precise rules (TASK-101a) PA-Q9",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 2.5,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 5.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "prefetch",
+              "castIds": [
+                "di_t_item_01"
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 5.75
+          },
+          "event": {
+            "type": "freeze"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 15.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Waiting"
+          }
+        },
+        {
+          "t": {
+            "uptime": 15.0
+          },
+          "event": {
+            "type": "resume"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 15.1875
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Waiting"
+          }
+        },
+        {
+          "t": {
+            "uptime": 15.25
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "D",
+                  "castId": "di_d_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "C",
+                  "castId": "di_c_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "3",
+                  "castId": "di_3_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "note": "0.25 s of the wait passed before the freeze; the rest runs out 0.25 s after the resume."
+    },
+    {
+      "id": "PA-Q9-panel-while-waiting-to-armed",
+      "source": "gdd: parade.md States (Waiting → Armed); Precise rules (TASK-101a) PA-Q9",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 2.5,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 5.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "prefetch",
+              "castIds": [
+                "di_t_item_01"
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 5.75
+          },
+          "event": {
+            "type": "panelOpen"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Armed",
+            "batch": [
+              "D",
+              "C",
+              "T",
+              "3",
+              "A",
+              "B"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC17-no-cap-repeating-keys",
+      "source": "gdd: parade.md R1 (no cap; repeats count again after a parade); AC-17",
+      "given": {
+        "knobs": {
+          "parade_count": 6,
+          "parade_s": 11.0,
+          "parade_delay_s": 1.5,
+          "gap": 150.0,
+          "fade_s": 0.6,
+          "art_wait_s": 0.5,
+          "skip_fraction": 0.5
+        },
+        "theme": "dinosaurs",
+        "resident": [
+          "di_a_item_01",
+          "di_b_item_01",
+          "di_c_item_01",
+          "di_d_item_01",
+          "di_e_item_01",
+          "di_f_item_01",
+          "di_g_item_01",
+          "di_h_item_01",
+          "di_i_item_01",
+          "di_j_item_01",
+          "di_k_item_01",
+          "di_l_item_01",
+          "di_m_item_01",
+          "di_n_item_01",
+          "di_o_item_01",
+          "di_p_item_01",
+          "di_q_item_01",
+          "di_r_item_01",
+          "di_s_item_01",
+          "di_t_item_01",
+          "di_u_item_01",
+          "di_v_item_01",
+          "di_w_item_01",
+          "di_x_item_01",
+          "di_y_item_01",
+          "di_z_item_01",
+          "di_0_item_01",
+          "di_1_item_01",
+          "di_2_item_01",
+          "di_3_item_01",
+          "di_4_item_01",
+          "di_5_item_01",
+          "di_6_item_01",
+          "di_7_item_01",
+          "di_8_item_01",
+          "di_9_item_01"
+        ],
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.5
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 1.5,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 4.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "D",
+                  "castId": "di_d_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "C",
+                  "castId": "di_c_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "T",
+                  "castId": "di_t_item_01",
+                  "i": 2
+                },
+                {
+                  "key": "3",
+                  "castId": "di_3_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 15.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "paradeWalking",
+              "on": false
+            },
+            {
+              "out": "release"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 16.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "E",
+            "castId": "di_e_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 16.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "F",
+            "castId": "di_f_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 17.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "G",
+            "castId": "di_g_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 17.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "H",
+            "castId": "di_h_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 17.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "I",
+            "castId": "di_i_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 17.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "J",
+            "castId": "di_j_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 18.0
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 18.0,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 21.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "E",
+                  "castId": "di_e_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "F",
+                  "castId": "di_f_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "G",
+                  "castId": "di_g_item_01",
+                  "i": 2
+                },
+                {
+                  "key": "H",
+                  "castId": "di_h_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "I",
+                  "castId": "di_i_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "J",
+                  "castId": "di_j_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 32.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "paradeWalking",
+              "on": false
+            },
+            {
+              "out": "release"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 33.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "D",
+            "castId": "di_d_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 33.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "C",
+            "castId": "di_c_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 33.5
+          },
+          "event": {
+            "type": "shown",
+            "key": "T",
+            "castId": "di_t_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 33.75
+          },
+          "event": {
+            "type": "shown",
+            "key": "3",
+            "castId": "di_3_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 34.0
+          },
+          "event": {
+            "type": "shown",
+            "key": "A",
+            "castId": "di_a_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 34.25
+          },
+          "event": {
+            "type": "shown",
+            "key": "B",
+            "castId": "di_b_item_01",
+            "kind": "creature"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 34.5
+          },
+          "event": {
+            "type": "rest",
+            "restingSince": 34.5,
+            "formedS": 2.5,
+            "revealLen": 3.0
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 37.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "E12",
+              "op": "play"
+            },
+            {
+              "out": "paradeWalking",
+              "on": true
+            },
+            {
+              "out": "walkers",
+              "walkers": [
+                {
+                  "key": "D",
+                  "castId": "di_d_item_01",
+                  "i": 0
+                },
+                {
+                  "key": "C",
+                  "castId": "di_c_item_01",
+                  "i": 1
+                },
+                {
+                  "key": "T",
+                  "castId": "di_t_item_01",
+                  "i": 2
+                },
+                {
+                  "key": "3",
+                  "castId": "di_3_item_01",
+                  "i": 3
+                },
+                {
+                  "key": "A",
+                  "castId": "di_a_item_01",
+                  "i": 4
+                },
+                {
+                  "key": "B",
+                  "castId": "di_b_item_01",
+                  "i": 5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 48.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "paradeWalking",
+              "on": false
+            },
+            {
+              "out": "release"
+            }
+          ]
+        }
+      ],
+      "note": "Three batches, the third repeating the first's keys: three parades."
+    }
+  ]
+}
