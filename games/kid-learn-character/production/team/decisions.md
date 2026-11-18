@@ -105,6 +105,13 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-14 Merge authority (Luan, 2026-11-18)
+
+The leader merges a finished task into `docs/kid-learn-character-plan` and pushes **without asking
+again**, once the task's peer or independent review is APPROVE; the leader reports merges after the
+fact. Design, content, ADR acceptance, engine, store, money and legal calls still go to Luan. Merges
+into `main` still need Luan's go.
+
 ### K-03 Platforms (Luan, 2026-11-17)
 
 **Fully native on every platform, Apple first.** iPadOS and macOS come first (Swift), then iPhone.
