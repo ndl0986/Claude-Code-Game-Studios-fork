@@ -37,10 +37,10 @@ case "validate":
     let r = ContentValidator.run(contentDir: URL(fileURLWithPath: rest[0]), singleItemPerKey: !load)
     for f in r.findings { print(f) }
     for t in r.inProgress { print("NOT ASSESSED theme \(t): in progress (src/ only, no theme.json yet)") }
-    let releaseBlocked = release && !r.inProgress.isEmpty
+    let releaseBlocked = r.pass && !r.passes(release: release)
     let verdict = !r.pass ? "FAIL" : (releaseBlocked ? "FAIL (release: \(r.inProgress.count) theme(s) in progress)" : "PASS")
     print("validate: \(r.themes.count) theme(s)\(r.themes.isEmpty ? "" : " (" + r.themes.joined(separator: ", ") + ")"), \(r.inProgress.count) in progress, \(r.findings.count) finding(s): \(verdict)")
-    exit(r.pass && !releaseBlocked ? 0 : 1)
+    exit(r.passes(release: release) ? 0 : 1)
 default:
     fail("unknown command \(cmd)")
 }
