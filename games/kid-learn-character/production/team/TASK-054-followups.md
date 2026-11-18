@@ -29,7 +29,7 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
 - C2: add the Scene's worst case (snow 60 + windy) to the R11 device measurement run.
 
 ## Reveal Stage
-- R1: publish `mashing` (Press Queue snapshot queue length ≥ 1, or an ignored press in the last 1 s) for the
+- **Done (TASK-054b, 12384c76: R10 publishes `haloOn` and `mashing`; checked in TASK-085a):** R1: publish `mashing` (Press Queue snapshot queue length ≥ 1, or an ignored press in the last 1 s) for the
   Scene's R3a weather halving; also publish `haloOn` (on through the glow phase, R5 timeline) for the Scene's
   halo fade-out. (TASK-053, game-dev-ios)
 
@@ -53,21 +53,21 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
   (TASK-053 Scene)
 
 ## App Shell & Title
-- A1 (wording): AC-3 "in that order" → "all four, before the options" (preconditions arrive in any order);
+- **Done (TASK-054a, bc075e52: AC-3 "in any order of arrival, before 'ready'", R7's didResignActive reason; checked in TASK-085a):** A1 (wording): AC-3 "in that order" → "all four, before the options" (preconditions arrive in any order);
   R7's reason → "would move focus away; Child Lock-in releases only on didResignActive". (game-dev-android)
 
 ## Privacy & Kids Compliance
-- V1: the continuous clock used by App Shell R6 (ContinuousClock / mach_continuous_time) — check whether
+- **Done (TASK-085a: App Shell R6 names ADR-0002 D3 `AwayClock`; `mach_continuous_time` is not a SystemBootTime required-reason API, so 35F9.1 stays PKC-09/AC-09's call):** V1: the continuous clock used by App Shell R6 (ContinuousClock / mach_continuous_time) — check whether
   it needs a privacy-manifest required-reason entry (PKC-09 / system boot time API). (game-dev-ios)
 - V2: L-07 (OS crash logs) stays Luan's call; App Shell cites it.
 
 ## Queued after TASK-060 / TASK-061 (next follow-up batch, TASK-062)
 - **Done (TASK-062, b384818b; checked in TASK-085b):** Hint Letters: read the keyboard row band (y ≥ 582) as an F4 clearance box; note that with the row on the parade
   lane (448) visually overlaps the bottom hint slots, accepted (K-26 dims and stills hints). (TASK-060)
-- Reveal Stage: list the keyboard row band next to its published boxes; set `accessibilityIgnoresInvertColors` on
+- **Done (TASK-062, c4d4ef7b: R10 lists the band `y ≥ 582`; R1 sets `accessibilityIgnoresInvertColors` on the stage view, K-30; checked in TASK-085a):** Reveal Stage: list the keyboard row band next to its published boxes; set `accessibilityIgnoresInvertColors` on
   the stage view (with App Shell). (TASK-060, TASK-061)
 - **Done (TASK-062, b384818b: R6 twinkle × 0.6 reveal-locked, R7 idles next frame with `idle_rm_ease_s`; checked in TASK-085b):** Cast Rendering: stardust twinkle steady under Reduce Motion; ambient idles change on the next frame (K-29).
-- Reveal Stage: Reduce Motion rule for the tap / ignored-press sparkles (owner decides).
-- **Art bible side done (TASK-062, b384818b: §2 rule 2 reads ~~0.48~~ 0.38 Hz, dated; checked in TASK-085b); App Shell side is game-dev-ios's (TASK-085a).** App Shell + art bible: play-button breathe rate 0.38 vs 0.48 Hz; play button's physical touch floor.
+- **Done (TASK-062, c4d4ef7b: R9 keeps the tap and ignored-press sparkles unchanged, leader's call; checked in TASK-085a):** Reveal Stage: Reduce Motion rule for the tap / ignored-press sparkles (owner decides).
+- **Art bible side done (TASK-062, b384818b: §2 rule 2 reads ~~0.48~~ 0.38 Hz, dated; checked in TASK-085b); App Shell side done (TASK-062, c4d4ef7b: R2 keeps 0.38 Hz as played; R3: any tap except the moon starts play, so no physical touch floor; checked in TASK-085a).** App Shell + art bible: play-button breathe rate 0.38 vs 0.48 Hz; play button's physical touch floor.
 - **Done (TASK-062, b384818b: all ten motion GDDs name "Accessibility's `reduceMotion` (its A1; never the OS API)"; checked in TASK-085b):** Every motion GDD: read Accessibility's `reduceMotion` flag, not the OS API.
-- Reveal Stage R10: add the On-screen Keyboard Row at z 35 (above the current creature, below glyph/specks) to the draw-order line (ADR-0006 D1, TASK-070).
+- **Done (TASK-085a: R10's draw order names the row; the z values point to ADR-0006 D1's table):** Reveal Stage R10: add the On-screen Keyboard Row at z 35 (above the current creature, below glyph/specks) to the draw-order line (ADR-0006 D1, TASK-070).

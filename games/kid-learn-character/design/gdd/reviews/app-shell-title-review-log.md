@@ -67,3 +67,9 @@ Reviewed-Content-Hash: design/gdd/app-shell-title.md f8d7498422bcd569090952989df
 Review mode: lean · Workflow: standard
 Change: R2: the play-button breathe stays 0.38 Hz as played (leader's call; the art bible §2 note is amended) and the flag is Accessibility's reduceMotion (A1), next frame. R3: the play button needs no physical touch floor, since any tap except the moon starts play. An Accessibility row added to Interactions. Follow-ups from the Keyboard Row (TASK-060) and Accessibility (TASK-061) GDDs; verdict unchanged; review by game-qc-ios from the diff.
 Reviewed-Content-Hash: design/gdd/app-shell-title.md ff2c7c4cf7970d79f7e66890c113d3f414def5c7
+
+## Update — 2026-11-18 — TASK-085a follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-085a
+Change: Privacy V1: R6's clock note names ADR-0002 D3 AwayClock (ContinuousClock / mach_continuous_time; Android elapsedRealtime); mach_continuous_time is not a SystemBootTime required-reason API, so App Shell adds no manifest entry and 35F9.1 stays PKC-09 / AC-09's call. Replaces the open "Privacy follow-up" sentence. Checked, already landed: A1 wording (TASK-054a), breathe 0.38 Hz and no physical touch floor for the play button (TASK-062). Review: game-qc-ios, from the diff.
+Reviewed-Content-Hash: design/gdd/app-shell-title.md ad0e7f50e3b9d4760c0b5e07c84ae370135f0453
