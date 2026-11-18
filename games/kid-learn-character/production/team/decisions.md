@@ -114,6 +114,8 @@ that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per
 - **MT-Q3:** **yes, a light flies from each new creature to its cell** (Luan chose this over the recommendation).
   Designed in TASK-120 within ADR-0013's bounds.
 - **MT-Q4:** the meter sits **beside the queue tokens**, left of them on the same row (tokens stay in the corner).
+- **ADR-0006 D1 dated note approved** (status stays Accepted): z 70 also holds the parade meter (Parade R12 snapshot,
+  drawn by the Reveal Stage); it and the tokens never overlap. game-dev-ios writes it after TASK-120 merges.
 
 ### K-45 The parade starts as soon as the batch is full (Luan, 2026-11-18)
 
