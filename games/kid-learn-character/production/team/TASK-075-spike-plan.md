@@ -114,9 +114,10 @@ TASK-054b C2); MorphCore AC-11; ADR-0006 D1–D3, D8 (60 fps cap; 120 Hz measure
   baked file; option B's rasteriser run at build time.
 - Unit tests: the same baked creature drawn by A and B gives the same bounding boxes within 1 px; the subset rejector.
 - Simulator frame-time smoke runs (not evidence: device numbers only count from P-2 / M-13).
-- **Dependency:** at least three layered creature SVGs in the subset (a sauropod with neck parts, a rex with a jaw, a
-  flyer with wings) from game-art-content, plus the Dinosaurs glyphs and silhouettes. **The leader should schedule
-  this art early**; without it the spike uses the TASK-033 silhouette and the result is weaker.
+- **Dependency: TASK-077** (game-art-content; game-dev-ios reviews): at least three layered creature SVGs in Cast
+  Rendering's subset (a sauropod with neck parts, a rex with a jaw, a flyer with wings), plus the Dinosaurs glyphs and
+  silhouettes. The Render screen's device runs wait for it; without it the spike would only measure the TASK-033
+  silhouette.
 
 **(c) Evidence rows.** P-2 (iPad: frame time, load per role, memory, app-size delta, crispness), M-13 (Mac), and the
 same build serves P-3 / M-12 (the flash gate) and P-11 / M-10 (window and ppi) and P-13 (Smart Invert pair).
@@ -158,8 +159,10 @@ pending with the AC thresholds (AC-16: within one display frame of the first ans
 output; AC-9: no discontinuity above −60 dBFS). Acceptance after iPad session 1a.
 
 **(d) Spike build.**
-- **P-1 can run now** on the existing TASK-033 app (the device-checks plan says so), SpriteKit target, signed with the
-  Personal Team. That gives the latency baseline early.
+- **P-1 can run now on the TASK-033 app only in a build with the Rive target removed** (or proven to use `loadCdn:
+  false`), running option A (SpriteKit) only, signed with the Personal Team and passing the minimal spike check
+  (including "no Rive in the installed build"). That gives the latency baseline early. Otherwise P-1 waits for
+  `DeviceSpike`.
 - The `DeviceSpike` **Audio** screen adds: the candidate graph and session, a cut button per bus (voice line, cast
   sound, parade tune), mute, a scripted reveal sequence, headphones-unplug and interruption logging, and a silent-mode
   check. It serves P-7, P-8, P-9 on the iPad and M-14 on the Mac. If it is ready before iPad session 1a, P-1 re-runs on
@@ -167,11 +170,27 @@ output; AC-9: no discontinuity above −60 dBFS). Acceptance after iPad session 
 
 **(e) Size: M** (2–3 days).
 
+## What spike evidence can and cannot close
+
+Spike evidence **decides ADR options; it does not pass GDD acceptance criteria** on the production app. Per row:
+
+| Row | GDD AC | What the spike run gives |
+|---|---|---|
+| M-1 | Input AC-1k6 | Decides whether ADR-0007 wires `KeyStateQuery`. TCC is per bundle ID, so the **release gate re-runs M-1 on the production macOS app** |
+| M-3–M-7 | Child Lock-in AC-13–17 | Decides ADR-0008's full-screen mode. The ACs **re-run on the production app** with the real gate, panel and Quit (a short subset is fine) |
+| P-2, M-13 | Cast Rendering AC-17, MorphCore AC-11 | Decides ADR-0009. With three test creatures (TASK-077), the app-size delta for all 36 items and the "raise 240 particles" call are **partial**, recorded as partial |
+| P-3, M-12 | Accessibility AC-08 | An ADR-0009 and F2-detector **rehearsal**. The release gate is the production busy case |
+| P-13 | Accessibility AC-15 | **Stage half only** (the `SKView` opt-out). The panel half waits for the production panel |
+| P-11, M-10 | ADR-0006 V6, V7 (ADR-0006 Accepted) | **Can close** ADR-0006 V6 / V7: the spike stage implements ADR-0006 D2 as written (the F1 transform, `DisplayMetrics` from the window, `.resizeFill`, the touch px conversion) and D7's ppi rule |
+| P-1, P-7–P-9, M-14 | Audio AC-16, AC-9, AC-15, AC-20 | Decides ADR-0010. The ACs re-run on the production app with Audio & Voice |
+| P-4 | Child Lock-in AC-12 | Decides ADR-0008's Guided Access observation. The panel's status line re-runs on the production panel |
+| P-15 (proposed) | Input R1–R4 | Decides ADR-0007's iPad adapter. Re-runs on the production app |
+
 ## Builds and sessions: fewest installs
 
 | Build | Contents | Serves rows | Install |
 |---|---|---|---|
-| **TASK-033 spike app** (exists) | SpriteKit morph + audio, the latency procedure | P-1 (baseline) | iPad, now (Setup F-1–F-3 first) |
+| **TASK-033 spike app, Rive removed** | SpriteKit morph + audio, the latency procedure (option A only) | P-1 (baseline) | iPad, after Setup F-1–F-3 and the minimal spike check |
 | **`DeviceSpike` v1** (one app, iPad + Mac) | Audio, Render (A/B), Keys, Lock / Guided Access screens | P-1 (re-run), P-2, P-3, P-4, P-7, P-8, P-9, P-11, P-13, **P-15**; M-1–M-7, M-10, M-12, M-13, M-14 | **one** iPad install for both 1a and 1b (re-sign if more than 7 days apart); the Mac runs it from Xcode under MAC FREE |
 
 The production-app rows (P-0, P-5, P-6, P-10, P-12, P-14, M-8, M-9, M-11, M-15, M-16, S-1–S-4) wait for the real
@@ -187,13 +206,23 @@ stories; they are not spike rows and are not planned here.
 
 ## Checks before an install (the minimal spike check, instead of `verify.sh`)
 
-ADR-0011 is Proposed, and its `verify.sh` gates the cores under `apple/`, which the spike is not. Before any spike build
-goes onto Luan's iPad or runs on his Mac:
+ADR-0011 is Accepted (fd35c14f); its `verify.sh` gates the cores under `apple/`. Spike code stays in `prototypes/` and
+never moves into `apple/`, so it runs this minimal check instead. It applies to **both** installs (the TASK-033 build
+for P-1 and `DeviceSpike`), before either goes onto Luan's iPad or runs on his Mac:
 1. It builds headless for the iPad Simulator and macOS, and its unit tests pass.
-2. **No network:** the entitlements show no `com.apple.security.network.client` / `.server`, and a static grep finds no
-   `URLSession`, `NWConnection` or web view (the PKC-01 static subset); no Rive.
-3. No remote Swift package (PKC-03 (a)).
-4. The build's short sha is recorded in the session's `results.md`.
+2. **No network** (PKC-01 static subset): the entitlements show no `com.apple.security.network.client` / `.server`;
+   a static grep finds no `URLSession`, `NWConnection` or web view.
+3. **No Rive in the installed build:** no Rive framework or package in the target, the bundle or its symbols.
+4. No remote Swift package (PKC-03 (a)).
+5. **No permissions** (PKC-04, 06, 08 static subset): no `NS*UsageDescription` key in Info.plist (the Audio screen's
+   silent-mode and route checks need no microphone: they only observe the session and its route); no location,
+   camera or microphone entitlement (`com.apple.security.device.audio-input`, `.camera`,
+   `.personal-information.location`); no URL schemes (`CFBundleURLTypes`, `LSApplicationQueriesSchemes`).
+6. **The Mac key-state read is off by default** (the Keys screen's switch), so M-1 sees a clean first launch.
+7. The build's short sha is recorded in the session's `results.md`.
+
+**After each iPad session, the spike app is removed from the child's iPad** (its debug menu is ungated; leader's
+choice, QC's recommendation), and the removal is recorded in that session's `results.md`.
 
 ## Order and size
 
@@ -220,5 +249,6 @@ Steps 1–3 are headless and can overlap: 1 and 2 by one developer, 3 by another
 
 ## Questions
 
-None for Luan: no store, money, legal or new framework. The art dependency for ADR-0009 (three layered creature SVGs)
-is a scheduling call for the leader.
+None for Luan: no store, money, legal or new framework. The ADR-0009 art is TASK-077 (game-art-content); P-15 and a
+"spike run / ADR evidence" column go into the device-checks plan in TASK-076 (game-qc-ios); game-dev-ios reviews
+both.
