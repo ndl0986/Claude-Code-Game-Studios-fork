@@ -31,7 +31,7 @@ D6).
   - Panel open (Input emits nothing; non-⌘ keys pass to the panel);
   - Inactive.
 - **F1** hit radius (75 at the provisional scale); **F2** re-press gap, including the boundary.
-- **AC-1a–l, n, o; AC-2; AC-3a–f; AC-8** (the sparkle).
+- **AC-1a–l, n–s; AC-2; AC-3a–f; AC-8** (the sparkle).
 
 **Not covered here, and why:**
 - **Hardware system keys and AC-1m:** they never become a `KeyEvent`. The adapters handle them (IF-Q2): device
@@ -80,7 +80,7 @@ Each step's outputs are compared in order.
 | `press` | `key`, `source` (`hardwareKey`, `hint(<id>)`, `keyboardRow`), `origin` (stage point or null), `time` | R8 |
 | `startPlay` | — | Title |
 | `openPanel` | — | the chord |
-| `gateDigit` | `digit`, `anotherKeyHeld` | Gate challenge (IF-Q4; R8 text in TASK-083) |
+| `gateDigit` | `digit`, `anotherKeyHeld` | Gate challenge (R8). `anotherKeyHeld` is true only when another held key **resolved to 0–9** (Space held plus 4 is false) |
 | `gateCancel` | — | Esc in the Gate challenge (IF-Q8) |
 | `gateTouch` | `phase` (`began`, `ended`), `pointerId` | the moon; `ended` once per pointer |
 | `creatureTap` | `point` | |
@@ -90,7 +90,7 @@ Each step's outputs are compared in order.
 **State (`expectState`):** `heldSet` (the `physicalId`s, compared as a set).
 **Field kinds:** `time` is `time` (1e-9); `origin` and `point` are `geometry` (1e-6).
 
-## Answers from the GDD author (IF-Q1–Q11, game-dev-ios; GDD text in TASK-083)
+## Answers from the GDD author (IF-Q1–Q11, game-dev-ios; written into input-key-filter.md by TASK-083 @ 915a9331)
 
 - **Q1:** a numpad key has `character` nil and `positionKey` = its digit; Num Lock is only a modifier bit (adapter
   rule).
@@ -106,4 +106,4 @@ Each step's outputs are compared in order.
 - **Q11 (corrected):** on iPadOS every ⌘-combination, ⌃⌥⌘Q included, is swallowed. The ⌘ exception is macOS
   with the kiosk mode off only. Ctrl, Alt and Fn are swallowed everywhere.
 
-The cases follow these answers. sources.lock is cut again after TASK-083 merges.
+The cases follow the merged GDD text, and sources.lock is cut on it.

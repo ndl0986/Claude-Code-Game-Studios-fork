@@ -1572,7 +1572,7 @@
     },
     {
       "id": "R2-numpad-digit-character-nil",
-      "source": "gdd: input-key-filter.md R2.1; AC-1a; (IF-Q1 answered by game-dev-ios; GDD text pending TASK-083)",
+      "source": "gdd: input-key-filter.md R2.1; AC-1a; (IF-Q1, TASK-083)",
       "given": {
         "platform": "iPadOS",
         "state": "Play",
@@ -1645,7 +1645,7 @@
     },
     {
       "id": "AC1i-numpad-num-lock-off",
-      "source": "gdd: input-key-filter.md AC-1i; Edge Cases (Num Lock off); (IF-Q1 answered by game-dev-ios; GDD text pending TASK-083)",
+      "source": "gdd: input-key-filter.md AC-1i; Edge Cases (Num Lock off); (IF-Q1, TASK-083)",
       "given": {
         "platform": "iPadOS",
         "state": "Play",
@@ -1717,7 +1717,7 @@
     },
     {
       "id": "R3-numpad-num-lock-bit-ignored",
-      "source": "gdd: input-key-filter.md R3 (Num Lock ignored); (IF-Q1 answered by game-dev-ios; GDD text pending TASK-083)",
+      "source": "gdd: input-key-filter.md R3 (Num Lock ignored); (IF-Q1, TASK-083)",
       "given": {
         "platform": "iPadOS",
         "state": "Play",
@@ -3034,7 +3034,7 @@
     },
     {
       "id": "AC1c-cmd-swallowed-on-ipad",
-      "source": "gdd: input-key-filter.md AC-1c; R3; order of checks (the ⌘ exception is macOS only); IF-Q11 (answered; pending TASK-083)",
+      "source": "gdd: input-key-filter.md AC-1c; R3; order of checks (the ⌘ exception is macOS only); IF-Q11 (TASK-083)",
       "given": {
         "platform": "iPadOS",
         "state": "Play",
@@ -6367,7 +6367,7 @@
     },
     {
       "id": "AC1k3-cmd-release-clears-keys-pressed-under-cmd",
-      "source": "gdd: input-key-filter.md AC-1k3; R6 (⌘ release empties the held set); IF-Q9 (answered; pending TASK-083)",
+      "source": "gdd: input-key-filter.md AC-1k3; R6 (⌘ release empties the held set); IF-Q9 (TASK-083)",
       "given": {
         "platform": "macOS",
         "state": "Play",
@@ -6521,7 +6521,7 @@
     },
     {
       "id": "AC1k3-stale-key-pressed-before-cmd",
-      "source": "gdd: input-key-filter.md AC-1k3 (as written); R6 (⌘ release empties the held set); IF-Q9 (answered; pending TASK-083)",
+      "source": "gdd: input-key-filter.md AC-1k3 (as written); R6 (⌘ release empties the held set); IF-Q9 (TASK-083)",
       "given": {
         "platform": "macOS",
         "state": "Play",
@@ -6675,7 +6675,7 @@
     },
     {
       "id": "IFQ9-key-still-held-after-cmd-release",
-      "source": "gdd: input-key-filter.md R4; R6; IF-Q9 (answered; pending TASK-083)",
+      "source": "gdd: input-key-filter.md R4; R6; IF-Q9 (TASK-083)",
       "given": {
         "platform": "macOS",
         "state": "Play",
@@ -6821,7 +6821,7 @@
     },
     {
       "id": "IFQ9-pre-cmd-key-up-then-down-again",
-      "source": "gdd: input-key-filter.md R4; R6; IF-Q9 (answered; pending TASK-083)",
+      "source": "gdd: input-key-filter.md R4; R6; IF-Q9 (TASK-083)",
       "given": {
         "platform": "macOS",
         "state": "Play",
@@ -7860,7 +7860,7 @@
     },
     {
       "id": "AC1k5-moon-slop-in-points",
-      "source": "gdd: input-key-filter.md AC-1k5; R7 (moon_slop_pt 20); (IF-Q6 answered by game-dev-ios; GDD text pending TASK-083)",
+      "source": "gdd: input-key-filter.md AC-1k5; R7 (moon_slop_pt 20); (IF-Q6, TASK-083)",
       "given": {
         "platform": "iPadOS",
         "state": "Play",
@@ -9367,7 +9367,7 @@
     },
     {
       "id": "Gate-digit-key",
-      "source": "gdd: input-key-filter.md States (Gate challenge: digits to the keypad); (IF-Q4 answered by game-dev-ios; GDD text pending TASK-083)",
+      "source": "gdd: input-key-filter.md States (Gate challenge: digits to the keypad); (IF-Q4, TASK-083)",
       "given": {
         "platform": "iPadOS",
         "state": "GateChallenge",
@@ -9437,7 +9437,7 @@
     },
     {
       "id": "Gate-numpad-digit-num-lock-off",
-      "source": "gdd: input-key-filter.md States (Gate challenge); (IF-Q4 answered by game-dev-ios; GDD text pending TASK-083)",
+      "source": "gdd: input-key-filter.md States (Gate challenge); (IF-Q4, TASK-083)",
       "given": {
         "platform": "iPadOS",
         "state": "GateChallenge",
@@ -9507,7 +9507,7 @@
     },
     {
       "id": "Gate-azerty-digit-by-position",
-      "source": "gdd: input-key-filter.md States (Gate challenge); R2.3; (IF-Q4 answered by game-dev-ios; GDD text pending TASK-083)",
+      "source": "gdd: input-key-filter.md States (Gate challenge); R2.3; (IF-Q4, TASK-083)",
       "given": {
         "platform": "iPadOS",
         "state": "GateChallenge",
@@ -9577,7 +9577,7 @@
     },
     {
       "id": "Gate-digit-with-another-key-held",
-      "source": "gdd: input-key-filter.md States (Gate challenge); (IF-Q4 answered by game-dev-ios; GDD text pending TASK-083)",
+      "source": "gdd: input-key-filter.md States (Gate challenge); (IF-Q4, TASK-083)",
       "given": {
         "platform": "iPadOS",
         "state": "GateChallenge",
@@ -9673,7 +9673,7 @@
     },
     {
       "id": "Gate-digit-repeat-and-modifier",
-      "source": "gdd: input-key-filter.md States (Gate challenge); R3; R4; (IF-Q4 answered by game-dev-ios; GDD text pending TASK-083)",
+      "source": "gdd: input-key-filter.md States (Gate challenge); R3; R4; (IF-Q4, TASK-083)",
       "given": {
         "platform": "iPadOS",
         "state": "GateChallenge",
@@ -9799,8 +9799,424 @@
       ]
     },
     {
+      "id": "AC1p-gate-digit-variants",
+      "source": "gdd: input-key-filter.md AC-1p; R8 (gateDigit)",
+      "given": {
+        "platform": "iPadOS",
+        "state": "GateChallenge",
+        "kioskModeOn": false,
+        "displayMetrics": {
+          "windowPx": [
+            1280,
+            720
+          ],
+          "pxPerPt": 1.0,
+          "safeAreaInsetsPx": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "ppiX": 264,
+          "ppiY": 264,
+          "gestureInsetsPx": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "regions": {
+          "hints": [],
+          "rowKeys": [],
+          "moon": {
+            "centre": [
+              66.0,
+              62.0
+            ],
+            "radius": 50.0
+          },
+          "cast": null
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "key",
+            "kind": "down",
+            "character": "4",
+            "positionKey": "4",
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "k_4"
+          },
+          "expect": [
+            {
+              "out": "gateDigit",
+              "digit": "4",
+              "anotherKeyHeld": false
+            },
+            {
+              "out": "disposition",
+              "value": "consume"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0625
+          },
+          "event": {
+            "type": "key",
+            "kind": "up",
+            "character": "4",
+            "positionKey": "4",
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "k_4"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "key",
+            "kind": "down",
+            "character": null,
+            "positionKey": "4",
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "np4"
+          },
+          "expect": [
+            {
+              "out": "gateDigit",
+              "digit": "4",
+              "anotherKeyHeld": false
+            },
+            {
+              "out": "disposition",
+              "value": "consume"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.3125
+          },
+          "event": {
+            "type": "key",
+            "kind": "up",
+            "character": null,
+            "positionKey": "4",
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "np4"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.5
+          },
+          "event": {
+            "type": "key",
+            "kind": "down",
+            "character": "'",
+            "positionKey": "4",
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "k_4"
+          },
+          "expect": [
+            {
+              "out": "gateDigit",
+              "digit": "4",
+              "anotherKeyHeld": false
+            },
+            {
+              "out": "disposition",
+              "value": "consume"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5625
+          },
+          "event": {
+            "type": "key",
+            "kind": "up",
+            "character": "'",
+            "positionKey": "4",
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "k_4"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.75
+          },
+          "event": {
+            "type": "key",
+            "kind": "down",
+            "character": "d",
+            "positionKey": "D",
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "k_D"
+          },
+          "expect": [
+            {
+              "out": "disposition",
+              "value": "consume"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.8125
+          },
+          "event": {
+            "type": "key",
+            "kind": "up",
+            "character": "d",
+            "positionKey": "D",
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "k_D"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "key",
+            "kind": "down",
+            "character": " ",
+            "positionKey": null,
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "k_space"
+          },
+          "expect": [
+            {
+              "out": "disposition",
+              "value": "consume"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0625
+          },
+          "event": {
+            "type": "key",
+            "kind": "up",
+            "character": " ",
+            "positionKey": null,
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "k_space"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.25
+          },
+          "event": {
+            "type": "key",
+            "kind": "down",
+            "character": "4",
+            "positionKey": "4",
+            "modifiers": [
+              "ctrl"
+            ],
+            "isRepeat": false,
+            "physicalId": "k_4"
+          },
+          "expect": [
+            {
+              "out": "disposition",
+              "value": "consume"
+            }
+          ]
+        }
+      ],
+      "note": "Main-row 4, numpad 4 (Num Lock off), AZERTY's ' key: gateDigit(\"4\", false). D, Space and ⌃4: nothing."
+    },
+    {
+      "id": "AC1p-gate-non-digit-held-is-not-another-key",
+      "source": "gdd: input-key-filter.md R8 (anotherKeyHeld counts held keys that resolved to 0-9)",
+      "given": {
+        "platform": "iPadOS",
+        "state": "GateChallenge",
+        "kioskModeOn": false,
+        "displayMetrics": {
+          "windowPx": [
+            1280,
+            720
+          ],
+          "pxPerPt": 1.0,
+          "safeAreaInsetsPx": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "ppiX": 264,
+          "ppiY": 264,
+          "gestureInsetsPx": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "regions": {
+          "hints": [],
+          "rowKeys": [],
+          "moon": {
+            "centre": [
+              66.0,
+              62.0
+            ],
+            "radius": 50.0
+          },
+          "cast": null
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "key",
+            "kind": "down",
+            "character": " ",
+            "positionKey": null,
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "k_space"
+          },
+          "expect": [
+            {
+              "out": "disposition",
+              "value": "consume"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "key",
+            "kind": "down",
+            "character": "4",
+            "positionKey": "4",
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "k_4"
+          },
+          "expect": [
+            {
+              "out": "gateDigit",
+              "digit": "4",
+              "anotherKeyHeld": false
+            },
+            {
+              "out": "disposition",
+              "value": "consume"
+            }
+          ]
+        }
+      ],
+      "note": "Space is held, but it resolved to nothing, so it doesn't count."
+    },
+    {
+      "id": "AC1p-gate-cmd-digit-kiosk-on",
+      "source": "gdd: input-key-filter.md AC-1p; R5",
+      "given": {
+        "platform": "macOS",
+        "state": "GateChallenge",
+        "kioskModeOn": true,
+        "displayMetrics": {
+          "windowPx": [
+            1280,
+            720
+          ],
+          "pxPerPt": 1.0,
+          "safeAreaInsetsPx": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "ppiX": 264,
+          "ppiY": 264,
+          "gestureInsetsPx": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "regions": {
+          "hints": [],
+          "rowKeys": [],
+          "moon": {
+            "centre": [
+              66.0,
+              62.0
+            ],
+            "radius": 50.0
+          },
+          "cast": null
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "key",
+            "kind": "down",
+            "character": "4",
+            "positionKey": "4",
+            "modifiers": [
+              "cmd"
+            ],
+            "isRepeat": false,
+            "physicalId": "k_4"
+          },
+          "expect": [
+            {
+              "out": "disposition",
+              "value": "consume"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "Gate-esc-cancels",
-      "source": "gdd: input-key-filter.md States (Gate challenge); IF-Q8 (answered by game-dev-ios; GDD text pending TASK-083)",
+      "source": "gdd: input-key-filter.md States (Gate challenge); IF-Q8 (TASK-083)",
       "given": {
         "platform": "iPadOS",
         "state": "GateChallenge",
@@ -9868,7 +10284,7 @@
     },
     {
       "id": "Gate-shift-esc-cancels",
-      "source": "gdd: input-key-filter.md R3 (Shift ignored); IF-Q8 (answered; pending TASK-083)",
+      "source": "gdd: input-key-filter.md R3 (Shift ignored); IF-Q8 (TASK-083)",
       "given": {
         "platform": "iPadOS",
         "state": "GateChallenge",
@@ -9938,7 +10354,7 @@
     },
     {
       "id": "Gate-esc-with-modifier-swallowed",
-      "source": "gdd: input-key-filter.md R3; IF-Q8 (answered; pending TASK-083)",
+      "source": "gdd: input-key-filter.md R3; IF-Q8 (TASK-083)",
       "given": {
         "platform": "iPadOS",
         "state": "GateChallenge",
@@ -10005,7 +10421,7 @@
     },
     {
       "id": "Gate-esc-held-from-before-does-nothing",
-      "source": "gdd: input-key-filter.md R4; IF-Q8 (answered; pending TASK-083)",
+      "source": "gdd: input-key-filter.md R4; IF-Q8 (TASK-083)",
       "given": {
         "platform": "iPadOS",
         "state": "Play",
@@ -10103,6 +10519,203 @@
       "note": "The challenge opens while Esc is held: the set clears, and the platform's repeat of Esc is a repeat, not a new down."
     },
     {
+      "id": "AC1q-gate-ctrl-esc-swallowed",
+      "source": "gdd: input-key-filter.md AC-1q",
+      "given": {
+        "platform": "iPadOS",
+        "state": "GateChallenge",
+        "kioskModeOn": false,
+        "displayMetrics": {
+          "windowPx": [
+            1280,
+            720
+          ],
+          "pxPerPt": 1.0,
+          "safeAreaInsetsPx": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "ppiX": 264,
+          "ppiY": 264,
+          "gestureInsetsPx": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "regions": {
+          "hints": [],
+          "rowKeys": [],
+          "moon": {
+            "centre": [
+              66.0,
+              62.0
+            ],
+            "radius": 50.0
+          },
+          "cast": null
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "key",
+            "kind": "down",
+            "character": "\u001b",
+            "positionKey": null,
+            "modifiers": [
+              "ctrl"
+            ],
+            "isRepeat": false,
+            "physicalId": "k_esc"
+          },
+          "expect": [
+            {
+              "out": "disposition",
+              "value": "consume"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC1q-esc-on-title-is-nothing",
+      "source": "gdd: input-key-filter.md AC-1q",
+      "given": {
+        "platform": "iPadOS",
+        "state": "Title",
+        "kioskModeOn": false,
+        "displayMetrics": {
+          "windowPx": [
+            1280,
+            720
+          ],
+          "pxPerPt": 1.0,
+          "safeAreaInsetsPx": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "ppiX": 264,
+          "ppiY": 264,
+          "gestureInsetsPx": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "regions": {
+          "hints": [],
+          "rowKeys": [],
+          "moon": {
+            "centre": [
+              66.0,
+              62.0
+            ],
+            "radius": 50.0
+          },
+          "cast": null
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "key",
+            "kind": "down",
+            "character": "\u001b",
+            "positionKey": null,
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "k_esc"
+          },
+          "expect": [
+            {
+              "out": "disposition",
+              "value": "consume"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC1r-panel-digit-passes",
+      "source": "gdd: input-key-filter.md AC-1r",
+      "given": {
+        "platform": "iPadOS",
+        "state": "PanelOpen",
+        "kioskModeOn": false,
+        "displayMetrics": {
+          "windowPx": [
+            1280,
+            720
+          ],
+          "pxPerPt": 1.0,
+          "safeAreaInsetsPx": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "ppiX": 264,
+          "ppiY": 264,
+          "gestureInsetsPx": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "regions": {
+          "hints": [],
+          "rowKeys": [],
+          "moon": {
+            "centre": [
+              66.0,
+              62.0
+            ],
+            "radius": 50.0
+          },
+          "cast": null
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "key",
+            "kind": "down",
+            "character": "4",
+            "positionKey": "4",
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "k_4"
+          },
+          "expect": [
+            {
+              "out": "disposition",
+              "value": "pass"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "Gate-esc-in-play-is-nothing",
       "source": "gdd: input-key-filter.md R2.4 (Esc resolves to nothing); AC-7",
       "given": {
@@ -10169,7 +10782,7 @@
     },
     {
       "id": "Panel-open-input-emits-nothing",
-      "source": "gdd: input-key-filter.md States (Panel open); IF-Q5 (answered; pending TASK-083)",
+      "source": "gdd: input-key-filter.md States (Panel open); IF-Q5 (TASK-083)",
       "given": {
         "platform": "macOS",
         "state": "PanelOpen",
