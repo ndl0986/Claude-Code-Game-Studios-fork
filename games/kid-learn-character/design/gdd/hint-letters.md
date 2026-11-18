@@ -1,6 +1,6 @@
 # Hint Letters
 
-> **Status**: In Review
+> **Status**: Approved (independent read by game-qc-android, merged 2026-11-18)
 > **Author**: game-dev-android for Luan (TASK-047); plan reviewed by game-qc-android
 > **Last Updated**: 2026-11-18
 > **Last Verified**: 2026-11-18, against Input & Key Filter R7/F1, Press Queue R3/R4/R11, Key Table (36 keys), art
