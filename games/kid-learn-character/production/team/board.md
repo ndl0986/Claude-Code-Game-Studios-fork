@@ -49,8 +49,10 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-067 | ADR-0005 settings persistence on Apple (via /architecture-decision; Proposed → Luan) | architecture | game-dev-ios (review: game-qc-ios) | DONE `84163153`, merged (review: game-qc-ios APPROVE); **ADR-0005 Accepted by Luan** | `design/TASK-067-adr-0005` | 2026-11-18 |
 | TASK-068 | First contracts: contracts/README, case-schema-v1.md, key-table-schema-v1, settings-record-v1 (specs + hand-written cases, no code) | qa | game-qc-android (review: game-art-content / game-dev-android) | Both APPROVE `2514266e`; HOLD (option a): rebase on TASK-069, add KT-Q/V18 cases + SS-Q1–Q7 cases, regenerate sources.lock, delta re-review | `design/TASK-068-contracts-first` | 2026-11-18 |
 | TASK-069 | Key Table + art bible follow-ups from ADR-0003 (id = dinosaurs, assetPrefix, art → baked JSON, exact-case V7, §8 subset list) | design | game-art-content (review: game-dev-android) | DONE `51cfeb01`, merged 2026-11-18 (review: game-dev-android APPROVE) | `design/TASK-069-keytable-adr0003` | 2026-11-18 |
-| TASK-070 | ADR-0006 stage runtime (SpriteKit behind the stage protocol, frame driver, stage fit, window choice, ppi table) | architecture | game-dev-ios (review: game-dev-android) | SENT 2026-11-18 | `design/TASK-070-adr-0006` | 2026-11-18 |
-| TASK-071 | ADR-0011 local build, verification and PKC scans | architecture | game-dev-android (review: game-qc-ios) | SENT 2026-11-18 | `design/TASK-071-adr-0011` | 2026-11-18 |
+| TASK-070 | ADR-0006 stage runtime (SpriteKit behind the stage protocol, frame driver, stage fit, window choice, ppi table) | architecture | game-dev-ios (review: game-dev-android) | IN PROGRESS: PLAN APPROVED 2026-11-18 (+ ADR-0002 ppi amendment note, K-34) | `design/TASK-070-adr-0006` | 2026-11-18 |
+| TASK-071 | ADR-0011 local build, verification and PKC scans | architecture | game-dev-android (review: game-qc-ios) | IN PROGRESS: PLAN APPROVED 2026-11-18 (K-34 headless rule; tools/ci at game root) | `design/TASK-071-adr-0011` | 2026-11-18 |
+| TASK-072 | Settings Store "Canonical record" note (SS-Q1–Q7 answers) | design | game-dev-android (review: game-qc-android) | SENT 2026-11-18 | `design/TASK-072-settings-canonical` | 2026-11-18 |
+| TASK-073 | TTS sample spike: Kokoro af_heart vs Piper ljspeech, ~12 lines, headless; Luan listens and picks (K-33) | audio | game-art-content | SENT 2026-11-18 | `design/TASK-073-tts-samples` | 2026-11-18 |
 
 ## Leader log
 
@@ -128,3 +130,4 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 - 2026-11-18: ADR-0004 Accepted (Luan). K-32: no ads reaffirmed; TTS needs a distribution licence even for a free app (L-09 open).
 - 2026-11-18: ADR-0003 Accepted (Luan). ADR-0005 merged as Proposed.
 - 2026-11-18: ADR-0005 Accepted (Luan). Accepted so far: ADR-0001…0005. Luan asked for a TTS licence survey (research running).
+- 2026-11-18: K-33 (try Kokoro + Piper), K-34 (headless runs need no MAC FREE; ADR-0002 ppi amendment). TASK-069 merged. TASK-072, 073 sent.
