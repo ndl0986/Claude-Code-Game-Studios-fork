@@ -25,6 +25,8 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-043 | GDD: Press Queue (`design/gdd/press-queue.md`) via /design-system | design | game-dev-android (review: game-dev-ios) | DONE `5a8aa5f`, merged 2026-11-18 (review: game-dev-ios APPROVE) | `design/TASK-043-gdd-press-queue` | 2026-11-18 |
 | TASK-044 | GDD: Cast Rendering (`design/gdd/cast-rendering.md`) via /design-system | design | game-dev-ios (review: game-dev-android) | IN PROGRESS: PLAN APPROVED 2026-11-18 after REVISE (K-16 folded in) | `design/TASK-044-gdd-cast-rendering` | 2026-11-18 |
 | TASK-045 | Art bible K-16 amendments (stardust + parade-bob exceptions, per-part groups with pivots, Reduce Motion softening, 240 particles, SVG subset pointer) | design | game-art-content (review: game-dev-ios) | CODE REVIEW: done `c3f7f3f`; SVG-subset line requested; game-dev-ios peer check | `design/TASK-045-art-bible-k16` | 2026-11-18 |
+| TASK-046 | GDD: Parade (`design/gdd/parade.md`) via /design-system | design | game-art-content (review: game-dev-android) | SENT 2026-11-18 (after TASK-045) | `design/TASK-046-gdd-parade` | 2026-11-18 |
+| TASK-047 | GDD: Hint Letters (`design/gdd/hint-letters.md`) via /design-system | design | game-dev-android (review: game-qc-android) | SENT 2026-11-18 | `design/TASK-047-gdd-hint-letters` | 2026-11-18 |
 
 ## Leader log
 
@@ -65,3 +67,4 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 - 2026-11-18: TASK-042 merged (K-14). Press Queue decisions (Luan): panel open clears queue; background clears queue + creature settled; Reduce Motion hold stays 3 s; ignored hint stays.
 - 2026-11-18: K-16 cast rendering choices; TASK-043 done (review); TASK-040 rework; V15 priming note awaiting confirm. Art bible needs a note for the K-16 stardust exception.
 - 2026-11-18: V15 priming note and TASK-043 Press Queue merged (K-14), 6/14 MVP GDDs approved. TASK-044 plan approved; TASK-045 art bible amendments in peer check; TASK-040 rework in review.
+- 2026-11-18: next GDDs sent: TASK-046 Parade (game-art-content), TASK-047 Hint Letters (game-dev-android). TASK-040 rework diff to game-qc-android.
