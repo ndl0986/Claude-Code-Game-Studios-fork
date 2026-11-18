@@ -157,6 +157,19 @@ content/
    family's idle data moves carries a pivot as **`data-pivot="x y"`** in artboard units (a `data-*` attribute, so
    the file stays valid SVG). A missing layer group, a missing part the family's idle names, or a part without its
    pivot fails the bake (Cast Rendering R2, R7).
+   - *Clarification (2026-11-18, Luan, K-37; found while making the TASK-077 spike art):* the sentence above,
+     "holds the three layer groups `body`, `outline` and `detail`", **is clarified as follows.** SVG ids must be
+     unique in a file, so once parts nest, every part can't have a group with `id="body"`. Instead:
+     - a **layer group** is identified by an `id` ending in **`_body`**, **`_outline`** or **`_detail`**, and the rest
+       of the id equals the **enclosing part's id**: `<part>_<layer>` (`root_body`, `neck_outline`,
+       `wing_near_detail`);
+     - every `id` is **unique in the file**;
+     - **part names** match `[a-z]+(_[a-z]+)*`, and `body`, `outline` and `detail` are **reserved**: none of them
+       may appear as a segment of a part name;
+     - the bake and the validator read the layer from the **last `_` segment** of the id (option a1, agreed by
+       game-dev-ios and game-dev-android). A layer group whose prefix is not its enclosing part's id, a duplicate
+       id, or a part name using a reserved segment fails the bake, naming the element and the line.
+     The ADR's status is unchanged (Accepted).
 
 Every rejection names the element, the attribute and the line. The Letter Gold glyph gradient is the only gradient
 in the game; it lives in the glyph renderer (Cast Rendering R4), never in cast art. The bake parses with Foundation

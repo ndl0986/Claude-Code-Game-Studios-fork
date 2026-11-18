@@ -432,6 +432,12 @@ the glyph rises from where it was pressed with an ease-out.
     `rotate`, `scale` only; **rejected: `skewX`, `skewY`**, and a `matrix` with any skew. Plain numbers, no units.
   - **Structure:** every part group holds the `body`, `outline` and `detail` layer groups, and every part the
     family's idle moves carries its `data-pivot`; the part names are the Cast Rendering data's.
+    *(Clarification 2026-11-18, Luan, K-37; ADR-0003 D4.)* **Name each layer group after its part:**
+    `<part>_body`, `<part>_outline`, `<part>_detail`, because every id in an SVG file must be unique. Part names
+    are lowercase words joined by `_` (`neck`, `wing_near`), and never use `body`, `outline` or `detail` as a
+    word. Example: the part `<g id="neck" data-pivot="400 262">` holds `<g id="neck_body">`,
+    `<g id="neck_outline">` and `<g id="neck_detail">`, then its child part `<g id="head" …>` with `head_body`,
+    `head_outline`, `head_detail`. The TASK-077 spike art (`prototypes/DeviceSpike/art/`) follows this.
   - Every rejection names the element, the attribute and the line; the bake fails loudly.
 - *Earlier wording* **SVG subset** *(amendment 2026-11-18, TASK-045)*: cast art uses **only Cast Rendering's SVG subset**
   (`design/gdd/cast-rendering.md` R2, TASK-044). **Allowed:** paths (basic shapes and arcs are converted by the
