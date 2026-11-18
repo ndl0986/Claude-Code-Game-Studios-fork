@@ -98,3 +98,8 @@ Reviewed-Content-Hash: design/gdd/key-table-theme-data.md 640a8fc4bb90c1b95656ed
 Review mode: lean · Workflow: standard
 Change: schemaVersion 2 adds the required theme field `rowWords` (K-29: the keyboard row's word pool; Dinosaurs = 16 words, no given names) and validator rule V17 (≥ 8 unique entries, 2–8 letters A–Z, every letter a theme key, toddler-safe review). The app knows majors 1 and 2; a v1 theme (or a pool failing V17 at load) loads with the row fallback: the first cast name of 2–8 letters in canonical order (Dinosaurs: FOSSIL), else ABC, one debug line. AC-6 now tests an unknown major 3 and the v1 fallback; AC-17 added; Interactions and Dependencies name the On-screen Keyboard Row. Review: game-dev-android (with TASK-060).
 Reviewed-Content-Hash: design/gdd/key-table-theme-data.md c73c0a8e9abbb3b520ef953760a39bce3fc12eb8
+
+## Update — 2026-11-18 — TASK-069 ADR-0003 follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: ADR-0003 (Accepted) D1/D3/D4: `id` = folder = Settings themeId (Dinosaurs "dinosaurs"); new field `assetPrefix` ("dino") used in castIds and asset names, checked by new V18 (present, [a-z]{2,8}, unique across bundled themes, id matches the folder); `art` names the baked cast/cast_….json, with its SVG source found by the stem rule (src/art/, and src/sil/ for silhouettes); V6 uses the prefix; V7 checks existence in exact case and, at build, the sources by stem. AC-18 added. No schema bump (v2 has not shipped). Review: game-dev-android from the diff.
+Reviewed-Content-Hash: design/gdd/key-table-theme-data.md ba50e4e2980d09c4be947addfd2717d2739e8ea3
