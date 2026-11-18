@@ -1,0 +1,91 @@
+skills	1	.claude/skills
+skill	story-done	files=4	lines=561
+check1	story-done	frontmatter=ok	missing=-	name=match
+check2	story-done	phases=8	h2=10	h2_total=10
+check3	story-done	verdicts=CONCERNS:2,APPROVED:2,BLOCKED:5,COMPLETE:11	assessment_words=ready
+check4	story-done	may_i_write=0	before_writing=1	approval=0	ask_write_lines=1	write_tools=Write,Edit
+check5	story-done	last_section=Phase 8: Next story, checkpoint, close	skills_named=story-done,dev-story,story-readiness,create-stories,project-settings	next_phrases=6/2
+check6	story-done	context_fork=no	phases=8	h2=10
+check7	story-done	hint=[story-file-path] [--review full|lean|solo]	args_section=-
+checked	1 of 1
+
+ROOT: <worktree>
+AGENTS: 49  SKILLS: 79  SKILL_FILES: 210  DELEGATION_BLOCKS: 122
+DELEGATION: story-done .claude/skills/story-done/references/review-gates.md:6 "QL-TEST-COVERAGE" agents=qa-lead lines=26
+  markers: objective=1 output=1 sources=2 boundaries=2 recheck=0
+DELEGATION: story-done .claude/skills/story-done/references/review-gates.md:32 "LP-CODE-REVIEW" agents=lead-programmer lines=22
+  markers: objective=1 output=1 sources=2 boundaries=2 recheck=0
+
+ROOT: <worktree>
+FILES: skills=1 skill_files=5 agents=0 instructions=0 docs=0 hooks=0 settings=0
+FOUND_LINES: 25 in 2 of 5 files read
+SCOPE: skill story-done only; agents, instructions, docs, hooks and settings not read
+COUNT: arguments $ARGUMENTS files=0 hits=0
+COUNT: arguments $N files=0 hits=0
+COUNT: frontmatter fm:allowed-tools files=1 hits=1
+COUNT: frontmatter fm:argument-hint files=1 hits=1
+COUNT: frontmatter fm:disable-model-invocation files=1 hits=1
+COUNT: frontmatter fm:model files=1 hits=1
+COUNT: frontmatter fm:user-invocable files=1 hits=1
+COUNT: frontmatter tools-string files=0 hits=0
+COUNT: hooks hook-answer:* files=0 hits=0
+COUNT: hooks hook-payload:* files=0 hits=0
+COUNT: hooks hook:* files=0 hits=0
+COUNT: hooks var:CLAUDE_PROJECT_DIR files=0 hits=0
+COUNT: instructions @import files=0 hits=0
+COUNT: instructions CLAUDE.md files=0 hits=0
+COUNT: instructions cc-path:.claude/CLAUDE.md files=0 hits=0
+COUNT: instructions cc-path:.claude/rules files=0 hits=0
+COUNT: instructions rule-file files=0 hits=0
+COUNT: instructions rule-paths files=0 hits=0
+COUNT: instructions shared-path:.claude/docs files=2 hits=6
+COUNT: questions AskUserQuestion files=1 hits=1
+COUNT: settings cc-path:.claude/output-styles files=0 hits=0
+COUNT: settings cc-path:.claude/settings.json files=0 hits=0
+COUNT: settings cc-path:.claude/settings.local.json files=0 hits=0
+COUNT: settings permission:* files=0 hits=0
+COUNT: settings settings:* files=0 hits=0
+COUNT: settings statusline-payload:* files=0 hits=0
+COUNT: settings var:* files=0 hits=0
+COUNT: shell-lines shared-path:.claude/scripts files=1 hits=9
+COUNT: shell-lines shell-line files=1 hits=1
+COUNT: skill-loading cc-path:.claude/commands files=0 hits=0
+COUNT: skill-loading cc-path:.claude/skills files=1 hits=1
+COUNT: skill-loading skillOverrides files=0 hits=0
+COUNT: skill-loading var:CLAUDE_PLUGIN_DATA files=0 hits=0
+COUNT: skill-loading var:CLAUDE_PLUGIN_ROOT files=0 hits=0
+COUNT: skill-loading var:CLAUDE_SESSION_ID files=0 hits=0
+COUNT: skill-loading var:CLAUDE_SKILL_DIR files=1 hits=1
+COUNT: subagents Agent-tool files=1 hits=1
+COUNT: subagents Task-tool files=0 hits=0
+COUNT: subagents agent-type-list files=0 hits=0
+COUNT: subagents cc-path:.claude/agent-memory files=0 hits=0
+COUNT: subagents cc-path:.claude/agents files=0 hits=0
+COUNT: subagents subagent_type files=0 hits=0
+COUNT: tools TodoWrite files=0 hits=0
+COUNT: tools task-tools files=0 hits=0
+FOUND: instructions shared-path:.claude/docs .claude/skills/story-done/CONTRACT.md:58
+FOUND: frontmatter fm:argument-hint .claude/skills/story-done/SKILL.md:4
+FOUND: frontmatter fm:user-invocable .claude/skills/story-done/SKILL.md:5
+FOUND: frontmatter fm:disable-model-invocation .claude/skills/story-done/SKILL.md:6
+FOUND: frontmatter fm:allowed-tools .claude/skills/story-done/SKILL.md:7
+FOUND: questions AskUserQuestion .claude/skills/story-done/SKILL.md:7
+FOUND: shell-lines shared-path:.claude/scripts .claude/skills/story-done/SKILL.md:7
+FOUND: skill-loading cc-path:.claude/skills .claude/skills/story-done/SKILL.md:7
+FOUND: subagents Agent-tool .claude/skills/story-done/SKILL.md:7
+FOUND: frontmatter fm:model .claude/skills/story-done/SKILL.md:8
+FOUND: shell-lines shell-line .claude/skills/story-done/SKILL.md:11
+FOUND: skill-loading var:CLAUDE_SKILL_DIR .claude/skills/story-done/SKILL.md:11
+FOUND: instructions shared-path:.claude/docs .claude/skills/story-done/SKILL.md:14
+FOUND: instructions shared-path:.claude/docs .claude/skills/story-done/SKILL.md:33
+FOUND: shell-lines shared-path:.claude/scripts .claude/skills/story-done/SKILL.md:57
+FOUND: shell-lines shared-path:.claude/scripts .claude/skills/story-done/SKILL.md:64
+FOUND: instructions shared-path:.claude/docs .claude/skills/story-done/SKILL.md:74
+FOUND: shell-lines shared-path:.claude/scripts .claude/skills/story-done/SKILL.md:100
+FOUND: shell-lines shared-path:.claude/scripts .claude/skills/story-done/SKILL.md:103
+FOUND: instructions shared-path:.claude/docs .claude/skills/story-done/SKILL.md:120
+FOUND: shell-lines shared-path:.claude/scripts .claude/skills/story-done/SKILL.md:177
+FOUND: instructions shared-path:.claude/docs .claude/skills/story-done/SKILL.md:284
+FOUND: shell-lines shared-path:.claude/scripts .claude/skills/story-done/SKILL.md:352
+FOUND: shell-lines shared-path:.claude/scripts .claude/skills/story-done/SKILL.md:393
+FOUND: shell-lines shared-path:.claude/scripts .claude/skills/story-done/SKILL.md:421
