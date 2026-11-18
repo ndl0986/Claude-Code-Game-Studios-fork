@@ -123,7 +123,9 @@ but production uses the subclass either way.
 rebuilt whenever displays change while locked (Child Lock-in R6).
 **Apple.** One borderless `NSWindow` subclass per other `NSScreen`, `canBecomeKey` / `canBecomeMain` `false`,
 background `#46558f`, at the main window's level, accepting mouse events (so they go nowhere); built on lock, removed
-on unlock (R4 step 2), rebuilt on `NSApplication.didChangeScreenParametersNotification`.
+on unlock (R4 step 2), rebuilt on `NSApplication.didChangeScreenParametersNotification`; on the same notification the
+**kiosk window is re-fitted** to its screen's frame (borderless mode), so `windowCoversDisplay` stays true
+(game-dev-android).
 
 ### D5. Activation, suspend, sleep, quit, crash
 **Rule.** The lock is applied only while the app is active and released when it is not (Suspended); it is re-applied
@@ -143,8 +145,10 @@ lifecycle events (ADR-0002 D6, D7 chain 3).
 `windowCoversDisplay` from D1.
 
 ### D7. iPad: observe Guided Access
-**Rule.** There is no app-side lock on the iPad (the system keeps its shortcuts); the app only reports whether the
-platform's own lock is on and shows text guidance with no link (Child Lock-in R8).
+**Rule.** **Never an app-built lock where the platform keeps its shortcuts; the app may request the platform's own,
+user-confirmed lock where one exists, else it observes and guides** (Child Lock-in R8, R9; game-dev-android). On the
+iPad the app only reports whether Guided Access is on and shows text guidance with no link; Android chooses between
+screen pinning and guidance in ADR-0012.
 **Apple.** `guidedAccessEnabled` = `UIAccessibility.isGuidedAccessEnabled`, refreshed on
 `guidedAccessStatusDidChangeNotification`; the panel's G7 reads it. No `requestGuidedAccessSession` (it needs a
 supervised device, `modules/guided-access.md`). Android's equivalent (screen pinning, Child Lock-in R9) is ADR-0012's.
@@ -206,7 +210,9 @@ iPad: guidedAccessEnabled (D7) ──▶ panel G7
 
 ### Negative
 - Some trackpad gestures or keys may escape in both modes (M-3 records them); the app cannot block them.
-- The kiosk window must be an `NSWindow` subclass rather than SwiftUI's default window.
+- The kiosk window must be an `NSWindow` subclass rather than SwiftUI's default window. The merged scaffold uses a
+  SwiftUI `WindowGroup` with `.restorationBehavior(.disabled)`; an AppKit-created window hosting the SwiftUI root keeps
+  that by **`isRestorable = false` and no frame autosave** (game-dev-android).
 
 ### Neutral
 - The iPad has no app-side lock (by design, R8).
@@ -235,7 +241,9 @@ iPad: guidedAccessEnabled (D7) ──▶ panel G7
 - **CPU / Memory**: one window subclass and up to one cover per extra display. **Load / Network**: none.
 
 ## Migration Plan
-None in `apple/`. `prototypes/DeviceSpike`'s Lock screen (both modes, covers, chord stub, overlay stub) and its
+In `apple/`, the Mac target's window moves from SwiftUI's `WindowGroup` to an AppKit-created `NSWindow` subclass
+hosting the same SwiftUI root (D3), with `isRestorable = false` and no frame autosave, so restoration stays off as the
+scaffold has it. `prototypes/DeviceSpike`'s Lock screen (both modes, covers, chord stub, overlay stub) and its
 Guided Access page are the spike; the Child Lock-in adapter story rewrites them.
 
 ## Validation Criteria

@@ -104,8 +104,8 @@ never does, ADR-0002 D6).
 
 ### D2. Key ids, characters and the adapter rules Input names
 **Rule.**
-- `physicalId` is the platform's physical key id, prefixed by platform (`hid:<usage>`, `mac:<keyCode>`); Input's held
-  set keys on it (R4).
+- `physicalId` is the platform's **layout-independent** physical key id, prefixed by platform (`hid:<usage>`,
+  `mac:<keyCode>`; Android's scanCode, Input R4); Input's held set keys on it (R4).
 - `character` is the base-level character (Input R2.2). `positionKey` is the US-QWERTY position of the 26 letters
   and the top-row digits (R2.3).
 - **Numpad (TASK-083, IF-Q1):** a keypad 0–9 key arrives as `character = nil`, `positionKey` = its digit, whatever
@@ -130,10 +130,19 @@ callback; `KidCore` returns the key-down's disposition (consume / pass) before t
 applies it. Ups, cancels and modifier changes carry no disposition (input-filter-v2).
 **Apple.**
 - iPad: a first-responder view in the stage overrides all four `presses…` methods (header: handle cancelled
-  presses). Consume = do not call `super`; pass = call `super`. A `pressesCancelled` becomes `kind: cancel` (Input
-  R4: clears the held set). Focus loss (the scene leaving active) is App Shell's `AppLifecycle` → Input's Inactive.
-- Mac: one `NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .keyUp, .flagsChanged])`; consume = return `nil`,
-  pass = return the event; `flagsChanged` → `kind: modifiersChanged` with the new mask (R6's ⌘-release clear runs on
+  presses). The disposition is **per press**: the reader calls `super` with **only the passed presses** of the
+  `Set<UIPress>`, the consumed ones never. A `pressesCancelled` becomes `kind: cancel` (Input R4: clears the held
+  set). Focus loss (the scene leaving active) is App Shell's `AppLifecycle` → Input's Inactive. UIKit sends no repeats
+  through `pressesBegan` (a held key is one began), so on the iPad R4's repeat rule works through the held set alone.
+- **First responder** (game-dev-android): the stage's responder **stays first responder through the gate challenge**
+  (the SwiftUI keypad overlay is touch-only and never takes focus), so `gateDigit` / `gateDigitUp` / `gateCancel` keep
+  arriving. When **Panel open** begins (Input States: keys pass to the panel's responders), the stage responder
+  resigns so the panel's own controls can take keys; when the panel closes it becomes first responder again. Input's
+  held set clears on both edges anyway (R4).
+- Mac: one `NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .keyUp, .flagsChanged])` (app-wide, so no
+  responder hand-off is needed; in Panel open a passed key reaches the panel's responders); consume = return `nil`,
+  pass = return the event; **focus loss** (the window resigns key, or the app resigns active) is delivered as Input
+  R1's focus loss / Inactive (the held set clears); `flagsChanged` → `kind: modifiersChanged` with the new mask (R6's ⌘-release clear runs on
   it in `KidCore`, ADR-0002 D5). The monitor is installed before the first frame (App Shell R1 step 3; Child Lock-in
   R3: "the chord handler installed" is this monitor). It is never called during menu tracking (header); with the
   kiosk on, the menu bar is hidden, and with it off ⌘-combinations pass to the menus anyway (Input R5).
@@ -156,8 +165,9 @@ then turns it on and the Keys log counts the calls, so the row proves the read r
 it through ADR-0006 D2. An unordered batch of touch-downs is **sorted by the adapter** by timestamp, then x, then y,
 ascending, exact equality, and delivered one at a time (Input R7, IF-Q10).
 **Apple.** iPad: `touchesBegan/Moved/Ended/Cancelled` on the stage view, points × `pxPerPt` (ADR-0006 D2), the
-`Set<UITouch>` batch sorted as above; the pointer id is stable per `UITouch` for its life. Mac: the primary mouse
-button as pointer 0 (down / dragged / up), in window pixels (backing scale).
+`Set<UITouch>` batch sorted as above; the pointer id is stable per `UITouch` for its life. Mac: every mouse button is a
+touch (Input R1): the primary as pointer 0, the secondary (`rightMouseDown`) as pointer 1, others (`otherMouseDown`)
+as 2 + `buttonNumber`; down / dragged / up, in window pixels (backing scale).
 
 ### Decision rule (fixed before the rows run)
 | Row | Pass (decides this ADR) | If it fails |
