@@ -213,9 +213,11 @@ MorphCore F1).
     happened in the last `mash_window_s` (1 s, the Scene's knob); false otherwise. It stops changing under a
     freeze (play clock) and is false after a settle (the queue is empty).
 - **Draw order** (back to front): Scene backdrop (sky, hills, ground, weather) → parade walkers → the leaving
-  creature → the current creature → the glyph or the specks → starlights and sparkles → hint letters → queue
+  creature → the current creature → **the On-screen Keyboard Row** (while it is on) → the glyph or the specks → starlights and sparkles → hint letters → queue
   tokens → the moon → the gate and panel. During a parade the stage creature stays where it is, in front of the
-  walkers (Parade R5).
+  walkers (Parade R5). The `zPosition` of each layer is ADR-0006 D1's table (the keyboard row at z 35: above the
+  current creature at 30, below the glyph or specks at 40) *(TASK-085a; TASK-070)*; this line gives the order only,
+  and D1's table is the one source for the numbers.
 
 ### States and Transitions
 
