@@ -148,7 +148,7 @@ diameter; scaled up by `k` if a device would go under it).
 | Target | Size | Source |
 |---|---|---|
 | Hint letter | hit diameter 27–31 mm on iPads, ≥ 22.5 mm on the smallest Mac window (k = 1 on every MVP device) | Hint Letters F5 |
-| On-screen keyboard row key | hit rect 144 × 134 units (the drawn key plus 8 units a side), which meets the 18 mm floor; a short common word or name, at most 8 letters | `onscreen-keyboard-row.md` (hit rect, F2; its V17 caps the word at 8, within K-29's ≤ 9) |
+| On-screen keyboard row key | hit rect 144 × 134 units (the drawn key plus 8 units a side), which meets the 18 mm floor; a short common word or name, at most 8 letters | `onscreen-keyboard-row.md` (hit rect, F2; its V17 caps the word at 8, as K-29 does) |
 
 
 Not targets: the title play button (any tap except the moon starts play, App Shell R3), a tap on a
