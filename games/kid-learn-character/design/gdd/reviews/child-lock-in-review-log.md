@@ -41,3 +41,8 @@ Reviewed-Content-Hash: design/gdd/child-lock-in.md c04c66982c334222b5c9d9fa82323
 Review mode: lean · Workflow: standard
 Change: R-2: an Edge Case states that with the lock stored ON, ⌘ is swallowed from the start of Waiting, possibly before the chord handler is installed; accepted (≤ engage_timeout_s, no presentation options yet, ⌥⌘Esc still works) and named for the real-Mac AC-1k6 run. From the cross-review re-run (PASS, e8c8344). Text only; no rule changed. Review: game-qc-android, from the diff.
 Reviewed-Content-Hash: design/gdd/child-lock-in.md 28c5229ecc64dfb6284986a00434a2b273668ea4
+
+## Update — 2026-11-18 — TASK-057a: R3 ready split after 057b (no re-review)
+Review mode: lean · Workflow: standard
+Change: game-qc-android's follow-on from TASK-057b: R3's parenthetical now reads App Shell's "ready" is items 1, 2 and 4; Child Lock-in adds 3 (Input's kiosk-on mode, set on entering Waiting, R7), 5 and 6. Text only.
+Reviewed-Content-Hash: design/gdd/child-lock-in.md 8fea01e0c82e1c8d14b4f882e594bbb5a87d674f

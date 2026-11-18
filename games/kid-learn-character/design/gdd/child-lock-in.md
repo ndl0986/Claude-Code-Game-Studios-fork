@@ -75,8 +75,8 @@ gives up quietly if it can't start, and comes off the moment they turn it off or
 - **Never blockable, by design:** a long press of the power key forces a shutdown. That is the grown-up's hardware
   way out of last resort.
 
-**R3. When it engages.** The kiosk is applied only when **all** of these hold (App Shell's "ready" is the first
-four; Child Lock-in adds 5 and 6):
+**R3. When it engages.** The kiosk is applied only when **all** of these hold (App Shell's "ready" is items 1, 2 and 4;
+Child Lock-in adds 3, 5 and 6):
 
 1. the first frame has been drawn;
 2. the ⌃⌥⌘Q chord handler is installed (Input R6);
