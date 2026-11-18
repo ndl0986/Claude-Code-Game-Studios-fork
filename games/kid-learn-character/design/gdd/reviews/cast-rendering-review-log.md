@@ -71,3 +71,9 @@ Reviewed-Content-Hash: design/gdd/cast-rendering.md b448b0876908c9d8ed79260a3049
 Review mode: lean · Workflow: standard
 Change: game-qc-ios APPROVE of c4d4ef7b with one value fix: the steady twinkle is alpha × 0.6, the true mean of 0.6 + 0.4·sin (range 0.2–1.0), not the 0.8 the previous entry stated (R6 and F3 now say so). The idle ease runs both ways and is a knob, idle_rm_ease_s 0.3 s (R7, the edge case, Tuning Knobs).
 Reviewed-Content-Hash: design/gdd/cast-rendering.md f936a5f0c89f78b8622d7bc90d3b2e3beb6aa662
+
+## Update — 2026-11-18 — TASK-104 F8 edge-switch state (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-104
+Change: game-qc-android's CR-Q1 (scene-look-v1). F8's edge switch states its state rules: at launch the edge is the one for the current value with no dissolve (amber if skyMidL ≥ L_x 0.308, else cream); a return from the background keeps the state (hysteresis on the published skyMidL through the Scene's 3 s jump fade); thresholds inclusive (≥ 0.313, ≤ 0.303); the dissolve starts on the crossing frame; a reverse crossing during a dissolve starts a new 1 s dissolve from the current mix. Consistent with K-25. Review: game-qc-android, from the diff.
+Reviewed-Content-Hash: design/gdd/cast-rendering.md c7c86d58a924777a6c20ca098ece9b7c3920f7bf
