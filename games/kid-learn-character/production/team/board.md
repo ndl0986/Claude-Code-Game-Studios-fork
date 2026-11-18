@@ -85,9 +85,11 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-096 | Parent Gate G13 timing/boundaries (GL-Q answers), G4 slip, AC-36 wording, AC-38 → deferEdges | design | game-qc-ios (review: game-qc-android; AC-38 line: game-dev-ios) | DONE: MERGED (game-qc-android APPROVE @ 5c207fcb) | `design/TASK-096-gate-g13` | 2026-11-18 |
 | TASK-097 | QC iPad simulator: sim-guard --qc accepts it, --dev refuses; ADR-0011 D3 dated note | tools | game-dev-android (review: game-qc-ios) | APPROVE (game-qc-ios @ bd76f904); merges with TASK-079 as its candidate | `design/TASK-097-qc-ipad-sim` | 2026-11-18 |
 | TASK-098 | Input: digit key-up for the Gate (gateDigitUp or digitKeyHeld) so G13 B7 is expressible; input-filter-v2 later | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ bd9df8bc) | `design/TASK-098-input-gate-digit-up` | 2026-11-18 |
-| TASK-099 | input-filter-v2: v1 + AC-1t gateDigitUp cases; v1 superseded | qa | game-qc-android (review: game-dev-ios) | SENT | `design/TASK-099-input-filter-v2` | 2026-11-18 |
+| TASK-099 | input-filter-v2: v1 + AC-1t gateDigitUp cases; v1 superseded | qa | game-qc-android (review: game-dev-ios) | IN REVIEW @ 56aac75a (94 cases) → game-dev-ios | `design/TASK-099-input-filter-v2` | 2026-11-18 |
 
 ## Leader log
+
+- 2026-11-18: after TASK-099 merges, contract merges are frozen until TASK-079 lands; scaffold re-syncs plan tip + registers gate-logic, app-shell, input-filter-v2; QC runs --qc once on that sha.
 
 - 2026-11-18: Mac load spiked to ~360 (first-boot simulator + idle sims + browsers); all builds paused; Luan closed Edge/Chrome/Music; load < 40 → TASK-079 S1 resumed alone.
 
