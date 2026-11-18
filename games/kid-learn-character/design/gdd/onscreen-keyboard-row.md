@@ -80,8 +80,9 @@ who wants to pick their own letters, and nothing ever moves under the child's fi
     press: E and G.
   - **Also on each entry to Play** (from the Title, including after a long background, K-22): a new word is drawn,
     and it fades in with the row.
-  - **The pressed set** *(KR-Q4)* starts empty **when a word's keys start to fade in**, and only presses from then
-    on count for it. A press before that, including a tap on an old key during its fade-out, counts only for the
+  - **The pressed set** *(KR-Q4)* starts empty **when a newly drawn word's keys start to fade in** (a change, a Play
+    entry or a turn-on), and only presses from then on count for it. A short-background return keeps the same word
+    **and its pressed set** (R7, AC-14). A press before that, including a tap on an old key during its fade-out, counts only for the
     old word, which is already being replaced.
   - **Only at a quiet moment** *(KR-Q5: checked every frame; the change starts on the first frame where the word
     is Due and the moment is quiet; a word fading in is not yet Due-checkable, see KR-Q9)*: a due word changes only

@@ -40,3 +40,8 @@ Reviewed-Content-Hash: design/gdd/onscreen-keyboard-row.md 82488fc155f6fab5132c1
 Review mode: lean · Workflow: standard
 Change: answers to game-qc-android's keyboard-row-v1 questions, written into R2, R3, R5 and R8: last = the last word shown this run (none on the first draw), F1 draw rule as is (Q1); turn-on draws at panel close (Q2); a change draws at its start (Q3); the pressed set starts at the new word's fade-in (Q4); the quiet moment is checked every frame, by pointers' current positions (Q5); a row tap lights only that key, hardware/hint all matching (Q6); closed hit rects, y 582 hits, misses fall through to Input R7 (Q7); linear fades (Q8); no change during a fade-in (Q9); turn-off drops the pressed set and keeps the word as last (Q10); the fallback name rule (Q11). Verdict unchanged.
 Reviewed-Content-Hash: design/gdd/onscreen-keyboard-row.md 27f3e276eeb4d2979b975906145e25fbeb371eef
+
+## Update — 2026-11-18 — TASK-089 KR-Q4 wording fix (no re-review)
+Review mode: lean · Workflow: standard
+Change: from game-qc-android's REVISE: the pressed set starts empty only when a newly drawn word fades in (a change, a Play entry, a turn-on); a short-background return keeps the word and its pressed set, consistent with R7 and AC-14.
+Reviewed-Content-Hash: design/gdd/onscreen-keyboard-row.md 078055581428800bf231136040abdac28dc0a038
