@@ -27,6 +27,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-045 | Art bible K-16 amendments (stardust + parade-bob exceptions, per-part groups with pivots, Reduce Motion softening, 240 particles, SVG subset pointer) | design | game-art-content (review: game-dev-ios) | CODE REVIEW: done `c3f7f3f`; SVG-subset line requested; game-dev-ios peer check | `design/TASK-045-art-bible-k16` | 2026-11-18 |
 | TASK-046 | GDD: Parade (`design/gdd/parade.md`) via /design-system | design | game-art-content (review: game-dev-android) | SENT 2026-11-18 (after TASK-045) | `design/TASK-046-gdd-parade` | 2026-11-18 |
 | TASK-047 | GDD: Hint Letters (`design/gdd/hint-letters.md`) via /design-system | design | game-dev-android (review: game-qc-android) | SENT 2026-11-18 | `design/TASK-047-gdd-hint-letters` | 2026-11-18 |
+| TASK-048 | GDD: Parent Gate & Grown-up Panel (`design/gdd/parent-gate-panel.md`) via /design-system | design | game-qc-ios (review: game-qc-android) | SENT 2026-11-18 | `design/TASK-048-gdd-parent-gate-panel` | 2026-11-18 |
 
 ## Leader log
 
