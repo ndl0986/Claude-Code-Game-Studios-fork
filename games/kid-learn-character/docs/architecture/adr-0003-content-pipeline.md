@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed
+Accepted (Luan, 2026-11-18; recorded by game-leader on Luan's explicit acceptance)
 
 > **Who may move this to `Accepted`: the user, or `technical-director` on the
 > user's explicit confirmation. No other agent, and no skill on its own.**
