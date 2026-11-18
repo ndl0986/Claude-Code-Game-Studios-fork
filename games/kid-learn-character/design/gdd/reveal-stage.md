@@ -148,6 +148,8 @@ MorphCore F1).
   with the art bible §7 look (placed from `queue_max`: x 846–1022, y 40–76 with its glow at the default 3), just left
   of the token row, inside the safe stage,
   in the token layer. A touch on it is an empty-stage `sparkle(point)`.
+  It also draws the **meter light** from the snapshot's `flight` (Parade R12a, F4; art bible §7): a 16-unit Starlight
+  star from the cast box's top centre to its cell, above the meter in the same layer *(K-46)*.
 
 **R7. Tapping the creature.**
 - The Reveal Stage publishes the **current, formed** creature's hit shape to Input (its R7 layer 4): the

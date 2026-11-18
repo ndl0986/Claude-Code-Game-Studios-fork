@@ -90,3 +90,8 @@ Reviewed-Content-Hash: design/gdd/reveal-stage.md ad91cda2866a9354d3735736201377
 Review mode: lean · Workflow: standard
 Change: R6 also draws the meter light from the Parade snapshot's flight (Parade R12a; art bible §7), above the meter in the token layer (K-46).
 Reviewed-Content-Hash: design/gdd/reveal-stage.md ad91cda2866a9354d3735736201377cecd3ffdb3
+
+## Update — 2026-11-18 — TASK-120 meter light, applied (no re-review)
+Review mode: lean · Workflow: standard
+Change: The previous entry's R6 line (the meter light drawn from the snapshot's flight, above the meter) was logged but not applied in c983b43e; it is applied here. That entry's hash is of the unchanged file.
+Reviewed-Content-Hash: design/gdd/reveal-stage.md 9c8150ac467d10a46af70d8e43d733aabac6b40d
