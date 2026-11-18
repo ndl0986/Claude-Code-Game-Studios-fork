@@ -1,0 +1,52 @@
+<!-- PROTOTYPE - NOT FOR PRODUCTION (TASK-077 spike test art) -->
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="640" height="440" viewBox="0 0 640 440">
+  <title>SPIKE TEST ART - flyer (TASK-077), not a Dinosaurs-set item</title>
+  <g id="root" data-pivot="320 410">
+    <g id="wing_far" data-pivot="312 282">
+      <g id="wing_far_body" fill="#e6b88a">
+        <path d="M 312 282 C 252 204 170 172 96 190 C 158 232 228 272 300 304 Z"/>
+      </g>
+      <g id="wing_far_outline" stroke="#2a2340" stroke-width="6" stroke-linejoin="round" stroke-linecap="round" fill="none" opacity="0.8">
+        <path d="M 312 282 C 252 204 170 172 96 190 C 158 232 228 272 300 304 Z"/>
+      </g>
+      <g id="wing_far_detail"/>
+    </g>
+    <g id="root_body" fill="#c4864a">
+      <rect x="300" y="330" width="16" height="80" rx="8"/>
+      <rect x="338" y="330" width="16" height="80" rx="8"/>
+      <ellipse cx="330" cy="302" rx="72" ry="50"/>
+      <path d="M 372 284 C 392 232 402 182 412 150 L 434 156 C 426 190 414 240 398 294 Z"/>
+      <ellipse cx="442" cy="140" rx="34" ry="20"/>
+      <path d="M 468 132 L 548 150 L 468 152 Z" fill="#e6b88a"/>
+      <path d="M 428 126 C 420 96 440 78 458 88 C 452 104 446 118 442 126 Z" fill="#d9534f"/>
+    </g>
+    <g id="root_outline" stroke="#2a2340" stroke-width="6" stroke-linejoin="round" stroke-linecap="round" fill="none" opacity="0.8">
+      <rect x="300" y="330" width="16" height="80" rx="8"/>
+      <rect x="338" y="330" width="16" height="80" rx="8"/>
+      <ellipse cx="330" cy="302" rx="72" ry="50"/>
+      <path d="M 372 284 C 392 232 402 182 412 150 L 434 156 C 426 190 414 240 398 294 Z"/>
+      <ellipse cx="442" cy="140" rx="34" ry="20"/>
+      <path d="M 468 132 L 548 150 L 468 152 Z"/>
+      <path d="M 428 126 C 420 96 440 78 458 88 C 452 104 446 118 442 126 Z"/>
+    </g>
+    <g id="root_detail">
+      <circle cx="448" cy="134" r="7" fill="#f8efdc"/>
+      <circle cx="450" cy="135" r="4" fill="#2a2340"/>
+      <circle cx="440" cy="149" r="5" fill="#e8a6b8" fill-opacity="0.7"/>
+      <path d="M 470 146 Q 482 152 494 147" fill="none" stroke="#2a2340" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="306" cy="290" r="7" fill="#a86e3a"/>
+      <circle cx="334" cy="280" r="6" fill="#a86e3a"/>
+    </g>
+    <g id="wing_near" data-pivot="342 286">
+      <g id="wing_near_body" fill="#e6b88a">
+        <path d="M 342 286 C 302 210 232 180 160 198 C 212 240 270 280 330 312 Z"/>
+      </g>
+      <g id="wing_near_outline" stroke="#2a2340" stroke-width="6" stroke-linejoin="round" stroke-linecap="round" fill="none" opacity="0.8">
+        <path d="M 342 286 C 302 210 232 180 160 198 C 212 240 270 280 330 312 Z"/>
+      </g>
+      <g id="wing_near_detail" fill="#c4864a" fill-opacity="0.5">
+        <path d="M 330 286 C 300 232 250 208 200 206 C 246 226 290 258 322 300 Z"/>
+      </g>
+    </g>
+  </g>
+</svg>
