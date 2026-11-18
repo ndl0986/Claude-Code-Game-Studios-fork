@@ -6786,7 +6786,7 @@
           "event": {
             "type": "cardTouch",
             "on": "confirmTrigger",
-            "action": "quit"
+            "action": "reset"
           },
           "expect": [
             {
@@ -6831,7 +6831,7 @@
             {
               "out": "confirm",
               "state": "done",
-              "action": "quit"
+              "action": "reset"
             },
             {
               "out": "panelClose",
