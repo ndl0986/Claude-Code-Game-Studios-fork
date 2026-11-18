@@ -1,0 +1,3159 @@
+{
+  "contract": "keyboard-row-v1",
+  "schema": 1,
+  "uint64AsString": true,
+  "units": {
+    "time": "s",
+    "space": "stage units"
+  },
+  "tolerance": {
+    "time": 1e-09,
+    "geometry": 1e-06
+  },
+  "streams": [
+    "keyboard-row"
+  ],
+  "cases": [
+    {
+      "id": "F1-layout-AB",
+      "source": "gdd: onscreen-keyboard-row.md F1 table; AC-2",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "layout",
+            "word": "AB"
+          },
+          "expect": [
+            {
+              "out": "layout",
+              "total": 272.0,
+              "x0": 504.0,
+              "keys": [
+                {
+                  "key": "A",
+                  "centre": [
+                    568.0,
+                    649.0
+                  ],
+                  "hit": [
+                    496.0,
+                    582.0,
+                    144.0,
+                    134.0
+                  ]
+                },
+                {
+                  "key": "B",
+                  "centre": [
+                    712.0,
+                    649.0
+                  ],
+                  "hit": [
+                    640.0,
+                    582.0,
+                    144.0,
+                    134.0
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1-layout-REX",
+      "source": "gdd: onscreen-keyboard-row.md F1 table; AC-2",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "layout",
+            "word": "REX"
+          },
+          "expect": [
+            {
+              "out": "layout",
+              "total": 416.0,
+              "x0": 432.0,
+              "keys": [
+                {
+                  "key": "R",
+                  "centre": [
+                    496.0,
+                    649.0
+                  ],
+                  "hit": [
+                    424.0,
+                    582.0,
+                    144.0,
+                    134.0
+                  ]
+                },
+                {
+                  "key": "E",
+                  "centre": [
+                    640.0,
+                    649.0
+                  ],
+                  "hit": [
+                    568.0,
+                    582.0,
+                    144.0,
+                    134.0
+                  ]
+                },
+                {
+                  "key": "X",
+                  "centre": [
+                    784.0,
+                    649.0
+                  ],
+                  "hit": [
+                    712.0,
+                    582.0,
+                    144.0,
+                    134.0
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1-layout-NEST",
+      "source": "gdd: onscreen-keyboard-row.md F1 table; AC-2",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "layout",
+            "word": "NEST"
+          },
+          "expect": [
+            {
+              "out": "layout",
+              "total": 560.0,
+              "x0": 360.0,
+              "keys": [
+                {
+                  "key": "N",
+                  "centre": [
+                    424.0,
+                    649.0
+                  ],
+                  "hit": [
+                    352.0,
+                    582.0,
+                    144.0,
+                    134.0
+                  ]
+                },
+                {
+                  "key": "E",
+                  "centre": [
+                    568.0,
+                    649.0
+                  ],
+                  "hit": [
+                    496.0,
+                    582.0,
+                    144.0,
+                    134.0
+                  ]
+                },
+                {
+                  "key": "S",
+                  "centre": [
+                    712.0,
+                    649.0
+                  ],
+                  "hit": [
+                    640.0,
+                    582.0,
+                    144.0,
+                    134.0
+                  ]
+                },
+                {
+                  "key": "T",
+                  "centre": [
+                    856.0,
+                    649.0
+                  ],
+                  "hit": [
+                    784.0,
+                    582.0,
+                    144.0,
+                    134.0
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1-layout-DINOSAUR",
+      "source": "gdd: onscreen-keyboard-row.md F1 table; AC-2",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "layout",
+            "word": "DINOSAUR"
+          },
+          "expect": [
+            {
+              "out": "layout",
+              "total": 1136.0,
+              "x0": 72.0,
+              "keys": [
+                {
+                  "key": "D",
+                  "centre": [
+                    136.0,
+                    649.0
+                  ],
+                  "hit": [
+                    64.0,
+                    582.0,
+                    144.0,
+                    134.0
+                  ]
+                },
+                {
+                  "key": "I",
+                  "centre": [
+                    280.0,
+                    649.0
+                  ],
+                  "hit": [
+                    208.0,
+                    582.0,
+                    144.0,
+                    134.0
+                  ]
+                },
+                {
+                  "key": "N",
+                  "centre": [
+                    424.0,
+                    649.0
+                  ],
+                  "hit": [
+                    352.0,
+                    582.0,
+                    144.0,
+                    134.0
+                  ]
+                },
+                {
+                  "key": "O",
+                  "centre": [
+                    568.0,
+                    649.0
+                  ],
+                  "hit": [
+                    496.0,
+                    582.0,
+                    144.0,
+                    134.0
+                  ]
+                },
+                {
+                  "key": "S",
+                  "centre": [
+                    712.0,
+                    649.0
+                  ],
+                  "hit": [
+                    640.0,
+                    582.0,
+                    144.0,
+                    134.0
+                  ]
+                },
+                {
+                  "key": "A",
+                  "centre": [
+                    856.0,
+                    649.0
+                  ],
+                  "hit": [
+                    784.0,
+                    582.0,
+                    144.0,
+                    134.0
+                  ]
+                },
+                {
+                  "key": "U",
+                  "centre": [
+                    1000.0,
+                    649.0
+                  ],
+                  "hit": [
+                    928.0,
+                    582.0,
+                    144.0,
+                    134.0
+                  ]
+                },
+                {
+                  "key": "R",
+                  "centre": [
+                    1144.0,
+                    649.0
+                  ],
+                  "hit": [
+                    1072.0,
+                    582.0,
+                    144.0,
+                    134.0
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R3-hit-REX-x711.9",
+      "source": "gdd: onscreen-keyboard-row.md R3 (nearest centre, tie to the left); AC-4",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "hitTest",
+            "word": "REX",
+            "point": [
+              711.9,
+              649.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "rowHit",
+              "key": "E",
+              "index": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R3-hit-REX-x712.1",
+      "source": "gdd: onscreen-keyboard-row.md R3 (nearest centre, tie to the left); AC-4",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "hitTest",
+            "word": "REX",
+            "point": [
+              712.1,
+              649.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "rowHit",
+              "key": "X",
+              "index": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R3-hit-REX-x712.0",
+      "source": "gdd: onscreen-keyboard-row.md R3 (nearest centre, tie to the left); AC-4",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "hitTest",
+            "word": "REX",
+            "point": [
+              712.0,
+              649.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "rowHit",
+              "key": "E",
+              "index": 1
+            }
+          ]
+        }
+      ],
+      "note": "the shared edge: the left key"
+    },
+    {
+      "id": "R3-hit-REX-x784.0",
+      "source": "gdd: onscreen-keyboard-row.md R3 (nearest centre, tie to the left); AC-4",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "hitTest",
+            "word": "REX",
+            "point": [
+              784.0,
+              649.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "rowHit",
+              "key": "X",
+              "index": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R3-hit-REX-x424.0",
+      "source": "gdd: onscreen-keyboard-row.md R3 (nearest centre, tie to the left); AC-4",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "hitTest",
+            "word": "REX",
+            "point": [
+              424.0,
+              649.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "rowHit",
+              "key": "R",
+              "index": 0
+            }
+          ]
+        }
+      ],
+      "note": "the left edge of R's hit rect"
+    },
+    {
+      "id": "R3-hit-REX-x423.5",
+      "source": "gdd: onscreen-keyboard-row.md R3 (nearest centre, tie to the left); AC-4",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "hitTest",
+            "word": "REX",
+            "point": [
+              423.5,
+              649.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "rowHit",
+              "key": null,
+              "index": null
+            }
+          ]
+        }
+      ],
+      "note": "left of every rect"
+    },
+    {
+      "id": "R3-hit-REX-x856.5",
+      "source": "gdd: onscreen-keyboard-row.md R3 (nearest centre, tie to the left); AC-4",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "hitTest",
+            "word": "REX",
+            "point": [
+              856.5,
+              649.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "rowHit",
+              "key": null,
+              "index": null
+            }
+          ]
+        }
+      ],
+      "note": "right of every rect"
+    },
+    {
+      "id": "R3-hit-REX-y582.0",
+      "source": "gdd: onscreen-keyboard-row.md F1 hit rect y 582…716",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "hitTest",
+            "word": "REX",
+            "point": [
+              640.0,
+              582.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "rowHit",
+              "key": "E",
+              "index": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R3-hit-REX-y581.5",
+      "source": "gdd: onscreen-keyboard-row.md F1 hit rect y 582…716",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "hitTest",
+            "word": "REX",
+            "point": [
+              640.0,
+              581.5
+            ]
+          },
+          "expect": [
+            {
+              "out": "rowHit",
+              "key": null,
+              "index": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R3-hit-REX-y716.0",
+      "source": "gdd: onscreen-keyboard-row.md F1 hit rect y 582…716",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "hitTest",
+            "word": "REX",
+            "point": [
+              640.0,
+              716.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "rowHit",
+              "key": "E",
+              "index": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R3-hit-REX-y716.5",
+      "source": "gdd: onscreen-keyboard-row.md F1 hit rect y 582…716",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "hitTest",
+            "word": "REX",
+            "point": [
+              640.0,
+              716.5
+            ]
+          },
+          "expect": [
+            {
+              "out": "rowHit",
+              "key": null,
+              "index": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F2-size-ipad11",
+      "source": "gdd: onscreen-keyboard-row.md F2 table; AC-3",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "size",
+            "stageToPx": 1.865625,
+            "ppi": 264
+          },
+          "expect": [
+            {
+              "out": "size",
+              "hitMm": [
+                25.84738636363636,
+                24.052428977272726
+              ],
+              "k": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F2-size-mac-small-2x",
+      "source": "gdd: onscreen-keyboard-row.md F2 table; AC-3",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "size",
+            "stageToPx": 1.5,
+            "ppi": 254
+          },
+          "expect": [
+            {
+              "out": "size",
+              "hitMm": [
+                21.599999999999998,
+                20.099999999999998
+              ],
+              "k": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F2-size-mac-small-1x",
+      "source": "gdd: onscreen-keyboard-row.md F2 table; AC-3",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "size",
+            "stageToPx": 0.75,
+            "ppi": 109
+          },
+          "expect": [
+            {
+              "out": "size",
+              "hitMm": [
+                25.16697247706422,
+                23.41926605504587
+              ],
+              "k": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F2-size-synthetic-k",
+      "source": "gdd: onscreen-keyboard-row.md F2 table; AC-3",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "size",
+            "stageToPx": 1.0,
+            "ppi": 254
+          },
+          "expect": [
+            {
+              "out": "size",
+              "hitMm": [
+                14.399999999999999,
+                13.399999999999999
+              ],
+              "k": 1.3432835820895523
+            }
+          ]
+        }
+      ],
+      "note": "A synthetic screen, below every MVP device, to exercise k > 1."
+    },
+    {
+      "id": "F3-light",
+      "source": "gdd: onscreen-keyboard-row.md F3; AC-5",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "lightAt",
+            "tau": 0.0
+          },
+          "expect": [
+            {
+              "out": "light",
+              "glow": 0.5,
+              "scale": 1.08
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.175
+          },
+          "event": {
+            "type": "lightAt",
+            "tau": 0.175
+          },
+          "expect": [
+            {
+              "out": "light",
+              "glow": 0.25,
+              "scale": 1.04
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.35
+          },
+          "event": {
+            "type": "lightAt",
+            "tau": 0.35
+          },
+          "expect": [
+            {
+              "out": "light",
+              "glow": 0.0,
+              "scale": 1.0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "lightAt",
+            "tau": 0.5
+          },
+          "expect": [
+            {
+              "out": "light",
+              "glow": 0.0,
+              "scale": 1.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F3-light-reduced",
+      "source": "gdd: onscreen-keyboard-row.md F3; AC-5",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": true
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "lightAt",
+            "tau": 0.0
+          },
+          "expect": [
+            {
+              "out": "light",
+              "glow": 0.5,
+              "scale": 1.0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.175
+          },
+          "event": {
+            "type": "lightAt",
+            "tau": 0.175
+          },
+          "expect": [
+            {
+              "out": "light",
+              "glow": 0.25,
+              "scale": 1.0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.35
+          },
+          "event": {
+            "type": "lightAt",
+            "tau": 0.35
+          },
+          "expect": [
+            {
+              "out": "light",
+              "glow": 0.0,
+              "scale": 1.0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "lightAt",
+            "tau": 0.5
+          },
+          "expect": [
+            {
+              "out": "light",
+              "glow": 0.0,
+              "scale": 1.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F4-word-draw-fixture",
+      "source": "gdd: onscreen-keyboard-row.md F4 fixture case; AC-11",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {
+        "keyboard-row": [
+          "7378697629483821056"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "drawWord",
+            "pool": [
+              "REX",
+              "EGG",
+              "NEST",
+              "ROAR"
+            ],
+            "last": 1
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 2,
+              "word": "NEST"
+            }
+          ]
+        }
+      ],
+      "note": "u = 0.40 (to 2^-53): candidates {0, 2, 3}, target 1.2 → index 2."
+    },
+    {
+      "id": "F4-word-draw-u0.0",
+      "source": "gdd: onscreen-keyboard-row.md F4 (Key Table F1, weights 1)",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {
+        "keyboard-row": [
+          "0"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "drawWord",
+            "pool": [
+              "REX",
+              "EGG",
+              "NEST",
+              "ROAR"
+            ],
+            "last": 1
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 0,
+              "word": "REX"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F4-word-draw-u0.25",
+      "source": "gdd: onscreen-keyboard-row.md F4 (Key Table F1, weights 1)",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {
+        "keyboard-row": [
+          "4611686018427387904"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "drawWord",
+            "pool": [
+              "REX",
+              "EGG",
+              "NEST",
+              "ROAR"
+            ],
+            "last": 1
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 0,
+              "word": "REX"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F4-word-draw-u0.375",
+      "source": "gdd: onscreen-keyboard-row.md F4 (Key Table F1, weights 1)",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {
+        "keyboard-row": [
+          "6917529027641081856"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "drawWord",
+            "pool": [
+              "REX",
+              "EGG",
+              "NEST",
+              "ROAR"
+            ],
+            "last": 1
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 2,
+              "word": "NEST"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F4-word-draw-u0.6875",
+      "source": "gdd: onscreen-keyboard-row.md F4 (Key Table F1, weights 1)",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {
+        "keyboard-row": [
+          "12682136550675316736"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "drawWord",
+            "pool": [
+              "REX",
+              "EGG",
+              "NEST",
+              "ROAR"
+            ],
+            "last": 1
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 3,
+              "word": "ROAR"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC8-due-any-source-any-outcome",
+      "source": "gdd: onscreen-keyboard-row.md R2 (with TASK-089a); AC-8",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        },
+        "rowWords": [
+          "REX",
+          "EGG",
+          "NEST",
+          "ROAR",
+          "DINO",
+          "BABY",
+          "MOM",
+          "DAD",
+          "SUN",
+          "MOON",
+          "STAR",
+          "CAT",
+          "DOG",
+          "BALL",
+          "HAT",
+          "BUS"
+        ],
+        "castNames": [
+          "T-Rex",
+          "Fossil"
+        ],
+        "keyboardRow": true
+      },
+      "draws": {
+        "keyboard-row": [
+          "0"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "enterPlay"
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 0,
+              "word": "REX"
+            }
+          ],
+          "expectState": {
+            "state": "FadingIn"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Showing"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "press",
+            "key": "R",
+            "source": "hint(4)",
+            "outcome": "started"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                0
+              ]
+            }
+          ],
+          "expectState": {
+            "due": false
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.5
+          },
+          "event": {
+            "type": "press",
+            "key": "E",
+            "source": "hardwareKey",
+            "outcome": "ignored"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                1
+              ]
+            }
+          ],
+          "expectState": {
+            "due": false
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "rowTap",
+            "point": [
+              784.0,
+              649.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "press",
+              "key": "X",
+              "source": "keyboardRow",
+              "origin": [
+                784.0,
+                649.0
+              ]
+            },
+            {
+              "out": "light",
+              "indices": [
+                2
+              ]
+            }
+          ],
+          "expectState": {
+            "due": true,
+            "state": "Showing"
+          }
+        }
+      ],
+      "note": "The first draw after launch has no last (KR-Q1): pool of 4, u 0 → REX. The queue is never quiet here, so no change."
+    },
+    {
+      "id": "AC8-repeats-do-not-make-due",
+      "source": "gdd: onscreen-keyboard-row.md R2 (with TASK-089a); AC-8",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        },
+        "rowWords": [
+          "REX",
+          "EGG",
+          "NEST",
+          "ROAR",
+          "DINO",
+          "BABY",
+          "MOM",
+          "DAD",
+          "SUN",
+          "MOON",
+          "STAR",
+          "CAT",
+          "DOG",
+          "BALL",
+          "HAT",
+          "BUS"
+        ],
+        "castNames": [
+          "T-Rex",
+          "Fossil"
+        ],
+        "keyboardRow": true
+      },
+      "draws": {
+        "keyboard-row": [
+          "0"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "enterPlay"
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 0,
+              "word": "REX"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "press",
+            "key": "R",
+            "source": "hardwareKey",
+            "outcome": "started"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5
+          },
+          "event": {
+            "type": "press",
+            "key": "R",
+            "source": "hardwareKey",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "press",
+            "key": "E",
+            "source": "hardwareKey",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                1
+              ]
+            }
+          ],
+          "expectState": {
+            "due": false
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "press",
+            "key": "Q",
+            "source": "hardwareKey",
+            "outcome": "queued"
+          },
+          "expect": [],
+          "expectState": {
+            "due": false
+          }
+        }
+      ],
+      "note": "Q is not in the word: no light, counts toward nothing."
+    },
+    {
+      "id": "AC7-EGG-lights",
+      "source": "gdd: onscreen-keyboard-row.md R5 (KR-Q6); AC-7",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        },
+        "rowWords": [
+          "REX",
+          "EGG",
+          "NEST",
+          "ROAR",
+          "DINO",
+          "BABY",
+          "MOM",
+          "DAD",
+          "SUN",
+          "MOON",
+          "STAR",
+          "CAT",
+          "DOG",
+          "BALL",
+          "HAT",
+          "BUS"
+        ],
+        "castNames": [
+          "T-Rex",
+          "Fossil"
+        ],
+        "keyboardRow": true
+      },
+      "draws": {
+        "keyboard-row": [
+          "1152921504606846976"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "enterPlay"
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 1,
+              "word": "EGG"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "press",
+            "key": "G",
+            "source": "hardwareKey",
+            "outcome": "started"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                1,
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5
+          },
+          "event": {
+            "type": "press",
+            "key": "G",
+            "source": "hint(2)",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                1,
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "rowTap",
+            "point": [
+              784.0,
+              649.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "press",
+              "key": "G",
+              "source": "keyboardRow",
+              "origin": [
+                784.0,
+                649.0
+              ]
+            },
+            {
+              "out": "light",
+              "indices": [
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "due": false
+          }
+        },
+        {
+          "t": {
+            "uptime": 3.0
+          },
+          "event": {
+            "type": "press",
+            "key": "E",
+            "source": "hardwareKey",
+            "outcome": "ignored"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                0
+              ]
+            }
+          ],
+          "expectState": {
+            "due": true
+          }
+        }
+      ],
+      "note": "A row tap lights that key only; a hardware or hint G lights both. E and G make EGG Due."
+    },
+    {
+      "id": "AC9-AC10-quiet-moment-and-change",
+      "source": "gdd: onscreen-keyboard-row.md R2 (with TASK-089a) (KR-Q3, Q4, Q5); AC-9, AC-10",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        },
+        "rowWords": [
+          "REX",
+          "EGG",
+          "NEST",
+          "ROAR",
+          "DINO",
+          "BABY",
+          "MOM",
+          "DAD",
+          "SUN",
+          "MOON",
+          "STAR",
+          "CAT",
+          "DOG",
+          "BALL",
+          "HAT",
+          "BUS"
+        ],
+        "castNames": [
+          "T-Rex",
+          "Fossil"
+        ],
+        "keyboardRow": true
+      },
+      "draws": {
+        "keyboard-row": [
+          "0",
+          "2305843009213693952"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "enterPlay"
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 0,
+              "word": "REX"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "queueState",
+            "quiet": false
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "press",
+            "key": "R",
+            "source": "hardwareKey",
+            "outcome": "started"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "press",
+            "key": "E",
+            "source": "hardwareKey",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "press",
+            "key": "X",
+            "source": "hardwareKey",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                2
+              ]
+            }
+          ],
+          "expectState": {
+            "due": true
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.5
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Showing"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "pointerDown",
+            "id": 1,
+            "point": [
+              640.0,
+              649.0
+            ]
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "queueState",
+            "quiet": true
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.25
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Showing"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "pointerMove",
+            "id": 1,
+            "point": [
+              640.0,
+              400.0
+            ]
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 2,
+              "word": "NEST"
+            }
+          ],
+          "expectState": {
+            "state": "Changing"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.7
+          },
+          "event": {
+            "type": "rowTap",
+            "point": [
+              640.0,
+              649.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "press",
+              "key": "E",
+              "source": "keyboardRow",
+              "origin": [
+                640.0,
+                649.0
+              ]
+            },
+            {
+              "out": "light",
+              "indices": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.9
+          },
+          "event": {
+            "type": "rowTap",
+            "point": [
+              424.0,
+              649.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "press",
+              "key": "N",
+              "source": "keyboardRow",
+              "origin": [
+                424.0,
+                649.0
+              ]
+            },
+            {
+              "out": "light",
+              "indices": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 3.1
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Showing",
+            "word": "NEST",
+            "pressed": [
+              "N"
+            ]
+          }
+        }
+      ],
+      "note": "Not while the queue holds a key, nor while a pointer is on a key (current position); the change draws at its start (last = REX: 15 candidates, u 0.125 → the 2nd, NEST). At +0.2 a tap hits the old E (it counts only for REX), at +0.4 the new N."
+    },
+    {
+      "id": "AC12-play-entry-no-repeat",
+      "source": "gdd: onscreen-keyboard-row.md R2 (with TASK-089a) (KR-Q1: last kept across a Title entry); AC-12",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        },
+        "rowWords": [
+          "REX",
+          "EGG",
+          "NEST",
+          "ROAR",
+          "DINO",
+          "BABY",
+          "MOM",
+          "DAD",
+          "SUN",
+          "MOON",
+          "STAR",
+          "CAT",
+          "DOG",
+          "BALL",
+          "HAT",
+          "BUS"
+        ],
+        "castNames": [
+          "T-Rex",
+          "Fossil"
+        ],
+        "keyboardRow": true
+      },
+      "draws": {
+        "keyboard-row": [
+          "3458764513820540928",
+          "0",
+          "3458764513820540928"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "enterPlay"
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 3,
+              "word": "ROAR"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 5.0
+          },
+          "event": {
+            "type": "title"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Hidden"
+          }
+        },
+        {
+          "t": {
+            "uptime": 6.0
+          },
+          "event": {
+            "type": "enterPlay"
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 0,
+              "word": "REX"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 9.0
+          },
+          "event": {
+            "type": "title"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "enterPlay"
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 3,
+              "word": "ROAR"
+            }
+          ]
+        }
+      ],
+      "note": "u 0.1875 with no last → 3 (ROAR); then last 3: u 0 → 0 (REX); then last 0: 15 candidates, u 0.1875 → the 3rd, ROAR."
+    },
+    {
+      "id": "AC14-background-keeps-word-and-pressed",
+      "source": "gdd: onscreen-keyboard-row.md R7; R2 (KR-Q4, Q9; TASK-089a); AC-14",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        },
+        "rowWords": [
+          "REX",
+          "EGG",
+          "NEST",
+          "ROAR",
+          "DINO",
+          "BABY",
+          "MOM",
+          "DAD",
+          "SUN",
+          "MOON",
+          "STAR",
+          "CAT",
+          "DOG",
+          "BALL",
+          "HAT",
+          "BUS"
+        ],
+        "castNames": [
+          "T-Rex",
+          "Fossil"
+        ],
+        "keyboardRow": true
+      },
+      "draws": {
+        "keyboard-row": [
+          "0",
+          "2305843009213693952"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "enterPlay"
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 0,
+              "word": "REX"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "queueState",
+            "quiet": true
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "press",
+            "key": "R",
+            "source": "hardwareKey",
+            "outcome": "started"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "press",
+            "key": "E",
+            "source": "hardwareKey",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "background"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Hidden"
+          }
+        },
+        {
+          "t": {
+            "uptime": 9.0
+          },
+          "event": {
+            "type": "returnFromBackground"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "FadingIn",
+            "word": "REX",
+            "pressed": [
+              "E",
+              "R"
+            ]
+          }
+        },
+        {
+          "t": {
+            "uptime": 9.0
+          },
+          "event": {
+            "type": "press",
+            "key": "X",
+            "source": "hardwareKey",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                2
+              ]
+            }
+          ],
+          "expectState": {
+            "due": true
+          }
+        },
+        {
+          "t": {
+            "uptime": 9.25
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "FadingIn"
+          }
+        },
+        {
+          "t": {
+            "uptime": 9.3125
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 2,
+              "word": "NEST"
+            }
+          ],
+          "expectState": {
+            "state": "Changing"
+          }
+        }
+      ],
+      "note": "The same word and pressed letters after a short background; a Due word does not change during its fade-in, only once Showing (first frame at or after 0.3 s)."
+    },
+    {
+      "id": "AC15-on-at-panel-close-off-at-once",
+      "source": "gdd: onscreen-keyboard-row.md R8 (KR-Q2, Q10); AC-15",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        },
+        "rowWords": [
+          "REX",
+          "EGG",
+          "NEST",
+          "ROAR",
+          "DINO",
+          "BABY",
+          "MOM",
+          "DAD",
+          "SUN",
+          "MOON",
+          "STAR",
+          "CAT",
+          "DOG",
+          "BALL",
+          "HAT",
+          "BUS"
+        ],
+        "castNames": [
+          "T-Rex",
+          "Fossil"
+        ],
+        "keyboardRow": false
+      },
+      "draws": {
+        "keyboard-row": [
+          "2305843009213693952",
+          "0"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "enterPlay"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Hidden"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "panelOpen"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "setRow",
+            "on": true
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Hidden"
+          }
+        },
+        {
+          "t": {
+            "uptime": 4.0
+          },
+          "event": {
+            "type": "panelClose"
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 2,
+              "word": "NEST"
+            }
+          ],
+          "expectState": {
+            "state": "FadingIn"
+          }
+        },
+        {
+          "t": {
+            "uptime": 5.0
+          },
+          "event": {
+            "type": "press",
+            "key": "N",
+            "source": "hardwareKey",
+            "outcome": "started"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 6.0
+          },
+          "event": {
+            "type": "panelOpen"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 6.5
+          },
+          "event": {
+            "type": "setRow",
+            "on": false
+          },
+          "expect": [],
+          "expectState": {
+            "state": "FadingOut"
+          }
+        },
+        {
+          "t": {
+            "uptime": 7.0
+          },
+          "event": {
+            "type": "panelClose"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Hidden"
+          }
+        },
+        {
+          "t": {
+            "uptime": 7.0
+          },
+          "event": {
+            "type": "rowTap",
+            "point": [
+              424.0,
+              649.0
+            ]
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Hidden"
+          }
+        },
+        {
+          "t": {
+            "uptime": 8.0
+          },
+          "event": {
+            "type": "panelOpen"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 8.5
+          },
+          "event": {
+            "type": "setRow",
+            "on": true
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 9.0
+          },
+          "event": {
+            "type": "panelClose"
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 0,
+              "word": "REX"
+            }
+          ],
+          "expectState": {
+            "pressed": []
+          }
+        }
+      ],
+      "note": "On: drawn at panel close (no last yet: u 0.125 → NEST). Off: the hit rects go at once (a tap there is not a row press) and the pressed set is dropped; NEST is kept only as last (u 0 → REX)."
+    },
+    {
+      "id": "AC13-freeze-holds-light-and-fade",
+      "source": "gdd: onscreen-keyboard-row.md R2c, R7 (play clock); AC-13",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        },
+        "rowWords": [
+          "REX",
+          "EGG",
+          "NEST",
+          "ROAR",
+          "DINO",
+          "BABY",
+          "MOM",
+          "DAD",
+          "SUN",
+          "MOON",
+          "STAR",
+          "CAT",
+          "DOG",
+          "BALL",
+          "HAT",
+          "BUS"
+        ],
+        "castNames": [
+          "T-Rex",
+          "Fossil"
+        ],
+        "keyboardRow": true
+      },
+      "draws": {
+        "keyboard-row": [
+          "0"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "enterPlay"
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 0,
+              "word": "REX"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.1
+          },
+          "event": {
+            "type": "press",
+            "key": "R",
+            "source": "hardwareKey",
+            "outcome": "started"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.2
+          },
+          "event": {
+            "type": "gateOpen"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Frozen"
+          }
+        },
+        {
+          "t": {
+            "uptime": 5.0
+          },
+          "event": {
+            "type": "lightQuery",
+            "index": 0
+          },
+          "expect": [
+            {
+              "out": "lightValue",
+              "glow": 0.4008746355685131,
+              "scale": 1.064139941690962
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 5.0
+          },
+          "event": {
+            "type": "gateResume"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "FadingIn"
+          }
+        },
+        {
+          "t": {
+            "uptime": 5.1
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Showing"
+          }
+        },
+        {
+          "t": {
+            "uptime": 5.15
+          },
+          "event": {
+            "type": "lightQuery",
+            "index": 0
+          },
+          "expect": [
+            {
+              "out": "lightValue",
+              "glow": 0.0991253644314869,
+              "scale": 1.0158600583090378
+            }
+          ]
+        }
+      ],
+      "note": "Frozen at play 0.2: the light (tau 0.1) and the row fade-in (0.2 of 0.3) hold; after resume they continue."
+    },
+    {
+      "id": "AC16-fallback-word-never-changes",
+      "source": "gdd: onscreen-keyboard-row.md R2a (KR-Q11); AC-16",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        },
+        "rowWords": null,
+        "castNames": [
+          "T-Rex",
+          "Fossil"
+        ],
+        "keyboardRow": true
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "enterPlay"
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 0,
+              "word": "FOSSIL"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "queueState",
+            "quiet": true
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "press",
+            "key": "F",
+            "source": "hardwareKey",
+            "outcome": "started"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "press",
+            "key": "O",
+            "source": "hardwareKey",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "press",
+            "key": "S",
+            "source": "hardwareKey",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "press",
+            "key": "I",
+            "source": "hardwareKey",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "press",
+            "key": "L",
+            "source": "hardwareKey",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                5
+              ]
+            }
+          ],
+          "expectState": {
+            "due": true
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Showing",
+            "word": "FOSSIL"
+          }
+        }
+      ],
+      "note": "No rowWords: T-Rex is skipped (a hyphen), Fossil → FOSSIL; a pool of one never draws and never changes."
+    },
+    {
+      "id": "AC16-fallback-ABC",
+      "source": "gdd: onscreen-keyboard-row.md R2a; AC-16",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18
+        },
+        "accessibility": {
+          "reduceMotion": false
+        },
+        "rowWords": null,
+        "castNames": [
+          "T-Rex",
+          "three baby dinosaurs",
+          "Archaeopteryx"
+        ],
+        "keyboardRow": true
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "enterPlay"
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 0,
+              "word": "ABC"
+            }
+          ]
+        }
+      ],
+      "note": "No name of 2-8 A-Z letters (Archaeopteryx has 13)."
+    }
+  ]
+}

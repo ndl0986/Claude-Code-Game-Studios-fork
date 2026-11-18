@@ -1,0 +1,6 @@
+# sources.lock for keyboard-row-v1 (cut 2026-11-18, TASK-089): the ## sections the cases cite.
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/onscreen-keyboard-row.md#Detailed Design 0a1ed321a8964989acc304ac2c274b371276ab22
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/onscreen-keyboard-row.md#Formulas e03da150433461f4a88af3dfb73abd0063a77a7f
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/onscreen-keyboard-row.md#Edge Cases dea76f90eec5bb29104579f5400b6482059914bb
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/onscreen-keyboard-row.md#Acceptance Criteria babfd3520bf4d1b99dbb93d2346da672b63292ff
+Reviewed-Section-Hash: games/kid-learn-character/docs/architecture/adr-0002-modules-seams-types.md#Decision 7a622020948197194ccd9e003ecdfe8e243fb356
