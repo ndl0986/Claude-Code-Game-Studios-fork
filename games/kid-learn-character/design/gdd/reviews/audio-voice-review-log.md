@@ -63,3 +63,8 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md 54410d1a1974580736d15e121d0ad14
 Review mode: lean · Workflow: standard
 Change: Interactions: Accessibility's reduceMotion (A1) reaches the voice timings through MorphCore at reveal start. Follow-ups from the Keyboard Row (TASK-060) and Accessibility (TASK-061) GDDs; verdict unchanged; review by game-qc-ios from the diff.
 Reviewed-Content-Hash: design/gdd/audio-voice.md f72cfa129302bdcb39fc8245ab92752d35164f76
+
+## Update — 2026-11-18 — TASK-086 contract questions AU-Q1–Q8 (no re-review)
+Review mode: lean · Workflow: standard
+Change: answers to game-qc-android's audio-plan-v1 questions, written into the rules. AU-Q1: T in R1 means the Reveal Stage's formedS (the fade-in end for fallbacks); E8 follows willForm (a creature shown) and sfx, not hasWord; E9 follows hasWord. AU-Q2: E7 plays when the solid glyph breaks up (dissolve or sparkle-out), not in the glyph-missing fallback. AU-Q3: F3 window is half-open and shared by E1/E2/E3. AU-Q4: a sound frees its player at its end; free players before steals; ties steal the lowest-numbered. AU-Q5: ducking moves linearly in dB at fixed rates, starting from the current dB; d = 10^(dB/20). AU-Q6: the F1 trims stay provisional knobs (no edit). AU-Q7: E11 replaces E8 for digits. AU-Q8: paused sounds carry their remaining length; events due while frozen fire at their play time after resume. Verdict unchanged.
+Reviewed-Content-Hash: design/gdd/audio-voice.md 0124f9531a0bb12e249490be909d338f344d891e

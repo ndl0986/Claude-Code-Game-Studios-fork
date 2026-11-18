@@ -51,6 +51,8 @@ that stays quiet while the child mashes, rather than one that gets louder the ha
 **R1. The sound event table.** Times are seconds since the reveal started (`s`, the clock MorphCore uses), except
 press-time events, which fire when Input delivers the event. `glow` and `T` are the **active** timing set's values
 (MorphCore F1, F3): normal glow 0.8 s, T 2.45 s; reduced glow 0.4 s, T 1.2 s (Reduce Motion).
+**`T` in this table means the reveal's `formedS`** as the Reveal Stage returns it (its R6, F5): `T` for a morph,
+the fade-in's end for the glyph-missing and invalid-set fallbacks *(TASK-086, AU-Q1)*.
 
 | # | Event | Trigger (owner) | When | Bus / player | Notes |
 |---|---|---|---|---|---|
@@ -60,11 +62,11 @@ press-time events, which fire when Input delivers the event. `glow` and `T` are 
 | E4 | **Silence** | a swallowed or ignored key (Input R4/R5, K-10), a creature tap inside the cooldown | — | — | Nothing plays. A tap inside the cooldown still sparkles (Reveal Stage). |
 | E5 | **Title chime** | `startPlay` from a key or the play button on the title screen (K-10) | at the press | ui pool | The chime only; **no letter voice**, because the title key is not a press. |
 | E6 | **Letter / number voice** | reveal start (Reveal Stage) | `s = 0` | voice | `vo_<locale>_letter_<id>` or `vo_<locale>_number_<id>`. Always cuts any line still playing (R2.3). |
-| E7 | **Twinkle** | the glyph starts to dissolve | `s = glow` | ui pool | One per reveal; not mash-scaled. |
-| E8 | **Cast sound** | the reveal is formed | `s = T` | cast | The item's `sfx` (≤ 2 s). Skipped if `sfx` is null or missing. |
+| E7 | **Twinkle** | the solid glyph starts to break up: it dissolves (a morph) or sparkles out (the art-missing fallback) | `s = glow` | ui pool | One per reveal; not mash-scaled. **Not played** when there is no glyph (the glyph-missing fallback: the creature only fades in) *(AU-Q2)*. |
+| E8 | **Cast sound** | the reveal is formed | `s = T` (`formedS`) | cast | The item's `sfx` (≤ 2 s). Plays **when a creature is shown** (`willForm` true: the morph or a fade-in) and the `sfx` exists; skipped if `willForm` is false, or `sfx` is null or missing. It does **not** depend on `hasWord`: a creature with no word line still makes its sound *(AU-Q1)*. |
 | E9 | **Word voice** | the reveal is formed | `s = T + word_offset_s` (0.25 s, decided, Luan Q1) | voice | `vo_<locale>_word_<id>`. The cast sound is ducked under it (F2). **A waiting key does not cut it** (F6). **Skipped when `hasWord` is false** (the Reveal Stage's answer, from Cast Rendering's `willForm`: no word line, or the creature will not form) *(TASK-050)*. |
 | E10 | **Creature-tap sound** | `creatureTap` on the formed cast member, outside the cooldown (Reveal Stage) | at the tap | cast | The same `sfx` again; cuts the cast player's current sound (R2.4). During the word it is ducked like E8 (F2): the word stays on top. |
-| E11 | **Number sound** | a digit reveal is formed | `s = T` | cast | The digit item's `sfx`: **one chirp per baby, counting along up to 9** (decided, Luan Q6); 0 (the empty nest) is one soft chirp. The file stays ≤ 2 s (A3), so chirps are ≤ 0.22 s apart for 9. It runs on the cast player, so the next reveal cuts it (R2.4). |
+| E11 | **Number sound** | a digit reveal is formed | `s = T` (`formedS`) | cast | **For a digit, E11 takes E8's place**: the same trigger, time, player and skip rules *(AU-Q7)*. The digit item's `sfx`: **one chirp per baby, counting along up to 9** (decided, Luan Q6); 0 (the empty nest) is one soft chirp. The file stays ≤ 2 s (A3), so chirps are ≤ 0.22 s apart for 9. It runs on the cast player, so the next reveal cuts it (R2.4). |
 | E12 | **Parade tune** | the parade starts (Parade GDD owns the trigger) | at parade start | music | Ducked under any voice line (F2). Stops with a fade when the parade ends or the panel opens. |
 
 For a digit, E6 says the number ("three") and E9 says the counted words ("three baby dinosaurs"), following the
@@ -104,7 +106,9 @@ theme (K-09). A creature tap never replays the word; only its sound (as played i
 4. **One cast sound at a time.** E8, E10 and E11 replace each other on the cast player. A new reveal's E6 also cuts
    the cast player, so a long grumble or a chirp run never spills into the next letter.
 5. **The ui pool steals the oldest.** If all 4 ui players are busy, the one that started earliest is cut (R2.2) and
-   reused.
+   reused. *(AU-Q4)* A sound frees its player **at its end** (its start plus its length), and a free player is
+   always used before any steal (the lowest-numbered free one). Between players that started at the same time, the
+   **lowest-numbered** is stolen.
 
 **R3. The mashing loudness ceiling.** More presses never mean more sound (art bible §2: "extra presses add sparks,
 never more brightness"; Pillar 3).
@@ -162,7 +166,9 @@ never more brightness"; Pillar 3).
 - **Gate challenge freeze (K-20; TASK-050):** on the Reveal Stage's `freeze()` (the parent-gate number challenge
   shows), Audio **pauses** every player where it is (voice, cast, ui, and music, so the parade tune E12 too), and
   **nothing new starts** while frozen: event times run on the same play clock as the reveal, which stands still.
-  On `resume()` (a wrong answer or a timeout) each paused sound **continues** from where it stopped. A correct
+  On `resume()` (a wrong answer or a timeout) each paused sound **continues** from where it stopped: its remaining
+  length is carried over the frozen interval, and an event that falls due while frozen fires when the play clock
+  reaches its time after `resume()` *(AU-Q8)*. A correct
   answer opens the panel, and the panel rule above (cut) applies. Pausing and continuing follow R2.2: no click.
   Only the gate challenge freezes; the panel and the background keep their cut / settle behaviour.
 - **No sound before the first input** at launch: the engine is already running (R2.1), but **nothing is
@@ -245,6 +251,10 @@ holds the ceiling. Peaks rarely align, so this is a bound, not a typical level.
 d_cast = d_music = 10^(duck_db / 20)     duck_db = −9 dB → 0.355
 attack = duck_attack_s (0.05 s), release = duck_release_s (0.25 s), both linear in dB
 ```
+*(AU-Q5)* The duck level moves **linearly in dB** at a fixed rate: towards `duck_db` at `duck_db / duck_attack_s`
+(−9 dB per 0.05 s) while a voice line plays, back towards 0 dB at `−duck_db / duck_release_s` (+9 dB per 0.25 s)
+after it ends, each **starting from the current dB**. A word that ends mid-attack releases from where the attack
+reached. The factor applied is `d(t) = 10^(dB(t) / 20)`.
 The ui bus is not ducked (a chime during a word stays audible, it is already quiet). Example: the grumble starts
 at T at its trim; at T + 0.25 the word starts and the grumble falls 9 dB over 50 ms; when the word ends it comes
 back over 250 ms (if still playing).
@@ -252,7 +262,8 @@ back over 250 ms (if still playing).
 **F3. Mash factor (ui bus).**
 ```
 m = max(mash_floor, 1 / (1 + mash_k × n))
-n = the number of E1/E2/E3 sounds started in the last chime_window_s before this one
+n = the number of E1, E2 and E3 sounds (one window for all three) started in the half-open window
+    (t − chime_window_s, t) before this one: one started exactly chime_window_s earlier is not counted (AU-Q3)
 ```
 | | n | m | level |
 |---|---|---|---|
@@ -320,7 +331,7 @@ about **2.7 s** later than with a plain 3.0 s hold. Luan accepted this for a wor
 | **sfx missing or failed to decode** | E8/E10/E11 skipped; the rest plays (Key Table fallback). Debug log. |
 | **Word voice missing** | E9 skipped; the letter line only. The Press Queue uses the plain hold for that reveal. |
 | **Late art** (Cast Rendering: the art is not resident at `formedS`; the stardust holds the shape ≤ 0.5 s) | **E8 and E9 still play on time**, at `s = T` and `T + word_offset_s`: the sounds never wait for the picture *(TASK-050)*. If the art still does not arrive and the specks sparkle out, the cast sound and word that already started finish; nothing is cut. |
-| **`hasWord` false** (`willForm` false: art missing or failed the theme check) | E8 and E9 are skipped; the glyph sparkles out with the letter line and the chime only (Key Table fallback) *(TASK-050)*. |
+| **`willForm` false** (art missing or failed the theme check; `hasWord` is then false too) | E8 and E9 are skipped (AU-Q1: E8 follows `willForm`, E9 follows `hasWord`; a creature with no word line still plays E8); the glyph sparkles out with the letter line and the chime only (Key Table fallback) *(TASK-050)*. |
 | **Letter voice missing too** | The chime only (E1). |
 | **Fixed sound missing** (chime, ping, twinkle, parade) | A build check makes this impossible; at run time it is skipped and logged. Never a crash. |
 | **A locale in `voiceLocales` has no files** | The build fails (A8, Key Table V7). |
