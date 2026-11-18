@@ -78,3 +78,8 @@ Reviewed-Content-Hash: design/gdd/input-key-filter.md e0aab170b758b949109f2d01c9
 Review mode: lean · Workflow: standard
 Change: game-qc-ios's diff review: I1's key-state read is a build decision with a release check (no Input Monitoring prompt on a clean Mac, else removed from the build; no run-time fallback, PKC), the ⌘-release rule stated as alone passing AC-27 / k3, the held-set-only limit and its cure stated, new AC-1k6 (real Mac, release-blocking, NOT ASSESSED until run).
 Reviewed-Content-Hash: design/gdd/input-key-filter.md aa441ae5b394c020fb3156b879b9c800aad847b9
+
+## Update — 2026-11-18 — TASK-054b text (no re-review)
+Review mode: lean · Workflow: standard
+Change: I5: R6's sentence "The chord replaces the moon hold only…" moved off the end of the held-set-limit bullet onto its own R6-level line. Text only; no rule changed. Review: game-qc-ios, from the diff.
+Reviewed-Content-Hash: design/gdd/input-key-filter.md 8bf6b260a886d63f988e59a5dc2c719809a79c37

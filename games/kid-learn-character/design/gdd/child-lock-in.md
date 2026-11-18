@@ -2,9 +2,9 @@
 
 > **Status**: Approved (independent read by game-qc-ios, merged 2026-11-18; TASK-054a merged 2026-11-18 — Mac release ACs NOT ASSESSED until a Mac build runs AC-1k6 and the real-Mac ACs)
 > **Author**: game-dev-android for Luan (TASK-052); plan reviewed by game-qc-ios
-> **Last Updated**: 2026-11-18
+> **Last Updated**: 2026-11-18 (TASK-054b text)
 > **Last Verified**: 2026-11-18, against ADR-0001 Decision 9 (a–c), the TASK-033 spike report (Child lock-in),
-> Input & Key Filter R5/R6 and its Gate challenge state, Settings Store R1/R8 (TASK-050, K-21; `childLockActive` pending TASK-054 S1/S2), App Shell & Title
+> Input & Key Filter R5/R6 and its Gate challenge state, Settings Store R1/R8 (TASK-050, K-21; `childLockActive` landed in TASK-054a, 5e1c365), App Shell & Title
 > (TASK-051) R1/R7, the Parent Gate & Grown-up Panel interface (TASK-048: G2, G7, G8, G11, `panelWillOpen` /
 > `panelDidClose`), Privacy & Kids Compliance PKC-07, decisions K-10, K-12, K-19, K-21, K-23
 > **Implements Pillar**: Pillar 5 (Safe by Design)
@@ -59,8 +59,8 @@ gives up quietly if it can't start, and comes off the moment they turn it off or
   on macOS 27 and later.
 - Input's **kiosk-on mode**: ⌘-combinations are swallowed too (Input R5). **While `childLockActive` is true they are
   swallowed in every Input state**, Play, the Gate challenge and Panel open, so ⌘Q in the panel can never skip the
-  Quit button's 1.5 s hold (Parent Gate G8/G11). *(Input change: **TASK-054 I3**, safety, open in TASK-054a;
-  not edited here.)*
+  Quit button's 1.5 s hold (Parent Gate G8/G11). *(Input R5: **TASK-054 I3**, safety, landed in TASK-054a,
+  5e1c365.)*
 - The main window covers its display (App Shell R7). If App Shell uses native full screen, the options are supplied
   through the window delegate's `window(_:willUseFullScreenPresentationOptions:)` instead of set directly; a
   borderless window at the screen's frame sets them directly. Which one is **NOT ASSESSED** until the Mac build
@@ -112,7 +112,8 @@ before the keys are released, so there is never a moment with ⌘-keys live and 
   2. the panel → turn the lock **OFF** → ⌘Q (K-21);
   3. a long press of the power key, always (R2).
 - **The chord, as the gate defines it** (Parent Gate G2): it counts only when **exactly** ⌃⌥⌘Q is down, judged from
-  the OS key state once **TASK-054 I1** lands (safety; the merged Input R6 today uses the held set); it works on the Title and in Play; it does nothing
+  the OS key state (if Input AC-1k6 passes), otherwise from the held set kept honest by the ⌘-release rule (Input
+  R6, TASK-054a); it works on the Title and in Play; it does nothing
   during the gate's 10 s moon sleep after a wrong or timed-out code (K-20, K-21); it is ignored while the challenge or
   the panel shows. **Note: a mistyped code delays the chord by 10 s.**
 - **No lock before the way out works:** preconditions 1–3 of R3 are the way out; the kiosk is never applied before
@@ -240,11 +241,11 @@ failed (the timer counted 0.2 s).
 
 - **Upstream:**
   - Settings Store (`design/gdd/settings-store.md`): `childLock` stored only as ON (R1, R8, TASK-050, K-21), Reset (R9).
-    The run value `childLockActive` and its no-write OFF notification are **TASK-054 S1/S2** (open in TASK-054a).
+    The run value `childLockActive` and its no-write OFF notification are **TASK-054 S1/S2** (landed in TASK-054a, 5e1c365).
   - Input & Key Filter (`design/gdd/input-key-filter.md`): the chord (R6, exactly ⌃⌥⌘Q with nothing else held,
-    TASK-050), the kiosk-on mode (R5), the Gate challenge state. **Open (TASK-054a, owner game-dev-android):** I1
-    (safety: the chord judged from the OS key state, so a lost key-up can't block it) and I3 (safety: ⌘-combinations
-    swallowed in every state while `childLockActive` is true).
+    TASK-050), the kiosk-on mode (R5), the Gate challenge state. **Landed in TASK-054a (5e1c365):** I1
+    (safety: the chord judged from the OS key state if Input AC-1k6 passes, else from the held set kept honest by the
+    ⌘-release rule) and I3 (safety: ⌘-combinations swallowed in every state while `childLockActive` is true).
   - App Shell & Title (TASK-051): "ready" and the window (its R1, R7); **requirement:** overlays only while the lock
     can be on (R5), and the full-screen choice (R2).
 - **Peers / downstream (each must name Child Lock-in):**
@@ -304,8 +305,10 @@ retained in `production/qa/evidence/`.
 - **AC-17 Ways out (real Mac; NOT ASSESSED until run):** chord → challenge → panel → Quit with its hold ends the app with the desktop usable;
   panel → OFF → ⌘Q quits; a wrong code makes the chord do nothing for 10 s.
 
-**Release-blocking:** AC-3 and AC-6 cannot pass until TASK-054 S1/S2 (`childLockActive`, no-write OFF) and I3 (⌘
-swallowed in every state) land, and AC-17's chord path depends on I1 (OS key state). All three are open in TASK-054a.
+**Release-blocking:** TASK-054 S1/S2 (`childLockActive`, no-write OFF), I1 and I3 (⌘ swallowed in every state)
+landed in TASK-054a (5e1c365), so AC-3 and AC-6 are no longer blocked by design; they stay NOT ASSESSED until they
+run. AC-17's chord path depends on **Input AC-1k6** (real Mac, release-blocking for the macOS build, NOT ASSESSED until
+run).
 
 **NOT ASSESSED:** every R2 item marked so; AC-13 to AC-17 until run on a real Mac; native full screen vs borderless
 (App Shell); iPad hardware-keyboard shortcuts under Guided Access; Android screen pinning.
