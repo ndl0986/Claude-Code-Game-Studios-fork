@@ -55,9 +55,8 @@ For the child the gate is invisible. The moon is just the moon.
 - **This GDD owns the moon's hit region** and publishes it to Input as touch layer 3 (Input R7): a
   circle of `moon_hit_px` (50 stage px radius, as in the one-shot's `GATE.r`; ≥ 44 pt **diameter** on every supported screen) around the drawn crescent. A touch down on it emits `gateTouch(began, pointerId)`;
   its up or cancel emits `gateTouch(ended, pointerId)`. **Input (TASK-054 I2, landed in TASK-054a (5e1c365)):** Input also emits
-  `gateTouch(ended, pointerId)` when that pointer leaves the region grown by `moon_slop_pt` (20 pt), so
-  a finger that drifts a little keeps its hold and one that slides away resets. Input R7 emits only
-  began/ended today.
+  `gateTouch(ended, pointerId)` when that pointer leaves the region grown by `moon_slop_pt` (20 pt), so a finger that drifts a little keeps its hold and one that slides away resets (Input R7 layer 3;
+  `moon_slop_pt` is Input's knob, safe range 10–40).
 - While one pointer holds the moon, `t_held` grows (measured from the touch's event timestamp, checked
   every frame against the injected clock) and the Starlight ring fills (F1). At `t_held ≥ gate_hold_s`
   (1.5 s, K-19) the challenge opens (G3).
@@ -81,7 +80,9 @@ For the child the gate is invisible. The moon is just the moon.
 **G2. The Mac parent chord.** ⌃⌥⌘Q (K-10, Input R6) **replaces step 1 and still shows step 2** (K-19).
 It counts only when **exactly ⌃, ⌥, ⌘ and Q are down and no other key is held** (a palm across the
 corner of a keyboard holds more keys; game-qc-android item 3).
-- Shift, Caps Lock and Fn are not "other keys" (Input R6 ignores Shift).
+- **Input R6 owns the chord rule** (K-26): exactly ⌃⌥⌘ + Q; Shift is ignored (Input R6), as are Caps Lock and Num
+  Lock (Input R3); **Fn
+  disqualifies** it (a palm on a laptop's bottom-left row hits fn next to ⌃), like any other extra key.
 - "No other key held" is judged from **the OS's current key state at the moment Q goes down** (for
   example `CGEventSource.keyState`), not from Input's tracked downs, because macOS can drop the key-up
   of a key pressed while ⌘ is held; a stale tracked key must never disable the way out under the kiosk.
@@ -124,7 +125,9 @@ corner of a keyboard holds more keys; game-qc-android item 3).
   once** (wrong). The fourth right digit opens the panel (G6).
 - **Dull on purpose** (item 4): a plain grown-up card on the dimmed stage. No sound, no animation, no
   shake, no red; a key shows only its pressed state. Nothing on it is worth tapping for fun.
-- **Timeout:** `challenge_timeout_s` (20 s) with no **accepted digit** (a keypad touch or digit key
+- **Timeout:** `challenge_timeout_s` (20 s), on the injected **continuous monotonic clock** (the play clock
+  is frozen during the challenge, G5; continuous matches moon sleep, G1, and a background closes the
+  challenge anyway, so uptime and continuous never differ while it shows), with no **accepted digit** (a keypad touch or digit key
   that enters a right digit), counted from the last one, or from the opening if there was none →
   closes as a timeout. Touches outside the keypad and non-digit keys don't reset it. So a challenge
   lasts at most 20 s × 4 = 80 s.
@@ -151,6 +154,8 @@ corner of a keyboard holds more keys; game-qc-android item 3).
 - K-15 / Press Queue R8: the queue is **cleared**, the current reveal **settles to formed**, and its
   hold counts as passed. A running parade fades out, counts as played and is not replayed (K-17).
   Audio cuts the voice, cast and music players (Audio R6); the panel is quiet.
+- Hint Letters stay **frozen** under the dim while the panel shows and resume on close (Hint Letters R9);
+  the freeze that began at the challenge simply continues.
 - Input enters **Panel open** (its states table): keys and touches go to the panel; the held set clears.
 - The panel publishes `panelWillOpen` before any of this and `panelDidClose` after G9.
 
@@ -163,7 +168,7 @@ centred over the dimmed stage; it scrolls when Dynamic Type makes it taller than
 | Sound | Volume slider, 11 steps 0–10 | `volume`: preview gain to Audio while dragging; store write on release (Settings Store F1, F2, R4; Audio R5) | always |
 | Sound | Mute switch | `muted` | always |
 | Sound | Static text: "No sound? Check silent mode and the volume." | — (no API reads the silent switch; Audio) | iPadOS |
-| Theme | Theme list | `themeId`; the next reveal uses it (Key Table R3) | more than one theme bundled (hidden in the MVP: Dinosaurs only) |
+| Theme | Theme list | `themeId`; the next reveal uses it (Key Table §4, the item pick) | more than one theme bundled (hidden in the MVP: Dinosaurs only) |
 | Weather | Clear · Cloudy · Light rain · Snow, and a Windy switch | `weather`, `windy` (Windy enabled only with Light rain or Snow; kept otherwise, Settings Store R1) | once Scene: Time of Day & Weather (#15) ships |
 | Keyboard | On-screen keyboard row switch | `keyboardRow` | once On-screen Keyboard Row (#16) ships |
 | Child lock | Child lock switch; "Quit" button | `childLock` / `childLockActive` → Child Lock-in (G11); Quit = Child Lock-in disengages (options removed, extra-display covers removed, then Input's kiosk mode off; its R4), then the app terminates | macOS (Quit only while the lock is on) |
@@ -254,12 +259,12 @@ Moon sleep is a timer on Idle, not a state the grown-up sees.
 | Settings Store (#4) | out | writes `volume`, `muted`, `themeId`, `weather`, `windy`, `keyboardRow`, `childLock`; Reset (R9). K-21's "off for this run" changes R1/R8 and adds the runtime `childLockActive` with a write-free R10 notification (G11): **TASK-054 S1/S2, landed in TASK-054a (5e1c365)**; TASK-050 made OFF run-only |
 | Press Queue (#7) | out | challenge open → **freeze**, close → **resume** (TASK-050); panel open → clear and settle (R8, K-15) |
 | Reveal Stage (#9) | out | challenge open → **freeze/resume** pair next to settle (**TASK-049**); panel open → settle to formed |
-| Hint Letters (#10) | out | challenge open → **freeze `hintTime`**, close → resume (**TASK-047**) |
+| Hint Letters (#10) | out | challenge open → **freeze `hintTime`**, close → resume (**TASK-047**); **panel open → freeze** (under the dim), **panel close → resume** (Hint Letters R9 cites this GDD) |
 | Parade (#11) | out | challenge open → **pause the walk**, close → resume (**TASK-046**); panel open → fade out, counts as played (K-17); debug manual start (K-17, K-19) |
 | Audio & Voice (#6) | out | slider preview gain (R5); panel open → cut players (R6); challenge open → no cut, nothing new starts, **the parade tune pauses and resumes with the walk** (Audio owner, with TASK-046) |
 | App Shell & Title (#14) | — | the chord works on the Title screen (G2); whether the moon is drawn there; backgrounding closes challenge and panel |
 | Child Lock-in (#13) | out | G11 |
-| Key Table & Theme Data (#1) | — | theme list; next reveal uses the new theme (R3) |
+| Key Table & Theme Data (#1) | — | theme list; next reveal uses the new theme (Key Table §4) |
 | Scene: Time of Day & Weather (#15) | in | `look` and `lookBlend` for the moon's opacity (UI Requirements; Scene R1, F1); the Scene draws no moon disc. The weather row appears when it ships |
 | Keyboard Row (#16) | — | its row appears when it ships |
 | Privacy & Kids Compliance (#5) | constraint | PKC-02, PKC-07, PKC-14 (no input logged in release: the code is never logged) |
@@ -344,7 +349,8 @@ leader (Open Questions Q6).
 - **Settings Store** (Approved): R1 fields, R4 writes and preview, R8, R9 Reset, R10, R11. TASK-050 made
   the lock's OFF run-only (R8, K-21).
 - **Input & Key Filter** (Approved): R5, R6 (chord), R7 (moon layer), states. TASK-050 added the Gate
-  challenge state, the exact chord (from the held set) and the chord ignored during the challenge.
+  challenge state and the chord ignored during the challenge; TASK-054a made the exact chord judged from the
+  OS key state (if AC-1k6 passes), with Fn disqualifying (K-26).
   **Audio:** the parade tune pauses and resumes with the walk (TASK-050, done).
 - **Follow-up TASK-054** (`production/team/TASK-054-followups.md`). **TASK-054a** (Input and Settings
   Store; game-dev-android) is **merged** (5e1c365); **TASK-054b** is split across game-dev-ios,
@@ -376,7 +382,7 @@ leader (Open Questions Q6).
 |---|---|---|---|
 | `gate_hold_s` | 1.5 (K-19) | 1.5–3.0 | how long a grown-up holds; below 1.5 the F2 figures Luan accepted (K-21) no longer hold. At 3.0: max P ≈ 2.7%/h |
 | `moon_sleep_s` | 10 (K-20) | 10–30 | maximum attempt rate; below 10 breaks K-21 (5 s → ≈ 5.2%/h). At 30: max P ≈ 1.1%/h |
-| `moon_hit_px`, `moon_slop_pt` | 50 stage px, 20 pt | ≥ 44 pt; 10–30 pt | how easy the moon is to hold for an adult; a bigger region catches more stray child touches |
+| `moon_hit_px`, `moon_slop_pt` | 50 stage px, 20 pt | ≥ 44 pt diameter; 10–40 pt (Input's knob and range) | how easy the moon is to hold for an adult; a bigger region catches more stray child touches |
 | `challenge_timeout_s` | 20 | 10–60 | how long an abandoned challenge keeps play frozen |
 | `overlap_grace_s` | 0.15 | 0.05–0.25 | how much two-thumb overlap an adult gets on the keypad; longer lets a rolling palm enter digits |
 | `key_size_pt`, `key_gap_pt` | 60, 12 | ≥ 44, ≥ 8 | adult accuracy; larger keys need a taller card |
@@ -422,7 +428,8 @@ All timers use an injected clock and the code an injected seed, so every criteri
    first; a second pointer elsewhere is classified by Input R7. WHEN the first lifts at 1.2 s while the
    second stays THEN the ring empties and the second does not take over.
 3. **AC-03 · chord (game-qc-android AC-c):** GIVEN macOS, WHEN exactly ⌃⌥⌘Q go down THEN the challenge
-   opens; WHEN ⌃⌥⌘Q go down with D also held THEN nothing opens. WHEN ⌃⌥⌘Q go down with Shift or Caps Lock on THEN the challenge opens. GIVEN iPadOS, ⌃⌥⌘Q → nothing.
+   opens; WHEN ⌃⌥⌘Q go down with D also held THEN nothing opens. WHEN ⌃⌥⌘Q go down with Shift or Caps Lock on THEN the challenge opens. WHEN ⌃⌥⌘Q go down with Fn
+   held THEN nothing opens (K-26). GIVEN iPadOS, ⌃⌥⌘Q → nothing.
 4. **AC-04 · code (game-qc-android AC-a):** GIVEN seeded uniform random keypad taps, WHEN 200,000
    attempts are simulated THEN the number that pass lies in 7–33 (expected 20 = 200,000 × 10⁻⁴, ±3 σ; with the fixed seed the count is the same every run).
    AND for a fixed seed the code and its words are the same every run; 1,000 successive openings with one seed show between 932 and 971 distinct codes (±3 σ, σ ≈ 6.5) (expected ≈ 952 =

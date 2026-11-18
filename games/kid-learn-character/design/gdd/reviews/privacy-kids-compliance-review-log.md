@@ -238,3 +238,9 @@ Task: TASK-040
 - PKC-03 / AC-05 (and PKC-02's package check): `apkanalyzer dex packages --defined-only --proguard-mappings mapping.txt`, using the same release build's mapping, kept as evidence; without it the row is NOT ASSESSED.
 - Release APK route named: (b) the signed universal APK from Play Console's App bundle explorer, supplied by Luan; (a) `bundletool --mode=universal` only with Luan's OK; NOT ASSESSED until the Android ADR.
 - Nits: every Android cell now starts with "NOT ASSESSED: no Android build (K-03)". PKC-02 has a static dexdump backstop for VIEW intents and market:// / http(s) strings. PKC-08 reads `<queries>` with `aapt2 dump xmltree`, because `dump permissions` doesn't show it.
+
+## Update — 2026-11-18 — TASK-056b V1 (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-056
+Change: a one-line note on PKC-09's API scan. The continuous clock (App Shell R6) is not a listed required-reason API; Apple lists only systemUptime and mach_absolute_time under System boot time (checked by game-dev-ios 2026-11-18). The existing 35F9.1 entry would cover it if Apple adds it. No rule change.
+Reviewed-Content-Hash: design/gdd/privacy-kids-compliance.md 6ee522cecceb875f3ab354617121da1a14980ad2

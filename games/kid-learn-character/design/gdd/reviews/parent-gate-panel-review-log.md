@@ -185,3 +185,16 @@ Change:
 - P1: the moon is the sky's only moon (Scene R1, 09459f1). Its opacity follows the Scene's look/lookBlend: 0.7 in Morning and Day, 1.0 at Dusk and Night, crossfaded (example 16:07 → 0.84). It follows the wall clock under the freeze and the panel. The hit region and the ring are unchanged.
 - Added the Scene row to Interactions.
 Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 3aa1e879d9aa5e86b13774ef15fec66a67ab3d88
+
+## Update — 2026-11-18 — TASK-056b cross-review fixes (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-056
+Change (TASK-055 report gdd-cross-review-2026-11-18.md; K-26):
+- B-1: G2 follows Input R6 as owner (exactly ⌃⌥⌘ + Q, Shift ignored, Caps/Num Lock per Input R3, Fn disqualifies). The "Fn is not another key" wording is dropped, and AC-03 gets an Fn case.
+- W-4: the challenge timeout runs on the continuous monotonic clock, with the reason given.
+- W-5: the panel freeze of hints is in G6 and in the Hint Letters row.
+- W-6: Key Table §4 replaces the R3 cites.
+- W-8: moon_slop_pt now cites Input's knob and its 10–40 range.
+- W-9: the stale "emits only began/ended today" and "exact chord (from the held set)" lines are fixed.
+- W-1 (Quit visibility, "lock on") is pending game-dev-android's TASK-056a engaged state, to be aligned in a follow-up commit.
+Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 74f6e6c0423e745636546daf69932f566f17272c
