@@ -242,6 +242,6 @@ Against `design/accessibility-requirements.md` (tier: Standard, Luan, K-42):
 |---|---|---|
 | OQ-1 | The title creature's exact position on the ground line (App Shell R2 says "anchored on the ground line"; Reveal Stage R10 gives the Play anchor (640, 600) and the ground line y 558) | App Shell owner |
 | OQ-2 | The Title → Play handover: do the play button and title creature fade, and over how long? | App Shell owner / art |
-| OQ-3 | The play button's size and drawing (only its position, light and breathe are stated) | art (art bible §7) |
+| OQ-3 | ~~The play button's size and drawing (only its position, light and breathe are stated)~~ **Closed (TASK-117):** art bible §7 "Play button": 140 × 92 units, radius 40, Letter Gold with a cream triangle, the light per look | art (art bible §7) |
 | OQ-4 | The moon ring's geometry on the Title (see `interaction-patterns.md` OQ-1) | Parent Gate owner / art |
 | OQ-5 | Player journey map not yet created (`design/player-journey.md`); author it from `.claude/docs/templates/player-journey.md` | producer / UX |
