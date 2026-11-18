@@ -105,6 +105,17 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-30 Accessibility scope (game-leader, 2026-11-18, TASK-061; within K-29 and the art bible)
+
+- **Smart Invert: the stage opts out** (`accessibilityIgnoresInvertColors = true` on the stage view), because
+  inverting breaks art bible §4 contrast and colour meanings; the grown-up panel follows Smart Invert. Classic
+  Invert / macOS Invert are OS-wide and the user's choice.
+- **MVP scope confirmed:** Reduce Transparency has no effect (no system blur/vibrancy); Increase Contrast is not
+  supported in the MVP (art bible §4 floors are the contrast design); Bold Text applies to the panel only (the child
+  side has no text); no captions (the child cannot read; the glyph and creature are the visual equivalent).
+- Note for the art bible owner: the red-flash palette check (Accessibility F2b) passes Letter Gold at 0.781 against
+  the 0.8 saturated-red limit; any warmer gold must re-run F2b.
+
 ### K-29 Keyboard Row and Accessibility (Luan, 2026-11-18, TASK-060 / TASK-061 questions)
 
 - **Keyboard row keys: as random as possible, drawn from common words/names.** The row shows a short, common
