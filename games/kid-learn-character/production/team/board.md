@@ -71,7 +71,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-088a | Audio R1 E8/E9: s = formedS; E8 on sfx, E9 on hasWord; AU-Q answers | design | game-art-content (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 82f24b2b) | `design/TASK-088a-audio-e8e9` | 2026-11-18 |
 | TASK-088b | Reveal Stage R3/R6: hasWord definition; only-when-hasWord gates E9 only | design | game-dev-ios (review: game-qc-android) | DONE: MERGED 4d83b81e + 7d16be9d (game-qc-android APPROVE); R3 cell + letter_in nits queued | `design/TASK-088b-reveal-hasword` | 2026-11-18 |
 | TASK-088c | Reveal Stage nits: R3 cells 'in the active locale'; invalid-set rise knob fallback_rise_s 0.45 | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE) | `design/TASK-088c-reveal-nits` | 2026-11-18 |
-| TASK-088d | Reveal Stage F3: invalid-set fadeStart = formedS − fallback_fade_s | design | game-dev-ios (review: game-qc-android) | IN REVIEW @ daf62298 → game-qc-android | `design/TASK-088d-reveal-f3` | 2026-11-18 |
+| TASK-088d | Reveal Stage F3: invalid-set fadeStart = formedS − fallback_fade_s | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 45809435) | `design/TASK-088d-reveal-f3` | 2026-11-18 |
 
 ## Leader log
 
