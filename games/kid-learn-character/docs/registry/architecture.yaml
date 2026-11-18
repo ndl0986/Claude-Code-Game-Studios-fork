@@ -177,6 +177,7 @@ interfaces:
     signal_signature: "SettingsBackend, KioskEffects, AudioOutput, RenderSink, ResidencySink, ThemeSource, DisplayMetrics, AccessibilityState, AppLifecycle, DebugLog, KeyStateQuery (optional: anyNonModifierDown(except:))"
     referenced_by:
       - docs/architecture/adr-0002-modules-seams-types.md
+      - docs/architecture/adr-0005-settings-persistence.md
     added: 2026-11-18
     revised: ""
   - contract: freeze_settle_chain
@@ -284,7 +285,17 @@ performance_budgets: []
 # Register an API decision when the choice is non-obvious and other ADRs might
 # make a different choice for the same purpose without knowing this was decided.
 
-api_decisions: []
+api_decisions:
+  - purpose: settings_persistence
+    status: active
+    api: "UserDefaults.standard, the canonical bytes as Data under the single key settings"
+    not: "NSUbiquitousKeyValueStore, CloudKit, a file, separate keys per field, UserDefaults(suiteName:) / an app group"
+    adr: docs/architecture/adr-0005-settings-persistence.md
+    reason: "one all-or-nothing record, one app-written key (PKC-05), one privacy reason CA92.1 (PKC-09), no sync (PKC-01, K-12)"
+    referenced_by:
+      - docs/architecture/adr-0005-settings-persistence.md
+    added: 2026-11-18
+    revised: ""
 
 # Example:
 #
