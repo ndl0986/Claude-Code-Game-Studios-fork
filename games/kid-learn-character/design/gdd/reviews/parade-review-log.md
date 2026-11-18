@@ -79,3 +79,8 @@ Reviewed-Content-Hash: design/gdd/parade.md 76dafbae4a08a832dc47472eefa7928fc707
 Review mode: lean · Workflow: standard
 Change: The resolved-questions history row for MT-Q3 now leads with "Superseded: Luan chose yes, K-46; see R12a" so the old recommendation cannot be read as current.
 Reviewed-Content-Hash: design/gdd/parade.md 8b9d74d6d67df241f4103add12585e5af607ab54
+
+## Update — 2026-11-18 — TASK-120 meter light landing crossfade (no re-review)
+Review mode: lean · Workflow: standard
+Change: From game-dev-ios's render read (option a): litAt = launchAt + meter_fly_s − meter_land_s (0.75 s), so the cell's fill starts as the light's fade starts (one crossfade, no dip); fullAt follows (6th cell full at armedAt + 1.15; glow seen ~0.75 s); constraint and knob note updated; the swept strip stated as a range, 10,800–37,400 px on an 11-inch iPad (27,600 default); one line on why a single flight field suffices (meter_fly_s ≤ 1.1 < 1.2 s). AC-22, 23, 31, 35 times updated.
+Reviewed-Content-Hash: design/gdd/parade.md 16a839ee8bf58c44b04bee7228237e422339a804
