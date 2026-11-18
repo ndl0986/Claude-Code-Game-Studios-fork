@@ -278,8 +278,9 @@ alpha    = u
 pop(u)   = 0.92 + 0.08·u + 0.03·sin(π·u)         normal (as played)
 pop(u)   = 0.92 + 0.08·u                          Reduce Motion (no overshoot)
 ```
-`fadeStart = formedS` for the morph (later with late art); `fadeStart = formedS − form_s` for the two fade-in
-fallbacks, whose `formedS` is the fade-in's end (Press Queue R6). Example: u = 0.5 → pop 0.99 normal
+`fadeStart = formedS` for the morph (later with late art); for the two fade-in fallbacks, whose `formedS` is the
+fade-in's end (Press Queue R6): `fadeStart = formedS − form_s` for glyph missing (the set is valid), and
+**`fadeStart = formedS − fallback_fade_s`** for an invalid set, whose own `form_s` is not trusted *(TASK-088d)*. Example: u = 0.5 → pop 0.99 normal
 (0.96 + 0.03), 0.96 reduced. The normal pop peaks just above 1 (≈ 1.002 near u = 0.8) and settles at 1.0; the
 reduced one never exceeds 1.0.
 

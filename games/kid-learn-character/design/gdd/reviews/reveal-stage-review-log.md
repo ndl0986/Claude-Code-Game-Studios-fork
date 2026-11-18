@@ -69,3 +69,9 @@ Review mode: lean · Workflow: standard
 Task: TASK-088c
 Change: R3's table cells read "true if the item has a word line in the active locale", matching the prose (game-qc-android's nit). The invalid-set row: the glyph rises over the new knob fallback_rise_s (0.45 s, the normal set's letter_in), since the invalid set's own values are not used; the knob row lists fallback_rise_s with fallback_glow_s and fallback_fade_s. Review: game-qc-android, from the diff.
 Reviewed-Content-Hash: design/gdd/reveal-stage.md bba04d187103932c1475f2935a7ed45de045717f
+
+## Update — 2026-11-18 — TASK-088d F3 fadeStart for the invalid set (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-088d
+Change: F3: the invalid-set fallback fades in from formedS − fallback_fade_s (its own form_s is not trusted); glyph missing keeps formedS − form_s (its set is valid). The values happen to be equal today (0.5), which hid the error; found reviewing reveal-timing-v1. Review: game-qc-android, from the diff.
+Reviewed-Content-Hash: design/gdd/reveal-stage.md 3289bf38a1ea48cfa41fdc7b4b5c1a65139a824c
