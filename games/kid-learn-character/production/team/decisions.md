@@ -44,6 +44,9 @@ ignored, about 3 s per reveal while keys are queued. See `design/gdd/game-concep
 - **Numbers follow the theme:** "three… three baby dinosaurs" in Dinosaurs, "three little cars" in a
   vehicles theme; 0 = the theme's "empty" item.
 - T stays "tee… tee rex"; F = fossil and N = nest stay (theme-world objects are allowed).
+- Letter-sound picks (TASK-036): **P = Tapejara** (replaces pteranodon); **X = Xenoceratops kept as the
+  one recorded exception** to the letter-sound rule; Triceratops, Oviraptor, Utahraptor and
+  Quetzalcoatlus kept.
 
 ### K-10 Input rules (Luan, 2026-11-18, TASK-037 questions)
 
@@ -52,6 +55,7 @@ ignored, about 3 s per reveal while keys are queued. See `design/gdd/game-concep
 - **Parent chord: ⌃⌥⌘Q on the Mac only.** An iPad with a keyboard has no chord; the moon hold is the
   way in.
 - Swallowed keys do nothing at all; a tap on the empty stage sparkles (from Luan's play notes).
+- **Title screen:** any letter or digit key starts play (like the play button), from TASK-037's question.
 
 ### K-11 Morph choices (Luan, 2026-11-18, TASK-038 questions)
 

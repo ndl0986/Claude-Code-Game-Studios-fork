@@ -2,7 +2,7 @@
 
 > **Status**: Draft
 > **Created**: 2026-11-17
-> **Last Updated**: 2026-11-17
+> **Last Updated**: 2026-11-18
 > **Source Concept**: design/gdd/game-concept.md (with decisions K-01…K-08 in production/team/decisions.md, the art bible design/art/art-bible.md, the one-shot prototypes/letter-morph-dinosaur/ iterations 1–4, and the TASK-033/034 reports)
 
 ---
@@ -56,22 +56,22 @@ child lock-in, privacy compliance), because the player is 2.5–3 years old.
 
 | # | System Name | Category | Priority | Status | Design Doc | Depends On |
 |---|-------------|----------|----------|--------|------------|------------|
-| 1 | Key Table & Theme Data | Data | MVP | Not Started | design/gdd/key-table-theme-data.md | — |
-| 2 | Input & Key Filter | Core | MVP | Not Started | design/gdd/input-key-filter.md | — |
-| 3 | MorphCore | Core | MVP | Not Started | design/gdd/morphcore.md | — |
+| 1 | Key Table & Theme Data | Data | MVP | Approved | design/gdd/key-table-theme-data.md | — |
+| 2 | Input & Key Filter | Core | MVP | In Review | design/gdd/input-key-filter.md | — |
+| 3 | MorphCore | Core | MVP | Approved | design/gdd/morphcore.md | — |
 | 4 | Settings Store (inferred) | Persistence | MVP | Not Started | design/gdd/settings-store.md | — |
 | 5 | Privacy & Kids Compliance (inferred) | Meta | MVP | Not Started | design/gdd/privacy-kids-compliance.md | — |
 | 6 | Audio & Voice | Audio | MVP | Not Started | design/gdd/audio-voice.md | Key Table & Theme Data |
 | 7 | Press Queue | Gameplay | MVP | Not Started | design/gdd/press-queue.md | Input & Key Filter |
 | 8 | Cast Rendering (inferred) | Presentation | MVP | Not Started | design/gdd/cast-rendering.md | Key Table & Theme Data, MorphCore |
 | 9 | Reveal Stage | Gameplay | MVP | Not Started | design/gdd/reveal-stage.md | MorphCore, Audio & Voice, Press Queue, Cast Rendering, Key Table & Theme Data |
-| 10 | Hint Letters | Gameplay | MVP | Not Started | design/gdd/hint-letters.md | Key Table & Theme Data, Press Queue |
+| 10 | Hint Letters | Gameplay | MVP | Not Started | design/gdd/hint-letters.md | Key Table & Theme Data, Input & Key Filter, Press Queue |
 | 11 | Parade | Gameplay | MVP | Not Started | design/gdd/parade.md | Reveal Stage, Cast Rendering |
 | 12 | Parent Gate & Grown-up Panel | UI | MVP | Not Started | design/gdd/parent-gate-panel.md | Settings Store, Input & Key Filter |
 | 13 | Child Lock-in | Platform | MVP | Not Started | design/gdd/child-lock-in.md | Input & Key Filter, Parent Gate & Grown-up Panel |
 | 14 | App Shell & Title (inferred) | Presentation | MVP | Not Started | design/gdd/app-shell-title.md | Reveal Stage, Settings Store |
 | 15 | Scene: Time of Day & Weather | Presentation | Vertical Slice | Not Started | design/gdd/scene-time-weather.md | Settings Store |
-| 16 | On-screen Keyboard Row | UI | Vertical Slice | Not Started | design/gdd/onscreen-keyboard-row.md | Press Queue, Settings Store |
+| 16 | On-screen Keyboard Row | UI | Vertical Slice | Not Started | design/gdd/onscreen-keyboard-row.md | Input & Key Filter, Press Queue, Settings Store |
 | 17 | Accessibility | Meta | Vertical Slice | Not Started | design/gdd/accessibility.md | MorphCore, Reveal Stage, Scene: Time of Day & Weather, Hint Letters, Parade |
 | 18 | Theme Packs | Content | Alpha | Not Started | design/gdd/theme-packs.md | Key Table & Theme Data, Parent Gate & Grown-up Panel |
 | 19 | Localization (inferred) | Meta | Alpha | Not Started | design/gdd/localization.md | Audio & Voice, Key Table & Theme Data |
@@ -145,11 +145,11 @@ Narrative does not apply.
 ### Feature Layer (depends on core)
 
 1. Reveal Stage — depends on: MorphCore, Audio & Voice, Press Queue, Cast Rendering, Key Table & Theme Data
-2. Hint Letters — depends on: Key Table & Theme Data, Press Queue
+2. Hint Letters — depends on: Key Table & Theme Data, Input & Key Filter, Press Queue
 3. Parade — depends on: Reveal Stage, Cast Rendering
 4. Parent Gate & Grown-up Panel — depends on: Settings Store, Input & Key Filter
 5. Child Lock-in — depends on: Input & Key Filter, Parent Gate & Grown-up Panel
-6. On-screen Keyboard Row — depends on: Press Queue, Settings Store
+6. On-screen Keyboard Row — depends on: Input & Key Filter, Press Queue, Settings Store
 
 ### Presentation Layer (depends on features)
 
@@ -226,10 +226,10 @@ Effort: S = 1 session, M = 2–3 sessions.
 | Metric | Count |
 |--------|-------|
 | Total systems identified | 20 |
-| Design docs started | 0 |
-| Design docs reviewed | 0 |
-| Design docs approved | 0 |
-| MVP systems designed | 0/14 |
+| Design docs started | 3 |
+| Design docs reviewed | 3 |
+| Design docs approved | 2 |
+| MVP systems designed | 2/14 |
 | Vertical Slice systems designed | 0/3 |
 
 ---
