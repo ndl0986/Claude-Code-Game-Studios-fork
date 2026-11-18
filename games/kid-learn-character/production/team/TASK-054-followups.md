@@ -81,3 +81,4 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
 - DeviceSpike Freeze continuity: add a second correlation just after resume (gain back to 1) to confirm heard content starts at 'from' (game-qc-ios note on ADR-0010) — game-dev-ios, next DeviceSpike touch; or P-7 records it by listening.
 - Parade precise rules: drop "plus any batch keys beyond parade_count" (can't happen; batch never grows past 6) — game-art-content, next Parade touch (TASK-101a nit).
 - Cast Rendering F6: 1024 px tier is a HEIGHT per R3 (full image 1490 × 1024), not a width; restate F6's per-set figure and its 1.5× cap (game-dev-android finding, TASK-103) — game-dev-ios, next Cast Rendering touch.
+- F2 detector (Accessibility / P-3, M-12): take each frame's timestamp from the in-app dump, never assume an even display rate (the dump slows frames) — game-dev-android nit on TASK-106; check the F2 tool spec when it's written.

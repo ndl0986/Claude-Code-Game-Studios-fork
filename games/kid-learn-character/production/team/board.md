@@ -93,7 +93,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-103 | ADR-0009 render path draft to Proposed (device rows pending) | architecture | game-dev-android (review: game-dev-ios; rows game-qc-ios) | rows REVISE (row 2 → 'A passes both → A'; partial re-runs; H-1 text) → fixing; game-dev-ios review pending | `design/TASK-103-adr-0009` | 2026-11-18 |
 | TASK-104 | Cast Rendering F8 edge switch: launch state, background keeps state, reverse crossing mid-dissolve (CR-Q1) | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 5fa2bbff) | `design/TASK-104-cast-f8-edge` | 2026-11-18 |
 | TASK-105 | Device-checks plan: M-1 read-ON procedure, M-2 → ADR-0007, M-3/P-4 keyboard part, P-15 → input-filter-v2 | qa | game-qc-ios (review: game-dev-ios) | IN REVIEW @ 1416e04c → game-dev-ios | `design/TASK-105-plan-0007-0008` | 2026-11-18 |
-| TASK-106 | Device-checks plan: M-12 uses in-app frame dump; P-2 Settings read time → production re-run | qa | game-qc-ios (review: game-dev-android) | IN REVIEW @ b6493e6e → game-dev-android | `design/TASK-106-plan-0009` | 2026-11-18 |
+| TASK-106 | Device-checks plan: M-12 uses in-app frame dump; P-2 Settings read time → production re-run | qa | game-qc-ios (review: game-dev-android) | DONE: MERGED (game-dev-android APPROVE @ b6493e6e) | `design/TASK-106-plan-0009` | 2026-11-18 |
 
 ## Leader log
 
