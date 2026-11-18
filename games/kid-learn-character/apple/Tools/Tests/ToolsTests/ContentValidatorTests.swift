@@ -69,6 +69,8 @@ final class ContentValidatorTests: XCTestCase {
         XCTAssertEqual(r.inProgress, ["wip"])
         XCTAssertEqual(r.findings, [])
         XCTAssertEqual(r.themes, ["testbase"])
+        XCTAssertTrue(r.passes(release: false), "a theme in progress does not fail a merge")
+        XCTAssertFalse(r.passes(release: true), "a theme in progress fails a release (--release)")
     }
 
     /// TASK-125: anything shipped (here a cast/ folder) without a theme.json is still a V1 FAIL, not "in progress".

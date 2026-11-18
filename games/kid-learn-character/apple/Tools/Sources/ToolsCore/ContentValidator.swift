@@ -20,6 +20,8 @@ public enum ContentValidator {
         /// theme in progress. Reported NOT ASSESSED, never PASS; `--release` FAILs on any (TASK-125).
         public var inProgress: [String] = []
         public var pass: Bool { findings.isEmpty }
+        /// The exit decision: a merge needs no finding; a release also needs no theme in progress (TASK-125).
+        public func passes(release: Bool) -> Bool { pass && !(release && !inProgress.isEmpty) }
     }
 
     /// True when `folder` holds nothing but a `src/` directory (hidden files aside): build-only inputs, nothing the
