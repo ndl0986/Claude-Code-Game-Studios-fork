@@ -12330,6 +12330,146 @@
       "note": "After the ⌘-release clear, 4's later up emits nothing (the count is already 0)."
     },
     {
+      "id": "AC1t-cmd-release-clear-two-digits-in-down-order",
+      "source": "gdd: input-key-filter.md R8 gateDigitUp; AC-1t (TASK-098); R6 (⌘ release)",
+      "given": {
+        "platform": "macOS",
+        "state": "GateChallenge",
+        "kioskModeOn": false,
+        "displayMetrics": {
+          "windowPx": [
+            1280,
+            720
+          ],
+          "pxPerPt": 1.0,
+          "safeAreaInsetsPx": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "ppiX": 264,
+          "ppiY": 264,
+          "gestureInsetsPx": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "regions": {
+          "hints": [],
+          "rowKeys": [],
+          "moon": {
+            "centre": [
+              66.0,
+              62.0
+            ],
+            "radius": 50.0
+          },
+          "cast": null
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "key",
+            "kind": "down",
+            "character": "4",
+            "positionKey": "4",
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "k_4"
+          },
+          "expect": [
+            {
+              "out": "gateDigit",
+              "digit": "4",
+              "anotherKeyHeld": false
+            },
+            {
+              "out": "disposition",
+              "value": "consume"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "key",
+            "kind": "down",
+            "character": "7",
+            "positionKey": "7",
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "k_7"
+          },
+          "expect": [
+            {
+              "out": "gateDigit",
+              "digit": "7",
+              "anotherKeyHeld": true
+            },
+            {
+              "out": "disposition",
+              "value": "consume"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5
+          },
+          "event": {
+            "type": "key",
+            "kind": "modifiersChanged",
+            "character": null,
+            "positionKey": null,
+            "modifiers": [
+              "cmd"
+            ],
+            "isRepeat": false,
+            "physicalId": "mods"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.75
+          },
+          "event": {
+            "type": "key",
+            "kind": "modifiersChanged",
+            "character": null,
+            "positionKey": null,
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "mods"
+          },
+          "expect": [
+            {
+              "out": "gateDigitUp",
+              "digit": "4"
+            },
+            {
+              "out": "gateDigitUp",
+              "digit": "7"
+            }
+          ],
+          "expectState": {
+            "heldSet": []
+          }
+        }
+      ],
+      "note": "game-dev-ios's advisory: down order pinned on the ⌘-release clear too."
+    },
+    {
       "id": "AC1t-no-up-after-leaving-challenge",
       "source": "gdd: input-key-filter.md R8 gateDigitUp; AC-1t (TASK-098)",
       "given": {

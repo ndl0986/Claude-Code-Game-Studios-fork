@@ -10,10 +10,11 @@ v2 supersedes input-filter-v1 (K-40) after TASK-098 added `gateDigitUp(digit)` t
 - **Three v1 cases now expect `gateDigitUp`** where a key that gave a `gateDigit` leaves the held set:
   `Gate-digit-repeat-and-modifier` (step 2), `AC1p-gate-digit-variants` (steps 1, 3, 5) and
   `R6-gate-cmd-release-drops-held-digit` (step 2, the ⌘-release clear). Nothing else in them changed.
-- **Eight AC-1t cases added:** a down then an up; two physical 4s, each with its own up; no up for D or ⌃4; a
-  focus-loss clear in down order; a cancel clear; the ⌘-release clear on the Mac (the later up emits nothing); no up
+- **Nine AC-1t cases added:** a down then an up; two physical 4s, each with its own up; no up for D or ⌃4; a
+  focus-loss clear and a ⌘-release clear, each in down order; a cancel clear; the ⌘-release clear on the Mac (the later
+  up emits nothing); no up
   after leaving the challenge; nothing for a key held from before the challenge.
-- The other 83 cases are byte-identical. All 94 are re-derived by the updated independent model, with 0 mismatches.
+- The other 83 cases are byte-identical. All 95 are re-derived by the updated independent model, with 0 mismatches.
 
 ## What it covers
 
