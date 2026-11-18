@@ -110,7 +110,11 @@ that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per
 - **Keyboard row keys: as random as possible, drawn from common words/names.** The row shows a short, common
   word or name (≤ 9 distinct keys at the 18 mm floor), picked at random from a per-theme pool of the most
   common/familiar words and names — not necessarily the full theme word ("DINOSAUR") or anything longer, as in
-  the first prototype. The pool, the pick rule and when the word changes are TASK-060's to propose.
+  the first prototype. Luan approved TASK-060's proposal (same day): a per-theme `rowWords` pool; Dinosaurs =
+  REX, EGG, NEST, ROAR, DINO, BABY, MOM, DAD, SUN, MOON, STAR, CAT, DOG, BALL, HAT, BUS (no people's given
+  names); a seeded uniform pick with no immediate repeat; **the word changes once every key of it has been
+  pressed at least once, and on each entry to Play**, only at a quiet moment (no finger on the row, stage
+  resting), with a 0.3 s fade.
 - Keyboard row: shown whenever the grown-up turned it on, even with a hardware keyboard; stays fully visible and
   active during a parade (not dimmed like hints); hidden on the Title, fades in on Play; a hardware press of a row
   letter also lights that row key.
