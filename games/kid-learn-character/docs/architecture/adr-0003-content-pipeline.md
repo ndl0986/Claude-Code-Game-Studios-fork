@@ -222,6 +222,11 @@ pivots, layers, paths, fills and strokes, in artboard units).
   audio in a kids' app**, even though the app is free with no ads (K-32; Audio & Voice Q8). No engine is wired into
   the build until Luan decides. Until then, **placeholder** voice files go through D5 unchanged, so V15 and the
   loudness checks are proven with any files.
+- *TTS note (2026-11-18, Luan K-41; pre-approved by K-36 and K-41; status unchanged, Accepted):* the engine behind the
+  adapter is **Kokoro-82M**, voice `af_heart`, `lang_code='a'`, speed 0.88, package `kokoro` 0.9.4, weights revision
+  `f3ff3571791e39611d31c381e3a41a3af07b4987` (Apache-2.0; Privacy L-09 closed). espeak-ng is its build-machine-only
+  phonemiser fallback (K-36). The adapter seam above stays **engine-agnostic**: changing the engine, or a human
+  re-record, still replaces files only. Respelled script lines (K-35) are adapter input; file names stay the line ids.
 
 ### D7. Decoding at the edge (ADR-0002 D2)
 - JSON decoding lives only in `<App>` and Tools (`JSONSerialization` or `Codable`). `KidCore` receives plain

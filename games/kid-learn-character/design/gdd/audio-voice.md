@@ -199,8 +199,13 @@ never more brightness"; Pillar 3).
 into the same `.m4a` pipeline: the same file names and line ids (`vo_<locale>_<kind>_<id>.m4a`), loudness-matched
 like any other file. The app never synthesises speech at run time and never uses the network (the app is offline, ADR-0001). The script is
 the Key Table's `say` and `word` fields ("A." for A, because a TTS voice read "ay" as "eye" in the one-shot).
-Swapping in a recorded voice later replaces files only. Open: whether to re-record with a human voice for release,
-and that the TTS licence allows a commercial kids' app (Open Questions).
+Swapping in a recorded voice later replaces files only.
+**The engine (decided, Luan K-41, 2026-11-18):** **Kokoro-82M, voice `af_heart`, American English
+(`lang_code='a'`), speed 0.88**, as rendered in TASK-073. The bake pins the `kokoro` package **0.9.4** and weights
+revision **`f3ff3571791e39611d31c381e3a41a3af07b4987`** (Privacy L-09, closed: Apache-2.0, an attribution line in the
+acknowledgements). Its espeak-ng fallback runs on the build machine only (K-36). Piper is not used. Hard names get a
+respelled script for that line only (K-35); the displayed and Key Table names keep their spelling, and each respelled
+line is approved by ear before it is baked. Open: whether to re-record with a human voice for release (Q7).
 
 ### States and Transitions
 
@@ -507,11 +512,9 @@ Logic criteria run with an injected clock and a fake player layer (no audio hard
 
 - **Q7. Human voice for release.** The MVP uses build-time TTS (R8). Whether to re-record with a human voice
   (adult actor, licence buy-out) before release stays open.
-- **Q8. TTS licence (open item).** The chosen TTS voice's licence must allow its rendered audio in a commercial
-  app for children. To be checked before the voice files are rendered for release.
 - **Q9. Memory budget.** F5's ~20 MB per theme needs the real iPad memory budget (ADR-0001).
 
-**Resolved (Luan, 2026-11-18), now in the rules:** Q1 the word plays 0.25 s after the cast sound, ducked over it,
+**Resolved (Luan, 2026-11-18), now in the rules:** Q8 (TTS licence) closed by K-41: Kokoro-82M, Apache-2.0, attribution in the acknowledgements; Privacy L-09 (R8). Q1 the word plays 0.25 s after the cast sound, ducked over it,
 and a waiting key does not cut it (E9, F6); Q2 an overflow press gets the softer ping (E2); Q3 the MVP voice is
 TTS pre-rendered at build time (R8); Q4 silent mode is respected (R6); Q5 the loudness targets as
 proposed, tuned in play (F4); Q6 one chirp per baby, counting along up to 9 (E11).
