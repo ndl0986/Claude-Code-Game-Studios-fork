@@ -225,3 +225,13 @@ Review mode: lean · Workflow: standard
 Task: TASK-083
 Change: G3 "Mac hardware digits" becomes "Hardware-keyboard digits (Mac and iPad)" (K-19, K-21), taken from Input's new gateDigit(digit, anotherKeyHeld) (anotherKeyHeld = two digit keys down = wrong) and Esc = Cancel from gateCancel (Input R8, TASK-083); the Input dependency row names both. No rule of the gate's own changed. Review: game-qc-android, from the diff.
 Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 5a3ffe0e3a9da6ee8757f02f7fe1467f916f3630
+
+## Update — 2026-11-18 — TASK-092 iPad overlays with the gate (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-092
+Change:
+- The Interactions row for App Shell & Title now says that while the challenge or panel shows, App Shell stops deferring system edge gestures (App Shell R7, K-39) and restores it on close, and the status bar stays hidden throughout.
+- New AC-38 covers the deferral following the gate (test seam; the real swipes are device-checks P-16).
+- The Android AC is renumbered AC-39.
+- No other rule change.
+Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 1a7b45cba78e0e0483f070827c390e7732054dcc
