@@ -60,3 +60,13 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
 - V1: the continuous clock used by App Shell R6 (ContinuousClock / mach_continuous_time) — check whether
   it needs a privacy-manifest required-reason entry (PKC-09 / system boot time API). (game-dev-ios)
 - V2: L-07 (OS crash logs) stays Luan's call; App Shell cites it.
+
+## Queued after TASK-060 / TASK-061 (next follow-up batch, TASK-062)
+- Hint Letters: read the keyboard row band (y ≥ 582) as an F4 clearance box; note that with the row on the parade
+  lane (448) visually overlaps the bottom hint slots, accepted (K-26 dims and stills hints). (TASK-060)
+- Reveal Stage: list the keyboard row band next to its published boxes; set `accessibilityIgnoresInvertColors` on
+  the stage view (with App Shell). (TASK-060, TASK-061)
+- Cast Rendering: stardust twinkle steady under Reduce Motion; ambient idles change on the next frame (K-29).
+- Reveal Stage: Reduce Motion rule for the tap / ignored-press sparkles (owner decides).
+- App Shell + art bible: play-button breathe rate 0.38 vs 0.48 Hz; play button's physical touch floor.
+- Every motion GDD: read Accessibility's `reduceMotion` flag, not the OS API.
