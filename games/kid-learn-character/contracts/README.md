@@ -48,8 +48,10 @@ it is never Done.
 | Contract | Row | Cases |
 |---|---|---|
 | audio-plan-v1 | not-started: story:audio-voice | 30 |
+| hint-letters-v1 | not-started: story:hint-letters | 58 |
 | input-filter-v1 | not-started: story:input-key-filter | 86 |
 | key-table-schema-v1 | runner: KeyTableModelRunner + Tools.KeyTableFileLayer | 93 |
+| keyboard-row-v1 | not-started: story:keyboard-row | 36 |
 | press-queue-v1 | not-started: story:press-queue | 46 |
 | reveal-timing-v1 | not-started: story:reveal-stage | 60 |
 | settings-record-v1 | superseded-by: settings-record-v2 | 73 |
