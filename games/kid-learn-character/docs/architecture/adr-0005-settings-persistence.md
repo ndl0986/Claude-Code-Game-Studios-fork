@@ -87,7 +87,7 @@ the first.
 | Call | Apple | Notes |
 |---|---|---|
 | `read() → [UInt8]?` | `data(forKey: "settings")` | nil when the key is absent, or when a non-`Data` value sits under it; `KidCore`'s reader then treats it as no record or garbage → defaults, one log line (Settings R6) |
-| `write([UInt8]) → Bool?` | `set(Data, forKey: "settings")` | returns **nil**: `UserDefaults` reports no failure, so "cannot report" is nil (D6), never true. `false` is for a backend that can report one (Android, ADR-0012) |
+| `write([UInt8]) → Bool?` | `set(Data, forKey: "settings")` | returns **nil**: `UserDefaults` reports no failure, so "cannot report" is nil (ADR-0002 D6), never true. `false` is for a backend that can report one (Android, ADR-0012) |
 | `remove()` | `removeObject(forKey: "settings")` | Reset (Settings R9) |
 
 - All calls run on the main thread (the record is under 1 KB, Settings R4).
@@ -244,9 +244,14 @@ None: nothing is stored today. Schema migrations are `KidCore`'s (Settings R7).
 
 ## Validation Criteria
 1. **Bytes round trip:** every settings-record-v1 "record → bytes" case, written through the real backend and read
-   back, is byte-identical (Simulator). Plus the D4 case: lock ON → OFF for the run → a volume change → the bytes
-   still contain `"childLock":true`; then a **cold launch** reads it and `childLockActive` is true again (K-21; Parent
-   Gate AC-19); after Reset the key is absent.
+   back, is byte-identical (Simulator).
+   - **The D4 case runs on macOS** (`childLock` is macOS-only): a macOS host unit test or the Mac app, through the
+     real backend, **under MAC FREE**, and **NOT ASSESSED until it has run**. Lock ON → OFF for the run → a volume
+     change → the bytes still contain `"childLock":true`; then a **cold launch** reads it and `childLockActive` is
+     true again (K-21; Parent Gate AC-19); after Reset the key is absent.
+   - **The iPad counterpart runs on the Simulator:** a record containing `"childLock":true` is read with the key
+     ignored (`childLockActive` false, no kiosk), and after the next write the bytes contain no `childLock` key
+     (D4; Settings R6).
 2. **One key** (D5): the plist at the D5 paths holds only `"settings"` plus the allowlist; Simulator first, then the
    Mac under MAC FREE. NOT ASSESSED until the first runs fill the allowlist.
 3. **Privacy manifest:** `plutil -p PrivacyInfo.xcprivacy` shows `NSPrivacyAccessedAPICategoryUserDefaults` with
