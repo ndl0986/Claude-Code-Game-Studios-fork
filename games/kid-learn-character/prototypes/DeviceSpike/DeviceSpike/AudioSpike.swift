@@ -229,7 +229,11 @@ final class AudioSpike: @unchecked Sendable {
                 if !self.ps[i].stopped {
                     self.ps[i].gen += 1; self.ps[i].state = .sounding        // the pending stop becomes a no-op
                 } else if let b = self.ps[i].buffer {
-                    self.schedule(i, b, name: "resume", handed: ProcessInfo.processInfo.systemUptime, from: self.ps[i].frozenAt)
+                    // ADR-0010 D7: rewind = max(20 ms, actual IO period + 5 ms), capped at cutSettle, so nothing is skipped
+                    // (the captured position runs ahead by the schedule-to-first-render delay, ≤ one IO period; H-1)
+                    let rewindS = min(self.cutSettle, max(0.020, self.ioBufferMs / 1000 + 0.005))
+                    let rewind = AVAudioFramePosition(rewindS * self.format.sampleRate)
+                    self.schedule(i, b, name: "resume", handed: ProcessInfo.processInfo.systemUptime, from: max(0, self.ps[i].frozenAt - rewind))
                     self.log("resume player \(i) from frame \(self.ps[i].frozenAt)")
                 }
                 p.mix.outputVolume = 1

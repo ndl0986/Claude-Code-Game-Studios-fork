@@ -170,7 +170,9 @@ mechanism) and the **Apple** mechanism that meets it (game-dev-android's review,
   - mute during a freeze: mute acts on the main mix only (D5) and leaves the frozen players' state alone; unmute
     restores the main mix and the frozen players still resume on `resume()`.
 - "Sounding" ends when the platform reports the buffer **played back**, not after its nominal length (a freeze stops
-  a player's time, so a length-based guess goes wrong).
+  a player's time, so a length-based guess goes wrong). **A played-back completion counts only for the sound it
+  belongs to, and only while that player is `sounding`**: a stop of a cut or frozen buffer also fires its completion
+  (on Apple, `stop()` does), and it must not turn a cutting or frozen player idle (game-dev-android).
 
 **Apple.** One serial `DispatchQueue` (QoS `.userInteractive`). Idle: `scheduleBuffer(buffer, at: nil, options:
 .interrupts, completionCallbackType: .dataPlayedBack)`; the completion, hopped to the queue, moves the player to idle
@@ -213,12 +215,15 @@ smoothing rounds the steps.
 
 **Apple.** `pause()`: for each sounding player, capture its position (`playerTime(forNodeTime: lastRenderTime)` minus
 the sample at which its buffer started), set the gate to 0, and after `cut_settle_s` `stop()` it (state frozen, token
-kept). `resume()`: for each frozen player, schedule **the rest of its buffer from the captured frame** (a sub-buffer
+kept). `resume()`: for each frozen player, schedule **the rest of its buffer from a rewind before the captured frame**,
+clamped at 0, with **rewind = max(20 ms, the session's actual IO period + 5 ms), capped at `cut_settle_s`** (a sub-buffer
 copy made at resume, never on a press; `scheduleSegment` exists only for files), start the player, and raise the gate
-(the mixer smooths the rise). A resume within `cut_settle_s` (not yet stopped) only raises the gate (D4). The captured frame can sit
-**before** the true freeze instant (`lastRenderTime` is the last render's start, plus the graph's latency), so a
-little is heard again and nothing is skipped: H-1 measures 0–15 ms, within Audio's "up to `cut_settle_s` earlier"
-(R6, AC-21; TASK-090b). The sub-buffer copy is made on the audio queue.
+(the mixer smooths the rise). A resume within `cut_settle_s` (not yet stopped) only raises the gate (D4). The captured position runs **ahead** of the frame actually audible by the delay between a buffer's scheduling (where
+its start sample is taken) and its first render, at most one IO period in the app; H-1 measures exactly
+`resume − freeze frame = −rewind + that delay` in every rendering, so the rewind must exceed the delay: 20 ms covers
+IO periods up to 15 ms (5 ms requested, D1; the actual value is logged, D9), and a longer actual IO period lengthens
+the rewind, capped at `cut_settle_s`, Audio's limit (R6, AC-21; TASK-090b). A little is heard again; nothing is
+skipped. The sub-buffer copy is made on the audio queue.
 
 ### D8. Session and engine notifications
 All handlers hop to the audio queue; none deallocates the engine (header).
@@ -332,6 +337,9 @@ KidCore audio plan ──AudioOutput (ADR-0002 D6)──▶ AudioAdapter (app)
 - The TTS choice stays out of this ADR (D10).
 
 ## Risks
+- **The offline rig's player start moves by whole render quanta** (0 to ~5500 frames seen), which made several
+  alignment-based measures unreliable during development (each fixed and recorded in H-1); the click verdicts never
+  depended on it. Resume continuity stays a device claim (P-7, the production AC-21).
 - **The mixer's smoothing changes or differs on the device.** Mitigation: H-1 runs in CI-local builds; P-7 and M-14
   listen on the speakers; Alternative 4 is ready.
 - **The iOS 27 resumption notifications behave differently from the deprecated one.** Mitigation: P-8 logs which
@@ -380,33 +388,53 @@ Per K-34: headless runs need no MAC FREE; anything on the Mac's screen or speake
     freeze (position captured at the freeze call, gate to 0, stop after 40 ms; resume 140 ms later from the captured
     frame, gate to 1).
   - **Detectors**: for single tones the **sine-predictor residual** max|x[n] − 2cos(ω)x[n−1] + x[n−2]| (0 for a clean
-    tone at any amplitude and phase), threshold **−60 dBFS** (AC-9); for the chord and the voice-like line the
-    **largest per-sample gain step** of out/src (aligned for the graph's latency), threshold **1/720 per sample**
-    (−57.1 dB: no faster than a 15 ms linear fade; a hard stop is ≈ 0 dB). The older d2 detector is reported for
-    the 100 Hz tone for one release, to compare with the first numbers. **Continuity** (D7): the source frame the
-    resumed output lines up with, against the frame at the freeze call.
+    tone at any amplitude and phase), threshold **−60 dBFS** (AC-9); for the chord and the voice-like line two measures against the
+    latency-aligned source: **(a)** the **per-sample gain step** g[n] − g[n−1], g = out/src, between adjacent samples
+    where |src| ≥ 0.2·amp (no bridging, no division by a gap), limit **1/1000 per sample** (−60 dB, the
+    AC-9-equivalent: a gain step Δg on a full-scale signal is a Δg discontinuity); and **(b)** a **guard** for what (a)
+    cannot see, a step landing where |src| is small: the least-squares gain over 1 ms windows must not change by
+    **≥ 0.25** between consecutive windows (a hard stop trips it wherever it lands; a smooth fade changes it by
+    ≤ 0.07). (b) is a guard, not a measure: on a smooth ramp the window's energy weighting by the chord's beat makes
+    it read unevenly (a probe of the D5 cut shows the mixer's fall as a continuous ≈ 27 ms ramp, 1 → 0, with 1 ms
+    differences alternating 0.02–0.06). **Self-check:** a hard stop must be detected at every phase on every signal,
+    or the run fails (game-qc-ios: the first gain metric, a per-sample ratio that bridged gaps ≤ 2 ms dividing by
+    their length, missed the chord's hard stop at phases 5/8 and 6/8, where the stop fell in a 2.3 ms near-null
+    stretch, and under-read phases 3/8 and 4/8). The older d2 detector is reported for
+    the 100 Hz tone for one release, to compare with the first numbers. **Continuity** (D7), in content: the resume
+    frame against the frame actually playing at the freeze call, from that rendering's own latency (a one-sample
+    marker starts every source; the player's start moves by one render quantum between renderings, so a
+    once-per-process or correlation-based latency is wrong).
   - **Pass**: every gated mechanism (D5 cut, D5 mute, D7 freeze) passes on every signal at every phase; the
-    detectors' floor (no event) passes; the resume is never later than the freeze frame and at most
+    detectors' floor (no event) passes; the self-check passes; the resume is never later than the freeze frame and at most
     `cut_settle_s` earlier.
   - **Results** (2026-11-18, macOS 27.2, repeated runs, evidence `production/qa/evidence/TASK-087/<sha>/`):
-    | Mechanism | 100 Hz (residual) | 1 kHz (residual) | chord, voice-like (gain step) | Verdict |
+    | Mechanism | 100 Hz (residual) | 1 kHz (residual) | chord, voice-like (gain step (a)) | Verdict |
     |---|---|---|---|---|
     | no event (floor) | −137.1 | −142.1 | none | PASS |
-    | hard `stop()` | −1.0 worst, −38.7 best | −1.0 / −18.7 | 0.0 dB (a full drop in one sample) | FAIL at every phase |
+    | hard `stop()` | −1.0 worst, −38.7 best | −1.0 / −18.7 | 0.0 dB (the guard trips) | FAIL at every phase |
     | `.interrupts` on a busy player | −1.0 / −38.7 | −1.0 / −18.7 | 0.0 dB | FAIL at every phase |
-    | `pause()` / play at once | −1.0 / −38.7 | −1.0 / −18.7 | up to +11.6 dB | FAIL at every phase |
-    | **D5 cut** (gate 0, 40 ms, stop) | **−62.6** worst | **−62.7** | **−61.6** (limit −57.1) | **PASS at every phase** |
+    | `pause()` / play at once | −1.0 / −38.7 | −1.0 / −18.7 | 0.0 dB (the guard trips) | FAIL at every phase |
+    | **D5 cut** (gate 0, 40 ms, stop) | **−62.6** worst | **−62.7** | **−61.6** (limit −60) | **PASS at every phase** |
     | **D5 mute** (main mix 0) | **−63.0** | **−62.7** | **−61.6** | **PASS at every phase** |
-    | **D7 freeze / resume from position** | **−62.6** | **−62.7** | **−61.6** | **PASS at every phase** |
+    | **D7 freeze / resume from position** | **−62.6** | **−62.7** | **−61.6** (fade-out; resume: P-7, M-14) | **PASS at every phase** |
 
     dBFS for the residual; d2 on the 100 Hz tone for comparison: floor −76.3, hard stop −1.0, D5 −61.0. The first
     H-1 (a70779fb) cut only at the zero crossing (game-dev-android's R1), so its −38.7 is the **best** case of a hard
     stop, not a typical one. The gated mechanisms pass with a **2.6 dB** margin on single tones (the mixer's ≈ 27 ms
-    smoothing is close to a 25 ms linear fade); the verdicts are identical across 3 runs of the final script, the failing
-    mechanisms' best cases move by ≤ 2 dB. **Continuity (D7):** on the chord and the voice-like line (aperiodic within the search, so
-    the alignment is unambiguous) the resumed audio starts **0 to 720 frames (0–15 ms) before** the frame at the
-    freeze call, never after: a little is heard again, nothing is skipped (Audio R6, AC-21 as amended in TASK-090b).
-    On pure tones the alignment is ambiguous modulo the period and is not used.
+    smoothing is close to a 25 ms linear fade); the verdicts are identical across 3 runs of the final script (fixes after game-qc-ios's review:
+    the chord's blind spot, per-rendering latency, onset-relative windows), the failing
+    mechanisms' best cases move by ≤ 2 dB. **Continuity (D7)**, in content (the resume frame against the frame actually playing at the freeze call, per
+    rendering): in **all 96** resumes of the final runs, **resume − freeze frame = −960 frames (the 20 ms rewind) +
+    that rendering's player-start delay**. The offline rig starts its player 0 to 1920 frames late (one rendering
+    during development: about 5500, which produced a +95 ms reading); where the delay is under 20 ms the resume lands
+    0–20 ms **before** the freeze frame (heard again, nothing skipped); the 2 positive readings (+720, +960 frames)
+    are renderings whose start delay (1680, 1920) exceeded the rewind. In the app the delay is at most one IO period,
+    hence D7's rule tying the rewind to the actual IO period. **"Nothing skipped" remains a device claim:** P-7 listens
+    to the freeze and the production re-run of Audio AC-21 measures it.
+    **Scoped out offline:** on the chord and the voice-like line the gain metric does not cover the resumed segment
+    (aligning content across a player restart is not reliable offline: the start delay moves by whole render
+    quanta); it covers the freeze's fade-out. The resume's fade-in is proven click-free on the single tones at every
+    phase (their residual needs no alignment), and **P-7 and M-14** listen to it on the device.
 - **H-2 Build:** `DeviceSpike` with `AudioSpike` implementing D1–D8 (the gate cut, the freeze, the iOS 27 branches)
   builds for iOS Simulator and macOS with no warnings (2026-11-18, this ADR's sha). Its minimal spike check runs
   before each install (TASK-078 `tools/device-build.sh`).
