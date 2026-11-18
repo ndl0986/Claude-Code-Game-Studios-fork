@@ -2,7 +2,7 @@
 
 > **Status**: Approved (all 9 sections approved one by one by Luan, 2026-11-17)
 > **Owned By**: art-director
-> **Last Updated**: 2026-11-18 (TASK-069: §8 SVG subset per ADR-0003 D4, `data-pivot`, baked names; K-25 glyph edge and crossfade contrast in §2, §4; K-16 amendments in §2, §4, §5, §7, §8; earlier the same day: §8 says where silhouette path data lives)
+> **Last Updated**: 2026-11-18 (TASK-117, no re-review: §3 "starlight" and "sparkle burst" terms, §7 hint size figure, §7 play button size and drawing; earlier TASK-069: §8 SVG subset per ADR-0003 D4, `data-pivot`, baked names; K-25 glyph edge and crossfade contrast in §2, §4; K-16 amendments in §2, §4, §5, §7, §8; earlier the same day: §8 says where silhouette path data lives)
 > **Art Director Sign-Off (AD-ART-BIBLE)**: SKIPPED 2026-11-17 — lean mode
 
 `/art-bible` writes these nine sections in this order and replaces each
@@ -182,7 +182,8 @@ rounded clouds, thin streaks, round flakes.
 | Queued letter | **A small circle in a still row at the top right** (Luan, 2026-11-17; the prototype still draws a smaller rounded square) | "Waiting its turn" |
 | Moon gate | A crescent with no bubble and no letter; a thin ring fills while it is held | Scenery that happens to be a control: it should not invite a child's tap |
 | Play button | A rounded pill with a soft right-pointing triangle | The game's only icon |
-| Sparkle | A four-point star | "I heard you" |
+| Starlight | A four-point star at the press point | "I heard you": an accepted press (started or queued) |
+| Sparkle burst | A small burst of 8 specks | "I heard you" too: a press that was not taken (queue full), or a tap on the empty stage |
 | Grown-up card | A rounded rectangle with plain rectangular controls | Adult layout; the only text-heavy shapes in the game |
 
 The rule against plain circles applies to creatures only; circles are allowed in the UI. Hint and
@@ -192,8 +193,11 @@ queued letters differ in **shape, size, position and motion**, never in colour a
 
 The heroes are the glyph (largest, centred, heaviest weight) and the creature, which carries the
 ink outline. The supporting shapes are the hints (about a third of the glyph's height), the queue
-(about half a hint), the sparkles and the moon. The environment has no outlines at all: **an
+(about half a hint), the starlight and sparkle bursts, and the moon. The environment has no outlines at all: **an
 outline marks a hero.**
+*(Amendment 2026-11-18, TASK-117, no re-review: "Sparkle" is split into the GDDs' two terms, **starlight** for an
+accepted press and **sparkle burst** for an ignored press or an empty-stage tap (Reveal Stage R6; Press Queue R4).
+No look changes.)*
 
 ## 4. Color System
 
@@ -374,17 +378,44 @@ The grown-up panel uses the same family, regular weight, 15–22 pt.
 
 **Icons:** one only, the play triangle. Everything else is a letter, a creature or the moon.
 
+**Play button** *(amendment 2026-11-18, TASK-117, no re-review; closes title-screen.md OQ-3)*. Its size and drawing,
+as played in the prototype, inside what App Shell fixes (R2: centre (640, 520), the one icon, the per-look light;
+R3: any tap except the moon starts, so it is **not a hit target** and has no touch floor; F2: the 0.38 Hz, ±4%
+breathe, half amplitude under Reduce Motion):
+- **Shape:** a rounded rectangle **140 × 92 stage units**, corner radius **40** (§3's "rounded pill"), centred on
+  (640, 520). On an 11" iPad that is about 131 × 86 pt (about 25 mm wide).
+- **Triangle:** pointing right, vertices (−16, −24), (28, 0), (−16, 24) from the button's centre (44 × 48 units,
+  so it sits a little right of centre, which reads as centred).
+- **Colours:** the pill in Letter Gold `#f6a93b` (§4: the play button is one of the gold things; the prototype's
+  `#f5b14a` is the nearest palette stop). The triangle in highlight cream `#f8efdc`, not the prototype's `#fffaf0`,
+  which is brighter than the frame cap (L 0.96 against the glyph top's 0.88, §2). Cream on gold is only about
+  1.7:1. That is fine: the triangle is a shape cue, and nothing depends on reading it, since any tap starts.
+- **Light per look** (§2 Title row): **dusk and night**, a soft gold glow behind the pill (as played: blur 26,
+  `rgba(255, 190, 80, 0.8)`); **morning and day**, the glyph's deep amber edge `#80450f`, 6 units, which is about
+  3.8:1 on the pill and carries it on the pale sky. This is the one UI token with an edge, as §2 already says
+  (see §5's "UI tokens glow and have no outline").
+- **Breathe:** App Shell F2, a uniform scale about the centre. At its peak (1.04) the pill is about 146 × 96 and its
+  bottom reaches y ≈ 568, overlapping the ground line (y 558) by about 10 units. As played, it sits on the hill.
+- **On a start:** App Shell R3's "lights fully". What that looks like in morning and day, how long it lasts and
+  how the button leaves are not stated (title-screen.md OQ-2).
+- **Not stated here:** whether the morning/day edge follows the glyph's K-25 sky switch (L_x 0.308, 1 s dissolve)
+  or switches with the look (an open question for App Shell, raised with TASK-117), and how the title creature keeps
+  clear of the button (title-screen.md OQ-1).
+
 **UI motion:** hints fade and scale in over 0.6 s and drift slowly; tokens appear without bounce;
 the glyph rises from where it was pressed with an ease-out.
 
 ### UX view
 
-- **Every press is answered:** a chime plus a sparkle; an ignored press still sparkles; with the
-  sound off, everything still reads visually.
+- **Every press is answered:** a chime plus the starlight; an ignored press still gets a sparkle burst and a
+  ping; with the sound off, everything still reads visually. *(TASK-117: terms aligned with Reveal Stage R6.)*
 - **Flash safety:** the glyph's ~2.2 Hz halo pulse (K-08) is below the three-flashes-per-second
   threshold and changes blur, not brightness.
-- **Target size:** a hint is about 120 px on the stage, roughly 75–80 pt on an 11" iPad: well above
-  44 pt and sized for small fingers.
+- **Target size:** a hint is about 120 px on the stage (`hint_size`, Hint Letters R12), about **112 pt, or
+  ~21 mm drawn**, on an 11" iPad (stage scale 2388 / 1280 = 1.87, 264 ppi). Its touch area is larger, about
+  **27 mm** on an 11" iPad and 31 mm on a 13", with an 18 mm floor (Hint Letters F5). That is well above 44 pt and
+  sized for small fingers. *(Amendment 2026-11-18, TASK-117, no re-review: replaces "roughly 75–80 pt", which was
+  wrong.)*
 - **Reduce Motion (rule):** follow the iOS/macOS Reduce Motion setting with a shorter morph, no hint
   drift and a calmer parade. *(Amendment 2026-11-18, K-16: it also **softens**: idles at **half amplitude**, a
   **smaller tap hop**, and the glyph halo **holds steady** with no pulse.)*
