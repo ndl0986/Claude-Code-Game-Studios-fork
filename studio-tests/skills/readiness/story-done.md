@@ -315,6 +315,47 @@ Fixture defaults.
 
 ---
 
+### Case 9: A contract registry blocks a story whose contract is not started (guarded)
+
+For projects that keep a behaviour-contract registry with its reader
+`tools/ci/contract-rows.sh` (kid-learn-character's K-40). Without that helper the
+step does not exist.
+
+**Fixture:**
+- As Case 1, and the project has no `tools/ci/contract-rows.sh`
+- Variant A: the project has `tools/ci/contract-rows.sh` and `contracts/README.md`;
+  the story's GDD is `design/gdd/light-pickup.md`, and the Registry has
+  `light-pickup-v1 | not-started: story:light-pickup` owned by `light-pickup.md`
+- Variant B: as A, plus `light-pickup-v0 | superseded-by: light-pickup-v1`
+- Variant C: as A, but the row is `runner: LightPickupRunner`
+- Variant D: the helper exists and `contracts/README.md` does not
+- Variant E: as A, but the story's GDD is `design/gdd/lamp-render.md`, which the contract only cites
+  (its Owner cell reads `light-pickup.md; lamp-render.md F2`)
+
+**Input:** `/story-done production/epics/core/story-light-pickup.md`
+
+**Expected behavior:**
+1. No helper: the run is exactly Case 1's. Nothing about contracts is read, printed or asked
+2. Variant A: Phase 4 runs `bash tools/ci/contract-rows.sh --system light-pickup --story <path>`
+   and gets a `kind=not-started` row. It is BLOCKING in every mode and at every gate
+   level, though the id is a placeholder (`story:light-pickup` names no file); the
+   fix named is "register its runner (`runner: <Name>`) and make `tools/ci/verify.sh` run it"
+3. Variant B: the superseded row is skipped; the verdict turns on the not-started row only
+4. Variant C: the runner row is noted, and the verdict is Case 1's
+5. Variant D: NOT ASSESSED, "`contracts/README.md` is missing", never a pass
+6. Variant E: BLOCKED as in A: a GDD the contract cites is matched like its owner
+
+**Assertions:**
+- [ ] No helper: no `contract-rows.sh` call, no contract line in the report, verdict as Case 1
+- [ ] Variant A: verdict BLOCKED, naming `light-pickup-v1` and the runner fix; the Phase 7 options do not include "Close anyway", and the story is not closed even on request
+- [ ] Variant A: the row is read with the helper, never judged by reading the README
+- [ ] Variant B: `light-pickup-v0` does not appear as a blocker
+- [ ] Variant C: COMPLETE (or COMPLETE WITH NOTES for Case 1's own notes), with the runner noted; whether it passes is `verify.sh`'s
+- [ ] Variant D: verdict NOT ASSESSED, not COMPLETE
+- [ ] Variant E: verdict BLOCKED, naming `light-pickup-v1`; a cited GDD is not let through
+
+---
+
 ## Protocol Compliance
 
 - [ ] Reads a `references/*.md` file only on the branch that needs it, before that branch's step begins
@@ -339,3 +380,5 @@ Fixture defaults.
 - Case 6 covers the no-sprint-plan branch at `minimal`; the Sprint Close-Out
   Sequence is not tested here.
 - Stories with multiple TR-IDs or multiple ADRs are not explicitly tested.
+- The contract-row step (Case 9) runs only where `tools/ci/contract-rows.sh` exists; the
+  helper's parsing is tested by that project's `tools/ci/self-test.sh`, not here.

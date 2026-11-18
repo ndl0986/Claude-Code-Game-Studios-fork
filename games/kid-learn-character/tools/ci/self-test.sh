@@ -50,6 +50,45 @@ expect_fail "sim-guard --qc refuses QC's iPhone simulator (this game is iPad-onl
 echo "QC_SIM_UDID=475D45B4-557A-4594-B121-60D7F402D033" > "$T/g/tools/qa/apple/sim.env"
 expect_pass "sim-guard --qc accepts QC's iPad simulator" "$T/g/tools/ci/sim-guard.sh" --qc
 
+# contract-rows.sh (K-40, /story-done): reads a planted registry row by row; observations, never verdicts
+CR="$ROOT/tools/ci/contract-rows.sh"
+cat > "$T/cr.md" <<'MD'
+## Current versions
+
+| Contract | Version | Owner GDD | Layers | Status |
+|---|---|---|---|---|
+| alpha-v1 | v1 | alpha.md | KidCore | superseded |
+| alpha-v2 | v2 | alpha.md; other.md F1 | KidCore | x |
+| beta-v1 | v1 | beta.md (G1) | KidCore | x |
+| gamma-v1 | v1 | gamma.md | KidCore | x |
+
+## Registry
+
+| Contract | Row | Cases |
+|---|---|---|
+| alpha-v1 | superseded-by: alpha-v2 | 3 |
+| alpha-v2 | not-started: story:alpha | 4 |
+| beta-v1 | runner: BetaRunner | 5 |
+MD
+cr_planted_other() { sed 's/runner: BetaRunner/runnr BetaRunner/' "$T/cr.md" > "$T/cr2.md"; ! "$CR" --readme "$T/cr2.md" --system beta | grep -q 'kind=other'; }
+cr_has() { local want="$1"; shift; "$CR" --readme "$T/cr.md" "$@" | grep -qx -- "$want"; }
+cr_only() { local want="$1"; shift; [ "$("$CR" --readme "$T/cr.md" "$@")" = "$want" ]; }
+expect_pass "contract-rows: an owner's not-started row" cr_has 'ROW alpha-v2 kind=not-started owner=alpha,other story=story:alpha match=system row=not-started: story:alpha' --system alpha
+expect_pass "contract-rows: the superseded row is reported as superseded-by" cr_has 'ROW alpha-v1 kind=superseded-by owner=alpha story=- match=system row=superseded-by: alpha-v2' --system design/gdd/alpha.md
+expect_pass "contract-rows: a cited GDD is blocked too (every stem in the Owner cell)" cr_only 'ROW alpha-v2 kind=not-started owner=alpha,other story=story:alpha match=system row=not-started: story:alpha' --system other
+expect_pass "contract-rows: a partial stem matches nothing" cr_only 'NONE' --system alph
+expect_pass "contract-rows: a note after the GDD is not a stem" cr_only 'ROW beta-v1 kind=runner owner=beta story=- match=system row=runner: BetaRunner' --system beta
+expect_pass "contract-rows: matched by story id alone" cr_only 'ROW alpha-v2 kind=not-started owner=alpha,other story=story:alpha match=story row=not-started: story:alpha' --story story:alpha
+expect_pass "contract-rows: a path never matches a placeholder" cr_only 'NONE' --story production/epics/alpha/alpha.md
+expect_pass "contract-rows: an owned contract with no Registry row" cr_only 'UNREGISTERED gamma-v1 owner=gamma' --system gamma
+expect_pass "contract-rows: a missing README is reported, not passed" cr_only "README MISSING $T/none.md" --readme "$T/none.md" --system alpha
+expect_fail "contract-rows: no --system and no --story is a usage error" "$CR" --readme "$T/cr.md"
+# the real registry: every owner's rows come back, and none is of an unknown form
+cr_real() { local o out; for o in $(sed -n '/^## Current versions/,/^## /p' "$ROOT/contracts/README.md" | grep -oE '^\| [a-z0-9-]+-v[0-9]+ \| v[0-9]+ \| [A-Za-z0-9_.-]+\.md' | sed -E 's/.* ([A-Za-z0-9_.-]+)\.md$/\1/' | sort -u); do
+  out="$("$CR" --system "$o")" || return 1; [ -n "$out" ] && [ "$out" != NONE ] || return 1; ! printf '%s\n' "$out" | grep -q -e 'kind=other' -e '^README MISSING' || return 1; done; }
+expect_pass "contract-rows: every real registry row has a known form" cr_real
+expect_fail "contract-rows: a row of no known form is seen (planted)" cr_planted_other
+
 # verify.sh: a run stopped by the load check is never reported as PASS (exit 4, a STOPPED summary)
 vout="$(LOAD_MAX=-1 "$ROOT/tools/ci/verify.sh" --dev --no-xcode 2>&1)"; vrc=$?
 if [ "$vrc" = 4 ] && printf '%s\n' "$vout" | grep -q '^verify: STOPPED (load), not a pass' && ! printf '%s\n' "$vout" | grep -q '^verify: PASS'; then
