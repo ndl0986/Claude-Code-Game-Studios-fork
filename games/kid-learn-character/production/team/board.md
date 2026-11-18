@@ -45,7 +45,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-063 | ADR-0002 module layout and seams (via /architecture-decision; Proposed → Luan accepts) | architecture | game-dev-ios (review: game-dev-android) | DONE `71cad33`, merged 2026-11-18 (review: game-dev-android APPROVE); **ADR-0002 Accepted by Luan** | `design/TASK-063-adr-0002` | 2026-11-18 |
 | TASK-064 | ADR-0004 KidCore contracts, fixture rules, verification harness (via /architecture-decision; Proposed → Luan) | architecture | game-qc-android (review: game-dev-ios) | DONE `aba43c26`, merged (review: game-dev-ios APPROVE after REVISE); **ADR-0004 Accepted by Luan** | `design/TASK-064-adr-0004` | 2026-11-18 |
 | TASK-065 | Accessibility: mark TASK-062 follow-ups done | design | game-qc-ios (review: game-qc-android) | DONE `03fd76b6`, merged 2026-11-18 | `design/TASK-065-a11y-done` | 2026-11-18 |
-| TASK-066 | ADR-0003 content data and key-table pipeline (via /architecture-decision; Proposed → Luan) | architecture | game-dev-android (review: game-art-content) | PLAN REVISE (theme id vs assetPrefix, SVG attribute/value checks, silhouette rule, glyph fixture, loudness <0.4 s); Luan: own Swift tools; TTS licence question open | `design/TASK-066-adr-0003` | 2026-11-18 |
+| TASK-066 | ADR-0003 content data and key-table pipeline (via /architecture-decision; Proposed → Luan) | architecture | game-dev-android (review: game-art-content) | IN PROGRESS: PLAN APPROVED 2026-11-18 after REVISE (game-art-content); own Swift tools (K-31); TTS L-09 open | `design/TASK-066-adr-0003` | 2026-11-18 |
 
 ## Leader log
 
