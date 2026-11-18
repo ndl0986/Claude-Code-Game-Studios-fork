@@ -41,13 +41,13 @@ developer's own simulator, where the evidence goes, which runs need the leader's
 | **Knowledge Risk** | LOW for `swift test`, `xcodebuild`, `xcrun simctl`, `codesign`, `otool`, `plutil` (TASK-033 used them). MEDIUM for `log stream` and `nettop` output formats on macOS 27 (NOT SOURCEABLE until run) |
 | **References Consulted** | `docs/engine-reference-local/native-apple/VERSION.md`; ADR-0004 (harness); `design/gdd/privacy-kids-compliance.md` (check columns) |
 | **Post-Cutoff APIs Used** | None; command-line tools only |
-| **Verification Required** | Validation Criteria 1–6 |
+| **Verification Required** | Validation Criteria 1–8 |
 
 ## ADR Dependencies
 
 | Field | Value |
 |-------|-------|
-| **Depends On** | ADR-0002 (the ban grep, the API surface), ADR-0003 (validator, staleness, bundle scan), ADR-0004 (the harness), ADR-0005 (dev-simulator use) |
+| **Depends On** | ADR-0002 (the ban grep, the API surface), ADR-0003 (validator, staleness, bundle scan), ADR-0004 (the harness), ADR-0005 (simulator use, D5 container paths and OS-key allowlist, D8 entitlements) |
 | **Enables** | The first scaffold story's checks; every story's definition of done; the release checklist's PKC evidence |
 | **Blocks** | The scaffold story (it writes `verify.sh`) |
 | **Ordering Note** | Written after 0002–0005; 0006–0010 add their own device checks to the same evidence layout |
@@ -87,30 +87,46 @@ a script or lets a mechanical failure pass as an opinion.
 
 ### D2. Who runs what, and when (K-28, K-34)
 - **The developer, before every push:** `tools/ci/verify.sh`, all gates. A failing gate means nothing is pushed.
-- **QC, on every merge candidate:** `verify.sh`, the app test suites (D3), and `pkc-scan.sh` on a Release build,
-  recorded in the evidence folder for that commit (D6).
-- **The leader** merges only when QC's evidence for **that exact commit** exists.
+- **QC, on every merge candidate that touches `apple/`, `tools/`, `contracts/` or `content/`:** `verify.sh`, the
+  app test suites (D3), the two Release builds (D3), the bundle-content scan and the **static** PKC scan
+  (`pkc-scan.sh --static`) on both `.app`s, recorded in the evidence folder for that commit (D6). All of it is
+  headless (K-34). **Docs-only merges** (`design/`, `docs/`, `production/`) need no build evidence.
+- **QC, per release candidate, in a MAC FREE session:** the **runtime** PKC rows (`pkc-scan.sh --runtime`):
+  PKC-01c `nettop`, PKC-14 `log stream`, PKC-05's live preferences read. They follow the device-checks plan
+  (`production/qa/device-checks-plan.md`, TASK-074: sessions M-8, M-11, S-2). In a merge candidate's
+  `pkc-verdict.md` those rows are **NOT ASSESSED** with a pointer to the next release-candidate session.
+- **The leader** merges only when QC's evidence for **that exact commit** exists (or, for a docs-only merge, none is
+  needed).
 - **MAC FREE (K-34):**
   - **Needed** for anything that takes the Mac's screen, keyboard or focus: launching the macOS app, macOS UI tests,
     the kiosk, key injection, `nettop` and `log stream` sessions, and **Simulator windows**.
-  - **Not needed** for headless runs: `swift test`, `xcodebuild build`, and tests on the developer's own simulator
-    booted headless (no Simulator window).
+  - **Not needed** for headless runs: `swift test`, `xcodebuild build`, and tests on a simulator booted headless (no
+    Simulator window).
 - **Every run:** `nice -n 10`; its own `-derivedDataPath` per worktree; stop if the load average goes above about
   40; build daemons stopped after use.
 
-### D3. Commands
+### D3. Commands and simulators
 All paths are under `games/kid-learn-character/`.
 ```
 swift test --package-path apple/MorphCore            # morph-contract-v1 and unit tests
 swift test --package-path apple/KidCore              # unit tests and every KidCore contract
 swift test --package-path apple/Tools                # key-table-schema-v1 "file" layer, validator, bake tests
-xcodebuild test  -scheme <App> -destination "platform=iOS Simulator,id=$DEV_SIM_UDID" \
+xcodebuild test  -scheme <App> -destination "platform=iOS Simulator,id=$SIM_UDID" \
                  -derivedDataPath <worktree>/.build/xcode            # headless: the sim is booted with simctl, no window
 xcodebuild build -scheme <App> -destination "platform=macOS" -derivedDataPath …    # headless build
-xcodebuild build -scheme <App> -configuration Release …              # the build the PKC scans read
+# QC's Release builds, the products the PKC scans read (both .apps are scanned):
+xcodebuild build -scheme <App> -configuration Release -destination "generic/platform=iOS" …    # iPadOS device build
+xcodebuild build -scheme <App> -configuration Release -destination "platform=macOS" …
 ```
-- `DEV_SIM_UDID` comes from an untracked, per-machine `tools/dev/apple/sim.env`. The scripts **refuse** QC's
-  simulator `E9F515E9…` and refuse an empty value.
+- **Two simulator paths, each from its own untracked env file:**
+  - **developer:** `DEV_SIM_UDID` from `tools/dev/apple/sim.env`; the scripts **refuse QC's simulator
+    `E9F515E9…`** on this path;
+  - **QC:** `QC_SIM_UDID` from QC's own `tools/qa/apple/sim.env`; on this path the scripts **refuse any simulator other
+    than `E9F515E9…`**;
+  - both paths refuse an empty value. The scripts take `--dev` or `--qc` and read only that path's variable.
+- **Signed products for the scans:** the Release builds are **signed** (the free Personal Team, K-28, or ad-hoc
+  `CODE_SIGN_IDENTITY=-` with `CODE_SIGN_ENTITLEMENTS` applied), never `CODE_SIGNING_ALLOWED=NO`, because an unsigned
+  product shows no entitlements and PKC-01's allowlist comparison would pass falsely (D5).
 - macOS UI tests and any macOS launch need MAC FREE (D2).
 
 ### D4. `tools/ci/verify.sh`: the gates, fastest first
@@ -120,33 +136,66 @@ xcodebuild build -scheme <App> -configuration Release …              # the bui
 3. ADR-0003 content: the validator (Tools), baked-output staleness, the `voiceDurations` re-measure, exact-case
    paths.
 4. The `swift test` runs of D3.
-5. After an app build: the ADR-0003 D8 bundle-content scan.
+5. **Only when given an `.app` path** (`verify.sh --app <path>`): the ADR-0003 D8 bundle-content scan. The
+   developer's pre-push run gives none and skips it (and says so in its output); **QC runs it on both Release
+   `.app`s** (D2).
 
 It prints one summary line per gate and writes `verify.txt` (D6). `tools/ci/` lives at the **game root**, because
 its content and PKC parts are not Apple-specific and the Android build reuses them.
 
-### D5. `tools/ci/pkc-scan.sh <path-to.app>`: observations only
-One section per PKC row, taken from that row's Apple check column:
-- **PKC-01:** `codesign -d --entitlements -` compared with the allowlist; the network API scan. Runtime `nettop`
-  (PKC-01c) is a foreground session: MAC FREE.
-- **PKC-02, 04, 06:** `otool -L` framework lists; the API scans.
-- **PKC-03:** `Package.resolved` and `project.pbxproj` remote references; `otool -L` paths; `Frameworks/` empty.
-- **PKC-05:** the identifier API scan; the preferences keys (`defaults read`, or the simulator data container).
+### D5. `tools/ci/pkc-scan.sh --static | --runtime <path-to.app>`: observations only
+**The API scan** (PKC Core Rules), used wherever a row says "API scan", runs on **every Mach-O in the bundle** in two
+passes: (1) `nm -um` for classes, C functions and constants; (2) `otool -ov` plus `strings -a` for Objective-C
+selectors and Swift-bridged methods. It matches **whole** symbol and selector names (so `stat` never matches
+`status`). Each hit is printed with its pass and binary; a person reads it (D1).
+
+**Static sections** (`--static`, per merge candidate, headless), from each row's Apple check column:
+- **PKC-01:** `codesign -d --entitlements -` on the **signed** product, compared with the allowlist, **and** the
+  `CODE_SIGN_ENTITLEMENTS` file compared with the same allowlist (a second source, in case signing changed); the
+  network API scan; ADR-0005 D8's entitlements (`com.apple.developer.ubiquity-kvstore-identifier`,
+  `com.apple.developer.icloud-container-identifiers`, `com.apple.developer.icloud-services`,
+  `com.apple.security.application-groups`) and APIs (`NSUbiquitousKeyValueStore`, `CKContainer`,
+  `url(forUbiquityContainerIdentifier:)`, `UserDefaults(suiteName:)`).
+- **PKC-02:** `otool -L` framework list; the API scan.
+- **PKC-03:** (a) `Package.resolved` and `project.pbxproj` remote references; (b) `otool -L` paths; (c)
+  `Frameworks/` empty; **(d) the Swift module names** from `nm` (mangled `$s<len><Module>` prefixes): only Apple's
+  modules, the app target, `KidCore` and `MorphCore`.
+- **PKC-04:** `plutil -p Info.plist` (no `NSLocation*` key); `otool -L` (no `CoreLocation`); the macOS entitlement
+  `com.apple.security.personal-information.location`.
+- **PKC-05:** the identifier API scan (static part only; the preferences read is runtime, below).
+- **PKC-06:** `plutil -p Info.plist` (no `NSMicrophoneUsageDescription`, `NSCameraUsageDescription`); the macOS
+  entitlements `com.apple.security.device.audio-input` and `com.apple.security.device.camera`; the capture API scan.
 - **PKC-08:** `plutil -p Info.plist` keys.
-- **PKC-09:** `plutil -p PrivacyInfo.xcprivacy`; the file-timestamp and disk-space API scans; whether 35F9.1 and
-  CA92.1 are present against the APIs found.
+- **PKC-09:** `plutil -p PrivacyInfo.xcprivacy`; the file-timestamp and disk-space API scans and the
+  **`ActiveKeyboards`** scan (`activeInputModes`); **`SystemBootTime` / `35F9.1` present exactly when the scan finds
+  `systemUptime` or `mach_absolute_time`**; `CA92.1` present.
 - **PKC-12:** the On-Demand Resources and donation API scans.
-- **PKC-14:** the code scan for log calls carrying input or accessibility state outside `#if DEBUG`; the optional
-  `log stream --level debug` capture during the scripted session (foreground: MAC FREE).
-- **PKC-07, 10, 11, 13:** listed as "QC play", "screenshot" or "review", with nothing to scan.
-- **Android rows:** NOT ASSESSED until an Android build exists (K-03).
+- **PKC-14:** the code scan for log calls carrying input or accessibility state outside `#if DEBUG`.
+
+**Runtime sections** (`--runtime`, per release candidate, MAC FREE, following the device-checks plan):
+- **PKC-01c:** `nettop` during the scripted session (M-8).
+- **PKC-05:** the live preferences read **from the sandbox container**, per ADR-0005 D5: on the Mac
+  `~/Library/Containers/<bundle id>/Data/Library/Preferences/<bundle id>.plist`, on the Simulator the app's data
+  container via `xcrun simctl get_app_container`, each **after a `cfprefsd` flush** (`killall cfprefsd`, or quitting
+  the app), compared with ADR-0005's OS-key allowlist. **NOT ASSESSED until that allowlist is filled** by the first
+  runs (ADR-0005 D5). Not `defaults read`, which reads the wrong domain for a sandboxed app.
+- **PKC-14:** `log stream --level debug` during the scripted session (M-11, S-2).
+
+**Rows with nothing to scan**, and where their evidence comes from (D6):
+- **PKC-07:** QC's play session in the device-checks plan (`production/qa/device-checks-plan.md`, TASK-074).
+- **PKC-10, PKC-11:** Luan's App Store Connect screenshots (privacy answers; age rating).
+- **PKC-13:** QC's review of the merge diff (a new entitlement, usage key, privacy entry, framework or package).
+
+Android rows stay NOT ASSESSED until an Android build exists (K-03).
 
 ### D6. Evidence
 Under `production/qa/evidence/<TASK-id>/<short-sha>/`:
 - `verify.txt`: the gate results;
-- `pkc-scan.txt`: the raw OBSERVED lines;
-- `pkc-verdict.md`: QC's table, one row per PKC-01…14, PASS / FAIL / NOT ASSESSED, each citing its observed lines,
-  plus the screenshots the rows need;
+- `pkc-scan.txt`: the raw OBSERVED lines (static; runtime ones in the release candidate's folder);
+- `pkc-verdict.md`: QC's table, one row per PKC-01…14, PASS / FAIL / NOT ASSESSED, each **citing its evidence
+  file**: the observed lines, the device-checks plan session's evidence (PKC-07, the runtime rows), Luan's
+  screenshot files (PKC-10, PKC-11), or the reviewed diff (PKC-13). A runtime row in a merge candidate's table is NOT
+  ASSESSED with a pointer to its release-candidate session, never left without one;
 - `title.png` for the scaffold story: the Title launch on the developer's simulator (check (f)).
 
 Evidence belongs to one commit; a newer commit needs new evidence.
@@ -172,12 +221,14 @@ leader:    merge only with evidence for that commit
 ```
 
 ### Key Interfaces
-`tools/ci/verify.sh` (exit code: 0 = all gates passed); `tools/ci/pkc-scan.sh <app>` (exit 0 unless a tool
-fails); the D6 evidence layout; `tools/dev/apple/sim.env` (`DEV_SIM_UDID`, untracked).
+`tools/ci/verify.sh [--app <path>]` (exit code: 0 = all gates passed); `tools/ci/pkc-scan.sh --static|--runtime
+<app>` (exit 0 unless a tool fails); the D6 evidence layout; `tools/dev/apple/sim.env` (`DEV_SIM_UDID`) and
+`tools/qa/apple/sim.env` (`QC_SIM_UDID`), both untracked.
 
 ### Implementation Guidelines
 - A gate **must** be mechanical and **must** fail the run; a judgement **must** be an observation for QC.
-- Scripts **must never** use QC's simulator, and **must** refuse it by UDID.
+- The developer path **must** refuse QC's simulator by UDID, and the QC path **must** refuse every other one.
+- The PKC scans **must** read a signed product.
 - A run that takes the screen, keyboard or focus **must** wait for MAC FREE.
 - `tools/ci/` **must** use only the system's command-line tools and our own code (K-31).
 
@@ -241,11 +292,18 @@ None: nothing exists yet. The scaffold story writes `verify.sh`, `pkc-scan.sh` a
 1. Every gate fails on a planted break: a `Date` in `KidCore`, a stale API file, a stale baked file, a broken V-rule,
    a zero-case contract layer, an `.svg` left in the bundle.
 2. `pkc-scan.sh` with a planted `URLSession` exits 0 and prints an `OBSERVED PKC-01` line for it, without a verdict.
-3. The scripts refuse QC's simulator UDID and an empty `DEV_SIM_UDID`.
+3. On the `--dev` path the scripts refuse QC's simulator `E9F515E9…`; on the `--qc` path they refuse any other
+   simulator; both refuse an empty value.
 4. The evidence folder for one commit holds `verify.txt`, `pkc-scan.txt` and `pkc-verdict.md` (and `title.png` for the
    scaffold story).
 5. A headless `xcodebuild test` on the developer's simulator runs with no Simulator window.
 6. `verify.sh` runs at nice 10 and stops on its load check.
+7. **The API scan is proven before its first use** (PKC Core Rules): on a fixture binary that calls every API named
+   in PKC-01…12 and their Edge Cases, both passes together list each one, including selector-only APIs that `nm`
+   cannot see (`openURL:`, `identifierForVendor`, `requestReview`), and a planted `status` symbol does not match
+   `stat`. It is proven again whenever Xcode or `pkc-scan.sh` changes.
+8. An unsigned product (`CODE_SIGNING_ALLOWED=NO`) is reported by `pkc-scan.sh` as `OBSERVED PKC-01 codesign
+   unsigned` instead of an empty entitlement list, and the `CODE_SIGN_ENTITLEMENTS` comparison still runs.
 
 ## Related
 - `docs/architecture/architecture.md` (scaffold checks); ADR-0002, ADR-0003, ADR-0004, ADR-0005.
