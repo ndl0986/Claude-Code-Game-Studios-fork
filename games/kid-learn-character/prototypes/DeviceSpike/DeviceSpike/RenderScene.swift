@@ -2,7 +2,8 @@
 // The full stage under ADR-0006: a stage root with the F1 transform and the y flip, fixed layers z0…z80, the
 // Scene's worst case (Night, snow 60 + windy, 3 clouds, 50 stars), a current and a leaving creature, the glyph and
 // 240 specks from MorphCore, and a parade of 6. Creatures are drawn by option A (one SKShapeNode per SVG shape) or
-// option B (each part rasterised once into a texture). Frame times go to FrameStats; a debug frame dump writes PNGs.
+// option B (each part rasterised once into a texture). Frame times go to FrameStats; the frame dump
+// (FrameDump, ADR-0013 D5's method) writes raw frames, and its V7 probe checks the dump doesn't advance the scene.
 import SpriteKit
 import ImageIO
 import SpikeKit
@@ -37,6 +38,12 @@ final class RenderScene: SKScene {
     var pxPerPt: CGFloat = 2
     let stats = FrameStats()
     var dumpRemaining = 0, dumpIndex = 0
+    private var dumper: FrameDump?
+    private var lastUpdate: TimeInterval = 0
+    // ADR-0013 V7: an invisible node moved by an SKAction at 60 pt/s. Its x − 60·t is constant while only the view
+    // updates the scene; if the dump's renderer advanced the scene too, it would drift. Range in pt, × pxPerPt for px.
+    private let probe = SKNode()
+    private var probeOff: [Double] = [], probeOn: [Double] = []
     var onLog: (String) -> Void = { _ in }
     private let root = SKNode()
     private var layers: [Int: SKNode] = [:]
@@ -300,7 +307,11 @@ final class RenderScene: SKScene {
 
     // MARK: per frame
     override func update(_ currentTime: TimeInterval) {
-        stats.tick(currentTime)
+        stats.tick(currentTime); lastUpdate = currentTime
+        if probe.parent == nil { probe.alpha = 0; addChild(probe) }
+        if !probe.hasActions() {          // one-hour linear move, re-armed (216,000 pt keeps Float rounding near 0.02 pt)
+            probe.position = .zero; probeOff = []; probe.run(.moveBy(x: 60 * 3600, y: 0, duration: 3600))
+        }
         let t = currentTime
         if morphT0 == 0 { morphT0 = t }
         // the morph loops every 3.5 s: glyph, then specks to the silhouette (spec units → stage box at the creature)
@@ -344,13 +355,26 @@ final class RenderScene: SKScene {
         if stats.deltas.count == 600, UserDefaults.standard.bool(forKey: "smoke") {
             onLog(String(format: "smoke: 600 frames, option %@, p50 %.2f ms p99 %.2f ms (Simulator: not evidence)", option == .a ? "A" : "B", stats.percentile(0.5), stats.percentile(0.99)))
         }
-        guard dumpRemaining > 0, let v = view, let tex = v.texture(from: self) else { return }
-        let img = tex.cgImage()
-        let dir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0].appendingPathComponent("framedump", isDirectory: true)
-        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-        let url = dir.appendingPathComponent(String(format: "f%05d.png", dumpIndex))
-        if let dest = CGImageDestinationCreateWithURL(url as CFURL, "public.png" as CFString, 1, nil) { CGImageDestinationAddImage(dest, img, nil); CGImageDestinationFinalize(dest) }
-        dumpIndex += 1; dumpRemaining -= 1
-        if dumpRemaining == 0 { onLog("frame dump done: \(dumpIndex) frames in \(dir.path)") }
+        // V7 probe, after this tick's actions ran: the node's offset from the clock
+        if probe.hasActions() {
+            let e = Double(probe.position.x) - 60 * lastUpdate
+            if dumper == nil { probeOff.append(e); if probeOff.count > 120 { probeOff.removeFirst() } } else { probeOn.append(e) }
+        }
+        guard dumpRemaining > 0 || dumper != nil, let v = view else { return }
+        if dumper == nil {
+            dumper = FrameDump(scene: self, target: FrameDump.target(of: v, scale: pxPerPt), log: onLog)
+            probeOn = []
+            if dumper == nil { dumpRemaining = 0; return }
+        }
+        if dumpRemaining > 0 {
+            dumper?.capture(scene: self, updateTime: lastUpdate)    // render only, after the view's update (ADR-0013 D5)
+            dumpIndex += 1; dumpRemaining -= 1
+            return
+        }
+        dumper?.close(log: onLog); dumper = nil
+        func range(_ a: [Double]) -> Double { (a.max() ?? 0) - (a.min() ?? 0) }
+        let off = range(probeOff) * Double(pxPerPt), on = range(probeOn) * Double(pxPerPt)
+        onLog(String(format: "V7 probe: dump off %.3f px over %d frames, dump on %.3f px over %d frames (ADR-0013 V7 tolerance 0.5 px) → %@",
+                     off, probeOff.count, on, probeOn.count, on <= 0.5 ? "the dump did not move the scene" : "DRIFT: the dump advanced the scene; use D5's fallback"))
     }
 }

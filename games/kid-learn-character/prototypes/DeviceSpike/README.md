@@ -46,13 +46,25 @@ between. Signing: automatic, Luan's Personal Team (K-28, K-37); the team ID come
 Device sessions follow the device-checks plan (MAC FREE for the Mac; **remove the app from the child's iPad after each
 session**). The P-2/P-3 render rows use a build whose sha carries TASK-077's committed `art/`.
 
+**Not with the child watching.** The spike screens are test screens for an adult, not the game: they have none of the
+game's flash, rate or palette gates (ADR-0013), and screens like Render (the worst-case stage) and Audio (mashing the
+pad) can show fast changes. Run every row with the child out of view of the screen. The Audio pad no longer flashes
+(TASK-118: a 36 pt press dot under ADR-0013 D7's 4,347 px limit), but the rule stands for every screen.
+
 ## Notes
 - The production frame driver (display link → `tick(now:)`, ADR-0006 D3) is the stage story's; here the `SKView`'s own
   loop drives the scene, since the spike measures drawing cost.
 - Option B rasterises each part once at load (at ~2.5×), not at build time; its load numbers are therefore an upper bound
   for the PNG-tier option, and its frame cost is the same kind (sprites).
 - The iPad ppi table holds spike values; each production row must cite Apple's tech-specs page (ADR-0006 D7).
-- The frame dump writes PNGs to Caches/framedump (P-3 / M-12 rehearsal); it slows frames while it runs.
+- The frame dump (P-3 / M-12 rehearsal) follows ADR-0013 D5's G5 method: after the view's update, a second `SKRenderer`
+  on the scene calls `render` only, never `updateAtTime:`, at the drawable's size, pixel format and colour space. It
+  writes raw frames, `format.txt` and `times.csv` (each frame's update time) to Caches/framedump; it is never
+  `SKView.texture(from:)` and never PNG-encodes on the main thread. Raw frames are large (an 11" iPad: about 18 MB
+  each, 120 frames about 2 GB); a frame dropped at the in-flight cap is a gap in `times.csv`. The update time is the
+  `SKView` loop's `currentTime`, not a display-link `targetTimestamp` (the spike has no display link of its own).
+- **V7 probe (ADR-0013):** the dump's end logs `V7 probe: dump off … px, dump on … px`. More than 0.5 px with the dump
+  on means the shared scene was advanced by the dump; ADR-0013 D5's fallback then applies.
 
 ## Findings
 None yet: no device run. Headless: both platforms build; SpikeKit tests pass; the check works (headless proof in
