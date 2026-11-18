@@ -1,0 +1,180 @@
+OBSERVED pkc-scan static: Xcode 27.1; the scan is proven in scan-proof-xcode-*.txt
+OBSERVED PKC-03 project package-reference XCLocalSwiftPackageReference; relativePath = KidCore
+OBSERVED PKC-03 project package-reference XCLocalSwiftPackageReference; relativePath = MorphCore
+OBSERVED PKC-03 Package.resolved absent
+OBSERVED PKC-14 log-call scan done
+OBSERVED PKC-scan app LetterMorph.app platform macos
+OBSERVED PKC-01 codesign adhoc (file-based only; Xcode-added entitlements NOT ASSESSED)
+OBSERVED PKC-01 codesign entitlement "com.apple.security.get-task-allow":true
+OBSERVED PKC-01 codesign entitlement "com.apple.security.app-sandbox":true
+OBSERVED PKC-01 CODE_SIGN_ENTITLEMENTS "com.apple.security.app-sandbox":true
+OBSERVED PKC-03 otool-L LetterMorph /System/Library/Frameworks/Foundation.framework/Versions/C/Foundation
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/libobjc.A.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/libSystem.B.dylib
+OBSERVED PKC-03 otool-L LetterMorph /System/Library/Frameworks/AppKit.framework/Versions/C/AppKit
+OBSERVED PKC-03 otool-L LetterMorph /System/Library/Frameworks/SpriteKit.framework/Versions/A/SpriteKit
+OBSERVED PKC-03 otool-L LetterMorph /System/Library/Frameworks/SwiftUI.framework/Versions/A/SwiftUI
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftCore.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftCoreAudio.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftCoreFoundation.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftCoreImage.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftDispatch.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftGLKit.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftIOKit.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftMetal.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftModelIO.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftOSLog.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftObjectiveC.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftQuartzCore.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftSpatial.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftSpriteKit.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftUniformTypeIdentifiers.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftXPC.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswift_Builtin_float.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswift_Concurrency.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswift_StringProcessing.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftos.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftsimd.dylib
+OBSERVED PKC-03 otool-L LetterMorph <qc-checkout>/.build/qc-release/Build/Products/Release/LetterMorph.app/Contents/MacOS/LetterMorph
+OBSERVED PKC-03 otool-L LetterMorph /System/Library/Frameworks/Foundation.framework/Versions/C/Foundation
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/libobjc.A.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/libSystem.B.dylib
+OBSERVED PKC-03 otool-L LetterMorph /System/Library/Frameworks/AppKit.framework/Versions/C/AppKit
+OBSERVED PKC-03 otool-L LetterMorph /System/Library/Frameworks/SpriteKit.framework/Versions/A/SpriteKit
+OBSERVED PKC-03 otool-L LetterMorph /System/Library/Frameworks/SwiftUI.framework/Versions/A/SwiftUI
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftCore.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftCoreAudio.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftCoreFoundation.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftCoreImage.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftDispatch.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftGLKit.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftIOKit.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftMetal.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftModelIO.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftOSLog.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftObjectiveC.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftQuartzCore.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftSpatial.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftSpriteKit.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftUniformTypeIdentifiers.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftXPC.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswift_Builtin_float.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswift_Concurrency.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswift_StringProcessing.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftos.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftsimd.dylib
+OBSERVED PKC-03 Frameworks/ absent
+OBSERVED PKC-03 swift-module CoreGraphics
+OBSERVED PKC-03 swift-module KidCore
+OBSERVED PKC-03 swift-module LetterMorph
+OBSERVED PKC-03 swift-module MorphCore
+OBSERVED PKC-03 swift-module SwiftUI
+OBSERVED PKC-08 Info.plist key BuildMachineOSBuild
+OBSERVED PKC-08 Info.plist key CFBundleDevelopmentRegion
+OBSERVED PKC-08 Info.plist key CFBundleDisplayName
+OBSERVED PKC-08 Info.plist key CFBundleExecutable
+OBSERVED PKC-08 Info.plist key CFBundleIdentifier
+OBSERVED PKC-08 Info.plist key CFBundleInfoDictionaryVersion
+OBSERVED PKC-08 Info.plist key CFBundleName
+OBSERVED PKC-08 Info.plist key CFBundlePackageType
+OBSERVED PKC-08 Info.plist key CFBundleShortVersionString
+OBSERVED PKC-08 Info.plist key CFBundleSupportedPlatforms
+OBSERVED PKC-08 Info.plist key CFBundleVersion
+OBSERVED PKC-08 Info.plist key DTCompiler
+OBSERVED PKC-08 Info.plist key DTPlatformBuild
+OBSERVED PKC-08 Info.plist key DTPlatformName
+OBSERVED PKC-08 Info.plist key DTPlatformVersion
+OBSERVED PKC-08 Info.plist key DTSDKBuild
+OBSERVED PKC-08 Info.plist key DTSDKName
+OBSERVED PKC-08 Info.plist key DTXcode
+OBSERVED PKC-08 Info.plist key DTXcodeBuild
+OBSERVED PKC-08 Info.plist key LSApplicationCategoryType
+OBSERVED PKC-08 Info.plist key LSMinimumSystemVersion
+OBSERVED PKC-08 Info.plist key UIApplicationSupportsIndirectInputEvents
+OBSERVED PKC-08 Info.plist key UIColorName
+OBSERVED PKC-08 Info.plist key UILaunchScreen
+OBSERVED PKC-09 privacy-manifest "NSPrivacyAccessedAPITypes" => [
+OBSERVED PKC-09 privacy-manifest "NSPrivacyAccessedAPIType" => "NSPrivacyAccessedAPICategoryUserDefaults"
+OBSERVED PKC-09 privacy-manifest "NSPrivacyAccessedAPITypeReasons" => [
+OBSERVED PKC-09 privacy-manifest 0 => "CA92.1"
+OBSERVED PKC-09 privacy-manifest "NSPrivacyAccessedAPIType" => "NSPrivacyAccessedAPICategorySystemBootTime"
+OBSERVED PKC-09 privacy-manifest "NSPrivacyAccessedAPITypeReasons" => [
+OBSERVED PKC-09 privacy-manifest 0 => "35F9.1"
+OBSERVED PKC-09 privacy-manifest "NSPrivacyCollectedDataTypes" => [
+OBSERVED PKC-09 privacy-manifest "NSPrivacyTracking" => false
+OBSERVED PKC-09 privacy-manifest "NSPrivacyTrackingDomains" => [
+OBSERVED PKC-09 api-scan LetterMorph.app found systemUptime (as systemUptime)
+OBSERVED PKC-scan app LetterMorph.app platform ios
+OBSERVED PKC-01 codesign unsigned (no signature, or only the linker's ad-hoc signature: not a signed product, entitlements unread)
+OBSERVED PKC-03 otool-L LetterMorph /System/Library/Frameworks/Foundation.framework/Foundation
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/libobjc.A.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/libSystem.B.dylib
+OBSERVED PKC-03 otool-L LetterMorph /System/Library/Frameworks/SpriteKit.framework/SpriteKit
+OBSERVED PKC-03 otool-L LetterMorph /System/Library/Frameworks/SwiftUI.framework/SwiftUI
+OBSERVED PKC-03 otool-L LetterMorph /System/Library/Frameworks/UIKit.framework/UIKit
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftCore.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftCoreAudio.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftCoreFoundation.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftCoreImage.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftCoreLocation.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftDispatch.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftGLKit.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftMetal.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftModelIO.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftOSLog.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftObjectiveC.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftQuartzCore.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftSpatial.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftSpriteKit.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftUniformTypeIdentifiers.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftXPC.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswift_Builtin_float.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswift_Concurrency.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswift_StringProcessing.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftos.dylib
+OBSERVED PKC-03 otool-L LetterMorph /usr/lib/swift/libswiftsimd.dylib
+OBSERVED PKC-03 Frameworks/ absent
+OBSERVED PKC-03 swift-module CoreGraphics
+OBSERVED PKC-03 swift-module KidCore
+OBSERVED PKC-03 swift-module LetterMorph
+OBSERVED PKC-03 swift-module MorphCore
+OBSERVED PKC-03 swift-module SwiftUI
+OBSERVED PKC-08 Info.plist key BuildMachineOSBuild
+OBSERVED PKC-08 Info.plist key CFBundleDevelopmentRegion
+OBSERVED PKC-08 Info.plist key CFBundleDisplayName
+OBSERVED PKC-08 Info.plist key CFBundleExecutable
+OBSERVED PKC-08 Info.plist key CFBundleIdentifier
+OBSERVED PKC-08 Info.plist key CFBundleInfoDictionaryVersion
+OBSERVED PKC-08 Info.plist key CFBundleName
+OBSERVED PKC-08 Info.plist key CFBundlePackageType
+OBSERVED PKC-08 Info.plist key CFBundleShortVersionString
+OBSERVED PKC-08 Info.plist key CFBundleSupportedPlatforms
+OBSERVED PKC-08 Info.plist key CFBundleVersion
+OBSERVED PKC-08 Info.plist key DTCompiler
+OBSERVED PKC-08 Info.plist key DTPlatformBuild
+OBSERVED PKC-08 Info.plist key DTPlatformName
+OBSERVED PKC-08 Info.plist key DTPlatformVersion
+OBSERVED PKC-08 Info.plist key DTSDKBuild
+OBSERVED PKC-08 Info.plist key DTSDKName
+OBSERVED PKC-08 Info.plist key DTXcode
+OBSERVED PKC-08 Info.plist key DTXcodeBuild
+OBSERVED PKC-08 Info.plist key LSApplicationCategoryType
+OBSERVED PKC-08 Info.plist key LSRequiresIPhoneOS
+OBSERVED PKC-08 Info.plist key MinimumOSVersion
+OBSERVED PKC-08 Info.plist key UIApplicationSupportsIndirectInputEvents
+OBSERVED PKC-08 Info.plist key UIColorName
+OBSERVED PKC-08 Info.plist key UIDeviceFamily
+OBSERVED PKC-08 Info.plist key UILaunchScreen
+OBSERVED PKC-08 Info.plist key UIRequiredDeviceCapabilities
+OBSERVED PKC-09 privacy-manifest "NSPrivacyAccessedAPITypes" => [
+OBSERVED PKC-09 privacy-manifest "NSPrivacyAccessedAPIType" => "NSPrivacyAccessedAPICategoryUserDefaults"
+OBSERVED PKC-09 privacy-manifest "NSPrivacyAccessedAPITypeReasons" => [
+OBSERVED PKC-09 privacy-manifest 0 => "CA92.1"
+OBSERVED PKC-09 privacy-manifest "NSPrivacyAccessedAPIType" => "NSPrivacyAccessedAPICategorySystemBootTime"
+OBSERVED PKC-09 privacy-manifest "NSPrivacyAccessedAPITypeReasons" => [
+OBSERVED PKC-09 privacy-manifest 0 => "35F9.1"
+OBSERVED PKC-09 privacy-manifest "NSPrivacyCollectedDataTypes" => [
+OBSERVED PKC-09 privacy-manifest "NSPrivacyTracking" => false
+OBSERVED PKC-09 privacy-manifest "NSPrivacyTrackingDomains" => [
+OBSERVED PKC-09 api-scan LetterMorph.app found systemUptime (as systemUptime)
+OBSERVED runtime rows NOT run here: PKC-01c (M-11, P-5), PKC-05 live read (M-8, S-2), PKC-14 log stream (M-11); device-checks plan
