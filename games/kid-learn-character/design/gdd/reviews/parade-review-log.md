@@ -84,3 +84,8 @@ Reviewed-Content-Hash: design/gdd/parade.md 8b9d74d6d67df241f4103add12585e5af607
 Review mode: lean · Workflow: standard
 Change: From game-dev-ios's render read (option a): litAt = launchAt + meter_fly_s − meter_land_s (0.75 s), so the cell's fill starts as the light's fade starts (one crossfade, no dip); fullAt follows (6th cell full at armedAt + 1.15; glow seen ~0.75 s); constraint and knob note updated; the swept strip stated as a range, 10,800–37,400 px on an 11-inch iPad (27,600 default); one line on why a single flight field suffices (meter_fly_s ≤ 1.1 < 1.2 s). AC-22, 23, 31, 35 times updated.
 Reviewed-Content-Hash: design/gdd/parade.md 16a839ee8bf58c44b04bee7228237e422339a804
+
+## Update — 2026-11-18 — TASK-122 parade-v2 contract answers (no re-review)
+Review mode: lean · Workflow: standard
+Change: Two readings from game-qc-android's parade-v2 written as rules. R8.1: prefetch once per batch, at its first Armed entry, including Ended with a full next batch (a new set of walkers); re-anchors of the same batch (panel close, return, Waiting → Armed, the try after a skip) do not request it again. AC-27: the Reduce Motion glow keeps F4's 0.4 s ramp from fullAt (= armedAt), 0.20 at +0.2 s, steady 0.40 after; only the breathe is gone.
+Reviewed-Content-Hash: design/gdd/parade.md dd39cc72370a664cd37113896715e303b645ab4e

@@ -139,6 +139,9 @@ walk.
 **R8. Art not ready (decided, K-17).**
 1. **At Armed** *(K-45: was "at start")*, the Parade asks Cast Rendering whether each walker's art is resident at
    the `parade` role (`isResident`), and prefetches any that are not (`prefetch`), so the 1.5 s beat covers most loads.
+   **Once per batch** *(parade-v2, TASK-122)*: at the batch's first Armed entry, whether that is the 6th `shown` or
+   **Ended with a full next batch** (PA-Q4, a new set of walkers). Re-anchors of the same batch (panel close, app
+   return, Waiting for art → Armed, the try after a skip) do not request it again.
 2. At `t_start` it waits up to `art_wait_s` (0.5 s) in **Waiting for art** for any walker still missing, then walks
    **without any figure still missing**.
    The others keep their own index `i`, so the gaps stay where the missing walker would have been.
@@ -640,8 +643,9 @@ Logic criteria use an injected clock and fake Reveal Stage, Press Queue and Cast
     that cell's alpha is 1 and the glow holds at 0.40; nothing changes on close except by R1 and R2.
 26. **AC-26 Meter per theme and launch.** Three keys in Dinosaurs, switch to a test theme in the panel: on close
     `filled` 0, with no fill animation; back to Dinosaurs: 3. A fresh launch: 0.
-27. **AC-27 Meter Reduce Motion.** With the flag on, the glow is 0.40 at every time while Armed (g1 = 0), and the
-    fills still take 0.4 s.
+27. **AC-27 Meter Reduce Motion.** With the flag on, the glow has no breathe (g1 = 0): it ramps from `fullAt`
+    (= `armedAt`) over F4's 0.4 s, 0.20 at +0.2 s, and is a steady 0.40 from +0.4 s while Armed; the fills still take
+    0.4 s *(wording aligned with F4, parade-v2 TASK-122)*.
 28. **AC-28 Meter taps.** A touch on the meter produces an empty-stage sparkle, no press and no change to the meter.
 29. **AC-29 Meter flash data.** G1 reads `meter_pulse_hz` 0.5 and passes with no exception; the build's palette check
     (G2) includes the meter's colours.
