@@ -30,6 +30,7 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
   22.5 mm, k = 1); correct the row and AC-7's k values. (game-dev-android)
 
 ## Parent Gate & Panel
+- P0 (text): Dependencies name game-art-content as TASK-054 owner; 054a (Settings, Input) is game-dev-android.
 - P1: the moon is the sky's only moon; it takes the Scene's `look`; daytime moon at 70% in Morning/Day.
   (TASK-053 Scene)
 

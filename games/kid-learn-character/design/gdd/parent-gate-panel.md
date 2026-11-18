@@ -1,6 +1,6 @@
 # Parent Gate & Grown-up Panel
 
-> **Status**: In Review
+> **Status**: Approved (independent read by game-qc-android, merged 2026-11-18; release-blocked on TASK-054a I1/I3)
 > **Author**: game-qc-ios for Luan (TASK-048); plan reviewed by game-qc-android
 > **Last Updated**: 2026-11-18
 > **Last Verified**: 2026-11-18

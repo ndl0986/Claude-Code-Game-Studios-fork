@@ -67,7 +67,7 @@ child lock-in, privacy compliance), because the player is 2.5–3 years old.
 | 9 | Reveal Stage | Gameplay | MVP | Approved | design/gdd/reveal-stage.md | MorphCore, Audio & Voice, Press Queue, Cast Rendering, Key Table & Theme Data |
 | 10 | Hint Letters | Gameplay | MVP | Approved | design/gdd/hint-letters.md | Key Table & Theme Data, Input & Key Filter, Press Queue |
 | 11 | Parade | Gameplay | MVP | Approved | design/gdd/parade.md | Reveal Stage, Cast Rendering |
-| 12 | Parent Gate & Grown-up Panel | UI | MVP | Not Started | design/gdd/parent-gate-panel.md | Settings Store, Input & Key Filter |
+| 12 | Parent Gate & Grown-up Panel | UI | MVP | Approved | design/gdd/parent-gate-panel.md | Settings Store, Input & Key Filter |
 | 13 | Child Lock-in | Platform | MVP | Not Started | design/gdd/child-lock-in.md | Input & Key Filter, Parent Gate & Grown-up Panel |
 | 14 | App Shell & Title (inferred) | Presentation | MVP | Approved | design/gdd/app-shell-title.md | Reveal Stage, Settings Store |
 | 15 | Scene: Time of Day & Weather | Presentation | Vertical Slice | Not Started | design/gdd/scene-time-weather.md | Settings Store |
@@ -226,10 +226,10 @@ Effort: S = 1 session, M = 2–3 sessions.
 | Metric | Count |
 |--------|-------|
 | Total systems identified | 20 |
-| Design docs started | 12 |
-| Design docs reviewed | 12 |
-| Design docs approved | 12 |
-| MVP systems designed | 12/14 |
+| Design docs started | 14 |
+| Design docs reviewed | 14 |
+| Design docs approved | 13 |
+| MVP systems designed | 13/14 |
 | Vertical Slice systems designed | 0/3 |
 
 ---
