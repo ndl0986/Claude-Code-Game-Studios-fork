@@ -1,6 +1,6 @@
 # Parent Gate & Grown-up Panel
 
-> **Status**: Approved (independent read by game-qc-android, merged 2026-11-18; release-blocked on TASK-054a I1/I3)
+> **Status**: Approved (independent read by game-qc-android, merged 2026-11-18; TASK-054a merged 2026-11-18 — Mac release ACs NOT ASSESSED until a Mac build runs AC-1k6 and the real-Mac ACs)
 > **Author**: game-qc-ios for Luan (TASK-048); plan reviewed by game-qc-android
 > **Last Updated**: 2026-11-18
 > **Last Verified**: 2026-11-18

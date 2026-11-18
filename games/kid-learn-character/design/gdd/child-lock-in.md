@@ -1,6 +1,6 @@
 # Child Lock-in
 
-> **Status**: Approved (independent read by game-qc-ios, merged 2026-11-18; release-blocked on TASK-054a S1/S2, I1, I3)
+> **Status**: Approved (independent read by game-qc-ios, merged 2026-11-18; TASK-054a merged 2026-11-18 — Mac release ACs NOT ASSESSED until a Mac build runs AC-1k6 and the real-Mac ACs)
 > **Author**: game-dev-android for Luan (TASK-052); plan reviewed by game-qc-ios
 > **Last Updated**: 2026-11-18
 > **Last Verified**: 2026-11-18, against ADR-0001 Decision 9 (a–c), the TASK-033 spike report (Child lock-in),

@@ -1,4 +1,6 @@
-# TASK-054 follow-up batch (queued by game-leader, 2026-11-18)
+# TASK-054 follow-up batch
+
+**054a merged 2026-11-18 (fe63267): S1, S2, I1–I4, H1, A1.** Remaining for 054b: C1, C2, R1, P0, P1, V1, I5, L1. (queued by game-leader, 2026-11-18)
 
 Small edits to Approved GDDs, collected while the last MVP GDDs were written. Send as one task once
 TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review" log entry with a receipt.
@@ -30,6 +32,10 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
 - R1: publish `mashing` (Press Queue snapshot queue length ≥ 1, or an ignored press in the last 1 s) for the
   Scene's R3a weather halving; also publish `haloOn` (on through the glow phase, R5 timeline) for the Scene's
   halo fade-out. (TASK-053, game-dev-ios)
+
+## Input & Key Filter (054b)
+- I5 (text): in R6, the sentence "The chord replaces the moon hold only: the gate's second step…" is glued to the
+  end of the "Limit of the held set alone" bullet; put it on its own line at the R6 level. (game-qc-ios)
 
 ## Child Lock-in
 - L1: if 054a's TCC check removes the keyState read, R5's "judged from the OS key state" becomes "from the OS key
