@@ -29,3 +29,8 @@ Reviewer: game-dev-ios (independent read, recorded by game-leader at merge)
 Summary: All nine of game-dev-ios's plan items are present (R2, R4–R11, AC-6, AC-9…AC-13, AC-22). The self-fixed F1 blocker is right (check 1 hold_s ≥ 2.45, check 2 hold_s ≥ 2.95). Agrees with the author's choices: the hold counts as passed after the panel closes; a theme change never clears the queue. Receipt a6a1d62 matches the file.
 Prior verdict resolved: Yes (NEEDS REVISION, fixed)
 Carried to Reveal Stage (non-blocking): (1) the glyph-sparkles-out fallback forms no creature, so startReveal should also return hasWord (or word_end) and F1 drops the word term then; (2) revealLen = T + form_s for a morph; Cast Rendering's late-art rule keeps formedS and revealLen fixed after startReveal.
+
+## Update — 2026-11-18 — TASK-050 cross-GDD follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: TASK-050: startReveal returns {formedS, revealLen, hasWord} and F1 drops the word term when hasWord is false (not only when there is no word line); R10's start rule points to Parade F2; new R8a: the queue freezes while the parent-gate challenge shows and resumes on a wrong answer or timeout, frozen time never counting; K-15's clear only when the panel actually opens (K-20). Interactions, Edge Cases, AC-23, AC-24. Wording and interface follow-ups from K-18/K-19/K-20 and the Cast Rendering and Reveal Stage reviews; verdict unchanged; review by game-dev-ios.
+Reviewed-Content-Hash: design/gdd/press-queue.md e3f251e964d1741a83ea0ab55fa7bd1b608560fc

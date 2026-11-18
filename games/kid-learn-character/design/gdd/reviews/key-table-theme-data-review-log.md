@@ -78,3 +78,8 @@ Reviewed-Content-Hash: design/gdd/key-table-theme-data.md 6fa1ce3101c05275459090
 Review mode: lean · Workflow: standard
 Change: from game-dev-ios's review of TASK-042: V15's duration is the decoded length with AAC encoder priming and padding removed (what the app's decoder returns and Audio schedules), not the container duration; priming (~2112 samples ≈ 44 ms at 48 kHz) would otherwise break ±0.01 s.
 Reviewed-Content-Hash: design/gdd/key-table-theme-data.md e108179924cb3f53191a26f006791f88e7e342bd
+
+## Update — 2026-11-18 — TASK-050 cross-GDD follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: TASK-050: Rule 4.5 `peek(key)` for prefetch (the item resolve would pick now; lastShown and the variety stream unchanged), the Reveal Stage interaction row, AC-15. Wording and interface follow-ups from K-18/K-19/K-20 and the Cast Rendering and Reveal Stage reviews; verdict unchanged; review by game-dev-ios.
+Reviewed-Content-Hash: design/gdd/key-table-theme-data.md 3732afc4fa931107ff03ab93f9d73a6551e4f483

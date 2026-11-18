@@ -53,3 +53,8 @@ Findings:
   starts play (`startPlay`), like the play button, and is not a press; the held set carries into Play. States
   table, R8 outputs, AC-1o.
 Reviewed-Content-Hash: design/gdd/input-key-filter.md bbbc45714a1c29c1a25ec86c921a6e938773b71f
+
+## Update — 2026-11-18 — TASK-050 cross-GDD follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: TASK-050: R8 origin is nil from Input and set by the Play router from Hint Letters' originFor(key) (K-18); R6 the Mac chord counts only with no other key held and starts the gate's second step (K-19); nothing reaches play during the gate challenge (K-20), new Gate challenge state; AC 1j extended. Wording and interface follow-ups from K-18/K-19/K-20 and the Cast Rendering and Reveal Stage reviews; verdict unchanged; review by game-dev-ios.
+Reviewed-Content-Hash: design/gdd/input-key-filter.md 8c1a71612d35412e14543e2f0d9a44ba65a8e5cb

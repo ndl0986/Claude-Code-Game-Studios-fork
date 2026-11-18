@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent re-review by game-dev-ios, merged 2026-11-18)
 > **Author**: game-dev-android for Luan (TASK-043); plan reviewed by game-dev-ios
-> **Last Updated**: 2026-11-18
+> **Last Updated**: 2026-11-18 (TASK-050 cross-GDD follow-ups)
 > **Last Verified**: 2026-11-18, against Input & Key Filter R8, MorphCore F5/F6, Audio & Voice F6/E1/E2, Key Table
 > R3 and `voiceDurations` (V15), Settings Store, K-06, K-13, K-15, the one-shot `pressLetter` / `holdTime`
 > **Implements Pillar**: Pillar 1 (Every Press Answers); serves Pillar 3 (Calm Magic)
@@ -108,7 +108,8 @@ Android: `SystemClock.uptimeMillis() / 1000`, the clock of `getEventTime()`). In
 **R6. Starting a reveal.** The queue calls the Reveal Stage's `startReveal(revealId, key, source, origin, r0)`:
 
 - Key Table resolves the item **now**, with the theme active now (its R3); `item` is returned in the outcome.
-- The Reveal Stage returns `{formedS, revealLen}` for this reveal, **including its no-morph fallbacks**:
+- The Reveal Stage returns `{formedS, revealLen, hasWord}` for this reveal, **including its no-morph fallbacks**.
+  `hasWord` is false when no word will play (no word line, or Cast Rendering's `willForm` is false):
 
   | Case | formedS | revealLen |
   |---|---|---|
@@ -138,14 +139,21 @@ creature counts as passed, so after the panel closes the next press starts at on
 choice, consistent with K-15). A theme can only be changed in the panel, so the queue is already empty when a new
 theme takes effect; the next reveal uses it (Key Table R3). The theme change itself never clears anything.
 
+**R8a. Parent-gate challenge: freeze and resume** (K-20; TASK-050). While the gate's number challenge shows (after
+the moon hold or the Mac chord), the queue **freezes**: no tick advances it, the hold and the formed timeout do not
+run, and nothing is cleared. Input sends no presses during the challenge (Input R6). On a **wrong answer or a
+timeout**, the queue **resumes** exactly where it stopped: the frozen time never counts (`r0` and `formedAt` of
+`current` move forward by the frozen duration, so `holdEff`, the timeout and `restingSince` see no gap). Only a
+**correct answer** opens the panel, and R8's clear and settle apply then (K-15, K-20).
+
 **R9. App to background** (Input & Key Filter: Inactive). The queue is cleared and the current reveal settles to
 formed with its hold passed (Luan, K-15). On return, the formed creature is on stage and the next press starts at
 once. Time spent in the background never counts towards anything.
 
 **R10. Resting signal for the Parade.** The queue publishes `restingSince`: when the queue is empty and
 `current` is formed, `restingSince = current.formedAt`; otherwise none. The Parade starts when its own rule
-holds, for example `restingSince ≠ none` and `now ≥ restingSince + parade_delay_s` (the delay and whether a press
-during the parade ends it or waits are the Parade GDD's).
+holds: `restingSince ≠ none` and `now ≥ restingSince + (revealLen − formedS) + parade_delay_s` (Parade F2; the
+delay and what a press during the parade does are the Parade GDD's).
 
 **R11. Snapshot for drawing.** Each frame after `tick`, the Reveal Stage reads a snapshot: `current` (revealId,
 key, origin, r0, formed) and the queue's keys in order (for the tokens, art bible §3). The snapshot is read-only.
@@ -175,12 +183,12 @@ Panel open and background (R8, R9) move to Resting with an empty queue.
 | System | Direction | Interface |
 |---|---|---|
 | Input & Key Filter | in | `press(p)` (R8 event) in its callback; Title `startPlay` never reaches the queue |
-| Reveal Stage | out / in | `startReveal(...) → {formedS, revealLen}`; outcomes (R4); snapshot (R11); in: `formed(revealId)`, `settle` on panel/background |
+| Reveal Stage | out / in | `startReveal(...) → {formedS, revealLen, hasWord}`; outcomes (R4); snapshot (R11); in: `formed(revealId)`, `settle` on panel/background |
 | Audio & Voice | out | outcomes for E1/E2 (R4); reads its `word_offset_s` and `hold_ext_max_s` (F1) |
 | Key Table & Theme Data | in | the item at start (R6); `voiceDurations` for the word line (F1) |
 | Hint Letters | out | outcomes: consume on accepted, keep on ignored (R4, K-15) |
 | On-screen Keyboard Row | in (via Input) | its presses are ordinary presses (R12) |
-| Parent Gate & Grown-up Panel | in | panel open → clear + settle (R8) |
+| Parent Gate & Grown-up Panel | in | challenge shown → freeze; wrong answer or timeout → resume (R8a); panel open (correct answer) → clear + settle (R8) |
 | App Shell & Title | in | Play entered with an empty queue (R3); background → clear + settle (R9) |
 | Parade | out | `restingSince` (R10) |
 | Accessibility | in (via Reveal Stage) | the timing set at start; the hold stays 3 s (K-15) |
@@ -205,7 +213,8 @@ holdEff  = max( hold_s, revealLen, min( word_end, hold_s + hold_ext_max_s ) )
 | `hold_ext_max_s` | the longest a word may extend the hold | 1.5 s | Audio & Voice |
 | `holdEff` | the hold of this reveal | 3.0–4.5 s with shipped values | — |
 
-- If the item has no word line, the term `min(word_end, …)` is dropped.
+- If `startReveal` returns `hasWord` false (no word line, or the creature will not form so no word plays), the
+  term `min(word_end, …)` is dropped.
 - If its `voiceDurations` entry is missing at run time (despite V15), `word_end = formedS + 1.5` (Audio F6 bound),
   one debug log line.
 - The base hold is not measured from the press: it starts at `r0`.
@@ -281,6 +290,9 @@ rests longer on stage and the pace of the queue is unchanged.
   (R6).
 - **Panel opened with 3 keys waiting:** all three are dropped silently (no ping, no sparkle); the creature
   settles; after close the next press starts at once (R8).
+- **Gate challenge shown with 2 keys waiting, then a wrong answer:** nothing is dropped; the reveal and its hold
+  continue from where they froze, and the 2 keys play in turn (R8a).
+- **Gate challenge, then the correct answer:** the panel opens and R8 clears and settles as usual.
 - **Theme changed in the panel:** the queue is already empty; the next reveal uses the new theme (R8, Key Table R3).
 - **App backgrounded mid-morph:** the queue is cleared, the creature is formed on return, the next press starts at
   once (R9).
@@ -380,6 +392,12 @@ frames, no randomness.
   of range, and when the F1 build check fails; no timing literal appears in the queue's code (code review).
 - **AC-22 One advance per tick:** GIVEN two queued presses and a tick far past both holds, THEN only one starts on
   that tick.
+- **AC-23 Gate freeze (TASK-050):** GIVEN a reveal at s = 1.0 with 2 keys queued, WHEN the gate challenge shows for
+  20 s and then times out, THEN the queue still holds 2 keys, `current.r0` moved forward by 20 s, and the first
+  queued key starts at `r0 + holdEff` measured without the 20 s. WHEN instead the answer is correct, THEN the queue
+  is cleared and the reveal settles (R8).
+- **AC-24 hasWord (TASK-050):** GIVEN `startReveal` returns `hasWord` false for an item that has a word line
+  (`willForm` false), THEN `holdEff = max(hold_s, revealLen)`.
 
 **NOT ASSESSED:** how the 3 s hold and the 9–11.5 s worst wait feel to a 2.5-year-old on a real device (playtest).
 

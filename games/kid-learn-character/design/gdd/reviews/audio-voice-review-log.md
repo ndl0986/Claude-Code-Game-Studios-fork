@@ -43,3 +43,8 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md 5f743e882a62b62e7206eaa67041915
 Review mode: lean · Workflow: standard
 Change: F6 and Dependencies now name the Key Table's `voiceDurations` field (TASK-042, checked by its V15) as the source of each word line's length; the bound T + 1.5 s stays as the run-time fallback for a missing entry. The first entry's Recommended item on a per-line duration is closed (fixed).
 Reviewed-Content-Hash: design/gdd/audio-voice.md 1f3d8158975fa07f5bac347250674314dc0ac4f0
+
+## Update — 2026-11-18 — TASK-050 cross-GDD follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: TASK-050: E9 is skipped when hasWord is false; Edge Cases confirm E8/E9 play on time during Cast Rendering's late-art wait and nothing is cut if the specks sparkle out; hasWord false skips E8 and E9. Wording and interface follow-ups from K-18/K-19/K-20 and the Cast Rendering and Reveal Stage reviews; verdict unchanged; review by game-dev-ios.
+Reviewed-Content-Hash: design/gdd/audio-voice.md df83c5e1d8eac9184fb8852c95464ac2e8f77e73

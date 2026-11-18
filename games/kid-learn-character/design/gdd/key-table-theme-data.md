@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent review by game-dev-ios, merged 2026-11-18)
 > **Author**: game-art-content (TASK-036), with Luan's answers via game-leader; plan reviewed by game-dev-ios
-> **Last Updated**: 2026-11-18 (TASK-042: launch fallback, voice durations, back-references)
+> **Last Updated**: 2026-11-18 (TASK-050 cross-GDD follow-ups)
 > **Last Verified**: 2026-11-18
 > **Implements Pillar**: Pillar 1 (Every Press Answers), Pillar 4 (Things the Child Loves), Pillar 5 (Safe by Design)
 
@@ -166,6 +166,12 @@ lowercase with underscores:
    this system.
 4. **Variety seed:** one random 64-bit seed per launch, injectable in tests (game-dev-ios point 8). It
    is a separate stream from the morph seed, which is not in this table.
+5. **`peek(key)` for prefetch** *(TASK-050)*. Returns the item `resolve(key)` would pick **now**, without
+   changing anything: `lastShown` is not updated and the variety stream is **not advanced** (F1 is run on
+   the stream's next value, read but not consumed). Cast Rendering prefetches the peeked item when a key
+   is queued (its prefetch rule; Reveal Stage R5). The prediction is exact with one item per key (MVP).
+   With several items it can differ from the later `resolve` if another reveal resolves in between or the
+   theme changes; the reveal still uses `resolve`, and Cast Rendering drops the wrong prefetch.
 
 #### 5. Build time and run time (game-dev-ios point 2)
 
@@ -237,7 +243,7 @@ the theme changes.
 |---|---|---|
 | Input & Key Filter (TASK-037) | in | The key value "A"–"Z" / "0"–"9" (shared format, Rule 1). |
 | Press Queue | — | Queues keys, not items. Whether closing the grown-up panel clears the queue is **Press Queue's / Reveal Stage's call** (dependency stated, not decided here). |
-| Reveal Stage | out | At reveal start: `resolve(key) → item` (pick rule). |
+| Reveal Stage | out | At reveal start: `resolve(key) → item` (pick rule). For prefetch: `peek(key) → item`, no state change (Rule 4.5). |
 | MorphCore | out | The glyph path (glyph set) and the silhouette path (item). The morph seed and timings are not here. |
 | Cast Rendering | out | `art`, `family`, `variant`, `hueSlot`; idle params by family id. |
 | Audio & Voice | out | `sfx` path; voice paths built from `voiceLocales` + line ids. |
@@ -497,3 +503,6 @@ Each criterion is checked by the validator on the data, or by a unit test with f
 14. **Voice durations:** the validator reports a `voiceDurations` entry for every voice line in every
     locale, each within ±0.01 s of its file; a test word line of 1.30 s and a test letter line of 1.10 s
     each fail the build and name the file.
+15. **Peek changes nothing:** with a fixed seed, `n = 5` and `last` set, calling `peek(D)` 10 times returns
+    the same item each time and equals the next `resolve(D)`; `lastShown` and the stream position are
+    unchanged after the peeks (unit test). With `n = 1`, `peek` returns item 0 and draws nothing.
