@@ -981,6 +981,81 @@
       "note": "m = 1.0, 0.67, 0.5, 0.4, then the 0.35 floor."
     },
     {
+      "id": "R1-E5-not-mash-scaled-or-counted",
+      "source": "gdd: audio-voice.md R1 E5; F3 (E1, E2, E3 only)",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "started"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E1",
+              "mash": 1.0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E5",
+              "mash": 1.0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5
+          },
+          "event": {
+            "type": "pressOutcome",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "play",
+              "event": "E1",
+              "mash": 0.6666666666666666
+            }
+          ]
+        }
+      ],
+      "note": "E5 plays at full level and isn't in the window: the second E1 sees n = 1, not 2."
+    },
+    {
       "id": "R1-E7-not-mash-scaled",
       "source": "gdd: audio-voice.md R1 E7 (not mash-scaled)",
       "given": {
@@ -2127,6 +2202,91 @@
         }
       ],
       "note": "Frozen at play s 2.5 for 20 s: E9, due at s 2.7, fires on the first frame at s >= 2.7 after resume (uptime 22.7…), never during the freeze."
+    },
+    {
+      "id": "R2-E10-during-a-word-is-ducked",
+      "source": "gdd: audio-voice.md R1 E10 (ducked like E8 under the word); F2",
+      "given": {
+        "knobs": {
+          "word_offset_s": 0.25,
+          "fallback_glow_s": 0.8,
+          "mash_k": 0.5,
+          "mash_floor": 0.35,
+          "chime_window_s": 1.0,
+          "duck_db": -9.0,
+          "duck_attack_s": 0.05,
+          "duck_release_s": 0.25,
+          "head_db": -3.0,
+          "bus_db": {
+            "voice": 0.0,
+            "cast": -4.0,
+            "ui": -10.0,
+            "music": -8.0
+          },
+          "ping_db": -6.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "start",
+            "event": "E9",
+            "length": 1.0
+          },
+          "expect": [
+            {
+              "out": "player",
+              "bus": "voice",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "voiceStart"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "start",
+            "event": "E10",
+            "length": 1.0
+          },
+          "expect": [
+            {
+              "out": "player",
+              "bus": "cast",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "duckQuery"
+          },
+          "expect": [
+            {
+              "out": "duck",
+              "value": 0.35481338923357547
+            }
+          ]
+        }
+      ],
+      "note": "A creature tap during the word plays on the cast bus, ducked: the word stays on top."
     }
   ]
 }
