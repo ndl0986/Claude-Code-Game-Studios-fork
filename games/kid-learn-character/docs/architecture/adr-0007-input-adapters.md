@@ -148,7 +148,8 @@ set, kept honest by R6's ⌘-release clear (already the GDD's fallback, AC-1k3 o
 codes 0–127 except the modifiers (54–63) and the excepted key. **Wired only if M-1 passes**; if M-1 shows a prompt,
 or lists the app under Privacy & Security › Input Monitoring, the read is **removed from the build** (not switched
 off at run time: a prompt at the first chord would already be in front of the grown-up or the child). DeviceSpike
-keeps the read behind a switch that is off by default (TASK-078 minimal check item 6), so M-1's first launch is clean.
+keeps the read behind a switch that is off by default (TASK-078 minimal check item 6), so M-1's first launch is clean; M-1
+then turns it on and the Keys log counts the calls, so the row proves the read ran.
 
 ### D5. Touches
 **Rule.** A touch arrives as D5's `TouchEvent` in **window pixels** with its pointer id and phase; `KidCore` converts
@@ -161,7 +162,7 @@ button as pointer 0 (down / dragged / up), in window pixels (backing scale).
 ### Decision rule (fixed before the rows run)
 | Row | Pass (decides this ADR) | If it fails |
 |---|---|---|
-| **M-1** Input Monitoring | clean Mac (`tccutil reset ListenEvent`), first launch with the lock on, ⌃⌥⌘Q: **no prompt**, the gate opens, the app not listed under Input Monitoring | `KeyStateQuery` is **removed** from the build (D4); input-filter-v2's AC-1k3 runs on the held-set path; the ADR records "absent" |
+| **M-1** Input Monitoring | `tccutil reset ListenEvent com.galaxyandsun.devicespike`; launch with the read's switch **off** (the clean baseline); turn the switch **ON**; press ⌃⌥⌘Q and a few ⌘ combinations; the Keys log must show **"key-state read called (n=…)" with n > 0** (otherwise the row tested nothing); then **no prompt** and the app **not listed** under Privacy & Security › Input Monitoring (screenshot). The result holds for DeviceSpike's bundle id only (TCC is per bundle); the production AC-1k6 repeats it for the app (game-qc-ios) | `KeyStateQuery` is **removed** from the build (D4); input-filter-v2's AC-1k3 runs on the held-set path; the ADR records "absent" |
 | **M-2** ⌘ window before the chord | the launch log shows settings read → monitor installed within `engage_timeout_s` (5 s); ⌘-keys swallowed meanwhile is accepted (Child Lock-in Edge Cases) | a longer window is a defect in the launch order (App Shell R1), not in this ADR's choice |
 | **M-3** (keyboard part) physical keyboard, lock on | ⌘H, ⌘Q, ⌘Space never reach the system; every key in the Keys log normalizes as input-filter-v2 expects; the log records whether ups arrive under ⌘ | a wrong normalization is a table fix in the mapper (D2), not a design change; a ⌘-combination that escapes the monitor goes to ADR-0008 (the options set) |
 | **P-15** iPad hardware keys | all 36 keys, the numpad (Num Lock on and off), Shift / Caps / ⌘ / ⌥ / ⌃ (Fn / Globe where reported) arrive through `pressesBegan` and normalize as input-filter-v2 expects; repeats and ups recorded | a key not delivered at all is recorded as a platform limit (Input's NOT ASSESSED list); a wrong normalization is a table fix |
@@ -249,9 +250,10 @@ build (TASK-102).
 
 **Headless (done):**
 - **H-1** `SpikeKit` (TASK-078): 7 tests pass, including the ASCII fold, AZERTY / Cyrillic / numpad positions and the
-  chord's modifier rule (evidence `production/qa/evidence/TASK-078/`).
+  chord's modifier rule (`production/qa/evidence/TASK-078/2f2803d7/test.txt`).
 - **H-2** `DeviceSpike` (Keys screen, the key-state read behind an off switch) builds for the iOS Simulator and macOS
-  with no warnings (TASK-087 evidence `9a47d845`); the minimal spike check's item 6 confirms the read is off by default.
+  with no warnings (`production/qa/evidence/TASK-087/e606ad36/`); the minimal spike check's item 6 confirms the read
+  is off by default (`production/qa/evidence/TASK-078/ea51346e/spike-check-devicespike.txt`).
 
 **Headless (to run with the adapter story, or before the rows on the leader's OK):**
 - **H-3** The mapper over input-filter-v2's key cases: every case's raw tuple (HID usage or Mac key code, characters,

@@ -244,8 +244,7 @@ Per K-34: headless runs need no MAC FREE; anything on the Mac's screen does. Ask
 
 **Headless (done):**
 - **H-1** `DeviceSpike` builds for the iOS Simulator (Guided Access page) and macOS (Lock screen with both modes, the
-  options set with the 27 availability branch, covers, the chord and overlay stubs) with no warnings (TASK-087
-  evidence `9a47d845`).
+  options set with the 27 availability branch, covers, the chord and overlay stubs) with no warnings (`production/qa/evidence/TASK-087/e606ad36/`).
 
 **Headless (to run with the adapter story, or before the rows on the leader's OK):**
 - **H-2** The options-set function: the macOS 26 set and the 27 set (with `.disableScreenCornerInteractions` and
