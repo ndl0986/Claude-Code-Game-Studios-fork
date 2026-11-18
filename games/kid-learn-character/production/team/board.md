@@ -18,9 +18,9 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-036 | GDD: Key Table & Theme Data (`design/gdd/key-table-theme-data.md`) via /design-system | design | game-art-content (review: game-dev-ios) | DONE `c7ef996`, merged 2026-11-18 (review: game-dev-ios APPROVE after one fix) | `design/TASK-036-gdd-key-table` | 2026-11-18 |
 | TASK-037 | GDD: Input & Key Filter (`design/gdd/input-key-filter.md`) via /design-system | design | game-dev-ios (review: game-dev-android) | DONE `6b3dbe2`, merged 2026-11-18 (review: game-dev-android APPROVE after A+B) | `design/TASK-037-gdd-input-key-filter` | 2026-11-18 |
 | TASK-038 | GDD: MorphCore (`design/gdd/morphcore.md`) via /design-system | design | game-dev-android (review: game-dev-ios) | DONE `89fb1cc`, merged 2026-11-18 (review: game-dev-ios APPROVE) | `design/TASK-038-gdd-morphcore` | 2026-11-18 |
-| TASK-039 | GDD: Settings Store (`design/gdd/settings-store.md`) via /design-system | design | game-dev-android (review: game-dev-ios) | PLAN REVIEW (game-dev-ios); Luan Q1–Q4 asked | `design/TASK-039-gdd-settings-store` | 2026-11-18 |
-| TASK-040 | GDD: Privacy & Kids Compliance (`design/gdd/privacy-kids-compliance.md`) via /design-system | design | game-qc-ios (review: game-qc-android) | PLAN REVIEW (game-qc-android) | `design/TASK-040-gdd-privacy-compliance` | 2026-11-18 |
-| TASK-041 | GDD: Audio & Voice (`design/gdd/audio-voice.md`) via /design-system | design | game-art-content (review: game-dev-ios) | SENT 2026-11-18: plan first | `design/TASK-041-gdd-audio-voice` | 2026-11-18 |
+| TASK-039 | GDD: Settings Store (`design/gdd/settings-store.md`) via /design-system | design | game-dev-android (review: game-dev-ios) | IN PROGRESS: PLAN APPROVED 2026-11-18; Luan answered (K-12) | `design/TASK-039-gdd-settings-store` | 2026-11-18 |
+| TASK-040 | GDD: Privacy & Kids Compliance (`design/gdd/privacy-kids-compliance.md`) via /design-system | design | game-qc-ios (review: game-qc-android) | IN PROGRESS: PLAN APPROVED 2026-11-18 after REVISE | `design/TASK-040-gdd-privacy-compliance` | 2026-11-18 |
+| TASK-041 | GDD: Audio & Voice (`design/gdd/audio-voice.md`) via /design-system | design | game-art-content (review: game-dev-ios) | IN PROGRESS: PLAN APPROVED 2026-11-18; Luan answered (K-13) | `design/TASK-041-gdd-audio-voice` | 2026-11-18 |
 
 ## Leader log
 
@@ -53,3 +53,4 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 - 2026-11-18: TASK-036 (Key Table) and TASK-038 (MorphCore) merged; systems index updated (2/14 MVP approved). K-09 picks (P = Tapejara, X exception) and title-screen rule recorded.
 - 2026-11-18: next GDDs in design order sent: TASK-039 Settings Store, TASK-040 Privacy & Kids Compliance, TASK-041 Audio & Voice.
 - 2026-11-18: TASK-037 merged (3/14 MVP GDDs approved); ADR-0001/art-bible sil_….json wording clarified (merged).
+- 2026-11-18: TASK-039/040/041 plans approved; Luan decided K-12 (settings) and K-13 (audio).

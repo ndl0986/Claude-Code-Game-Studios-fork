@@ -63,6 +63,27 @@ ignored, about 3 s per reveal while keys are queued. See `design/gdd/game-concep
   measurement.
 - **A different morph on every press** (seed from the key and the press count, reproducible in debug).
 
+### K-12 Settings (Luan, 2026-11-18, TASK-039 questions)
+
+- An in-app **volume slider** (default 0.8) plus mute.
+- The hand-picked **weather is kept until changed** (no date stored).
+- **Mac child lock comes back on after a relaunch, but only once the app is ready** (after the first
+  frame, with the ⌃⌥⌘Q chord working), because the kiosk blocks force-quit and shutdown.
+- **Device backups allowed** for the settings (settings only, nothing personal).
+
+### K-13 Audio and voice (Luan, 2026-11-18, TASK-041 questions)
+
+- The **word plays 0.25 s after the cast sound** (cast ducked) and a waiting key **does not cut it**
+  (the hold extends to the word's end, capped +1.5 s; with 3 queued the last reveal waits ~2.7 s
+  longer).
+- An overflow press (queue full) gives the **softer ping**.
+- **Voice: TTS pre-rendered at build time** into the same file pipeline; a human re-record for release
+  and the TTS licence stay open.
+- **Respect the device's silent switch** (device silent → game silent).
+- Loudness targets as proposed (voice −16 LUFS, cast −20, chime −26, ping −30, parade −22,
+  ≤ −1 dBTP), tuned in play.
+- Numbers: **one chirp per item**, counting along up to 9.
+
 ### K-08 Time of day and weather in the scene (Luan, 2026-11-17, /art-bible Section 2)
 
 - **Time of day from the system clock:** a morning scene in the morning, day, then evening/dusk and
