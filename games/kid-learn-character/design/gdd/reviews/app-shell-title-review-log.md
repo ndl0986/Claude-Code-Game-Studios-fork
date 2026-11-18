@@ -52,3 +52,8 @@ Reviewed-Content-Hash: design/gdd/app-shell-title.md 09dc4b56bb283e6dfb84ff83b5b
 Review mode: lean · Workflow: standard
 Change: R-1: since TASK-056a, Input's kiosk-on mode (kioskModeOn) is Child Lock-in's own output on entering Waiting, so App Shell's "ready" (R1 step 5, F1) is now first frame + chord installed + window covering its display; Child Lock-in sets kioskModeOn on Waiting and applies the options once its R3 preconditions hold. AC-3 aligned (ready fires with the lock off too). Text only.
 Reviewed-Content-Hash: design/gdd/app-shell-title.md 973139da5486e46e4a0fc9ed5a06df34f66a397a
+
+## Update — 2026-11-18 — TASK-057b wording (no re-review)
+Review mode: lean · Workflow: standard
+Change: from game-qc-android's diff review (REVISE, wording): Waiting (and so kioskModeOn) starts at the settings read and can come before "ready", so R1 step 5 no longer says "then", and AC-3 says Child Lock-in sets kioskModeOn on entering Waiting (possibly before "ready") and applies the options only after "ready" plus its R3. F1 unchanged.
+Reviewed-Content-Hash: design/gdd/app-shell-title.md 2e7f2ef9dcdbcd02cd50078c115cb7035a3b7749
