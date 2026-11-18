@@ -80,3 +80,4 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
 - App Shell R6 (v2 of app-shell-v1, on request): order of background notifications (Reveal settle, Audio cut, Hint clear, Parade drop, Input Inactive) and the list for a return to Play (not R4's entry) — game-dev-ios advisory, TASK-094.
 - DeviceSpike Freeze continuity: add a second correlation just after resume (gain back to 1) to confirm heard content starts at 'from' (game-qc-ios note on ADR-0010) — game-dev-ios, next DeviceSpike touch; or P-7 records it by listening.
 - Parade precise rules: drop "plus any batch keys beyond parade_count" (can't happen; batch never grows past 6) — game-art-content, next Parade touch (TASK-101a nit).
+- Cast Rendering F6: 1024 px tier is a HEIGHT per R3 (full image 1490 × 1024), not a width; restate F6's per-set figure and its 1.5× cap (game-dev-android finding, TASK-103) — game-dev-ios, next Cast Rendering touch.
