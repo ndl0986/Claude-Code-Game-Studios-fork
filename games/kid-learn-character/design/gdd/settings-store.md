@@ -2,7 +2,7 @@
 
 > **Status**: In Review
 > **Author**: game-dev-android for Luan (TASK-039); plan reviewed by game-dev-ios
-> **Last Updated**: 2026-11-18
+> **Last Updated**: 2026-11-18 (TASK-039 touch-up: slider preview, `.debug` logging, restoration off)
 > **Last Verified**: 2026-11-18, against ADR-0001 (Accepted) Decisions 8 and 9, art bible §2, §4 and §7, TASK-034
 > **Implements Pillar**: Pillar 5 (Safe by Design)
 
@@ -73,10 +73,16 @@ record or anywhere else on the device. In particular, never:
 - Reduce Motion / "Remove animations" and the time of day: these are **read live** from the OS and the clock
   every time they are needed (art bible §7, K-08), never copied into the store.
 
-A new field needs a GDD change to R1 and a schema bump (R7). Debug logging (R6) goes to the platform's console
-only, never to a file. Framework state the OS would save on the app's behalf is turned off where the app controls
-it (macOS: no window-frame autosave, no state restoration of the window), so the app's preferences hold only the
-record.
+A new field needs a GDD change to R1 and a schema bump (R7). Debug logging (R6) is never written to a file by
+the app: on Apple it uses `Logger` at the **`.debug`** level, which the unified log keeps in memory only and does
+not persist (`.default` and `.error` are persisted, so they are not used for these lines); on Android, Logcat. Framework
+state the OS would save on the app's behalf is turned off where the app controls it, so the app's preferences hold
+only the record:
+- **macOS:** window restoration off, with SwiftUI's window restoration modifier (`.restorationBehavior(.disabled)`)
+  or, for an AppKit window, `NSWindow.isRestorable = false` and an empty frame autosave name (no
+  `setFrameAutosaveName`), so AppKit writes no `NSWindow Frame` key and no saved window state.
+- **iPadOS:** no scene state restoration (no `stateRestorationActivity`, no `NSUserActivity` saved for the scene).
+- **Android:** no `onSaveInstanceState` use for settings; the record is the only stored state.
 
 **R3. Device only; no sync.**
 
@@ -100,7 +106,10 @@ record.
   Individual fields are never stored under separate keys. So a write either replaces the whole record or does
   not happen; a crash or power loss mid-write leaves the old record or the new one, never a mix.
 - **Writes:** on every grown-up change, the store writes the full in-memory record at once. The volume slider
-  writes when it is released, not on every step while dragging. Writes happen on the main thread (the record is
+  writes when it is released, not on every step while dragging. **While dragging**, the grown-up panel sends
+  the preview gain (F2 from the slider's current position) straight to Audio & Voice, so the grown-up hears the
+  level as they move it; the store is not involved. **On release**, the store writes `volume` (F1) and sends one
+  notification (R10). Writes happen on the main thread (the record is
   under 1 KB).
 - **Reads never write.** A read that finds problems (R6, R7) fixes them in memory only; the record on disk is
   rewritten only by the next grown-up change or by Reset.
@@ -141,7 +150,7 @@ record.
 - Unknown keys inside the record → ignored (see R7 for a newer record).
 - **The whole record unreadable** (not decodable, wrong type under the key, empty bytes) → all defaults in memory;
   the next write replaces it.
-- Every fallback writes **one debug log line** to the console (field name and reason, never the value of a theme
+- Every fallback writes **one debug log line** (`.debug` level, R2; field name and reason, never the value of a theme
   path or anything else). **Never a crash, never a dialog**; the child sees nothing.
 
 **R7. Schema version and migration.**
@@ -203,10 +212,10 @@ is already the new one.
 
 | System | Direction | Interface |
 |---|---|---|
-| Parent Gate & Grown-up Panel | writes | sets each R1 field; calls Reset (R9) |
+| Parent Gate & Grown-up Panel | writes | sets each R1 field; calls Reset (R9); previews the volume gain to Audio while the slider is dragged (R4) |
 | App Shell & Title | reads | runs the launch order (R5); **holds play until the theme is loaded** |
 | Key Table & Theme Data | reads | `themeId` at launch and on change; falls back to Dinosaurs in memory (R6); saves nothing of its own state (its R3) |
-| Audio & Voice | reads | `volume` (0–10, F2) and `muted` |
+| Audio & Voice | reads | `volume` (0–10, F2) and `muted`; also takes a preview gain from the panel during a slider drag (R4) |
 | Scene: Time of Day & Weather | reads | `weather` and `windy`; time of day comes from the clock, not the store |
 | On-screen Keyboard Row | reads | `keyboardRow` |
 | Input & Key Filter | reads (indirectly) | the keyboard row's on/off decides whether row rectangles are published; Child Lock-in sets Input's kiosk-on mode |
