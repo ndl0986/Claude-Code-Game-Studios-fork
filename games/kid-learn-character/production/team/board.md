@@ -105,7 +105,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-114 | architecture.md refresh (ADR audit 11 ADRs, Keyboard Row, Accessibility, contract registry) + ADR-0004/0005 dated notes v2 contracts (K-42) | architecture | game-dev-android (review: game-qc-android) | MERGED (b8141a2a) | `docs/TASK-114-architecture-refresh` | 2026-11-18 |
 | TASK-115 | ADR-0006 dated note: K-39 iPad presentation (status bar, home indicator, edgeDeferral) for TR-shell-004 | architecture | game-dev-ios (review: game-qc-ios) | IN REVIEW @ e9649c4d → game-qc-ios | `docs/TASK-115-adr-0006-k39` | 2026-11-18 |
 | TASK-116 | ADR-0013 flash safety (TR-a11y-003) draft → Proposed | architecture | game-qc-ios (review: game-dev-android, game-dev-ios) | SENT | `docs/TASK-116-adr-0013-flash` | 2026-11-18 |
-| TASK-117 | Art bible fixes: §7 hint size (~112 pt / Hint Letters F5), §3 'Sparkle' → GDD terms, §7 play button size + drawing (title-screen OQ-3) | art | game-art-content (review: game-dev-android) | IN REVIEW @ 6a5945b3 → game-dev-android (+ title-screen OQ-6: play-button edge follows K-25?) | `design/TASK-117-art-bible-fixes` | 2026-11-18 |
+| TASK-117 | Art bible fixes: §7 hint size (~112 pt / Hint Letters F5), §3 'Sparkle' → GDD terms, §7 play button size + drawing (title-screen OQ-3) | art | game-art-content (review: game-dev-android) | MERGED (6a5945b3); title-screen OQ-6 (edge follows K-25, recommended) coming from game-dev-android | `design/TASK-117-art-bible-fixes` | 2026-11-18 |
 
 ## Leader log
 
