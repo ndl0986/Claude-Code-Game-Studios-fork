@@ -56,9 +56,8 @@ gentler. For a grown-up using VoiceOver: the panel reads every control by name.
 - It is **read live and never stored** (Settings Store R2). There is **no in-app Reduce Motion
   switch**: the art bible §7 rule is to follow the OS, and the Settings Store's field list (R1) is
   closed.
-- **Every system reads this flag, not the OS API** (one source; tests inject it). Today each motion
-  GDD names "the Reduce Motion flag" from Accessibility in its Interactions; the follow-up list asks
-  each to say "Accessibility's `reduceMotion`" explicitly where it doesn't.
+- **Every system reads this flag, not the OS API** (one source; tests inject it). Every motion GDD now names "Accessibility's `reduceMotion` (its A1; never the OS API)" in its
+  Interactions (done, TASK-062).
 
 **A2. When a change takes effect** (K-29, one rule).
 - **Reveal-locked parts change from the next reveal:** the timing set (MorphCore), the reveal's
@@ -67,8 +66,7 @@ gentler. For a grown-up using VoiceOver: the panel reads every control by name.
   only inside a reveal, and a running reveal keeps its set, so the twinkle goes steady from the next
   reveal.
 - **Ambient parts change on the next frame:** clouds, rain and snow, stars (Scene R8); hints (Hint
-  Letters R10); the parade's bob (Parade R7); **an idling creature's idle amplitude** (Cast Rendering;
-  follow-up, because Cast Rendering today keeps a running idle until the next reveal); the title's
+  Letters R10); the parade's bob (Parade R7); **an idling creature's idle amplitude** (Cast Rendering R7: on the next frame, eased over `idle_rm_ease_s` 0.3 s both ways; done, TASK-062); the title's
   breathe (App Shell); the moon ring (Parent Gate).
 
 **A3. The Reduce Motion rules, collected.** Each row is the owner's rule; this GDD adds none.
@@ -77,7 +75,7 @@ gentler. For a grown-up using VoiceOver: the panel reads every control by name.
 |---|---|---|---|
 | MorphCore | the **reduced timing set** (provisional: T 1.2 s, glow 0.4 s) | MorphCore Rule 8, Q3 | next reveal |
 | Reveal Stage | glyph rises straight, no scale overshoot; creature appears with no pop overshoot; the leaving creature only fades, no sink | Reveal Stage R9, K-20 | next reveal |
-| Cast Rendering | halo steady at `halo_steady` 80% (× 0.7 at Night); idles × 0.5; hop 13 units; **stardust twinkle steady at a fixed alpha (K-29; follow-up)** | Cast Rendering R5, R7, R8; K-16; K-29 | halo, hop: next reveal; idles: next frame; twinkle: next reveal (A2) |
+| Cast Rendering | halo steady at `halo_steady` 80% (× 0.7 at Night); idles × 0.5; hop 13 units; **stardust twinkle steady at alpha × 0.6, the term's mean (K-29; Cast Rendering R6, F3; done, TASK-062)** | Cast Rendering R5, R7, R8; K-16; K-29 | halo, hop: next reveal; idles: next frame; twinkle: next reveal (A2) |
 | Hint Letters | no drift, no pulse, no scale-in; a 0.3 s consume fade | Hint Letters R10 | next frame |
 | Parade | the same 11 s walk; step bob × 0.5 (Cast Rendering R8) | Parade R7, K-17 | next frame |
 | Scene | clouds still; rain and snow at half count and half speed; stars steady; fades unchanged | Scene R8, K-24 | next frame |
@@ -87,12 +85,11 @@ gentler. For a grown-up using VoiceOver: the panel reads every control by name.
 | Audio & Voice | the voice timings follow the active set | Audio R1 | next reveal |
 | Settings, Input, Key Table, Privacy, Child Lock-in | none (no motion) | — | — |
 
-**Flags to owners** (no rule is set here):
-- **Reveal Stage:** the tap and ignored-press **sparkles** have no Reduce Motion rule. The owner
-  decides (keep, or soften).
-- **App Shell & art bible:** the play button breathes at **0.38 Hz** (App Shell `title_breathe_hz`)
-  but the art bible §2 rule 2 note says **0.48 Hz**. Both are ≤ 1 Hz, so F1 passes either way; the
-  owners pick one.
+**Flags to owners** (no rule is set here; both closed by their owners):
+- **Reveal Stage:** the tap and ignored-press **sparkles** under Reduce Motion. **Done (TASK-062):** they
+  stay unchanged (Reveal Stage R9, leader's call): short, the "I heard you" answer, small specks only.
+- **App Shell & art bible:** the play button's rate, 0.38 Hz vs 0.48 Hz. **Done (TASK-062):** 0.38 Hz
+  is kept as played (App Shell R2) and the art bible §2 rule 2 note is amended to match.
 - **Art bible §7** asks for "a calmer parade"; K-17 decided that only the bob halves. Noted as
   consistent with K-17.
 
@@ -112,7 +109,7 @@ The pulses, collected:
 | Hint pulse (until the first press) | 0.64 Hz (4 rad/s) | size × (1 + 0.06·p) and glow | Hint Letters R7 | ≤ 1 Hz |
 | Hint drift | 0.11 and 0.21 Hz | position | Hint Letters R7 | ≤ 1 Hz |
 | Creature idles, breathe | ≤ 1 Hz (breathe 0.33 Hz; babies 0.95 Hz) | pose | Cast Rendering R7 (build check) | ≤ 1 Hz |
-| Title play button | 0.38 Hz (App Shell; see flag) | scale ± 4% | App Shell | ≤ 1 Hz |
+| Title play button | 0.38 Hz (App Shell R2; art bible amended, TASK-062) | scale ± 4% | App Shell | ≤ 1 Hz |
 | Star twinkle | ≤ 0.35 Hz | alpha | Scene; art bible §2 | ≤ 1 Hz |
 | Snow sway | ≤ 0.3 Hz | position | Scene | ≤ 1 Hz |
 | Lightning, thunder flashes | never | — | Scene; art bible §2 | — |
@@ -195,7 +192,7 @@ a sparkle), so they need no floor.
   bundled family allows. **NOT ASSESSED:** whether the bundled family has a bold weight.
 - **Smart Invert** (iOS): **decided (K-30, from art bible §4): the stage opts out**
   (`accessibilityIgnoresInvertColors = true` on the stage view), because inverting it would break the
-  §4 contrast floors and colour meanings; the grown-up panel follows Smart Invert. Follow-up below.
+  §4 contrast floors and colour meanings; the grown-up panel follows Smart Invert. Set on the stage view by Reveal Stage R1 (done, TASK-062).
 - **Classic Invert** (iOS) and **Invert colors** (macOS): can't be opted out of; the OS inverts
   everything, by the user's choice. Stated as such.
 - **Android** (NOT ASSESSED until the Android ADR): the flag from "Remove animations"; **TalkBack**
@@ -343,18 +340,17 @@ Example: in a 10 s Night capture on an 11" iPad, if 60,000 px inside one field (
 - **Documents:** art bible §1–§4, §7; decisions K-08, K-13, K-15, K-16, K-17, K-20, K-24, K-25, K-26,
   K-29, K-30; WCAG 2.2 SC 2.3.1 and its definitions (w3.org, read 2026-11-18).
 
-**Follow-ups for other GDDs** (listed here, not edited):
+**Follow-ups for other GDDs** (listed here, not edited; status after TASK-062, merged b384818b):
 
 | GDD | Follow-up |
 |---|---|
-| Cast Rendering | the stardust twinkle steady at a fixed alpha under Reduce Motion (K-29, "the stardust twinkle holds steady"), from the next reveal (A2); idle amplitude changes on the next frame (K-29, "Mid-session Reduce Motion toggle"), not the next reveal |
-| Reveal Stage | decide the sparkles under Reduce Motion (A3 flag) |
-| App Shell & Title / art bible | pick 0.38 or 0.48 Hz for the play button (A3 flag) |
-| App Shell & Title / Reveal Stage | set `accessibilityIgnoresInvertColors` on the stage view (A10, leader decision) |
-
-| Every motion GDD | name "Accessibility's `reduceMotion`" as the flag's source in its Interactions (A1) |
-| Parent Gate & Grown-up Panel | record the Switch Control / AssistiveTouch acceptance (K-29) in its Edge Cases |
-| Privacy & Kids Compliance | extend PKC-14's release log scan to accessibility settings (A11) |
+| Cast Rendering | **done (TASK-062)**: the stardust twinkle steady at alpha × 0.6 under Reduce Motion (K-29, "the stardust twinkle holds steady"), from the next reveal (A2); idle amplitude changes on the next frame (K-29, "Mid-session Reduce Motion toggle"), not the next reveal |
+| Reveal Stage | **done (TASK-062)**: the sparkles stay unchanged under Reduce Motion (R9; A3 flag) |
+| App Shell & Title / art bible | **done (TASK-062)**: 0.38 Hz kept, art bible §2 amended (A3 flag) |
+| App Shell & Title / Reveal Stage | **done (TASK-062)**: `accessibilityIgnoresInvertColors` on the stage view (Reveal Stage R1; A10, K-30) |
+| Every motion GDD | **done (TASK-062)**: all 10 name "Accessibility's `reduceMotion`" as the flag's source in their Interactions (A1) |
+| Parent Gate & Grown-up Panel | **open**: record the Switch Control / AssistiveTouch acceptance (K-29) in its Edge Cases |
+| Privacy & Kids Compliance | **open**: extend PKC-14's release log scan to accessibility settings (A11) |
 
 ## Tuning Knobs
 

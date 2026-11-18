@@ -97,3 +97,19 @@ Reviewed-Content-Hash: design/gdd/accessibility.md 47a61c595bbae74d3740e75cac338
 Task: TASK-061
 Change: A7 cites Key Table V17. F2 captures at the display refresh rate (60 or 120 Hz on ProMotion; recorded per run), with the window being the frames in (t − 1 s, t]. AC-07 and AC-08 match.
 Reviewed-Content-Hash: design/gdd/accessibility.md 4cc7c647cc87a9deb798a2f73a0dc5f20b0acdfa
+
+## Update — 2026-11-18 — TASK-065 follow-ups done in TASK-062 (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-065
+Change:
+- A1, A2, A3 (the Cast Rendering row, the flag lines, the pulse table), A10 and the follow-up table now mark the TASK-062 items done (merged b384818b):
+  - the twinkle at alpha × 0.6 (Cast Rendering R6/F3);
+  - idles on the next frame, eased over idle_rm_ease_s, both ways (R7);
+  - the sparkles unchanged (Reveal Stage R9);
+  - 0.38 Hz kept, with the art bible amended;
+  - the stage-view Smart Invert opt-out (Reveal Stage R1);
+  - all 10 motion GDDs naming reduceMotion.
+- Still open: the Parent Gate Switch Control edge-case note (K-29) and the PKC-14 scan extension.
+- A blank line that had split the follow-up table is removed.
+- No rule change.
+Reviewed-Content-Hash: design/gdd/accessibility.md 46b193e259777e4780cb721292dcf79d66462a1a
