@@ -27,7 +27,8 @@ Cross-platform behaviour contracts for Kid Learn Character (ADR-0004). Each cont
 | keyboard-row-v1 | v1 | onscreen-keyboard-row.md | KidCore | batch 4 (TASK-089) |
 | gate-logic-v1 | v1 | parent-gate-panel.md (G13) | KidCore | batch 5 (TASK-094) |
 | app-shell-v1 | v1 | app-shell-title.md | KidCore | batch 5 (TASK-094) |
-| parade-v1 | v1 | parade.md | KidCore | batch 6 (TASK-101) |
+| parade-v1 | v1 | parade.md | KidCore | superseded-by: parade-v2 (K-40; K-45 removed the rest) |
+| parade-v2 | v2 | parade.md (TASK-120) | KidCore | TASK-122: K-45 start, K-44 meter, K-46 light |
 | scene-look-v1 | v1 | scene-time-weather.md; cast-rendering.md F8 | KidCore | batch 6 (TASK-101) |
 
 All ADR-0004 D8 contracts are written (order in `production/team/TASK-080-contracts-plan.md`).
@@ -60,7 +61,8 @@ it is never Done.
 | input-filter-v2 | not-started: story:input | 95 |
 | key-table-schema-v1 | runner: KeyTableModelRunner + Tools.KeyTableFileLayer | 93 |
 | keyboard-row-v1 | not-started: story:keyboard-row | 36 |
-| parade-v1 | not-started: story:parade | 30 |
+| parade-v1 | superseded-by: parade-v2 | 30 |
+| parade-v2 | not-started: story:parade | 46 |
 | press-queue-v1 | not-started: story:press-queue | 46 |
 | reveal-timing-v1 | not-started: story:reveal-stage | 60 |
 | scene-look-v1 | not-started: story:scene | 42 |

@@ -1,0 +1,6 @@
+# sources.lock for parade-v2 (cut 2026-11-18, TASK-122; re-cut after the TASK-122 Parade answers): the ## sections the cases cite.
+Reviewed-Section-Hash: design/gdd/parade.md#Detailed Design 1b44c235d0b251cd9139dfaa9fb3c2d4457f793c
+Reviewed-Section-Hash: design/gdd/parade.md#Formulas 3c510318bfa2cb4eead250059da7b5caa1b52585
+Reviewed-Section-Hash: design/gdd/parade.md#Edge Cases e78a42d063bf16ec6ae58f9c476b4191496d1712
+Reviewed-Section-Hash: design/gdd/parade.md#Acceptance Criteria e5b3cfe44c6c369af9c5d31e5f5dfa8b89bb80e4
+Reviewed-Section-Hash: docs/architecture/adr-0002-modules-seams-types.md#Decision 20f4dafde70f9e0fe915e9154aff0c640178fb82
