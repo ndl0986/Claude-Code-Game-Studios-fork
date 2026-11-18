@@ -78,3 +78,8 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md 5b4c029ac7917e603565127b3265eca
 Review mode: lean · Workflow: standard
 Change: AC-1's fallback cases restated with Reveal Stage AC-5's example numbers (TASK-088b @ 4d83b81e): sfx without a word line gives E8 at 2.45 and no E9; art missing gives neither.
 Reviewed-Content-Hash: design/gdd/audio-voice.md b9db0299f13d5297edb4ee3af73248355d1c31d8
+
+## Update — 2026-11-18 — TASK-088a review item 1 (no re-review)
+Review mode: lean · Workflow: standard
+Change: from game-qc-android's REVISE: F3 counts the E1/E2/E3 sounds started in (t − chime_window_s, t] that come before this one in delivery order, so a same-timestamp batch is attenuated (the half-open (t − w, t) of AU-Q3 left them all at n = 0); AC-8 adds the one-batch case.
+Reviewed-Content-Hash: design/gdd/audio-voice.md 7f30e65849f904273ecc1b11ccf812bd9071f3c3

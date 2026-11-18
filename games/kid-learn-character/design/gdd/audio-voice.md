@@ -262,8 +262,9 @@ back over 250 ms (if still playing).
 **F3. Mash factor (ui bus).**
 ```
 m = max(mash_floor, 1 / (1 + mash_k × n))
-n = the number of E1, E2 and E3 sounds (one window for all three) started in the half-open window
-    (t − chime_window_s, t) before this one: one started exactly chime_window_s earlier is not counted (AU-Q3)
+n = the number of E1, E2 and E3 sounds (one window for all three) started in (t − chime_window_s, t] that come
+    **before this one in delivery order**: sounds in the same batch at the same t count for the later ones; one
+    started exactly chime_window_s earlier is not counted (AU-Q3; TASK-088a)
 ```
 | | n | m | level |
 |---|---|---|---|
@@ -454,6 +455,8 @@ Logic criteria run with an injected clock and a fake player layer (no audio hard
    never cut.
 8. **AC-8 Mash ceiling.** F3 gives m = 1.0, 0.67, 0.40 and 0.35 for n = 0, 1, 3, 9; the ui bus gain is never above
    the single-chime gain for each ui sound with n > 0, and the sum of the 4 ui players' m never exceeds 2.57.
+   Ten presses delivered in **one batch at one timestamp** get n = 0, 1, …, 9 in delivery order (m = 1.0, 0.67, 0.5,
+   0.4, then the 0.35 floor), never all n = 0 (TASK-088a).
 9. **AC-9 No click on a cut (device).** Cutting a playing voice line, cast sound and parade tune (by a new reveal,
    mute, the panel and headphones out) shows no discontinuity above −60 dBFS in an output capture; listened on the
    built-in speaker, no click is heard.
