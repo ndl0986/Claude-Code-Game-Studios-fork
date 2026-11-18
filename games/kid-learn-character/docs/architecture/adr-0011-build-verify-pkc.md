@@ -91,9 +91,10 @@ a script or lets a mechanical failure pass as an opinion.
   app test suites (D3), the two Release builds (D3), the bundle-content scan and the **static** PKC scan
   (`pkc-scan.sh --static`) on both `.app`s, recorded in the evidence folder for that commit (D6). All of it is
   headless (K-34). **Docs-only merges** (`design/`, `docs/`, `production/`) need no build evidence.
-- **QC, per release candidate, in a MAC FREE session:** the **runtime** PKC rows (`pkc-scan.sh --runtime`):
-  PKC-01c `nettop`, PKC-14 `log stream`, PKC-05's live preferences read. They follow the device-checks plan
-  (`production/qa/device-checks-plan.md`, TASK-074: sessions M-8, M-11, S-2). In a merge candidate's
+- **QC, per release candidate:** the **runtime** PKC rows (`pkc-scan.sh --runtime`): PKC-01c `nettop` and the iPad
+  Instruments trace, PKC-14 `log stream`, PKC-05's live preferences read. They follow the device-checks plan
+  (`production/qa/device-checks-plan.md`, TASK-074): sessions **M-8 and M-11 under MAC FREE**, **P-5** on the iPad,
+  and **S-2 headless** (`simctl launch` on the developer's simulator). In a merge candidate's
   `pkc-verdict.md` those rows are **NOT ASSESSED** with a pointer to the next release-candidate session.
 - **The leader** merges only when QC's evidence for **that exact commit** exists (or, for a docs-only merge, none is
   needed).
@@ -173,16 +174,19 @@ selectors and Swift-bridged methods. It matches **whole** symbol and selector na
 - **PKC-14:** the code scan for log calls carrying input or accessibility state outside `#if DEBUG`.
 
 **Runtime sections** (`--runtime`, per release candidate, MAC FREE, following the device-checks plan):
-- **PKC-01c:** `nettop` during the scripted session (M-8).
+- **PKC-01c:** `nettop` during the scripted session on the Mac (**M-11**); the iPad's Instruments network trace
+  (**P-5**).
 - **PKC-05:** the live preferences read **from the sandbox container**, per ADR-0005 D5: on the Mac
   `~/Library/Containers/<bundle id>/Data/Library/Preferences/<bundle id>.plist`, on the Simulator the app's data
   container via `xcrun simctl get_app_container`, each **after a `cfprefsd` flush** (`killall cfprefsd`, or quitting
   the app), compared with ADR-0005's OS-key allowlist. **NOT ASSESSED until that allowlist is filled** by the first
-  runs (ADR-0005 D5). Not `defaults read`, which reads the wrong domain for a sandboxed app.
-- **PKC-14:** `log stream --level debug` during the scripted session (M-11, S-2).
+  runs (ADR-0005 D5). Not `defaults read`, which reads the wrong domain for a sandboxed app. Sessions: the Mac
+  plist **M-8** (MAC FREE); the Simulator container **S-2** (headless).
+- **PKC-14:** `log stream --level debug` during the scripted session (**M-11** only).
 
 **Rows with nothing to scan**, and where their evidence comes from (D6):
-- **PKC-07:** QC's play session in the device-checks plan (`production/qa/device-checks-plan.md`, TASK-074).
+- **PKC-07:** session **S-4** of the device-checks plan (`production/qa/device-checks-plan.md`, TASK-074): QC's play on
+  QC's simulator, with Parent Gate AC-21.
 - **PKC-10, PKC-11:** Luan's App Store Connect screenshots (privacy answers; age rating).
 - **PKC-13:** QC's review of the merge diff (a new entitlement, usage key, privacy entry, framework or package).
 
