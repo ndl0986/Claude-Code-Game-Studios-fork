@@ -1,0 +1,25 @@
+# Review log: design/gdd/press-queue.md
+
+## Review — 2026-11-18 — Verdict: NEEDS REVISION
+Review mode: lean · Workflow: standard
+Scope signal: M
+Specialists: none (lean)
+Blocking items: 1 | Recommended: 2
+Summary: All 8 sections are present (Formulas required: F1 hold, F2 accept predicate, F3 cap, F4 wait, F5 Reduce Motion). The accept/queue/ignore rules (R3), synchronous per-press outcome (R4), one tick per frame (R5), the startReveal → {formedS, revealLen} contract with fallbacks (R6), formed exactly once with the timeout and stale-id rules (R7), panel and background clear + settle (R8, R9), restingSince for the Parade (R10), revealId = MorphCore's press count (R2) and the injected-clock ACs cover TASK-043's criteria, game-dev-ios's nine must-state items and Luan's K-15. F1 matches Audio & Voice F6 and uses Key Table voiceDurations with the T + 1.5 bound. One blocker: F1's build check mixed revealLen into the word-cap condition and gave the wrong bound. Revised the same day by the author (TASK-043). No registry exists (design/registry/ absent); values were cross-checked against the named GDDs and decisions.
+Prior verdict resolved: First review
+Findings:
+- [BLOCKING] Formulas, F1 build check: "hold_s + hold_ext_max_s ≥ revealLen_max + word_offset_s + word_len_max_s" used revealLen where the word starts from formedS, giving hold_s ≥ 2.95 for the word cap (correct: 2.45) and hiding MorphCore's separate hold ≥ T + form_s constraint → split into check 1 (cap never cuts a word: hold_s ≥ 2.45) and check 2 (hold_s ≥ revealLen = 2.95); Tuning Knobs range cites both (fixed)
+- [RECOMMENDED] Edge Cases: a started-at-once r0 (event time, in the past) can be earlier than the last tick's targetTimestamp on Apple → stated as allowed, same uptime clock, s never negative (fixed)
+- [RECOMMENDED] Dependencies: Reveal Stage, Hint Letters, Parade, Parent Gate & Panel, App Shell, Keyboard Row and Accessibility have no GDD yet; each must name the Press Queue, and Reveal Stage must restate the startReveal / formed contract (open)
+Values cross-checked: queue 3 and ~3 s (K-06), T 2.45 / 1.2 and F5 2.95 / 1.5 (MorphCore), word_offset_s 0.25, hold_ext_max_s 1.5, word_len ≤ 1.25 (Audio F6, Key Table V15), ping on overflow (K-13 / Audio E2), Title startPlay (Input, Audio E5), reveal count for the seed (K-11), K-15 answers. Key Table's open line "whether a theme change clears the queue" is answered in R8 (it does not; the panel already has).
+Reviewed-Content-Hash: design/gdd/press-queue.md a6a1d629b15462d4a7d69eca7f5d5f885b591450
+Reviewed-Content-Hash: .claude/skills/design-review/SKILL.md 4dcc8b81162613c757144532f1b72708ab3ba27f
+Reviewed-Content-Hash: design/gdd/game-concept.md e525c154ca1b014fe3ca0024ba5a339d37135429
+Reviewed-Content-Hash: design/gdd/systems-index.md b5a843b05a30dfb1d90e76079026f1fc6da722e8
+Reviewed-Content-Hash: design/art/art-bible.md 1a8306227139727ca120d88e6f74223b68b08dba
+Reviewed-Content-Hash: design/gdd/input-key-filter.md 14c4a9a102f93f6ed093d038b3dcc1387550e738
+Reviewed-Content-Hash: design/gdd/morphcore.md 7a65f1c4513cf05fc49fc11342e9c619485b6e66
+Reviewed-Content-Hash: design/gdd/audio-voice.md 1f3d8158975fa07f5bac347250674314dc0ac4f0
+Reviewed-Content-Hash: design/gdd/key-table-theme-data.md 6fa1ce3101c052754590905f734280abc25e3540
+Reviewed-Content-Hash: design/gdd/settings-store.md 6e2df80d2d4061d730f3e2cb322e8d9669e51359
+Reviewed-Content-Hash: production/team/decisions.md 36c2e5cc9c0c5ff4a437dc57012cb6ebb1a034e9
