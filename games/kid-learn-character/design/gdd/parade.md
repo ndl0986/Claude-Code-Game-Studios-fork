@@ -1,7 +1,7 @@
 # Parade
 
 > **Status**: Approved (independent read by game-dev-ios, merged 2026-11-18); **TASK-120 revision in review** (K-44 parade
-> meter R12, F4; K-45 start without a rest R2, F2)
+> meter R12, F4; K-45 start without a rest R2, F2; K-46 answers MT-Q1–Q5, with the meter light R12a)
 > **Author**: game-art-content for Luan (TASK-046); plan reviewed by game-dev-android
 > **Last Updated**: 2026-11-18
 > **Last Verified**: 2026-11-18
@@ -79,7 +79,8 @@ time, never a reward for doing something right, so it never asks the child to do
    creature's fade-in has finished (`form_s` 0.5 s, 0.3 s reduced) and its word has ended (Audio & Voice F6 caps the
    word's end at `formedS + 1.5`), so the tune follows the name (F2). The walkers' art is prefetched from Armed (R8.1).
    *Why:* the old rule needed about 4 s without a press; Luan's child kept pressing, met more than 8 keys and never
-   saw a parade (K-45).
+   saw a parade (K-45). **K-45 removed the rest, not the beat** (Luan, K-46, MT-Q5): the 1.5 s after the 6th
+   creature has formed stays, so the tune follows the 6th name.
 3. A reveal that is playing when the parade starts keeps playing **in front** (R5); its creature, if new, joins the next
    batch (held while Armed, appended once Walking; PA-Q4).
 4. **Once Walking, the parade runs on its own state and clock** (`pt`, seconds since the walk started). Presses do
@@ -172,17 +173,18 @@ it. A manual start while Walking is ignored. A manual parade empties the batch l
   **No number and no text** (K-44, leader default). The count is the number of lit cells, never colour alone.
 - **Not a score:** it is never saved, never shows a total and empties with each parade (concept anti-pillars;
   K-44).
-- **A cell lights when a key joins the batch:** at the `shown(kind: creature)` that adds it (R1, formed time), so a
-  cell lights as its creature appears, **not** at the settle. Cells light left to right, the way the parade walks.
-  A repeat key, a glyph-only reveal, and an ignored or dropped press light nothing (R1). Each fill takes
-  `meter_step_s` (0.4 s, F4).
+- **A key joins the batch at its `shown(kind: creature)`** (R1, formed time), **not** at the settle; `filled`
+  counts it from then. Its cell **lights when the meter light lands** (R12a, `meter_fly_s` 0.9 s later; at once under
+  Reduce Motion) and then fills over `meter_step_s` (0.4 s, F4). Cells light left to right, the way the parade walks.
+  A repeat key, a glyph-only reveal, and an ignored or dropped press light nothing and send no light (R1).
 - **What it shows:** `filled` = the **counting batch** of the current theme, at most `parade_count` (F4): the
   batch while Counting, Armed or Waiting for art; from Walking entry, the next batch (PA-Q4). Keys held while Armed
   are not shown beyond full.
-- **Full:** when the 6th cell lights, the Parade is Armed (R2) and the meter shows its **full look**: a soft
-  Starlight glow around the bar, breathing at `meter_pulse_hz` (0.5 Hz) between alpha 0.35 and 0.45 (F4). Under K-45
-  that lasts `parade_delay_s` (1.5 s) in the usual case, and longer while the panel holds the start (R6), during the
-  art wait, or after a skip (R8).
+- **Full:** the Parade is Armed at the 6th key's `shown` (R2). The meter shows its **full look** from `fullAt`, when
+  the 6th light lands and its cell lights (`armedAt + meter_fly_s`; `armedAt` under Reduce Motion): a soft Starlight
+  glow around the bar, breathing at `meter_pulse_hz` (0.5 Hz) between alpha 0.35 and 0.45 (F4). In the usual case it
+  shows for about 0.6 s before the parade starts at `armedAt + 1.5` (the brief full look K-45 expected), and longer
+  while the panel holds the start (R6), during the art wait, or after a skip (R8).
 - **Handover:** at Walking entry the glow fades out, and every cell beyond the next batch's count fades back to
   unlit, both over `fade_s` (0.6 s), while the parade fades in. Cells for held keys stay lit. During the walk,
   creatures shown light cells of the next batch as usual (R5). If the next batch fills during the walk, the meter is
@@ -191,19 +193,52 @@ it. A manual start while Walking is ignored. A manual parade empties the batch l
   meter shows the new theme's count from the first frame after the panel closes, with no fill animation. It is empty
   at launch.
 - **Gate, panel and background:** the meter is part of the stage: it sits under the panel's dim and is drawn nowhere
-  in the background. While the gate challenge or the panel shows, it holds still: a fill in progress completes and
-  the glow holds at its middle (F4). Closing or returning replays no fill.
-- **Reduce Motion** (Accessibility A1, from the next frame): the cells still fade over 0.4 s (fades stay, as for the
-  keyboard row); the full glow is **steady** at 0.40, with no breathe (as the glyph halo holds steady, K-16).
+  in the background. When the gate challenge or the panel shows, or the app goes to the background, a light in flight
+  is removed and its cell is lit at once; while they show, a fill in progress completes and the glow holds at its
+  middle (F4). Closing or returning replays no light and no fill.
+- **Reduce Motion** (Accessibility A1, from the next frame): **no light flies**; the cell lights at the `shown` and
+  still fades over 0.4 s (fades stay, as for the keyboard row); the full glow is **steady** at 0.40, with no breathe
+  (as the glyph halo holds steady, K-16).
 - **Not a target:** a touch on the meter is an empty-stage sparkle (Input R7 layer 5).
-- **Play only:** shown from Play entry, empty or at the batch's count, fading in with the Play entry; **not on the
-  Title** (App Shell R2). Showing it from Play entry rather than from the first creature is the recommendation in
-  MT-Q1, for Luan.
-- **No sound of its own** (MT-Q2): the parade tune E12 follows 1.5 s later.
+- **Play only** (decided, Luan K-46, MT-Q1): shown **from Play entry**, empty or at the batch's count, fading in with
+  the Play entry; **not on the Title** (App Shell R2).
+- **No sound of its own** (decided, K-46, MT-Q2), and the light is silent too: the parade tune E12 is the full
+  moment's sound.
+- **Beside the tokens** (decided, K-46, MT-Q4): left of the queue-token row on the same line, placed from `queue_max`
+  (art bible §7); the tokens keep the corner.
 - **Flash safety:** F4's bounds hold: its one rate is ≤ 1 Hz (Accessibility F1, no exception), the glow's swing is
-  below ΔL 0.1, and fills come at most once per formed reveal (ADR-0013).
+  below ΔL 0.1, fills and lights come at most once per formed reveal, and a light passes each pixel once (ADR-0013).
 - **Drawn by the Reveal Stage** from the Parade's meter snapshot (Interface 7), in the queue-token layer; its box is
   published with the token circles for Hint Letters' clearances (its F4).
+
+**R12a. The meter light (decided, Luan K-46, MT-Q3; designed in TASK-120).** A small light flies from each new
+creature to its cell, so the child sees which creature filled the meter. Small and calm.
+- **When:** it launches at the `shown(kind: creature)` that adds a key to the counting batch (R1), the same moment
+  the key counts. Only keys that get a cell send one: a repeat, a glyph-only reveal, or a key held while Armed (the
+  meter is already full) sends none.
+- **From and to:** from the top centre of the creature's **cast box** (Reveal Stage R10, published from `formedS`) to
+  the centre of its cell (art bible §7: cell `i` at `meter_cx − 67.5 + 27·i`, y 58).
+- **Path and time:** one quadratic curve that first rises, then glides right into the cell (F4: control point straight
+  above the start, at the cell's height), over `meter_fly_s` (**0.9 s**) with a sine ease-in-out. It stays above the
+  hint slots' bubbles near the meter (F4) and never reaches the moon.
+- **Look:** a small Starlight four-point star, like the press starlight but smaller, **16 units** tip to tip, with a
+  soft Starlight glow of radius 8 at 40%; never gold (§4). No trail, no sparkle on arrival. Over its last
+  `meter_land_s` (0.15 s) it fades out while its cell starts to light (art bible §7).
+- **The cell lights on arrival:** `litAt = launchAt + meter_fly_s`, then fills over `meter_step_s` (F4). So the 6th
+  cell is full at `armedAt + 1.3`, before the parade starts at `armedAt + 1.5` (constraint:
+  `meter_fly_s + meter_step_s ≤ parade_delay_s`).
+- **One at a time:** reveals form at least 1.2 s apart (the reduced `formedS`), longer than a flight, so at most one
+  light is in the air.
+- **During a parade and the handover:** a creature shown during the walk sends its light to its cell of the **next**
+  batch as usual, drawn above the walkers. If it lands on a cell that is draining (F4), the lighting wins for that
+  cell. A light is never in flight at Walking entry in the usual case (the 6th lands 0.6 s before it); if one is, it
+  keeps flying to its cell in the next batch.
+- **Gate, panel, background, theme switch:** the light is removed and its cell lit at once (R12); a theme switch
+  happens in the panel, so no light crosses themes.
+- **Reduce Motion:** no light; the cell lights at the `shown` (R12).
+- **Not a target;** taps go through it (an empty-stage sparkle or whatever is under it).
+- **Draw layer:** with the meter in the queue-token layer (ADR-0006 D1, z 70), **above** the meter, so it lands on
+  its cell; above the hints, the parade and the creature it leaves.
 
 ### Precise rules for the contract (TASK-101; parade-v1)
 
@@ -292,8 +327,9 @@ batch is used from then on.
    and `freeze()` / `resume()` for the gate challenge (K-20). The Press Queue follows the same signals (its R8, R9,
    and R8a: the gate freeze on the play clock).
 7. **The parade meter** *(TASK-120, K-44)*: the Reveal Stage draws the meter from the Parade's **meter snapshot**
-   `{cells: parade_count, filled, litAt[], armed, armedAt, drainAt}` (R12, F4; `drainAt` = the Walking-entry time,
-   or none; TASK-120 render read), with the art bible §7 look, in the
+   `{cells: parade_count, filled, litAt[], armed, armedAt, fullAt, drainAt, flight}` (R12, R12a, F4; `drainAt` = the
+   Walking-entry time, or none; `fullAt` = when the last cell lit, or none; `flight` = `{cell, from, to, launchAt}`
+   or none; TASK-120), with the art bible §7 look, in the
    queue-token layer, and publishes its **meter box** next to the token circles for Hint Letters' clearances (F4
    there). It routes a touch on the meter as an empty-stage `sparkle(point)`.
 
@@ -362,14 +398,24 @@ with a pinned `parade_s`.
 filled        = min(|counting batch(current theme)|, parade_count)
                 counting batch = the batch (Counting, Armed, Waiting for art); from Walking entry, the next batch (PA-Q4)
 cell i        = 0 … parade_count − 1, left to right; lit when i < filled
-litAt_i       = play time of the shown(...) that made filled > i
+litAt_i       = launchAt_i + meter_fly_s    (the light lands, R12a); = the shown's time under Reduce Motion, or
+                when a light is removed (gate, panel, background), the time it was removed with a_i = 1 at once
 a_i(t)        = e + (1 − e) · ease(clamp((t − litAt_i) / meter_step_s, 0, 1))     lit cell
               = e                                                                  unlit cell
 ease(u)       = 1 − (1 − u)²                                                       ease-out
 drain         : from drainAt (the Walking-entry time) each cell i ≥ filled goes linearly from its alpha to e over fade_s
-glow(t)       = ramp(t) · (g0 + g1 · sin(2π · meter_pulse_hz · (t − armedAt)))     Armed or Waiting for art
+glow(t)       = ramp(t) · (g0 + g1 · sin(2π · meter_pulse_hz · (t − fullAt)))      Armed or Waiting for art, t ≥ fullAt
               = from drainAt, linearly from its value at drainAt to 0 over fade_s; 0 otherwise
-ramp(t)       = clamp((t − armedAt) / meter_step_s, 0, 1)
+ramp(t)       = clamp((t − fullAt) / meter_step_s, 0, 1)
+fullAt        = litAt of the last cell (armedAt + meter_fly_s; armedAt under Reduce Motion or when the cells are
+                already lit, as at Ended with a full next batch)
+
+the light (R12a), τ = (t − launchAt) / meter_fly_s in [0, 1]:
+P0 = (castBox.midX, castBox.minY)        P2 = (meter_cx − 67.5 + 27·i, 58)        P1 = (P0.x, P2.y)
+u(τ)   = (1 − cos(π · τ)) / 2                                                       sine ease-in-out
+B(u)   = (1 − u)² · P0 + 2u(1 − u) · P1 + u² · P2
+       → x(u) = P0.x + u² · (P2.x − P0.x),   y(u) = P2.y + (1 − u)² · (P0.y − P2.y)
+alpha  = 1, fading linearly to 0 over the last meter_land_s
 ```
 | Variable | Meaning | Value |
 |---|---|---|
@@ -378,13 +424,21 @@ ramp(t)       = clamp((t − armedAt) / meter_step_s, 0, 1)
 | `g0`, `g1` | the full glow's middle alpha and swing (`meter_glow`) | 0.40, 0.05 (g1 = 0 under Reduce Motion) |
 | `meter_pulse_hz` | the full glow's breathe | 0.5 Hz |
 | `fade_s` | the handover fade (the parade's own) | 0.6 s |
+| `meter_fly_s` | the light's flight | 0.9 s |
+| `meter_land_s` | the light's fade-out at the end of its flight | 0.15 s |
 
 All on the play clock. While the gate challenge or the panel shows, a fill in progress completes (`a_i = 1`) and the
-glow holds at `ramp · g0`.
+glow holds at `ramp · g0`; a light in flight is removed when either shows, or at the background (R12a).
 
-Examples: D, C, D → `filled` 1 at D's `shown`, 2 at C's; the second D changes nothing. A cell lit at 10.0 s has
-alpha 0.25 at 10.0, 0.25 + 0.75 · 0.75 = 0.81 at 10.2 and 1 at 10.4. Armed at 20.0: glow 0.5 · (0.40 + 0.05 · sin(0.2π)) = 0.215 at 20.2
-(ramp), 0.40 + 0.05 = 0.45 at 20.5 (a quarter period). Walking entry with the held list [K]: `filled` → 1; cells 1–5
+**The light's path, checked:** from the widest creature's box top (640, 280) to cell 5 at the default `queue_max`
+(1001.5, 58), `x(u) ≥ 860` (where the R2 hint bubble could be, x 860–980 at most) only for `u ≥ 0.78`, where
+`y ≤ 58 + 0.048 · 222 = 68.7`; the bubble's top is at y ≥ 130 (R2 at y 190 after jitter, radius 60). So the light
+passes above every hint near the meter, and its x stays within 640…1134 (the moon is at x 66).
+
+Examples: D, C, D → `filled` 1 at D's `shown`, 2 at C's; the second D changes nothing. D shown at 9.1 s: its light
+lands at 10.0 (`litAt`); the cell has alpha 0.25 at 10.0, 0.25 + 0.75 · 0.75 = 0.81 at 10.2 and 1 at 10.4. The 6th
+light lands at `fullAt` 20.0: glow 0.5 · (0.40 + 0.05 · sin(0.2π)) = 0.215 at 20.2 (ramp), 0.40 + 0.05 = 0.45 at 20.5
+(a quarter period). The light at τ = 0.5: u = 0.5, x = P0.x + 0.25 · (P2.x − P0.x), y = P2.y + 0.25 · (P0.y − P2.y). Walking entry with the held list [K]: `filled` → 1; cells 1–5
 fade to 0.25 over 0.6 s; cell 0 stays at 1.
 
 **Flash bounds (ADR-0013):**
@@ -393,6 +447,12 @@ fade to 0.25 over 0.6 s; cell 0 stays at 1.
   look (≤ 0.067 if the renderer blends in sRGB values), on the track and on the sky (art bible §7 table), below WCAG's 0.1, so F2 counts no transitions from it.
 - **Fills are rare:** a cell fills once per formed reveal (reveals form ≥ 1.2 s apart, the reduced `formedS`) and the
   drain happens once per parade: at most 2 transitions per pixel in any 1 s window, below F2's 7, **at any size**.
+- **The light (R12a) is a moving bright spot:** it passes each pixel on its path **once** per flight (dark → bright
+  → dark: 2 transitions), and at most one flight starts in any 1.2 s, so a pixel on the path sees at most 2
+  transitions in any 1 s window from it, below 7, **at any size**. It is not periodic (no F1 rate). Its disc with
+  glow (radius 8) is about 200 square units, 700 px on an 11" iPad; the strip it sweeps in one flight (16 units wide,
+  a path of about 480 units for the widest creature to cell 5) is about 26,800 px there (floor 58,449). Where it lands, the cell lighting follows the light's own fade, so
+  that pixel goes dark → bright once. G4's busy case includes the light (it fires on every new key).
 - **Area (the D7 style):** the meter's box with its glow, 176 × 36 units, is 22,156 px on an 11" iPad (1.87 px per
   unit; floor 58,449), 25,344 px in a 1280-pt window on a 2× Mac (2.0; floor 54,105) and 3,564 px in the smallest
   window on a 1× display (0.75; floor 4,347). A larger window on a 1× display exceeds that floor; the transition
@@ -424,7 +484,11 @@ fade to 0.25 over 0.6 s; cell 0 stays at 1.
 | **A very wide or narrow screen** | Only `speed` changes with W (F3); the walk still lasts `parade_s` and every walker leaves the screen. |
 | **Art keeps failing while the child keeps pressing** | One try per formed reveal; no retry loop between reveals (R8.3). |
 | **Meter: a repeat key, a glyph-only reveal, an ignored press** | No cell lights (R1, R12). |
-| **Meter: a 7th distinct key while Armed** | The meter stays full; the key is held, and its cell is lit from Walking entry (F4 drain keeps it). |
+| **Meter: a 7th distinct key while Armed** | The meter stays full; the key is held and sends no light; its cell is lit from Walking entry (F4 drain keeps it). |
+| **Light: the panel or gate opens, or the app goes to the background, mid-flight** | The light is removed and its cell lit at once (R12a). |
+| **Light: Reduce Motion turned on mid-flight** | The light is removed and its cell lights from that frame (R12a; next frame). |
+| **Light: lands on a draining cell** (a key shown just after Walking entry) | The lighting wins for that cell (R12a). |
+| **Light: keyboard row on** | It starts from the raised creature's cast box (`row_lift`); the path rule is the same. |
 | **Meter: theme switched in the panel** | On close the meter shows the new theme's count at once, with no fill animation; switching back shows the old count (R12). |
 | **Meter: launch** | Empty: nothing is saved. |
 | **Meter: background and return** | Nothing is drawn in the background; on return it shows the same state, with no replayed fill. |
@@ -471,6 +535,8 @@ All bundled data. Pinned values come from the game brief or K-17.
 | `meter_empty_alpha` | 0.25 | 0.15–0.4 | TASK-120 | how visible unlit cells are |
 | `meter_glow` | g0 0.40, g1 0.05 | g1 ≤ 0.05 | TASK-120 | the full glow; above 0.05 the swing nears ΔL 0.1 (F4) |
 | `meter_pulse_hz` | 0.5 | 0.2–1.0 | TASK-120 | the full glow's breathe; ≤ 1 Hz (Accessibility F1) |
+| `meter_fly_s` | 0.9 | 0.6–1.1 | TASK-120, K-46 | the light's flight; slower is calmer, but `meter_fly_s + meter_step_s ≤ parade_delay_s` so the 6th cell is full before the parade |
+| `meter_land_s` | 0.15 | 0.1–0.3 | TASK-120 | the light's fade into its cell |
 | `gap` | 150 u | 110–220 | one-shot | spacing; a parade figure is ~85 u tall and narrower than 110 u |
 | `fade_s` | 0.6 | 0.2–1.5 | one-shot | fade in and out |
 | `art_wait_s` | 0.5 | 0–1.0 | K-17 | how long the start waits for art |
@@ -489,12 +555,13 @@ with a fixed `gap` makes the line longer and the walk faster (F3); raise `parade
 - No gold on the walkers (art bible §4).
 - The tune: Audio & Voice E12, a light 12-note tune (the one-shot's `paradeTune`).
 - **The parade meter** (R12): its size, box, shape and colours per look are the art bible's §7 "Parade meter".
-  Starlight, never gold (§4). No sound of its own (MT-Q2).
+  Starlight, never gold (§4). No sound of its own (K-46). **The meter light** (R12a): a 16-unit Starlight star, art
+  bible §7.
 
 ## UI Requirements
 
-- **The parade meter** (R12, F4; art bible §7): the child's one HUD element, drawn by the Reveal Stage in Play only
-  (not on the Title, MT-Q1). No text, no number, not a target.
+- **The parade meter** (R12, R12a, F4; art bible §7): the child's one HUD element, drawn by the Reveal Stage in Play
+  only (not on the Title, K-46), with its light. No text, no number, not a target.
 - Debug builds expose `startParade(manual)` (R11), for example in the debug menu.
 
 ## Cross-References
@@ -557,11 +624,12 @@ Logic criteria use an injected clock and fake Reveal Stage, Press Queue and Cast
     parade plays for every 6 distinct keys.
 21. **AC-21 Panel while Armed (K-45).** Armed at 10.0; the panel opens at 10.8 and closes at 30.0: no parade starts
     under the panel, and Waiting for art is entered at 31.5. Background at 10.8, return at 50.0: entered at 51.5.
-22. **AC-22 Meter fill.** `shown(creature)` for D, C, D: `filled` is 1 at D's `shown` and 2 at C's, unchanged by the
-    second D; cell 0's alpha is 0.25 at its `litAt`, 0.81 at +0.2 s and 1 at +0.4 s. `shown(glyphOnly)` for E and an
-    ignored press change nothing.
-23. **AC-23 Meter full.** At the 6th distinct key: `filled` 6 and the snapshot is `armed` with `armedAt` = that
-    `shown`'s time; glow 0.215 at +0.2 s and 0.45 at +0.5 s; the glow is 0 while not Armed or Waiting for art.
+22. **AC-22 Meter fill.** `shown(creature)` for D at 9.1, C, D: `filled` is 1 at D's `shown` and 2 at C's, unchanged
+    by the second D; cell 0's `litAt` is 10.0 (the light lands), its alpha 0.25 up to 10.0, 0.81 at 10.2 and 1 at
+    10.4. `shown(glyphOnly)` for E and an ignored press change nothing and send no light.
+23. **AC-23 Meter full.** At the 6th distinct key's `shown` at 19.1: `filled` 6, the snapshot is `armed` with
+    `armedAt` 19.1 and `fullAt` 20.0; glow 0 before 20.0, 0.215 at 20.2 and 0.45 at 20.5; the glow is 0 while not
+    Armed or Waiting for art; Waiting for art at 20.6 (`armedAt + 1.5`).
 24. **AC-24 Handover.** Walking entry with the held list [K]: `filled` 1; cells 1–5 reach 0.25 at +0.6 s; cell 0 stays
     1; the glow reaches 0 at +0.6 s. Keys shown during the walk light the next cells.
 25. **AC-25 Meter under the gate and panel.** Armed with a fill in progress: while the challenge or the panel shows,
@@ -575,13 +643,28 @@ Logic criteria use an injected clock and fake Reveal Stage, Press Queue and Cast
     (G2) includes the meter's colours.
 30. **AC-30 Meter looks (device, screenshots).** Retained screenshots in `production/qa/evidence/` on the iPad of the
     meter empty, at 3 of 6 and full, in Day and Night: no text, no gold, inside the safe stage at the top right,
-    clear of the queue tokens with 3 tokens showing.
+    clear of the queue tokens with 3 tokens showing; and one of a light mid-flight, a small Starlight star above the
+    hints.
+31. **AC-31 The light's path.** D shown at 0 with the cast box top centre (640, 300) and cell 0 at (866.5, 58): the
+    light is at (640, 300) at 0, at (696.6, 118.5) at 0.45 s (u 0.5) and at (866.5, 58) at 0.9 s, with alpha 1 until
+    0.75 and 0 at 0.9; `flight` is none after 0.9.
+32. **AC-32 Light and Reduce Motion.** With the flag on, no `flight` is ever set and `litAt` equals the `shown`'s
+    time; turning it on mid-flight removes the light and lights the cell from that frame.
+33. **AC-33 Light interrupted.** A light in flight when the gate challenge shows, the panel opens or the app goes to
+    the background is removed, and its cell's alpha is 1 at once; nothing flies on close or return.
+34. **AC-34 One light at a time.** Over a scripted 60 s session of mashing, at most one `flight` exists at any tick,
+    and a held key (a 7th distinct key while Armed) sets none.
+35. **AC-35 Light during a walk.** A key shown at `pt = 2` sends its light to its cell in the next batch (index 0 if
+    no keys were held) and lights it at `pt = 2.9`, drawn above the walkers.
 
 ## Open Questions
 
-**For Luan (TASK-120; each changes the feel; the rules above use the recommendation until Luan answers):**
+**Resolved (Luan, K-46, 2026-11-18), now in the rules:** MT-Q1 the meter shows from Play entry (R12); MT-Q2 no sound
+(R12); **MT-Q3 yes, a light flies from each new creature to its cell** (R12a; Luan chose it over the recommendation
+below); MT-Q4 beside the tokens, placed from `queue_max` (R12; art bible §7); MT-Q5 the 1.5 s beat stays: K-45
+removed the rest, not the beat (R2). The questions as they were asked:
 
-| # | Question | Recommendation |
+| # | Question | Recommendation (TASK-120) |
 |---|---|---|
 | MT-Q1 | Show the meter from Play entry (empty at first), or hide it until the first creature joins the batch? | **From Play entry**, empty: an empty bar says "something fills here" before the first creature, which is the gap Luan's playtest found. Not on the Title either way. |
 | MT-Q2 | A sound when the meter fills? | **No.** The parade tune E12 starts 1.5 s later and is the full moment's sound; an extra sting would be a reward sound (anti-pillars). |
@@ -598,13 +681,14 @@ Follow-ups for other GDDs (not blocking this one):
 - **Press Queue:** R10's example start rule is superseded by F2 here; since K-45 the Parade reads nothing from it.
 - **Reveal Stage:** draw the meter from the snapshot in the token layer and publish its box (Interface 7; TASK-120
   adds the lines there).
-- **App Shell & Title:** the meter is Play only (MT-Q1); the Title shows none.
-- **Accessibility:** the meter in A4's pulse table, A6 (the count is cells, not colour) and A7 (not a target).
-- **ADR-0006 D1:** the meter's `zPosition` (with the queue tokens). **ADR-0013:** G4's busy case covers it (the Title
+- **App Shell & Title:** the meter is Play only (K-46); the Title shows none.
+- **Accessibility:** the meter in A4's pulse table (the glow at 0.5 Hz; the light is one-shot motion, not a pulse), A6
+  (the count is cells, not colour), A7 (not a target) and A3 (Reduce Motion: no light).
+- **ADR-0006 D1:** the meter's `zPosition` (with the queue tokens, z 70) and its light, above the meter in that layer. **ADR-0013:** G4's busy case covers it (the Title
   run has no meter).
 - **parade-v1:** 21 of its 30 cases drive the start through `restingSince` and change under K-45; the 9 walk, count
   and per-theme cases (AC1, AC2, AC6 ×6, AC11) do not. A parade-v2 with K-45's start and the meter's cases (AC-20 to
-  AC-29).
+  AC-35, with the light).
 
 **Resolved (Luan, K-17, 2026-11-18):** P1 letters and digits count, digits walk as their group; P2 every 6 distinct
 keys per batch, no cap; P3 a press lets the parade keep walking behind; P4 panel or background fade it out, counted,

@@ -379,8 +379,9 @@ one cell per new creature in the batch; when it is full, the parade starts (Para
 is its look). **No number and no text.** It is Starlight, because gold is for letters only (§4) and Starlight already
 means "I heard you" and progress (the moon ring).
 - **Box and position:** a track **168 × 28 stage units**, corner radius 14, at y 58 (y 44–72): the top right of the
-  safe stage, on the queue-token row's line, **24 units left of the leftmost token's glow** that `queue_max` allows
-  (tokens at x 1214 − 66·j, glow radius 40; TASK-120 render read). Its centre is
+  safe stage, on the queue-token row's line, beside the tokens (Luan K-46): the **track's right edge is 24 units, and
+  the meter's glow 20 units, left of the leftmost token's glow** that `queue_max` allows (tokens at x 1214 − 66·j,
+  glow radius 40; TASK-120 render read). Its centre is
   ```
   meter_cx = 1214 − 66 · (max(queue_max, 1) − 1) − 40 − 24 − 84 = 1066 − 66 · (max(queue_max, 1) − 1)
   ```
@@ -399,7 +400,9 @@ means "I heard you" and progress (the moon ring).
   meets the frame cap (L 0.86 < 0.88) and the red check (R/(R+G+B) 0.36).
 - **The looks:**
   - **Empty:** the track with 6 faint cells.
-  - **A step:** one cell rises from 25% to 100% over 0.4 s, ease-out, as its creature appears. Nothing moves or scales.
+  - **A step:** a small light flies from the new creature to its cell (below), and the cell rises from 25% to 100%
+    over 0.4 s, ease-out, as the light lands. Nothing else moves or scales. Under Reduce Motion there is no light: the
+    cell rises as its creature appears.
   - **Full:** all 6 lit, plus a soft Starlight glow 4 units around the track that **breathes at 0.5 Hz between 35%
     and 45%**. It is steady at 40% under Reduce Motion. It usually lasts 1.5 s before the parade starts (K-45).
   - **Handover:** as the parade fades in, the glow and the cells not carried into the next batch fade back over
@@ -420,7 +423,12 @@ means "I heard you" and progress (the moon ring).
   the six places show, and only lit ones draw the eye. At dusk and night the track all but disappears into the sky,
   so the meter reads as six faint dots that light. The glow's swing stays below ΔL 0.1, so it is never a flash
   transition (Accessibility F2; ADR-0013).
-- **Not a target, no sound** (Parade R12, MT-Q2). **Play only**, not on the Title (Parade MT-Q1).
+- **The meter light** *(Luan K-46; TASK-120)*: a small **Starlight four-point star, 16 units tip to tip**, with a
+  soft Starlight glow of radius 8 at 40%: the press starlight's shape, smaller, so it reads as "the same light, going
+  home". No trail and no burst. It rises from the top of the new creature and glides right into its cell over 0.9 s
+  (sine ease-in-out; Parade R12a and F4 give the curve), fading over its last 0.15 s as the cell lights. One at a
+  time, silent, drawn above the meter, the hints and the parade (z 70). Never gold.
+- **Not a target, no sound** (Parade R12, K-46). **Play only**, from Play entry; not on the Title (K-46).
 
 
 **Typography: the glyph is the UI.** One bundled OFL rounded, heavy sans (the prototype uses Arial

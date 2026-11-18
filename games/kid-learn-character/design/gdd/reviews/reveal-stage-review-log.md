@@ -85,3 +85,8 @@ Reviewed-Content-Hash: design/gdd/reveal-stage.md 2c7743ca2e1d0e933ed4f1c936eae3
 Review mode: lean · Workflow: standard
 Change: The meter box values are given at the default queue_max 3 and placed from queue_max (art bible §7).
 Reviewed-Content-Hash: design/gdd/reveal-stage.md ad91cda2866a9354d3735736201377cecd3ffdb3
+
+## Update — 2026-11-18 — TASK-120 meter light (no re-review)
+Review mode: lean · Workflow: standard
+Change: R6 also draws the meter light from the Parade snapshot's flight (Parade R12a; art bible §7), above the meter in the token layer (K-46).
+Reviewed-Content-Hash: design/gdd/reveal-stage.md ad91cda2866a9354d3735736201377cecd3ffdb3
