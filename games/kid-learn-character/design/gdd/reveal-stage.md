@@ -68,7 +68,7 @@ when they open the grown-up gate.
 
 **R3. Starting a reveal.** The Press Queue calls `startReveal(revealId, key, source, origin, r0)` (its R6). The
 Reveal Stage, before returning:
-1. resolves the item: Key Table `resolve(key)` with the theme active now (its R3 pick rule);
+1. resolves the item: Key Table `resolve(key)` with the theme active now (its §4 pick rule);
 2. derives the seed from (key, revealId) by the platform's own mix (MorphCore Rule 5; revealId is the "reveal
    count");
 3. asks Cast Rendering `willForm(item)` (its R9);
@@ -155,7 +155,7 @@ MorphCore F1).
   freeze it equals the uptime clock.
 - **`freeze()`** — the Parent Gate opens its number challenge (K-20): the play clock stops; the current reveal,
   the queue (no ticks, no presses: keys go to the challenge) and the hints stop where they are; the creature's idle
-  stops. Audio is asked to pause its players (follow-up). A **walking parade pauses** too: its walk clock `pt`, the
+  stops. Audio pauses its players (Audio & Voice's gate-freeze rule, AC-21). A **walking parade pauses** too: its walk clock `pt`, the
   walkers and its tune (E12, through Audio) stop, and while the Parade is Armed its rest time does not count (the
   leader's decision, Parade TASK-046). The scene is still drawn, frozen, under the gate.
 - **`resume()`** — a wrong answer or a timeout: the clock runs again from where it stopped, so nothing jumps and no
@@ -165,6 +165,10 @@ MorphCore F1).
   creature fully formed at rest (no specks, no halo, idle from rest), sends `shown` if not yet sent (R4), and
   clears its own sparkles. The panel's dim and Audio's cuts are theirs. Closing the panel returns to Play with the
   settled creature and the hold passed.
+- **Under the panel the play clock runs** (the panel is not a freeze; Scene R9 relies on this). Nothing waits on it
+  there: the settle left the queue empty and the hold passed, no press or touch reaches Play, the tap cooldown and
+  the `mashing` window simply age out, and the creature idles under the dim. Hint Letters freezes its own `hintTime`
+  from the Parent Gate's panel signals (K-18), and a walking parade has already faded out (Parade R6).
 - Background: settle, and the play clock does not count background time (Press Queue R9).
 
 **R9. Reduce Motion** (K-16, K-20). Read at reveal start and locked with the timing set:
@@ -317,7 +321,7 @@ Example: taps at 10.0, 10.5 and 11.0 → the first and third count (0.5 < 0.9; 1
 | **The window is resized on the Mac** | F1 is recomputed; the safe stage keeps its layout; the visible rect and `stage_to_px` are republished; Cast Rendering may change tier (its edge case). |
 | **The keyboard row is turned on or off** | Applied from the next reveal: the anchor, ground line and lane move by `row_lift`; the current creature stays where it is until it leaves. |
 | **Reduce Motion changes mid-reveal** | The running reveal keeps its locked set and motion; the next one uses the new rules (R9). |
-| **A theme change in the panel** | The settled creature stays; the next reveal uses the new theme (Key Table R3). |
+| **A theme change in the panel** | The settled creature stays; the next reveal uses the new theme (Key Table §4). |
 | **A frame hitch** | `s` jumps with the clock; events already due (formed, sounds) fire on that frame, once. |
 
 ## Dependencies
@@ -331,7 +335,7 @@ Example: taps at 10.0, 10.5 and 11.0 → the first and third count (0.5 < 0.9; 1
   - Audio & Voice (`design/gdd/audio-voice.md`): E1–E12 and their times; ducking.
   - Key Table & Theme Data (`design/gdd/key-table-theme-data.md`): `resolve`, the fallbacks.
   - Input & Key Filter (`design/gdd/input-key-filter.md`): the press event, `sparkle`, `creatureTap`, hit layers.
-  - Hint Letters (TASK-047, no GDD yet): `originFor(key)`, consume / keep.
+  - Hint Letters (`design/gdd/hint-letters.md`): `originFor(key)`, consume / keep.
 - **Downstream (each must name the Reveal Stage):** Parade (TASK-046: `shown`, the lane, the visible rect, draw
   order, taps, freeze and settle), Parent Gate & Grown-up Panel (freeze, resume, settle), App Shell & Title (enters
   Play, background, window), Scene (the visible rect), Accessibility (R9), Mash World (Full Vision).

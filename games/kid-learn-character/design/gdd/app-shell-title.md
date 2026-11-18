@@ -94,7 +94,8 @@ reset only at launch (Parade R1).
 **R5. The grown-up gate and panel.** App Shell only switches states; the gate and panel are the Parent Gate's.
 - Opening the number challenge: the Reveal Stage `freeze()`s play (K-20, Reveal Stage R8).
 - A correct answer: the panel opens, and the Reveal Stage `settle()`s (K-15).
-- Closing the panel returns to the state the gate was opened from (Play, or the Title).
+- Closing the panel, and **Cancel or Esc** on the gate's challenge (Parent Gate §G9), return to the state the gate
+  was opened from (Play, or the Title).
 - The **device-silenced hint** ("No sound? Check silent mode and the volume") is a static line in the grown-up
   panel, laid out by the Parent Gate & Grown-up Panel GDD (Audio R6, K-13). Silent mode cannot be detected, so
   nothing appears on the child's screens.
@@ -165,7 +166,7 @@ rebuilt, in this order:
 | **Launching** | the process starts | none | Title (first frame, R1) |
 | **Title** | launch; a return after > 30 min | `startPlay`, taps (R3); the moon to the gate | Play (start, theme ready); Gate (moon); Background |
 | **Play** | a start from the Title; a return ≤ 30 min | Reveal Stage | Gate (moon or chord); Background |
-| **Gate** | the moon hold or the chord (Parent Gate) | the gate's | Panel (correct); the previous state (wrong, timeout) |
+| **Gate** | the moon hold or the chord (Parent Gate) | the gate's | Panel (correct); the previous state (wrong, timeout, **Cancel or Esc**, Parent Gate §G9) |
 | **Panel** | a correct answer | the panel's | the state the gate was opened from (close, or the panel's 60 s auto-close, K-19) |
 | **Background** | the app leaves the foreground | none | Play or Title on return (R6) |
 
@@ -173,7 +174,7 @@ rebuilt, in this order:
 
 | System | Direction | What passes |
 |---|---|---|
-| Settings Store | in | the launch read (R1); `childLock` for Child Lock-in |
+| Settings Store | in | the launch read (R1); the stored `childLock`, which becomes the run value `childLockActive` (Settings Store) that Child Lock-in reads |
 | Key Table & Theme Data | out / in | `themeId` to load; "theme ready"; `titleCastId` (new field, Dependencies) |
 | Input & Key Filter | out / in | the state (Title, Play, Inactive); in: `startPlay`, Title touches |
 | Audio & Voice | out | start the engine at launch; E5 on start; background cut |
@@ -193,7 +194,7 @@ rebuilt, in this order:
 ```
 t_settings ≤ t_firstFrame ≤ t_ready_theme     (the Title can show before the theme is ready)
 t_ready    = max(t_firstFrame, t_chordInstalled, t_kioskModeOn, t_windowCoversDisplay)     (Mac)
-t_kiosk    ≥ max(t_ready, t_appActive, t_childLockActiveOn)          (Child Lock-in R3; childLock true)
+t_kiosk    ≥ max(t_ready, t_appActive, t_childLockActiveOn)          (Child Lock-in R3; childLockActive true)
 t_playable = t_ready_theme
 ```
 The read is a few milliseconds (Settings Store R5). Device times are NOT ASSESSED (Cast Rendering's measurement
@@ -228,7 +229,7 @@ at 100 s and 140 s → both level 1.
 | **A start while the theme loads** | Chime and lit button at once; Play when ready; extra starts absorbed (R3). |
 | **The stored theme fails at launch** | Dinosaurs loads in memory, the stored id is kept (Key Table §5); the Title shows Dinosaurs' title creature. |
 | **A tap on the moon on the Title** | Goes to the Parent Gate, not a start (R3). |
-| **The gate opened from the Title** | Correct → panel; closing it returns to the Title (R5). |
+| **The gate opened from the Title** | Correct → panel; closing it returns to the Title. Cancel, Esc, a wrong answer or the timeout return to the Title too (R5, Parent Gate §G9, AC-31 there). |
 | **Back after 29 min / after 31 min** | Play with the settled creature / the Title (R6, F3). |
 | **The iPad slept overnight with the app open** | Away is counted on the continuous clock → the Title (R6). |
 | **The process was ended while in the background** | A cold launch: the Title (R6). |

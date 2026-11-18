@@ -36,3 +36,8 @@ Reviewed-Content-Hash: design/gdd/reveal-stage.md 713b8b7789dc2e66dd68291fedd52a
 Review mode: lean · Workflow: standard
 Change: R1 (TASK-054b): R10 publishes `haloOn` (the Glow phase) and `mashing` (queue length ≥ 1 or an ignored outcome in the last 1 s, on the play clock) for the Scene's R3/R3a; the Scene row in Interactions lists what it reads; AC-17 added.
 Reviewed-Content-Hash: design/gdd/reveal-stage.md aa1099094a5009d3cf2291bf7687d1aa08eaee1a
+
+## Update — 2026-11-18 — TASK-056c cross-review fixes (no re-review)
+Review mode: lean · Workflow: standard
+Change: from /review-all-gdds 2026-11-18 (design/gdd/gdd-cross-review-2026-11-18.md): W-6: Key Table cites → §4; W-9: Hint Letters is no longer "no GDD yet", and R8 cites Audio's gate-freeze rule and AC-21 instead of a follow-up; Info: R8 states the play clock runs under the panel and that nothing waits on it there. Text only; no rule changed.
+Reviewed-Content-Hash: design/gdd/reveal-stage.md d6c0206ac4d61e436e04064edaf3c5f17405aca5

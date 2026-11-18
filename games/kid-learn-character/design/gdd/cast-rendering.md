@@ -89,8 +89,9 @@ halo on and off and passes the time; this GDD defines what the halo looks like o
 
 - **Space:** stage units, 1280×720, y pointing down (the stage every other GDD uses). The artboard maps to the stage
   through the anchor (320, 410) and the caller's position and scale.
-- **Time:** seconds on the platform's monotonic uptime clock (Input R8, Press Queue R5). The draw calls take times
-  relative to the reveal (`s`) or to "formed" (`idleTime`).
+- **Time:** seconds. `s` and `idleTime` are **play-clock** values supplied by the caller (Reveal Stage R8: uptime
+  minus frozen time), so idles, the hop and the twinkle stop under the gate's freeze. The edge's 1 s switch dissolve
+  is the one wall-clock time here (R4, F8).
 - **Role** (what detail survives; art bible §5), chosen by the caller:
 
   | Role | Where | Height on the stage | Draws |
@@ -123,7 +124,7 @@ points, so when the Reveal Stage swaps the glyph for the specks at `s > glow` th
     colours (a mixed edge would drop to ~1.5:1).
   - **Contrast** (K-25, the dated exception to art bible §2 rule 2): ≥ 3:1 against the sky mid band at the ends of
     every crossfade (w = 0, 1), and ≥ 2.5:1 inside a 15-min crossfade or the 3 s jump fade (measured minimum
-    **2.57:1** at `skyMidL` 0.307). The Scene's 160-case build check uses this edge model and skips the 1 s dissolve
+    **2.57:1** at `skyMidL` 0.307; the edge actually shown floors at **2.53:1** under the ±0.005 hysteresis). The Scene's 160-case build check uses this edge model and skips the 1 s dissolve
     window (Scene R5, F2).
   - At **Night** the glyph **drops its palest stop** (the top stop becomes `#ffd36e`, so the gradient runs
     `#ffd36e` → `#f6a93b`), blended with `lookBlend` (F8).
@@ -201,7 +202,7 @@ cast sound and word will play (`hasWord`, Press Queue review note), without gues
   current stage creature needs its parade-role copy too: the two roles are separate resident sets. Nothing else is
   kept (F6).
 - **Prefetch:** when a key is queued, its item is resolved for prefetch and its art loads off the main thread. The
-  reveal still resolves its item at start (Key Table R3); if that gives a different item (the pick rule), the
+  reveal still resolves its item at start (Key Table §4); if that gives a different item (the pick rule), the
   prefetched one is dropped and the new one loads.
 - **A press that starts at once** loads its art at start. The art is needed only at `formedS` (T: 2.45 s normal,
   1.2 s reduced). The measurement plan must show that loading fits (R11).
@@ -370,7 +371,8 @@ castDim    = 1 − 0.15·n         × every cast drawing's colour and its shadow
 `mixLin` blends in linear RGB (Scene F2), and `castDim` multiplies linear RGB, so the Scene's build check and this
 drawing agree on every in-between frame. `L_x` is where amber and cream give the same contrast:
 `(skyMidL + 0.05)² = (0.869 + 0.05)(0.089 + 0.05)`, so `skyMidL + 0.05 = 0.357`. Against the mid band, amber gives
-≥ 3:1 for `skyMidL` ≥ 0.367 and cream for ≤ 0.256; between them the better edge stays ≥ 2.57:1.
+≥ 3:1 for `skyMidL` ≥ 0.367 and cream for ≤ 0.256; between them the better edge stays ≥ 2.57:1, and the edge actually shown, which can lag by the ±0.005
+hysteresis, stays ≥ 2.53:1 (cream at 0.313, amber at 0.303).
 
 Sky-mid luminances (art bible §2 mid stops; luminance is linear in linear RGB, so a blend is the weighted mean):
 Morning 0.615, Day 0.555, Dusk 0.098, Night 0.029.
@@ -423,6 +425,10 @@ The stardust cap of F4 uses the current `topStop`, so at Night the specks never 
     glyph paths; the theme load check (§5) that `willForm` reads.
   - MorphCore (`design/gdd/morphcore.md`): speck positions, T, the seed; its Rule 4 (glyph swap on the same
     outline) and its ownership table (the halo split, R1 here).
+  - Scene: Time of Day & Weather (`design/gdd/scene-time-weather.md`): `look`, `lookBlend` and `skyMidL` (its R1,
+    F1, F2) for the per-look edge, halo, top stop and Night dim (R4, R5, R7, F8).
+  - App Shell & Title (`design/gdd/app-shell-title.md`): the title creature (its R2) and memory-warning shedding
+    (its R8, against R10's resident set).
 - **Downstream (each must name Cast Rendering):**
   - Reveal Stage: every draw call, `willForm`, `prefetch` and `release`, the hop trigger, the late-art rule (R9,
     R10, R12); it passes `willForm` on as `hasWord` (Press Queue review note).

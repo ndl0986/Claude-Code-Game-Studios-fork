@@ -42,3 +42,8 @@ Reviewed-Content-Hash: design/gdd/app-shell-title.md ef2a879a99004c2f3244890c39c
 Review mode: lean · Workflow: standard
 Change: A1: AC-3 logs all four ready conditions in any order of arrival before the options; R7's overlay reason now says another window would move focus away and Child Lock-in releases only on didResignActive. Wording and rule edits from the TASK-054 follow-up list (production/team/TASK-054-followups.md @ 84f7ea2); Parent Gate G-numbers cited as given by game-qc-ios (TASK-048 not merged). Review: game-qc-ios, from the diff.
 Reviewed-Content-Hash: design/gdd/app-shell-title.md 02d7c90895449c9ad40a1dbbe9996794c33d8bbf
+
+## Update — 2026-11-18 — TASK-056c cross-review fixes (no re-review)
+Review mode: lean · Workflow: standard
+Change: from /review-all-gdds 2026-11-18 (design/gdd/gdd-cross-review-2026-11-18.md): W-2: Cancel and Esc on a gate opened from the Title return to the Title (R5, States, an edge case; Parent Gate §G9); W-10: Interactions and F1 name the run value childLockActive where they mean it. Text only; no rule changed.
+Reviewed-Content-Hash: design/gdd/app-shell-title.md 09dc4b56bb283e6dfb84ff83b5b494070234a3e1

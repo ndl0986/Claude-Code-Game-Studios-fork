@@ -51,3 +51,8 @@ Reviewed-Content-Hash: design/gdd/cast-rendering.md 633aa4552182f511e341012e2786
 Review mode: lean · Workflow: standard
 Change: K-25 (Luan, after game-art-content's finding and an exact recheck): R4 and F8 drive the glyph edge from the Scene's sky-mid luminance, not lookBlend: amber #80450f (L 0.089) above L_x ≈ 0.308 and cream #f8efdc at 100% (was 85%) below, with ±0.005 hysteresis and a 1 s wall-clock cross-dissolve, no colour blend; the floor is ≥ 3:1 at w 0 and 1 and ≥ 2.5:1 inside crossfades (measured minimum 2.57:1). The F8 table adds skyMidL and the two switch times; castDim multiplies linear RGB; the Scene row reads skyMidL; an edge case for hovering at L_x; AC-18 restated.
 Reviewed-Content-Hash: design/gdd/cast-rendering.md fb093009752428febf40e087cbc610bbf31771f1
+
+## Update — 2026-11-18 — TASK-056c cross-review fixes (no re-review)
+Review mode: lean · Workflow: standard
+Change: from /review-all-gdds 2026-11-18 (design/gdd/gdd-cross-review-2026-11-18.md): W-3: R3 puts s and idleTime on the play clock supplied by the Reveal Stage (R8), the edge dissolve stays wall-clock; W-6: Key Table cite → §4; W-9: Scene and App Shell added to Dependencies; nit: the shown edge floors at 2.53:1 under hysteresis (R4, F8). Text only; no rule changed.
+Reviewed-Content-Hash: design/gdd/cast-rendering.md dd6e05e7ee77cf26f2d7ae0e71e3239c515d414b
