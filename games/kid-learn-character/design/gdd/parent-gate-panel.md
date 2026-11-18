@@ -271,7 +271,7 @@ Moon sleep is a timer on Idle, not a state the grown-up sees.
 | Keyboard Row (#16) | — | its row appears when it ships |
 | Privacy & Kids Compliance (#5) | constraint | PKC-02, PKC-07, PKC-14 (no input logged in release: the code is never logged) |
 | Localization (#19) | later | the number words and panel text |
-| Accessibility (#17) | — | Reduce Motion rules here (below) |
+| Accessibility (#17) | in | Accessibility's `reduceMotion` (its A1; never the OS API), applied on the next frame; Reduce Motion rules here (below) |
 
 ---
 

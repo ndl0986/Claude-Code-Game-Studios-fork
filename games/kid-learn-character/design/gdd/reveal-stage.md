@@ -55,6 +55,10 @@ when they open the grown-up gate.
   2. update the current reveal's timeline and late-art state (R5);
   3. draw in the R10 order.
 - The Title, panel and background states are App Shell's; the Reveal Stage is active only in Play.
+- **The stage view** (the one view that draws the Scene, the cast and the stage, owned here; App Shell owns the
+  window around it) sets **`accessibilityIgnoresInvertColors = true`** (K-30): Smart Invert leaves the stage alone,
+  because inverting it would break the art bible §4 contrast and colour meanings. The grown-up panel follows Smart
+  Invert (Parent Gate). Classic Invert is OS-wide and the user's choice *(TASK-062)*.
 
 **R2. Where a press comes from** (Input R8, K-18).
 - A **hint** touch and a **keyboard-row** key bring their own `origin` (the hint's centre, the key's centre).
@@ -178,6 +182,10 @@ MorphCore F1).
 - the creature appears **with no pop overshoot** (F3);
 - the leaving creature **fades without sinking or shrinking** (F4);
 - Cast Rendering softens the idle, the hop and the halo (its R5, R7, R8).
+- **The tap and ignored-press sparkles stay unchanged** (leader's call, TASK-062; Accessibility A3's flag): they are
+  short (0.6–1.0 s), they are the toy's "I heard you" answer (art bible §7: every press is answered), and they move
+  small specks, not the scene.
+- The flag is **Accessibility's `reduceMotion`** (its A1; never the OS API).
 
 **R10. Layout, stage fit and draw order** (K-20).
 - **Stage units:** the 1280×720 **safe stage**, y down. Glyph centre (640, 320), ~330 units tall; creature anchor
@@ -195,7 +203,8 @@ MorphCore F1).
   use it. App Shell owns the window and the safe-area insets it hands over.
 - It also publishes, in stage units and updated whenever they move (`row_lift`, a token-row change, a new
   creature): the **cast box** (the current creature's box at its anchor), the **glyph box** (the glyph's drawn
-  box at full size) and the **token circles** (the queue row). Hint Letters reads them for its clearances (its R5);
+  box at full size), the **token circles** (the queue row) and, while it is on, the **keyboard row band** (`y ≥ 582`,
+  published by the On-screen Keyboard Row, its R1) *(TASK-062)*. Hint Letters reads them for its clearances (its R5);
   the moon's rect comes from the Parent Gate.
 - And two flags, for the Scene (its R3, R3a), on the play clock:
   - **`haloOn`**: true while the glyph's halo is on, through the Glow phase (R5: `letter_in < s ≤ glow`), false
@@ -234,7 +243,7 @@ The Reveal Stage's own state follows the Press Queue's, plus freeze:
 | Parent Gate & Grown-up Panel | in | `freeze` (challenge open), `resume` (wrong or timeout), `settle` (correct → panel) |
 | App Shell & Title | in | enters Play; background → settle; the window size and safe area |
 | Scene: Time of Day & Weather | out | the visible rect to fill (sky and ground extension), the ground line, the play clock and freeze / resume, the glyph box, `haloOn` and `mashing` (R8, R10) |
-| Accessibility | in | the Reduce Motion flag, read at reveal start (R9) |
+| Accessibility | in | Accessibility's `reduceMotion` (its A1; never the OS API), read at reveal start (R9) |
 
 ## Formulas
 

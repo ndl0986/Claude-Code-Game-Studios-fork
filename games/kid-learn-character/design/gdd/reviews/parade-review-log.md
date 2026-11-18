@@ -44,3 +44,8 @@ Reviewed-Content-Hash: design/gdd/parade.md f2e4445aca32b3e358a730460d0350de4df8
 Review mode: lean · Workflow: standard
 Change: W-9: Scene moved from Upstream to Downstream (it reads paradeWalking); Reveal Stage cited by path instead of 'no GDD yet'; Audio's freeze pause closed (TASK-050). K-26: Hint Letters added to Downstream (reads paradeWalking to dim and hold the hints). From /review-all-gdds 2026-11-18 (design/gdd/gdd-cross-review-2026-11-18.md) and K-26. Verdict unchanged; diff re-run by game-qc-android.
 Reviewed-Content-Hash: design/gdd/parade.md 1635d85de1ff5176df125b7a673418f883a2eac6
+
+## Update — 2026-11-18 — TASK-062 follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: Interactions: Accessibility's reduceMotion (A1), next frame. Follow-ups from the Keyboard Row (TASK-060) and Accessibility (TASK-061) GDDs; verdict unchanged; review by game-qc-ios from the diff.
+Reviewed-Content-Hash: design/gdd/parade.md 8fc6e7be1b8b7a12d5212ed76fa446fa9248879f

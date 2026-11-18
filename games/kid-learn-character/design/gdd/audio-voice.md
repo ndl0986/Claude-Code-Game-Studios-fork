@@ -213,7 +213,7 @@ playing.
 | MorphCore | in (via Reveal Stage) | `glow` and `T` of the active timing set |
 | Parade | in | parade start and end (E12) |
 | Settings Store | in | `volume` (0–10) and `muted` as one gain (its F2), and the slider preview gain (R5); later the voice locale |
-| Accessibility | in | the reduced-motion flag changes `glow` and `T`, so the voice timings follow (R1) |
+| Accessibility | in | Accessibility's `reduceMotion` (its A1; never the OS API) changes `glow` and `T` (through MorphCore, at reveal start), so the voice timings follow (R1) |
 | Parent Gate & Grown-up Panel | in | panel open → cut players (R6) |
 | Localization | out | a new locale is files only; the same checks (A7, A8) per locale |
 

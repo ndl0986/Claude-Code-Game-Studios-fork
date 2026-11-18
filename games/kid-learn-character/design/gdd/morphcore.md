@@ -128,7 +128,7 @@ The Reveal Stage reports "formed" to the Press Queue at `s ≥ T`. MorphCore onl
 | System | Direction | What passes |
 |---|---|---|
 | Key Table & Theme Data | in | the glyph path for each key and the silhouette path for each cast member, as v1-subset path strings |
-| Accessibility | in | the Reduce Motion / "Remove animations" flag that picks the timing set |
+| Accessibility | in | Accessibility's `reduceMotion` (its A1; never the OS API) ("Remove animations" on Android), which picks the timing set at reveal start |
 | Reveal Stage | out | build a morph per reveal; position(i, s), T and phase(s) each frame |
 | Cast Rendering | out | unit-box positions to draw particles at |
 | Press Queue | none directly | the Press Queue owns the hold. Constraint for its GDD: the normal hold should be ≥ T + `form_s` (F5) |

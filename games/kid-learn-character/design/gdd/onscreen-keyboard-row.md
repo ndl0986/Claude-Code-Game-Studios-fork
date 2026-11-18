@@ -183,7 +183,7 @@ keyboard (every Mac, an iPad with a keyboard). Detecting a keyboard is unreliabl
 | App Shell & Title | in | Title vs Play entry; background and return |
 | Parent Gate & Grown-up Panel | in | the panel switch writes `keyboardRow`; panel open/close (dim) |
 | Parade | none | the lane moves with `row_lift` (Reveal Stage); the row is not dimmed |
-| Accessibility | in | the Reduce Motion flag |
+| Accessibility | in | Accessibility's `reduceMotion` (its A1; never the OS API), applied on the next frame (R7) |
 | Child Lock-in | none | the row works the same in a locked Mac |
 
 ## Formulas

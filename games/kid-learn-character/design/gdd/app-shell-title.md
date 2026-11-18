@@ -64,8 +64,9 @@ locked in a way they can't undo.
   carried by its amber outline in morning and day); the **moon** (the Parent Gate).
 - **No text** at all: no wordmark, no control hints (K-22, art bible §7).
 - **Motion:** the play button breathes at `title_breathe_hz` (0.38 Hz, ±4% scale, as played), within the ≤ 1 Hz rule;
-  the title creature idles as in Play (Cast Rendering R7). With Reduce Motion the breathe amplitude halves
-  (`reduce_motion_scale`, Cast Rendering).
+  the title creature idles as in Play (Cast Rendering R7). With Accessibility's `reduceMotion` (its A1; never the OS
+  API) the breathe amplitude halves (`reduce_motion_scale`, Cast Rendering), on the next frame (A2). *0.38 Hz is kept
+  as played (leader's call, TASK-062); the art bible §2 rule 2 note is amended to match.*
 - **Silent** until the first input (Audio R6). No hints on the Title (Hint Letters).
 - **Layout:** in stage units on the safe stage, fitted by the Reveal Stage's contain-and-extend transform
   (Reveal Stage R10): the play button at (640, 520), the title creature anchored on the ground line, the moon where
@@ -74,7 +75,9 @@ locked in a way they can't undo.
 **R3. What starts play** (K-10, K-22).
 - **Keys:** any letter or digit key gives Input's `startPlay` (Input Title state). Every other key does nothing
   (system keys still pass, Input R5).
-- **Touch / click:** **any tap except the moon** starts play (as played). A touch on the moon goes to the Parent
+- **Touch / click:** **any tap except the moon** starts play (as played). So the play button needs **no physical
+  touch floor** (unlike hints and row keys, Accessibility A7): it is a visual cue, not the only target
+  *(TASK-062)*. A touch on the moon goes to the Parent
   Gate (`gateTouch`, as in Play); App Shell owns all other Title touches (Input Title state).
 - **On start:** the E5 title chime plays at once (Audio E5), and the play button lights fully.
 - **The title press is not the first reveal** (Input decision): Play opens on an empty stage, and the child's next
@@ -186,6 +189,7 @@ rebuilt, in this order:
 | Child Lock-in | out | "the app is ready" (R1 step 5) |
 | Parent Gate & Grown-up Panel | in / out | the gate and panel states; the silent-mode hint in the panel (R5) |
 | Scene: Time of Day & Weather | out | the Title's backdrop |
+| Accessibility | in | Accessibility's `reduceMotion` (its A1; never the OS API): the breathe amplitude, on the next frame (R2) |
 | Privacy & Kids Compliance | evidence | R1 (no prompts, no network), R9 (no crash collection), L-07 |
 
 ## Formulas

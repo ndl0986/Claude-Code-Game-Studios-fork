@@ -46,3 +46,8 @@ Reviewed-Content-Hash: design/gdd/reveal-stage.md d6c0206ac4d61e436e04064edaf3c5
 Review mode: lean · Workflow: standard
 Change: deletes two stray lines of tool markup ("</content>", "</invoke>") left at the end of the file by its author's writing tool; no content or rule changed.
 Reviewed-Content-Hash: design/gdd/reveal-stage.md 09269c33e01e5c4e95b0aa6898201b83756223d2
+
+## Update — 2026-11-18 — TASK-062 follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: R1: the stage view sets accessibilityIgnoresInvertColors = true (K-30; App Shell owns the window). R9: the tap and ignored-press sparkles stay unchanged under Reduce Motion (leader's call, Accessibility A3 flag), and the flag is Accessibility's reduceMotion (A1). R10: the keyboard row band listed with the published boxes. Follow-ups from the Keyboard Row (TASK-060) and Accessibility (TASK-061) GDDs; verdict unchanged; review by game-qc-ios from the diff.
+Reviewed-Content-Hash: design/gdd/reveal-stage.md f9058fb25faf2264bdf788984eb18fe3ff57819b
