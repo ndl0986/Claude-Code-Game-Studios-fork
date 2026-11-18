@@ -51,12 +51,14 @@ api_check() {
   done
 }
 gate "api-surface (ADR-0002 V4)" api_check
+# 3a. Content (ADR-0003 D3): V1–V18 and the staleness stub over content/themes ("0 themes" passes until a theme lands)
+gate "kidtools validate content (ADR-0003 D3)" "$BUILD/swiftpm/Tools/debug/kidtools" validate content
 # 3. Contracts (ADR-0004 D5): the KidCore harness (ContractTests) and the Tools "file" layer run inside step 4's
 #    swift test; their per-contract counts are echoed here from that run.
 # 4. swift test
 for m in MorphCore KidCore ContractKit Tools; do
   gate "swift test $m" sh -c 'swift test --package-path "apple/$1" --scratch-path "$2/swiftpm/$1" > "$2/test-$1.log" 2>&1; r=$?; cat "$2/test-$1.log"; exit $r' _ "$m" "$BUILD"
-  grep -h '^CONTRACT ' "$BUILD/test-$m.log" 2>/dev/null | sort -u | while IFS= read -r l; do say "OBSERVED ${l#CONTRACT }"; done
+  grep -h '^CONTRACT ' "$BUILD/test-$m.log" 2>/dev/null | awk '!seen[$0]++' | while IFS= read -r l; do say "OBSERVED ${l#CONTRACT }"; done
 done
 if [ "$RELEASE" = 1 ]; then
   ns="$(grep -h '^CONTRACT NOT ASSESSED' "$BUILD"/test-*.log 2>/dev/null | sort -u | wc -l | tr -d ' ')"

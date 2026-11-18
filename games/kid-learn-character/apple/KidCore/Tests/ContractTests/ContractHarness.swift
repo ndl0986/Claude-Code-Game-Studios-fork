@@ -190,8 +190,9 @@ final class ContractHarnessTests: XCTestCase {
         // CONTRACTS_ROOT points the run at another contracts folder (a review of a branch's contracts).
         let override = ProcessInfo.processInfo.environment["CONTRACTS_ROOT"].map { URL(fileURLWithPath: $0) }
         let report = ContractHarness.runAll(root: try override ?? ContractHarness.contractsRoot())
+        if let first = report.lines.first { print("CONTRACT \(first)") }
         for (k, v) in report.counts.sorted(by: { $0.key < $1.key }) { print("CONTRACT \(k): \(v.pass) pass, \(v.fail) fail") }
-        for l in report.lines { print("CONTRACT \(l)") }
+        for l in report.lines.dropFirst() { print("CONTRACT \(l)") }
         for f in report.failures { XCTFail(f) }
     }
 }
