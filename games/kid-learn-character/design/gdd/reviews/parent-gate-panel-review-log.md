@@ -264,3 +264,9 @@ Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 9d85857f213adae43727890f2
 Task: TASK-096
 Change: B2 (the hold) moves to the away clock: it opens at the first tick with away_now − max(away_down, away_close + 10) ≥ 1.5. It previously used uptime, which diverged from B3's away-clock sleep across a device sleep (game-qc-android's example). G13's clock note and G1's t_held line now say the touch stamp is converted to the away clock at receipt.
 Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 88580d8ec0ec5f17a6da7a4a9cad38ba54719739
+
+## Update — 2026-11-18 — ADR-0013 D7 pressed state (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-119
+Change: G3's "a key shows only its pressed state" gains the F2 bound per device class from ADR-0013 D7 (Accepted, K-43): the changing area is at most the class's floor area_max (58,449 / 54,105 / 4,347 px), or ΔL < 0.1. SwiftUI's default button dimming counts. No other change.
+Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 3892bfb2541135807b185feeb08ef76fbc509056
