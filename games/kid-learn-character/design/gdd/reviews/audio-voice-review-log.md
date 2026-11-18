@@ -63,3 +63,28 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md 54410d1a1974580736d15e121d0ad14
 Review mode: lean · Workflow: standard
 Change: Interactions: Accessibility's reduceMotion (A1) reaches the voice timings through MorphCore at reveal start. Follow-ups from the Keyboard Row (TASK-060) and Accessibility (TASK-061) GDDs; verdict unchanged; review by game-qc-ios from the diff.
 Reviewed-Content-Hash: design/gdd/audio-voice.md f72cfa129302bdcb39fc8245ab92752d35164f76
+
+## Update — 2026-11-18 — TASK-086 contract questions AU-Q1–Q8 (no re-review)
+Review mode: lean · Workflow: standard
+Change: answers to game-qc-android's audio-plan-v1 questions, written into the rules. AU-Q1: T in R1 means the Reveal Stage's formedS (the fade-in end for fallbacks); E8 follows willForm (a creature shown) and sfx, not hasWord; E9 follows hasWord. AU-Q2: E7 plays when the solid glyph breaks up (dissolve or sparkle-out), not in the glyph-missing fallback. AU-Q3: F3 window is half-open and shared by E1/E2/E3. AU-Q4: a sound frees its player at its end; free players before steals; ties steal the lowest-numbered. AU-Q5: ducking moves linearly in dB at fixed rates, starting from the current dB; d = 10^(dB/20). AU-Q6: the F1 trims stay provisional knobs (no edit). AU-Q7: E11 replaces E8 for digits. AU-Q8: paused sounds carry their remaining length; events due while frozen fire at their play time after resume. Verdict unchanged.
+Reviewed-Content-Hash: design/gdd/audio-voice.md 0124f9531a0bb12e249490be909d338f344d891e
+
+## Update — 2026-11-18 — TASK-088a E8/E9 at formedS (no re-review)
+Review mode: lean · Workflow: standard
+Change: R1 E8, E9 and E11 now read `s = formedS` (and `formedS + word_offset_s`), equal to T for a morph, the fade-in end for the fallbacks; E8 plays when a creature forms and sfx exists; E9 plays only when hasWord (a creature forms AND the active locale has the item's word line), matching Reveal Stage (TASK-088b). The late-art edge row and AC-1 (fallback cases) updated. Builds on the AU-Q1–Q8 entry above. Review: game-qc-android.
+Reviewed-Content-Hash: design/gdd/audio-voice.md 5b4c029ac7917e603565127b3265eca2a38a65d2
+
+## Update — 2026-11-18 — TASK-088a aligned with Reveal Stage AC-5 (no re-review)
+Review mode: lean · Workflow: standard
+Change: AC-1's fallback cases restated with Reveal Stage AC-5's example numbers (TASK-088b @ 4d83b81e): sfx without a word line gives E8 at 2.45 and no E9; art missing gives neither.
+Reviewed-Content-Hash: design/gdd/audio-voice.md b9db0299f13d5297edb4ee3af73248355d1c31d8
+
+## Update — 2026-11-18 — TASK-088a review item 1 (no re-review)
+Review mode: lean · Workflow: standard
+Change: from game-qc-android's REVISE: F3 counts the E1/E2/E3 sounds started in (t − chime_window_s, t] that come before this one in delivery order, so a same-timestamp batch is attenuated (the half-open (t − w, t) of AU-Q3 left them all at n = 0); AC-8 adds the one-batch case.
+Reviewed-Content-Hash: design/gdd/audio-voice.md 7f30e65849f904273ecc1b11ccf812bd9071f3c3
+
+## Update — 2026-11-18 — TASK-088a review item 2 (no re-review)
+Review mode: lean · Workflow: standard
+Change: E7 in the invalid-timing-set fallback, confirmed with game-dev-ios (Reveal Stage F5): the glyph is drawn and fades out at fallback_glow_s under the creature's fade-in, so E7 plays at fallback_glow_s (0.8 s); none in the glyph-missing fallback; at glow in the art-missing one. AC-1 adds the invalid-set case (E7 0.8, E8 1.30, E9 1.55).
+Reviewed-Content-Hash: design/gdd/audio-voice.md 6d07bd606e108f7878507da7f8831b7411976144
