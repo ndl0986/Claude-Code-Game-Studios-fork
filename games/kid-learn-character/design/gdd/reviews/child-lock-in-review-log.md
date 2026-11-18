@@ -46,3 +46,35 @@ Reviewed-Content-Hash: design/gdd/child-lock-in.md 28c5229ecc64dfb6284986a00434a
 Review mode: lean · Workflow: standard
 Change: game-qc-android's follow-on from TASK-057b: R3's parenthetical now reads App Shell's "ready" is items 1, 2 and 4; Child Lock-in adds 3 (Input's kiosk-on mode, set on entering Waiting, R7), 5 and 6. Text only.
 Reviewed-Content-Hash: design/gdd/child-lock-in.md 8fea01e0c82e1c8d14b4f882e594bbb5a87d674f
+
+## Re-review — 2026-11-18 — Verdict: APPROVED
+Review mode: lean (independent read) · Workflow: standard
+Reviewer: game-qc-ios (author of Parent Gate & Grown-up Panel, whose interface this GDD consumes); not the author of this GDD.
+Task: TASK-052 (logged under TASK-058, gate-check bookkeeping)
+Prior verdict resolved: Yes. The author's lean review was NEEDS REVISION (R5 vs R6 window contradiction), fixed the same day. This independent read was REVISE at 3a06dc4 and then APPROVE at 7908a20.
+
+Read at 3a06dc4 against the TASK-052 plan review's 8 items, checked against Parent Gate as merged (G2, G7, G8, G10, G11). All 8 landed:
+1. childLockActive drives R3/R4. OFF disengages at once, sends one notification and makes no write (AC-3).
+2. Engage on panelDidClose, including the 60 s auto-close (G10/K-19). A lock that is already on stays on while the panel is open. ON then OFF in one visit does nothing (R3, AC-4).
+3. Release only on didResignActive, never on didResignKey. Overlays only, which matches Parent Gate G7's "drawn inside the main window" (R5, AC-5, AC-11).
+4. Extra-display covers are never key or main (canBecomeKey and canBecomeMain false) and are rebuilt on a screen change (R6, AC-10).
+5. ⌘ is swallowed in every Input state while locked (R2, AC-6).
+6. The G2 ways out, plus "a mistyped code delays the chord 10 s" (R5, AC-17).
+7. engage_timeout_s 5 counts active time only and sets an in-memory failure flag (R7, F1, AC-8/9). The F1 examples recompute (0.60 s, 5.00 s, 10.2 s with 0.2 s counted).
+8. The Quit order: options → covers → Input mode → terminate (R4, AC-2). guidedAccessEnabled feeds G7 (R8, AC-12).
+
+Two bookkeeping must-fixes found at 3a06dc4, both fixed at 7908a20 (diff read, approved):
+- (a) R5 credited "the chord read from the OS key state" to merged Input R6, which then used the held set. It now cites TASK-054 I1 as open (safety).
+- (b) Open follow-ups were credited as done. R2 and Dependencies now name TASK-054 I3, and childLockActive with the no-write OFF is TASK-054 S1/S2. A release-blocking note was added: AC-3 and AC-6 need S1/S2 and I3, and AC-17 needs I1.
+- Advisories, both taken: AC-16 and AC-17 marked NOT ASSESSED inline; the cover colour cited as App Shell's launch colour (proposal).
+
+Later follow-ups to this file, as recorded in the entries above:
+- TASK-054b (206de60): L1 and the "landed in TASK-054a" text. Reviewed and approved by game-qc-ios.
+- TASK-056a (ed68d7b): the one kioskModeOn signal (on in Waiting, Locked and Suspended; off in Off, including after the engage timeout). panelWillOpen is dropped as unused.
+  - Not formally reviewed by game-qc-ios. Its interface was read and matched in Parent Gate G7/G11 and AC-28 (TASK-056b, 86c31dd).
+- TASK-057a (8034d93, 6d5b8fc): the ⌘-swallowed-before-chord edge case, and the R3 ready split (App Shell items 1, 2 and 4; Lock-in items 3, 5 and 6).
+  - Reviewed by game-qc-android. For this entry I read the diff from 206de60 to the current file: consistent with Parent Gate G7/G11 and with Input R5's one signal, and no contradiction found.
+
+Still NOT ASSESSED: the R2 NOT ASSESSED items; AC-13 to AC-17 until run on a real Mac (needs MAC FREE); Input AC-1k6 (the TCC check) for AC-17's chord path.
+Reviewed-Content-Hash: design/gdd/child-lock-in.md 8fea01e0c82e1c8d14b4f882e594bbb5a87d674f
+Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 0576d85a17b704c4e8909134524c669e51c43024
