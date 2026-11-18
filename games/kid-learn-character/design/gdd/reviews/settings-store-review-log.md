@@ -47,3 +47,9 @@ Reviewed-Content-Hash: design/gdd/settings-store.md 8b65da436b822e87958e856f7fd1
 Review mode: lean · Workflow: standard
 Change: W-10: AC-15 checks all six Child Lock-in R3 preconditions in any order (as Child Lock-in AC-1). W-6: Key Table cites point at its §4. W-9: the Downstream line no longer says the GDDs don't exist. From design/gdd/gdd-cross-review-2026-11-18.md and K-26. Review: game-qc-android (diff re-run).
 Reviewed-Content-Hash: design/gdd/settings-store.md 2ddae72ca6a1ec7067b369e04e1056c9a0148edc
+
+## Update — 2026-11-18 — TASK-072 canonical record (no re-review)
+Review mode: lean · Workflow: standard
+Change: new R6a writes the answers to settings-record-v1's SS-Q1–Q7 (TASK-068): minimal string escaping (only quote, backslash and U+0000–U+001F as lowercase \u00xx; everything else raw UTF-8), any JSON number token read as a number, bare NaN and duplicate keys make the whole record unreadable, rounding inside 0–10 logs nothing, several bad fields log in R1 order, a no-op change does nothing. No other rule changed. Review: game-qc-android, from the diff.
+fixture: settings-record-v1 (cases added in TASK-068)
+Reviewed-Content-Hash: design/gdd/settings-store.md d88b459d1131866ca6da1eb08e11d76b196c782f
