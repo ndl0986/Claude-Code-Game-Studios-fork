@@ -1,0 +1,6 @@
+# sources.lock for app-shell-v1 (cut 2026-11-18, TASK-094): the ## sections the cases cite.
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/app-shell-title.md#Detailed Design 1a8a5515376613015ed47a5c887bbae2b23628db
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/app-shell-title.md#Formulas 49c4fed41cc34f5a2766eece643eb4a49c01d56f
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/app-shell-title.md#Edge Cases a80fe313c85b93ea849e70019038bfca9427e8eb
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/app-shell-title.md#Acceptance Criteria e22aa094eb5d094bac2073f1904b446f3a96f151
+Reviewed-Section-Hash: games/kid-learn-character/docs/architecture/adr-0002-modules-seams-types.md#Decision 7a622020948197194ccd9e003ecdfe8e243fb356

@@ -77,3 +77,4 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
 - ~~Audio knob row (cut_settle_s Effect column):~~ done (TASK-093, c724f9ec). "stopped or paused" → "stopped" (TASK-090b nit, game-dev-ios) — game-art-content.
 - K-40: the game-local /story-done skill must refuse to close a system's story while its contract row in contracts/README.md is not-started (ADR-0004 D5 note says the refusal lives in the studio skill). Route before the first system story closes.
 - Audio R6: measured freeze-resume overlap 0–17 ms → 0–15 ms (aperiodic H-1, ADR-0010 rev 2); rule and AC-21 unchanged — game-art-content, next Audio touch.
+- App Shell R6 (v2 of app-shell-v1, on request): order of background notifications (Reveal settle, Audio cut, Hint clear, Parade drop, Input Inactive) and the list for a return to Play (not R4's entry) — game-dev-ios advisory, TASK-094.

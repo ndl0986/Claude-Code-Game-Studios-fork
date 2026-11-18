@@ -235,3 +235,32 @@ Change:
 - The Android AC is renumbered AC-39.
 - No other rule change.
 Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 1a7b45cba78e0e0483f070827c390e7732054dcc
+
+## Update — 2026-11-18 — TASK-096 G13 Timing and boundaries (normative; review: game-qc-android, AC-38 line: game-dev-ios)
+Review mode: lean · Workflow: standard
+Task: TASK-096
+Change:
+- New **G13**, a 13-row boundaries table: the normative answers to gate-logic-v1 GL-Q1–Q12 (TASK-094).
+  - B1: the code draws and the exact text.
+  - B2: the hold, inclusive, t_eff.
+  - B3: sleep, strict, on the away clock, and what starts it.
+  - B4: one `ineligible` flag.
+  - B5: the challenge timeout, inclusive, and accepted times.
+  - B6: the half-open lift grace and pending-second cancel.
+  - B7: mixed input counts as wrong.
+  - B8: the confirm window.
+  - B9: the burst window (t − 1, t] over all card downs.
+  - B10: idle and cap, on the away clock.
+  - B11: the background.
+  - B12: this GDD publishes `gateOverlayShown`; App Shell owns `edgeDeferral` and `statusBarHidden` (TASK-095 names).
+  - B13: the chord.
+- G4: sleep starts only for a wrong answer or a timeout (Cancel/Esc none, per G1), fixing the bookkeeping slip.
+- G3 and AC-36: the grace reads "less than 0.15 s", and AC-36 gains the 0.149 / exactly-0.15 cases.
+- AC-38 is pointed at `gateOverlayShown` and App Shell's `edgeDeferral` / `statusBarHidden`.
+- Rule changes are confined to G13's new boundaries. Every other behaviour is unchanged.
+Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 9d85857f213adae43727890f20dcf981df92b2b5
+
+## Update — 2026-11-18 — TASK-096 B2 on the away clock (game-qc-android REVISE)
+Task: TASK-096
+Change: B2 (the hold) moves to the away clock: it opens at the first tick with away_now − max(away_down, away_close + 10) ≥ 1.5. It previously used uptime, which diverged from B3's away-clock sleep across a device sleep (game-qc-android's example). G13's clock note and G1's t_held line now say the touch stamp is converted to the away clock at receipt.
+Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 88580d8ec0ec5f17a6da7a4a9cad38ba54719739
