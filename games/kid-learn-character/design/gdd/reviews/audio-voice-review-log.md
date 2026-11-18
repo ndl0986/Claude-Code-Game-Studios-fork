@@ -68,3 +68,8 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md f72cfa129302bdcb39fc8245ab92752
 Review mode: lean · Workflow: standard
 Change: answers to game-qc-android's audio-plan-v1 questions, written into the rules. AU-Q1: T in R1 means the Reveal Stage's formedS (the fade-in end for fallbacks); E8 follows willForm (a creature shown) and sfx, not hasWord; E9 follows hasWord. AU-Q2: E7 plays when the solid glyph breaks up (dissolve or sparkle-out), not in the glyph-missing fallback. AU-Q3: F3 window is half-open and shared by E1/E2/E3. AU-Q4: a sound frees its player at its end; free players before steals; ties steal the lowest-numbered. AU-Q5: ducking moves linearly in dB at fixed rates, starting from the current dB; d = 10^(dB/20). AU-Q6: the F1 trims stay provisional knobs (no edit). AU-Q7: E11 replaces E8 for digits. AU-Q8: paused sounds carry their remaining length; events due while frozen fire at their play time after resume. Verdict unchanged.
 Reviewed-Content-Hash: design/gdd/audio-voice.md 0124f9531a0bb12e249490be909d338f344d891e
+
+## Update — 2026-11-18 — TASK-088a E8/E9 at formedS (no re-review)
+Review mode: lean · Workflow: standard
+Change: R1 E8, E9 and E11 now read `s = formedS` (and `formedS + word_offset_s`), equal to T for a morph, the fade-in end for the fallbacks; E8 plays when a creature forms and sfx exists; E9 plays only when hasWord (a creature forms AND the active locale has the item's word line), matching Reveal Stage (TASK-088b). The late-art edge row and AC-1 (fallback cases) updated. Builds on the AU-Q1–Q8 entry above. Review: game-qc-android.
+Reviewed-Content-Hash: design/gdd/audio-voice.md 5b4c029ac7917e603565127b3265eca2a38a65d2
