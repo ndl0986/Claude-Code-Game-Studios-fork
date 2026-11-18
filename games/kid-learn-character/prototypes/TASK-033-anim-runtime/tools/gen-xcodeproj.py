@@ -4,7 +4,10 @@
 #   SpikeNoRive  SpriteKit only (NORIVE), for the app-size delta
 # Both: iPadOS 26 + macOS 26 (one multiplatform target each), MorphCore as a local package.
 #   python3 tools/gen-xcodeproj.py
-import hashlib, os
+#   python3 tools/gen-xcodeproj.py --no-rive   (TASK-078: SpikeNoRive.xcodeproj, SpikeNoRive only, no Rive package at all;
+#                                              the P-1 baseline build, ADR-0010)
+import hashlib, os, sys
+NO_RIVE = "--no-rive" in sys.argv
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
 def oid(name):  # deterministic 24-hex object ids
@@ -69,7 +72,7 @@ def config_list(tag, settings):
 
 targets = []
 product_refs = []
-for name, rive in (("Spike", True), ("SpikeNoRive", False)):
+for name, rive in ((("SpikeNoRive", False),) if NO_RIVE else (("Spike", True), ("SpikeNoRive", False))):
     prod = add(f"prod.{name}", f'{{isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = {name}.app; sourceTree = BUILT_PRODUCTS_DIR; }}')
     product_refs.append(prod)
     dep_core = add(f"dep.{name}.MorphCore", f'{{isa = XCSwiftPackageProductDependency; package = {pkg_local}; productName = MorphCore; }}')
@@ -91,21 +94,24 @@ for name, rive in (("Spike", True), ("SpikeNoRive", False)):
     targets.append(t)
 
 add("group.products", "{isa = PBXGroup; children = (" + ", ".join(product_refs) + '); name = Products; sourceTree = "<group>"; }')
-add("group.main", "{isa = PBXGroup; children = (" + f"{spike_sync}, {fixtures_ref}, {riv_ref}, {products_group}" + '); sourceTree = "<group>"; }')
+add("group.main", "{isa = PBXGroup; children = (" + (f"{spike_sync}, {fixtures_ref}, {products_group}" if NO_RIVE else f"{spike_sync}, {fixtures_ref}, {riv_ref}, {products_group}") + '); sourceTree = "<group>"; }')
 proj_cfg = config_list("project", {"ALWAYS_SEARCH_USER_PATHS": "NO", "CLANG_ENABLE_MODULES": "YES", "ENABLE_STRICT_OBJC_MSGSEND": "YES"})
 add("project", "{isa = PBXProject; attributes = {BuildIndependentTargetsInParallel = 1; LastSwiftUpdateCheck = 2700; LastUpgradeCheck = 2700; }; buildConfigurationList = " +
     proj_cfg + '; compatibilityVersion = "Xcode 15.0"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en, Base); mainGroup = ' + main_group +
-    "; minimizedProjectReferenceProxies = 1; packageReferences = (" + f"{pkg_local}, {pkg_rive}" + "); preferredProjectObjectVersion = 77; productRefGroup = " +
+    "; minimizedProjectReferenceProxies = 1; packageReferences = (" + (f"{pkg_local}" if NO_RIVE else f"{pkg_local}, {pkg_rive}") + "); preferredProjectObjectVersion = 77; productRefGroup = " +
     products_group + '; projectDirPath = ""; projectRoot = ""; targets = (' + ", ".join(targets) + "); }")
 
 out = "// !$*UTF8*$!\n{\n\tarchiveVersion = 1;\n\tclasses = {\n\t};\n\tobjectVersion = 77;\n\tobjects = {\n"
 for i, n, b in sorted(objs, key=lambda o: o[0]):
     out += f"\t\t{i} /* {n} */ = {b};\n"
 out += f"\t}};\n\trootObject = {proj};\n}}\n"
-os.makedirs(os.path.join(ROOT, "Spike.xcodeproj"), exist_ok=True)
-open(os.path.join(ROOT, "Spike.xcodeproj", "project.pbxproj"), "w").write(out)
+PROJ = "SpikeNoRive.xcodeproj" if NO_RIVE else "Spike.xcodeproj"
+if NO_RIVE:  # drop the Rive objects entirely, so the project names no remote package
+    out = "\n".join(l for l in out.split("\n") if "pkg.rive" not in l and "ref.rivassets" not in l)
+os.makedirs(os.path.join(ROOT, PROJ), exist_ok=True)
+open(os.path.join(ROOT, PROJ, "project.pbxproj"), "w").write(out)
 open(os.path.join(ROOT, "Spike-macOS.entitlements"), "w").write(
     '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n'
     '<!-- PROTOTYPE - NOT FOR PRODUCTION (TASK-033). Sandboxed WITHOUT com.apple.security.network.client: any network attempt is denied and logged. -->\n'
     '<plist version="1.0">\n<dict>\n\t<key>com.apple.security.app-sandbox</key>\n\t<true/>\n</dict>\n</plist>\n')
-print("wrote Spike.xcodeproj/project.pbxproj and Spike-macOS.entitlements")
+print(f"wrote {PROJ}/project.pbxproj and Spike-macOS.entitlements")
