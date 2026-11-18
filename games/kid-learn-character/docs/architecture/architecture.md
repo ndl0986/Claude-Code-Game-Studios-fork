@@ -1,17 +1,20 @@
 # Letter Morph — Master Architecture
 
 ## Document Status
-- Version: 1
+- Version: 2 (TASK-114 refresh, 2026-11-18, against the TASK-111 review `architecture-review-2026-11-18.md`; v1 was
+  TASK-059)
 - Last Updated: 2026-11-18
 - Engine: none from the template's engine table (`engine.name` unset on purpose, ADR-0001, K-28). Native Apple
   stack: Swift 6.4, Xcode 27.1 (27A9275), SDKs iOS 27.1 / macOS 27.0, deployment iPadOS 26 and macOS 26.
   Reference: `docs/engine-reference-local/native-apple/`, inside this game's folder (K-28 Q3; Luan: kept out of the
   template's shared `docs/engine-reference/`).
-- GDDs Covered (15, all Approved): input-key-filter, key-table-theme-data, morphcore, press-queue, settings-store,
+- GDDs Covered (17, all Approved): input-key-filter, key-table-theme-data, morphcore, press-queue, settings-store,
   audio-voice, cast-rendering, reveal-stage, hint-letters, parade, parent-gate-panel, child-lock-in,
-  app-shell-title, scene-time-weather, privacy-kids-compliance.
-- ADRs Referenced: ADR-0001 Native Apple (Accepted); morph-contract-v1 (Accepted with ADR-0001).
-- Author: game-dev-ios (TASK-059); plan reviewed by game-dev-android; decisions K-01…K-28.
+  app-shell-title, scene-time-weather, privacy-kids-compliance, **onscreen-keyboard-row, accessibility** (added in v2;
+  TASK-111 AD-2).
+- ADRs Referenced: ADR-0001 to ADR-0006 and ADR-0011 (Accepted); ADR-0007 to ADR-0010 (Proposed, waiting on device
+  rows); morph-contract-v1 (Accepted with ADR-0001). The status of each is in the ADR Audit below.
+- Author: game-dev-ios (TASK-059, v1); game-dev-android (TASK-114, v2 refresh); decisions K-01…K-42.
 - Workflow: standard, `docs.density: balanced`, review mode lean.
 - **Deviation recorded:** Phase 0a read `docs/engine-reference-local/native-apple/` (game-local) in place of
   `docs/engine-reference/[engine]/`, since no engine is configured (K-28 Q3). The game's `docs/engine-reference/` is
@@ -19,7 +22,8 @@
   as PROVEN (TASK-033), SOURCED (an Apple URL) or NOT SOURCEABLE.
 - TD-ARCHITECTURE: 2026-11-18 — skipped — lean mode
 - LP-FEASIBILITY: 2026-11-18 — skipped — lean mode
-- Independent read: game-dev-android (pending)
+- Independent read: v1, game-dev-android (pending in v1's status block); v2 refresh reviewed by game-qc-android
+  (TASK-114, approve-from-diff)
 
 ## Summary
 
@@ -217,20 +221,26 @@ Location: `games/kid-learn-character/contracts/<name>-vN/` with `spec.md` and `c
 `content/fixtures/morph-contract-v1.json`), because the prototype, its generator and the GDDs cite those paths;
 `contracts/README.md` points to it, and it moves only with a v2.
 
-| Contract | Covers (GDD) |
-|---|---|
-| morph-contract-v1 (exists) | MorphCore positions, T, phases |
-| key-table-schema-v1 | theme files → validator verdicts (V-rules); pick and peek with draws (§4) |
-| settings-record-v1 | records → decoded values, defaults, migration; exact written bytes |
-| input-filter-v1 | normalized key/touch events + state → outcomes: AC-1j (chord with Fn/Shift/Caps), AC-1k (kioskModeOn), k3 (stale ⌘ release), k4 (Title and challenge routing), k5 (moon slop) |
-| press-queue-v1 | press/tick sequences → outcomes, holdEff (F1), timeouts |
-| reveal-timing-v1 | startReveal cases → formedS, revealLen, hasWord; stage fit F1; published boxes (the E6–E9 times are audio-plan-v1's) |
-| scene-look-v1 | WallClock + weather → look, lookBlend, skyMidL; Cast Rendering F8 factors and the edge switch |
-| parade-v1 | shown sequences → batches, F2 start, F3 positions, freeze |
-| app-shell-v1 | state machine, F3 30 min on the continuous clock, single pending start, the ready set |
-| hint-letters-v1 | F1–F5 with draws, slot validity with jittered clearances, the 0 / 0.7 / 1.4 s sequence, freeze and Dimmed with no replay |
-| audio-plan-v1 | E1–E12 times (owns E6–E9) from formedS and hasWord, F1 gain chain, F3 mash, F6 word_end |
-| gate-logic-v1 | hold, slop, the 10 s sleep, timeout, keypad matching with injected words |
+**The current list is the K-40 registry in `contracts/README.md`** (ADR-0004 D5 note); that table, not this
+document, is the source. As of v2 (2026-11-18) it has **14 rows**: 12 current contracts, all written (ADR-0004 D8),
+and 2 superseded versions:
+
+| Contract | Covers (GDD) | Registry row |
+|---|---|---|
+| morph-contract-v1 (lives in `docs/architecture/`) | MorphCore positions, T, phases | MorphCore's own test (not a registry row; ADR-0004 D5) |
+| key-table-schema-v1 | theme files → validator verdicts (V1–V18); pick and peek with draws (§4) | runner (model + file layers) |
+| settings-record-v2 | records → decoded values, defaults, migration; exact written bytes; the non-finite slider | runner |
+| input-filter-v2 | normalized key/touch events + state → outcomes (chord, `kioskModeOn`, stale ⌘ release, Title and challenge routing, moon slop, `gateDigitUp`) | not-started |
+| press-queue-v1 | press/tick sequences → outcomes, holdEff (F1), timeouts | not-started |
+| reveal-timing-v1 | startReveal → formedS, revealLen, hasWord; stage fit F1; published boxes | not-started |
+| audio-plan-v1 | E1–E12 times (owns E6–E9), F1 gain chain, F3 mash, F6 word_end | not-started |
+| hint-letters-v1 | R13 draw and tick order, F1–F5, the 0 / 0.7 / 1.4 s sequence, freeze and Dimmed | not-started |
+| parade-v1 | batches, F2 start, F3 positions, freeze | not-started |
+| scene-look-v1 | WallClock + weather → look, lookBlend, skyMidL; F8 factors and the edge switch | not-started |
+| app-shell-v1 | state machine, F3 30 min on the continuous clock, single pending start, the ready set | not-started |
+| gate-logic-v1 | hold, slop, the 10 s sleep, timeout, keypad matching | not-started |
+| keyboard-row-v1 | word draw, Due and change, hit rects (Keyboard Row F1–F4) | not-started |
+| settings-record-v1 → v2, input-filter-v1 → v2 | superseded (K-40); kept unedited, never run | superseded-by |
 
 **Excluded, with reasons:** Child Lock-in (Apple only; Android uses screen pinning); seeds and stardust looks
 (per platform, Cast Rendering R6); render-path drawing (depends on ADR-0009; its pure formulas ride in
@@ -250,8 +260,9 @@ reveal-timing-v1 and scene-look-v1); audio graph (per platform).
 
 ## Technical Requirements Baseline
 
-(TR registry: **empty** (`requirements: []`). Every ID below is **provisional**: `/architecture-review` assigns
-permanent IDs in `docs/architecture/tr-registry.yaml`. Do not cite these in stories.)
+(**v2:** the TR registry `docs/architecture/tr-registry.yaml` now holds the permanent IDs (84 rows, TASK-111) and is
+the source for stories; `requirements-traceability.md` maps them to ADRs. The table below is v1's baseline, kept for
+context, plus the keyboard row and accessibility rows v1 lacked (TASK-111 AD-2). Cite the registry, not this table.)
 
 | TR-ID (provisional) | GDD | Requirement | Layer |
 |---|---|---|---|
@@ -279,41 +290,50 @@ permanent IDs in `docs/architecture/tr-registry.yaml`. Do not cite these in stor
 | TR-shell-001 | app-shell-title R1–R9 | launch order, Title starts, pending start, away rule, windows, memory | KidCore + app |
 | TR-scene-001 | scene-time-weather R2–R9 | wall-clock looks, weather, skyMidL, caps build check, two clocks | KidCore + app |
 | TR-pkc-001 | privacy-kids-compliance PKC-01…14 | no network, no SDK, no identifiers, privacy manifest, scans | Tools / CI |
+| TR-kbrow-001…004 | onscreen-keyboard-row F1–F4, R12, AC-1, AC-3, AC-16 | layout, hit rect, light, word draw and change; theme words with v1 fallback; a z 35 layer on the press path; off by default, ≥ 18 mm | KidCore + app |
+| TR-a11y-001…006 | accessibility A1, A10, F1, F2, F2b, AC-01–AC-16 | one Reduce Motion flag; Smart Invert opt-out; flash gate and red-flash check; palette and idle lints; 18 mm child floor; nothing stored, sent or logged | KidCore + app + Tools |
 
 ## ADR Audit
 
-| ADR | Status | Covers | Engine compatibility | Gaps |
-|---|---|---|---|---|
-| ADR-0001 Native Apple | Accepted | stack, packages, roots, UI-free cores, stage protocol, lock-in, no network | HIGH risk recorded; "proven by building" rule | its Open follow-ups 1–5 → ADR-0007…0012 below |
-| morph-contract-v1 | Accepted (with ADR-0001) | MorphCore cross-platform math | LOW | — |
+All eleven ADRs exist (v2; TASK-111 AD-1). Four are Proposed because their decision rules wait on device rows,
+which the owner has put on hold; none conflicts with another (TASK-111, Cross-ADR Conflicts).
 
-Every TR above is either covered by ADR-0001's decisions (stack, roots, UI-free cores) or by a GDD; the
-implementation-level choices (module seams, content pipeline, persistence, stage runtime, input, kiosk, render
-path, audio, build) have **no ADR yet** — Required ADRs below.
+| ADR | Status | Covers | Waits on |
+|---|---|---|---|
+| ADR-0001 Native Apple | Accepted | stack, packages, roots, UI-free cores, stage protocol, lock-in, no network | — |
+| morph-contract-v1 | Accepted (with ADR-0001) | MorphCore cross-platform math | — |
+| ADR-0002 Modules, seams and types | Accepted | packages, the four clocks, `RandomSource`, Kotlin-mappable types, seams, the ban grep | — |
+| ADR-0003 Content data and pipeline | Accepted | theme schema v2, bake tool, SVG subset (a1 layer ids, K-37), validator V1–V18, voice durations, TTS pre-render | — |
+| ADR-0004 Contracts, fixtures, harness | Accepted | the contract list and rules, the harness on both platforms, the K-40 registry and not-started state | — |
+| ADR-0005 Settings persistence (Apple) | Accepted | one canonical record under one `UserDefaults` key, CA92.1, backups | — |
+| ADR-0006 Stage runtime | Accepted | composition, frame driver (≤ 60 fps), stage fit, windows, Smart Invert, Reduce Motion, ppi | — |
+| ADR-0007 Input adapters | **Proposed** | reader → mapper, key ids, the synchronous disposition, `KeyStateQuery` only if M-1 passes, touches | M-1, M-2, M-3, P-15, P-4 |
+| ADR-0008 Kiosk and lock-in | **Proposed** | borderless window preferred, the options set, the key-able window, covers, activation, Guided Access | M-3–M-7, P-4 |
+| ADR-0009 Render path | **Proposed** | A (live paths, A-candidate) vs B (textures; B-load preferred) or a mix, by TASK-075's fixed rule | P-2, M-13 (H-2 done headless) |
+| ADR-0010 Audio engine | **Proposed** | `.soloAmbient`, the graph, no-click cut and freeze, interruptions, latency split | P-1, P-7, P-8, P-9, M-14 |
+| ADR-0011 Build, verify, PKC | Accepted | gates vs observations, `verify.sh`, `pkc-scan.sh`, simulator guards, evidence | — |
 
 ## Required ADRs
 
-In dependency order. ★ = needs device time first: a measurement spike as its own task. **Any run on Luan's Mac
-needs the leader's MAC FREE**; iPad runs use a free Personal Team build on Luan's Apple ID (K-28 Q2).
+v2 status (TASK-111 review). Any run on Luan's Mac needs the leader's MAC FREE; iPad runs use a Personal Team build
+(K-28 Q2).
 
-| # | ADR | Decides | Depends on | Device |
-|---|---|---|---|---|
-| 1 | ADR-0002 Modules, seams and types | packages, the four clocks, `RandomSource`, Kotlin-mappable types, the import/type check, the Android module and clock notes | ADR-0001 | no |
-| 2 | ADR-0004 Behaviour contracts and fixtures | the 12-contract list, fixture rules, the verification harness on both platforms (moved up from 0011) | 0002 | no |
-| 3 | ADR-0003 Content data and pipeline | schema v1, bake tool, SVG subset → cast JSON, glyph baking, voiceDurations, loudness, validator gating the build | 0002, 0004 | no |
-| 4 | ADR-0005 Settings persistence (Apple) | one JSON value under one `UserDefaults` key, atomic, CA92.1, backups per K-12; the Android half is in 0012 | 0002, 0004 | Simulator / Mac proof |
-| 5 | ADR-0006 Stage runtime | SpriteKit scene composition, the display-link frame driver, draw order, stage fit, iPadOS window rules (source the full-screen claim) | 0002 | Simulator |
-| 6 | ADR-0007 Input adapters ★ | UIKit presses / AppKit monitor → normalized events; HID position map; chord; OS key state | 0002, 0004 | **Mac (MAC FREE): Input AC-1k6, the TCC prompt and the ⌘ window (TASK-057 R-2); physical-keyboard checks** |
-| 7 | ADR-0008 Kiosk and child lock-in ★ | presentationOptions set, native vs borderless full screen, overlays-only, covers, Guided Access | 0006, 0007 | **Mac (MAC FREE): Child Lock-in AC-13–17 incl. `kill -9`; iPad: Guided Access with a hardware keyboard** |
-| 8 | ADR-0009 SVG render path ★ | option A (live paths) vs B (PNG tiers per part) or a mix | 0003, 0006 | **iPad + Mac (MAC FREE): Cast Rendering R11's combined run with the Scene's worst case** |
-| 9 | ADR-0010 Audio engine ★ | `.soloAmbient`, graph, primed players, no-click cut, limiter, interruptions | 0002 | **iPad: TASK-033 `procedure-ipad.md` latency run** |
-| 10 | ADR-0011 Build, CI and verification | local `xcodebuild` / `swift test` under MAC FREE, QC runs the suites (K-28 Q1); PKC scans; content validation in the build | 0003, 0004 | no (GitHub runners later) |
-| 11 | ADR-0012 Android | Kotlin modules, adapters, the Android gaps listed above | 0002, 0004, morph-contract-v1 | later |
-
-0002, 0004, 0003, 0005, 0006 and 0011 can start before any device time. Numbering follows the plan; 0004 is
-written before 0003 because the content validator's cases are contract cases.
+| # | Item | Status | Next |
+|---|---|---|---|
+| 1 | ADR-0002, 0003, 0004, 0005, 0006, 0011 | **Done** (Accepted) | — |
+| 2 | ADR-0007, ADR-0008 ★ | Proposed | accept after M-1…M-7, P-4, P-15 (TASK-111 B-1) |
+| 3 | ADR-0009, ADR-0010 ★ | Proposed | accept after P-2, M-13 and P-1, P-7, P-8, P-9, M-14 (TASK-111 B-1) |
+| 4 | Flash safety gate (TR-a11y-003): where Accessibility F2 and F2b run, and that a FAIL blocks a release candidate | **Needed** (TASK-111 B-3) | an ADR-0011 amendment or a small ADR; with it the F1 / A5 lints (TR-a11y-004) and hint-knob validation |
+| 5 | Grown-up panel accessibility (VoiceOver, Dynamic Type, target sizes; TR-gate-006) | Advisory (TASK-111) | an ADR or the panel story |
+| 6 | iPad presentation (`edgeDeferral`, status bar, home indicator; TR-shell-004) | **Covered by an ADR-0006 dated note** (K-42) | — |
+| 7 | ADR-0012 Android | Later | Kotlin modules, adapters, the Android gaps listed above (TASK-111 AD-4: nothing writes it yet) |
 
 ## The First Scaffold Story (described here; not created in TASK-059)
+
+**v2: done.** TASK-079 built it and merged as a4adca84 (QC's `--qc` evidence PASS, df6a154e): the packages, the app
+targets, the ban grep, `verify.sh` and `pkc-scan.sh`, the contract harness with the K-40 registry, and the headless
+Title screenshot. The Mac launch, the first signed build and the macOS UI test wait for MAC FREE. The goal as
+written in v1 follows, unchanged.
 
 **Goal:** the `apple/` skeleton that every later story builds on.
 - One Xcode multiplatform project under `apple/` (iPadOS + macOS, deployment 26); local packages `apple/KidCore`
@@ -333,11 +353,12 @@ written before 0003 because the content validator's cases are contract cases.
 
 ## Open Questions
 
-- **The iPadOS full-screen claim** (App Shell R7: an app can no longer require full screen) is NOT SOURCEABLE in
-  the reference; ADR-0006 must source or disprove it. The design already supports any window shape.
+- ~~The iPadOS full-screen claim~~ **v2: closed.** ADR-0006 D4 (Accepted) decides the window rules; K-39 allows
+  every orientation and window shape with contain-and-extend (App Shell R7). Its device row is P-11.
 - **One owner per fixture case:** each number lives in exactly one contract (audio-plan-v1 owns the E6–E9 times;
   reveal-timing-v1 owns the startReveal outputs, stage fit and the boxes).
-- **The On-screen Keyboard Row** has no contract yet: its cases join key-table-schema-v1 or a keyboard-row-v1 when
-  its GDD lands (game-dev-android's note).
-- **Seam names** (`UptimeClock`, `WallClock`, …) are provisional until ADR-0002.
+- ~~The On-screen Keyboard Row has no contract yet~~ **v2: closed.** keyboard-row-v1 is written (36 cases,
+  not-started in the registry).
+- ~~Seam names are provisional until ADR-0002~~ **v2: closed.** ADR-0002 D3, D6 fix them (Accepted).
+- **v2, open:** the flash-safety gate's home (Required ADRs #4); ADR-0012 (#7).
 - The ★ ADRs cannot be decided until their device runs; their GDD rules are written to work with every option.

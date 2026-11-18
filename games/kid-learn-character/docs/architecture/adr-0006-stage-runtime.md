@@ -150,6 +150,15 @@ window behaviour, two accessibility settings and pixel density, which ADR-0002's
 - **Mac, kiosk on:** native full screen (options through `window(_:willUseFullScreenPresentationOptions:)`) or a
   borderless window at the screen frame is **decided in ADR-0008**, after its MAC FREE device checks. Either must keep:
   one window; the overlays inside it (D1); `windowCoversDisplay` reported to `KioskEffects` (ADR-0002 D6).
+- *Note 2026-11-18 (K-39, K-42, TASK-114; status stays Accepted; TR-shell-004):* **iPad presentation.** Every
+  orientation is allowed, portrait included, with D2's contain-and-extend fit and never letterbox bars (K-39; App
+  Shell R7). While the child-facing stage shows (Title, Play) the status bar and the home indicator are hidden
+  (`prefersStatusBarHidden`, `.persistentSystemOverlays(.hidden)`), and the system edge gestures are deferred on
+  every edge (`preferredScreenEdgesDeferringSystemGestures`). App Shell publishes `edgeDeferral {on}` (on in the
+  Title and Play, off while the Parent Gate's `gateOverlayShown` is true) and `statusBarHidden {true}` (once, at
+  the first frame), so the status bar stays hidden in the gate and panel too and the stage fit never jumps (App
+  Shell R7, TASK-095). A speed bump, not a lock: Guided Access stays the lock (ADR-0008 D7). Device check: App
+  Shell AC-14 (edge swipes, NOT ASSESSED until run).
 
 ### D5. Smart Invert (K-30)
 On iPad the `SKView` sets `accessibilityIgnoresInvertColors = true`; the SwiftUI panel overlay does not, so the panel

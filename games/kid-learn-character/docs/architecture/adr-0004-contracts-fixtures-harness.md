@@ -88,7 +88,13 @@ bit. The other systems need the same, decided before the scaffold story writes t
 ### D1. The contracts
 
 Contracts live in `games/kid-learn-character/contracts/<name>-vN/`, each with `spec.md`, `cases.json`,
-`sources.lock` and, optionally, `cases-generated.json` (generated cases only, same schema and version). `contracts/README.md` is the index, naming the current version of each contract. morph-contract-v1
+`sources.lock` and, optionally, `cases-generated.json` (generated cases only, same schema and version). `contracts/README.md` is the index, naming the current version of each contract.
+
+*Note 2026-11-18 (K-42, TASK-114; status stays Accepted):* **settings-record-v1** is superseded by
+**settings-record-v2** (TASK-091: v1's `F1-slider-release-7.5` contradicted R6a; v2 adds the non-finite slider
+cases), and **input-filter-v1** by **input-filter-v2** (TASK-099). Where this ADR names a v1 (the D1 table, D3, the
+"one owner per number" list, the MVP order and Related), read its v2; the v1 directories stay unedited and are
+reported SUPERSEDED, never run (the D5 K-40 note). The registry in `contracts/README.md` is the current list. morph-contract-v1
 stays at `docs/architecture/morph-contract-v1.md` and `content/fixtures/morph-contract-v1.json` (architecture.md),
 and the README points to it.
 
