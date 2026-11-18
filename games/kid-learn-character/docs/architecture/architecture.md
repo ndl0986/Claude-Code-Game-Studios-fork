@@ -260,7 +260,7 @@ reveal-timing-v1 and scene-look-v1); audio graph (per platform).
 
 ## Technical Requirements Baseline
 
-(**v2:** the TR registry `docs/architecture/tr-registry.yaml` now holds the permanent IDs (84 rows, TASK-111) and is
+(**v2:** the TR registry `docs/architecture/tr-registry.yaml` now holds the permanent IDs (TASK-111) and is
 the source for stories; `requirements-traceability.md` maps them to ADRs. The table below is v1's baseline, kept for
 context, plus the keyboard row and accessibility rows v1 lacked (TASK-111 AD-2). Cite the registry, not this table.)
 
