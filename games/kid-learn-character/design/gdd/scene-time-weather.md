@@ -246,18 +246,18 @@ the cap.
 
 **F4. Element counts for the visible area.**
 ```
-A_ratio   = (visible sky area) / (safe sky area 1280 × 300)        (sky: y from rect.minY to 320)
+A_ratio   = (visible sky area) / (safe sky area 1280 × 320)        (sky: y from rect.minY to 320)
 n_stars   = min(50, round(base_stars(look) × A_ratio))              base: Morning 4, Day 0, Dusk 46, Night 50
 n_rain    = min(70, round(55 × A_vis / A_safe)) × factors           (A over the whole visible rect)
 n_snow    = min(60, round(45 × A_vis / A_safe)) × factors
 n_clouds  = cloudy: 3 (4 if A_ratio ≥ 1.3); rain or snow: 2 (3 if A_ratio ≥ 1.3)
 ```
-| Rect | A_ratio (sky) | A_vis / A_safe | stars (Night) | rain | snow |
-|---|---|---|---|---|---|
-| 16:9, 1280 × 720 | 1.00 | 1.00 | 50 | 55 | 45 |
-| 11" iPad, 1280 × 894 | 1.36 | 1.24 | 50 (cap) | 68 | 56 |
-| 13" iPad, 1280 × 960 | 1.47 | 1.33 | 50 (cap) | 70 (cap) | 60 (cap) |
-| 21:9 Mac, 1720 × 720 | 1.34 | 1.34 | 50 (cap) | 70 (cap) | 60 (cap) |
+| Rect | A_ratio (sky) | A_vis / A_safe | stars (Night) | rain | snow | clouds: cloudy / rain or snow |
+|---|---|---|---|---|---|---|
+| 16:9, 1280 × 720 | 1.00 | 1.00 | 50 | 55 | 45 | 3 / 2 |
+| 11" iPad, 1280 × 894 | 407/320 = 1.27 | 1.24 | 50 (cap) | 68 | 56 | 3 / 2 |
+| 13" iPad, 1280 × 960 | 440/320 = 1.375 | 1.33 | 50 (cap) | 70 (cap) | 60 (cap) | 4 / 3 |
+| 21:9 Mac, 1720 × 720 | 1720/1280 = 1.34 | 1.34 | 50 (cap) | 70 (cap) | 60 (cap) | 4 / 3 |
 
 Dusk at 16:9 gives the one-shot's 46 stars.
 

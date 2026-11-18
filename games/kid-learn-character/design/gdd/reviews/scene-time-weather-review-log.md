@@ -23,3 +23,8 @@ Reviewed-Content-Hash: design/gdd/parade.md f2e4445aca32b3e358a730460d0350de4df8
 Reviewed-Content-Hash: design/art/art-bible.md ff95ca81ce8e7a2adbf92f5ce92267c3fe355cda
 Reviewed-Content-Hash: production/team/decisions.md fe4761035a309a289bdb33b864b79baae62fc9ea
 Reviewed-Content-Hash: design/compliance/TASK-034-kids-weather-rules.md efc8d1ecc3ad747f52894344afb5442089e0c52d
+
+## Update — 2026-11-18 — independent read: APPROVE; F4 fix (no re-review)
+Review mode: lean · Workflow: standard
+Change: game-dev-ios's independent read of 4b03332 is APPROVE (all 7 plan items in). His F4 fix: A_ratio divides by the safe sky band 1280 × 320 (y 0…320), not 1280 × 300; A_ratio is now 1.00 / 1.27 / 1.375 / 1.34 for the four rects; stars unchanged (capped); a clouds column added (11" iPad: 3 cloudy, 2 with rain or snow; 13" and 21:9: 4 / 3). No AC used the old figures.
+Reviewed-Content-Hash: design/gdd/scene-time-weather.md 1c442e010786ec085de1240405a13529ce8406cd
