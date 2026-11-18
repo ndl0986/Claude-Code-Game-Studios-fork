@@ -58,7 +58,8 @@ every speck slows to a stop as it lands, and the reveal ends quieter than it beg
 |---|---|
 | Mapping unit-box positions to the screen (the glyph's box, the creature's box on the stage) | Reveal Stage |
 | Drawing particles (size, colour, twinkle, blending, fade-out) and the solid glyph and creature pictures | Cast Rendering and Reveal Stage; how SVG reaches the screen is the later SVG-rendering ADR |
-| The glyph's halo pulse (~2.2 Hz, art bible §2) and the creature's fade-in (`form_s`) | Reveal Stage |
+| When the glyph's halo is on, and the creature's fade-in (`form_s`) | Reveal Stage |
+| How the halo looks: its ~2.2 Hz blur pulse (art bible §2), steady under Reduce Motion | Cast Rendering (its R1, R5) |
 | How long a reveal holds while keys wait, and when the next reveal starts | Press Queue (systems-index circular-dependency note) |
 | Whether the normal or the reduced timing set applies | Accessibility (supplies the Reduce Motion / "Remove animations" flag) |
 | Where the seed comes from | The caller (Reveal Stage), through an injected source (Rule 5) |
@@ -277,7 +278,7 @@ without changing any single flight.
 MorphCore has none of its own. The art bible rules it serves are drawn by others:
 - the glyph is the brightest thing on screen, and the stardust keeps the glyph's outline before it becomes the
   creature (§1; MorphCore's `from` points lie on that outline, the drawing is Reveal Stage and Cast Rendering);
-- the halo pulses at ~2.2 Hz while the glyph glows (§2, Reveal Stage);
+- the halo pulses at ~2.2 Hz while the glyph glows (§2; Reveal Stage turns it on, Cast Rendering draws it);
 - the reveal ends quieter than it began (§2): the motion settles (F8), and the light fades (Reveal Stage);
 - detail per size (§5) applies to the creature pictures, not to the silhouette path.
 

@@ -19,3 +19,8 @@ Reviewed-Content-Hash: design/gdd/systems-index.md 6652c64909266be6f7de820ddfbff
 Reviewed-Content-Hash: design/art/art-bible.md a01094340e7e5b7bdae636f4cc879d0f84b472b5
 Reviewed-Content-Hash: docs/architecture/morph-contract-v1.md 4935b3ac7490c131eb67bdf4c388b14a5f7ed46b
 Reviewed-Content-Hash: docs/architecture/adr-0001-native-apple.md 9bd960cdffd4bec53f0f2875d6f4c7a33f873a70
+
+## Update — 2026-11-18 — ownership wording (no re-review)
+Review mode: lean · Workflow: standard
+Change: TASK-044 (Cast Rendering R1): the ownership table splits the halo: WHEN it is on (and the creature's `form_s` fade-in) is the Reveal Stage's, how it LOOKS (the ~2.2 Hz blur pulse, steady under Reduce Motion) is Cast Rendering's; Visual/Audio Requirements line matched. Wording only; no rule changed.
+Reviewed-Content-Hash: design/gdd/morphcore.md 936291c0a2a5e5e3df31fba9f300df58920d4adb
