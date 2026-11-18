@@ -22,13 +22,23 @@ final class AudioSpike: @unchecked Sendable {
     var format: AVAudioFormat
     var buffers: [String: AVAudioPCMBuffer] = [:]
     var cutSettle = 0.04          // ADR-0010 D5 cut_settle_s: the mixer's smoothing (~27 ms) plus margin
-    private var busyUntil: [Double]
+    /// ADR-0010 D4: a per-player state machine on the audio queue. `gen` is the transition token (a delayed step runs
+    /// only if it is still current); `sound` identifies the scheduled sound (its played-back completion counts only if
+    /// it is still the sound on the player).
+    enum PState: String { case idle, sounding, cutting, frozen }
+    struct PlayerState {
+        var state = PState.idle, gen = 0, sound = 0
+        var buffer: AVAudioPCMBuffer?, startSample: AVAudioFramePosition = 0
+        var frozenAt: AVAudioFramePosition = 0, stopped = false
+        var pending: (AVAudioPCMBuffer, String)?
+    }
+    private var ps: [PlayerState]
     private var uiNext = 0
     var log: (String) -> Void = { _ in }
 
     init(log: @escaping (String) -> Void) {
         self.log = log
-        busyUntil = []
+        ps = []
         #if os(iOS)
         let s = AVAudioSession.sharedInstance()
         try? s.setCategory(.soloAmbient, mode: .default)       // obeys silent mode, does not mix (Audio R6)
@@ -49,7 +59,7 @@ final class AudioSpike: @unchecked Sendable {
                 players.append((b, p, pm))
             }
         }
-        busyUntil = Array(repeating: 0, count: players.count)
+        ps = Array(repeating: PlayerState(), count: players.count)
         busMixers[.cast]?.outputVolume = 0.63; busMixers[.ui]?.outputVolume = 0.32; busMixers[.music]?.outputVolume = 0.40
         engine.connect(submix, to: limiter, format: nil)
         engine.connect(limiter, to: engine.mainMixerNode, format: nil)
@@ -115,59 +125,116 @@ final class AudioSpike: @unchecked Sendable {
     @discardableResult
     func play(_ name: String, on bus: Bus) -> Double {
         let handed = ProcessInfo.processInfo.systemUptime
+        // spike only: the production adapter takes the player the plan chose (ADR-0010 D4; audio-plan-v1's cap)
         let idx: Int
         if bus == .ui { let ui = players.indices.filter { players[$0].bus == .ui }; idx = ui[uiNext % ui.count]; uiNext += 1 }
         else { idx = players.firstIndex { $0.bus == bus }! }
         guard let b = buffers[name] else { return handed }
-        let p = players[idx]
-        let dur = Double(b.frameLength) / format.sampleRate
-        queue.async {
-            let now = ProcessInfo.processInfo.systemUptime
-            let schedule = {
-                p.node.scheduleBuffer(b, at: nil, options: .interrupts)   // the player is silent here: no hard cut
-                if !p.node.isPlaying { self.startPlayer(p.node) }
-                // ADR-0010 D9 in-app split: estimated acoustic onset = schedule time + IO buffer + output latency
-                let at = ProcessInfo.processInfo.systemUptime
-                self.log(String(format: "split %@: handed %.4f scheduled %.4f io %.2f ms out %.2f ms estOnset %.4f",
-                                name, handed, at, self.ioBufferMs, self.outputLatencyMs,
-                                at + (self.ioBufferMs + self.outputLatencyMs) / 1000))
-                self.busyUntil[idx] = ProcessInfo.processInfo.systemUptime + dur
-            }
-            if self.busyUntil[idx] > now {                                 // busy: cut first (D5), then start
-                self.cutPlayer(idx) { schedule() }
-            } else { schedule() }
-        }
+        queue.async { self.request(idx, b, name, handed: handed) }
         return handed
     }
 
-    /// ADR-0010 D5, on the audio queue: volume 0 (smoothed by the mixer), wait cutSettle, stop, volume back to 1.
-    private func cutPlayer(_ idx: Int, then: (() -> Void)? = nil) {
-        let p = players[idx]
-        p.mix.outputVolume = 0
-        queue.asyncAfter(deadline: .now() + cutSettle) {
-            p.node.stop(); self.startPlayer(p.node); p.mix.outputVolume = 1; self.busyUntil[idx] = 0
-            then?()
+    // MARK: ADR-0010 D4/D5/D7 state machine (all on `queue`)
+    private func request(_ i: Int, _ b: AVAudioPCMBuffer, _ name: String, handed: Double) {
+        switch ps[i].state {
+        case .idle: schedule(i, b, name: name, handed: handed)
+        case .sounding: ps[i].pending = (b, name); cutPlayer(i)          // replacement: cut first, start after settle
+        case .cutting: ps[i].pending = (b, name)                          // the newest request replaces a pending one
+        case .frozen: log("play on a frozen player ignored (the plan starts nothing while frozen)")
         }
     }
 
-    /// Cuts every player on a bus without a click (P-7 / M-14 listen for clicks).
+    private func currentSample(_ i: Int) -> AVAudioFramePosition {
+        let n = players[i].node
+        guard let nt = n.lastRenderTime, let pt = n.playerTime(forNodeTime: nt) else { return 0 }
+        return pt.sampleTime
+    }
+
+    /// Schedules on a silent player (so `.interrupts` never cuts a sound hard), optionally from a frame (D7 resume).
+    private func schedule(_ i: Int, _ b: AVAudioPCMBuffer, name: String, handed: Double, from: AVAudioFramePosition = 0) {
+        let p = players[i]
+        ps[i].gen += 1; ps[i].sound += 1
+        let sound = ps[i].sound
+        ps[i].state = .sounding; ps[i].buffer = b; ps[i].stopped = false
+        var toPlay = b
+        if from > 0, from < AVAudioFramePosition(b.frameLength) {   // the rest of the buffer, copied here (not on a press)
+            let rest = Int(b.frameLength) - Int(from)
+            let r = AVAudioPCMBuffer(pcmFormat: b.format, frameCapacity: AVAudioFrameCount(rest))!
+            r.frameLength = AVAudioFrameCount(rest)
+            r.floatChannelData![0].update(from: b.floatChannelData![0] + Int(from), count: rest)
+            toPlay = r
+        }
+        if !p.node.isPlaying { startPlayer(p.node) }
+        ps[i].startSample = currentSample(i) - from                   // frame 0 of the original buffer, in player time
+        p.node.scheduleBuffer(toPlay, at: nil, options: .interrupts, completionCallbackType: .dataPlayedBack) { [weak self] _ in
+            self?.queue.async {
+                guard let self, self.ps[i].sound == sound, self.ps[i].state == .sounding else { return }
+                self.ps[i].state = .idle                               // "sounding" ends when played back (D4)
+            }
+        }
+        let at = ProcessInfo.processInfo.systemUptime
+        log(String(format: "split %@: handed %.4f scheduled %.4f io %.2f ms out %.2f ms estOnset %.4f",
+                   name, handed, at, ioBufferMs, outputLatencyMs, at + (ioBufferMs + outputLatencyMs) / 1000))
+    }
+
+    /// D5: gate to 0 (smoothed), after cutSettle stop, restart, gate back to 1, then any pending start.
+    private func cutPlayer(_ i: Int) {
+        let p = players[i]
+        switch ps[i].state {
+        case .idle, .cutting: return                                   // nothing sounding / already fading
+        case .frozen where ps[i].stopped:                              // already silent and stopped
+            ps[i].gen += 1; ps[i].state = .idle; startPlayer(p.node); p.mix.outputVolume = 1; return
+        case .sounding, .frozen: break                                 // a frozen player still fading: finish as a cut
+        }
+        ps[i].state = .cutting; ps[i].gen += 1
+        let g = ps[i].gen
+        p.mix.outputVolume = 0
+        queue.asyncAfter(deadline: .now() + cutSettle) {
+            guard self.ps[i].gen == g else { return }
+            p.node.stop(); self.startPlayer(p.node); p.mix.outputVolume = 1
+            self.ps[i].state = .idle
+            if let (b, name) = self.ps[i].pending { self.ps[i].pending = nil; self.schedule(i, b, name: name, handed: ProcessInfo.processInfo.systemUptime) }
+        }
+    }
+
+    /// Cuts every player on a bus without a click (P-7 / M-14 listen for clicks). A cut drops any pending start.
     func cut(_ bus: Bus) {
-        queue.async { for i in self.players.indices where self.players[i].bus == bus { self.cutPlayer(i) } }
+        queue.async { for i in self.players.indices where self.players[i].bus == bus { self.ps[i].pending = nil; self.cutPlayer(i) } }
         log("cut \(bus.rawValue) settle=\(Int(cutSettle * 1000)) ms")
     }
 
     func setMuted(_ m: Bool) { let target: Float = m ? 0 : 1; queue.async { let from = self.engine.mainMixerNode.outputVolume; for s in 0...30 { self.engine.mainMixerNode.outputVolume = from + (target - from) * Float(s) / 30; usleep(1000) } }; log("mute \(m)") }
-    /// ADR-0010 D7: volume 0, wait cutSettle, pause (the position is held ~cutSettle after the freeze moment).
+
+    /// D7: position taken at the freeze call (before the gate falls), gate 0, stop after cutSettle.
     func freeze() {
         queue.async {
-            for p in self.players { p.mix.outputVolume = 0 }
-            self.queue.asyncAfter(deadline: .now() + self.cutSettle) { for p in self.players { p.node.pause() } }
+            for i in self.players.indices where self.ps[i].state == .sounding {
+                self.ps[i].frozenAt = max(0, self.currentSample(i) - self.ps[i].startSample)
+                self.ps[i].state = .frozen; self.ps[i].stopped = false; self.ps[i].gen += 1
+                let g = self.ps[i].gen, p = self.players[i]
+                p.mix.outputVolume = 0
+                self.queue.asyncAfter(deadline: .now() + self.cutSettle) {
+                    guard self.ps[i].gen == g, self.ps[i].state == .frozen else { return }
+                    p.node.stop(); self.ps[i].stopped = true
+                }
+            }
         }
-        log("freeze: players faded and paused")
+        log("freeze: positions held, players faded and stopped")
     }
-    /// ADR-0010 D7: play from the held position, then volume 1 (the mixer smooths the rise).
+    /// D7: each frozen sound continues from its held frame; a resume before the stop only raises the gate.
     func resume() {
-        queue.async { for p in self.players { self.startPlayer(p.node); p.mix.outputVolume = 1 } }
+        queue.async {
+            for i in self.players.indices where self.ps[i].state == .frozen {
+                let p = self.players[i]
+                if !self.ps[i].stopped {
+                    self.ps[i].gen += 1; self.ps[i].state = .sounding        // the pending stop becomes a no-op
+                } else if let b = self.ps[i].buffer {
+                    self.schedule(i, b, name: "resume", handed: ProcessInfo.processInfo.systemUptime, from: self.ps[i].frozenAt)
+                    self.log("resume player \(i) from frame \(self.ps[i].frozenAt)")
+                }
+                p.mix.outputVolume = 1
+            }
+        }
         log("resume")
     }
 

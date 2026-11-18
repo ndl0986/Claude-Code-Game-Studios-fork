@@ -147,44 +147,78 @@ player(music) ─ gate ─┘                                     (g_master × g
   until the new generation is ready, `play(event)` skips and logs (R4.4; AC-15).
 - Durations come from ADR-0003 D5 (`voiceDurations`, priming removed); the adapter never measures them at run time.
 
+Each of D4–D7 states a **Rule** (platform-neutral: the Android audio ADR, ADR-0012, meets the same rule with its own
+mechanism) and the **Apple** mechanism that meets it (game-dev-android's review, TASK-087).
+
 ### D4. Scheduling (`AudioOutput.play`)
-- The main thread only posts the event (R4.3); one **serial audio queue** (QoS `.userInteractive`) does all graph
-  work: scheduling, gates, ducks, freeze, restarts.
-- An **idle** player (the ui pool picks an idle one first; voice, cast and music have one each) gets
-  `scheduleBuffer(buffer, at: nil, options: .interrupts)` at once; its gate is already at 1.
-- A **busy** player (a replacement: E6 over a line, E8/E10/E11 on the cast player, or the ui pool's steal of the
-  oldest, R2.5) is **cut first (D5) and the new buffer scheduled when the cut completes**: such a sound starts up to
-  `cut_settle_s` (40 ms) late. `.interrupts` alone on a sounding player is a hard switch and clicks (H-1).
-  AC-16's single press always finds an idle ui player, so it pays nothing.
-- Busy is tracked by the adapter (scheduled length from D3), not by asking the node.
+**Rule.**
+- The main thread only posts the event (R4.3); one serial audio context does all graph work.
+- `play(event)` carries **the player the plan chose** (audio-plan-v1 owns the 7-player cap and R2.5's steal of the
+  oldest ui player, ADR-0004); the adapter never picks a player.
+- A player that is **idle** starts the sound at once. A player that is **sounding** is cut first (D5) and the new
+  sound starts when the cut completes, **no later than `cut_settle_s`**. AC-16's single press always finds its ui
+  player idle, so it pays nothing.
+- Each player is a small state machine on the audio context, **idle → sounding → cutting → idle**, plus **frozen**
+  (D7), with a **generation token** bumped on every transition; a delayed step (the end of a cut, the stop after a
+  freeze) runs only if its token is still current. The races it settles:
+  - a `play` for a player that is **cutting**: the newest request replaces any pending one and starts when that cut
+    completes;
+  - a second `cut` (or a replacement) on a player already **cutting**: no new fade; the pending start, if any, is
+    dropped by a cut;
+  - `resume()` within `cut_settle_s` of `pause()` (the stop has not happened yet): the gate rises again and the player
+    continues untouched, its token making the pending stop a no-op;
+  - mute during a freeze: mute acts on the main mix only (D5) and leaves the frozen players' state alone; unmute
+    restores the main mix and the frozen players still resume on `resume()`.
+- "Sounding" ends when the platform reports the buffer **played back**, not after its nominal length (a freeze stops
+  a player's time, so a length-based guess goes wrong).
+
+**Apple.** One serial `DispatchQueue` (QoS `.userInteractive`). Idle: `scheduleBuffer(buffer, at: nil, options:
+.interrupts, completionCallbackType: .dataPlayedBack)`; the completion, hopped to the queue, moves the player to idle
+if its token matches. `.interrupts` is used only on a silent player: on a sounding one it is a hard switch and clicks
+(H-1).
 
 ### D5. The cut, without a click (`AudioOutput.cut`; R2.2, AC-9)
-- **Never** `stop()`, `pause()` or `.interrupts` a player while it sounds: H-1 measured −38.7 dBFS discontinuities for
-  all three (threshold −60).
-- Cut = set that player's **gate** `outputVolume` to 0; the mixer smooths the change itself (H-1: the output falls below
-  −60 dBFS **≈ 27 ms** after a jump to 0, with no discontinuity above the clean tone's floor, −76 dBFS); after
-  **`cut_settle_s` = `cut_fade_s` + 0.01 s** (0.04 s with Audio's 0.03) `stop()` the player, restart it, and set the
-  gate back to 1 (silent then, so no smoothing matters).
-- If Audio ever sets `cut_fade_s` above the mixer's smoothing, the gate is stepped toward 0 over `cut_fade_s` in steps
-  of one IO period (≤ 5 ms); each step is smoothed (H-1: a 30 ms stepped ramp also passes; its 1 ms-step variant once
-  measured −62.7 dBFS, 2.7 dB inside the threshold, so if that path is used its H-1 case runs N = 20 times and every run
-  must pass).
-- **Mute** (R5, AC-14): the main mixer's volume to 0 (smoothed the same way) and D5 cuts on the voice and cast players.
-  **Volume and the slider preview**: `setGain` sets the main mixer to F1's `g_master × g_head`, stepped over
-  `cut_fade_s` when the change is large.
-- **The panel, background, headphones out, theme switch** use the same cut.
+**Rule.**
+- **Never stop, pause or replace a player's sound until its gain is below −60 dBFS.** The gain falls over
+  `cut_fade_s`, smoothly (no step above −60 dBFS on H-1's detector, at any phase).
+- **`cut_settle_s`** is the time from the start of a cut until the player may be stopped or reused:
+  `cut_settle_s = max(cut_fade_s + 0.01, smoothing_s + 0.01)` where `smoothing_s` is the platform's own gain smoothing
+  (0 where the platform ramps per sample). It is **bundled data** (ADR-0001 Decision 6), proposed as an Audio & Voice
+  knob (0.04 s) so both platforms use the same value and lose or delay the same amount; the loader rejects a value
+  below the formula (so `cut_fade_s` 0.01 cannot shrink it under the Apple mixer's smoothing).
+- **Mute** is silent within `cut_fade_s` (gain smoothed, then the voice and cast players cut); volume and the slider
+  preview change the main gain smoothly (F1).
+- The panel, background, headphones out and a theme switch use the same cut.
+- **A per-sample gain ramp over `cut_fade_s` (Alternative 4) meets this rule by construction**, with `smoothing_s` = 0;
+  it is the expected Android mechanism and the Apple fallback.
+
+**Apple.** The cut sets the player's **gate** `outputVolume` to 0; the mixer smooths it (H-1: below −60 dBFS ≈ 27 ms
+after a jump to 0; Apple's `smoothing_s` is set to **0.03**, rounded up). After `cut_settle_s` the player is
+`stop()`ped, restarted (`playAudio()` / `play()`) and its gate set back to 1 (silent then). For `cut_fade_s` longer
+than the smoothing, the gate is stepped toward 0 in IO-period steps, each smoothed. Mute sets the main mixer to 0 the
+same way and cuts the voice and cast players. The smoothing is measured, not documented (Risks).
 
 ### D6. Ducking (F2)
-- The cast and music **bus** mixers are stepped along F2's dB-linear ramp (`duck_attack_s`, `duck_release_s`) in steps
-  of one IO period on the audio queue; the mixer's smoothing rounds the steps. The ui bus is never ducked.
+**Rule.** The cast and music buses follow F2's dB-linear ramp (`duck_attack_s`, `duck_release_s`) with no step above
+−60 dBFS; the ui bus is never ducked.
+**Apple.** The bus mixers' `outputVolume` stepped along the ramp in IO-period steps on the audio queue; the mixer's
+smoothing rounds the steps.
 
 ### D7. The gate freeze (`AudioOutput.pause` / `resume`; R6, AC-21; ADR-0002 D7 chain 2)
-- `pause()`: every gate to 0; after `cut_settle_s`, `pause()` every player. `resume()`: `playAudio()` / `play()` every
-  player, then every gate to 1 (the mixer smooths the rise, ≈ 27 ms).
-- Consequence: a paused sound continues from **≈ `cut_settle_s` after** the freeze moment (that much of it was faded,
-  not heard). AC-21's "continues from where it paused" holds within 40 ms; the plan's play clock, not the adapter,
-  keeps new events from starting (R6).
-- The engine keeps running through a freeze; only the background pauses the engine (D8).
+**Rule.**
+- **A freeze skips nothing:** on `resume()` each frozen sound continues **from the frame it had reached at the freeze
+  call, or up to `cut_settle_s` earlier** (a little heard again, never skipped; Audio R6 and AC-21 as amended by
+  TASK-090b). The fade-out and fade-in are the only change, both without a click.
+- No new event starts while frozen (the plan's play clock; R6). The engine keeps running.
+
+**Apple.** `pause()`: for each sounding player, capture its position (`playerTime(forNodeTime: lastRenderTime)` minus
+the sample at which its buffer started), set the gate to 0, and after `cut_settle_s` `stop()` it (state frozen, token
+kept). `resume()`: for each frozen player, schedule **the rest of its buffer from the captured frame** (a sub-buffer
+copy made at resume, never on a press; `scheduleSegment` exists only for files), start the player, and raise the gate
+(the mixer smooths the rise). A resume within `cut_settle_s` (not yet stopped) only raises the gate (D4). The captured frame can sit
+**before** the true freeze instant (`lastRenderTime` is the last render's start, plus the graph's latency), so a
+little is heard again and nothing is skipped: H-1 measures 0–15 ms, within Audio's "up to `cut_settle_s` earlier"
+(R6, AC-21; TASK-090b). The sub-buffer copy is made on the audio queue.
 
 ### D8. Session and engine notifications
 All handlers hop to the audio queue; none deallocates the engine (header).
@@ -196,7 +230,7 @@ All handlers hop to the audio queue; none deallocates the engine (header).
 | Configuration change | `AVAudioEngineConfigurationChange` | same | same (output device change) | the engine stopped itself: restart; re-prime when the output format changed (D3) |
 | Route: old device unavailable | `routeChangeNotification` `.oldDeviceUnavailable` | same | (config change) | D5 cut on voice and cast; nothing jumps to the speaker mid-line |
 | Media services reset | `mediaServicesWereResetNotification` | same | — | rebuild the whole graph (D2), re-prime (D3) |
-| Background / foreground | app lifecycle (ADR-0002 D6) | same | same | D5 cut on every player, then `engine.pause()`; on return, as "interruption ends" |
+| Background / foreground | **`didEnterBackground`** (ADR-0002 D6 `AppLifecycle`); `willResignActive` alone (Control Center, Siri) does nothing here: an interruption that takes the audio arrives through the session rows above | same | window/app inactive is not background | D5 cut on every player, then `engine.pause()` **after `cut_settle_s`** (well inside the background grace period); on return, as "interruption ends" |
 Which notification is observed is chosen with `if #available(iOS 27, *)`; the deprecated one is not observed on 27.
 
 ### D9. Latency target and what P-1 measures (AC-16)
@@ -207,7 +241,8 @@ Which notification is observed is chosen with `if #available(iOS 27, *)`; the de
   offset is about ±10 ms, while one display period is 16.7 ms at 60 Hz and 8.3 ms at 120 Hz. So P-1 uses two
   measurements (decision rule): the **film as a screen** and **the in-app split** as the decider within the film's
   resolution.
-- **The in-app split** (debug builds, per press): the event's uptime stamp; the hand-off to the audio queue; the
+- **The in-app split** (debug builds, per press), all on **host time** (the mach timebase that
+  `ProcessInfo.systemUptime`, event timestamps and `CADisplayLink.targetTimestamp` share): the event's uptime stamp; the hand-off to the audio queue; the
   `scheduleBuffer` call; the session's `ioBufferDuration` and `outputLatency`; and the `targetTimestamp` of the first
   display-link frame that draws the press's answer. Estimated onset = schedule time + `ioBufferDuration` +
   `outputLatency`; the split passes when estimated onset − that frame's `targetTimestamp` ≤ 1 display period.
@@ -252,7 +287,9 @@ KidCore audio plan ──AudioOutput (ADR-0002 D6)──▶ AudioAdapter (app)
 
 ### Implementation Guidelines
 - One adapter type owns the engine; nothing else touches AVFAudio. All of it compiles in the app target only.
-- Branch the two deprecations with `#available(iOS 27, macOS 27, *)`; no deprecated call on 27.
+- The 27 SDKs replace several void AVFAudio calls with throwing ones (`play()` → `playAudio()`,
+  `connect(_:to:format:)` → `connectNode(_:to:format:)`, the interruption notification → D8's pair); with deployment
+  26, branch each with `#available(iOS 27, macOS 27, *)`; no deprecated call runs on 27.
 - Debug builds log one line per press (D9) and per notification (D8); release builds log no child input (PKC-14).
 - Keep `prototypes/DeviceSpike/tools/offline-cut-check.swift`'s detector as the adapter story's headless test for
   AC-9 and AC-21 (rewritten to production standards, not copied).
@@ -268,7 +305,9 @@ KidCore audio plan ──AudioOutput (ADR-0002 D6)──▶ AudioAdapter (app)
   ignoring silent mode).
 
 ### Alternative 3: Cut with `stop()`, `pause()` or `.interrupts` directly
-- **Rejected**: H-1 measures −38.7 dBFS discontinuities, 21 dB over AC-9's −60.
+- **Rejected**: H-1 measures discontinuities up to **−1 dBFS** on single tones (a step at the peak) and a full gain
+  drop in one sample on the chord and voice-like line; even the best phase (a zero crossing) is −38.7 dBFS on the
+  100 Hz tone, 21 dB over AC-9's −60.
 
 ### Alternative 4: A per-sample gain ramp (an `AVAudioSourceNode` or a fade written into a copy of the buffer)
 - **Kept as the fallback** if P-7 or M-14 hears a click: exact and independent of the mixer's undocumented
@@ -315,7 +354,7 @@ KidCore audio plan ──AudioOutput (ADR-0002 D6)──▶ AudioAdapter (app)
 | audio-voice.md R8; ADR-0003 D6 | voice source, no run-time TTS | D10 |
 
 ## Performance Implications
-- **CPU**: 7 players, 12 mixers (7 gates, 4 buses, the submix) plus the main mixer, and one limiter run continuously at the IO rate (measured on the Mac by M-14's session;
+- **CPU**: 7 players, 13 mixers (7 gates, 4 buses, 1 submix, 1 main) and one limiter run continuously at the IO rate (measured on the Mac by M-14's session;
   iPad by P-1's thermal note).
 - **Memory**: decoded PCM per Audio F5; nothing allocated on a press.
 - **Latency**: the IO buffer (requested 5 ms) plus output latency, logged (D9).
@@ -329,25 +368,45 @@ adapter story rewrites it to production standards.
 Per K-34: headless runs need no MAC FREE; anything on the Mac's screen or speakers does.
 
 **Headless (done or runnable now):**
-- **H-1 Offline cut check** (`prototypes/DeviceSpike/tools/offline-cut-check.swift`, `AVAudioEngine` offline manual
-  rendering, the D2 chain with the Apple limiter): a 100 Hz tone at −1 dBFS cut at 300 ms; detector = the largest
-  second difference of the output (the clean tone's floor is −76 dBFS; AC-9's threshold −60 dBFS). Results
-  (2026-11-18, macOS 27; output in `production/qa/evidence/TASK-087/<sha>/offline-cut-check.txt`):
+- **H-1 Offline cut check** — a **platform-neutral spec** (Android runs the same signals, phases, events and limits
+  in its own offline render; proposed as a shared fixture with QC), implemented here in
+  `prototypes/DeviceSpike/tools/offline-cut-check.swift` (`AVAudioEngine` offline manual rendering, the D2 chain with
+  Apple's PeakLimiter):
+  - **Signals**, each at −1 dBFS and started at **8 phases** (k/8 of a period), so an event lands at every phase,
+    peak included: a 100 Hz tone, a 1 kHz tone, a 220 + 347 Hz chord, and a voice-like line (a gliding,
+    vibrato'd tone with a 3 Hz syllable envelope).
+  - **Events** at 300 ms, on 5 ms render quanta: a hard stop; `.interrupts` with a new buffer on a busy player; a
+    pause and immediate play; the D5 cut (gate to 0, `cut_settle_s` 40 ms, stop); the D5 mute (main mix to 0); the D7
+    freeze (position captured at the freeze call, gate to 0, stop after 40 ms; resume 140 ms later from the captured
+    frame, gate to 1).
+  - **Detectors**: for single tones the **sine-predictor residual** max|x[n] − 2cos(ω)x[n−1] + x[n−2]| (0 for a clean
+    tone at any amplitude and phase), threshold **−60 dBFS** (AC-9); for the chord and the voice-like line the
+    **largest per-sample gain step** of out/src (aligned for the graph's latency), threshold **1/720 per sample**
+    (−57.1 dB: no faster than a 15 ms linear fade; a hard stop is ≈ 0 dB). The older d2 detector is reported for
+    the 100 Hz tone for one release, to compare with the first numbers. **Continuity** (D7): the source frame the
+    resumed output lines up with, against the frame at the freeze call.
+  - **Pass**: every gated mechanism (D5 cut, D5 mute, D7 freeze) passes on every signal at every phase; the
+    detectors' floor (no event) passes; the resume is never later than the freeze frame and at most
+    `cut_settle_s` earlier.
+  - **Results** (2026-11-18, macOS 27.2, repeated runs, evidence `production/qa/evidence/TASK-087/<sha>/`):
+    | Mechanism | 100 Hz (residual) | 1 kHz (residual) | chord, voice-like (gain step) | Verdict |
+    |---|---|---|---|---|
+    | no event (floor) | −137.1 | −142.1 | none | PASS |
+    | hard `stop()` | −1.0 worst, −38.7 best | −1.0 / −18.7 | 0.0 dB (a full drop in one sample) | FAIL at every phase |
+    | `.interrupts` on a busy player | −1.0 / −38.7 | −1.0 / −18.7 | 0.0 dB | FAIL at every phase |
+    | `pause()` / play at once | −1.0 / −38.7 | −1.0 / −18.7 | up to +11.6 dB | FAIL at every phase |
+    | **D5 cut** (gate 0, 40 ms, stop) | **−62.6** worst | **−62.7** | **−61.6** (limit −57.1) | **PASS at every phase** |
+    | **D5 mute** (main mix 0) | **−63.0** | **−62.7** | **−61.6** | **PASS at every phase** |
+    | **D7 freeze / resume from position** | **−62.6** | **−62.7** | **−61.6** | **PASS at every phase** |
 
-  | Mechanism | Largest discontinuity | Verdict |
-  |---|---|---|
-  | hard `stop()` | −38.7 dBFS | FAIL |
-  | `.interrupts` on a busy player (a new buffer replaces a sounding one) | −38.7 dBFS | FAIL |
-  | `pause()` / play at once (a naive freeze) | −38.7 dBFS | FAIL |
-  | gate to 0, `pause()` only 10 ms later (smoothing not finished) | −43.1 dBFS | FAIL |
-  | gate to 0 at once (below −60 dBFS after 26.8 ms) | −76.3 dBFS (the floor) | PASS |
-  | 30 ms stepped ramp, 5 ms or 1 ms steps | −76.3 dBFS (one earlier run −62.7) | PASS |
-  | **D5 cut**: gate to 0, settle 40 ms, `stop()`, gate to 1 | −76.3 dBFS | **PASS** |
-  | **D7 freeze / resume**: gate to 0, settle 40 ms, `pause()`; 100 ms later play, gate to 1 | −76.3 dBFS | **PASS** |
-
-  These three FAILs, 21 dB over AC-9's −60 dBFS, are the measured reason for D5 and D7 and for Alternative 3's
-  rejection. Offline rendering is deterministic up to the mixer's internals; the 1 ms-step ramp varied between
-  −62.7 and −76.3 dBFS across runs, still under the threshold.
+    dBFS for the residual; d2 on the 100 Hz tone for comparison: floor −76.3, hard stop −1.0, D5 −61.0. The first
+    H-1 (a70779fb) cut only at the zero crossing (game-dev-android's R1), so its −38.7 is the **best** case of a hard
+    stop, not a typical one. The gated mechanisms pass with a **2.6 dB** margin on single tones (the mixer's ≈ 27 ms
+    smoothing is close to a 25 ms linear fade); the verdicts are identical across 3 runs of the final script, the failing
+    mechanisms' best cases move by ≤ 2 dB. **Continuity (D7):** on the chord and the voice-like line (aperiodic within the search, so
+    the alignment is unambiguous) the resumed audio starts **0 to 720 frames (0–15 ms) before** the frame at the
+    freeze call, never after: a little is heard again, nothing is skipped (Audio R6, AC-21 as amended in TASK-090b).
+    On pure tones the alignment is ambiguous modulo the period and is not used.
 - **H-2 Build:** `DeviceSpike` with `AudioSpike` implementing D1–D8 (the gate cut, the freeze, the iOS 27 branches)
   builds for iOS Simulator and macOS with no warnings (2026-11-18, this ADR's sha). Its minimal spike check runs
   before each install (TASK-078 `tools/device-build.sh`).
