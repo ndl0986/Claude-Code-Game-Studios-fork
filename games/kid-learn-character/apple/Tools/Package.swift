@@ -6,12 +6,17 @@ import PackageDescription
 let package = Package(
     name: "Tools",
     platforms: [.macOS("26.0")],
-    products: [.executable(name: "kidtools", targets: ["kidtools"])],
-    dependencies: [.package(path: "../KidCore"), .package(path: "../MorphCore")],
+    products: [
+        .executable(name: "kidtools", targets: ["kidtools"]),
+        .library(name: "ToolsCore", targets: ["ToolsCore"]),
+    ],
+    dependencies: [.package(path: "../KidCore"), .package(path: "../MorphCore"), .package(path: "../ContractKit")],
     targets: [
-        .executableTarget(name: "kidtools", dependencies: [
+        .target(name: "ToolsCore", dependencies: [
             .product(name: "KidCore", package: "KidCore"), .product(name: "MorphCore", package: "MorphCore"),
         ]),
-        .testTarget(name: "ToolsTests", dependencies: ["kidtools"]),
+        .executableTarget(name: "kidtools", dependencies: ["ToolsCore"]),
+        // ToolsTests: the key-table-schema-v1 "file" layer (ADR-0004 D3, D5). ContractKit is test-only (K-38).
+        .testTarget(name: "ToolsTests", dependencies: ["ToolsCore", .product(name: "ContractKit", package: "ContractKit")]),
     ]
 )

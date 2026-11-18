@@ -3,6 +3,7 @@
 //   kidtools api-surface <symbol-graph-dir> <module> <out.md>   write a module's public API surface
 //   kidtools api-surface --check <symbol-graph-dir> <module> <file.md>   exit 1 if <file.md> is stale
 import Foundation
+import ToolsCore
 
 func fail(_ s: String) -> Never { FileHandle.standardError.write(Data((s + "\n").utf8)); exit(2) }
 

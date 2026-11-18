@@ -49,10 +49,13 @@ api_check() {
   done
 }
 gate "api-surface (ADR-0002 V4)" api_check
-# 3. Content and contracts (ADR-0003, ADR-0004): wired in S2.
-say "OBSERVED contracts: harness not wired until S2, $(ls -d contracts/*-v*/ 2>/dev/null | wc -l | tr -d ' ') contracts unrun"
+# 3. Contracts (ADR-0004 D5): the KidCore harness (ContractTests) and the Tools "file" layer run inside step 4's
+#    swift test; their per-contract counts are echoed here from that run.
 # 4. swift test
-for m in MorphCore KidCore ContractKit Tools; do gate "swift test $m" swift test --package-path "apple/$m" --scratch-path "$BUILD/swiftpm/$m"; done
+for m in MorphCore KidCore ContractKit Tools; do
+  gate "swift test $m" sh -c 'swift test --package-path "apple/$1" --scratch-path "$2/swiftpm/$1" > "$2/test-$1.log" 2>&1; r=$?; cat "$2/test-$1.log"; exit $r' _ "$m" "$BUILD"
+  grep -h '^CONTRACT ' "$BUILD/test-$m.log" 2>/dev/null | sort -u | while IFS= read -r l; do say "OBSERVED ${l#CONTRACT }"; done
+done
 # 5. Xcode, headless
 if [ "$XCODE" = 1 ]; then
   gate "xcodebuild build macOS" xcodebuild -project apple/LetterMorph.xcodeproj -scheme LetterMorph -destination platform=macOS -derivedDataPath "$BUILD/xcode" -quiet build

@@ -38,7 +38,7 @@ final class DrawQueues {
 /// The KidCore harness (ADR-0004 D5). Every failure is a message; an empty list is a pass.
 enum ContractHarness {
     /// The runners this harness registers. A contract directory with no runner here is a FAIL.
-    static let registry: [ContractRunner.Type] = [SettingsRecordRunner.self]
+    static let registry: [ContractRunner.Type] = [SettingsRecordRunner.self, KeyTableModelRunner.self]
 
     struct Report {
         var failures: [String] = []

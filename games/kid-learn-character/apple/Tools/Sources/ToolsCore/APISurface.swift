@@ -2,10 +2,10 @@ import Foundation
 
 /// Renders a module's public API surface from its Swift symbol graph (`swift package dump-symbol-graph`), as a
 /// sorted, stable Markdown list the Kotlin port diffs against (ADR-0002 Key Interfaces, Validation 4).
-enum APISurface {
+public enum APISurface {
     struct Failure: Error, CustomStringConvertible { let description: String }
 
-    static func render(symbolGraphDir: String, module: String) throws -> String {
+    public static func render(symbolGraphDir: String, module: String) throws -> String {
         let fm = FileManager.default
         let files = try fm.contentsOfDirectory(atPath: symbolGraphDir)
             .filter { $0.hasPrefix(module + ".") && $0.hasSuffix(".symbols.json") }.sorted()

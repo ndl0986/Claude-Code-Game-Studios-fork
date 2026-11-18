@@ -43,6 +43,14 @@ The Kotlin port diffs its names and shapes against this file (ADR-0002).
 - `ContentProbe.decodedDuration(_:)` (method): `func decodedDuration(_ path: String) -> Double?`
 - `ContentProbe.exists(_:)` (method): `func exists(_ path: String) -> Bool`
 - `ContentProbe` (protocol): `protocol ContentProbe`
+- `CountedItem.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `CountedItem.castId` (property): `var castId: String`
+- `CountedItem.emptyCastId` (property): `var emptyCastId: String`
+- `CountedItem.emptyWord` (property): `var emptyWord: String`
+- `CountedItem.init(castId:singular:plural:emptyCastId:emptyWord:)` (init): `init(castId: String, singular: String, plural: String, emptyCastId: String, emptyWord: String)`
+- `CountedItem.plural` (property): `var plural: String`
+- `CountedItem.singular` (property): `var singular: String`
+- `CountedItem` (struct): `struct CountedItem`
 - `DebugLog.log(_:)` (method): `func log(_ line: String)`
 - `DebugLog` (protocol): `protocol DebugLog`
 - `DisplayMetrics.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
@@ -59,8 +67,32 @@ The Kotlin port diffs its names and shapes against this file (ADR-0002).
 - `DrawList.next()` (method): `mutating func next() -> UInt64`
 - `DrawList.remaining` (property): `var remaining: Int { get }`
 - `DrawList` (struct): `struct DrawList`
+- `GlyphSetModel.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `GlyphSetModel.baker` (property): `var baker: String`
+- `GlyphSetModel.fontLicence` (property): `var fontLicence: String?`
+- `GlyphSetModel.fontName` (property): `var fontName: String?`
+- `GlyphSetModel.fontVersion` (property): `var fontVersion: String?`
+- `GlyphSetModel.glyphs` (property): `var glyphs: [String : String]`
+- `GlyphSetModel.id` (property): `var id: String`
+- `GlyphSetModel.init(id:fontName:fontVersion:fontLicence:baker:glyphs:)` (init): `init(id: String, fontName: String?, fontVersion: String?, fontLicence: String?, baker: String, glyphs: [String : String])`
+- `GlyphSetModel` (struct): `struct GlyphSetModel`
 - `KeyStateQuery.anyNonModifierDown(except:)` (method): `func anyNonModifierDown(except physicalId: String) -> Bool`
 - `KeyStateQuery` (protocol): `protocol KeyStateQuery`
+- `KeyTable.hueSlots` (type.property): `static let hueSlots: Set<String>`
+- `KeyTable.keys` (type.property): `static let keys: [String]`
+- `KeyTable.knownSchemaVersions` (type.property): `static let knownSchemaVersions: Set<Int>`
+- `KeyTable.pick(n:weights:last:u:)` (type.method): `static func pick(n: Int, weights: [Double]? = nil, last: Int?, u: Double) -> Int`
+- `KeyTable.pickNeedsDraw(n:last:)` (type.method): `static func pickNeedsDraw(n: Int, last: Int?) -> Bool`
+- `KeyTable.titleCast(_:)` (type.method): `static func titleCast(_ t: ThemeModel) -> (item: ThemeItem?, fellBack: Bool)`
+- `KeyTable.validate(_:glyphs:assets:singleItemPerKey:)` (type.method): `static func validate(_ t: ThemeModel, glyphs g: GlyphSetModel, assets a: ThemeAssetFacts, singleItemPerKey: Bool? = nil) -> ThemeVerdict`
+- `KeyTable.voicePath(_:_:_:)` (type.method): `static func voicePath(_ locale: String, _ kind: String, _ id: String) -> String`
+- `KeyTable` (enum): `enum KeyTable`
+- `KeyVariety.init(lastShown:)` (init): `init(lastShown: [String : Int] = [:])`
+- `KeyVariety.lastShown` (property): `var lastShown: [String : Int] { get }`
+- `KeyVariety.peek(_:in:peekU:)` (method): `func peek(_ key: String, in theme: ThemeModel, peekU: () -> Double) -> ThemeItem?`
+- `KeyVariety.resolve(_:in:drawU:)` (method): `mutating func resolve(_ key: String, in theme: ThemeModel, drawU: () -> Double) -> ThemeItem?`
+- `KeyVariety.themeChanged()` (method): `mutating func themeChanged()`
+- `KeyVariety` (struct): `struct KeyVariety`
 - `KioskEffects.apply()` (method): `func apply()`
 - `KioskEffects.coverDisplays(_:)` (method): `func coverDisplays(_ on: Bool)`
 - `KioskEffects.isActive` (property): `var isActive: Bool { get }`
@@ -124,6 +156,53 @@ The Kotlin port diffs its names and shapes against this file (ADR-0002).
 - `StageFit.visibleX` (property): `let visibleX: Double`
 - `StageFit.visibleY` (property): `let visibleY: Double`
 - `StageFit` (struct): `struct StageFit`
+- `ThemeAssetFacts.folder` (property): `var folder: String`
+- `ThemeAssetFacts.glyphPath` (property): `var glyphPath: (String) -> String?`
+- `ThemeAssetFacts.init(folder:otherThemePrefixes:probe:silhouettePath:glyphPath:)` (init): `init(folder: String, otherThemePrefixes: [String], probe: ContentProbe, silhouettePath: @escaping (String) -> String?, glyphPath: @escaping (String) -> String?)`
+- `ThemeAssetFacts.otherThemePrefixes` (property): `var otherThemePrefixes: [String]`
+- `ThemeAssetFacts.probe` (property): `var probe: ContentProbe`
+- `ThemeAssetFacts.silhouettePath` (property): `var silhouettePath: (String) -> String?`
+- `ThemeAssetFacts` (struct): `struct ThemeAssetFacts`
+- `ThemeItem.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `ThemeItem.art` (property): `var art: String`
+- `ThemeItem.castId` (property): `var castId: String`
+- `ThemeItem.family` (property): `var family: String`
+- `ThemeItem.hueSlot` (property): `var hueSlot: String`
+- `ThemeItem.init(castId:name:word:say:sound:family:variant:hueSlot:art:silhouette:sfx:voice:weight:)` (init): `init(castId: String, name: String, word: String, say: String, sound: String?, family: String, variant: String, hueSlot: String, art: String, silhouette: String, sfx: String?, voice: [String : String], weight: Double?)`
+- `ThemeItem.name` (property): `var name: String`
+- `ThemeItem.say` (property): `var say: String`
+- `ThemeItem.sfx` (property): `var sfx: String?`
+- `ThemeItem.silhouette` (property): `var silhouette: String`
+- `ThemeItem.sound` (property): `var sound: String?`
+- `ThemeItem.variant` (property): `var variant: String`
+- `ThemeItem.voice` (property): `var voice: [String : String]`
+- `ThemeItem.weight` (property): `var weight: Double?`
+- `ThemeItem.word` (property): `var word: String`
+- `ThemeItem` (struct): `struct ThemeItem`
+- `ThemeModel.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `ThemeModel.assetPrefix` (property): `var assetPrefix: String?`
+- `ThemeModel.contentVersion` (property): `var contentVersion: String`
+- `ThemeModel.countedItem` (property): `var countedItem: CountedItem`
+- `ThemeModel.families` (property): `var families: [String : String]`
+- `ThemeModel.glyphSet` (property): `var glyphSet: String`
+- `ThemeModel.id` (property): `var id: String`
+- `ThemeModel.init(schemaVersion:contentVersion:id:assetPrefix:name:voiceLocales:glyphSet:families:countedItem:soundExceptions:voiceDurations:titleCastId:rowWords:keys:)` (init): `init(schemaVersion: Int, contentVersion: String, id: String, assetPrefix: String?, name: String, voiceLocales: [String], glyphSet: String, families: [String : String], countedItem: CountedItem, soundExceptions: [String : String], voiceDurations: [String : [String : Double]], titleCastId: String?, rowWords: [String]?, keys: [String : [ThemeItem]])`
+- `ThemeModel.keyOrder` (property): `var keyOrder: [String] { get }`
+- `ThemeModel.keys` (property): `var keys: [String : [ThemeItem]]`
+- `ThemeModel.name` (property): `var name: String`
+- `ThemeModel.namingPrefix` (property): `var namingPrefix: String? { get }`
+- `ThemeModel.rowWords` (property): `var rowWords: [String]?`
+- `ThemeModel.schemaVersion` (property): `var schemaVersion: Int`
+- `ThemeModel.soundExceptions` (property): `var soundExceptions: [String : String]`
+- `ThemeModel.titleCastId` (property): `var titleCastId: String?`
+- `ThemeModel.voiceDurations` (property): `var voiceDurations: [String : [String : Double]]`
+- `ThemeModel.voiceLocales` (property): `var voiceLocales: [String]`
+- `ThemeModel` (struct): `struct ThemeModel`
+- `ThemeVerdict.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `ThemeVerdict.failedRules` (property): `var failedRules: [String] { get }`
+- `ThemeVerdict.failed` (property): `var failed: [Int : [String]]`
+- `ThemeVerdict.pass` (property): `var pass: Bool { get }`
+- `ThemeVerdict` (struct): `struct ThemeVerdict`
 - `UptimeClock.now()` (method): `func now() -> Double`
 - `UptimeClock` (protocol): `protocol UptimeClock`
 - `WallClock.now()` (method): `func now() -> WallTime`
