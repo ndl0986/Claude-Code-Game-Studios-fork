@@ -40,7 +40,7 @@
 #   unsupported layout, with its number.
 
 version: 1
-last_updated: ""
+last_updated: "2026-11-18"
 
 # ─── STATE OWNERSHIP ─────────────────────────────────────────────────────────
 # Who is the authoritative owner of each piece of shared game state.
@@ -53,7 +53,37 @@ last_updated: ""
 # interface: how other systems access this state (read-only property, method call,
 #   signal, shared resource, etc.) — this is the contract other ADRs depend on.
 
-state_ownership: []
+state_ownership:
+  - state: play_clock
+    status: active
+    owner_system: reveal-stage
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    interface: "PlayClock = uptime - frozenTotal, derived in KidCore (Reveal Stage R8); read-only to every other system"
+    write_access: reveal-stage-only
+    referenced_by:
+      - docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+    revised: ""
+  - state: childLockActive
+    status: active
+    owner_system: settings-store
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    interface: "run value of the stored childLock (Settings Store); read by Child Lock-in, App Shell, Parent Gate"
+    write_access: settings-store-only
+    referenced_by:
+      - docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+    revised: ""
+  - state: kioskModeOn
+    status: active
+    owner_system: child-lock-in
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    interface: "set by Child Lock-in on entering Waiting, cleared on Off (including Off after the engage timeout, Child Lock-in R7); read by Input's cmd exception (Input R5), Child Lock-in, and the Parent Gate panel, which shows Quit while it is on (G7)"
+    write_access: child-lock-in-only
+    referenced_by:
+      - docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+    revised: ""
 
 # Example:
 #
@@ -81,7 +111,103 @@ state_ownership: []
 #
 # pattern options: signal | direct_call | event_bus | shared_resource | rpc | none
 
-interfaces: []
+interfaces:
+  - contract: clocks
+    status: active
+    pattern: direct_call
+    producer: app (adapters)
+    consumers:
+      - kidcore
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    signal_signature: "UptimeClock.now() -> Double; AwayClock.now() -> Double; WallClock.now() -> {minutesOfDay: Double, dayKey: Int}; PlayClock derived in KidCore"
+    referenced_by:
+      - docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+    revised: ""
+  - contract: random_source
+    status: active
+    pattern: direct_call
+    producer: app (one seeded generator per stream)
+    consumers:
+      - key-table-theme-data
+      - hint-letters
+      - onscreen-keyboard-row
+      - morphcore
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    signal_signature: "RandomSource.next() -> UInt64; u = Double(x >> 11) * 2^-53; one source per stream"
+    referenced_by:
+      - docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+    revised: ""
+  - contract: normalized_events
+    status: active
+    pattern: direct_call
+    producer: app (input adapters)
+    consumers:
+      - input-key-filter
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    signal_signature: "KeyEvent {character: String?, positionKey: String?, modifiers: Int bitmask, isRepeat, physicalId: String, kind: down|up|cancel|modifiersChanged, time}; TouchEvent {pointerId, phase, xPx, yPx, time}"
+    referenced_by:
+      - docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+    revised: ""
+  - contract: frame_tick
+    status: active
+    pattern: direct_call
+    producer: app (display link / Choreographer)
+    consumers:
+      - reveal-stage
+      - press-queue
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    signal_signature: "tick(now:) on the uptime clock, once per frame before drawing"
+    referenced_by:
+      - docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+    revised: ""
+  - contract: platform_seams
+    status: active
+    pattern: direct_call
+    producer: kidcore (protocols)
+    consumers:
+      - app
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    signal_signature: "SettingsBackend, KioskEffects, AudioOutput, RenderSink, ResidencySink, ThemeSource, DisplayMetrics, AccessibilityState, AppLifecycle, DebugLog, KeyStateQuery (optional: anyNonModifierDown(except:))"
+    referenced_by:
+      - docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+    revised: ""
+  - contract: freeze_settle_chain
+    status: active
+    pattern: direct_call
+    producer: parent-gate-panel
+    consumers:
+      - reveal-stage
+      - press-queue
+      - hint-letters
+      - parade
+      - audio-voice
+      - scene-time-weather
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    signal_signature: "Parent Gate -> RevealStage.freeze()/resume()/settle() -> Press Queue, Hint Letters (challenge), Parade, Audio plan, Scene motion"
+    referenced_by:
+      - docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+    revised: ""
+  - contract: kiosk_mode_chain
+    status: active
+    pattern: direct_call
+    producer: settings-store
+    consumers:
+      - child-lock-in
+      - app-shell-title
+      - input-key-filter
+      - parent-gate-panel
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    signal_signature: "settings read -> Child Lock-in Waiting sets kioskModeOn -> App Shell ready -> Child Lock-in R3 -> KioskEffects.apply(); kioskModeOn cleared on Off (incl. after the engage timeout); read by Input, Child Lock-in, Parent Gate G7"
+    referenced_by:
+      - docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+    revised: ""
 
 # Example:
 #
@@ -167,7 +293,67 @@ api_decisions: []
 # Register a pattern when an ADR explicitly bans it AND other ADRs might
 # unknowingly use it (i.e., it's a tempting but wrong approach for this project).
 
-forbidden_patterns: []
+forbidden_patterns:
+  - pattern: core_platform_imports
+    status: active
+    description: "KidCore and MorphCore import anything other than the Swift standard library and Foundation"
+    why: "the cores stay UI-free and portable (ADR-0001, ADR-0002 D1-D2)"
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+  - pattern: platform_types_outside_app_layer
+    status: active
+    description: "UIKit, AppKit, SwiftUI, SpriteKit, AVFoundation or CoreGraphics types outside apple/<App>, its tests, or apple/Tools"
+    why: "platform code stays at the edge (ADR-0002 D1)"
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+  - pattern: core_foundation_time_and_ids
+    status: active
+    description: "Date, Calendar, Decimal, Duration, DispatchTime or UUID in the cores"
+    why: "Kotlin mapping and cross-platform fixtures (ADR-0002 D2)"
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+  - pattern: core_json_coding
+    status: active
+    description: "JSONDecoder, JSONEncoder or JSON Codable conformances in the cores"
+    why: "JSON is decoded at the edge; the cores take plain models (ADR-0002 D2)"
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+  - pattern: core_character_and_narrow_numbers
+    status: active
+    description: "Character, Float, CGFloat, Int32 or Int8 in the cores; UInt64 outside RandomSource, the MorphCore contract types and the morph-seed derivation; iterating or counting a String directly instead of via unicodeScalars/utf8 helpers"
+    why: "Kotlin mapping and cross-platform fixtures (ADR-0002 D2)"
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+  - pattern: locale_case_mapping
+    status: active
+    description: "uppercased(with:), localizedUppercase or Unicode-aware upper/lower-casing in the cores; use the ASCII-only helper"
+    why: "Kotlin mapping and cross-platform fixtures (ADR-0002 D2)"
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+  - pattern: unpinned_rounding
+    status: active
+    description: "round, lround, rint or .rounded() outside roundHalfAwayFromZero in the cores"
+    why: "Kotlin's round is half-even; one helper keeps both platforms equal (ADR-0002 D2)"
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+  - pattern: set_dictionary_order_dependence
+    status: active
+    description: "any output that depends on Set or Dictionary iteration order"
+    why: "iteration order differs across platforms and runs (ADR-0002 D2)"
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+  - pattern: unnamed_clock_read
+    status: active
+    description: "a module reading a clock it does not name, or the app computing the play clock"
+    why: "the freeze and away rules depend on each module using its own clock (ADR-0002 D3)"
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+  - pattern: shared_random_generator
+    status: active
+    description: "one random generator shared by several streams"
+    why: "one stream's draws must never shift another's (ADR-0002 D4)"
+    adr: docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
 
 # Example:
 #
