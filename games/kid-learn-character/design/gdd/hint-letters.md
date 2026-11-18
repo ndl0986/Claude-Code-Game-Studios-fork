@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent read by game-qc-android, merged 2026-11-18)
 > **Author**: game-dev-android for Luan (TASK-047); plan reviewed by game-qc-android
-> **Last Updated**: 2026-11-18 (TASK-056a cross-review fixes)
+> **Last Updated**: 2026-11-18 (TASK-057a re-run info notes)
 > **Last Verified**: 2026-11-18, against Input & Key Filter R7/F1, Press Queue R3/R4/R11, Key Table (36 keys), art
 > bible §2–§4, §6, §7, the one-shot (`config.js` hint_*, `index.html` spawnHint / hintAt / takeHint / drawHints),
 > decisions K-06, K-08, K-10, K-15, K-16, K-18, K-20
@@ -70,7 +70,7 @@ So no two hints show the same key, and no hint repeats what is on stage or waiti
 spawns this time (R6 retries).
 
 **R4. The seed.** One random 64-bit seed per launch for all hint draws (key, slot, jitter, life, drift phase),
-injectable in tests, a separate stream from Key Table's variety seed and the morph seed (as Key Table R4). Debug
+injectable in tests, a separate stream from Key Table's variety seed and the morph seed (as Key Table §4, point 4 "Variety seed"; TASK-057 R-3). Debug
 builds log it at launch.
 
 **R5. Where: slots, jitter and clearances** (F4). Positions are in **stage units**, the 1280×720 safe stage, y

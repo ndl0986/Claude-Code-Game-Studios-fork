@@ -36,3 +36,8 @@ Reviewed-Content-Hash: design/gdd/child-lock-in.md 7298161cfbdbff84d6d8362766110
 Review mode: lean · Workflow: standard
 Change: W-1: one signal kioskModeOn (Input's kiosk-on mode): on in Waiting, Locked and Suspended, off in Off; on the engage timeout it goes off (⌘Q works, no Quit row) while childLockActive stays true; Parent Gate G7 shows Quit whenever it is on; States, Interactions and AC-8 updated. W-10: R2 lists the Title; panelWillOpen dropped (unused). W-9: AC-6 marker refreshed. From design/gdd/gdd-cross-review-2026-11-18.md and K-26. Review: game-qc-android (diff re-run).
 Reviewed-Content-Hash: design/gdd/child-lock-in.md c04c66982c334222b5c9d9fa82323e534dd0687c
+
+## Update — 2026-11-18 — TASK-057a re-run info notes (no re-review)
+Review mode: lean · Workflow: standard
+Change: R-2: an Edge Case states that with the lock stored ON, ⌘ is swallowed from the start of Waiting, possibly before the chord handler is installed; accepted (≤ engage_timeout_s, no presentation options yet, ⌥⌘Esc still works) and named for the real-Mac AC-1k6 run. From the cross-review re-run (PASS, e8c8344). Text only; no rule changed. Review: game-qc-android, from the diff.
+Reviewed-Content-Hash: design/gdd/child-lock-in.md 28c5229ecc64dfb6284986a00434a2b273668ea4

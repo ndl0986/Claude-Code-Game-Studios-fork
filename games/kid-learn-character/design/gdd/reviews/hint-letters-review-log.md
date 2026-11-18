@@ -43,3 +43,8 @@ Reviewed-Content-Hash: design/gdd/hint-letters.md 15d217671d25cf93d93b2145e8d681
 Review mode: lean · Workflow: standard
 Change: game-qc-android's review: the Frozen state now exits to Dimmed when the challenge fails or times out while the parade is still Walking (Parade R6a), and to Running when the panel closes (the parade has faded out); no replay; the 0.5 dim is kept while Frozen.
 Reviewed-Content-Hash: design/gdd/hint-letters.md 1b9e2c650de556f3da60f980276f17631a3e148a
+
+## Update — 2026-11-18 — TASK-057a re-run info notes (no re-review)
+Review mode: lean · Workflow: standard
+Change: R-3: R4's seed cite points at Key Table §4 (point 4, Variety seed). From the cross-review re-run (PASS, e8c8344). Text only; no rule changed. Review: game-qc-android, from the diff.
+Reviewed-Content-Hash: design/gdd/hint-letters.md 61ee882c83b3075f1b3221a6167fdb308a1040d3
