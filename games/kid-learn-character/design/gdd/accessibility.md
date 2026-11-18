@@ -1,6 +1,6 @@
 # Accessibility
 
-> **Status**: In Review
+> **Status**: Approved (independent read by game-qc-android, merged 2026-11-18)
 > **Author**: game-qc-ios for Luan (TASK-061); plan reviewed by game-qc-android
 > **Last Updated**: 2026-11-18
 > **Last Verified**: 2026-11-18 (WCAG 2.2 read raw from w3.org on this date)

@@ -40,7 +40,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-058 | Log the independent APPROVE reads (gate CONCERN): morphcore, hint-letters, child-lock-in review logs | design | game-dev-ios, game-qc-android, game-qc-ios | DONE: 47ee06a, e682469, 6d02513 merged | `design/TASK-058-review-logs-*` | 2026-11-18 |
 | TASK-059 | /create-architecture: master architecture (module map, seams, Android mirror) + prioritised ADR work plan + first scaffold story | architecture | game-dev-ios (review: game-dev-android) | DONE `c209e63`, merged 2026-11-18 (review: game-dev-android APPROVE); engine ref at docs/engine-reference-local/native-apple/ | `design/TASK-059-architecture` | 2026-11-18 |
 | TASK-060 | GDD: On-screen Keyboard Row (`design/gdd/onscreen-keyboard-row.md`) via /design-system (Vertical Slice) | design | game-art-content (review: game-dev-android) | DONE `71a8d14`, merged 2026-11-18 (review: game-dev-android APPROVE after REVISE) | `design/TASK-060-gdd-keyboard-row` | 2026-11-18 |
-| TASK-061 | GDD: Accessibility (`design/gdd/accessibility.md`) via /design-system (Vertical Slice) | design | game-qc-ios (review: game-qc-android) | CODE REVIEW: done `b86693c` (lean NEEDS REVISION → fixed); game-qc-android independent read | `design/TASK-061-gdd-accessibility` | 2026-11-18 |
+| TASK-061 | GDD: Accessibility (`design/gdd/accessibility.md`) via /design-system (Vertical Slice) | design | game-qc-ios (review: game-qc-android) | DONE `0e7c178`, merged 2026-11-18 (review: game-qc-android APPROVE) | `design/TASK-061-gdd-accessibility` | 2026-11-18 |
 | TASK-063 | ADR-0002 module layout and seams (via /architecture-decision; Proposed → Luan accepts) | architecture | game-dev-ios (review: game-dev-android) | CODE REVIEW: done `8b00988` (ADR-0002 Proposed + registry stances); game-dev-android independent read; then Luan accepts | `design/TASK-063-adr-0002` | 2026-11-18 |
 
 ## Leader log
@@ -113,3 +113,4 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 - 2026-11-18: TASK-059 architecture merged (K-14): docs/architecture/architecture.md (module map, 12 contracts, ADR-0002…0012 plan), engine reference game-local. Next: ADR-0002 module layout.
 - 2026-11-18: TASK-059b merged. TASK-063 ADR-0002 sent.
 - 2026-11-18: TASK-060 Keyboard Row merged (K-14), Vertical Slice 2/3; Key Table is schema v2.
+- 2026-11-18: TASK-061 Accessibility merged (K-14). Vertical Slice GDDs 3/3; 17 GDDs approved. Nits for TASK-062: A7 "its V17" → "Key Table V17"; F2 capture at the display refresh rate (60/120 Hz).

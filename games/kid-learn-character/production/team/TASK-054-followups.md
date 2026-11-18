@@ -70,3 +70,5 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
 - Reveal Stage: Reduce Motion rule for the tap / ignored-press sparkles (owner decides).
 - App Shell + art bible: play-button breathe rate 0.38 vs 0.48 Hz; play button's physical touch floor.
 - Every motion GDD: read Accessibility's `reduceMotion` flag, not the OS API.
+- Accessibility (nits from the independent read): A7 "its V17" → "Key Table V17"; F2 capture runs at the display's
+  refresh rate (60 or 120 Hz), window = frames in (t − 1 s, t].
