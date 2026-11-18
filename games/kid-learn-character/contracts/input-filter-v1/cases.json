@@ -6967,6 +6967,134 @@
       "note": "Two presses in total: the first down, and the down after the up."
     },
     {
+      "id": "R6-cmd-release-empties-held-set-ipad",
+      "source": "gdd: input-key-filter.md R6 (the held set empties on every platform); AC-1s; TASK-083",
+      "given": {
+        "platform": "iPadOS",
+        "state": "Play",
+        "kioskModeOn": false,
+        "displayMetrics": {
+          "windowPx": [
+            1280,
+            720
+          ],
+          "pxPerPt": 1.0,
+          "safeAreaInsetsPx": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "ppiX": 264,
+          "ppiY": 264,
+          "gestureInsetsPx": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "regions": {
+          "hints": [],
+          "rowKeys": [],
+          "moon": {
+            "centre": [
+              66.0,
+              62.0
+            ],
+            "radius": 50.0
+          },
+          "cast": null
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "key",
+            "kind": "down",
+            "character": "d",
+            "positionKey": "D",
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "k_D"
+          },
+          "expect": [
+            {
+              "out": "press",
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "time": 1.0
+            },
+            {
+              "out": "disposition",
+              "value": "consume"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "key",
+            "kind": "modifiersChanged",
+            "character": null,
+            "positionKey": null,
+            "modifiers": [
+              "cmd"
+            ],
+            "isRepeat": false,
+            "physicalId": "mods"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.5
+          },
+          "event": {
+            "type": "key",
+            "kind": "modifiersChanged",
+            "character": null,
+            "positionKey": null,
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "mods"
+          },
+          "expect": [],
+          "expectState": {
+            "heldSet": []
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.75
+          },
+          "event": {
+            "type": "key",
+            "kind": "down",
+            "character": "d",
+            "positionKey": "D",
+            "modifiers": [],
+            "isRepeat": true,
+            "physicalId": "k_D"
+          },
+          "expect": [
+            {
+              "out": "disposition",
+              "value": "consume"
+            }
+          ]
+        }
+      ],
+      "note": "The same rule on iPadOS: no chord there, but the held set still empties on the cmd bit clearing."
+    },
+    {
       "id": "AC1k3-keystate-none-down-allows-chord",
       "source": "gdd: input-key-filter.md AC-1k3; R6 (the OS key-state read)",
       "given": {
@@ -10146,6 +10274,137 @@
         }
       ],
       "note": "Space is held, but it resolved to nothing, so it doesn't count."
+    },
+    {
+      "id": "R6-gate-cmd-release-drops-held-digit",
+      "source": "gdd: input-key-filter.md R6 (⌘ release empties the held set; Gate line); R8 (anotherKeyHeld); TASK-083",
+      "given": {
+        "platform": "macOS",
+        "state": "GateChallenge",
+        "kioskModeOn": false,
+        "displayMetrics": {
+          "windowPx": [
+            1280,
+            720
+          ],
+          "pxPerPt": 1.0,
+          "safeAreaInsetsPx": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "ppiX": 264,
+          "ppiY": 264,
+          "gestureInsetsPx": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "regions": {
+          "hints": [],
+          "rowKeys": [],
+          "moon": {
+            "centre": [
+              66.0,
+              62.0
+            ],
+            "radius": 50.0
+          },
+          "cast": null
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "key",
+            "kind": "down",
+            "character": "4",
+            "positionKey": "4",
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "k_4"
+          },
+          "expect": [
+            {
+              "out": "gateDigit",
+              "digit": "4",
+              "anotherKeyHeld": false
+            },
+            {
+              "out": "disposition",
+              "value": "consume"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "key",
+            "kind": "modifiersChanged",
+            "character": null,
+            "positionKey": null,
+            "modifiers": [
+              "cmd"
+            ],
+            "isRepeat": false,
+            "physicalId": "mods"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.5
+          },
+          "event": {
+            "type": "key",
+            "kind": "modifiersChanged",
+            "character": null,
+            "positionKey": null,
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "mods"
+          },
+          "expect": [],
+          "expectState": {
+            "heldSet": []
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.75
+          },
+          "event": {
+            "type": "key",
+            "kind": "down",
+            "character": "7",
+            "positionKey": "7",
+            "modifiers": [],
+            "isRepeat": false,
+            "physicalId": "k_7"
+          },
+          "expect": [
+            {
+              "out": "gateDigit",
+              "digit": "7",
+              "anotherKeyHeld": false
+            },
+            {
+              "out": "disposition",
+              "value": "consume"
+            }
+          ]
+        }
+      ],
+      "note": "4 is still physically down, but after the ⌘ release it is out of the held set, so it no longer counts for anotherKeyHeld."
     },
     {
       "id": "AC1p-gate-cmd-digit-kiosk-on",
