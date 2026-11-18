@@ -53,6 +53,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-071 | ADR-0011 local build, verification and PKC scans | architecture | game-dev-android (review: game-qc-ios) | IN PROGRESS: PLAN APPROVED 2026-11-18 (K-34 headless rule; tools/ci at game root) | `design/TASK-071-adr-0011` | 2026-11-18 |
 | TASK-072 | Settings Store "Canonical record" note (SS-Q1–Q7 answers) | design | game-dev-android (review: game-qc-android) | DONE `d61880e8`, merged 2026-11-18; nit: F1 slider NaN unstated (next Settings touch) | `design/TASK-072-settings-canonical` | 2026-11-18 |
 | TASK-073 | TTS sample spike: Kokoro af_heart vs Piper ljspeech, ~12 lines, headless; Luan listens and picks (K-33) | audio | game-art-content | SENT 2026-11-18 | `design/TASK-073-tts-samples` | 2026-11-18 |
+| TASK-074 | One device-checks plan: every NOT ASSESSED Mac/iPad check grouped into sessions for Luan (docs only) | qa | game-qc-ios (review: game-qc-android) | SENT 2026-11-18 | `design/TASK-074-device-checks` | 2026-11-18 |
 
 ## Leader log
 
