@@ -1,0 +1,5709 @@
+{
+  "contract": "gate-logic-v1",
+  "schema": 1,
+  "uint64AsString": true,
+  "units": {
+    "time": "s"
+  },
+  "tolerance": {
+    "time": 1e-09
+  },
+  "streams": [
+    "gate-code"
+  ],
+  "cases": [
+    {
+      "id": "B1-code-and-words",
+      "source": "gdd: parent-gate-panel.md G3; G13 B1; AC-05",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        }
+      ],
+      "note": "One gate-code draw per digit, digit = floor(u x 10); u = k/64 just above d/10 (dyadic)."
+    },
+    {
+      "id": "B1-every-digit-word",
+      "source": "gdd: parent-gate-panel.md G3; G13 B1",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "0",
+          "2017612633061982208",
+          "3746994889972252672",
+          "5764607523034234880",
+          "7493989779944505344",
+          "9223372036854775808",
+          "11240984669916758016",
+          "12970366926827028480",
+          "14987979559889010688",
+          "16717361816799281152",
+          "16717361816799281152",
+          "14987979559889010688"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "0123",
+              "text": "Enter zero · one · two · three"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "cancel"
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "cancel",
+              "sleep": false,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 3.0,
+            "away": 3.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4567",
+              "text": "Enter four · five · six · seven"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 4.0,
+            "away": 4.0
+          },
+          "event": {
+            "type": "cancel"
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "cancel",
+              "sleep": false,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 5.0,
+            "away": 5.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "8998",
+              "text": "Enter eight · nine · nine · eight"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        }
+      ],
+      "note": "A new code at every opening (G3); all ten words."
+    },
+    {
+      "id": "AC01-hold-1.49-and-1.50",
+      "source": "gdd: parent-gate-panel.md G1; F1; G13 B2 (inclusive); AC-01",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.49,
+            "away": 2.49
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Idle"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.5,
+            "away": 2.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC01-lift-resets",
+      "source": "gdd: parent-gate-panel.md G1 (reset); AC-01",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": []
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.2,
+            "away": 2.2
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "ended",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5,
+            "away": 2.5
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 3.0,
+            "away": 3.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Idle"
+          }
+        },
+        {
+          "t": {
+            "uptime": 3.5,
+            "away": 3.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Idle"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC02-second-moon-pointer",
+      "source": "gdd: parent-gate-panel.md G1; G13 B4; AC-02",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 2
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5,
+            "away": 2.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        }
+      ],
+      "note": "The second pointer doesn't change t_held; the challenge opens at 1.5 of the first."
+    },
+    {
+      "id": "AC02-second-does-not-take-over",
+      "source": "gdd: parent-gate-panel.md G1; G13 B4; AC-02",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 2
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.2,
+            "away": 2.2
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "ended",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 3.0,
+            "away": 3.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 5.0,
+            "away": 5.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Idle"
+          }
+        },
+        {
+          "t": {
+            "uptime": 5.5,
+            "away": 5.5
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "ended",
+            "pointerId": 2
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 6.0,
+            "away": 6.0
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 2
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 7.5,
+            "away": 7.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ]
+        }
+      ],
+      "note": "It must lift and come down again."
+    },
+    {
+      "id": "AC10-sleep-hold",
+      "source": "gdd: parent-gate-panel.md G1 (moon sleep); G13 B2, B3; AC-10",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672",
+          "2017612633061982208",
+          "3746994889972252672",
+          "5764607523034234880",
+          "7493989779944505344"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 9,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "wrong",
+              "sleep": true,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ],
+          "expectState": {
+            "asleep": true
+          }
+        },
+        {
+          "t": {
+            "uptime": 8.4,
+            "away": 8.4
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 9.9,
+            "away": 9.9
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Idle"
+          }
+        },
+        {
+          "t": {
+            "uptime": 9.9,
+            "away": 9.9
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "ended",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 10.0,
+            "away": 10.0
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 1
+          },
+          "expect": [],
+          "expectState": {
+            "asleep": false
+          }
+        },
+        {
+          "t": {
+            "uptime": 11.49,
+            "away": 11.49
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Idle"
+          }
+        },
+        {
+          "t": {
+            "uptime": 11.5,
+            "away": 11.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "1234",
+              "text": "Enter one · two · three · four"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC10-sleep-chord",
+      "source": "gdd: parent-gate-panel.md G2 (sleep applies to the chord); G13 B3, B13; AC-10",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672",
+          "2017612633061982208",
+          "3746994889972252672",
+          "5764607523034234880",
+          "7493989779944505344"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 9,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "wrong",
+              "sleep": true,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ],
+          "expectState": {
+            "asleep": true
+          }
+        },
+        {
+          "t": {
+            "uptime": 9.9375,
+            "away": 9.9375
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Idle"
+          }
+        },
+        {
+          "t": {
+            "uptime": 10.0,
+            "away": 10.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "1234",
+              "text": "Enter one · two · three · four"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B2-hold-started-in-sleep-counts-from-wake",
+      "source": "gdd: parent-gate-panel.md G1; G13 B2, B4",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672",
+          "2017612633061982208",
+          "3746994889972252672",
+          "5764607523034234880",
+          "7493989779944505344"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 9,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "wrong",
+              "sleep": true,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ],
+          "expectState": {
+            "asleep": true
+          }
+        },
+        {
+          "t": {
+            "uptime": 9.0,
+            "away": 9.0
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 11.49,
+            "away": 11.49
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Idle"
+          }
+        },
+        {
+          "t": {
+            "uptime": 11.5,
+            "away": 11.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "1234",
+              "text": "Enter one · two · three · four"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ]
+        }
+      ],
+      "note": "A finger kept down through sleep opens at sleep end + 1.5 s."
+    },
+    {
+      "id": "AC10-cancel-no-sleep",
+      "source": "gdd: parent-gate-panel.md G1 (Cancel and Esc start no sleep); G13 B3; AC-10, AC-25",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672",
+          "2017612633061982208",
+          "3746994889972252672",
+          "5764607523034234880",
+          "7493989779944505344"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "cancel"
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "cancel",
+              "sleep": false,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ],
+          "expectState": {
+            "asleep": false
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5,
+            "away": 0.5
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "1234",
+              "text": "Enter one · two · three · four"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC37-sleep-across-background",
+      "source": "gdd: parent-gate-panel.md G1; G13 B3, B11; AC-37",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672",
+          "2017612633061982208",
+          "3746994889972252672",
+          "5764607523034234880",
+          "7493989779944505344"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 9,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "wrong",
+              "sleep": true,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ],
+          "expectState": {
+            "asleep": true
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "background"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 6.0,
+            "away": 6.0
+          },
+          "event": {
+            "type": "foreground"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 8.5,
+            "away": 8.5
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 10.0,
+            "away": 10.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Idle"
+          }
+        },
+        {
+          "t": {
+            "uptime": 10.0,
+            "away": 10.0
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "ended",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 10.0,
+            "away": 10.0
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 2
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 11.5,
+            "away": 11.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "1234",
+              "text": "Enter one · two · three · four"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B2-device-sleep-between-close-and-hold",
+      "source": "gdd: parent-gate-panel.md G13 B2, B3 (wake on the away clock; TASK-096 review)",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672",
+          "2017612633061982208",
+          "3746994889972252672",
+          "5764607523034234880",
+          "7493989779944505344"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 9,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "wrong",
+              "sleep": true,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ],
+          "expectState": {
+            "asleep": true
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "background"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 12.0
+          },
+          "event": {
+            "type": "foreground"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5,
+            "away": 12.5
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 1
+          },
+          "expect": [],
+          "expectState": {
+            "asleep": false
+          }
+        },
+        {
+          "t": {
+            "uptime": 3.99,
+            "away": 13.99
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Idle"
+          }
+        },
+        {
+          "t": {
+            "uptime": 4.0,
+            "away": 14.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "1234",
+              "text": "Enter one · two · three · four"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ]
+        }
+      ],
+      "note": "The iPad slept 9 s (uptime stopped, away ran): awake on return, and a hold from 2.5 opens 1.5 s later."
+    },
+    {
+      "id": "AC12-lift-before-refill",
+      "source": "gdd: parent-gate-panel.md G1; G13 B4; AC-12",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672",
+          "2017612633061982208",
+          "3746994889972252672",
+          "5764607523034234880",
+          "7493989779944505344"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "cancel"
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "cancel",
+              "sleep": false,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 22.0,
+            "away": 22.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Idle"
+          }
+        },
+        {
+          "t": {
+            "uptime": 22.0,
+            "away": 22.0
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "ended",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 23.0,
+            "away": 23.0
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 24.5,
+            "away": 24.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "1234",
+              "text": "Enter one · two · three · four"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ]
+        }
+      ],
+      "note": "Cancel (no sleep) isolates the rule: the finger stays 20 s and never fills the ring."
+    },
+    {
+      "id": "B4-panel-close-makes-pointer-ineligible",
+      "source": "gdd: parent-gate-panel.md G13 B4",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.5,
+            "away": 2.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 1,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 3.0,
+            "away": 3.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 3.5,
+            "away": 3.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 2,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "panel"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 5.0,
+            "away": 5.0
+          },
+          "event": {
+            "type": "cancel",
+            "how": "back"
+          },
+          "expect": [
+            {
+              "out": "panelClose",
+              "reason": "back",
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.0,
+            "away": 10.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Idle"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC09-timeout-no-touch",
+      "source": "gdd: parent-gate-panel.md G3 (timeout); G13 B5; AC-09",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 19.9375,
+            "away": 19.9375
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 20.0,
+            "away": 20.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "timeout",
+              "sleep": true,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ],
+          "expectState": {
+            "asleep": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC09-timeout-after-right-digit",
+      "source": "gdd: parent-gate-panel.md G3; G13 B5; AC-09",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 15.0,
+            "away": 15.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 34.9375,
+            "away": 34.9375
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 35.0,
+            "away": 35.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "timeout",
+              "sleep": true,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC09-touches-outside-keypad-do-not-reset",
+      "source": "gdd: parent-gate-panel.md G3; G13 B5; AC-09",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 5.0,
+            "away": 5.0
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "outside"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 10.0,
+            "away": 10.0
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "outside"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 15.0,
+            "away": 15.0
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "outside"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 20.0,
+            "away": 20.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "timeout",
+              "sleep": true,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC08-first-wrong-digit",
+      "source": "gdd: parent-gate-panel.md G3 (judging); AC-08, AC-09",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 15.0,
+            "away": 15.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 2,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "wrong",
+              "sleep": true,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 16.0,
+            "away": 16.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Idle"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC07-keypad-touches-open-panel",
+      "source": "gdd: parent-gate-panel.md G3; AC-07",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 1,
+            "digit": 4
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.1,
+            "away": 1.1
+          },
+          "event": {
+            "type": "keypadUp",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 1,
+            "digit": 1
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.1,
+            "away": 2.1
+          },
+          "event": {
+            "type": "keypadUp",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 3.0,
+            "away": 3.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 2,
+            "digit": 7
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 3.1,
+            "away": 3.1
+          },
+          "event": {
+            "type": "keypadUp",
+            "pointerId": 2
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 4.0,
+            "away": 4.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 1,
+            "digit": 2
+          },
+          "expect": [
+            {
+              "out": "panel"
+            }
+          ],
+          "expectState": {
+            "mode": "Panel"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC07-hardware-digits",
+      "source": "gdd: parent-gate-panel.md G3 (hardware digits); AC-07",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 1,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.5,
+            "away": 2.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 2,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "panel"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC07-two-digit-keys-wrong",
+      "source": "gdd: parent-gate-panel.md G3; G13 B7; AC-07",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 1,
+            "anotherKeyHeld": true
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "wrong",
+              "sleep": true,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC06-second-pointer-held-wrong",
+      "source": "gdd: parent-gate-panel.md G3; G13 B6; AC-06",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 1,
+            "digit": 4
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 2,
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.125,
+            "away": 0.125
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.15,
+            "away": 0.15
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "wrong",
+              "sleep": true,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ],
+          "expectState": {
+            "asleep": true
+          }
+        }
+      ],
+      "note": "Wrong at the first tick with now - t2 >= 0.15 (exactly 0.15 here; t2 = 0 so the difference is exact)."
+    },
+    {
+      "id": "AC36-grace-accepted-0.10",
+      "source": "gdd: parent-gate-panel.md G3; G13 B6; AC-36",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 1,
+            "digit": 4
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 2,
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.1,
+            "away": 0.1
+          },
+          "event": {
+            "type": "keypadUp",
+            "pointerId": 1
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "keypadUp",
+            "pointerId": 2
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC36-grace-accepted-0.149",
+      "source": "gdd: parent-gate-panel.md G3; G13 B6; AC-36",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 1,
+            "digit": 4
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 2,
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.149,
+            "away": 0.149
+          },
+          "event": {
+            "type": "keypadUp",
+            "pointerId": 1
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "keypadUp",
+            "pointerId": 2
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC36-grace-lift-at-exactly-0.15-wrong",
+      "source": "gdd: parent-gate-panel.md G13 B6 (half-open); AC-36",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 1,
+            "digit": 4
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 2,
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.15,
+            "away": 0.15
+          },
+          "event": {
+            "type": "keypadUp",
+            "pointerId": 1
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "wrong",
+              "sleep": true,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        }
+      ],
+      "note": "No tick before the lift: the lift at exactly 0.15 is not < 0.15, so it is wrong."
+    },
+    {
+      "id": "AC36-grace-lift-0.5-wrong-at-0.15",
+      "source": "gdd: parent-gate-panel.md G13 B6; AC-36",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 1,
+            "digit": 4
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 2,
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.15,
+            "away": 0.15
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "wrong",
+              "sleep": true,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.5,
+            "away": 0.5
+          },
+          "event": {
+            "type": "keypadUp",
+            "pointerId": 1
+          },
+          "expect": []
+        }
+      ]
+    },
+    {
+      "id": "AC36-three-pointers-wrong",
+      "source": "gdd: parent-gate-panel.md G3; G13 B6; AC-36",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 1,
+            "digit": 4
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 2,
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.0625,
+            "away": 2.0625
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 3,
+            "digit": 7
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "wrong",
+              "sleep": true,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B6-pending-second-lifts-first-cancelled",
+      "source": "gdd: parent-gate-panel.md G13 B6",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 1,
+            "digit": 4
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 2,
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.0625,
+            "away": 2.0625
+          },
+          "event": {
+            "type": "keypadUp",
+            "pointerId": 2
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.5,
+            "away": 2.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 3.0,
+            "away": 3.0
+          },
+          "event": {
+            "type": "keypadUp",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 4.0,
+            "away": 4.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 1,
+            "digit": 1
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        }
+      ],
+      "note": "A brush adds nothing and is not wrong."
+    },
+    {
+      "id": "B7-hardware-digit-while-pointer-down",
+      "source": "gdd: parent-gate-panel.md G13 B7",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 1,
+            "digit": 4
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 1,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "wrong",
+              "sleep": true,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC25-esc-and-title-origin",
+      "source": "gdd: parent-gate-panel.md G4, G9; G13 B13; AC-25, AC-31",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Title"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "cancel",
+            "how": "esc"
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "cancel",
+              "sleep": false,
+              "to": "Title"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B13-chord-ignored-in-challenge-and-panel",
+      "source": "gdd: parent-gate-panel.md G2; G13 B13",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5,
+            "away": 0.5
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 1,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.5,
+            "away": 2.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 2,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "panel"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 3.0,
+            "away": 3.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Panel"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC22-background-closes-challenge",
+      "source": "gdd: parent-gate-panel.md Edge Cases; G13 B11; AC-22",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672",
+          "2017612633061982208",
+          "3746994889972252672",
+          "5764607523034234880",
+          "7493989779944505344"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "background"
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "background",
+              "sleep": false,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ],
+          "expectState": {
+            "asleep": false
+          }
+        },
+        {
+          "t": {
+            "uptime": 3.0,
+            "away": 3.0
+          },
+          "event": {
+            "type": "foreground"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 3.5,
+            "away": 3.5
+          },
+          "event": {
+            "type": "gateTouch",
+            "phase": "began",
+            "pointerId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 5.0,
+            "away": 5.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "1234",
+              "text": "Enter one · two · three · four"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ]
+        }
+      ],
+      "note": "No sleep, and the ineligible flags clear: a new down holds normally."
+    },
+    {
+      "id": "AC22-background-closes-panel",
+      "source": "gdd: parent-gate-panel.md G9; G13 B11; AC-22",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 1,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.5,
+            "away": 2.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 2,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "panel"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 5.0,
+            "away": 5.0
+          },
+          "event": {
+            "type": "background"
+          },
+          "expect": [
+            {
+              "out": "panelClose",
+              "reason": "background",
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ],
+          "expectState": {
+            "mode": "Idle"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC17-confirm-hold",
+      "source": "gdd: parent-gate-panel.md G8; G13 B8; AC-17",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.25,
+            "away": 1.25
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 1,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.75,
+            "away": 1.75
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 2,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "panel"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "confirmTrigger",
+            "action": "reset"
+          },
+          "expect": [
+            {
+              "out": "confirm",
+              "state": "shown"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 3.0,
+            "away": 3.0
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "confirm"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 4.49,
+            "away": 4.49
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 4.49,
+            "away": 4.49
+          },
+          "event": {
+            "type": "confirmUp"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 4.5,
+            "away": 4.5
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "confirmTrigger",
+            "action": "reset"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 5.0,
+            "away": 5.0
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "confirm"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 6.5,
+            "away": 6.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "confirm",
+              "state": "done",
+              "action": "reset"
+            }
+          ]
+        }
+      ],
+      "note": "1.49 s does nothing; a second tap on the trigger does nothing extra; 1.50 s confirms."
+    },
+    {
+      "id": "B8-confirm-hides-after-5s",
+      "source": "gdd: parent-gate-panel.md G8; G13 B8 (from the later of reveal and last lift)",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.25,
+            "away": 1.25
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 1,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.75,
+            "away": 1.75
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 2,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "panel"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 2.0
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "confirmTrigger",
+            "action": "quit"
+          },
+          "expect": [
+            {
+              "out": "confirm",
+              "state": "shown"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 3.0,
+            "away": 3.0
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "confirm"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 4.0,
+            "away": 4.0
+          },
+          "event": {
+            "type": "confirmUp"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 8.9375,
+            "away": 8.9375
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 9.0,
+            "away": 9.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "confirm",
+              "state": "hidden"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC18-idle-close-60",
+      "source": "gdd: parent-gate-panel.md G10; G13 B10; AC-18",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.25,
+            "away": 1.25
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 1,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.75,
+            "away": 1.75
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 2,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "panel"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 61.6875,
+            "away": 61.6875
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Panel"
+          }
+        },
+        {
+          "t": {
+            "uptime": 61.75,
+            "away": 61.75
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "panelClose",
+              "reason": "idle",
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        }
+      ],
+      "note": "The panel opened at 1.75; no input; closed at 61.75."
+    },
+    {
+      "id": "AC18-control-resets",
+      "source": "gdd: parent-gate-panel.md G10; AC-18",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.25,
+            "away": 1.25
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 1,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.75,
+            "away": 1.75
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 2,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "panel"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 51.75,
+            "away": 51.75
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 111.6875,
+            "away": 111.6875
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 111.75,
+            "away": 111.75
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "panelClose",
+              "reason": "idle",
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC18-empty-area-never-resets",
+      "source": "gdd: parent-gate-panel.md G10; G13 B9; AC-18",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.25,
+            "away": 1.25
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 1,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.75,
+            "away": 1.75
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 2,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "panel"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 20.0,
+            "away": 20.0
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "empty"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 50.0,
+            "away": 50.0
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "empty"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 61.75,
+            "away": 61.75
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "panelClose",
+              "reason": "idle",
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC18-burst-third-does-not-reset",
+      "source": "gdd: parent-gate-panel.md G10; G13 B9; AC-18",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.25,
+            "away": 1.25
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 1,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.75,
+            "away": 1.75
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 2,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "panel"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 51.75,
+            "away": 51.75
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 52.0,
+            "away": 52.0
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 52.25,
+            "away": 52.25
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 111.9375,
+            "away": 111.9375
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 112.0,
+            "away": 112.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "panelClose",
+              "reason": "idle",
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        }
+      ],
+      "note": "Control touches at 51.75, 52.0, 52.25: the third is in a burst; the timer runs from 52.0."
+    },
+    {
+      "id": "B9-burst-window-half-open",
+      "source": "gdd: parent-gate-panel.md G13 B9 (a down exactly 1.0 s earlier doesn't count)",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.25,
+            "away": 1.25
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 1,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.75,
+            "away": 1.75
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 2,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "panel"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 51.0,
+            "away": 51.0
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "empty"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 51.5,
+            "away": 51.5
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "empty"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 52.0,
+            "away": 52.0
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 111.9375,
+            "away": 111.9375
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 112.0,
+            "away": 112.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "panelClose",
+              "reason": "idle",
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        }
+      ],
+      "note": "Only the 51.5 down is in (51.0, 52.0], so 52.0 resets; empty-area downs count toward bursts."
+    },
+    {
+      "id": "B9-key-down-resets-and-never-counts",
+      "source": "gdd: parent-gate-panel.md G13 B9",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.25,
+            "away": 1.25
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 1,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.75,
+            "away": 1.75
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 2,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "panel"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 51.75,
+            "away": 51.75
+          },
+          "event": {
+            "type": "keyDown"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 51.875,
+            "away": 51.875
+          },
+          "event": {
+            "type": "keyDown"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 52.0,
+            "away": 52.0
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 111.9375,
+            "away": 111.9375
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 112.0,
+            "away": 112.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "panelClose",
+              "reason": "idle",
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC29-hard-cap",
+      "source": "gdd: parent-gate-panel.md G10 (cap); G13 B10; AC-29",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.25,
+            "away": 1.25
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 1,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.75,
+            "away": 1.75
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 2,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "panel"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 51.75,
+            "away": 51.75
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 101.75,
+            "away": 101.75
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 151.75,
+            "away": 151.75
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 201.75,
+            "away": 201.75
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 251.75,
+            "away": 251.75
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 301.6875,
+            "away": 301.6875
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Panel"
+          }
+        },
+        {
+          "t": {
+            "uptime": 301.75,
+            "away": 301.75
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "panelClose",
+              "reason": "cap",
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B10-cap-waits-for-slider-drag",
+      "source": "gdd: parent-gate-panel.md G10; G13 B10",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.25,
+            "away": 1.25
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 1,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 7,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.75,
+            "away": 1.75
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 2,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "panel"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 51.75,
+            "away": 51.75
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 101.75,
+            "away": 101.75
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 151.75,
+            "away": 151.75
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 201.75,
+            "away": 201.75
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 251.75,
+            "away": 251.75
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "control"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 300.0,
+            "away": 300.0
+          },
+          "event": {
+            "type": "cardTouch",
+            "on": "slider"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 301.75,
+            "away": 301.75
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "mode": "Panel"
+          }
+        },
+        {
+          "t": {
+            "uptime": 303.0,
+            "away": 303.0
+          },
+          "event": {
+            "type": "sliderEnd"
+          },
+          "expect": [
+            {
+              "out": "sliderWrite"
+            },
+            {
+              "out": "panelClose",
+              "reason": "cap",
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

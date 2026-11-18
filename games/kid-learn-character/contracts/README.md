@@ -24,8 +24,10 @@ Cross-platform behaviour contracts for Kid Learn Character (ADR-0004). Each cont
 | audio-plan-v1 | v1 | audio-voice.md | KidCore | batch 3 (TASK-086) |
 | hint-letters-v1 | v1 | hint-letters.md | KidCore | batch 4 (TASK-089) |
 | keyboard-row-v1 | v1 | onscreen-keyboard-row.md | KidCore | batch 4 (TASK-089) |
+| gate-logic-v1 | v1 | parent-gate-panel.md (G13) | KidCore | batch 5 (TASK-094) |
+| app-shell-v1 | v1 | app-shell-title.md | KidCore | batch 5 (TASK-094) |
 
-Not yet written (ADR-0004 D8; order in `production/team/TASK-080-contracts-plan.md`): parade-v1, gate-logic-v1, app-shell-v1, scene-look-v1.
+Not yet written (ADR-0004 D8; order in `production/team/TASK-080-contracts-plan.md`): parade-v1, scene-look-v1.
 
 ## Drift check
 

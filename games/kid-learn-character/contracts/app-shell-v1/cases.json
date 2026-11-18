@@ -1,0 +1,3084 @@
+{
+  "contract": "app-shell-v1",
+  "schema": 1,
+  "uint64AsString": true,
+  "units": {
+    "time": "s"
+  },
+  "tolerance": {
+    "time": 1e-09
+  },
+  "streams": [],
+  "cases": [
+    {
+      "id": "AC3-ready-after-all-three-any-order",
+      "source": "gdd: app-shell-title.md R1 step 5; F1; AC-3; AS-Q (game-dev-ios) Q1",
+      "given": {
+        "platform": "macOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.1
+          },
+          "event": {
+            "type": "chordInstalled"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.2
+          },
+          "event": {
+            "type": "windowCoversDisplay"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.3
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "ready"
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.4
+          },
+          "event": {
+            "type": "windowCoversDisplay"
+          },
+          "expect": []
+        }
+      ],
+      "note": "ready once, at the last of the three; a repeat of a condition emits nothing. The Mac has no edgeDeferral or statusBarHidden."
+    },
+    {
+      "id": "AC3-ready-first-frame-first",
+      "source": "gdd: app-shell-title.md R1 step 5; AC-3",
+      "given": {
+        "platform": "macOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.1
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.2
+          },
+          "event": {
+            "type": "windowCoversDisplay"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.3
+          },
+          "event": {
+            "type": "chordInstalled"
+          },
+          "expect": [
+            {
+              "out": "ready"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R1-ipad-first-frame-no-ready",
+      "source": "gdd: app-shell-title.md R1; R7 (K-39); AS-Q (game-dev-ios) Q1, Q8; AC-14",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.1
+          },
+          "event": {
+            "type": "chordInstalled"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC5-start-key-theme-ready",
+      "source": "gdd: app-shell-title.md R3; R4 (order); AC-5; AS-Q (game-dev-ios) Q2, Q3",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "Input"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "PressQueue"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "RevealStage"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "HintLetters"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Play"
+          }
+        }
+      ],
+      "note": "E5 and the light, then Play entered: Input, Press Queue (empty, no current), Reveal Stage (Empty), Hint Letters. A start in Play does nothing."
+    },
+    {
+      "id": "AC5-start-tap-down",
+      "source": "gdd: app-shell-title.md R3 (any tap but the moon, on its down); AS-Q (game-dev-ios) Q4",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "titleTouch",
+            "phase": "began",
+            "point": [
+              200.0,
+              200.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "Input"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "PressQueue"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "RevealStage"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "HintLetters"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        }
+      ]
+    },
+    {
+      "id": "R3-touch-up-or-move-does-not-start",
+      "source": "gdd: app-shell-title.md R3; AS-Q (game-dev-ios) Q4",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "titleTouch",
+            "phase": "moved",
+            "point": [
+              200.0,
+              200.0
+            ]
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.1
+          },
+          "event": {
+            "type": "titleTouch",
+            "phase": "ended",
+            "point": [
+              200.0,
+              200.0
+            ]
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC7-pending-start",
+      "source": "gdd: app-shell-title.md R3 (one pending start); AC-7; AS-Q (game-dev-ios) Q2",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.35
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.75
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.25
+          },
+          "event": {
+            "type": "titleTouch",
+            "phase": "began",
+            "point": [
+              900.0,
+              300.0
+            ]
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.25
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [
+            {
+              "out": "enterPlay",
+              "notify": "Input"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "PressQueue"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "RevealStage"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "HintLetters"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        }
+      ],
+      "note": "The theme is ready 2 s after the start: the chime at once, Play exactly once at themeReady, the later starts absorbed."
+    },
+    {
+      "id": "R1-launching-ignores-starts",
+      "source": "gdd: app-shell-title.md Edge Cases (launch screen); AS-Q (game-dev-ios) Q10",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.05
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.1
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.15
+          },
+          "event": {
+            "type": "titleTouch",
+            "phase": "began",
+            "point": [
+              200.0,
+              200.0
+            ]
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "Input"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "PressQueue"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "RevealStage"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "HintLetters"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        }
+      ],
+      "note": "Nothing is queued before the first frame, even with the theme ready."
+    },
+    {
+      "id": "R5-gate-from-play-and-back",
+      "source": "gdd: app-shell-title.md R5; R7 (edge deferral off in Gate and Panel); AS-Q (game-dev-ios) Q8; Parent Gate AC-38",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "Input"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "PressQueue"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "RevealStage"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "HintLetters"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "gateOpen"
+          },
+          "expect": [
+            {
+              "out": "edgeDeferral",
+              "on": false
+            }
+          ],
+          "expectState": {
+            "state": "Gate"
+          }
+        },
+        {
+          "t": {
+            "uptime": 3.0
+          },
+          "event": {
+            "type": "gateClosed",
+            "reason": "wrong"
+          },
+          "expect": [
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        },
+        {
+          "t": {
+            "uptime": 4.0
+          },
+          "event": {
+            "type": "gateOpen"
+          },
+          "expect": [
+            {
+              "out": "edgeDeferral",
+              "on": false
+            }
+          ],
+          "expectState": {
+            "state": "Gate"
+          }
+        },
+        {
+          "t": {
+            "uptime": 5.0
+          },
+          "event": {
+            "type": "gateCorrect"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Panel"
+          }
+        },
+        {
+          "t": {
+            "uptime": 9.0
+          },
+          "event": {
+            "type": "panelClosed"
+          },
+          "expect": [
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        }
+      ]
+    },
+    {
+      "id": "R5-gate-from-title-returns-to-title",
+      "source": "gdd: app-shell-title.md R5; Edge Cases (gate from the Title)",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "gateOpen"
+          },
+          "expect": [
+            {
+              "out": "edgeDeferral",
+              "on": false
+            }
+          ],
+          "expectState": {
+            "state": "Gate"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "gateClosed",
+            "reason": "cancel"
+          },
+          "expect": [
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 3.0
+          },
+          "event": {
+            "type": "gateOpen"
+          },
+          "expect": [
+            {
+              "out": "edgeDeferral",
+              "on": false
+            }
+          ],
+          "expectState": {
+            "state": "Gate"
+          }
+        },
+        {
+          "t": {
+            "uptime": 4.0
+          },
+          "event": {
+            "type": "gateCorrect"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Panel"
+          }
+        },
+        {
+          "t": {
+            "uptime": 8.0
+          },
+          "event": {
+            "type": "panelClosed",
+            "reason": "autoClose"
+          },
+          "expect": [
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        }
+      ]
+    },
+    {
+      "id": "R5-mac-gate-no-edge-outputs",
+      "source": "gdd: app-shell-title.md R7 (iPad only)",
+      "given": {
+        "platform": "macOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.1
+          },
+          "event": {
+            "type": "chordInstalled"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.2
+          },
+          "event": {
+            "type": "windowCoversDisplay"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.3
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "ready"
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "gateOpen"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Gate"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "gateClosed",
+            "reason": "cancel"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        }
+      ]
+    },
+    {
+      "id": "F3-return-10min",
+      "source": "gdd: app-shell-title.md R6; F3 (away > title_after_s, strict); AC-8; AS-Q (game-dev-ios) Q6",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "Input"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "PressQueue"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "RevealStage"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "HintLetters"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 100.0
+          },
+          "event": {
+            "type": "background"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Background"
+          }
+        },
+        {
+          "t": {
+            "uptime": 3.0,
+            "away": 700.0
+          },
+          "event": {
+            "type": "returnFromBackground"
+          },
+          "expect": [
+            {
+              "out": "return",
+              "to": "Play"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        }
+      ]
+    },
+    {
+      "id": "F3-return-exactly-1800",
+      "source": "gdd: app-shell-title.md R6; F3 (away > title_after_s, strict); AC-8; AS-Q (game-dev-ios) Q6",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "Input"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "PressQueue"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "RevealStage"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "HintLetters"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 100.0
+          },
+          "event": {
+            "type": "background"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Background"
+          }
+        },
+        {
+          "t": {
+            "uptime": 3.0,
+            "away": 1900.0
+          },
+          "event": {
+            "type": "returnFromBackground"
+          },
+          "expect": [
+            {
+              "out": "return",
+              "to": "Play"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        }
+      ]
+    },
+    {
+      "id": "F3-return-1800.5",
+      "source": "gdd: app-shell-title.md R6; F3 (away > title_after_s, strict); AC-8; AS-Q (game-dev-ios) Q6",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "Input"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "PressQueue"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "RevealStage"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "HintLetters"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 100.0
+          },
+          "event": {
+            "type": "background"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Background"
+          }
+        },
+        {
+          "t": {
+            "uptime": 3.0,
+            "away": 1900.5
+          },
+          "event": {
+            "type": "returnFromBackground"
+          },
+          "expect": [
+            {
+              "out": "return",
+              "to": "Title"
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        }
+      ]
+    },
+    {
+      "id": "F3-return-31min",
+      "source": "gdd: app-shell-title.md R6; F3 (away > title_after_s, strict); AC-8; AS-Q (game-dev-ios) Q6",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "Input"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "PressQueue"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "RevealStage"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "HintLetters"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 100.0
+          },
+          "event": {
+            "type": "background"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Background"
+          }
+        },
+        {
+          "t": {
+            "uptime": 3.0,
+            "away": 1960.0
+          },
+          "event": {
+            "type": "returnFromBackground"
+          },
+          "expect": [
+            {
+              "out": "return",
+              "to": "Title"
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        }
+      ]
+    },
+    {
+      "id": "F3-ipad-slept-8h",
+      "source": "gdd: app-shell-title.md R6 (the away clock counts sleep); F3; AC-8",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "Input"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "PressQueue"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "RevealStage"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "HintLetters"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 100.0
+          },
+          "event": {
+            "type": "background"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Background"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.5,
+            "away": 28900.0
+          },
+          "event": {
+            "type": "returnFromBackground"
+          },
+          "expect": [
+            {
+              "out": "return",
+              "to": "Title"
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 3.0
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "Input"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "PressQueue"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "RevealStage"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "HintLetters"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        }
+      ],
+      "note": "Uptime moves 0.5 s, the away clock 8 h. From the Title, the next start enters Play afresh (R4)."
+    },
+    {
+      "id": "R6-background-from-title-is-title",
+      "source": "gdd: app-shell-title.md R6; AS-Q (game-dev-ios) Q6 (from the Title: always the Title)",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 100.0
+          },
+          "event": {
+            "type": "background"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Background"
+          }
+        },
+        {
+          "t": {
+            "uptime": 3.0,
+            "away": 110.0
+          },
+          "event": {
+            "type": "returnFromBackground"
+          },
+          "expect": [
+            {
+              "out": "return",
+              "to": "Title"
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        }
+      ]
+    },
+    {
+      "id": "R6-background-from-gate-origin-play",
+      "source": "gdd: app-shell-title.md R6; AS-Q (game-dev-ios) Q6 (the gate's origin, then F3)",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "Input"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "PressQueue"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "RevealStage"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "HintLetters"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "gateOpen"
+          },
+          "expect": [
+            {
+              "out": "edgeDeferral",
+              "on": false
+            }
+          ],
+          "expectState": {
+            "state": "Gate"
+          }
+        },
+        {
+          "t": {
+            "uptime": 3.0,
+            "away": 100.0
+          },
+          "event": {
+            "type": "background"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Background"
+          }
+        },
+        {
+          "t": {
+            "uptime": 4.0,
+            "away": 160.0
+          },
+          "event": {
+            "type": "returnFromBackground"
+          },
+          "expect": [
+            {
+              "out": "return",
+              "to": "Play"
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        }
+      ]
+    },
+    {
+      "id": "R6-background-from-panel-origin-title",
+      "source": "gdd: app-shell-title.md R6; AS-Q (game-dev-ios) Q6",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "gateOpen"
+          },
+          "expect": [
+            {
+              "out": "edgeDeferral",
+              "on": false
+            }
+          ],
+          "expectState": {
+            "state": "Gate"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "gateCorrect"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Panel"
+          }
+        },
+        {
+          "t": {
+            "uptime": 3.0,
+            "away": 100.0
+          },
+          "event": {
+            "type": "background"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Background"
+          }
+        },
+        {
+          "t": {
+            "uptime": 4.0,
+            "away": 110.0
+          },
+          "event": {
+            "type": "returnFromBackground"
+          },
+          "expect": [
+            {
+              "out": "return",
+              "to": "Title"
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        }
+      ]
+    },
+    {
+      "id": "R6-background-from-panel-origin-play-long",
+      "source": "gdd: app-shell-title.md R6; F3; AS-Q (game-dev-ios) Q6",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "Input"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "PressQueue"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "RevealStage"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "HintLetters"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "gateOpen"
+          },
+          "expect": [
+            {
+              "out": "edgeDeferral",
+              "on": false
+            }
+          ],
+          "expectState": {
+            "state": "Gate"
+          }
+        },
+        {
+          "t": {
+            "uptime": 3.0
+          },
+          "event": {
+            "type": "gateCorrect"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Panel"
+          }
+        },
+        {
+          "t": {
+            "uptime": 4.0,
+            "away": 100.0
+          },
+          "event": {
+            "type": "background"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Background"
+          }
+        },
+        {
+          "t": {
+            "uptime": 5.0,
+            "away": 2000.0
+          },
+          "event": {
+            "type": "returnFromBackground"
+          },
+          "expect": [
+            {
+              "out": "return",
+              "to": "Title"
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        }
+      ]
+    },
+    {
+      "id": "R6-background-drops-pending-start",
+      "source": "gdd: app-shell-title.md R3, R6; AS-Q (game-dev-ios) Q9",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.35
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 50.0
+          },
+          "event": {
+            "type": "background"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Background"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Background"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0,
+            "away": 60.0
+          },
+          "event": {
+            "type": "returnFromBackground"
+          },
+          "expect": [
+            {
+              "out": "return",
+              "to": "Title"
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 3.0
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "Input"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "PressQueue"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "RevealStage"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "HintLetters"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        }
+      ],
+      "note": "The pending start is dropped; the theme became ready while away; the next start chimes again and enters Play."
+    },
+    {
+      "id": "F4-escalation-100-120",
+      "source": "gdd: app-shell-title.md F4 example; AC-11",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "Input"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "PressQueue"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "RevealStage"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "HintLetters"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        },
+        {
+          "t": {
+            "uptime": 100.0
+          },
+          "event": {
+            "type": "memoryWarning"
+          },
+          "expect": [
+            {
+              "out": "shed",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 120.0
+          },
+          "event": {
+            "type": "memoryWarning"
+          },
+          "expect": [
+            {
+              "out": "shed",
+              "level": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F4-no-escalation-100-140",
+      "source": "gdd: app-shell-title.md F4 example; AC-11",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "Input"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "PressQueue"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "RevealStage"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "HintLetters"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        },
+        {
+          "t": {
+            "uptime": 100.0
+          },
+          "event": {
+            "type": "memoryWarning"
+          },
+          "expect": [
+            {
+              "out": "shed",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 140.0
+          },
+          "event": {
+            "type": "memoryWarning"
+          },
+          "expect": [
+            {
+              "out": "shed",
+              "level": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F4-escalation-exactly-30",
+      "source": "gdd: app-shell-title.md F4 (<=, inclusive); AS-Q (game-dev-ios) Q7",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "Input"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "PressQueue"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "RevealStage"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "HintLetters"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        },
+        {
+          "t": {
+            "uptime": 100.0
+          },
+          "event": {
+            "type": "memoryWarning"
+          },
+          "expect": [
+            {
+              "out": "shed",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 130.0
+          },
+          "event": {
+            "type": "memoryWarning"
+          },
+          "expect": [
+            {
+              "out": "shed",
+              "level": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F4-previous-of-either-level",
+      "source": "gdd: app-shell-title.md F4; AS-Q (game-dev-ios) Q7 (previous = the immediately preceding warning)",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "Input"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "PressQueue"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "RevealStage"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "HintLetters"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        },
+        {
+          "t": {
+            "uptime": 100.0
+          },
+          "event": {
+            "type": "memoryWarning"
+          },
+          "expect": [
+            {
+              "out": "shed",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 120.0
+          },
+          "event": {
+            "type": "memoryWarning"
+          },
+          "expect": [
+            {
+              "out": "shed",
+              "level": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 140.0
+          },
+          "event": {
+            "type": "memoryWarning"
+          },
+          "expect": [
+            {
+              "out": "shed",
+              "level": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 175.0
+          },
+          "event": {
+            "type": "memoryWarning"
+          },
+          "expect": [
+            {
+              "out": "shed",
+              "level": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F4-background-warning-counts-uptime",
+      "source": "gdd: app-shell-title.md F4; AS-Q (game-dev-ios) Q7 (uptime clock; background warnings count)",
+      "given": {
+        "platform": "iPadOS",
+        "knobs": {
+          "title_after_s": 1800.0,
+          "memory_escalate_s": 30.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "launch"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Launching"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "firstFrame"
+          },
+          "expect": [
+            {
+              "out": "statusBarHidden",
+              "hidden": true
+            },
+            {
+              "out": "edgeDeferral",
+              "on": true
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "themeReady"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "startPlay"
+          },
+          "expect": [
+            {
+              "out": "titleChime"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "Input"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "PressQueue"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "RevealStage"
+            },
+            {
+              "out": "enterPlay",
+              "notify": "HintLetters"
+            }
+          ],
+          "expectState": {
+            "state": "Play"
+          }
+        },
+        {
+          "t": {
+            "uptime": 100.0
+          },
+          "event": {
+            "type": "memoryWarning"
+          },
+          "expect": [
+            {
+              "out": "shed",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 110.0,
+            "away": 500.0
+          },
+          "event": {
+            "type": "background"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Background"
+          }
+        },
+        {
+          "t": {
+            "uptime": 120.0
+          },
+          "event": {
+            "type": "memoryWarning"
+          },
+          "expect": [
+            {
+              "out": "shed",
+              "level": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 125.0,
+            "away": 5000.0
+          },
+          "event": {
+            "type": "returnFromBackground"
+          },
+          "expect": [
+            {
+              "out": "return",
+              "to": "Title"
+            }
+          ],
+          "expectState": {
+            "state": "Title"
+          }
+        },
+        {
+          "t": {
+            "uptime": 160.0
+          },
+          "event": {
+            "type": "memoryWarning"
+          },
+          "expect": [
+            {
+              "out": "shed",
+              "level": 1
+            }
+          ]
+        }
+      ],
+      "note": "The away clock jumps 4500 s, but F4 runs on uptime: 120 is 20 s after 100 (level 2); 160 is 40 s after 120 (level 1)."
+    }
+  ]
+}
