@@ -220,7 +220,7 @@ interfaces:
       - morphcore
       - apple-tools
     adr: docs/architecture/adr-0004-contracts-fixtures-harness.md
-    signal_signature: "contracts/<name>-vN/{spec.md, cases.json, sources.lock[, cases-generated.json]} validated by contracts/case-schema-v1.json; typed events, given seam state, raw UInt64 draws per stream, ordered expect lists, play clock never given; ContractHarness (XCTest) / JUnit 5 later; FAIL never skip"
+    signal_signature: "contracts/<name>-vN/{spec.md, cases.json, sources.lock[, cases-generated.json]} checked by each harness's hand-written strict structural check against contracts/case-schema-v1.md (no third-party validator, PKC-03); typed events, given seam state, raw UInt64 draws per stream, ordered expect lists, play clock never given; ContractHarness (XCTest) / JUnit 5 later; FAIL never skip"
     referenced_by:
       - docs/architecture/adr-0004-contracts-fixtures-harness.md
     added: 2026-11-18

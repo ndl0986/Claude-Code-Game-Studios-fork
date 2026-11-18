@@ -158,8 +158,16 @@ The code under test for each case must run inside the harness that runs it.
 
 ### D4. The case-file schema
 
-`contracts/case-schema-v1.json` (a JSON Schema) defines the file. Every harness validates each `cases.json` against
-it before running a single case, and a schema error is a FAIL.
+`contracts/case-schema-v1.md` defines the file. It is a written spec, not a JSON Schema document: PKC-03(a) allows
+no remote package pins, even in test targets, so no third-party schema validator is used.
+- **Enforcement is a strict structural check, hand-written in each harness.** The harness parses the file with the
+  platform's own JSON parser (`JSONSerialization` in the Apple test targets), then walks every object against
+  `case-schema-v1.md`'s tables of allowed and required keys and value kinds. It applies every FAIL rule below
+  before decoding into typed case structs, so a key the typed decoder would silently ignore still FAILs.
+- The Kotlin harness implements the same check by hand (ADR-0012 picks its JSON parser).
+- A schema error is a FAIL, raised before any case runs.
+- **Self-test:** every rule in `case-schema-v1.md` has a negative fixture in the harness's own tests that must
+  FAIL (Validation Criteria 4). A rule added to the spec without its negative fixture is REVISE at review.
 
 ```
 { "contract": "press-queue-v1", "schema": 1, "uint64AsString": true,
@@ -180,7 +188,7 @@ it before running a single case, and a schema error is a FAIL.
     "draws": { "hints": ["9007199254740993", "…"] },
     "steps": [ { "t": { "uptime": 1.25 },
                  "event": { "type": "key", "kind": "down", "character": "D", "positionKey": "D",
-                            "modifiers": 0, "isRepeat": false, "physicalId": "k4", "time": 1.25 },
+                            "modifiers": 0, "isRepeat": false, "physicalId": "k4" },
                  "expect": [ { "out": "press", "key": "D", "source": "hardware" },
                              { "out": "started", "revealId": 1 } ],
                  "expectState": { … } } ],
@@ -206,6 +214,8 @@ it before running a single case, and a schema error is a FAIL.
 **Rules:**
 - **`expect` is an ordered list** of emitted outputs, compared for exact sequence and count, never as a set.
   `expectState` (optional) checks the state after the step.
+- **One time per step.** A step's time is `t.uptime`. Events carry no `time` field: the harness fills D5's
+  `KeyEvent.time` / `TouchEvent.time` from `t.uptime`, and an event `time` in a case is a schema FAIL.
 - **The play clock is never given.** Cases give `uptime` (and `away` or `wall` where named) plus `freeze`, `resume`
   and `settle` events, and assert the play-clock results (play times in outputs, `s`, ages). A `play` field in `t`
   or `given` is a schema FAIL.
@@ -228,11 +238,13 @@ it before running a single case, and a schema error is a FAIL.
 **Apple** (`apple/KidCore/Tests/ContractTests`, a test target; JSON decoding is allowed there):
 - `ContractHarness` finds `games/kid-learn-character/contracts/` by walking up from the test file's `#filePath`.
   SwiftPM resources cannot sit outside the package, and CI is local (K-28).
-- It enumerates every `*-v*/cases.json` (and `cases-generated.json` where present) and checks each against `case-schema-v1.json`. It then runs each file through
-  the runner registered for that contract name.
+- It enumerates every `*-v*/cases.json` (and `cases-generated.json` where present), runs the strict structural
+  check (D4) on each, and then runs each file through the runner registered for that contract name.
 - **FAIL, never a skip:**
   - a contract directory with no registered runner;
   - a runner whose file has 0 cases;
+  - a `cases-generated.json` that is present but has 0 cases (absent is fine). Hand-written and generated counts
+    are reported separately;
   - an unreadable or invalid file;
   - a layer with 0 cases where `spec.md` lists cases for it (D3).
 - Each case runs in its own `XCTContext.runActivity` named `<contract>/<caseId>`. A failure reads:
@@ -289,7 +301,7 @@ pass without a GDD or ADR reason.
 
 1. **The scaffold story** (architecture.md check (c)):
    - `contracts/README.md`, including the morph pointer;
-   - `contracts/case-schema-v1.json`;
+   - `contracts/case-schema-v1.md` and the harness's structural check;
    - `ContractHarness`, plus the empty runner registry;
    - morph-contract-v1 passing within ±1e-3;
    - the harness self-test (Validation Criteria 2–3).
@@ -303,7 +315,7 @@ pass without a GDD or ADR reason.
 
 ```
  design/gdd/*.md (F-tables, ACs) ──QC writes──▶ contracts/<name>-vN/{spec.md, cases.json, sources.lock}
-        │                                              │ (case-schema-v1.json)
+        │                                              │ (case-schema-v1.md)  
         │ sections-hash                                ├──▶ apple/KidCore/Tests/ContractTests ──▶ KidCore
         ▼                                              ├──▶ apple/Tools tests (key-table "file") ──▶ Tools decoder
  tools/contracts/source-drift.sh (observations)        ├──▶ apple/MorphCore/Tests (morph-contract-v1) ──▶ MorphCore
@@ -312,7 +324,7 @@ pass without a GDD or ADR reason.
 
 ### Key Interfaces
 
-- `contracts/case-schema-v1.json`: the file format of D4.
+- `contracts/case-schema-v1.md`: the file format of D4, enforced by each harness's strict structural check.
 - `ContractHarness` (test target): `register(contract: String, runner: ContractRunner)`, `runAll()`.
 - `ContractRunner`: `acceptedEvents`, `givenFields`, `layers`, `run(case) → [Output]`. Every runner calls only the
   public API of the core it tests (ADR-0002, `contracts/kidcore-api.md` / `morphcore-api.md`).
@@ -428,7 +440,9 @@ None: nothing exists yet besides morph-contract-v1, which stays where it is. The
    - an unordered `expect`.
    Each fixture is then restored.
 3. With `contracts/` moved, the harness fails, printing the path it searched.
-4. The schema rejects the bad cases from 2 before any runner starts.
+4. The structural check rejects the bad cases from 2, plus one negative fixture per `case-schema-v1.md` rule
+   (an unknown key, an event `time`, a `u` field, a `play` field, a non-string UInt64, an override without
+   `toleranceReason`), before any runner starts.
 5. Once two contracts exist, `source-drift.sh` reports a section edit to one cited GDD, and nothing for an edit to an
    uncited section.
 
