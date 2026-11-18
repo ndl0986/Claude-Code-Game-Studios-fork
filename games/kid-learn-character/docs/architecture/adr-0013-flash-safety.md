@@ -64,7 +64,7 @@ in a release candidate.
 | **Knowledge Risk** | **LOW** for `SKRenderer` offscreen rendering: SDK header read; it renders headless into a Metal texture on this Mac (TASK-103 H-2, 6e455bfc). **MEDIUM** for whether an offscreen `SKRenderer` frame matches the on-screen frame pixel for pixel (colour space, pixel format, drawable scale): checked by V2. **MEDIUM** for the dump's effect on device frame timing: it slows frames, so G5 windows by recorded timestamps (D5) |
 | **References Consulted** | `SpriteKit.framework/Headers/SKRenderer.h` and `SKView.h` (Xcode 27.1, macOS 27.0 and iOS 27.1 SDKs, read 2026-11-18); `docs/engine-reference-local/native-apple/modules/spritekit.md`; `prototypes/DeviceSpike/DeviceSpike/RenderScene.swift` (frame dump) and `AudioScreen.swift`; `prototypes/DeviceSpike/tools/overlap-check.swift` (6e455bfc) |
 | **Post-Cutoff APIs Used** | None. `SKRenderer` (iOS 11 / macOS 10.13), Metal textures, `CGImage` |
-| **Verification Required** | V1–V6 (Validation Criteria). In short: G4 is deterministic run to run; an offscreen frame matches the device's dumped frame for the same tick (V2); the Release binary contains no dump code (V4); the device dump's frame coverage meets D5 |
+| **Verification Required** | V1–V7 (Validation Criteria). In short: G4 is deterministic run to run; an offscreen frame matches the device's dumped frame for the same tick (V2); the Release binary contains no dump code (V4); the device dump's frame coverage meets D5 |
 
 ### Sources (Xcode 27.1 SDK headers, read 2026-11-18)
 
@@ -199,10 +199,14 @@ ADR-0009 D6 deferred it, ADR-0004 calls F1/F2 "QC tools", and ADR-0011's gate li
 ### D5. G5: the device dump, and time from timestamps
 - **What the dump is:** a **Debug-only** `FlashDump` in the app target (`#if DEBUG`), off unless a launch argument
   turns it on. On each display-link tick it:
-  - renders that tick's scene with an `SKRenderer` into a Metal texture at the **drawable's pixel size, pixel format
-    and colour space**;
+  - **after the view's own update for that tick**, calls its `SKRenderer`'s **`render(withViewport:…)` only, never
+    `updateAtTime:`** (an update would advance every SpriteKit-timed action a second time per frame), into a Metal
+    texture at the **drawable's pixel size, pixel format and colour space**;
   - records `(targetTimestamp, frame index)`;
   - writes raw pixels to an on-device ring buffer that is flushed off the main thread.
+- **NOT SOURCED:** the headers don't say whether one `SKScene` may be presented by an `SKView` and rendered by an
+  `SKRenderer` at the same time. V7 checks that the dump doesn't disturb the scene; if it does, the dump falls back to a
+  dedicated debug path (the stage rendered only by an `SKRenderer` into the view's drawable) decided in the dump story.
 - It **must not** use `SKView.texture(from:)`, which is cropped to the node and isn't the presented drawable (Sources),
   and **must not** PNG-encode on the main thread (the spike does both).
 - **Time:** the detector windows by the recorded `targetTimestamp`s, never by frame index (TASK-054 follow-up).
@@ -218,10 +222,15 @@ ADR-0009 D6 deferred it, ADR-0004 calls F1/F2 "QC tools", and ADR-0011's gate li
 - **The rule:** a smaller ppi gives a smaller `field_px` and a smaller `area_max`, which is **stricter**. Each class has
   a **ppi floor**, the lowest ppi the game may meet in it: **264** for the iPad (every supported iPad), **254** for a Mac
   2× display, **72** for a Mac 1× external display (external 1× displays reach ~82 ppi; 72 is ADR-0006 D7's
-  "unknown" boundary). A display that reports less (a TV, 30–50 ppi) is judged in G5 at its **real** ppi, which is
-  stricter; judging it at the floor would be looser, so the floor is never substituted for a known lower value. **G4 uses the floor.**
-- **G5 uses the device's real ppi** from ADR-0006 D7. That is at or above the floor, so G5 is never stricter than G4 for
-  the same frames. **If D7 reports "unknown", the detector takes the class floor.**
+  "unknown" boundary). **G4 uses the floor.**
+- **G5 uses the device's real ppi** from ADR-0006 D7. On a supported display that is at or above the floor; a display
+  that reports **less** (a TV, 30–50 ppi) is judged at its real ppi, which is stricter, and the floor is never
+  substituted for a known lower value. **If D7 reports "unknown", the detector takes the class floor.**
+- **A stated limitation, below the floor (a Mac on a TV):** F2's field is a 10° visual angle at 300 mm. At a TV's real
+  viewing distance (1 m or more) the same angle covers several times more pixels, so the floor is stricter than reality
+  there; but a child at 300 mm from a large low-ppi screen, or a TV whose ppi reads "unknown" (judged at the looser
+  floor), is **not covered** by G4 or G5. Play on a TV is outside the supported setup (the Mac class is a built-in or a
+  desk display); this is recorded here, not hidden.
 - **AC-06 is unchanged:** its unit test still checks 264 / 254 / 109 ppi (the GDD's table); G3 adds 72 ppi
   (`field_px` 148.8, `area_max` 4,347).
 - **The opposite of D7's touch-target rule:** that rule takes the largest ppi so that targets come out big enough. This
@@ -233,6 +242,10 @@ ADR-0009 D6 deferred it, ADR-0004 calls F1/F2 "QC tools", and ADR-0011's gate li
 ### D7. Scope: what the frames contain
 - **Covered:** G4 and G5 capture the SpriteKit stage, which is everything the child sees while playing (Accessibility
   "Every visible system | gate").
+- **Overlay press feedback** is not a large luminance change: a key or button highlight stays under `area_max` of the
+  smallest class field (4,347 px at the 72 ppi floor) or changes by less than ΔL 0.1, so a child mashing the gate keypad
+  can't make it flash. SwiftUI's default `Button` press dimming counts, so overlay buttons use a style that meets this
+  (the same failure as DeviceSpike's Audio pad, Risks).
 - **Not covered:** SwiftUI overlays drawn above the stage (the gate challenge, the grown-up panel) are outside the
   render. They must hold **no periodic animation** at all. G1 lints their rates when they come from data, and code
   review checks them (a review rule for the overlay stories).
@@ -285,6 +298,11 @@ protocol FlashDetector { mutating func add(_ frame: FlashFrame); func report() -
 - G4 **must** drive KidCore only through `tick(now:)` on the synthetic clock, with every `RandomSource` seeded.
   Wall-clock time and unseeded randomness **must never** enter the harness.
 - G4 **must** render at each class's full native pixel size and use each class's ppi floor (D6).
+- The stage **must not** use `SKEmitterNode` or any unseeded SpriteKit / GameplayKit randomness; every random draw comes
+  from a seeded `RandomSource` (ADR-0002 D4), or G4 can't be deterministic (V3).
+- G4's harness scene **must never** be attached to an `SKView`; it is driven only by its `SKRenderer`. Readback uses a
+  `.shared` texture, or a blit `synchronize` for a `.managed` one, before the CPU reads it.
+- G5's dump **must** call `render` only, never `updateAtTime:` (D5).
 - The dump **must** be compiled only in Debug. The Release bundle scan (ADR-0003 D8, ADR-0011 D4 step 5) **must**
   find no `FlashDump` symbol in the Release binary (V4).
 - The dump **must** read the frame from its own `SKRenderer` pass at the drawable's size, format and colour space,
@@ -352,8 +370,8 @@ protocol FlashDetector { mutating func add(_ frame: FlashFrame); func report() -
 
 ## Risks
 - **The offscreen frame differs from the on-screen frame** (colour space, scale, a node culled differently).
-  *Mitigation:* V2 compares a G4 frame with a G5 dumped frame of the same scene and tick on each device class; a
-  difference beyond rounding is a FAIL of V2 and blocks relying on G4 alone.
+  *Mitigation:* V2 compares a G4 frame, the G5 dump of the same tick, **and the presented frame** (a screenshot of
+  the paused scene) on each device class; a difference beyond rounding is a FAIL of V2 and blocks relying on G4 alone.
 - **The dump changes what it measures** (slower frames, thermal throttling). *Mitigation:* timestamps (D5); the
   coverage rule; G4 as the repeatable baseline.
 - **G4's matrix misses a real-play case** (a key mash pattern the fixture doesn't have). *Mitigation:* the K-26 busy
@@ -381,7 +399,7 @@ protocol FlashDetector { mutating func add(_ frame: FlashFrame); func report() -
 | cast-rendering.md AC-11 | shipped idles ≤ 1 Hz, a build check on the data | G1 (`TR-cast-007`) |
 
 ## Performance Implications
-- **CPU / GPU (tooling only):** G1–G3 take seconds. G4 is 27 runs × 600 frames at native size; a Metal compute pass
+- **CPU / GPU (tooling only):** G1–G3 take seconds. G4 is 27 runs × 600 frames at native size, about **330 GB of pixel readback**, so `--flash` is a **long QC run**, not a quick gate; a Metal compute pass
   for luminance and per-pixel state keeps it to minutes at `nice -n 10` (the detector story measures it and records
   the time in its evidence).
 - **Memory:** per-pixel state is a few floats per pixel at the largest class (~6 Mpx), about 100 MB.
@@ -401,8 +419,13 @@ protocol FlashDetector { mutating func add(_ frame: FlashFrame); func report() -
 Per K-34: headless runs need no MAC FREE; G5 on the Mac (M-12) does.
 - **V1 (G3):** AC-06 and AC-07 pass, plus timestamp windowing: a clip with uneven frame times (a 30 ms gap every 10th
   frame) gives the same verdict as the even clip with the same content timing.
-- **V2 (offscreen = on-screen):** for one scene and tick per device class, the G4 frame and a G5 dumped frame match
-  within ±1 per 8-bit channel (excluding antialiased edges ≤ 1 px). This is recorded in P-3 / M-12.
+- **V2 (offscreen = on-screen):** for one scene and tick per device class:
+  - the G4 frame and the G5 dumped frame match within ±1 per 8-bit channel (excluding antialiased edges ≤ 1 px);
+  - **the presented frame:** a screenshot of the **paused** scene matches the dump of that tick within ±1 per 8-bit
+    channel, after both are converted to linear sRGB (the screenshot through its embedded colour profile; TASK-109's
+    Mac capture showed why a raw screenshot can't be compared).
+
+  Recorded in P-3 / M-12.
 - **V3 (determinism):** two G4 runs on one commit give identical per-frame hashes.
 - **V4 (Release has no dump):** `nm` / the bundle scan on the Release binaries finds no `FlashDump` symbol, and the
   launch argument does nothing.
@@ -411,6 +434,9 @@ Per K-34: headless runs need no MAC FREE; G5 on the Mac (M-12) does.
   self-test plants (ADR-0011's self-test), never left in shipped data.
 - **V6 (device):** G5 on a real iPad (P-3) and a real Mac (M-12) at the display's rate. No FAIL, coverage met, with the
   device rate and ppi recorded.
+- **V7 (the dump doesn't disturb the scene):** an action-timed test node (an `SKAction` move) is at the same position at
+  the same `targetTimestamp`s with the dump on and off (within 0.5 px). A drift means the dump advanced the scene, and
+  the dump's fallback (D5) is used.
 
 ## GDD sync
 
