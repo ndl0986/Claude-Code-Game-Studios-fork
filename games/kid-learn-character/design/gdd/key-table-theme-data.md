@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent review by game-dev-ios, merged 2026-11-18)
 > **Author**: game-art-content (TASK-036), with Luan's answers via game-leader; plan reviewed by game-dev-ios
-> **Last Updated**: 2026-11-18 (TASK-050 cross-GDD follow-ups)
+> **Last Updated**: 2026-11-18 (TASK-050 cross-GDD follow-ups; K-22 `titleCastId`)
 > **Last Verified**: 2026-11-18
 > **Implements Pillar**: Pillar 1 (Every Press Answers), Pillar 4 (Things the Child Loves), Pillar 5 (Safe by Design)
 
@@ -76,6 +76,7 @@ There are three kinds of file, all JSON, bundled in the app, and read with plain
 | `countedItem` | object | The thing numbers count and the "empty" item for 0: `{ castId, singular, plural, emptyCastId, emptyWord }`, e.g. `baby dinosaur` / `baby dinosaurs`, `dino_0_nest_01` / `an empty nest`. |
 | `soundExceptions` | object | Key → the decision that allows it to break T5, e.g. `{ "X": "K-09, Luan 2026-11-18" }`. Empty by default. |
 | `voiceDurations` | object | Locale → line id → **duration in seconds** (number, 3 decimals), for every voice line the theme uses, e.g. `{ "en-us": { "letter_c": 0.512, "word_triceratops": 0.904, "number_3": 0.430, "word_three_baby_dinosaurs": 1.180 } }`. **Written by the build tool** from the rendered files, never by hand; checked by V15. Read by Audio & Voice (F6) and the Press Queue to hold a waiting key until the word ends, without reading the file at play time. |
+| `titleCastId` | string | The one cast member who idles on the **Title** screen (K-22, Luan 2026-11-18). For Dinosaurs: the **T-Rex** (`dino_t_trex_01` under the castId pattern), as played. Must name an item's `castId` in this theme (V16). |
 | `keys` | object | Key ("A"…"9") → key entry (b). All 36 keys are required. |
 
 **b. Key entry and item**
@@ -209,7 +210,8 @@ lowercase with underscores:
 | V12 | Every sfx is ≤ 2.0 s long (art bible §8). |
 | V13 | `family` exists in the theme's `families`. |
 | V14 | Every `weight`, when present, is > 0 (F1 needs a positive total). |
-| V15 | `voiceDurations` has an entry for **every** voice line of every item, for every locale in `voiceLocales`, and no other entries. Each value **matches its file's decoded duration within ±0.01 s**: the **decoded length with the AAC encoder priming and end padding removed** (the sample count the app's decoder returns, which Audio & Voice schedules), **not** the container's duration; AAC priming alone is about 2112 samples, ≈ 44 ms at 48 kHz, which would break ±0.01 s. The build tool measures it with the same trimming the app's decoder applies. **Word lines ≤ 1.25 s** (Audio & Voice `word_len_max_s`, F6) and **letter and number lines ≤ 1.0 s** (`letter_len_max_s`, Audio A3). |
+| V15 | `voiceDurations` has an entry for **every** voice line of every item, for every locale in `voiceLocales`, and no other entries. Each value **matches its file's decoded duration within ±0.01 s**: the **decoded length with the AAC encoder priming and end padding removed** (the sample count the app's decoder returns, which Audio & Voice schedules), **not** the container's duration; AAC priming alone is about 2112 samples, ≈ 44 ms at 48 
+| V16 | `titleCastId` is present and equals the `castId` of an item in this theme (K-22). |kHz, which would break ±0.01 s. The build tool measures it with the same trimming the app's decoder applies. **Word lines ≤ 1.25 s** (Audio & Voice `word_len_max_s`, F6) and **letter and number lines ≤ 1.0 s** (`letter_len_max_s`, Audio A3). |
 
 #### 7. Toddler-safe content rules (every theme)
 
@@ -244,6 +246,7 @@ the theme changes.
 | Input & Key Filter (TASK-037) | in | The key value "A"–"Z" / "0"–"9" (shared format, Rule 1). |
 | Press Queue | — | Queues keys, not items. Whether closing the grown-up panel clears the queue is **Press Queue's / Reveal Stage's call** (dependency stated, not decided here). |
 | Reveal Stage | out | At reveal start: `resolve(key) → item` (pick rule). For prefetch: `peek(key) → item`, no state change (Rule 4.5). |
+| App Shell & Title | out | `titleCastId` → the Title's cast member (K-22); fallback: key A's item 0. |
 | MorphCore | out | The glyph path (glyph set) and the silhouette path (item). The morph seed and timings are not here. |
 | Cast Rendering | out | `art`, `family`, `variant`, `hueSlot`; idle params by family id. |
 | Audio & Voice | out | `sfx` path; voice paths built from `voiceLocales` + line ids. |
@@ -304,6 +307,7 @@ whenever C is non-empty. C is never empty: n ≥ 1, and `last` is only excluded 
 | `schemaVersion` unknown (newer major) | The theme is refused at load and the app stays on the current theme. If it is the default theme, it can't ship: the build validator uses the same version list. |
 | A theme fails the load check when picked in the panel | It is not shown. The current theme stays, with one debug log line. No message to the child. The grown-up panel may grey out the theme (Parent Gate GDD's call). |
 | The stored theme fails the check **at launch** (or is not bundled) | Dinosaurs loads in memory; the stored `themeId` is kept, not rewritten (Settings Store R6). One debug log line. The next launch tries the stored theme again. |
+| `titleCastId` missing or naming no cast member at theme load (despite V16) | The theme still loads. The Title shows the **first item in canonical order** (key `A`, item 0: Ankylosaurus in Dinosaurs) instead; one debug log line (K-22). |
 | A `voiceDurations` entry is missing or wrong at run time (despite V15) | The Press Queue uses the bound `T + 1.5 s` for that word (Audio & Voice F6). One debug log line. Playback never measures the file. |
 | Silhouette or art missing at run time (despite the gate) | Per asset, nothing shown to the child, one debug log line. **The glyph glows and sparkles out** instead of morphing, and the letter voice plays if present (game-dev-ios point 6). |
 | Glyph missing | No morph: the cast member fades in, with the voice (matches TASK-038). |
@@ -344,6 +348,7 @@ whenever C is non-empty. C is never empty: n ≥ 1, and `last` is only excluded 
 | Theme Packs | This format. |
 | Localization | `voiceLocales`, line ids. |
 | Settings Store (`design/gdd/settings-store.md`) | Stores only the chosen `themeId`; hands it over at launch and on change. At launch a failing stored theme → Dinosaurs in memory, `themeId` kept (its R6; section 5 here). |
+| App Shell & Title | `titleCastId` (K-22): the cast member idling on the Title; the canonical-order fallback. |
 
 ## Tuning Knobs
 
@@ -506,3 +511,6 @@ Each criterion is checked by the validator on the data, or by a unit test with f
 15. **Peek changes nothing:** with a fixed seed, `n = 5` and `last` set, calling `peek(D)` 10 times returns
     the same item each time and equals the next `resolve(D)`; `lastShown` and the stream position are
     unchanged after the peeks (unit test). With `n = 1`, `peek` returns item 0 and draws nothing.
+16. **Title cast member:** the validator passes Dinosaurs with `titleCastId` = the T-Rex's castId, and fails a
+    test theme whose `titleCastId` names no item (naming the theme). At run time, loading a test theme with a
+    bad `titleCastId` makes the Title show key A's item 0 and writes one debug log line (unit test).
