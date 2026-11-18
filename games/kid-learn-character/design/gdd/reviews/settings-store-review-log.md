@@ -37,3 +37,8 @@ Reviewed-Content-Hash: design/gdd/settings-store.md d0629a5f8a9ed9bb6d224656bb16
 Review mode: lean · Workflow: standard
 Change: S1: R10 sends one notification for a run-only child-lock OFF, with no write. S2: the run value childLockActive defined in R8 (= stored childLock at launch; OFF changes only it, K-21); R1 row, R4's write exception, R9 Reset, R10, AC-15b and the Child Lock-in rows aligned (no write on OFF; the record keeps childLock: true). Wording and rule edits from the TASK-054 follow-up list (production/team/TASK-054-followups.md @ 84f7ea2); Parent Gate G-numbers cited as given by game-qc-ios (TASK-048 not merged). Review: game-qc-ios, from the diff.
 Reviewed-Content-Hash: design/gdd/settings-store.md 92d1cbd1748f0cbe76272d90a514feba935fe9d3
+
+## Update — 2026-11-18 — TASK-054a review fixes (no re-review)
+Review mode: lean · Workflow: standard
+Change: game-qc-ios's advisory: R10 delivers a notification after the write, if any (the run-only OFF has none).
+Reviewed-Content-Hash: design/gdd/settings-store.md 8b65da436b822e87958e856f7fd1a77ed51b8348

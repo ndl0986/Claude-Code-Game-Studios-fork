@@ -204,7 +204,7 @@ only the record:
 **R10. Change notifications.**
 
 - Consumers read the current in-memory record and subscribe to changes. A change is delivered **on the main
-  thread**, after the write has been issued, as the whole new record plus `childLockActive` (consumers compare what
+  thread**, after the write, if any, as the whole new record plus `childLockActive` (consumers compare what
   they care about).
 - One grown-up change → one notification. Reset → one notification. **A run-only child-lock OFF → one
   notification with no write** (`childLockActive` false, the record unchanged; TASK-054 S1), so Child Lock-in can

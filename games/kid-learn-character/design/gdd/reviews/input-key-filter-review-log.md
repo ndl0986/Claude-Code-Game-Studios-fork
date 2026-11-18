@@ -73,3 +73,8 @@ Reviewed-Content-Hash: design/gdd/input-key-filter.md fd2286b73dad5e6608b4210337
 Review mode: lean · Workflow: standard
 Change: I1 (safety): the chord check reads the OS key state at the Q down (CGEventSource keyState), and keys pressed while ⌘ was held leave the held set when ⌘ is released, so a lost key-up never blocks the chord (Parent Gate AC-27; AC-1k3); the key-state read without an Input Monitoring prompt is NOT ASSESSED, with the ⌘-release rule as fallback. I2: layer 3 emits gateTouch(ended) when the pointer leaves the moon region + moon_slop_pt 20 pt (G1; new knob; AC-1k5). I3 (safety): ⌘-combinations swallowed in every state while childLockActive, Panel open row fixed (AC-1k2). I4: a wrong answer or timeout returns to the state the gate opened from; the chord works on the Title and is ignored in the Gate challenge and Panel open (AC-1k4). Wording and rule edits from the TASK-054 follow-up list (production/team/TASK-054-followups.md @ 84f7ea2); Parent Gate G-numbers cited as given by game-qc-ios (TASK-048 not merged). Review: game-qc-ios, from the diff.
 Reviewed-Content-Hash: design/gdd/input-key-filter.md e0aab170b758b949109f2d01c9045593afa93b76
+
+## Update — 2026-11-18 — TASK-054a review fixes (no re-review)
+Review mode: lean · Workflow: standard
+Change: game-qc-ios's diff review: I1's key-state read is a build decision with a release check (no Input Monitoring prompt on a clean Mac, else removed from the build; no run-time fallback, PKC), the ⌘-release rule stated as alone passing AC-27 / k3, the held-set-only limit and its cure stated, new AC-1k6 (real Mac, release-blocking, NOT ASSESSED until run).
+Reviewed-Content-Hash: design/gdd/input-key-filter.md aa441ae5b394c020fb3156b879b9c800aad847b9

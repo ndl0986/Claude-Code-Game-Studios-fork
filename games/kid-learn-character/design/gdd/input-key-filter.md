@@ -116,8 +116,16 @@ platform.
     down (Parent Gate G2: exactly ⌃⌥⌘Q, from the OS key state);
   - and, to keep the held set itself honest, **when ⌘ is released** (`flagsChanged` with ⌘ going up) every key that
     went down while ⌘ was held is removed from the held set.
-  - NOT ASSESSED: that the key-state read needs no Input Monitoring prompt in the sandboxed app; if it does, the
-    chord falls back to the held set kept honest by the ⌘-release rule, which alone passes AC-27's stale-key case. The chord replaces the moon hold only: the gate's second step (the number in words)
+  - **The ⌘-release rule alone passes AC-27's stale-key case** (AC-1k3): a key lost under ⌘ leaves the held set the
+    moment ⌘ is released, so the next ⌃⌥⌘Q counts.
+  - **The key-state read is a build decision, with a release check** (PKC: no system dialog may appear in a Kids
+    app). The read ships only if it triggers **no Input Monitoring prompt**. Check on a clean Mac: `tccutil reset
+    ListenEvent <bundle id>`, first launch with the lock on, then press ⌃⌥⌘Q. Pass: no prompt appears, and the app
+    is not listed under System Settings › Privacy & Security › Input Monitoring. If it prompts, the read is removed
+    from the build, and the chord uses the held set alone, kept honest by the ⌘-release rule (AC-1k6). There is no
+    run-time fallback: a prompt at the first chord would already be in front of the child or the grown-up.
+  - **Limit of the held set alone:** if ⌘ stays down without a break, a stale key keeps blocking the chord until ⌘ is
+    released; **releasing ⌘ and pressing the chord again always clears it.** The chord replaces the moon hold only: the gate's second step (the number in words)
   still shows (K-19).
 - **iPadOS: no chord**, even with a hardware keyboard. Holding the moon is the only way in. ⌃⌥⌘Q on an iPad is
   an ordinary disqualified key: swallowed (R3, R5).
@@ -346,6 +354,11 @@ The two provisional values are tuned in play (leader, 2026-11-18).
     ⌃⌥⌘Q goes down, THEN no `openPanel`.
   - **k5.** *(TASK-054 I2)* GIVEN a pointer down on the moon, WHEN it moves to 19 pt outside the moon's region, THEN
     no `gateTouch(ended)`; WHEN it moves to 21 pt outside, THEN exactly one `gateTouch(ended)`, and none again on its up.
+  - **k6.** *(TASK-054 I1; release-blocking for the macOS build; real Mac, NOT ASSESSED until run, needs MAC FREE)*
+    On a clean Mac (`tccutil reset ListenEvent <bundle id>`), first launch with the child lock on, press ⌃⌥⌘Q: THEN
+    no system prompt appears, the gate opens, and the app is not listed under Privacy & Security › Input Monitoring.
+    If a prompt appears, the build removes the key-state read and k3 is re-run on the held-set-only path. This is
+    evidence for Parent Gate AC-27 and Privacy & Kids Compliance (no system dialog in front of the child).
   - **l.** GIVEN `repress_min_s = 0.08`, WHEN D is pressed at 10.00 s and 10.05 s, THEN one press; at 10.00 s and
     10.10 s, THEN two; at 10.000 s and 10.080 s, THEN two (F2 boundary: a gap equal to `repress_min_s` counts; the
     test compares with a 1e-9 s tolerance so floating-point rounding can't flip it).
