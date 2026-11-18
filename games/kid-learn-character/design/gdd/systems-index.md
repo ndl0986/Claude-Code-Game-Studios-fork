@@ -37,7 +37,7 @@ child lock-in, privacy compliance), because the player is 2.5–3 years old.
   weather picked by hand behind the parent gate (K-08; no network, no location).
 - **Hint Letters** float a few glowing letters in the sky as touch targets; a touch on a fading
   hint still counts.
-- **Parade** walks the last 8 new cast members across the hills, every 8 met (Luan's Keep).
+- **Parade** walks the batch of 6 newly met keys across the hills, every 6 met (K-17; Luan's Keep).
 - **Parent Gate & Grown-up Panel** opens by holding the moon, or the parent key chord on the Mac.
 - **On-screen Keyboard Row** is an optional row of big letter keys, off by default (art bible §7).
 - **Child Lock-in** is the macOS kiosk behind the parent gate and the iPad Guided Access guidance
@@ -62,15 +62,15 @@ child lock-in, privacy compliance), because the player is 2.5–3 years old.
 | 4 | Settings Store (inferred) | Persistence | MVP | Approved | design/gdd/settings-store.md | — |
 | 5 | Privacy & Kids Compliance (inferred) | Meta | MVP | Approved | design/gdd/privacy-kids-compliance.md | — |
 | 6 | Audio & Voice | Audio | MVP | Approved | design/gdd/audio-voice.md | Key Table & Theme Data |
-| 7 | Press Queue | Gameplay | MVP | Approved | design/gdd/press-queue.md | Input & Key Filter |
+| 7 | Press Queue | Gameplay | MVP | Approved | design/gdd/press-queue.md | Input & Key Filter, Key Table & Theme Data, Audio & Voice, MorphCore |
 | 8 | Cast Rendering (inferred) | Presentation | MVP | Approved | design/gdd/cast-rendering.md | Key Table & Theme Data, MorphCore |
 | 9 | Reveal Stage | Gameplay | MVP | Approved | design/gdd/reveal-stage.md | MorphCore, Audio & Voice, Press Queue, Cast Rendering, Key Table & Theme Data |
 | 10 | Hint Letters | Gameplay | MVP | Approved | design/gdd/hint-letters.md | Key Table & Theme Data, Input & Key Filter, Press Queue |
-| 11 | Parade | Gameplay | MVP | Approved | design/gdd/parade.md | Reveal Stage, Cast Rendering |
+| 11 | Parade | Gameplay | MVP | Approved | design/gdd/parade.md | Reveal Stage, Cast Rendering, Press Queue, Key Table & Theme Data |
 | 12 | Parent Gate & Grown-up Panel | UI | MVP | Approved | design/gdd/parent-gate-panel.md | Settings Store, Input & Key Filter |
-| 13 | Child Lock-in | Platform | MVP | Approved | design/gdd/child-lock-in.md | Input & Key Filter, Parent Gate & Grown-up Panel |
+| 13 | Child Lock-in | Platform | MVP | Approved | design/gdd/child-lock-in.md | Settings Store, Input & Key Filter, App Shell & Title (peer: Parent Gate & Grown-up Panel) |
 | 14 | App Shell & Title (inferred) | Presentation | MVP | Approved | design/gdd/app-shell-title.md | Reveal Stage, Settings Store |
-| 15 | Scene: Time of Day & Weather | Presentation | Vertical Slice | Approved | design/gdd/scene-time-weather.md | Settings Store |
+| 15 | Scene: Time of Day & Weather | Presentation | Vertical Slice | Approved | design/gdd/scene-time-weather.md | Settings Store, Reveal Stage (reads Parade) |
 | 16 | On-screen Keyboard Row | UI | Vertical Slice | Not Started | design/gdd/onscreen-keyboard-row.md | Input & Key Filter, Press Queue, Settings Store |
 | 17 | Accessibility | Meta | Vertical Slice | Not Started | design/gdd/accessibility.md | MorphCore, Reveal Stage, Scene: Time of Day & Weather, Hint Letters, Parade |
 | 18 | Theme Packs | Content | Alpha | Not Started | design/gdd/theme-packs.md | Key Table & Theme Data, Parent Gate & Grown-up Panel |
@@ -138,18 +138,18 @@ Narrative does not apply.
 ### Core Layer (depends on foundation)
 
 1. Audio & Voice — depends on: Key Table & Theme Data
-2. Press Queue — depends on: Input & Key Filter
+2. Press Queue — depends on: Input & Key Filter, Key Table & Theme Data, Audio & Voice, MorphCore (T through Reveal Stage)
 3. Cast Rendering (inferred) — depends on: Key Table & Theme Data, MorphCore (silhouettes)
-4. Scene: Time of Day & Weather — depends on: Settings Store
 
 ### Feature Layer (depends on core)
 
 1. Reveal Stage — depends on: MorphCore, Audio & Voice, Press Queue, Cast Rendering, Key Table & Theme Data
 2. Hint Letters — depends on: Key Table & Theme Data, Input & Key Filter, Press Queue
-3. Parade — depends on: Reveal Stage, Cast Rendering
+3. Parade — depends on: Reveal Stage, Cast Rendering, Press Queue, Key Table & Theme Data
 4. Parent Gate & Grown-up Panel — depends on: Settings Store, Input & Key Filter
-5. Child Lock-in — depends on: Input & Key Filter, Parent Gate & Grown-up Panel
+5. Child Lock-in — depends on: Settings Store, Input & Key Filter, App Shell & Title (its "ready"); peer: Parent Gate & Grown-up Panel
 6. On-screen Keyboard Row — depends on: Input & Key Filter, Press Queue, Settings Store
+7. Scene: Time of Day & Weather — depends on: Settings Store, Reveal Stage (visible rect, ground line, freeze, mashing, haloOn); reads Parade's `paradeWalking`
 
 ### Presentation Layer (depends on features)
 
@@ -163,8 +163,9 @@ Narrative does not apply.
 4. Mash World — depends on: Reveal Stage, Cast Rendering, Scene: Time of Day & Weather
 
 **Bottlenecks** (many dependents, highest risk): Key Table & Theme Data, MorphCore, Press Queue,
-Reveal Stage. **Leaves** (no dependents, can be designed late): Child Lock-in, App Shell, Parade,
-Accessibility, Localization, Mash World.
+Reveal Stage. **Leaves** (no dependents, can be designed late): Child Lock-in, Accessibility, Localization,
+Mash World. (App Shell is not a leaf: Child Lock-in waits for its "ready". Parade feeds Scene and Audio.)
+Index edges updated 2026-11-18 after the TASK-055 cross-review (W-7, W-9).
 
 TD-SYSTEM-BOUNDARY skipped — Lean mode.
 
@@ -188,7 +189,7 @@ TD-SYSTEM-BOUNDARY skipped — Lean mode.
 | 12 | Parent Gate & Grown-up Panel | MVP | Feature | ux-designer | S |
 | 13 | Child Lock-in | MVP | Feature | ux-designer, security-engineer | S |
 | 14 | App Shell & Title | MVP | Presentation | ux-designer | S |
-| 15 | Scene: Time of Day & Weather | Vertical Slice | Core | art-director, technical-artist | M |
+| 15 | Scene: Time of Day & Weather | Vertical Slice | Feature | art-director, technical-artist | M |
 | 16 | On-screen Keyboard Row | Vertical Slice | Feature | ux-designer | S |
 | 17 | Accessibility | Vertical Slice | Polish | accessibility-specialist | S |
 | 18 | Theme Packs | Alpha | Polish | game-designer, art-director | M |
