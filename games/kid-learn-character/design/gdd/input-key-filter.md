@@ -200,14 +200,25 @@ platform.
 - **No dropping:** Input never drops or rate-limits a press. The mash rule (3 queued, extras sparkle) is the
   Press Queue's.
 - **Other outputs:** `sparkle(point)`, `creatureTap(point)`, `gateTouch(began | ended, pointerId)`,
-  `openPanel`, on the title screen only `startPlay`, and in the Gate challenge only `gateDigit(digit, anotherKeyHeld)`
-  and `gateCancel` *(TASK-083)*. A swallowed or ignored key emits nothing.
-- **Gate outputs** *(TASK-083, IF-Q4, IF-Q8)*. Neither is a press; neither reaches the Press Queue.
+  `openPanel`, on the title screen only `startPlay`, and in the Gate challenge only `gateDigit(digit, anotherKeyHeld)`,
+  `gateDigitUp(digit)` and `gateCancel` *(TASK-083, TASK-098)*. A swallowed or ignored key emits nothing.
+- **Gate outputs** *(TASK-083, IF-Q4, IF-Q8; TASK-098)*. None is a press; none reaches the Press Queue.
   - `gateDigit(digit, anotherKeyHeld)`: a key-down in the Gate challenge that R2 resolves to 0–9 (main row or
     numpad, Num Lock on or off; AZERTY's digit row by position), with no disqualifying modifier (R3), not a repeat
     and not held (R4). `digit` is "0"–"9". `anotherKeyHeld` is true when another key that resolved to 0–9 is in the
     held set at that down (the held set keeps each key's resolved value from its down); the Parent Gate judges two
     digit keys down at once as wrong.
+  - `gateDigitUp(digit)` *(TASK-098; Parent Gate G13 B7)*: emitted in the Gate challenge whenever a key that
+    produced a `gateDigit` **leaves the held set**: (1) by its key-up; (2) by a clear on cancel or focus loss (R4)
+    while the challenge shows; (3) by the ⌘-release clear (R6). One per such key, with the `digit` its `gateDigit`
+    carried, in the order the keys went down. **Nothing** is emitted for a key that never produced a `gateDigit` (a
+    non-digit, a disqualified, repeated or held down, or a key held from before the challenge), nor on the clear
+    when **leaving** the challenge (the gate is gone then). Two physical keys giving the same digit (main row and
+    numpad) each get their own up. So the Parent Gate can keep a **count of digit keys down** (+1 per `gateDigit`,
+    −1 per `gateDigitUp`) and judge a keypad touch made while it is above 0 (its B7). After a ⌘-release clear the
+    count is 0 even if a digit key is still physically down: that key's later repeats and up emit nothing (R6), so
+    a keypad touch then is not judged wrong; accepted, as R6 accepts it for the chord. No KeyEvent field is needed
+    (ADR-0002 D5 unchanged).
   - `gateCancel`: Esc (`character` "\u{1b}", R2) going down in the Gate challenge, with Shift or Caps Lock or
     none, not a repeat and not held. Esc with ⌃, ⌥, ⌘ or Fn is swallowed instead (⌘ per R5).
   - Every other key-down in the Gate challenge is swallowed. A key held from before the challenge (the held set
@@ -219,7 +230,7 @@ platform.
 | State | Hardware keys | Touches | Enter / leave |
 |---|---|---|---|
 | **Play** | R2–R6 | R7 | entered from the title (play button or a letter/digit key); left by the panel opening or the app leaving the foreground |
-| **Gate challenge** (K-20) | nothing reaches Play or the queue; **digit keys go only to the challenge's keypad** as `gateDigit`, Esc emits `gateCancel` (R8), every other key emits nothing (system keys still pass, R5) | **go only to the keypad**; anywhere else emits nothing | entered by `openPanel` (chord or moon hold); a wrong answer, a timeout, **Cancel or Esc** → **the state it was opened from** (Title or Play) *(TASK-056 W-2)*, a correct answer → Panel open; the held set clears on enter and on leave. ⌘-combinations swallowed while the kiosk-on mode is on (R5); the chord ignored (R6) |
+| **Gate challenge** (K-20) | nothing reaches Play or the queue; **digit keys go only to the challenge's keypad** as `gateDigit`, and their release as `gateDigitUp` (also on a clear, R8), Esc emits `gateCancel` (R8), every other key emits nothing (system keys still pass, R5) | **go only to the keypad**; anywhere else emits nothing | entered by `openPanel` (chord or moon hold); a wrong answer, a timeout, **Cancel or Esc** → **the state it was opened from** (Title or Play) *(TASK-056 W-2)*, a correct answer → Panel open; the held set clears on enter and on leave. ⌘-combinations swallowed while the kiosk-on mode is on (R5); the chord ignored (R6) |
 | **Panel open** | the filter is off; keys go to the grown-up panel as normal input (Input emits nothing; a non-⌘ key passes to the panel's responders, TASK-083 IF-Q5), **except ⌘-combinations while the kiosk-on mode is on**, which are swallowed and never reach the menus (R5, TASK-054 I3); the chord is ignored (R6). Only the panel's own close returns to the state the gate was opened from | go to the panel | entered by `openPanel` (chord or moon hold); the held set clears on enter and on leave |
 | **Title** | a key-down that would be a press in Play (R2–R6: resolves to A–Z/0–9, no disqualifying modifier, not a repeat or held) emits `startPlay`, the same as the play button, and **is not a press** (no reveal for that key); every other key emits nothing (system keys still pass, R5), except the Mac chord, which emits `openPanel` (R6) | belong to App Shell (the moon goes to the Parent Gate, layer 3) | entered and left by the App Shell; the held set is **kept** from Title into Play, so the starting key's repeats and up are ignored and only its next down is a press (Luan, 2026-11-18) |
 | **Inactive** (background, window not key) | nothing emitted; held set cleared | — | the App Shell switches states |
@@ -427,6 +438,13 @@ The two provisional values are tuned in play (leader, 2026-11-18).
     panel; GIVEN macOS with the kiosk-on mode on, WHEN ⌘Q goes down, THEN swallowed.
   - **s.** *(TASK-083, IF-Q9)* GIVEN D down and then ⌘ down, WHEN ⌘ is released, THEN the held set is empty; GIVEN
     ⌘ down and then D down, likewise.
+  - **t.** *(TASK-098)* GIVEN the Gate challenge, WHEN 4 goes down and up, THEN `gateDigit("4", false)` then
+    `gateDigitUp("4")`; WHEN 4 (main row) and numpad 4 go down, then up in either order, THEN two `gateDigitUp("4")`;
+    WHEN D goes down and up, or ⌃4 goes down and up, THEN no `gateDigitUp`; GIVEN 4 and 7 down, WHEN a focus loss
+    clears the held set, THEN `gateDigitUp("4")` then `gateDigitUp("7")`; GIVEN macOS, 4 down and ⌘ down, WHEN ⌘ is
+    released, THEN `gateDigitUp("4")` (and 4's later up emits nothing); GIVEN 4 down, WHEN the challenge is left
+    (correct, wrong, timeout, Cancel), THEN no `gateDigitUp`; GIVEN a digit key held from before the challenge, WHEN
+    it goes up, THEN nothing.
 - **AC-2 Order:** GIVEN three key-downs delivered in the order D (t = 5.002), B (t = 5.001), 3 (t = 5.001), WHEN
   they are filtered, THEN the presses come out D, B, 3 in delivery order with their own `time` values, none
   dropped.
