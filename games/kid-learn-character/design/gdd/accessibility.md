@@ -302,7 +302,9 @@ FAIL if ∃ t, ∃ field position F:  #{ p ∈ F : flashing(p, t) } > area_max
 - **Scenario:** the K-26 busy case: a seeded mash (the Press Queue's mash fixture) with a walking
   parade, at Night and at Day, with light rain and with snow; once with Reduce Motion off and once on;
   **and a 10 s Title idle run** (Night, light rain, Reduce Motion off) per device class (ADR-0013 D3).
-  10 s per run.
+  10 s per run. **Each busy-case window includes an Armed → Walking handover** (Parade R12: the 6th light landing,
+  the meter's full glow, then the glow fading out as the parade fades in), so the meter's full look, which shows
+  for only about 0.75 s, is always in the frames.
 - **Where (ADR-0013):** the **offline render (G4)** runs it on every merge candidate that touches `apple/` or
   `content/`: the stage drawn headless on a synthetic clock, no Simulator (the luminance math doesn't depend on the
   GPU). The **release gate is the run on a real iPad and a real Mac (G5)** (frame timing and the colour pipeline do).

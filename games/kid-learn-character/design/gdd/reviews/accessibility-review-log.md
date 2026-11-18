@@ -142,4 +142,5 @@ Change: The parade meter (K-44) and its light (K-46), from Parade R12, R12a and 
 - A6: the count is shown by the number of lit cells, left to right, not by colour alone.
 - A7: the meter is not a target (an empty-stage sparkle).
 Also (TASK-119 nit, folded here on the leader's call): F2 Where and AC-08 say "a merge candidate touching `apple/` or `content/`", matching ADR-0013 D1 and the ADR-0011 / ADR-0009 notes.
-Reviewed-Content-Hash: design/gdd/accessibility.md 1620bee0235ecb939754411897618a3dff90d975
+Also (leader, after the TASK-124 render read): F2's Scenario says each busy-case window includes an Armed → Walking handover, so the meter's full glow (about 0.75 s) is always rendered.
+Reviewed-Content-Hash: design/gdd/accessibility.md e009cec15cba0bdbd1516d4f93e358f40de86560
