@@ -57,3 +57,8 @@ Reviewed-Content-Hash: design/gdd/app-shell-title.md 973139da5486e46e4a0fc9ed5a0
 Review mode: lean · Workflow: standard
 Change: from game-qc-android's diff review (REVISE, wording): Waiting (and so kioskModeOn) starts at the settings read and can come before "ready", so R1 step 5 no longer says "then", and AC-3 says Child Lock-in sets kioskModeOn on entering Waiting (possibly before "ready") and applies the options only after "ready" plus its R3. F1 unchanged.
 Reviewed-Content-Hash: design/gdd/app-shell-title.md 2e7f2ef9dcdbcd02cd50078c115cb7035a3b7749
+
+## Update — 2026-11-18 — TASK-059b stray markup removed (no re-review)
+Review mode: lean · Workflow: standard
+Change: deletes two stray lines of tool markup ("</content>", "</invoke>") left at the end of the file by its author's writing tool; no content or rule changed.
+Reviewed-Content-Hash: design/gdd/app-shell-title.md f8d7498422bcd569090952989df48366203ecdda

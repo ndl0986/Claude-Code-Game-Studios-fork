@@ -41,3 +41,8 @@ Reviewed-Content-Hash: design/gdd/reveal-stage.md aa1099094a5009d3cf2291bf7687d1
 Review mode: lean · Workflow: standard
 Change: from /review-all-gdds 2026-11-18 (design/gdd/gdd-cross-review-2026-11-18.md): W-6: Key Table cites → §4; W-9: Hint Letters is no longer "no GDD yet", and R8 cites Audio's gate-freeze rule and AC-21 instead of a follow-up; Info: R8 states the play clock runs under the panel and that nothing waits on it there. Text only; no rule changed.
 Reviewed-Content-Hash: design/gdd/reveal-stage.md d6c0206ac4d61e436e04064edaf3c5f17405aca5
+
+## Update — 2026-11-18 — TASK-059b stray markup removed (no re-review)
+Review mode: lean · Workflow: standard
+Change: deletes two stray lines of tool markup ("</content>", "</invoke>") left at the end of the file by its author's writing tool; no content or rule changed.
+Reviewed-Content-Hash: design/gdd/reveal-stage.md 09269c33e01e5c4e95b0aa6898201b83756223d2
