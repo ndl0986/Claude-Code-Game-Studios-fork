@@ -1,6 +1,6 @@
 # Privacy & Kids Compliance
 
-> **Status**: In Review
+> **Status**: Approved (text review by game-qc-android, merged 2026-11-18; Luan's calls L-01…L-09 open)
 > **Author**: game-qc-ios for Luan (TASK-040); plan reviewed by game-qc-android
 > **Last Updated**: 2026-11-18
 > **Last Verified**: 2026-11-18 (official sources read raw on 2026-11-18, except [C3], read 2026-11-17 for TASK-034)
