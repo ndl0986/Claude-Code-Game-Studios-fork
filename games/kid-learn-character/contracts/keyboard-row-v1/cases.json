@@ -1652,7 +1652,7 @@
           }
         }
       ],
-      "note": "The first draw after launch has no last (KR-Q1): pool of 4, u 0 → REX. The queue is never quiet here, so no change."
+      "note": "The first draw after launch has no last (KR-Q1): the 16-word pool, u 0 → REX. The queue is never quiet here, so no change."
     },
     {
       "id": "AC8-repeats-do-not-make-due",
