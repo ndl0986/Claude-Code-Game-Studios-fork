@@ -105,16 +105,19 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
-### K-25 Glyph contrast during sky crossfades (Luan, 2026-11-18, TASK-054b review)
+### K-25 Glyph contrast during sky crossfades (Luan, 2026-11-18, TASK-054b review; corrected same day)
 
-- **The glyph's edge switches with the sky, not linearly by time of day:** the cream/amber edge weight
-  `d` follows the blended sky-mid luminance, crossing over where cream and amber are equal (sky L ≈ 0.31,
-  short smoothstep around it), so the edge is always the better of the two.
-- **Dated exception to art bible rule 2 (≥ 3:1):** at the looks themselves (crossfade w = 0 and 1) the glyph
-  is ≥ 3:1; inside a 15-min boundary crossfade (or the 3 s jump fade) it is ≥ 2.5:1 (minimum ≈ 2.55:1), for a
-  few minutes around 16:04–16:12 and 06:04–06:13. The halo behind the glyph still carries it.
-- Rejected: an Ink outline on the glyph (breaks art bible §5: cast has ink outlines, UI glows) and a faster sky
-  crossfade (can only shorten the dip, not remove it).
+- **The glyph's edge switches with the sky:** cream above / amber below the equal-contrast sky-mid luminance
+  L_x ≈ 0.308, with a **1 s time cross-dissolve** (wall clock) at the switch — not a colour blend over sky L
+  (a mixed edge drops to ~1.4:1). The build check skips that 1 s window.
+- **Correction (exact hexes):** with amber #8a4b12 (L 0.105) and cream drawn at 85%, the minimum was ~2.32:1,
+  not the 2.55 first reported. Luan chose to **darken the amber edge to #80450f** (L 0.089) and draw the
+  **cream edge at 100%**: minimum 2.57:1; Morning/Day contrast also rises (≈ 4.3 → 4.8, 3.9 → 4.4). Art bible
+  §2/§4's #8a4b12 gets a dated amendment.
+- **Dated exception to art bible rule 2 (≥ 3:1):** ≥ 3:1 at the looks themselves (w = 0 and 1); ≥ 2.5:1 inside
+  a 15-min boundary crossfade or the 3 s jump fade, for a few minutes around 16:04–16:12 and 06:04–06:13.
+- Rejected: an Ink outline on the glyph (breaks art bible §5), a faster sky crossfade (only shortens the dip),
+  lowering the floor to 2.3:1.
 
 ### K-24 Scene: Time of Day & Weather (Luan, 2026-11-18, TASK-053 questions)
 
