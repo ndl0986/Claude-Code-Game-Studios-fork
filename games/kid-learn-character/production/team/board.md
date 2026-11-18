@@ -82,7 +82,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-093 | Audio knob-row wording nit | design | game-art-content (review: game-dev-ios) | DONE: MERGED (APPROVE @ c724f9ec) | `design/TASK-093-audio-knob-nit` | 2026-11-18 |
 | TASK-094 | Contracts batch 5: gate-logic-v1 + app-shell-v1 | qa | game-qc-android (review: GDD authors) | SENT 2026-11-18 | `design/TASK-094-contracts-batch5` | 2026-11-18 |
 | TASK-095 | App Shell: AS-Q author decisions (start in Play ignored; Title return; Gate/Panel return via F3; F4 uptime; background drops pending start) | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 114796ff) | `design/TASK-095-appshell-asq` | 2026-11-18 |
-| TASK-096 | Parent Gate G13 timing/boundaries (GL-Q answers), G4 slip, AC-36 wording, AC-38 → deferEdges | design | game-qc-ios (review: game-qc-android; AC-38 line: game-dev-ios) | IN REVIEW @ 6ce84556 → game-qc-android (+ game-dev-ios AC-38 line) | `design/TASK-096-gate-g13` | 2026-11-18 |
+| TASK-096 | Parent Gate G13 timing/boundaries (GL-Q answers), G4 slip, AC-36 wording, AC-38 → deferEdges | design | game-qc-ios (review: game-qc-android; AC-38 line: game-dev-ios) | REVISE (B2 wake on away clock) → fixing | `design/TASK-096-gate-g13` | 2026-11-18 |
 
 ## Leader log
 
