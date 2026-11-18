@@ -47,6 +47,9 @@ changes nothing, except a moon touch, whose end the Parent Gate needs (R7).
 **R2. What a hardware key resolves to** (Luan, 2026-11-18: by the character printed on the key, with a position
 fallback). For each key-down, in this order:
 1. **Numpad digit** (a keypad 0–9 by its physical position) → that digit, whether Num Lock is on or off.
+   **The adapters do this** *(TASK-083, IF-Q1)*: a keypad 0–9 key arrives as `positionKey` = its digit with
+   `character = nil` (Num Lock is only the `numLock` bit, which R3 ignores), so the fold below never sees it and the
+   position fallback gives the digit. No KeyEvent field marks a numpad key (ADR-0002 D5 unchanged).
 2. **Character first:** take the key's **base-level character**, the character it types with no modifiers:
    - iPadOS `UIKey.charactersIgnoringModifiers`;
    - macOS `NSEvent.charactersIgnoringModifiers`;
@@ -60,6 +63,9 @@ fallback). For each key-down, in this order:
    non-Latin layouts (Cyrillic `в` → D) all 36 keys.
 4. Otherwise the key resolves to **nothing** (Space, Esc, Tab, Return, arrows, F-keys, punctuation, dead keys,
    Globe).
+   **Esc** arrives as `character = "\u{1b}"` on every platform (the Android adapter maps `KEYCODE_ESCAPE` to it
+   explicitly, since `KeyCharacterMap` can give 0). It resolves to nothing here; only the Gate challenge reads it
+   (`gateCancel`, R8) *(TASK-083, IF-Q8)*.
 
 So the child gets the letter printed on the keycap: AZERTY's A key is A, and QWERTZ's Z key is Z.
 
@@ -97,10 +103,15 @@ not a press, not a repeat and not the parent chord:
   reach the menus, so ⌘Q in the panel can never skip the Quit button's 1.5 s hold (Parent Gate G8/G11, Child Lock-in
   R2) *(TASK-054 I3)*. With the lock OFF for this run, or after an engage timeout, the mode is off and ⌘Q quits as usual (K-21's
   second way out). Input reads nothing else for this: not `childLockActive`, not the kiosk's presentation options.
+  **The mode-off exception is macOS only** *(TASK-083, IF-Q11)*: on iPadOS every ⌘-combination is an ordinary
+  disqualified key, swallowed (R3) in every state, whatever the mode; iPadOS keeps ⌘Tab, ⌘H and Globe before the app
+  sees them anyway (below).
 - **Hardware system keys always pass:** volume up/down, mute, power, camera and brightness are never presses
   and never swallowed; they go to the system untouched (Android `onKeyDown` returns `false` / calls `super`, so
   the volume rocker keeps working; iPadOS calls `super`). On the Mac, media keys arrive as system-defined events,
   not `keyDown`, so the monitor likely never sees them. iPad hardware-keyboard media keys: NOT ASSESSED.
+  **They never reach `KidCore`** *(TASK-083, IF-Q2)*: the adapters pass them on before building a KeyEvent, so
+  this rule is tested in the adapter suites (AC-1m), and `KidCore` has no system-key cases.
 - **Not this system's job:** keys the operating system keeps before the app sees them (iPad ⌘Tab, ⌘H, Globe; Mac
   Mission Control; Android Home and Recents) belong to Child Lock-in and the platform. Android Back is handled
   there as an `OnBackPressedCallback` that does nothing.
@@ -118,8 +129,14 @@ platform.
   - **the chord check reads the OS key state at the Q down**, not the held set: `CGEventSource.keyState(
     .combinedSessionState, key:)` for every non-modifier virtual key code other than Q; the chord counts when none is
     down (Parent Gate G2: exactly ⌃⌥⌘Q, from the OS key state);
-  - and, to keep the held set itself honest, **when ⌘ is released** (`flagsChanged` with ⌘ going up) every key that
-    went down while ⌘ was held is removed from the held set.
+  - and, to keep the held set itself honest, **when ⌘ is released** (`modifiersChanged` with the cmd bit clearing;
+    `flagsChanged` on the Mac) **the held set empties**, on every platform *(TASK-083, IF-Q9, safety)*. macOS can
+    drop the up of any key released under ⌘, whenever that key went down, so every key is cleared, not only those
+    pressed under ⌘.
+  - **A key still physically down when ⌘ goes up** is out of the held set but cannot become a second press: its
+    next events are repeats (ignored, R4) or its up (an up for a key not held is ignored). Modifiers, Fn included,
+    live in `modifiers`, not in the held set, so R3 and the Fn rule (K-26) are unchanged. In the Gate challenge such
+    a key no longer counts for `gateDigit`'s `anotherKeyHeld` (R8).
   - **The ⌘-release rule alone passes AC-27's stale-key case** (AC-1k3): a key lost under ⌘ leaves the held set the
     moment ⌘ is released, so the next ⌃⌥⌘Q counts.
   - **The key-state read is a build decision, with a release check** (PKC: no system dialog may appear in a Kids
@@ -129,10 +146,10 @@ platform.
     from the build, and the chord uses the held set alone, kept honest by the ⌘-release rule (AC-1k6). There is no
     run-time fallback: a prompt at the first chord would already be in front of the child or the grown-up.
   - **Limit of the held set alone:** if ⌘ stays down without a break, a stale key keeps blocking the chord until ⌘ is
-    released; **releasing ⌘ and pressing the chord again always clears it.**
+    released; **releasing ⌘ and pressing the chord again always clears it**, whenever the stale key went down.
 - The chord replaces the moon hold only: the gate's second step (the number in words) still shows (K-19).
 - **iPadOS: no chord**, even with a hardware keyboard. Holding the moon is the only way in. ⌃⌥⌘Q on an iPad is
-  an ordinary disqualified key: swallowed (R3, R5).
+  an ordinary disqualified key: swallowed (R3, R5), like every ⌘-combination on iPadOS.
 - **Android:** chosen by its ADR.
 - The chord works with the kiosk on and off. It is never a press and emits only `openPanel`, which **starts the
   gate's second step** (K-19); the panel itself opens only after the correct answer.
@@ -160,8 +177,10 @@ platform.
 
 - **Multi-touch:** every touch down (each pointer id) is classified on its own. Two fingers on two hints are two
   presses.
-- **Order within one touch batch:** iPadOS `touchesBegan` delivers an unordered `Set`, so the adapter sorts the
-  batch by timestamp, then stage x, then stage y, before classifying. Android delivers one pointer down per event
+- **Order within one touch batch:** iPadOS `touchesBegan` delivers an unordered `Set`, so the **adapter** sorts the
+  batch by timestamp, then x, then y, all ascending, in window pixels with exact equality, and hands the touches to
+  `KidCore` one at a time *(TASK-083, IF-Q7, IF-Q10)*. F1 is one positive scale plus an offset, so this is the stage
+  order too; touches equal in all three classify the same, so their order cannot matter. `KidCore` has no sort cases. Android delivers one pointer down per event
   and the Mac one click per event, so their order is the delivery order.
 - **A hint touched again** while it is still on stage is another press of its key, like pressing a key twice. The
   Press Queue decides what plays.
@@ -181,15 +200,27 @@ platform.
 - **No dropping:** Input never drops or rate-limits a press. The mash rule (3 queued, extras sparkle) is the
   Press Queue's.
 - **Other outputs:** `sparkle(point)`, `creatureTap(point)`, `gateTouch(began | ended, pointerId)`,
-  `openPanel` and, on the title screen only, `startPlay`. A swallowed or ignored key emits nothing.
+  `openPanel`, on the title screen only `startPlay`, and in the Gate challenge only `gateDigit(digit, anotherKeyHeld)`
+  and `gateCancel` *(TASK-083)*. A swallowed or ignored key emits nothing.
+- **Gate outputs** *(TASK-083, IF-Q4, IF-Q8)*. Neither is a press; neither reaches the Press Queue.
+  - `gateDigit(digit, anotherKeyHeld)`: a key-down in the Gate challenge that R2 resolves to 0–9 (main row or
+    numpad, Num Lock on or off; AZERTY's digit row by position), with no disqualifying modifier (R3), not a repeat
+    and not held (R4). `digit` is "0"–"9". `anotherKeyHeld` is true when another key that resolved to 0–9 is in the
+    held set at that down (the held set keeps each key's resolved value from its down); the Parent Gate judges two
+    digit keys down at once as wrong.
+  - `gateCancel`: Esc (`character` "\u{1b}", R2) going down in the Gate challenge, with Shift or Caps Lock or
+    none, not a repeat and not held. Esc with ⌃, ⌥, ⌘ or Fn is swallowed instead (⌘ per R5).
+  - Every other key-down in the Gate challenge is swallowed. A key held from before the challenge (the held set
+    clears on enter) or across a ⌘ release (R6) is not in the held set: it does not count for `anotherKeyHeld`, and
+    its repeats and up emit nothing.
 
 ### States and Transitions
 
 | State | Hardware keys | Touches | Enter / leave |
 |---|---|---|---|
 | **Play** | R2–R6 | R7 | entered from the title (play button or a letter/digit key); left by the panel opening or the app leaving the foreground |
-| **Gate challenge** (K-20) | nothing reaches Play or the queue; **digit keys go only to the challenge's keypad**, every other key emits nothing (system keys still pass, R5) | **go only to the keypad**; anywhere else emits nothing | entered by `openPanel` (chord or moon hold); a wrong answer, a timeout, **Cancel or Esc** → **the state it was opened from** (Title or Play) *(TASK-056 W-2)*, a correct answer → Panel open; the held set clears on enter and on leave. ⌘-combinations swallowed while the kiosk-on mode is on (R5); the chord ignored (R6) |
-| **Panel open** | the filter is off; keys go to the grown-up panel as normal input, **except ⌘-combinations while the kiosk-on mode is on**, which are swallowed and never reach the menus (R5, TASK-054 I3); the chord is ignored (R6). Only the panel's own close returns to the state the gate was opened from | go to the panel | entered by `openPanel` (chord or moon hold); the held set clears on enter and on leave |
+| **Gate challenge** (K-20) | nothing reaches Play or the queue; **digit keys go only to the challenge's keypad** as `gateDigit`, Esc emits `gateCancel` (R8), every other key emits nothing (system keys still pass, R5) | **go only to the keypad**; anywhere else emits nothing | entered by `openPanel` (chord or moon hold); a wrong answer, a timeout, **Cancel or Esc** → **the state it was opened from** (Title or Play) *(TASK-056 W-2)*, a correct answer → Panel open; the held set clears on enter and on leave. ⌘-combinations swallowed while the kiosk-on mode is on (R5); the chord ignored (R6) |
+| **Panel open** | the filter is off; keys go to the grown-up panel as normal input (Input emits nothing; a non-⌘ key passes to the panel's responders, TASK-083 IF-Q5), **except ⌘-combinations while the kiosk-on mode is on**, which are swallowed and never reach the menus (R5, TASK-054 I3); the chord is ignored (R6). Only the panel's own close returns to the state the gate was opened from | go to the panel | entered by `openPanel` (chord or moon hold); the held set clears on enter and on leave |
 | **Title** | a key-down that would be a press in Play (R2–R6: resolves to A–Z/0–9, no disqualifying modifier, not a repeat or held) emits `startPlay`, the same as the play button, and **is not a press** (no reveal for that key); every other key emits nothing (system keys still pass, R5), except the Mac chord, which emits `openPanel` (R6) | belong to App Shell (the moon goes to the Parent Gate, layer 3) | entered and left by the App Shell; the held set is **kept** from Title into Play, so the starting key's repeats and up are ignored and only its next down is a press (Luan, 2026-11-18) |
 | **Inactive** (background, window not key) | nothing emitted; held set cleared | — | the App Shell switches states |
 
@@ -199,7 +230,7 @@ platform.
 - **Hint Letters:** publishes each hint's centre, drawn radius, visibility and id; receives "touched" so the hint
   holds still for `hint_hold_s`.
 - **On-screen Keyboard Row:** publishes its key rectangles when on; a row touch is a press here, not in the row.
-- **Parent Gate & Grown-up Panel:** receives `gateTouch` and `openPanel`; owns how long the moon must be held.
+- **Parent Gate & Grown-up Panel:** receives `gateTouch`, `openPanel`, and in the Gate challenge `gateDigit` and `gateCancel` (TASK-083); owns how long the moon must be held.
   Tells Input when the panel opens and closes. On iPad the moon is the only way in (R6).
 - **Child Lock-in:** owns the macOS kiosk switch, which changes R5's ⌘ exception, and the system keys Input
   never sees.
@@ -237,6 +268,9 @@ first counts; at 10.00 s and 10.10 s → both count.
   down is a press.
 - **If an up is missed without a cancel** (a rare platform quirk): that key's downs are ignored until its up or
   the next clear. Any focus change recovers it.
+- **If a key is still physically down when ⌘ is released:** the held set empties anyway (R6); that key's repeats and
+  up emit nothing, it is never pressed twice, and in the Gate challenge it no longer counts for `anotherKeyHeld`
+  *(TASK-083, IF-Q9)*.
 - **If two keys go down in the same event batch:** each is its own press, in delivery order (R8).
 - **If the child presses the volume rocker or another hardware system key:** the system handles it (volume
   changes); no press, no sparkle (R5).
@@ -277,7 +311,7 @@ not depend on their rules.
 | System | What it takes from Input |
 |---|---|
 | Press Queue | the press event (R8) |
-| Parent Gate & Grown-up Panel | `openPanel`, `gateTouch`; panel open/close back to Input |
+| Parent Gate & Grown-up Panel | `openPanel`, `gateTouch`, `gateDigit`, `gateCancel` (TASK-083); panel open/close back to Input |
 | Child Lock-in | R5's swallowing; the kiosk switch changes the ⌘ exception |
 | Hint Letters | hint touches become presses here; "touched" back to the hint |
 | On-screen Keyboard Row | row touches become presses here |
@@ -331,7 +365,9 @@ The two provisional values are tuned in play (leader, 2026-11-18).
     `=`, `[`, `;`, `'`, `,`, `.`, `/` and a dead key goes down, THEN nothing is emitted and each is marked
     swallowed (not passed on). (Hardware system keys are not in this list; see m.)
   - **c.** GIVEN the letter D, WHEN it goes down with each of Ctrl, Option, ⌘ and Fn, alone and in pairs, THEN
-    nothing is emitted (swallowed); WHEN it goes down with Shift or Caps Lock, THEN one press of "D".
+    nothing is emitted (swallowed); WHEN it goes down with Shift or Caps Lock, THEN one press of "D". The ⌘ cases
+    are swallowed on iPadOS always and on macOS with the kiosk-on mode on; on macOS with the mode off they pass to the
+    system (k) *(TASK-083, IF-Q11)*.
   - **d.** GIVEN D is down, WHEN a repeat-flagged down or a second down of D arrives before its up, THEN nothing
     is emitted; WHEN D goes up and down again, THEN one more press.
   - **e.** GIVEN D is held, WHEN a cancel / focus loss / panel open-or-close clears the set and D goes down again
@@ -341,7 +377,8 @@ The two provisional values are tuned in play (leader, 2026-11-18).
     `"` …) go down, THEN they give A, Z, Q, M and 1, 2, 3 …; GIVEN QWERTZ, the Z key gives Z.
   - **h.** GIVEN a Cyrillic layout, WHEN the key at the US D position goes down (base character `в`), THEN one
     press of "D".
-  - **i.** GIVEN Num Lock off, WHEN numpad 7 goes down, THEN one press of "7".
+  - **i.** GIVEN Num Lock off, WHEN numpad 7 goes down, THEN one press of "7". (`KidCore` sees `character` nil,
+    `positionKey` "7", R2.1; the adapter mapping is an adapter test, TASK-083.)
   - **j.** GIVEN macOS, WHEN ⌃⌥⌘Q goes down, THEN `openPanel` and no press; WHEN ⌃⌥Q (no ⌘) goes down, THEN
     nothing. GIVEN iPadOS, WHEN ⌃⌥⌘Q goes down, THEN nothing (no chord on iPad). GIVEN macOS with D held, WHEN
     ⌃⌥⌘Q goes down, THEN no `openPanel` (TASK-050). GIVEN macOS, WHEN ⌃⌥⌘Q goes down with Fn held, THEN no
@@ -353,7 +390,9 @@ The two provisional values are tuned in play (leader, 2026-11-18).
     but the mode off (after Child Lock-in's engage timeout), WHEN ⌘Q goes down, THEN "pass to system".
   - **k3.** *(TASK-054 I1, Parent Gate AC-27)* GIVEN macOS, D down, ⌘ down, D up lost (no key-up delivered), WHEN ⌘ is
     released, THEN D is no longer in the held set; WHEN ⌃⌥⌘Q then goes down with the OS key state showing only Q,
-    THEN `openPanel`. GIVEN the OS key state showing D still physically down, THEN no `openPanel`.
+    THEN `openPanel`. GIVEN the OS key state showing D still physically down, THEN no `openPanel`. The same holds
+    for the order ⌘ down, D down, D up lost. GIVEN D still physically down after ⌘ is released, WHEN D's repeats and
+    its up arrive, THEN nothing is emitted *(TASK-083, IF-Q9)*.
   - **k4.** *(TASK-054 I4)* GIVEN the Title, WHEN ⌃⌥⌘Q goes down, THEN `openPanel`; GIVEN the gate opened from the
     Title, WHEN the answer is wrong or times out, or Cancel or Esc is pressed, THEN the Title state (TASK-056 W-2); GIVEN Panel open or the Gate challenge, WHEN
     ⌃⌥⌘Q goes down, THEN no `openPanel`.
@@ -367,14 +406,27 @@ The two provisional values are tuned in play (leader, 2026-11-18).
   - **l.** GIVEN `repress_min_s = 0.08`, WHEN D is pressed at 10.00 s and 10.05 s, THEN one press; at 10.00 s and
     10.10 s, THEN two; at 10.000 s and 10.080 s, THEN two (F2 boundary: a gap equal to `repress_min_s` counts; the
     test compares with a 1e-9 s tolerance so floating-point rounding can't flip it).
-  - **m.** GIVEN Play, WHEN volume up, volume down, mute, power, camera or brightness goes down, with or without
-    modifiers, THEN no press and the filter returns "pass to system".
+  - **m.** *(adapter suites, TASK-083 IF-Q2)* GIVEN Play, WHEN volume up, volume down, mute, power, camera or
+    brightness goes down, with or without modifiers, THEN no KeyEvent reaches `KidCore` and the adapter passes it
+    to the system. The adapter suites also check: a keypad 0–9 key gives `character` nil and `positionKey` its
+    digit; Esc gives `character` "\u{1b}" (Android `KEYCODE_ESCAPE` included); an unordered iPad touch batch comes
+    out sorted by timestamp, x, y (R7).
   - **n.** GIVEN Android ids, WHEN key-downs arrive with `scanCode` 0 and `keyCode`s for D and B, THEN two
     presses (D, B); WHEN D's second down arrives before its up, THEN nothing; WHEN a key with `scanCode` 32 and one
     with `scanCode` 0 / `keyCode` 32 are both down, THEN they are two different held keys.
   - **o.** GIVEN the Title state, WHEN D goes down, THEN `startPlay` and no press; WHEN D repeats or goes up
     after the switch to Play, THEN nothing; WHEN D goes down again, THEN one press of "D". GIVEN Title, WHEN
     Space or ⌘D goes down, THEN nothing.
+  - **p.** *(TASK-083)* GIVEN the Gate challenge, WHEN 4 on the main row, numpad 4 with Num Lock off, or AZERTY's
+    `'` key goes down alone, THEN `gateDigit("4", false)` and no press; WHEN 7 goes down while 4 is still held,
+    THEN `gateDigit("7", true)`; WHEN D, Space, ⌃4 or a repeat of 4 goes down, THEN nothing; GIVEN macOS with the
+    kiosk-on mode on, WHEN ⌘4 goes down, THEN swallowed.
+  - **q.** *(TASK-083)* GIVEN the Gate challenge, WHEN Esc or Shift+Esc goes down, THEN `gateCancel`; WHEN ⌃Esc or a
+    repeat of Esc goes down, THEN nothing. GIVEN Play or the Title, WHEN Esc goes down, THEN nothing.
+  - **r.** *(TASK-083)* GIVEN Panel open, WHEN D or 4 goes down, THEN nothing is emitted and the key passes to the
+    panel; GIVEN macOS with the kiosk-on mode on, WHEN ⌘Q goes down, THEN swallowed.
+  - **s.** *(TASK-083, IF-Q9)* GIVEN D down and then ⌘ down, WHEN ⌘ is released, THEN the held set is empty; GIVEN
+    ⌘ down and then D down, likewise.
 - **AC-2 Order:** GIVEN three key-downs delivered in the order D (t = 5.002), B (t = 5.001), 3 (t = 5.001), WHEN
   they are filtered, THEN the presses come out D, B, 3 in delivery order with their own `time` values, none
   dropped.
@@ -387,7 +439,8 @@ The two provisional values are tuned in play (leader, 2026-11-18).
   - **c.** GIVEN a hint overlapping the moon, WHEN the overlap is touched, THEN a press, no `gateTouch`.
   - **d.** GIVEN no hint, row key, moon or cast member at the point, WHEN touched, THEN `sparkle(point)`.
   - **e.** GIVEN two pointers going down on two hints in one event, THEN two presses in delivery order; GIVEN
-    an unordered iPad batch with equal timestamps, THEN they come out sorted by stage x, then y (R7).
+    touches handed to `KidCore` one at a time, THEN each is classified in that order (the iPad batch sort is an
+    adapter test, AC-1m; TASK-083 IF-Q10).
   - **f.** GIVEN the keyboard row off, WHEN its (hidden) area is touched, THEN it is not a row press.
 - **AC-4 Contract:** every emitted press has `key` in "A"–"Z" / "0"–"9" (one character), a `source`, a finite
   `time`, and `origin` `nil` exactly when `source = hardwareKey`.
