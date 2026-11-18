@@ -127,7 +127,10 @@ corner of a keyboard holds more keys; game-qc-android item 3).
 - **Judging:** each digit is checked when entered. **The first wrong digit closes the challenge at
   once** (wrong). The fourth right digit opens the panel (G6).
 - **Dull on purpose** (item 4): a plain grown-up card on the dimmed stage. No sound, no animation, no
-  shake, no red; a key shows only its pressed state. Nothing on it is worth tapping for fun.
+  shake, no red; a key shows only its pressed state. Nothing on it is worth tapping for fun. The pressed
+  state stays within F2 on each device class: the area that changes is at most that class's floor `area_max`
+  (iPad 58,449 px, Mac 2× 54,105 px, Mac 1× 4,347 px), or it changes relative luminance by less than 0.1, so
+  mashing the keypad can't make it flash (ADR-0013 D7; SwiftUI's default button dimming counts).
 - **Timeout:** `challenge_timeout_s` (20 s), on the injected **continuous monotonic clock** (the play clock
   is frozen during the challenge, G5; continuous matches moon sleep, G1, and a background closes the
   challenge anyway, so uptime and continuous never differ while it shows), with no **accepted digit** (a keypad touch or digit key
