@@ -119,3 +119,15 @@ Review mode: lean · Workflow: standard
 Task: TASK-065
 Change: The Parent Gate Switch Control note and the PKC-14 extension are marked done (TASK-065). A11 and AC-16 now cite the extended PKC-14. No other change.
 Reviewed-Content-Hash: design/gdd/accessibility.md d3a39163b69dee89a97eb460c69e36d0b9a0c074
+
+## Update — 2026-11-18 — the parade meter and its light (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-124
+Change: The parade meter (K-44) and its light (K-46), from Parade R12, R12a and F4 (TASK-120, merged 7815770d), are collected here. No rule is set here; each row is the Parade's or the art bible's.
+- A3, Parade row: under Reduce Motion no light flies, and the full glow is steady at 0.40.
+- A4 pulse table:
+  - the full glow at 0.5 Hz (alpha 0.35–0.45, below ΔL 0.1), F1 ≤ 1 Hz;
+  - the light and cell fill, one-shot (at most once per formed reveal, each pixel once).
+- A6: the count is shown by the number of lit cells, left to right, not by colour alone.
+- A7: the meter is not a target (an empty-stage sparkle).
+Reviewed-Content-Hash: design/gdd/accessibility.md 8cd46e00c6f253d8346a4bd51e35889f0b23a7d1

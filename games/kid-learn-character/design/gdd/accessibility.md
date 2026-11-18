@@ -77,7 +77,7 @@ gentler. For a grown-up using VoiceOver: the panel reads every control by name.
 | Reveal Stage | glyph rises straight, no scale overshoot; creature appears with no pop overshoot; the leaving creature only fades, no sink | Reveal Stage R9, K-20 | next reveal |
 | Cast Rendering | halo steady at `halo_steady` 80% (× 0.7 at Night); idles × 0.5; hop 13 units; **stardust twinkle steady at alpha × 0.6, the term's mean (K-29; Cast Rendering R6, F3; done, TASK-062)** | Cast Rendering R5, R7, R8; K-16; K-29 | halo, hop: next reveal; idles: next frame; twinkle: next reveal (A2) |
 | Hint Letters | no drift, no pulse, no scale-in; a 0.3 s consume fade | Hint Letters R10 | next frame |
-| Parade | the same 11 s walk; step bob × 0.5 (Cast Rendering R8) | Parade R7, K-17 | next frame |
+| Parade | the same 11 s walk; step bob × 0.5 (Cast Rendering R8). **Parade meter** *(K-44/K-46, TASK-124)*: no meter light flies (the cell lights at the `shown` and still fills over 0.4 s); the full glow is **steady at 0.40**, no breathe | Parade R7, R12, R12a; K-17 | next frame |
 | Scene | clouds still; rain and snow at half count and half speed; stars steady; fades unchanged | Scene R8, K-24 | next frame |
 | App Shell & Title | the play button breathes at half amplitude; the title creature as Cast Rendering | App Shell R2, F2 | next frame |
 | Parent Gate & Panel | the ring fills (progress) with no pulse; challenge and panel appear with no fade; the dim is instant; the "Child lock is OFF" notice disappears with no fade | Parent Gate UI Requirements, G9 | next frame |
@@ -112,6 +112,8 @@ The pulses, collected:
 | Title play button | 0.38 Hz (App Shell R2; art bible amended, TASK-062) | scale ± 4% | App Shell | ≤ 1 Hz |
 | Star twinkle | ≤ 0.35 Hz | alpha | Scene; art bible §2 | ≤ 1 Hz |
 | Snow sway | ≤ 0.3 Hz | position | Scene | ≤ 1 Hz |
+| Parade meter full glow *(K-44, TASK-124)* | 0.5 Hz (`meter_pulse_hz`), only while full | glow alpha between 0.35 and 0.45 around the bar (swing below ΔL 0.1) | Parade R12, F4; art bible §7 | ≤ 1 Hz |
+| Parade meter light and cell fill *(K-46, TASK-124)* | not periodic: one per new creature in the batch, at most once per formed reveal | a 16-unit Starlight star flies 0.9 s to its cell and fades as the cell fills over 0.4 s; it passes each pixel once | Parade R12a, F4; art bible §7 | — (one-shot) |
 | Lightning, thunder flashes | never | — | Scene; art bible §2 | — |
 
 **A5. Contrast** (collected; the numbers are their owners').
@@ -133,6 +135,7 @@ The pulses, collected:
 | Hint vs waiting | the same gold on cream | a drifting rounded square vs a small circle in a still row |
 | Which creature | slot | silhouette trait and spoken name |
 | Moon gate progress | ring | ring length and hold time |
+| Parade meter count *(K-44, TASK-124)* | Starlight cells on an Ink track | how many of the 6 cells are lit, left to right (a count by position, never colour alone); full adds the glow, and the parade follows |
 
 Under deuteranopia the raptors R, U and V converge to one brown; their outline traits tell them apart
 (art bible §3, §4). Panel switches show On/Off text (Parent Gate).
@@ -149,7 +152,8 @@ diameter; scaled up by `k` if a device would go under it).
 
 
 Not targets: the title play button (any tap except the moon starts play, App Shell R3), a tap on a
-cast member and a tap on the empty stage. Any touch there answers (a hop or
+cast member, the **parade meter** (a touch on it is an empty-stage sparkle, Parade R12; K-44, TASK-124) and a
+tap on the empty stage. Any touch there answers (a hop or
 a sparkle), so they need no floor.
 
 (b) **Grown-up targets: ≥ 44 pt** (Apple's minimum).
