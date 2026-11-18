@@ -1,0 +1,12 @@
+offline-cut-check at a70779fb (2026-11-18T06:41:18Z, macOS 27.2.1)
+offline cut check: 100 Hz tone at -1 dBFS, cut at 300 ms; detector max|d2x| (threshold -60 dBFS)
+no cut (floor) maxD2 -76.3 dBFS at 0.0545 s  below -60 dBFS 100.0 ms after the cut  PASS
+hard stop maxD2 -38.7 dBFS at 0.3020 s  below -60 dBFS 2.0 ms after the cut  FAIL
+volume 0 at once maxD2 -76.3 dBFS at 0.0545 s  below -60 dBFS 26.8 ms after the cut  PASS
+ramp 30 ms, 5 ms quanta (IO 5 ms) maxD2 -76.3 dBFS at 0.0545 s  below -60 dBFS 31.8 ms after the cut  PASS
+ramp 30 ms, 1 ms quanta maxD2 -76.3 dBFS at 0.0545 s  below -60 dBFS 31.8 ms after the cut  PASS
+new buffer with .interrupts on a busy player maxD2 -38.7 dBFS at 0.3170 s  below -60 dBFS 17.0 ms after the cut  FAIL
+D5 cut: volume 0, settle 40 ms, stop maxD2 -76.3 dBFS at 0.0545 s  below -60 dBFS 26.8 ms after the cut  PASS
+D7 freeze/resume: settle 40 ms maxD2 -76.3 dBFS at 0.0545 s  below -60 dBFS 26.8 ms after the cut  PASS
+freeze: pause / play at once maxD2 -38.7 dBFS at 0.3020 s  below -60 dBFS 2.0 ms after the cut  FAIL
+freeze: ramp 0, pause / play, ramp 1 maxD2 -43.1 dBFS at 0.3120 s  below -60 dBFS 12.0 ms after the cut  FAIL
