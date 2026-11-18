@@ -4,18 +4,20 @@ PASS api-surface (ADR-0002 V4)
 PASS kidtools validate content (ADR-0003 D3)
 PASS swift test MorphCore
 PASS swift test KidCore
-OBSERVED structure: 7/7 contracts OK (464 cases well-formed)
+OBSERVED structure: 9/9 contracts OK (558 cases well-formed)
 OBSERVED key-table-schema-v1 [model]: 86 pass, 0 fail
 OBSERVED settings-record-v2: 76 pass, 0 fail
 OBSERVED NOT ASSESSED audio-plan-v1: not started (story story:audio-voice); structure OK, 0 of 30 cases run
+OBSERVED NOT ASSESSED hint-letters-v1: not started (story story:hint-letters); structure OK, 0 of 58 cases run
 OBSERVED NOT ASSESSED input-filter-v1: not started (story story:input-key-filter); structure OK, 0 of 86 cases run
+OBSERVED NOT ASSESSED keyboard-row-v1: not started (story story:keyboard-row); structure OK, 0 of 36 cases run
 OBSERVED NOT ASSESSED press-queue-v1: not started (story story:press-queue); structure OK, 0 of 46 cases run
 OBSERVED NOT ASSESSED reveal-timing-v1: not started (story story:reveal-stage); structure OK, 0 of 60 cases run
 OBSERVED SUPERSEDED settings-record-v1 → settings-record-v2: not run (73 cases)
-OBSERVED contracts: 2 run PASS (key-table-schema-v1, settings-record-v2), 4 NOT ASSESSED (not-started: audio-plan-v1, input-filter-v1, press-queue-v1, reveal-timing-v1), 1 SUPERSEDED, 0 FAIL
+OBSERVED contracts: 2 run PASS (key-table-schema-v1, settings-record-v2), 6 NOT ASSESSED (not-started: audio-plan-v1, hint-letters-v1, input-filter-v1, keyboard-row-v1, press-queue-v1, reveal-timing-v1), 1 SUPERSEDED, 0 FAIL
 PASS swift test ContractKit
 PASS swift test Tools
 OBSERVED key-table-schema-v1 [file]: 7 pass, 0 fail
-FAIL release candidate: 4 contract(s) NOT ASSESSED (K-40)
+FAIL release candidate: 6 contract(s) NOT ASSESSED (K-40)
 SKIP bundle-content scan: no --app given (QC runs it on both Release .apps)
-verify: FAIL (1) at 5e06b721
+verify: FAIL (1) at a304d2cb (with local changes)
