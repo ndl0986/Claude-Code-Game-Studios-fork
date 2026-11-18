@@ -74,3 +74,4 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
 - ~~Reveal Stage R3 table cells:~~ done (TASK-088c, 34ab7951). "true if the item has a word line" → "…in the active locale" to match the prose (TASK-088b nit, game-qc-android).
 - ~~Reveal Stage F5 invalid-set row: state the glyph is drawn and fades out at fallback_glow_s~~ done (TASK-088b, 7d16be9d).
 - ~~Reveal Stage invalid-set row: does the glyph's rise~~ done: fallback_rise_s 0.45 (TASK-088c, 34ab7951). use the invalid set's `letter_in` or a fallback value? (TASK-088b nit ii, game-qc-android stubs it as an input) — game-dev-ios.
+- Audio knob row (cut_settle_s Effect column): "stopped or paused" → "stopped" (TASK-090b nit, game-dev-ios) — game-art-content.
