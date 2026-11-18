@@ -1,0 +1,87 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project apple/LetterMorph.xcodeproj -scheme LetterMorphUITests -destination platform=macOS -derivedDataPath <qc-checkout>/.build/mf-ui -allowProvisioningUpdates test
+
+Resolve Package Graph
+
+
+Resolved source packages:
+  MorphCore: <scratch>/mf/games/kid-learn-character/apple/MorphCore @ local
+  KidCore: <scratch>/mf/games/kid-learn-character/apple/KidCore @ local
+
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:macOS, arch:arm64, id:00006040-000C499202B8801C, name:My Mac }
+{ platform:macOS, arch:x86_64, id:00006040-000C499202B8801C, name:My Mac }
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (6 targets)
+    Target 'LetterMorphUITests' in project 'LetterMorph'
+        ➜ Explicit dependency on target 'LetterMorph' in project 'LetterMorph'
+    Target 'LetterMorph' in project 'LetterMorph'
+        ➜ Explicit dependency on target 'KidCore-product' in project 'KidCore'
+        ➜ Explicit dependency on target 'MorphCore-product' in project 'MorphCore'
+    Target 'KidCore-product' in project 'KidCore'
+        ➜ Explicit dependency on target 'KidCore' in project 'KidCore'
+        ➜ Explicit dependency on target 'MorphCore-product' in project 'MorphCore'
+    Target 'KidCore' in project 'KidCore'
+        ➜ Explicit dependency on target 'MorphCore-product' in project 'MorphCore'
+    Target 'MorphCore-product' in project 'MorphCore'
+        ➜ Explicit dependency on target 'MorphCore' in project 'MorphCore'
+    Target 'MorphCore' in project 'MorphCore' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKStatCaches.noindex/macosx27.0-26A425-7231f6df4def33e022ae2eb8f782df1a.sdkstatcache
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -o <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKStatCaches.noindex/macosx27.0-26A425-7231f6df4def33e022ae2eb8f782df1a.sdkstatcache
+
+PruneExplicitPrecompiledModules <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+2026-11-18 20:09:51.090296+0700 LetterMorphUITests-Runner[7692:15864978] [Default] Running tests...
+Test Suite 'All tests' started at 2026-11-18 20:09:51.437.
+Test Suite 'LetterMorphUITests.xctest' started at 2026-11-18 20:09:51.438.
+Test Suite 'LetterMorphUITests' started at 2026-11-18 20:09:51.438.
+Test Case '-[LetterMorphUITests.LetterMorphUITests test_app_launches_to_the_title]' started.
+    t =     0.00s Start Test at 2026-11-18 20:09:51.438
+    t =     0.43s Set Up
+    t =     0.44s Open com.galaxyandsun.lettermorph
+    t =     0.45s     Launch com.galaxyandsun.lettermorph
+2026-11-18 20:09:52.224 xcodebuild[7614:15864601] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-18 20:09:52.224 xcodebuild[7614:15864601] [MT] IDELaunchParametersSnapshot: no debugger version
+    t =     1.60s         Wait for accessibility to load
+    t =     1.76s         Setting up automation session
+    t =     1.78s         Wait for com.galaxyandsun.lettermorph to idle
+    t =     1.78s Wait for com.galaxyandsun.lettermorph to become Running Foreground
+    t =     1.79s Tear Down
+Test Case '-[LetterMorphUITests.LetterMorphUITests test_app_launches_to_the_title]' passed (1.817 seconds).
+Test Suite 'LetterMorphUITests' passed at 2026-11-18 20:09:53.256.
+	 Executed 1 test, with 0 failures (0 unexpected) in 1.817 (1.818) seconds
+Test Suite 'LetterMorphUITests.xctest' passed at 2026-11-18 20:09:53.257.
+	 Executed 1 test, with 0 failures (0 unexpected) in 1.817 (1.819) seconds
+Test Suite 'All tests' passed at 2026-11-18 20:09:53.257.
+	 Executed 1 test, with 0 failures (0 unexpected) in 1.817 (1.820) seconds
+2026-11-18 20:09:53.538 xcodebuild[7614:15864601] [MT] IDETestOperationsObserverDebug: 2.772 elapsed -- Testing started completed.
+2026-11-18 20:09:53.538 xcodebuild[7614:15864601] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-11-18 20:09:53.538 xcodebuild[7614:15864601] [MT] IDETestOperationsObserverDebug: 2.772 sec, +2.772 sec -- end
+
+Test session results, code coverage, and logs:
+	<scratch>/mf/games/kid-learn-character/.build/mf-ui/Logs/Test/Test-LetterMorphUITests-2026.11.18_20-09-50-+0700.xcresult
+
+** TEST SUCCEEDED **
+
+Testing started

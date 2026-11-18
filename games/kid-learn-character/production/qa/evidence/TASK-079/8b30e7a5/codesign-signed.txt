@@ -1,0 +1,12 @@
+== <qc-checkout>/.build/mf/Build/Products/Release/LetterMorph.app
+Identifier=com.galaxyandsun.lettermorph
+Format=app bundle with Mach-O universal (x86_64 arm64)
+Signature size=4790
+TeamIdentifier=<team>
+verify --strict: OK
+== <qc-checkout>/.build/mf/Build/Products/Release-iphoneos/LetterMorph.app
+Identifier=com.galaxyandsun.lettermorph
+Format=app bundle with Mach-O thin (arm64)
+Signature size=4790
+TeamIdentifier=<team>
+verify --strict: OK

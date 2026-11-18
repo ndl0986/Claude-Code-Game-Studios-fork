@@ -1,0 +1,1083 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project apple/LetterMorph.xcodeproj -scheme LetterMorphUITests -destination platform=macOS -derivedDataPath <qc-checkout>/.build/mf-ui -allowProvisioningUpdates test
+
+Resolve Package Graph
+
+
+Resolved source packages:
+  KidCore: <scratch>/mf/games/kid-learn-character/apple/KidCore @ local
+  MorphCore: <scratch>/mf/games/kid-learn-character/apple/MorphCore @ local
+
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:macOS, arch:arm64, id:00006040-000C499202B8801C, name:My Mac }
+{ platform:macOS, arch:x86_64, id:00006040-000C499202B8801C, name:My Mac }
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (6 targets)
+    Target 'LetterMorphUITests' in project 'LetterMorph'
+        ➜ Explicit dependency on target 'LetterMorph' in project 'LetterMorph'
+    Target 'LetterMorph' in project 'LetterMorph'
+        ➜ Explicit dependency on target 'KidCore-product' in project 'KidCore'
+        ➜ Explicit dependency on target 'MorphCore-product' in project 'MorphCore'
+    Target 'KidCore-product' in project 'KidCore'
+        ➜ Explicit dependency on target 'KidCore' in project 'KidCore'
+        ➜ Explicit dependency on target 'MorphCore-product' in project 'MorphCore'
+    Target 'KidCore' in project 'KidCore'
+        ➜ Explicit dependency on target 'MorphCore-product' in project 'MorphCore'
+    Target 'MorphCore-product' in project 'MorphCore'
+        ➜ Explicit dependency on target 'MorphCore' in project 'MorphCore'
+    Target 'MorphCore' in project 'MorphCore' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: a2bf3896ef7adfbc6a160024ef296b5f
+Build description path: <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/XCBuildData/a2bf3896ef7adfbc6a160024ef296b5f.xcbuilddata
+CreateBuildDirectory <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex
+
+CreateBuildDirectory <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules
+
+CreateBuildDirectory <scratch>/mf/games/kid-learn-character/.build/mf-ui/CompilationCache.noindex
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <scratch>/mf/games/kid-learn-character/.build/mf-ui/CompilationCache.noindex
+
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKStatCaches.noindex/macosx27.0-26A425-7231f6df4def33e022ae2eb8f782df1a.sdkstatcache
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -o <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKStatCaches.noindex/macosx27.0-26A425-7231f6df4def33e022ae2eb8f782df1a.sdkstatcache
+
+CreateBuildDirectory <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex
+
+CreateBuildDirectory <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products
+
+CreateBuildDirectory <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug
+
+CreateBuildDirectory <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/PrecompiledHeaders
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/PrecompiledHeaders
+
+CreateBuildDirectory <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+CreateBuildDirectory <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/ExplicitPrecompiledModules
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+CreateBuildDirectory <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/EagerLinkingTBDs/Debug
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/EagerLinkingTBDs/Debug
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph-c3c46f8647b70d5b2b13aacbf80fbbd2-VFS/all-product-headers.yaml
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph-c3c46f8647b70d5b2b13aacbf80fbbd2-VFS/all-product-headers.yaml
+
+CreateBuildDirectory <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/PackageFrameworks
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/PackageFrameworks
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/MorphCore.modulemap (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/MorphCore
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/MorphCore.modulemap
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/MorphCore.DependencyStaticMetadataFileList (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/MorphCore
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/MorphCore.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/MorphCore.DependencyMetadataFileList (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/MorphCore
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/MorphCore.DependencyMetadataFileList
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore_const_extract_protocols.json (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/MorphCore
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore_const_extract_protocols.json
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore-OutputFileMap.json (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/MorphCore
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore-OutputFileMap.json
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftConstValuesFileList (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/MorphCore
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftConstValuesFileList
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftFileList (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/MorphCore
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftFileList
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/ProductTypeInfoPlistAdditions.plist (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/ProductTypeInfoPlistAdditions.plist
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.LinkFileList (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/MorphCore
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.LinkFileList
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/empty-LetterMorphUITests.plist (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/empty-LetterMorphUITests.plist
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests_const_extract_protocols.json (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests_const_extract_protocols.json
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.SwiftFileList (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.SwiftFileList
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.LinkFileList (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.LinkFileList
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.SwiftConstValuesFileList (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.SwiftConstValuesFileList
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests-OutputFileMap.json (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests-OutputFileMap.json
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests.hmap (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests.hmap
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-project-headers.hmap (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-project-headers.hmap
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-own-target-headers.hmap (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-own-target-headers.hmap
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests.DependencyMetadataFileList (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests.DependencyMetadataFileList
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests.DependencyStaticMetadataFileList (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests.DependencyStaticMetadataFileList
+
+Copy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/GeneratedModuleMaps/MorphCore.modulemap <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/MorphCore.modulemap (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/MorphCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/MorphCore.modulemap <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/GeneratedModuleMaps
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-generated-files.hmap (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-generated-files.hmap
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-all-target-headers.hmap (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-all-target-headers.hmap
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-all-non-framework-target-headers.hmap (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-all-non-framework-target-headers.hmap
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/DerivedSources/Entitlements.plist (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/DerivedSources/Entitlements.plist
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.SwiftFileList (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.SwiftFileList
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph_const_extract_protocols.json (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph_const_extract_protocols.json
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.SwiftConstValuesFileList (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.SwiftConstValuesFileList
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.LinkFileList (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.LinkFileList
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph-OutputFileMap.json (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph-OutputFileMap.json
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph.hmap (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph.hmap
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph.DependencyStaticMetadataFileList (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph.DependencyMetadataFileList (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph.DependencyMetadataFileList
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-project-headers.hmap (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-project-headers.hmap
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-own-target-headers.hmap (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-own-target-headers.hmap
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-generated-files.hmap (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-generated-files.hmap
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-all-target-headers.hmap (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-all-target-headers.hmap
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-all-non-framework-target-headers.hmap (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-all-non-framework-target-headers.hmap
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-DebugDylibPath-normal-arm64.txt (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-DebugDylibPath-normal-arm64.txt
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-DebugDylibInstallName-normal-arm64.txt (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-DebugDylibInstallName-normal-arm64.txt
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources/Entitlements.plist (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources/Entitlements.plist
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.SwiftFileList (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/KidCore
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.SwiftFileList
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore_const_extract_protocols.json (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/KidCore
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore_const_extract_protocols.json
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.SwiftConstValuesFileList (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/KidCore
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.SwiftConstValuesFileList
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.LinkFileList (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/KidCore
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.LinkFileList
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore-OutputFileMap.json (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/KidCore
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore-OutputFileMap.json
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/KidCore.modulemap (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/KidCore
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/KidCore.modulemap
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/KidCore.DependencyStaticMetadataFileList (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/KidCore
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/KidCore.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/KidCore.DependencyMetadataFileList (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/KidCore
+    write-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/KidCore.DependencyMetadataFileList
+
+MkDir <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest/Contents (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /bin/mkdir -p <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest/Contents
+
+MkDir <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest/Contents/MacOS (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /bin/mkdir -p <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest/Contents/MacOS
+
+MkDir <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /bin/mkdir -p <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest
+
+MkDir <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /bin/mkdir -p <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents
+
+MkDir <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/MacOS (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /bin/mkdir -p <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/MacOS
+
+MkDir <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/Resources (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /bin/mkdir -p <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/Resources
+
+MkDir <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /bin/mkdir -p <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app
+
+Copy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/GeneratedModuleMaps/KidCore.modulemap <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/KidCore.modulemap (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/KidCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/KidCore.modulemap <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/GeneratedModuleMaps
+
+SwiftDriver MorphCore normal arm64 com.apple.xcode.tools.swift.compiler (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -parse-as-library -module-name MorphCore -Onone @<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftFileList -DSWIFT_PACKAGE -DDEBUG -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -DXcode -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -target arm64-apple-macos26.0 -g -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKStatCaches.noindex/macosx27.0-26A425-7231f6df4def33e022ae2eb8f782df1a.sdkstatcache -output-file-map <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -sdk-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -package-name morphcore -emit-const-values -const-gather-protocols-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore_const_extract_protocols.json -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/include -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/DerivedSources-normal/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/DerivedSources/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/DerivedSources -Xcc -DSWIFT_PACKAGE -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore-Swift.h -working-directory <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj -experimental-emit-module-separately -disable-cmo
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/SwiftShims-E2HB0R4LMEZMRZJXNIN9UG2HW.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/_SwiftConcurrencyShims-8ODLUB21CWWIIKZ6UPRSKRF4A.pcm
+
+SwiftCompile normal arm64 Compiling\ SVGPath.swift <qc-checkout>/apple/MorphCore/Sources/MorphCore/SVGPath.swift (in target 'MorphCore' from project 'MorphCore')
+
+SwiftCompile normal arm64 <qc-checkout>/apple/MorphCore/Sources/MorphCore/SVGPath.swift (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-SwiftPerFileCompile SVGPath.swift
+
+SwiftCompile normal arm64 Compiling\ Morph.swift <qc-checkout>/apple/MorphCore/Sources/MorphCore/Morph.swift (in target 'MorphCore' from project 'MorphCore')
+
+SwiftCompile normal arm64 <qc-checkout>/apple/MorphCore/Sources/MorphCore/Morph.swift (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-SwiftPerFileCompile Morph.swift
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ MorphCore (in target 'MorphCore' from project 'MorphCore')
+
+SwiftCompile normal arm64 (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    
+
+SwiftCompile normal arm64 Compiling\ SplitMix64.swift <qc-checkout>/apple/MorphCore/Sources/MorphCore/SplitMix64.swift (in target 'MorphCore' from project 'MorphCore')
+
+SwiftCompile normal arm64 <qc-checkout>/apple/MorphCore/Sources/MorphCore/SplitMix64.swift (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-SwiftPerFileCompile SplitMix64.swift
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for MorphCore (in target 'MorphCore' from project 'MorphCore')
+
+SwiftDriver\ Compilation\ Requirements MorphCore normal arm64 com.apple.xcode.tools.swift.compiler (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -parse-as-library -module-name MorphCore -Onone @<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftFileList -DSWIFT_PACKAGE -DDEBUG -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -DXcode -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -target arm64-apple-macos26.0 -g -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKStatCaches.noindex/macosx27.0-26A425-7231f6df4def33e022ae2eb8f782df1a.sdkstatcache -output-file-map <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -sdk-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -package-name morphcore -emit-const-values -const-gather-protocols-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore_const_extract_protocols.json -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/include -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/DerivedSources-normal/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/DerivedSources/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/DerivedSources -Xcc -DSWIFT_PACKAGE -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore-Swift.h -working-directory <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj -experimental-emit-module-separately -disable-cmo
+
+SwiftMergeGeneratedHeaders <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/GeneratedModuleMaps/MorphCore-Swift.h <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore-Swift.h (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/MorphCore
+    builtin-swiftHeaderTool -arch arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore-Swift.h -o <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/GeneratedModuleMaps/MorphCore-Swift.h
+
+Copy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/MorphCore.swiftmodule/arm64-apple-macos.swiftdoc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftdoc (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/MorphCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftdoc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/MorphCore.swiftmodule/arm64-apple-macos.swiftdoc
+
+Copy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/MorphCore.swiftmodule/arm64-apple-macos.abi.json <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.abi.json (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/MorphCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.abi.json <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/MorphCore.swiftmodule/arm64-apple-macos.abi.json
+
+Copy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/MorphCore.swiftmodule/arm64-apple-macos.swiftmodule <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftmodule (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/MorphCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftmodule <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/MorphCore.swiftmodule/arm64-apple-macos.swiftmodule
+
+Copy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/MorphCore.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftsourceinfo (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/MorphCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftsourceinfo <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/MorphCore.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo
+
+SwiftDriver KidCore normal arm64 com.apple.xcode.tools.swift.compiler (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -parse-as-library -module-name KidCore -Onone @<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.SwiftFileList -DSWIFT_PACKAGE -DDEBUG -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -DXcode -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -target arm64-apple-macos26.0 -g -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/PackageFrameworks -F <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKStatCaches.noindex/macosx27.0-26A425-7231f6df4def33e022ae2eb8f782df1a.sdkstatcache -output-file-map <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -sdk-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -package-name kidcore -emit-const-values -const-gather-protocols-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore_const_extract_protocols.json -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/include -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/DerivedSources-normal/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/DerivedSources/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/DerivedSources -Xcc -DSWIFT_PACKAGE -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore-Swift.h -working-directory <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj -experimental-emit-module-separately -disable-cmo
+
+SwiftCompile normal arm64 Compiling\ SettingsStore.swift <qc-checkout>/apple/KidCore/Sources/KidCore/SettingsStore.swift (in target 'KidCore' from project 'KidCore')
+
+SwiftCompile normal arm64 <qc-checkout>/apple/KidCore/Sources/KidCore/SettingsStore.swift (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-SwiftPerFileCompile SettingsStore.swift
+
+SwiftCompile normal arm64 Compiling\ Helpers.swift <qc-checkout>/apple/KidCore/Sources/KidCore/Helpers.swift (in target 'KidCore' from project 'KidCore')
+
+SwiftCompile normal arm64 <qc-checkout>/apple/KidCore/Sources/KidCore/Helpers.swift (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-SwiftPerFileCompile Helpers.swift
+
+SwiftCompile normal arm64 Compiling\ CanonicalJSON.swift <qc-checkout>/apple/KidCore/Sources/KidCore/CanonicalJSON.swift (in target 'KidCore' from project 'KidCore')
+
+SwiftCompile normal arm64 <qc-checkout>/apple/KidCore/Sources/KidCore/CanonicalJSON.swift (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-SwiftPerFileCompile CanonicalJSON.swift
+
+SwiftCompile normal arm64 Compiling\ StageFit.swift <qc-checkout>/apple/KidCore/Sources/KidCore/StageFit.swift (in target 'KidCore' from project 'KidCore')
+
+SwiftCompile normal arm64 <qc-checkout>/apple/KidCore/Sources/KidCore/StageFit.swift (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-SwiftPerFileCompile StageFit.swift
+
+SwiftCompile normal arm64 Compiling\ KeyTable.swift <qc-checkout>/apple/KidCore/Sources/KidCore/KeyTable.swift (in target 'KidCore' from project 'KidCore')
+
+SwiftCompile normal arm64 <qc-checkout>/apple/KidCore/Sources/KidCore/KeyTable.swift (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-SwiftPerFileCompile KeyTable.swift
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ KidCore (in target 'KidCore' from project 'KidCore')
+
+SwiftCompile normal arm64 (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    
+
+SwiftCompile normal arm64 Compiling\ Seams.swift <qc-checkout>/apple/KidCore/Sources/KidCore/Seams.swift (in target 'KidCore' from project 'KidCore')
+
+SwiftCompile normal arm64 <qc-checkout>/apple/KidCore/Sources/KidCore/Seams.swift (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-SwiftPerFileCompile Seams.swift
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for KidCore (in target 'KidCore' from project 'KidCore')
+
+SwiftDriver\ Compilation\ Requirements KidCore normal arm64 com.apple.xcode.tools.swift.compiler (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -parse-as-library -module-name KidCore -Onone @<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.SwiftFileList -DSWIFT_PACKAGE -DDEBUG -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -DXcode -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -target arm64-apple-macos26.0 -g -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/PackageFrameworks -F <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKStatCaches.noindex/macosx27.0-26A425-7231f6df4def33e022ae2eb8f782df1a.sdkstatcache -output-file-map <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -sdk-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -package-name kidcore -emit-const-values -const-gather-protocols-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore_const_extract_protocols.json -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/include -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/DerivedSources-normal/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/DerivedSources/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/DerivedSources -Xcc -DSWIFT_PACKAGE -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore-Swift.h -working-directory <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj -experimental-emit-module-separately -disable-cmo
+
+SwiftMergeGeneratedHeaders <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/GeneratedModuleMaps/KidCore-Swift.h <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore-Swift.h (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/KidCore
+    builtin-swiftHeaderTool -arch arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore-Swift.h -o <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/GeneratedModuleMaps/KidCore-Swift.h
+
+Copy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/KidCore.swiftmodule/arm64-apple-macos.swiftdoc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.swiftdoc (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/KidCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.swiftdoc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/KidCore.swiftmodule/arm64-apple-macos.swiftdoc
+
+Copy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/KidCore.swiftmodule/arm64-apple-macos.swiftmodule <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.swiftmodule (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/KidCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.swiftmodule <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/KidCore.swiftmodule/arm64-apple-macos.swiftmodule
+
+Copy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/KidCore.swiftmodule/arm64-apple-macos.abi.json <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.abi.json (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/KidCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.abi.json <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/KidCore.swiftmodule/arm64-apple-macos.abi.json
+
+Copy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/KidCore.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.swiftsourceinfo (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/KidCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.swiftsourceinfo <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/KidCore.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo
+
+ProcessProductPackaging <scratch>/mf/games/kid-learn-character/apple/Config/LetterMorph-macOS.entitlements <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph.app.xcent (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    
+    Entitlements:
+    
+    {
+    "com.apple.security.app-sandbox" = 1;
+    "com.apple.security.get-task-allow" = 1;
+}
+    
+    builtin-productPackagingUtility <scratch>/mf/games/kid-learn-character/apple/Config/LetterMorph-macOS.entitlements -entitlements -format xml -o <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph.app.xcent
+
+ProcessProductPackagingDER <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph.app.xcent <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph.app.xcent.der (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /usr/bin/derq query -f xml -i <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph.app.xcent -o <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph.app.xcent.der --raw
+
+MkDir <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/assetcatalog_output/thinned (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /bin/mkdir -p <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/assetcatalog_output/thinned
+
+MkDir <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/assetcatalog_output/unthinned (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /bin/mkdir -p <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/assetcatalog_output/unthinned
+
+GenerateAssetSymbols <scratch>/mf/games/kid-learn-character/apple/LetterMorph/Assets.xcassets (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /Applications/Xcode.app/Contents/Developer/usr/bin/actool <scratch>/mf/games/kid-learn-character/apple/LetterMorph/Assets.xcassets --compile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/Resources --output-format human-readable-text --notices --warnings --export-dependency-info <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/assetcatalog_dependencies --output-partial-info-plist <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/assetcatalog_generated_info.plist --enable-on-demand-resources NO --development-region en --target-device mac --minimum-deployment-target 26.0 --platform macosx --bundle-identifier com.galaxyandsun.lettermorph --generate-swift-asset-symbol-extensions NO --generate-swift-asset-symbols <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources/GeneratedAssetSymbols.swift --generate-objc-asset-symbols <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources/GeneratedAssetSymbols.h --generate-asset-symbol-index <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources/GeneratedAssetSymbols-Index.plist
+/* com.apple.actool.compilation-results */
+<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources/GeneratedAssetSymbols-Index.plist
+<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources/GeneratedAssetSymbols.h
+<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources/GeneratedAssetSymbols.swift
+
+
+CompileAssetCatalogVariant thinned <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/Resources <scratch>/mf/games/kid-learn-character/apple/LetterMorph/Assets.xcassets (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /Applications/Xcode.app/Contents/Developer/usr/bin/actool <scratch>/mf/games/kid-learn-character/apple/LetterMorph/Assets.xcassets --compile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/assetcatalog_output/thinned --output-format human-readable-text --notices --warnings --export-dependency-info <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/assetcatalog_dependencies_thinned --output-partial-info-plist <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/assetcatalog_generated_info.plist_thinned --enable-on-demand-resources NO --development-region en --target-device mac --minimum-deployment-target 26.0 --platform macosx
+/* com.apple.actool.compilation-results */
+<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/assetcatalog_generated_info.plist_thinned
+<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/assetcatalog_output/thinned/Assets.car
+
+
+SwiftDriver LetterMorph normal arm64 com.apple.xcode.tools.swift.compiler (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name LetterMorph -Onone @<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.SwiftFileList -DDEBUG -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -target arm64-apple-macos26.0 -g -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -Xfrontend -serialize-debugging-options -index-store-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Index.noindex/DataStore -swift-version 6 -I <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -F <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/PackageFrameworks -F <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKStatCaches.noindex/macosx27.0-26A425-7231f6df4def33e022ae2eb8f782df1a.sdkstatcache -output-file-map <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -sdk-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph_const_extract_protocols.json -Xcc -iquote -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-generated-files.hmap -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-own-target-headers.hmap -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph-c3c46f8647b70d5b2b13aacbf80fbbd2-VFS/all-product-headers.yaml -Xcc -iquote -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-project-headers.hmap -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/include -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources-normal/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources -emit-objc-header -emit-objc-header-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph-Swift.h -working-directory <scratch>/mf/games/kid-learn-character/apple -experimental-emit-module-separately -disable-cmo
+
+SwiftDriverJobDiscovery normal arm64 Compiling SplitMix64.swift (in target 'MorphCore' from project 'MorphCore')
+
+SwiftDriverJobDiscovery normal arm64 Compiling Morph.swift (in target 'MorphCore' from project 'MorphCore')
+
+SwiftDriverJobDiscovery normal arm64 Compiling CanonicalJSON.swift (in target 'KidCore' from project 'KidCore')
+
+SwiftDriverJobDiscovery normal arm64 Compiling StageFit.swift (in target 'KidCore' from project 'KidCore')
+
+SwiftDriverJobDiscovery normal arm64 Compiling SVGPath.swift (in target 'MorphCore' from project 'MorphCore')
+
+SwiftDriver\ Compilation MorphCore normal arm64 com.apple.xcode.tools.swift.compiler (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -parse-as-library -module-name MorphCore -Onone @<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftFileList -DSWIFT_PACKAGE -DDEBUG -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -DXcode -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -target arm64-apple-macos26.0 -g -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKStatCaches.noindex/macosx27.0-26A425-7231f6df4def33e022ae2eb8f782df1a.sdkstatcache -output-file-map <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -sdk-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -package-name morphcore -emit-const-values -const-gather-protocols-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore_const_extract_protocols.json -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/include -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/DerivedSources-normal/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/DerivedSources/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/DerivedSources -Xcc -DSWIFT_PACKAGE -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore-Swift.h -working-directory <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj -experimental-emit-module-separately -disable-cmo
+
+Ld <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/MorphCore.o normal (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/MorphCore
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-macos26.0 -r -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -O0 -Xlinker -no_warn_duplicate_libraries -F<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -F<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -filelist <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.LinkFileList -nostdlib -Xlinker -object_path_lto -Xlinker <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore_lto.o -Xlinker -no_deduplicate -Xlinker -dependency_info -Xlinker <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftmodule -o <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/MorphCore.o
+
+SwiftDriverJobDiscovery normal arm64 Compiling Seams.swift (in target 'KidCore' from project 'KidCore')
+
+ExtractAppIntentsMetadata (in target 'MorphCore' from project 'MorphCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/MorphCore
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name MorphCore --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk --xcode-version 27A9275 --platform-family macOS --deployment-target 26.0 --bundle-identifier morphcore.MorphCore --output <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/MorphCore.appintents --target-triple arm64-apple-macos26.0 --binary-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/MorphCore.o --dependency-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore_dependency_info.dat --stringsdata-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftFileList --metadata-file-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/MorphCore.DependencyMetadataFileList --static-metadata-file-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/MorphCore.DependencyStaticMetadataFileList --swift-const-vals-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/MorphCore.build/Debug/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftConstValuesFileList --force --compile-time-extraction --deployment-aware-processing --no-app-shortcuts-localization
+2026-11-18 20:01:38.255 appintentsmetadataprocessor[2566:15840895] Starting appintentsmetadataprocessor export
+2026-11-18 20:01:38.294 appintentsmetadataprocessor[2566:15840895] Extracted no relevant App Intents symbols, skipping writing output
+
+SwiftDriverJobDiscovery normal arm64 Compiling Helpers.swift (in target 'KidCore' from project 'KidCore')
+
+SwiftDriverJobDiscovery normal arm64 Compiling SettingsStore.swift (in target 'KidCore' from project 'KidCore')
+
+SwiftDriverJobDiscovery normal arm64 Compiling KeyTable.swift (in target 'KidCore' from project 'KidCore')
+
+SwiftDriver\ Compilation KidCore normal arm64 com.apple.xcode.tools.swift.compiler (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -parse-as-library -module-name KidCore -Onone @<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.SwiftFileList -DSWIFT_PACKAGE -DDEBUG -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -DXcode -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -target arm64-apple-macos26.0 -g -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/PackageFrameworks -F <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKStatCaches.noindex/macosx27.0-26A425-7231f6df4def33e022ae2eb8f782df1a.sdkstatcache -output-file-map <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -sdk-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -package-name kidcore -emit-const-values -const-gather-protocols-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore_const_extract_protocols.json -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/include -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/DerivedSources-normal/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/DerivedSources/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/DerivedSources -Xcc -DSWIFT_PACKAGE -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore-Swift.h -working-directory <scratch>/mf/games/kid-learn-character/apple/LetterMorph.xcodeproj -experimental-emit-module-separately -disable-cmo
+
+Ld <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/KidCore.o normal (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/KidCore
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-macos26.0 -r -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -O0 -Xlinker -no_warn_duplicate_libraries -F<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -F<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/PackageFrameworks -F<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -filelist <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.LinkFileList -nostdlib -Xlinker -object_path_lto -Xlinker <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore_lto.o -Xlinker -no_deduplicate -Xlinker -dependency_info -Xlinker <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.swiftmodule -o <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/KidCore.o
+
+ExtractAppIntentsMetadata (in target 'KidCore' from project 'KidCore')
+    cd <scratch>/mf/games/kid-learn-character/apple/KidCore
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name KidCore --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk --xcode-version 27A9275 --platform-family macOS --deployment-target 26.0 --bundle-identifier kidcore.KidCore --output <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/KidCore.appintents --target-triple arm64-apple-macos26.0 --binary-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/KidCore.o --dependency-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore_dependency_info.dat --stringsdata-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.SwiftFileList --metadata-file-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/KidCore.DependencyMetadataFileList --static-metadata-file-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/KidCore.DependencyStaticMetadataFileList --swift-const-vals-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/KidCore.build/Debug/KidCore-t.build/Objects-normal/arm64/KidCore.SwiftConstValuesFileList --force --compile-time-extraction --deployment-aware-processing --no-app-shortcuts-localization
+2026-11-18 20:01:38.332 appintentsmetadataprocessor[2569:15840941] Starting appintentsmetadataprocessor export
+2026-11-18 20:01:38.369 appintentsmetadataprocessor[2569:15840941] Extracted no relevant App Intents symbols, skipping writing output
+
+Ld <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/MacOS/__preview.dylib normal (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-macos26.0 -dynamiclib -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -Os -Xlinker -no_warn_duplicate_libraries -L<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -F<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/PackageFrameworks -F<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -install_name @rpath/LetterMorph.debug.dylib -Xlinker -dependency_info -Xlinker <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph_dependency_info.dat -Xlinker -no_adhoc_codesign -o <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/MacOS/__preview.dylib
+
+CpResource <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/Resources/PrivacyInfo.xcprivacy <scratch>/mf/games/kid-learn-character/apple/LetterMorph/PrivacyInfo.xcprivacy (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks <scratch>/mf/games/kid-learn-character/apple/LetterMorph/PrivacyInfo.xcprivacy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/Resources
+
+LinkAssetCatalog <scratch>/mf/games/kid-learn-character/apple/LetterMorph/Assets.xcassets (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-linkAssetCatalog --thinned <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/assetcatalog_output/thinned --thinned-dependencies <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/assetcatalog_dependencies_thinned --thinned-info-plist-content <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/assetcatalog_generated_info.plist_thinned --unthinned <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/assetcatalog_output/unthinned --unthinned-dependencies <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/assetcatalog_dependencies_unthinned --unthinned-info-plist-content <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/assetcatalog_generated_info.plist_unthinned --output <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/Resources --plist-output <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/assetcatalog_generated_info.plist
+note: Emplaced <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/Resources/Assets.car (in target 'LetterMorph' from project 'LetterMorph')
+
+ProcessInfoPlistFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/Info.plist <scratch>/mf/games/kid-learn-character/apple/Config/Info.plist (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-infoPlistUtility <scratch>/mf/games/kid-learn-character/apple/Config/Info.plist -producttype com.apple.product-type.application -genpkginfo <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/PkgInfo -expandbuildsettings -platform macosx -additionalcontentfile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/assetcatalog_generated_info.plist -o <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/Info.plist
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/ptrcheck-9N0UXX2EZ3707RTMUUITINF45.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/_SwiftConcurrencyShims-5AALP5FWI1CNI2VQ6DA3BATYG.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/ptrauth-A26SWY2QAWGYPOYZ1M1AKYRVH.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/_Builtin_float-H5PFL8B8539HVSYWUOQPVNFS.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/_AvailabilityInternal-VFYXD0PHQD90ZAGZ4GX2DKQ9.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/DeveloperToolsSupport-7R9OHQX5J26RDX0EX9TRNHR0L.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/_Builtin_stdarg-1MWCHDM6MPK53DIVM4M8I2ZX9.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/_Builtin_stdbool-CJORFJR1JBO7SRTMY995JJ694.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/SwiftShims-E8535OXPSY57YLUSJW8L9C0C6.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/_Builtin_stddef-AF2BD87BY23TIOEIFANFMT1IB.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/_DarwinFoundation1-CHFEHWUJPYFD4OTTFWVMYQLKM.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/_Builtin_limits-9EST545IUZE2OZFH3PT2WHHRD.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/_DarwinFoundation2-8XPT3AGAJF7F7CNAAHT92KM4N.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/_Builtin_tgmath-DYGHM09EA8C5VGI94CGGYSN36.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/sys_types-CL9EGTKHOPNZKVGXD8BQSHTKS.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/_Builtin_stdint-EJQRBQN4AV1KG8XDWU8Q02747.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/string_h-7DSVUYB1WXD5I52B2DOIBQJWN.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/_DarwinFoundation3-5FEIVYD963M4D8H4AYF2V149H.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/_Builtin_intrinsics-B8ZP6INNQ9D2IZ5UFGY4IYEM5.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/libDER-MQW1KNJNQPBCJ0MQFOYHRLGS.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/_Builtin_stdatomic-DBWOUOZHF0U34EQT671TSF7V9.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/_Builtin_inttypes-6LX6ZUKR31S89KUXSMD7EYIO5.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/Darwin-DXLO88IEKWEFOEN9VRW1LCCZ9.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/simd-BJM0CIJMLH57KBZH7R4QLU7UV.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/CUPS-4NBCNFLN17C9OE18EII6GIGR7.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/launch-DGU5ECVQHQYNV659AYNWB6YG.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/MachO-EIUOV1D77ZP8ECWR4EF6J6TMC.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/libkern-2C952PBFCCB01HB59Q393TY89.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/Spatial-AS00ADIOUPU6FZNQ6GE2PZ18B.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/ObjectiveC-46A5R9MBJ12YFPKQ5N0DAS6PH.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/os_object-72SFWBXLL81LDRJBMKJ3HSM3E.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/os_workgroup-3TX6HDW25YW9ZK0VBLU6N36G0.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/Dispatch-AHO4TO7MO7XFW8MFEGJV8NK4P.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/XPC-B89BR04GSGJX2IORQ2YOERJ76.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/CoreFoundation-9MUVFEECGPNINBPRR3CQHTBKJ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/os-441ZORGRIRB90XPDRMI49J5VV.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/ColorSync-6JMKBZPIOAZ1UCPDF2EAK4K2H.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/IOKit-8LIOHMRYHY1XP78F5BYCR55BF.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/CFNetwork-5F55WTKSUMI4IHHCPGNQKK9IJ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/CoreAudioTypes-3X9OK1B85V9G0G9I3R706WZDA.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/Security-6JWSSI6NO6RPQW22ZMRMTOTML.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/CoreGraphics-38IXMXLKSI4VF8QRIATZFDQT0.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/DiskArbitration-27M2WHEZ4P15D3UI0L30RK9JV.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/CoreServices-3TI5OJY3O8K7IH7TUWC51QMTD.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/ImageIO-2KZ8U0KRUP0Y9NEXZO6TQUGKM.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/CoreText-F4YHIP9SB15YTO3CBD6JD7MPD.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/Foundation-7ASGWJK342OT513WBQJ6PDGHR.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/ModelIO-EWJKXPKCU37L8F2LU4A8DCD7R.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/ApplicationServices-27B8EC9COTEXHVJZXA2V3CLBD.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/Accessibility-9YNUGPRTSV7OFP138Q7Y35TU2.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/CoreTransferable-4GU6V2X14V34K7E0YW0TIWH3V.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/OSLog-1HOPH9NQAOCVRN8M490NIP98A.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/IOSurface-ULD5MZGWTJD2RWUC51PCJHKW.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/CoreAudio-B5J8J2OBM35PYXD8PWCH3PTCN.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/DataDetection-1TIWM6T6T103N0X5Y59C5H14B.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/Symbols-BLWK8399BZQ8P64R3RBBH85DJ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/UniformTypeIdentifiers-26Y2ERW2SX5N5A60JE8DDRRIP.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/CoreData-7JCW6AKQUJWPYPXV0LL14BAYU.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/OpenGL-AE4S71UVH3KWY2GKCDEN9UTL9.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/Metal-4E7MB4W268WHFQPR7SISWQ57S.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/CoreVideo-2Z8NLLABC6CPX0MLZLEQC2XVR.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/CoreMedia-1QOWMD6DYCQ0A7W39TSV18CC3.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/QuartzCore-8FEWJ43BL10WH3R8T9AYUGDKA.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/CoreImage-8ZQIJ1VII0EROB55WL4VS0178.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/SwiftUICore-7QOZ1HN7TT4HUCIO479W8QRJC.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/AppKit-C2RP1BI6DV91SWIIDV9H2UZ4N.pcm
+
+SwiftExplicitDependencyCompileModuleFromInterface arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/SwiftUICore-2FSNLXE1FNI91.swiftmodule
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/SwiftUI-B1E0Z482CMF8O5EVTZBNXXS41.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/Cocoa-39V2X6MVVAJXRWARTIZKCMM60.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/GLKit-D2MJJTZZE95BXXE4OGX4UFJI0.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/SpriteKit-68JGQQLKP9DS3V52OTO9EPZ6V.pcm
+
+SwiftExplicitDependencyCompileModuleFromInterface arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/AppKit-APZM0PNI19IY.swiftmodule
+
+SwiftExplicitDependencyCompileModuleFromInterface arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/GLKit-QSIGFQZHE4MC.swiftmodule
+
+SwiftExplicitDependencyCompileModuleFromInterface arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/SwiftUI-1AR57ASYMHASE.swiftmodule
+
+SwiftExplicitDependencyCompileModuleFromInterface arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/SpriteKit-DO0YR0X4BGFM.swiftmodule
+
+SwiftExplicitDependencyCompileModuleFromInterface arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules/_SpriteKit_SwiftUI-2VDPIB8ZLI0GF.swiftmodule
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ LetterMorph (in target 'LetterMorph' from project 'LetterMorph')
+
+SwiftCompile normal arm64 (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    
+
+SwiftCompile normal arm64 Compiling\ LetterMorphApp.swift <scratch>/mf/games/kid-learn-character/apple/LetterMorph/LetterMorphApp.swift (in target 'LetterMorph' from project 'LetterMorph')
+
+SwiftCompile normal arm64 <scratch>/mf/games/kid-learn-character/apple/LetterMorph/LetterMorphApp.swift (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-SwiftPerFileCompile LetterMorphApp.swift
+
+SwiftCompile normal arm64 Compiling\ Clocks.swift <scratch>/mf/games/kid-learn-character/apple/LetterMorph/Clocks.swift (in target 'LetterMorph' from project 'LetterMorph')
+
+SwiftCompile normal arm64 <scratch>/mf/games/kid-learn-character/apple/LetterMorph/Clocks.swift (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-SwiftPerFileCompile Clocks.swift
+
+SwiftCompile normal arm64 Compiling\ StageView.swift <scratch>/mf/games/kid-learn-character/apple/LetterMorph/StageView.swift (in target 'LetterMorph' from project 'LetterMorph')
+
+SwiftCompile normal arm64 <scratch>/mf/games/kid-learn-character/apple/LetterMorph/StageView.swift (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-SwiftPerFileCompile StageView.swift
+
+SwiftCompile normal arm64 Compiling\ GeneratedAssetSymbols.swift <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'LetterMorph' from project 'LetterMorph')
+
+SwiftCompile normal arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-SwiftPerFileCompile GeneratedAssetSymbols.swift
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for LetterMorph (in target 'LetterMorph' from project 'LetterMorph')
+
+SwiftDriver\ Compilation\ Requirements LetterMorph normal arm64 com.apple.xcode.tools.swift.compiler (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name LetterMorph -Onone @<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.SwiftFileList -DDEBUG -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -target arm64-apple-macos26.0 -g -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -Xfrontend -serialize-debugging-options -index-store-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Index.noindex/DataStore -swift-version 6 -I <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -F <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/PackageFrameworks -F <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKStatCaches.noindex/macosx27.0-26A425-7231f6df4def33e022ae2eb8f782df1a.sdkstatcache -output-file-map <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -sdk-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph_const_extract_protocols.json -Xcc -iquote -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-generated-files.hmap -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-own-target-headers.hmap -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph-c3c46f8647b70d5b2b13aacbf80fbbd2-VFS/all-product-headers.yaml -Xcc -iquote -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-project-headers.hmap -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/include -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources-normal/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources -emit-objc-header -emit-objc-header-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph-Swift.h -working-directory <scratch>/mf/games/kid-learn-character/apple -experimental-emit-module-separately -disable-cmo
+
+SwiftMergeGeneratedHeaders <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources/LetterMorph-Swift.h <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph-Swift.h (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-swiftHeaderTool -arch arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph-Swift.h -o <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources/LetterMorph-Swift.h
+
+Copy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.swiftmodule/arm64-apple-macos.swiftdoc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftdoc (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftdoc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.swiftmodule/arm64-apple-macos.swiftdoc
+
+Copy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.swiftmodule/arm64-apple-macos.swiftmodule <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftmodule (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftmodule <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.swiftmodule/arm64-apple-macos.swiftmodule
+
+Copy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.swiftmodule/arm64-apple-macos.abi.json <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.abi.json (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.abi.json <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.swiftmodule/arm64-apple-macos.abi.json
+
+Copy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftsourceinfo (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftsourceinfo <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo
+
+ProcessProductPackaging "" <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests.xctest.xcent (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    
+    Entitlements:
+    
+    {
+    "com.apple.application-identifier" = "<team>.com.galaxyandsun.lettermorph.uitests.xctrunner";
+    "com.apple.security.app-sandbox" = 1;
+    "com.apple.security.get-task-allow" = 1;
+    "com.apple.security.network.client" = 1;
+    "com.apple.security.temporary-exception.files.absolute-path.read-only" =     (
+        "/"
+    );
+    "com.apple.security.temporary-exception.mach-lookup.global-name" =     (
+        "com.apple.testmanagerd",
+        "com.apple.dt.testmanagerd.runner",
+        "com.apple.coresymbolicationd",
+        "com.apple.coredevice.version",
+        "com.apple.coredevice.service",
+        "com.apple.remoted"
+    );
+    "com.apple.security.temporary-exception.mach-lookup.local-name" =     (
+        "com.apple.axserver"
+    );
+    "com.apple.security.temporary-exception.sbpl" =     (
+        "(allow hid-control)",
+        "(allow signal)"
+    );
+}
+    
+    builtin-productPackagingUtility -entitlements -format xml -o <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests.xctest.xcent
+
+ProcessProductPackagingDER <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests.xctest.xcent <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests.xctest.xcent.der (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /usr/bin/derq query -f xml -i <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests.xctest.xcent -o <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests.xctest.xcent.der --raw
+
+SwiftDriver LetterMorphUITests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name LetterMorphUITests -Onone @<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.SwiftFileList -DDEBUG -module-alias Testing\=_Testing_Unavailable -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -target arm64-apple-macos26.0 -g -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -Xfrontend -serialize-debugging-options -index-store-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Index.noindex/DataStore -swift-version 6 -I <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -parse-as-library -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKStatCaches.noindex/macosx27.0-26A425-7231f6df4def33e022ae2eb8f782df1a.sdkstatcache -output-file-map <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -sdk-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests_const_extract_protocols.json -Xcc -iquote -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-generated-files.hmap -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-own-target-headers.hmap -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph-c3c46f8647b70d5b2b13aacbf80fbbd2-VFS/all-product-headers.yaml -Xcc -iquote -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-project-headers.hmap -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/include -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/DerivedSources-normal/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/DerivedSources/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/DerivedSources -emit-objc-header -emit-objc-header-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests-Swift.h -working-directory <scratch>/mf/games/kid-learn-character/apple -experimental-emit-module-separately -disable-cmo
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/XCUIAutomation-4HIY0XQ6QATMADORQ2YJHMEDE.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/XCTest-4D3MQWD4AGLKXPL9TCI5JJLTP.pcm
+
+SwiftExplicitDependencyCompileModuleFromInterface arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/XCUIAutomation-14E29YA9PW0OU.swiftmodule
+
+SwiftExplicitDependencyCompileModuleFromInterface arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/XCTest-3NRKKRXB6VAX6.swiftmodule
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ LetterMorphUITests (in target 'LetterMorphUITests' from project 'LetterMorph')
+
+SwiftCompile normal arm64 (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    
+
+SwiftCompile normal arm64 Compiling\ LetterMorphUITests.swift <scratch>/mf/games/kid-learn-character/apple/LetterMorphUITests/LetterMorphUITests.swift (in target 'LetterMorphUITests' from project 'LetterMorph')
+<scratch>/mf/games/kid-learn-character/apple/LetterMorphUITests/LetterMorphUITests.swift:7:19: warning: call to main actor-isolated initializer 'init()' in a synchronous nonisolated context [#ActorIsolatedCall]
+ 4 | /// MAC FREE slot (K-34).
+ 5 | final class LetterMorphUITests: XCTestCase {
+ 6 |     func test_app_launches_to_the_title() {
+   |          `- note: add '@MainActor' to make instance method 'test_app_launches_to_the_title()' part of global actor 'MainActor'
+ 7 |         let app = XCUIApplication()
+   |                   `- warning: call to main actor-isolated initializer 'init()' in a synchronous nonisolated context [#ActorIsolatedCall]
+ 8 |         app.launch()
+ 9 |         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
+
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks/XCUIAutomation.framework/Headers/XCUIApplication.h:29:1: note: calls to initializer 'init()' from outside of its actor context are implicitly asynchronous
+ 27 |  * Returns a proxy for the application specified by the "Target Application" target setting.
+ 28 |  */
+ 29 | - (instancetype)init NS_DESIGNATED_INITIALIZER;
+    | `- note: calls to initializer 'init()' from outside of its actor context are implicitly asynchronous
+ 30 | + (instancetype)new;
+ 31 | 
+
+<scratch>/mf/games/kid-learn-character/apple/LetterMorphUITests/LetterMorphUITests.swift:8:13: warning: call to main actor-isolated instance method 'launch()' in a synchronous nonisolated context [#ActorIsolatedCall]
+ 4 | /// MAC FREE slot (K-34).
+ 5 | final class LetterMorphUITests: XCTestCase {
+ 6 |     func test_app_launches_to_the_title() {
+   |          `- note: add '@MainActor' to make instance method 'test_app_launches_to_the_title()' part of global actor 'MainActor'
+ 7 |         let app = XCUIApplication()
+ 8 |         app.launch()
+   |             `- warning: call to main actor-isolated instance method 'launch()' in a synchronous nonisolated context [#ActorIsolatedCall]
+ 9 |         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
+10 |     }
+
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks/XCUIAutomation.framework/Headers/XCUIApplication.h:54:1: note: calls to instance method 'launch()' from outside of its actor context are implicitly asynchronous
+ 52 |  * at that point.
+ 53 | */
+ 54 | - (void)launch;
+    | `- note: calls to instance method 'launch()' from outside of its actor context are implicitly asynchronous
+ 55 | 
+ 56 | /*!
+
+<scratch>/mf/games/kid-learn-character/apple/LetterMorphUITests/LetterMorphUITests.swift:9:27: warning: call to main actor-isolated instance method 'wait(for:timeout:)' in a synchronous nonisolated context [#ActorIsolatedCall]
+ 7 |         let app = XCUIApplication()
+ 8 |         app.launch()
+ 9 |         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
+   |                           `- warning: call to main actor-isolated instance method 'wait(for:timeout:)' in a synchronous nonisolated context [#ActorIsolatedCall]
+10 |     }
+11 | }
+
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks/XCUIAutomation.framework/Headers/XCUIApplication.h:126:1: note: calls to instance method 'wait(for:timeout:)' from outside of its actor context are implicitly asynchronous
+124 |  * timeout period.
+125 |  */
+126 | - (BOOL)waitForState:(XCUIApplicationState)state timeout:(NSTimeInterval)timeout XCUI_WARN_UNUSED;
+    | `- note: calls to instance method 'wait(for:timeout:)' from outside of its actor context are implicitly asynchronous
+127 | 
+128 | /*!
+
+[#ActorIsolatedCall]: <https://docs.swift.org/compiler/documentation/diagnostics/actor-isolated-call>
+
+SwiftCompile normal arm64 <scratch>/mf/games/kid-learn-character/apple/LetterMorphUITests/LetterMorphUITests.swift (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-SwiftPerFileCompile LetterMorphUITests.swift
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for LetterMorphUITests (in target 'LetterMorphUITests' from project 'LetterMorph')
+
+SwiftDriver\ Compilation\ Requirements LetterMorphUITests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name LetterMorphUITests -Onone @<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.SwiftFileList -DDEBUG -module-alias Testing\=_Testing_Unavailable -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -target arm64-apple-macos26.0 -g -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -Xfrontend -serialize-debugging-options -index-store-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Index.noindex/DataStore -swift-version 6 -I <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -parse-as-library -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKStatCaches.noindex/macosx27.0-26A425-7231f6df4def33e022ae2eb8f782df1a.sdkstatcache -output-file-map <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -sdk-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests_const_extract_protocols.json -Xcc -iquote -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-generated-files.hmap -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-own-target-headers.hmap -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph-c3c46f8647b70d5b2b13aacbf80fbbd2-VFS/all-product-headers.yaml -Xcc -iquote -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-project-headers.hmap -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/include -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/DerivedSources-normal/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/DerivedSources/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/DerivedSources -emit-objc-header -emit-objc-header-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests-Swift.h -working-directory <scratch>/mf/games/kid-learn-character/apple -experimental-emit-module-separately -disable-cmo
+
+SwiftMergeGeneratedHeaders <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/DerivedSources/LetterMorphUITests-Swift.h <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests-Swift.h (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-swiftHeaderTool -arch arm64 <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests-Swift.h -o <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/DerivedSources/LetterMorphUITests-Swift.h
+
+Copy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests.swiftmodule/arm64-apple-macos.swiftmodule <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.swiftmodule (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.swiftmodule <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests.swiftmodule/arm64-apple-macos.swiftmodule
+
+Copy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests.swiftmodule/arm64-apple-macos.abi.json <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.abi.json (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.abi.json <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests.swiftmodule/arm64-apple-macos.abi.json
+
+Copy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests.swiftmodule/arm64-apple-macos.swiftdoc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.swiftdoc (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.swiftdoc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests.swiftmodule/arm64-apple-macos.swiftdoc
+
+Copy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.swiftsourceinfo (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.swiftsourceinfo <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo
+
+SwiftDriverJobDiscovery normal arm64 Compiling Clocks.swift (in target 'LetterMorph' from project 'LetterMorph')
+
+SwiftDriverJobDiscovery normal arm64 Compiling GeneratedAssetSymbols.swift (in target 'LetterMorph' from project 'LetterMorph')
+
+SwiftDriverJobDiscovery normal arm64 Compiling LetterMorphUITests.swift (in target 'LetterMorphUITests' from project 'LetterMorph')
+
+SwiftDriver\ Compilation LetterMorphUITests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name LetterMorphUITests -Onone @<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.SwiftFileList -DDEBUG -module-alias Testing\=_Testing_Unavailable -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -target arm64-apple-macos26.0 -g -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -Xfrontend -serialize-debugging-options -index-store-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Index.noindex/DataStore -swift-version 6 -I <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -parse-as-library -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKStatCaches.noindex/macosx27.0-26A425-7231f6df4def33e022ae2eb8f782df1a.sdkstatcache -output-file-map <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -sdk-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests_const_extract_protocols.json -Xcc -iquote -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-generated-files.hmap -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-own-target-headers.hmap -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph-c3c46f8647b70d5b2b13aacbf80fbbd2-VFS/all-product-headers.yaml -Xcc -iquote -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests-project-headers.hmap -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/include -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/DerivedSources-normal/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/DerivedSources/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/DerivedSources -emit-objc-header -emit-objc-header-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests-Swift.h -working-directory <scratch>/mf/games/kid-learn-character/apple -experimental-emit-module-separately -disable-cmo
+
+SwiftDriverJobDiscovery normal arm64 Compiling LetterMorphApp.swift (in target 'LetterMorph' from project 'LetterMorph')
+
+SwiftDriverJobDiscovery normal arm64 Compiling StageView.swift (in target 'LetterMorph' from project 'LetterMorph')
+
+SwiftDriver\ Compilation LetterMorph normal arm64 com.apple.xcode.tools.swift.compiler (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name LetterMorph -Onone @<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.SwiftFileList -DDEBUG -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -target arm64-apple-macos26.0 -g -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -Xfrontend -serialize-debugging-options -index-store-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Index.noindex/DataStore -swift-version 6 -I <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -F <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/PackageFrameworks -F <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKStatCaches.noindex/macosx27.0-26A425-7231f6df4def33e022ae2eb8f782df1a.sdkstatcache -output-file-map <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex -sdk-module-cache-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph_const_extract_protocols.json -Xcc -iquote -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-generated-files.hmap -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-own-target-headers.hmap -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph-c3c46f8647b70d5b2b13aacbf80fbbd2-VFS/all-product-headers.yaml -Xcc -iquote -Xcc <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-project-headers.hmap -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/include -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources-normal/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources/arm64 -Xcc -I<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/DerivedSources -emit-objc-header -emit-objc-header-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph-Swift.h -working-directory <scratch>/mf/games/kid-learn-character/apple -experimental-emit-module-separately -disable-cmo
+
+Ld <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/MacOS/LetterMorph.debug.dylib normal (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-macos26.0 -dynamiclib -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -Os -Xlinker -no_warn_duplicate_libraries -L<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -L<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -F<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -F<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/PackageFrameworks -F<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -filelist <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.LinkFileList -install_name @rpath/LetterMorph.debug.dylib -Xlinker -rpath -Xlinker @loader_path -Xlinker -rpath -Xlinker <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/PackageFrameworks -Xlinker -rpath -Xlinker @executable_path/Frameworks -Xlinker -rpath -Xlinker @executable_path/../Frameworks -Xlinker -object_path_lto -Xlinker <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph_lto.o -rdynamic -Xlinker -dependency_info -Xlinker <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftmodule -Xlinker -alias -Xlinker _main -Xlinker ___debug_main_executable_dylib_entry_point -Xlinker -no_adhoc_codesign -o <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/MacOS/LetterMorph.debug.dylib
+
+ConstructStubExecutorLinkFileList <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-ExecutorLinkFileList-normal-arm64.txt (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    construct-stub-executor-link-file-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/MacOS/LetterMorph.debug.dylib /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/libPreviewsJITStubExecutor_no_swift_entry_point.a /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/libPreviewsJITStubExecutor.a --output <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-ExecutorLinkFileList-normal-arm64.txt
+note: Using stub executor library with Swift entry point. (in target 'LetterMorph' from project 'LetterMorph')
+
+Ld <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/MacOS/LetterMorph normal (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-macos26.0 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -Os -Xlinker -no_warn_duplicate_libraries -L<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -F<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/PackageFrameworks -F<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -Xlinker -rpath -Xlinker @executable_path -Xlinker -rpath -Xlinker @loader_path -Xlinker -rpath -Xlinker <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/PackageFrameworks -Xlinker -rpath -Xlinker @executable_path/Frameworks -Xlinker -rpath -Xlinker @executable_path/../Frameworks -rdynamic -e ___debug_blank_executor_main -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_dylib -Xlinker <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-DebugDylibPath-normal-arm64.txt -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_instlnm -Xlinker <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-DebugDylibInstallName-normal-arm64.txt -Xlinker -filelist -Xlinker <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph-ExecutorLinkFileList-normal-arm64.txt <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/MacOS/LetterMorph.debug.dylib -Xlinker -no_adhoc_codesign -o <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/MacOS/LetterMorph
+
+CopySwiftLibs <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-swiftStdLibTool --copy --verbose --sign <hash> --scan-executable <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/MacOS/LetterMorph.debug.dylib --scan-folder <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/Frameworks --scan-folder <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/PlugIns --scan-folder <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/Library/SystemExtensions --scan-folder <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/Extensions --platform macosx --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+ExtractAppIntentsMetadata (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name LetterMorph --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk --xcode-version 27A9275 --platform-family macOS --deployment-target 26.0 --bundle-identifier com.galaxyandsun.lettermorph --output <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/Resources --target-triple arm64-apple-macos26.0 --binary-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/MacOS/LetterMorph --dependency-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph_dependency_info.dat --stringsdata-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.SwiftFileList --metadata-file-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph.DependencyMetadataFileList --static-metadata-file-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph.DependencyStaticMetadataFileList --swift-const-vals-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/Objects-normal/arm64/LetterMorph.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --no-app-shortcuts-localization
+2026-11-18 20:01:47.434 appintentsmetadataprocessor[2712:15841593] Starting appintentsmetadataprocessor export
+2026-11-18 20:01:47.436 appintentsmetadataprocessor[2712:15841593] warning: Metadata extraction skipped, no AppIntents.framework dependency found
+
+CodeSign <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/MacOS/LetterMorph.debug.dylib (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    
+    Signing Identity:     "Apple Development: <apple-id> (<cert-id>)"
+    
+    /usr/bin/codesign --force --sign <hash> -o runtime --timestamp\=none --generate-entitlement-der <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/MacOS/LetterMorph.debug.dylib
+
+CodeSign <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/MacOS/__preview.dylib (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    
+    Signing Identity:     "Apple Development: <apple-id> (<cert-id>)"
+    
+    /usr/bin/codesign --force --sign <hash> -o runtime --timestamp\=none --generate-entitlement-der <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app/Contents/MacOS/__preview.dylib
+
+CodeSign <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    
+    Signing Identity:     "Apple Development: <apple-id> (<cert-id>)"
+    
+    /usr/bin/codesign --force --sign <hash> -o runtime --entitlements <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorph.build/LetterMorph.app.xcent --timestamp\=none --generate-entitlement-der <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app
+
+RegisterExecutionPolicyException <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-RegisterExecutionPolicyException <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app
+
+Validate <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-validationUtility <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app -no-validate-extension -infoplist-subpath Contents/Info.plist
+
+Touch <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /usr/bin/touch -c <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app
+
+RegisterWithLaunchServices <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app (in target 'LetterMorph' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-lsregisterurl --record-path <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/XCBuildData/registered-launchservices.txt -- /System/Library/Frameworks/CoreServices.framework/Versions/Current/Frameworks/LaunchServices.framework/Versions/Current/Support/lsregister -f -R -trusted <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorph.app
+
+ProcessInfoPlistFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest/Contents/Info.plist <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/empty-LetterMorphUITests.plist (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-infoPlistUtility <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/empty-LetterMorphUITests.plist -producttype com.apple.product-type.bundle.ui-testing -expandbuildsettings -platform macosx -additionalcontentfile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/ProductTypeInfoPlistAdditions.plist -o <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest/Contents/Info.plist
+
+Ld <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest/Contents/MacOS/LetterMorphUITests normal (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-macos26.0 -bundle -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -Os -Xlinker -no_warn_duplicate_libraries -L<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -L<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -F<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -filelist <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.LinkFileList -Xlinker -rpath -Xlinker @loader_path/../Frameworks -Xlinker -object_path_lto -Xlinker <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests_lto.o -Xlinker -dependency_info -Xlinker <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.swiftmodule -Xlinker -needed_framework -Xlinker XCTest -framework XCTest -Xlinker -needed-lXCTestSwiftSupport -lXCTestSwiftSupport -Xlinker -no_adhoc_codesign -o <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest/Contents/MacOS/LetterMorphUITests
+
+CopySwiftLibs <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-swiftStdLibTool --copy --verbose --sign <hash> --scan-executable <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest/Contents/MacOS/LetterMorphUITests --scan-folder <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest/Contents/Frameworks --scan-folder <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest/Contents/PlugIns --scan-folder <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest/Contents/Library/SystemExtensions --scan-folder <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest/Contents/Extensions --platform macosx --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest/Contents/Frameworks --strip-bitcode --scan-executable /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+ExtractAppIntentsMetadata (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name LetterMorphUITests --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk --xcode-version 27A9275 --platform-family macOS --deployment-target 26.0 --bundle-identifier com.galaxyandsun.lettermorph.uitests --output <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest/Contents/Resources --target-triple arm64-apple-macos26.0 --binary-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest/Contents/MacOS/LetterMorphUITests --dependency-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests_dependency_info.dat --stringsdata-file <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.SwiftFileList --metadata-file-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests.DependencyMetadataFileList --static-metadata-file-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests.DependencyStaticMetadataFileList --swift-const-vals-list <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/Objects-normal/arm64/LetterMorphUITests.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --no-app-shortcuts-localization
+2026-11-18 20:01:47.784 appintentsmetadataprocessor[2720:15841684] Starting appintentsmetadataprocessor export
+2026-11-18 20:01:47.785 appintentsmetadataprocessor[2720:15841684] warning: Metadata extraction skipped, no AppIntents.framework dependency found
+
+Copy <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PkgInfo /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/XCTRunner.app/Contents/PkgInfo (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/XCTRunner.app/Contents/PkgInfo <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents
+
+MkDir <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /bin/mkdir -p <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app
+
+CopyPlistFile <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/Info.plist /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/XCTRunner.app/Contents/Info.plist (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-copyPlist --validate --convert xml1 --macro-expansion WRAPPEDPRODUCTNAME LetterMorphUITests-Runner --macro-expansion WRAPPEDPRODUCTBUNDLEIDENTIFIER com.galaxyandsun.lettermorph.uitests.xctrunner --macro-expansion TESTPRODUCTNAME LetterMorphUITests --macro-expansion TESTPRODUCTBUNDLEIDENTIFIER com.galaxyandsun.lettermorph.uitests --copy-value UIDeviceFamily <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest/Contents/Info.plist --outdir <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents -- /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/XCTRunner.app/Contents/Info.plist
+
+CopyAndPreserveArchs <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/MacOS/LetterMorphUITests-Runner (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/XCTRunner.app/Contents/MacOS/XCTRunner -output <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/MacOS/LetterMorphUITests-Runner -extract arm64
+
+CodeSign <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    
+    Signing Identity:     "Apple Development: <apple-id> (<cert-id>)"
+    
+    /usr/bin/codesign --force --sign <hash> --entitlements <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests.xctest.xcent --timestamp\=none --generate-entitlement-der <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest
+
+CodeSign <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    
+    Signing Identity:     "Apple Development: <apple-id> (<cert-id>)"
+    
+    /usr/bin/codesign --force --sign <hash> --entitlements <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/LetterMorph.build/Debug/LetterMorphUITests.build/LetterMorphUITests.xctest.xcent --timestamp\=none --generate-entitlement-der <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app
+<scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app: replacing existing signature
+
+RegisterExecutionPolicyException <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    builtin-RegisterExecutionPolicyException <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest
+
+Touch <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest (in target 'LetterMorphUITests' from project 'LetterMorph')
+    cd <scratch>/mf/games/kid-learn-character/apple
+    /usr/bin/touch -c <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Products/Debug/LetterMorphUITests-Runner.app/Contents/PlugIns/LetterMorphUITests.xctest
+
+PruneExplicitPrecompiledModules <scratch>/mf/games/kid-learn-character/.build/mf-ui/SDKExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules <scratch>/mf/games/kid-learn-character/.build/mf-ui/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+2026-11-18 20:01:48.721403+0700 LetterMorphUITests-Runner[2725:15841716] [Default] Running tests...
+2026-11-18 20:02:48.791195+0700 LetterMorphUITests-Runner[2725:15841716] [Default] Failed to initialize for UI testing: Error Domain=com.apple.dt.XCTest.XCTFuture Code=1000 "Timed out while enabling automation mode." UserInfo={NSLocalizedDescription=Timed out while enabling automation mode.}
+
+
+*** If you believe this error represents a bug, please attach the result bundle at <scratch>/mf/games/kid-learn-character/.build/mf-ui/Logs/Test/Test-LetterMorphUITests-2026.11.18_20-01-35-+0700.xcresult
+
+2026-11-18 20:02:49.111 xcodebuild[2367:15843905]  IDETestOperationsObserverDebug: Failure collecting logarchive: Error Domain=OSLogErrorDomain Code=13 "Log archive creation failed with error 13, warnings during creation: failed to read version.plist
+" UserInfo={NSLocalizedDescription=Log archive creation failed with error 13, warnings during creation: failed to read version.plist
+}
+2026-11-18 20:02:49.117 xcodebuild[2367:15840134] [MT] IDETestOperationsObserverDebug: 61.238 elapsed -- Testing started completed.
+2026-11-18 20:02:49.117 xcodebuild[2367:15840134] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-11-18 20:02:49.117 xcodebuild[2367:15840134] [MT] IDETestOperationsObserverDebug: 61.238 sec, +61.238 sec -- end
+
+Test session results, code coverage, and logs:
+	<scratch>/mf/games/kid-learn-character/.build/mf-ui/Logs/Test/Test-LetterMorphUITests-2026.11.18_20-01-35-+0700.xcresult
+
+Testing failed:
+	LetterMorphUITests-Runner (2725) encountered an error (The test runner failed to initialize for UI testing. (Underlying Error: Timed out while enabling automation mode.))
+
+** TEST FAILED **
+
+Testing started
