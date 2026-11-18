@@ -54,6 +54,19 @@ The Kotlin port diffs its names and shapes against this file (ADR-0002).
 - `SettingsBackend.remove()` (method): `func remove()`
 - `SettingsBackend.write(_:)` (method): `func write(_ bytes: [UInt8]) -> Bool?`
 - `SettingsBackend` (protocol): `protocol SettingsBackend`
+- `StageFit.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `StageFit.init(width:height:)` (init): `init(width: Double, height: Double)`
+- `StageFit.offsetX` (property): `let offsetX: Double`
+- `StageFit.offsetY` (property): `let offsetY: Double`
+- `StageFit.scale` (property): `let scale: Double`
+- `StageFit.stageHeight` (type.property): `static let stageHeight: Double`
+- `StageFit.stageWidth` (type.property): `static let stageWidth: Double`
+- `StageFit.toWindow(x:y:)` (method): `func toWindow(x: Double, y: Double) -> (x: Double, y: Double)`
+- `StageFit.visibleHeight` (property): `let visibleHeight: Double`
+- `StageFit.visibleWidth` (property): `let visibleWidth: Double`
+- `StageFit.visibleX` (property): `let visibleX: Double`
+- `StageFit.visibleY` (property): `let visibleY: Double`
+- `StageFit` (struct): `struct StageFit`
 - `UptimeClock.now()` (method): `func now() -> Double`
 - `UptimeClock` (protocol): `protocol UptimeClock`
 - `WallClock.now()` (method): `func now() -> WallTime`

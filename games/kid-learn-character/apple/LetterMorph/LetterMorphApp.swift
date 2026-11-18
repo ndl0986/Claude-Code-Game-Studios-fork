@@ -24,6 +24,14 @@ struct LetterMorphApp: App {
 /// (ADR-0006 D1).
 struct StageContainer: View {
     var body: some View {
-        StageView().ignoresSafeArea()
+        StageView()
+            .ignoresSafeArea()
+            #if os(iOS)
+            // K-39: during play the status bar and home indicator are hidden and the system edge gestures need a
+            // second swipe. Guided Access stays the real lock.
+            .statusBarHidden(true)
+            .persistentSystemOverlays(.hidden)
+            .defersSystemGestures(on: .all)
+            #endif
     }
 }

@@ -1,3 +1,4 @@
+import KidCore
 import SpriteKit
 import SwiftUI
 
@@ -7,8 +8,9 @@ enum StageLayer: CGFloat, CaseIterable {
     case hints = 60, tokens = 70, moon = 80
 }
 
-/// The blank Title scene: the Dusk sky colour and the empty fixed layers (TASK-079 S1). No rule lives here; later
-/// stories map KidCore's render plan onto these layers (ADR-0006 D1).
+/// The blank Title scene: the Dusk sky colour filling the whole window and the empty fixed layers (TASK-079). No rule
+/// lives here; later stories map KidCore's render plan onto these layers (ADR-0006 D1). The stage root carries
+/// Reveal Stage F1 (KidCore `StageFit`): the safe stage contained, the sky extending, y flipped (ADR-0006 D2; K-39).
 final class StageScene: SKScene {
     override init(size: CGSize) {
         super.init(size: size)
@@ -23,6 +25,18 @@ final class StageScene: SKScene {
             n.zPosition = layer.rawValue
             root.addChild(n)
         }
+    }
+
+    /// The current F1 fit, in points (the scene is `.resizeFill`, sized in points).
+    private(set) var fit = StageFit(width: 1280, height: 720)
+
+    override func didChangeSize(_ oldSize: CGSize) {
+        super.didChangeSize(oldSize)
+        guard size.width > 0, size.height > 0, let root = childNode(withName: "stageRoot") else { return }
+        fit = StageFit(width: Double(size.width), height: Double(size.height))
+        root.xScale = CGFloat(fit.scale)
+        root.yScale = CGFloat(-fit.scale) // KidCore is y-down, SpriteKit y-up
+        root.position = CGPoint(x: fit.offsetX, y: Double(size.height) - fit.offsetY)
     }
 
     required init?(coder: NSCoder) { fatalError("not used") }
