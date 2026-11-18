@@ -5,6 +5,8 @@ Accepted (Luan, 2026-11-18)
 
 ## Date
 2026-11-17. Revised 2026-11-17 (TASK-035): adds the TASK-033 spike's findings. Accepted by Luan 2026-11-18.
+Clarified 2026-11-18 (wording only, approved by Luan; no decision changed): Decision 6 says where silhouette
+path data lives.
 
 ## Last Verified
 2026-11-17 (TASK-035), against the TASK-033 spike's builds (Release, Xcode 27.1 (27A9275), iOS SDK 27.1, macOS
@@ -150,11 +152,13 @@ changing `KidCore` or `MorphCore`.
 - **Glyph outlines** are **baked at build time to SVG path strings** from the bundled OFL font by a tool. The font
   name, version and licence are recorded with each glyph file (`glyph_<font>_<char>.json`). No font is rasterised
   at run time on any platform.
-- **Object silhouettes** are **one compound SVG path per cast member** (`sil_…`, art bible §8) in the key table.
+- **Object silhouettes** are **one compound SVG path per cast member** (art bible §8), baked to its own file
+  (`sil/sil_….json`). The key table does not hold the path: each entry names that file in its `silhouette` field
+  (Key Table & Theme Data). *(Clarification 2026-11-18: the wording was "in the key table".)*
 - **These path strings are morph input data:** the particles' sample points. They are **not** how the glyph or the
   object picture is drawn. That's the SVG-rendering decision, left open (Open follow-ups).
 - **The bake tool:** it flattens each silhouette into the v1 subset only (M/L/H/V/C/Q/Z, plain decimal numbers,
-  `M` after every `Z`) and **fails loudly** otherwise. A CI check parses every key-table path with a v1 parser
+  `M` after every `Z`) and **fails loudly** otherwise. A CI check parses every path file the key table names with a v1 parser
   (contract §8).
 
 **7. The `project.yaml` engine block.**
