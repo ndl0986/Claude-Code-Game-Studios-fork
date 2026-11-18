@@ -245,3 +245,4 @@ Against `design/accessibility-requirements.md` (tier: Standard, Luan, K-42):
 | OQ-3 | The play button's size and drawing (only its position, light and breathe are stated) | art (art bible §7) |
 | OQ-4 | The moon ring's geometry on the Title (see `interaction-patterns.md` OQ-1) | Parent Gate owner / art |
 | OQ-5 | Player journey map not yet created (`design/player-journey.md`); author it from `.claude/docs/templates/player-journey.md` | producer / UX |
+| OQ-6 | In morning and day, does the play button's amber edge (`#80450f`, art bible §7) follow the glyph's **K-25 sky switch** (cream above / amber below the sky-mid luminance L_x ≈ 0.308, with a 1 s wall-clock dissolve), or switch with the look? **Recommendation** (game-art-content, agreed by game-dev-android; not decided here): follow K-25, so the button and the glyph use one rule and stay in step through a crossfade | App Shell owner (Luan if it needs a decision) |
