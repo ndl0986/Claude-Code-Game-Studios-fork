@@ -60,8 +60,9 @@ ever competes with the letter.
   desaturated pale yellow the table names, not a warm accent. "The moon is the only warm sky element" is a Night
   line and does not conflict (no sun at Night).
 - It **publishes** `look` (the current phase) and `lookBlend` (the previous phase, the current one and the weight,
-  F1) for the Parent Gate (the moon), Cast Rendering (the per-look glyph and creature changes, follow-up) and
-  anyone else who needs the look.
+  F1) for the Parent Gate (the moon), Cast Rendering (the per-look glyph and creature changes) and anyone else who
+  needs the look, and **`skyMidL`** (the blended sky-mid luminance with the weather tint, F2; K-25), which Cast
+  Rendering's edge switch (its R4, F8) and R5's build check both read. All three follow the wall clock (R9).
 - Nothing in the Scene is touchable. A touch on the sky or ground is a `sparkle` (Input R7).
 
 **R2. Time of day** (K-08, art bible §2; K-24).
@@ -113,13 +114,15 @@ ever competes with the letter.
 - **Build check (AC-5):** over every look pair in the cycle (Night → Morning → Day → Dusk → Night) at blend weights
   0, 0.25, 0.5, 0.75 and 1 (F1), × the four weathers, × the horizon lift off and on (R7), the check computes every
   sky colour and fails the build on any cap breach: 4 × 5 × 4 × 2 = **160 cases**. The glyph's edge follows **the
-  same edge model as Cast Rendering F8** (K-25): cream `#f8efdc` at 100% where the case's blended sky-mid L is below
-  L_x ≈ 0.308, amber `#80450f` at or above it. The 1 s switch cross-dissolve is **excluded** (it is a wall-clock
-  moment, not a case). The check asserts **≥ 3:1 at w = 0 and 1** and **≥ 2.5:1 at w = 0.25, 0.5, 0.75**, against
+  same edge model as Cast Rendering F8** (K-25), read from the case's **`skyMidL`** (F2, the same value the switch
+  reads): cream `#f8efdc` at 100% below L_x ≈ 0.308, amber `#80450f` above it. Inside the switch's hysteresis band
+  (`skyMidL` 0.303–0.313) either edge can be showing, so the check takes the **worse** of the two there. The 1 s
+  switch cross-dissolve is **excluded** (it is a wall-clock moment, not a case). The check asserts **≥ 3:1 at w = 0 and 1** and **≥ 2.5:1 at w = 0.25, 0.5, 0.75**, against
   the case's blended sky mid band, through the better of the fill (`#ffd36e`) and the edge. Because the worst point
   (the crossover, where cream and amber are equal) can fall between samples, the check **also asserts the edge's
-  contrast at L_x itself is ≥ 2.5:1**, which bounds every in-between frame. With the shipped data: lowest sampled
-  2.68:1 (Night→Morning, w 0.5), at L_x 2.57:1, at the looks 4.36:1 (Day) and above. Because the extension clamps to the end stops (R6), the extended
+  contrast is ≥ 2.5:1 over the whole hysteresis band**, which bounds every in-between frame. With the shipped data:
+  lowest sampled 2.68:1 (Night→Morning, w 0.5); at L_x 2.57:1; at the band's edges 2.53:1 (cream at 0.313) and
+  2.54:1 (amber at 0.303); at the looks 4.36:1 (Day) and above. Because the extension clamps to the end stops (R6), the extended
   areas are covered by the same colours.
 - **Hints** sit on their own cream bubble with gold ink (Hint Letters R12), so the sky does not carry their
   contrast; they are in the sky band y 150–420, where only stars, the sun, clouds and weather can be.
@@ -239,6 +242,15 @@ the blended sky and on which edge is drawn), so the build check samples w = 0.25
 
 Example: Day mid `#a8c8e8` (L 0.56) and Dusk mid `#46558f` (L 0.10) at w 0.5 → L 0.33, between the two, under
 the cap.
+
+**`skyMidL`** (published, K-25): the relative luminance of the **drawn** sky mid band, that is, the mid stop of the
+look blend (F1) after the weather tint (rain's −10% saturation) and any jump fade:
+```
+skyMidL = L( tint_weather( toSRGB( lerp( toLinear(mid(prev)), toLinear(mid(P)), w ) ) ) )
+```
+Clear weather, by look: Morning 0.615, Day 0.555, Dusk 0.098, Night 0.029. Because luminance is linear in linear
+RGB, in clear weather a crossfade's `skyMidL` is the weighted mean: 16:07 → 0.533 × 0.555 + 0.467 × 0.098 = 0.342.
+The horizon lift (R7) changes the horizon stop, not the mid band, so it does not move `skyMidL`.
 
 **F3. Weather motion** (play clock `p`, seconds; stage units).
 - **a. Rain:** each streak falls at `rain_speed` (420 u/s) along the tilt: `x += v·sin(θ)·dt`, `y += v·cos(θ)·dt`,
