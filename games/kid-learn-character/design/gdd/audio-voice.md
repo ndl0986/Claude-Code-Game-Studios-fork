@@ -1,6 +1,6 @@
 # Audio & Voice
 
-> **Status**: In Review
+> **Status**: Approved (independent review by game-dev-ios, merged 2026-11-18)
 > **Author**: game-art-content for Luan (TASK-041)
 > **Last Updated**: 2026-11-18 (volume aligned with the Settings Store, K-12)
 > **Last Verified**: 2026-11-18

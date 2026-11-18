@@ -20,7 +20,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-038 | GDD: MorphCore (`design/gdd/morphcore.md`) via /design-system | design | game-dev-android (review: game-dev-ios) | DONE `89fb1cc`, merged 2026-11-18 (review: game-dev-ios APPROVE) | `design/TASK-038-gdd-morphcore` | 2026-11-18 |
 | TASK-039 | GDD: Settings Store (`design/gdd/settings-store.md`) via /design-system | design | game-dev-android (review: game-dev-ios) | DONE `7897eff`, merged 2026-11-18 (review: game-dev-ios APPROVE) | `design/TASK-039-gdd-settings-store` | 2026-11-18 |
 | TASK-040 | GDD: Privacy & Kids Compliance (`design/gdd/privacy-kids-compliance.md`) via /design-system | design | game-qc-ios (review: game-qc-android) | IN PROGRESS: PLAN APPROVED 2026-11-18 after REVISE | `design/TASK-040-gdd-privacy-compliance` | 2026-11-18 |
-| TASK-041 | GDD: Audio & Voice (`design/gdd/audio-voice.md`) via /design-system | design | game-art-content (review: game-dev-ios) | REWORK: game-dev-ios REVISE (volume 0–10 default 8 + headroom; silent mode wording; engine start; letter length bound) | `design/TASK-041-gdd-audio-voice` | 2026-11-18 |
+| TASK-041 | GDD: Audio & Voice (`design/gdd/audio-voice.md`) via /design-system | design | game-art-content (review: game-dev-ios) | DONE `bdd3ae7`, merged 2026-11-18 (review: game-dev-ios APPROVE after rework) | `design/TASK-041-gdd-audio-voice` | 2026-11-18 |
 | TASK-042 | Key Table follow-ups: launch case for a failing stored theme; per-line voice duration + validator; back-references to Audio & Settings | design | game-art-content (review: game-dev-ios) | SENT 2026-11-18 | `design/TASK-042-key-table-followups` | 2026-11-18 |
 
 ## Leader log
@@ -57,3 +57,4 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 - 2026-11-18: TASK-039/040/041 plans approved; Luan decided K-12 (settings) and K-13 (audio).
 - 2026-11-18: TASK-039 Settings Store merged (4/14 MVP). Follow-ups: Settings touch-up (volume preview, .debug logs, restoration switches) → game-dev-android; Key Table §5 launch case → game-art-content; startPlay during theme load → App Shell GDD.
 - 2026-11-18: Settings Store touch-up merged (K-14). GDD status lines set to Approved for the 4 merged GDDs.
+- 2026-11-18: TASK-041 Audio & Voice merged (K-14), 5/14 MVP GDDs approved. Note for the voice render: "double you" may approach letter_len_max_s 1.0 s.
