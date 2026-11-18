@@ -145,7 +145,9 @@ leave a hole (game-dev-ios, TASK-103 review).
 `lineWidth`, `.round` joins and caps, antialiased). **The outline is the merged path stroked opaque inside an
 `SKEffectNode` with `shouldRasterize`, one per part, at the layer's opacity (0.8)**: H-2 (headless, 6e455bfc) showed a
 single `SKShapeNode` blends its own self-overlap **twice** at 0.8 (crossing 0.961 against arm 0.800, for stroke alpha
-and node alpha alike), and the effect node blends **once**. The effect node holds only that part's outline, which never
+and node alpha alike), and the effect node blends **once**. The effect node is the default; **if the device's
+Overlap check shows a single node blending once** (stroke alpha first, then node alpha), that cheaper form is used on
+that device and P-2 records it (the spike's `outline=<variant>`). The effect node holds only that part's outline, which never
 changes, so its raster is reused while the part's own node rotates (idles); a per-look colour change (F8) re-rasterises
 it once. P-2 checks two things this introduces: the raster stays crisp at the stage size, and it is not rebuilt per
 frame (the frame log after a reveal starts). If either fails, the outline layer becomes a texture (B's rasteriser for
