@@ -371,6 +371,13 @@ n     = (1 − w)·nt(prev) + w·nt(P)          the Night share         (halo si
 edge:      amber #80450f (100%) while skyMidL ≥ L_x + 0.005 was last crossed upward,
            cream #f8efdc (100%) while skyMidL ≤ L_x − 0.005 was last crossed downward;   L_x = 0.308, 6 units
            a crossing starts a 1 s cross-dissolve on the wall clock (alpha, not colour mixing)
+           state: at launch the edge starts as the one for the current value, with no dissolve: amber if
+           skyMidL ≥ L_x (0.308), else cream (TASK-104, CR-Q1: with no crossing history, L_x picks the better edge);
+           a return from the background keeps the state (the hysteresis runs on the published skyMidL, which the
+           Scene's 3 s clock-jump fade moves continuously); the thresholds are inclusive (≥ 0.313, ≤ 0.303); the
+           dissolve starts on the crossing frame and the mix moves at 1 per second; a reverse crossing during a
+           dissolve turns it around from the current mix toward the new edge at the same rate (1 per s), so it
+           ends after (current mix) × 1 s and never lengthens a switch (no jump)
 haloColour = mixLin(rgba(255,200,90,0.95),  rgba(246,169,59,0.95),  d)
 haloScale  = 1 − 0.3·n          × halo_blur_max and × the glow-disk radius (230)
 topStop    = mixLin(#fff1b8, #ffd36e, n)                                     the glyph's (and F4's C_cap)
