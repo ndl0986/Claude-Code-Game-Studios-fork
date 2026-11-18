@@ -64,7 +64,7 @@ child lock-in, privacy compliance), because the player is 2.5–3 years old.
 | 6 | Audio & Voice | Audio | MVP | Approved | design/gdd/audio-voice.md | Key Table & Theme Data |
 | 7 | Press Queue | Gameplay | MVP | Approved | design/gdd/press-queue.md | Input & Key Filter |
 | 8 | Cast Rendering (inferred) | Presentation | MVP | Approved | design/gdd/cast-rendering.md | Key Table & Theme Data, MorphCore |
-| 9 | Reveal Stage | Gameplay | MVP | Not Started | design/gdd/reveal-stage.md | MorphCore, Audio & Voice, Press Queue, Cast Rendering, Key Table & Theme Data |
+| 9 | Reveal Stage | Gameplay | MVP | Approved | design/gdd/reveal-stage.md | MorphCore, Audio & Voice, Press Queue, Cast Rendering, Key Table & Theme Data |
 | 10 | Hint Letters | Gameplay | MVP | Approved | design/gdd/hint-letters.md | Key Table & Theme Data, Input & Key Filter, Press Queue |
 | 11 | Parade | Gameplay | MVP | Approved | design/gdd/parade.md | Reveal Stage, Cast Rendering |
 | 12 | Parent Gate & Grown-up Panel | UI | MVP | Not Started | design/gdd/parent-gate-panel.md | Settings Store, Input & Key Filter |
@@ -226,10 +226,10 @@ Effort: S = 1 session, M = 2–3 sessions.
 | Metric | Count |
 |--------|-------|
 | Total systems identified | 20 |
-| Design docs started | 10 |
-| Design docs reviewed | 10 |
-| Design docs approved | 10 |
-| MVP systems designed | 10/14 |
+| Design docs started | 11 |
+| Design docs reviewed | 11 |
+| Design docs approved | 11 |
+| MVP systems designed | 11/14 |
 | Vertical Slice systems designed | 0/3 |
 
 ---

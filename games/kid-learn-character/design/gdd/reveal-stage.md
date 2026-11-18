@@ -1,6 +1,6 @@
 # Reveal Stage
 
-> **Status**: In Review
+> **Status**: Approved (independent read by game-dev-android, merged 2026-11-18)
 > **Author**: game-dev-ios for Luan (TASK-049); plan reviewed by game-dev-android
 > **Last Updated**: 2026-11-18
 > **Last Verified**: 2026-11-18, against Press Queue (R2–R11, F1), Cast Rendering (R1, R7–R12, F1, F7), MorphCore
