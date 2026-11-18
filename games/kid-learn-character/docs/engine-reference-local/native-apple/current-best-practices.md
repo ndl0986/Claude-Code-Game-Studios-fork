@@ -14,6 +14,24 @@ Rule: PROVEN (TASK-033), SOURCED (Apple URL) or NOT SOURCEABLE (see `VERSION.md`
   (`CADisplayLink`).
 - `ProcessInfo.beginActivity(.latencyCritical)` for measurement runs. **PROVEN (TASK-033)** on a real Mac.
 
+- `CADisplayLink.preferredFrameRateRange` is a best-effort range; Low Power Mode, thermal state and accessibility
+  settings can lower it. **SOURCED** —
+  https://developer.apple.com/documentation/quartzcore/cadisplaylink/preferredframeraterange (ADR-0006 D3: 30–60, preferred 60).
+
+## Accessibility
+- Smart Invert opt-out per view: `accessibilityIgnoresInvertColors` "prevents the system from inverting the colors of
+  the view and all of its subviews". **SOURCED** — https://developer.apple.com/documentation/uikit/uiview/accessibilityignoresinvertcolors
+- Reduce Motion: `UIAccessibility.isReduceMotionEnabled` (iPadOS), `NSWorkspace.accessibilityDisplayShouldReduceMotion`
+  (macOS). **SOURCED** — https://developer.apple.com/documentation/uikit/uiaccessibility/isreducemotionenabled,
+  https://developer.apple.com/documentation/appkit/nsworkspace/accessibilitydisplayshouldreducemotion
+
+## Displays
+- No public iPad ppi API: `UIScreen.nativeScale` is "the native scale factor for the physical screen" (px per pt).
+  **SOURCED** — https://developer.apple.com/documentation/uikit/uiscreen/nativescale. ppi comes from a model table
+  (ADR-0006 D7).
+- Mac: `CGDisplayScreenSize` returns a display's size in mm, or 0; without EDID it estimates at 72 dpi. **SOURCED** —
+  https://developer.apple.com/documentation/coregraphics/cgdisplayscreensize(_:)
+
 ## Input
 - macOS: `NSEvent.addLocalMonitorForEvents` for keyDown/keyUp with `timestamp` and `isARepeat`. **PROVEN
   (TASK-033)** on a real Mac.
