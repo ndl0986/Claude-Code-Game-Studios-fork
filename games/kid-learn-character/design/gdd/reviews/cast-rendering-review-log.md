@@ -25,3 +25,8 @@ Reviewed-Content-Hash: design/gdd/key-table-theme-data.md e108179924cb3f53191a26
 Reviewed-Content-Hash: design/gdd/press-queue.md f73cb9bd44f9d6ca15ca48975e5a43d77bb7870f
 Reviewed-Content-Hash: design/gdd/audio-voice.md 1f3d8158975fa07f5bac347250674314dc0ac4f0
 Reviewed-Content-Hash: production/team/decisions.md 4baed8206a9b8920b39a20154cb0d523e6a75118
+
+## Update — 2026-11-18 — parade count (no re-review)
+Review mode: lean · Workflow: standard
+Change: K-17 makes a parade every 6 creatures: R10, F6, the measurement plan and an edge case now use `parade_count` (6; ≈ 1.1 MB at the 256 tier) instead of 8, and a walker that is also the current stage creature keeps a separate parade-role copy (Parade plan, TASK-046).
+Reviewed-Content-Hash: design/gdd/cast-rendering.md 7638b1bbf8c772dd1014f27375a2c17811cee115

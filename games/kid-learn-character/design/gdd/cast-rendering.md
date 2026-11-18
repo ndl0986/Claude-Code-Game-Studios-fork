@@ -173,7 +173,9 @@ cast sound and word will play (`hasWord`, Press Queue review note), without gues
 
 **R10. Loading on demand and late art.** (art bible §8 memory rule; K-16; Press Queue R6.)
 - **Resident set:** only the current figure, the one leaving, the figures of the keys waiting in the queue
-  (prefetched), and the parade's 8 figures at the `parade` role. Nothing else is kept (F6).
+  (prefetched), and the parade's `parade_count` figures (6, K-17) at the `parade` role. A walker that is also the
+  current stage creature needs its parade-role copy too: the two roles are separate resident sets. Nothing else is
+  kept (F6).
 - **Prefetch:** when a key is queued, its item is resolved for prefetch and its art loads off the main thread. The
   reveal still resolves its item at start (Key Table R3); if that gives a different item (the pick rule), the
   prefetched one is dropped and the new one loads.
@@ -207,7 +209,7 @@ bible's conflict (§8) is recorded, not decided, here.
 
 **Measurement plan for that ADR** (the oldest supported real iPad, and a Mac):
 1. A stage creature idling, a leaving creature fading out, 240 specks flying with the cap, the glyph with its
-   halo, over the Dusk scene; then the 8-figure parade.
+   halo, over the Dusk scene; then a parade of `parade_count` (6) figures.
 2. Measure: frame time p50 / p99 (target p99 ≤ 16.7 ms, art bible §8), the load time of one creature at each
    role (it must fit well within the reduced T, 1.2 s), peak memory, app-size delta for the 36 Dinosaurs items,
    and crispness at ~775 px on screen (a 13" iPad).
@@ -297,12 +299,13 @@ except the parade step (K-16). Example: hop at τ = 0.225 s → 26 units (13 wit
 ```
 bytes(set)     = Σ_parts w_part × h_part × 4                 (RGBA, 8-bit)
 with mipmaps   = bytes × 4/3
-resident       = (2 + queue_max) × bytes(stage set) + 8 × bytes(parade set)
+resident       = (2 + queue_max) × bytes(stage set) + parade_count × bytes(parade set)
 ```
 A stage set at 1024 px tall on the 640:440 artboard is at most 1024 × 704 × 4 ≈ **2.9 MB** if drawn as one image;
 split into parts the sum of the part boxes is capped at 1.5× that by a build check (overlap at the joints). With
-`queue_max` 3: 5 × 2.9 ≈ **14.4 MB** (19.2 MB with mipmaps; up to 1.5× with parts). The parade: 8 × 256 × 176 × 4
-≈ **1.4 MB**. Loading all 26 stage figures would be ≈ 75–100 MB, which is why nothing else stays resident.
+`queue_max` 3: 5 × 2.9 ≈ **14.4 MB** (19.2 MB with mipmaps; up to 1.5× with parts). The parade, with
+`parade_count` 6 (K-17): 6 × 256 × 176 × 4 ≈ **1.1 MB**, counted even when a walker is also the stage creature
+(its parade copy is separate). A digit walks as its group in one file, so it is one figure. Loading all 26 stage figures would be ≈ 75–100 MB, which is why nothing else stays resident.
 
 **F7. The late-art wait.**
 ```
@@ -337,7 +340,7 @@ waiting, nothing can replace the creature, so the full 0.5 s is safe.
 | **Many specks overlap** (a thin glyph, a mash) | The cap holds (F4): never brighter than the glyph's top colour. |
 | **The same item queued twice** | One resident copy serves both. |
 | **A theme change while figures are resident** | The new theme's figures load for the next reveal; the old ones are released when no longer current or leaving. |
-| **The parade starts while a stage figure is resident** | Both are allowed; the resident cap includes the parade set (F6). |
+| **The parade starts while a stage figure is resident** | Both are allowed; the resident cap includes the parade set (F6). If the stage creature is also a walker, its parade-role copy is loaded as well. |
 | **A flyer that hovers** | Its shadow stays on the ground line (R7). |
 | **Number 3 (three babies in one file)** | Each baby is a part with its own bob phase (R7); the silhouette is the three together (MorphCore). |
 | **Mac window resized** | The tier is chosen again from the new physical height (R3); a change loads the new tier and swaps when ready. |
