@@ -49,3 +49,8 @@ Reviewed-Content-Hash: design/gdd/parade.md 1635d85de1ff5176df125b7a673418f883a2
 Review mode: lean · Workflow: standard
 Change: Interactions: Accessibility's reduceMotion (A1), next frame. Follow-ups from the Keyboard Row (TASK-060) and Accessibility (TASK-061) GDDs; verdict unchanged; review by game-qc-ios from the diff.
 Reviewed-Content-Hash: design/gdd/parade.md 8fc6e7be1b8b7a12d5212ed76fa446fa9248879f
+
+## Update — 2026-11-18 — TASK-101 contract questions (no re-review)
+Review mode: lean · Workflow: standard
+Change: PA-Q1–Q9 answered in a new 'Precise rules for the contract' subsection: inclusive start tick on the play clock; the art wait (same tick if resident, else first all-resident tick or the inclusive 0.5 s timeout; 3 of 6 walks, 2 skips; a skip needs a new rest); the Walking-entry order; held keys and the next batch; Ended at pt ≥ 11, panel/background at once with paradeWalking off at once; inclusive draw test and clamped alpha; Reduce Motion bob 2.5 from the next tick; per-theme state; freeze holds the wait, panel/background while Waiting → Armed. Verdict unchanged; review by game-qc-android.
+Reviewed-Content-Hash: design/gdd/parade.md 4634d12d4160f0f88a278ae0fdbb163a3f547a1d

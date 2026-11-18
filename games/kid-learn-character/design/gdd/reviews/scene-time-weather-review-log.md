@@ -49,3 +49,8 @@ Reviewed-Content-Hash: design/gdd/scene-time-weather.md 3ec3f5a7be060a8661c26e13
 Review mode: lean · Workflow: standard
 Change: Interactions: Accessibility's reduceMotion (A1), next frame (R8). Follow-ups from the Keyboard Row (TASK-060) and Accessibility (TASK-061) GDDs; verdict unchanged; review by game-qc-ios from the diff.
 Reviewed-Content-Hash: design/gdd/scene-time-weather.md de2ee06fa8e5504dd8a18728e6f426eba2cc0363
+
+## Update — 2026-11-18 — TASK-101 contract questions (no re-review)
+Review mode: lean · Workflow: standard
+Change: SC-Q1–Q10 answered in a new 'Precise rules for the contract' subsection: real-valued minutesOfDay, boundary → new phase at w 0; a clock jump defined as |Δwall − Δuptime/60| > jump_threshold_min (1 min, new knob; mod-1440 wrap; no OS event, per game-qc-android) with a per-frame re-evaluated target; the rain tint is luminance-preserving (lerp 10% to its own grey in linear RGB), so skyMidL is unchanged by rain; colour data = art bible §2; the build check emits each case; F4 rounding and areas; linear mash fade and lift λ; the scene-weather stream draw order and counts; the freeze check. Verdict unchanged; review by game-qc-android.
+Reviewed-Content-Hash: design/gdd/scene-time-weather.md 1e9c05abf21db9f1af54079dcfc915845b88cd3a

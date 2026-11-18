@@ -182,6 +182,48 @@ ever competes with the letter.
 **R11. Sound: none** (K-24). The Scene has no weather or ambient sound, keeping Audio & Voice's rule A5 (no music
 bed).
 
+### Precise rules for the contract (TASK-101; scene-look-v1)
+
+Normative.
+- **Wall clock (SC-Q1):** `minutesOfDay` is a **real number** (seconds included: 16:00:20 is 960.333…). At exactly a
+  boundary the new phase has started: 16:00 → P = Dusk, w = 0.
+- **A clock jump (SC-Q2)** is defined without any OS event (ADR-0002 D6 has none): on a foreground frame, with both
+  measured since the previous frame, a jump is any frame where
+  `|Δwall − Δuptime / 60| > jump_threshold_min` (1 min, a knob), where `Δwall` is the wall-clock step in minutes taken
+  **mod 1440** into (−720, 720]. Normal ticking never trips it, and a return from sleep or the background never
+  fades (the first-frame rule of R2 applies on return). The fade is
+  `c = mix(c_drawn₀, c_target(t), smoothstep(τ / jump_fade_s))`, where `c_drawn₀` is the colour drawn when the jump
+  was detected and `c_target(t)` is **re-evaluated every frame** (F1). A jump during a jump starts again from the
+  colour drawn at that moment.
+- **The rain tint and `skyMidL` (SC-Q3):** "−10% saturation" is **luminance-preserving**: each sky colour `c` (in
+  linear RGB) moves 10% toward its own luminance grey, `c' = lerp(c, (L, L, L), 0.10)` with `L = L(c)`. So the tint
+  never changes a sky colour's luminance, and `skyMidL` is the same in rain as in clear weather. The order is: blend
+  the looks (F1, F2) → the jump fade → the rain tint; `skyMidL = L(final mid colour)`.
+- **The colour data (SC-Q4):** the sky stops (top, mid, horizon), hills and ground per look are the art bible §2 table
+  exactly. No data file exists yet; the Scene's bundled data will carry the same values (ADR-0003 D1 `data/`).
+- **The build check (SC-Q5):** per case, the glyph contrast is WCAG `(L1 + 0.05) / (L2 + 0.05)`, using the better of
+  the fill `#ffd36e` and the edge shown (inside `skyMidL` 0.303–0.313, the **worse** of the two edges), against the
+  case's `skyMidL`. It passes at ≥ 3 for w 0 and 1, and ≥ 2.5 inside. The contract emits **each case's contrast and
+  pass**. The lift cases equal the no-lift ones for the mid band (the lift moves only the horizon stop) and may be
+  emitted once.
+- **F4 rounding (SC-Q6):** `round` is half away from zero (ADR-0002 D2).
+  `A_ratio = (W × (320 − rect.minY)) / (1280 × 320)`; `A_vis / A_safe = (W × H) / (1280 × 720)`.
+- **The mash fade (SC-Q7):** the mash factor moves **linearly** on the play clock between 1 and `mash_factor`, at
+  `(1 − mash_factor) / mash_fade_s` per second (1.0/s), from its current value. `mashing` is an **input** (Reveal
+  Stage; reveal-timing-v1).
+- **F5 (SC-Q8):** `nightness = 1 − d`, with `d` the Morning/Day share (Cast Rendering F8). `h'` is mixed in linear
+  RGB. λ moves linearly at `1 / fade_s` per second on the play clock, from its current value.
+- **The `scene-weather` stream (SC-Q9; ADR-0004):** elements are (re)generated at **weather start** and on a
+  **visible-rect change**, always in this order:
+  1. **clouds**, index order: `x = minX + u·W`, `y = 40 + u·200` (2 draws each);
+  2. **rain streaks**, index order: `x = minX + u·W`, `y = minY + u·(ground_y − minY)` (2 draws each); or **snow
+     flakes**: `x`, `y` as for rain, then `v = 20 + 20u`, `φ = 2πu` (4 draws each).
+  The count created is F4's count **before** the Reduce Motion and mash factors (the surplus is faded by alpha).
+  A **wrap** (rain or snow leaving below the ground line) takes **one draw** for the new `x`, and `y = minY`. Stars
+  are not on this stream (a fixed layout, as in the one-shot).
+- **The freeze (SC-Q10):** testing that every element's position is unchanged under `freeze()`, while the look and `w`
+  keep following the wall clock (AC-11), covers it.
+
 ### States and Transitions
 
 The Scene is continuous; these are the conditions it runs under.
@@ -358,6 +400,7 @@ shapes.
 | boundaries | 06:00 / 10:00 / 16:00 / 19:30 | ±2 h each, in order | art bible §2 (proposal, tuned in play) | when each look starts |
 | `crossfade_min` | 15 | 5–60 | art bible §2; K-24 (starts at the boundary) | how long a look change takes |
 | `jump_fade_s` | 3 | 1–10 | K-24 | fade after a clock or zone jump |
+| `jump_threshold_min` | 1 min | 0.5–10 | TASK-101 (game-qc-android's proposal) | how far the wall clock must step beyond the elapsed time to count as a jump |
 | `weather_fade_s` | 2 | 1–5 | K-24 | fade of a panel weather pick |
 | `sky_mid_y` | 330 | 250–420 | one-shot (0.55 of 600) | where the mid band sits |
 | cloud count / speed | 2–4 / ≤ 8 u/s | art bible caps | art bible §2 | cloud cover |

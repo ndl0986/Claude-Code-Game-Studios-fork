@@ -152,6 +152,40 @@ set), so in practice it is never ducked at its start.
 batch holds fewer than `parade_count`, fills it with the first keys in canonical order (A, B, C…) not already in
 it. A manual start while Walking is ignored. A manual parade empties the batch like any other.
 
+### Precise rules for the contract (TASK-101; parade-v1)
+
+Normative. Times are the play clock (Reveal Stage R8: uptime minus frozen and background time); "a tick" is a frame
+of the Parade's update.
+- **Start (PA-Q1):** Armed → Waiting for art at the **first tick** with
+  `play ≥ restingSince + (revealLen − formedS) + parade_delay_s` (**inclusive**). `restingSince`, `formedS` and
+  `revealLen` are inputs from the Press Queue (its R6, R10) for the current reveal.
+- **The art wait (PA-Q2):** if every walker's parade art is resident at that tick, the parade is **Walking in the
+  same tick**. Otherwise it walks at the **first tick at which all are resident**, or at the first tick with
+  `play − waitStart ≥ art_wait_s` (**inclusive**), whichever comes first. At that timeout it walks if
+  `ready ≥ ceil(parade_count × skip_fraction)` (3 of 6: **2 → skip, 3 → walk**). A **skip** returns to Armed, and the
+  next try needs a **new rest**: a later `restingSince` than the one that started this try (one try per rest).
+- **Walking entry (PA-Q3),** in one step, in this order: request E12, set `paradeWalking` on, move the walkers out of
+  the batch, set `pt = 0`.
+- **Batches and held keys (PA-Q4):**
+  - while Armed or Waiting for art, a newly shown key that is **not already in the full batch and not already held**
+    is appended to the **held** list, in order (once);
+  - the walkers are the **first `parade_count`** keys of the batch, in order; at Walking entry the next batch
+    **starts as the held list** (plus any batch keys beyond `parade_count`, in order);
+  - keys shown while Walking are appended to that next batch, deduplicated;
+  - at Ended, if the next batch already holds `parade_count` keys, the Parade is **Armed at once**.
+- **Ended (PA-Q5):** at the **first tick with `pt ≥ parade_s`** (inclusive). On **panel open** while Walking the state
+  is **Ended at once** and `paradeWalking` turns **off at once** (the Scene's lift fades on its own λ); the 0.6 s
+  fade-out is drawn as a visual only. On **background**: Ended at once. The parade figures are **released** when
+  nothing of the parade is drawn any more (at Ended, or after the panel fade-out has finished).
+- **F3 (PA-Q6):** `x_i`, `alpha` and `speed` are pure functions; the draw test `−150 ≤ x − rect.minX ≤ W + 150` is
+  **inclusive**; `alpha = clamp(min(pt / fade_s, (parade_s − pt) / fade_s), 0, 1)`.
+- **Reduce Motion (PA-Q7):** the output is the bob amplitude passed to Cast Rendering, 5 → 2.5 units, from the
+  **next tick**.
+- **Per theme (PA-Q8):** each theme keeps its own batch, held list and Armed state; only the **current** theme's is
+  checked for a start.
+- **Freeze and interruptions while Waiting (PA-Q9):** the gate freeze holds the art wait (play clock). The panel or
+  the background while Waiting for art returns to **Armed**, with the batch and held list kept.
+
 ### States and Transitions
 
 | State | Entered when | Does | Left when |
