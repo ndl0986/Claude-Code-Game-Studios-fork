@@ -1,0 +1,6 @@
+# sources.lock for settings-record-v1 (cut 2026-11-18, TASK-068): the ## sections the cases cite.
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/settings-store.md#Detailed Design fe8ce3b62a75ca2864dcc2d857dd921cac8fb752
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/settings-store.md#Formulas 0a5df232c119ec41f496bd36015a5ecd980ea71d
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/settings-store.md#Edge Cases 99baa4aa3e1d331d450175ecaa2bf83d6d28f4b4
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/settings-store.md#Acceptance Criteria 1fd9ae30338a18bf81dea8621ffe095de49c064d
+Reviewed-Section-Hash: games/kid-learn-character/docs/architecture/adr-0002-modules-seams-types.md#Decision 7a622020948197194ccd9e003ecdfe8e243fb356

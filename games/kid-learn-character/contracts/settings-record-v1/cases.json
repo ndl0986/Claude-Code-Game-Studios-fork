@@ -1,0 +1,3565 @@
+{
+  "contract": "settings-record-v1",
+  "schema": 1,
+  "uint64AsString": true,
+  "units": {
+    "time": "s"
+  },
+  "tolerance": {
+    "time": 1e-09,
+    "gain": 1e-12,
+    "value": 0
+  },
+  "streams": [],
+  "cases": [
+    {
+      "id": "AC1-defaults-mac-no-record",
+      "source": "gdd: settings-store.md AC-1; R5 (first launch)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": null
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC1-defaults-ipad-no-childLock",
+      "source": "gdd: settings-store.md AC-1; R1 (childLock macOS only)",
+      "given": {
+        "platform": "iPadOS",
+        "settingsBytes": null
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "first-change-writes-full-record-mac",
+      "source": "gdd: settings-store.md R4 (full record written); AC-3; adr: adr-0002-modules-seams-types.md D8",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": null
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "volume",
+            "value": 3
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":3,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 3,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "Canonical bytes: UTF-8, keys sorted, no whitespace, integers as numbers."
+    },
+    {
+      "id": "first-change-writes-full-record-ipad",
+      "source": "gdd: settings-store.md R4; AC-3 (no childLock off macOS); adr: adr-0002-modules-seams-types.md D8",
+      "given": {
+        "platform": "iPadOS",
+        "settingsBytes": null
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "muted",
+            "value": true
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"keyboardRow\":false,\"muted\":true,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "keyboardRow": false,
+                "muted": true,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC2-round-trip-volume-0",
+      "source": "gdd: settings-store.md AC-2",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":0,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 0,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC2-round-trip-volume-10",
+      "source": "gdd: settings-store.md AC-2",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":10,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 10,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC2-round-trip-weather-cloudy",
+      "source": "gdd: settings-store.md AC-2",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"cloudy\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "cloudy",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC2-round-trip-weather-lightRain-windy",
+      "source": "gdd: settings-store.md AC-2",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"lightRain\",\"windy\":true}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "lightRain",
+                "windy": true
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC2-round-trip-weather-snow",
+      "source": "gdd: settings-store.md AC-2",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"snow\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "snow",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC2-round-trip-booleans-true",
+      "source": "gdd: settings-store.md AC-2",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":true,\"keyboardRow\":true,\"muted\":true,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": true,
+                "keyboardRow": true,
+                "muted": true,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC4-one-bad-field-volume-loud",
+      "source": "gdd: settings-store.md AC-4; R6",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":true,\"muted\":true,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":\"loud\",\"weather\":\"snow\",\"windy\":true}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "volume"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": true,
+                "muted": true,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "snow",
+                "windy": true
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC4-one-bad-field-volume-12",
+      "source": "gdd: settings-store.md AC-4; R6",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":true,\"muted\":true,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":12,\"weather\":\"snow\",\"windy\":true}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "volume"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": true,
+                "muted": true,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "snow",
+                "windy": true
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC4-one-bad-field-volume-minus-1",
+      "source": "gdd: settings-store.md AC-4; R6",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":true,\"muted\":true,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":-1,\"weather\":\"snow\",\"windy\":true}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "volume"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": true,
+                "muted": true,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "snow",
+                "windy": true
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC4-one-bad-field-volume-10.4",
+      "source": "gdd: settings-store.md R6; F1 (read 10.4 -> 8)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":true,\"muted\":true,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":10.4,\"weather\":\"snow\",\"windy\":true}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "volume"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": true,
+                "muted": true,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "snow",
+                "windy": true
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC4-one-bad-field-weather-storm",
+      "source": "gdd: settings-store.md AC-4; R6",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":true,\"muted\":true,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":5,\"weather\":\"storm\",\"windy\":true}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "weather"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": true,
+                "muted": true,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 5,
+                "weather": "clear",
+                "windy": true
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC4-one-bad-field-themeId-5",
+      "source": "gdd: settings-store.md AC-4; R6",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":true,\"muted\":true,\"schemaVersion\":1,\"themeId\":5,\"volume\":5,\"weather\":\"snow\",\"windy\":true}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "themeId"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": true,
+                "muted": true,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 5,
+                "weather": "snow",
+                "windy": true
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC4-one-bad-field-themeId-empty",
+      "source": "gdd: settings-store.md AC-4; R6",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":true,\"muted\":true,\"schemaVersion\":1,\"themeId\":\"\",\"volume\":5,\"weather\":\"snow\",\"windy\":true}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "themeId"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": true,
+                "muted": true,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 5,
+                "weather": "snow",
+                "windy": true
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC4-one-bad-field-keyboardRow-yes",
+      "source": "gdd: settings-store.md AC-4; R6",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":\"yes\",\"muted\":true,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":5,\"weather\":\"snow\",\"windy\":true}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "keyboardRow"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": true,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 5,
+                "weather": "snow",
+                "windy": true
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC4-one-bad-field-muted-string",
+      "source": "gdd: settings-store.md R6 (wrong type)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":true,\"muted\":\"true\",\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":5,\"weather\":\"snow\",\"windy\":true}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "muted"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": true,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 5,
+                "weather": "snow",
+                "windy": true
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1-read-6.6-rounds-to-7",
+      "source": "gdd: settings-store.md F1 example; AC-5",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":6.6,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 7,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "No log line: a non-integer inside 0-10 is rounded, not a fallback (R6). See question SS-Q4."
+    },
+    {
+      "id": "F1-read-10-is-10",
+      "source": "gdd: settings-store.md F1 example",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":10,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 10,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC7-garbage-text",
+      "source": "gdd: settings-store.md AC-7; R6 (record unreadable)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "not json"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "record"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC7-empty-bytes",
+      "source": "gdd: settings-store.md AC-7",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": ""
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "record"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC7-wrong-top-level-type",
+      "source": "gdd: settings-store.md AC-7 (wrong type)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "[1,2,3]"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "record"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC9-reads-never-write",
+      "source": "gdd: settings-store.md AC-9; R4",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"storm\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "weather"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "The step's expect list has no write output."
+    },
+    {
+      "id": "AC10-themeId-kept-on-write",
+      "source": "gdd: settings-store.md AC-10; R6 (stored themeId kept)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"vehicles\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "vehicles",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "volume",
+            "value": 4
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"vehicles\",\"volume\":4,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "vehicles",
+                "volume": 4,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "The store keeps 'vehicles'; Key Table's in-memory Dinosaurs fallback is not this contract's (key-table owns the load)."
+    },
+    {
+      "id": "AC11-windy-kept-with-clear",
+      "source": "gdd: settings-store.md AC-11; R1",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"snow\",\"windy\":true}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "snow",
+                "windy": true
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "weather",
+            "value": "clear"
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":true}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": true
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC12-newer-record-known-fields-then-own-version",
+      "source": "gdd: settings-store.md AC-12; R7 (newer record)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"futureField\":7,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":99,\"themeId\":\"dinosaurs\",\"volume\":5,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 5,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "volume",
+            "value": 6
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":6,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 6,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "The record is read at its known fields; the next write is at version 1 without futureField."
+    },
+    {
+      "id": "R7-missing-schemaVersion-is-v1",
+      "source": "gdd: settings-store.md R7 (missing schemaVersion -> v1)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"themeId\":\"dinosaurs\",\"volume\":5,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "schemaVersion"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 5,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "A missing field takes its default and every fallback logs one line (R6)."
+    },
+    {
+      "id": "R6-childLock-on-ipad-ignored-and-dropped",
+      "source": "gdd: settings-store.md R6 (childLock off macOS); Edge Cases",
+      "given": {
+        "platform": "iPadOS",
+        "settingsBytes": "{\"childLock\":true,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":5,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 5,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "volume",
+            "value": 6
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":6,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 6,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R6-unknown-key-ignored-and-dropped",
+      "source": "gdd: settings-store.md R6 (unknown keys ignored); R7",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"extra\":true,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "muted",
+            "value": true
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":true,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": true,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC13-reset-one-notification",
+      "source": "gdd: settings-store.md AC-13; R9",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":true,\"keyboardRow\":true,\"muted\":true,\"schemaVersion\":1,\"themeId\":\"vehicles\",\"volume\":2,\"weather\":\"snow\",\"windy\":true}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": true,
+                "keyboardRow": true,
+                "muted": true,
+                "schemaVersion": 1,
+                "themeId": "vehicles",
+                "volume": 2,
+                "weather": "snow",
+                "windy": true
+              },
+              "childLockActive": true
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "reset"
+          },
+          "expect": [
+            {
+              "out": "remove"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "relaunch"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "Reset removes the record and sends one notification; the relaunch reads the first-launch state."
+    },
+    {
+      "id": "AC14-one-change-one-notification",
+      "source": "gdd: settings-store.md AC-14; R10",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "keyboardRow",
+            "value": true
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":true,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": true,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "The read emits no notification; the change emits exactly one write then one notification."
+    },
+    {
+      "id": "two-quick-changes-in-order",
+      "source": "gdd: settings-store.md Edge Cases (two quick changes)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "muted",
+            "value": true
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":true,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": true,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.1
+          },
+          "event": {
+            "type": "change",
+            "field": "muted",
+            "value": false
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1-slider-release-7.4",
+      "source": "gdd: settings-store.md AC-5; F1",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "sliderRelease",
+            "x": 7.4
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":7,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 7,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1-slider-release-7.5",
+      "source": "gdd: settings-store.md AC-5; F1",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "sliderRelease",
+            "x": 7.5
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1-slider-release-0.4",
+      "source": "gdd: settings-store.md AC-5; F1",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "sliderRelease",
+            "x": 0.4
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":0,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 0,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1-slider-release-10.4",
+      "source": "gdd: settings-store.md F1 (slider clamped)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "sliderRelease",
+            "x": 10.4
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":10,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 10,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1-slider-release-10.6",
+      "source": "gdd: settings-store.md F1 (slider clamped)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "sliderRelease",
+            "x": 10.6
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":10,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 10,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F1-slider-release--0.6",
+      "source": "gdd: settings-store.md F1 (slider clamped)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "sliderRelease",
+            "x": -0.6
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":0,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 0,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "round-half-away-2.5",
+      "source": "gdd: settings-store.md F1 (round is half away from zero); adr: adr-0002-modules-seams-types.md D2",
+      "given": {},
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "roundHalfAwayFromZero",
+            "x": 2.5
+          },
+          "expect": [
+            {
+              "out": "value",
+              "value": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "round-half-away--2.5",
+      "source": "gdd: settings-store.md F1 (round is half away from zero); adr: adr-0002-modules-seams-types.md D2",
+      "given": {},
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "roundHalfAwayFromZero",
+            "x": -2.5
+          },
+          "expect": [
+            {
+              "out": "value",
+              "value": -3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "round-half-away-7.5",
+      "source": "gdd: settings-store.md F1 (round is half away from zero); adr: adr-0002-modules-seams-types.md D2",
+      "given": {},
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "roundHalfAwayFromZero",
+            "x": 7.5
+          },
+          "expect": [
+            {
+              "out": "value",
+              "value": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "round-half-away-0.5",
+      "source": "gdd: settings-store.md F1 (round is half away from zero); adr: adr-0002-modules-seams-types.md D2",
+      "given": {},
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "roundHalfAwayFromZero",
+            "x": 0.5
+          },
+          "expect": [
+            {
+              "out": "value",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "round-half-away-0.4",
+      "source": "gdd: settings-store.md F1 (round is half away from zero); adr: adr-0002-modules-seams-types.md D2",
+      "given": {},
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "roundHalfAwayFromZero",
+            "x": 0.4
+          },
+          "expect": [
+            {
+              "out": "value",
+              "value": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "round-half-away--0.4",
+      "source": "gdd: settings-store.md F1 (round is half away from zero); adr: adr-0002-modules-seams-types.md D2",
+      "given": {},
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "roundHalfAwayFromZero",
+            "x": -0.4
+          },
+          "expect": [
+            {
+              "out": "value",
+              "value": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "round-half-away-6.6",
+      "source": "gdd: settings-store.md F1 (round is half away from zero); adr: adr-0002-modules-seams-types.md D2",
+      "given": {},
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "roundHalfAwayFromZero",
+            "x": 6.6
+          },
+          "expect": [
+            {
+              "out": "value",
+              "value": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "round-half-away--7.5",
+      "source": "gdd: settings-store.md F1 (round is half away from zero); adr: adr-0002-modules-seams-types.md D2",
+      "given": {},
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "roundHalfAwayFromZero",
+            "x": -7.5
+          },
+          "expect": [
+            {
+              "out": "value",
+              "value": -8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F2-gain-level8-unmuted",
+      "source": "gdd: settings-store.md AC-6; F2",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "gain"
+          },
+          "expect": [
+            {
+              "out": "gain",
+              "value": 0.8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F2-gain-level8-muted",
+      "source": "gdd: settings-store.md AC-6; F2",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":true,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": true,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "gain"
+          },
+          "expect": [
+            {
+              "out": "gain",
+              "value": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F2-gain-level0-unmuted",
+      "source": "gdd: settings-store.md AC-6; F2",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":0,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 0,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "gain"
+          },
+          "expect": [
+            {
+              "out": "gain",
+              "value": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F2-gain-level10-unmuted",
+      "source": "gdd: settings-store.md F2",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":10,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 10,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "gain"
+          },
+          "expect": [
+            {
+              "out": "gain",
+              "value": 1.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F2-gain-level3-unmuted",
+      "source": "gdd: settings-store.md F2",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":3,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 3,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "gain"
+          },
+          "expect": [
+            {
+              "out": "gain",
+              "value": 0.3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R8-launch-childLockActive-equals-stored",
+      "source": "gdd: settings-store.md R8; AC-15b",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":true,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": true,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R8-turn-on-writes-and-notifies",
+      "source": "gdd: settings-store.md R8 (ON writes childLock true)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "setChildLock",
+            "on": true
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":true,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": true,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC15b-off-is-run-only-no-write",
+      "source": "gdd: settings-store.md AC-15b; R8; R10",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":true,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": true,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": true
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "setChildLock",
+            "on": false
+          },
+          "expect": [
+            {
+              "out": "notify",
+              "record": {
+                "childLock": true,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "change",
+            "field": "volume",
+            "value": 5
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":true,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":5,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": true,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 5,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 3.0
+          },
+          "event": {
+            "type": "relaunch"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": true,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 5,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": true
+            }
+          ]
+        }
+      ],
+      "note": "OFF: one notification, no write; a later write keeps childLock true; the relaunch has the lock active again."
+    },
+    {
+      "id": "AC15b-reset-clears-stored-on",
+      "source": "gdd: settings-store.md AC-15b; R9",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":true,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": true,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": true
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "reset"
+          },
+          "expect": [
+            {
+              "out": "remove"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "relaunch"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R6a-escape-quote",
+      "source": "gdd: settings-store.md R6a (strings escape only quote, backslash, U+0000-U+001F; SS-Q1)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"a\\\"b\",\"volume\":5,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "a\"b",
+                "volume": 5,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "volume",
+            "value": 6
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"a\\\"b\",\"volume\":6,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "a\"b",
+                "volume": 6,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "The reader accepts every JSON escape; the writer escapes only quote, backslash and control characters (as lowercase \\u00xx) and writes everything else raw."
+    },
+    {
+      "id": "R6a-escape-backslash",
+      "source": "gdd: settings-store.md R6a (strings escape only quote, backslash, U+0000-U+001F; SS-Q1)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"a\\\\b\",\"volume\":5,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "a\\b",
+                "volume": 5,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "volume",
+            "value": 6
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"a\\\\b\",\"volume\":6,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "a\\b",
+                "volume": 6,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "The reader accepts every JSON escape; the writer escapes only quote, backslash and control characters (as lowercase \\u00xx) and writes everything else raw."
+    },
+    {
+      "id": "R6a-escape-tab-escape-t",
+      "source": "gdd: settings-store.md R6a (strings escape only quote, backslash, U+0000-U+001F; SS-Q1)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"a\\tb\",\"volume\":5,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "a\tb",
+                "volume": 5,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "volume",
+            "value": 6
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"a\\u0009b\",\"volume\":6,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "a\tb",
+                "volume": 6,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "The reader accepts every JSON escape; the writer escapes only quote, backslash and control characters (as lowercase \\u00xx) and writes everything else raw."
+    },
+    {
+      "id": "R6a-escape-e-acute-raw",
+      "source": "gdd: settings-store.md R6a (strings escape only quote, backslash, U+0000-U+001F; SS-Q1)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"café\",\"volume\":5,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "café",
+                "volume": 5,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "volume",
+            "value": 6
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"café\",\"volume\":6,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "café",
+                "volume": 6,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "The reader accepts every JSON escape; the writer escapes only quote, backslash and control characters (as lowercase \\u00xx) and writes everything else raw."
+    },
+    {
+      "id": "R6a-escape-e-acute-u-escape",
+      "source": "gdd: settings-store.md R6a (strings escape only quote, backslash, U+0000-U+001F; SS-Q1)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"caf\\u00e9\",\"volume\":5,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "café",
+                "volume": 5,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "volume",
+            "value": 6
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"café\",\"volume\":6,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "café",
+                "volume": 6,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "The reader accepts every JSON escape; the writer escapes only quote, backslash and control characters (as lowercase \\u00xx) and writes everything else raw."
+    },
+    {
+      "id": "R6a-number-token-8.0",
+      "source": "gdd: settings-store.md R6a (any JSON number token is a number; SS-Q2)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8.0,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "Rounded by F1; rounding writes no log (SS-Q4)."
+    },
+    {
+      "id": "R6a-number-token-1e1",
+      "source": "gdd: settings-store.md R6a (any JSON number token is a number; SS-Q2)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":1e1,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 10,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "Rounded by F1; rounding writes no log (SS-Q4)."
+    },
+    {
+      "id": "R6a-number-token--0",
+      "source": "gdd: settings-store.md R6a (any JSON number token is a number; SS-Q2)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":-0,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 0,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "Rounded by F1; rounding writes no log (SS-Q4)."
+    },
+    {
+      "id": "R6a-bare-NaN-unreadable",
+      "source": "gdd: settings-store.md R6a (a bare NaN or Infinity is not JSON; SS-Q3); AC-7",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":NaN,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "record"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R6a-bare-Infinity-unreadable",
+      "source": "gdd: settings-store.md R6a (a bare NaN or Infinity is not JSON; SS-Q3); AC-7",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":Infinity,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "record"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R6a-duplicate-key-unreadable",
+      "source": "gdd: settings-store.md R6a (a duplicate key makes the record unreadable; SS-Q6)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":3,\"volume\":4,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "record"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R6a-log-order-R1",
+      "source": "gdd: settings-store.md R6a (several bad fields log in R1 order; SS-Q5)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":\"yes\",\"muted\":false,\"schemaVersion\":\"x\",\"themeId\":5,\"volume\":\"loud\",\"weather\":\"storm\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "schemaVersion"
+            },
+            {
+              "out": "log",
+              "field": "volume"
+            },
+            {
+              "out": "log",
+              "field": "themeId"
+            },
+            {
+              "out": "log",
+              "field": "weather"
+            },
+            {
+              "out": "log",
+              "field": "keyboardRow"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "Members appear in byte order in the bytes; the logs follow R1's table order."
+    },
+    {
+      "id": "R6a-no-op-change",
+      "source": "gdd: settings-store.md R6a (a no-op change does nothing; SS-Q7)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "muted",
+            "value": false
+          },
+          "expect": []
+        }
+      ]
+    },
+    {
+      "id": "R6a-no-op-slider-same-level",
+      "source": "gdd: settings-store.md R6a (no-op); F1",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":7,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 7,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "sliderRelease",
+            "x": 7.2
+          },
+          "expect": []
+        }
+      ]
+    },
+    {
+      "id": "R6a-lock-on-when-active-is-no-op",
+      "source": "gdd: settings-store.md R6a (no-op)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":true,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": true,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": true
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "setChildLock",
+            "on": true
+          },
+          "expect": []
+        }
+      ]
+    },
+    {
+      "id": "R6a-lock-on-after-run-only-off-is-a-change",
+      "source": "gdd: settings-store.md R6a (ON while stored true but childLockActive false is a real change; SS-Q7)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":true,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": true,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": true
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "setChildLock",
+            "on": false
+          },
+          "expect": [
+            {
+              "out": "notify",
+              "record": {
+                "childLock": true,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "setChildLock",
+            "on": true
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":true,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": true,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
