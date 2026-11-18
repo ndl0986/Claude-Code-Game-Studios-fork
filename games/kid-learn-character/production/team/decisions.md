@@ -105,6 +105,20 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-44 Parade meter: an energy bar in the top-right corner (Luan, 2026-11-18)
+
+- Luan wants the child to see progress toward the next parade: **a small energy bar in the top-right corner of the
+  stage that fills in 6 steps** (one per new creature met in the batch, K-17 counting) and, when full, the parade starts.
+  Chosen over a diegetic star row or hill silhouettes, knowing it is a real HUD element.
+- **Amends:** art bible §7 "No HUD for the child" gains this one exception; the concept's anti-pillar and Long-Term
+  Progression gain "a parade meter, not a score". Unchanged: no scores, levels, unlocks, timers or per-letter "seen"
+  marks; nothing is saved.
+- **Leader default, Luan may override:** no number or text on the bar (the "3/6" in the sketch was only a label), so
+  "no text the child must read" still holds.
+- Details (colour that keeps gold for letters, empty/fill/full animation, reset after the parade, per theme, mid-parade,
+  panel/background, Reduce Motion, ADR-0013 flash bounds, portrait K-39, clearance with hint letters and the moon) are
+  designed in TASK-120 and come back to Luan only if a choice changes the feel.
+
 ### K-43 ADR-0013 flash safety accepted (Luan, 2026-11-18)
 
 - Luan accepted ADR-0013 (five gates G1–G5; NOT ASSESSED fails a release candidate; red backstop; per-class ppi floors;
