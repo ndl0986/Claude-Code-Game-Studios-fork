@@ -77,7 +77,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-089b | Hint Letters R13 draw and tick order (HL-Q answers) + rounded 148/138 marked | design | game-dev-android (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 0dd33c3a) | `design/TASK-089b-hint-r13` | 2026-11-18 |
 | TASK-090 | App Shell R7: portrait allowed (contain + extend), hidden status bar + deferred edge gestures (K-39) | design | game-dev-ios (review: game-qc-ios) | DONE: MERGED (game-qc-ios APPROVE @ 78e98d5a) | `design/TASK-090-appshell-k39` | 2026-11-18 |
 | TASK-090b | Audio knob cut_settle_s 0.04 (≥ max(cut_fade_s, 0.03) + 0.01) for ADR-0010 R2 | design | game-art-content (review: game-dev-ios) | DONE: MERGED (game-dev-ios APPROVE @ 85770ed7) | `design/TASK-090b-audio-cut-settle` | 2026-11-18 |
-| TASK-091 | settings-record-v2: fix F1-slider-release-7.5 (5 → 8) + non-finite slider case; v1 superseded | qa | game-qc-android (review: game-dev-android) | IN PROGRESS | `design/TASK-091-settings-record-v2` | 2026-11-18 |
+| TASK-091 | settings-record-v2: fix F1-slider-release-7.5 (5 → 8) + non-finite slider case; v1 superseded | qa | game-qc-android (review: game-dev-android) | DONE: MERGED (game-dev-android APPROVE @ 38d40df0) | `design/TASK-091-settings-record-v2` | 2026-11-18 |
 | TASK-092 | Parent Gate Interactions: stop deferring edge gestures while challenge/panel shows (R7, K-39) + AC; device-checks plan P-16 iPad overlays | design/qa | game-qc-ios (review: game-dev-ios) | SENT 2026-11-18 | `design/TASK-092-gate-overlays-p16` | 2026-11-18 |
 
 ## Leader log
