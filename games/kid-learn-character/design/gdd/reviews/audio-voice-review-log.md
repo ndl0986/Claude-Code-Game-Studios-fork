@@ -108,3 +108,8 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md 6f34636324f22949650cd130ff17dcf
 Review mode: lean · Workflow: standard
 Change: the cut_settle_s knob row's Effect now says "the player is stopped" (was "stopped or paused"), matching R6's API-neutral wording.
 Reviewed-Content-Hash: design/gdd/audio-voice.md 67279ba7ce2335c2b2f9296904aea2a9648427f4
+
+## Update — 2026-11-18 — TASK-100 R6 resume figure (no re-review)
+Review mode: lean · Workflow: standard
+Change: R6's parenthetical now reads "(about 0–20 ms is heard again)", from ADR-0010 (merged Proposed, 3e39b8d8; the resume rewinds max(20 ms, IO period + 5 ms), capped at cut_settle_s), replacing the earlier 0–17 ms; a note adds that "nothing skipped" holds while the platform's capture uncertainty is at most cut_settle_s (ADR-0010 D7), measured by P-7. Rule and AC-21 unchanged.
+Reviewed-Content-Hash: design/gdd/audio-voice.md 69116ac3ad1a1e939c7adcba58f5eaebbeb916b9
