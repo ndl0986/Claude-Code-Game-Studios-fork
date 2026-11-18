@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent review by game-dev-ios, 2026-11-18)
 > **Author**: game-dev-android for Luan (TASK-039); plan reviewed by game-dev-ios
-> **Last Updated**: 2026-11-18 (TASK-056a cross-review fixes)
+> **Last Updated**: 2026-11-18 (TASK-072 canonical record, R6a)
 > **Last Verified**: 2026-11-18, against ADR-0001 (Accepted) Decisions 8 and 9, art bible §2, §4 and §7, TASK-034
 > **Implements Pillar**: Pillar 5 (Safe by Design)
 
@@ -154,6 +154,23 @@ only the record:
   the next write replaces it.
 - Every fallback writes **one debug log line** (`.debug` level, R2; field name and reason, never the value of a theme
   path or anything else). **Never a crash, never a dialog**; the child sees nothing.
+
+**R6a. The canonical record** *(TASK-072; the answers to settings-record-v1's SS-Q1–Q7, TASK-068)*. Both platforms
+read and write the record with the same hand-written code (ADR-0002 D8, ADR-0004 D3), so these details are fixed:
+- **Bytes written:** UTF-8 JSON, one object, members sorted by key (byte order), no whitespace, integers with no
+  fraction, `true` / `false`. Strings escape **only** `"` → `\"`, `\` → `\\`, and U+0000–U+001F as `\u00xx`
+  (lowercase hex); every other character, `/` and non-ASCII included, is written raw as UTF-8 (SS-Q1).
+- **Reading:** the reader accepts every JSON escape. Any JSON number token counts as a number: `8.0`, `1e1` and
+  `-0` are numbers inside 0–10 and are rounded by F1 (8, 10, 0) (SS-Q2).
+- **Not JSON means unreadable:** a bare `NaN` or `Infinity` is not JSON, so the whole record is unreadable (all
+  defaults, one `record` log line, AC-7); the NaN of AC-4 applies only to non-JSON inputs such as the slider (SS-Q3).
+  A **duplicate key** also makes the whole record unreadable, because parsers disagree on which one wins (SS-Q6).
+- **Logs:** rounding a number inside 0–10 is not a fallback and writes no log (SS-Q4). Several bad fields log in
+  R1's table order: `schemaVersion`, `volume`, `muted`, `themeId`, `weather`, `windy`, `keyboardRow`, `childLock`
+  (SS-Q5).
+- **No-op changes:** a change that leaves both the record and `childLockActive` unchanged does nothing: no write,
+  no notification. Turning the lock ON while the stored value is already `true` but `childLockActive` is false is a
+  real change: one write and one notification (SS-Q7).
 
 **R7. Schema version and migration.**
 
