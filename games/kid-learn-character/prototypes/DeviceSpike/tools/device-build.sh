@@ -39,4 +39,6 @@ SPIKE_BUILD_TESTS="$r xcodebuild $SCHEME $PLAT exit $b; $PKG swift test exit $t 
 codesign -dvv "$APP" 2>&1 | grep -E '^(Identifier|Authority|TeamIdentifier|Signature)' | sed "s/${TEAM:-NO_TEAM_SET}/<TEAM>/g" >> "$EV/spike-check-$PLAT.txt"
 # the team ID stays out of the check output too (a FAIL prints the entitlements XML, which holds it on iOS)
 [ -n "${TEAM:-}" ] && sed -i '' "s/$TEAM/<TEAM>/g" "$EV/spike-check-$PLAT.txt"
+# the local home path stays out of the committed evidence too (it carries the username)
+for f in "$EV/build-$PLAT.txt" "$EV/test.txt" "$EV/spike-check-$PLAT.txt"; do sed -i '' "s#$HOME#~#g" "$f"; done
 echo "$APP -> $EV (check exit $c)"; exit $c
