@@ -2,7 +2,7 @@
 
 > **Status**: Approved (all 9 sections approved one by one by Luan, 2026-11-17)
 > **Owned By**: art-director
-> **Last Updated**: 2026-11-17
+> **Last Updated**: 2026-11-18 (clarification only: §8 says where silhouette path data lives)
 > **Art Director Sign-Off (AD-ART-BIBLE)**: SKIPPED 2026-11-17 — lean mode
 
 `/art-bible` writes these nine sections in this order and replaces each
@@ -380,7 +380,9 @@ the glyph rises from where it was pressed with an ease-out.
   feet (320, 410), facing right. Layers: `body`, `outline`, `detail` (`detail` is hidden at parade
   size, Section 5). One **silhouette** path is exported per cast member (a single compound path, no
   strokes) for MorphCore: the TASK-033 contract (glyphs pre-baked to paths from the bundled OFL
-  font; silhouettes as SVG path data in the key table).
+  font; each silhouette baked to its own path file, `sil/sil_….json`, which the key table names in its
+  `silhouette` field: Key Table & Theme Data). *(Clarification 2026-11-18: the wording was "silhouettes as SVG
+  path data in the key table".)*
 - **Naming** (`[category]_[theme]_[key]_[name]_[variant].[ext]`):
   - `cast_dino_c_triceratops_01.svg`, `sil_dino_c_triceratops_01.svg`
   - `glyph_<font>_<char>.json`
