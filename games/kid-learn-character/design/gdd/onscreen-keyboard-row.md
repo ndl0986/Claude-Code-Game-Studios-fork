@@ -63,11 +63,16 @@ who wants to pick their own letters, and nothing ever moves under the child's fi
   A–Z. Dinosaurs: REX, EGG, NEST, ROAR, DINO, BABY, MOM, DAD, SUN, MOON, STAR, CAT, DOG, BALL, HAT, BUS (Luan,
   K-29; no people's given names). **Fallback:** for a v1 theme without `rowWords`, or a pool that fails V17 at
   load, the row uses the first cast `name` of 2–8 letters in canonical order (Dinosaurs: FOSSIL), else "ABC"; one
-  debug log line (Key Table Edge Cases). With the fallback the word never changes (a pool of one).
+  debug log line (Key Table Edge Cases). *(KR-Q11)* "Canonical order" is the Key Table key order (A–Z, then 0–9),
+  each key's items in data order. A `name` is upper-cased and **skipped if it then holds anything but A–Z**
+  (a space, a hyphen, a digit: "T-Rex", "three baby dinosaurs"); the first one of 2–8 letters wins. With the fallback the word never changes (a pool of one).
 - **b. The pick** (TASK-059 rule): one injectable 64-bit **`rowSeed`** per launch, its own random stream (separate
   from the morph, hint and item streams), logged in debug builds. Each draw uses **the same uniform no-repeat function
   as Key Table F1** (every weight 1, `last` = the current word's index), driven by an injected `RandomSource`. Test
   fixtures feed draws, not seeds (F4).
+  - *(KR-Q1)* `last` is **the last word shown in this run**, kept across a Title entry and a turn-off; the very first
+    draw after launch has none. F1's draw rule applies as is: no draw for a pool of one, nor for a pool of two with
+    `last` set (Key Table F1, |C| ≥ 2).
 - **c. When it changes** (K-29):
   - **Trigger:** the word becomes **due** when **every distinct letter of it has been pressed at least once** since
     it appeared. "Pressed" means **any press event of that key, from any source** (row, hardware key or hint),
@@ -75,10 +80,20 @@ who wants to pick their own letters, and nothing ever moves under the child's fi
     press: E and G.
   - **Also on each entry to Play** (from the Title, including after a long background, K-22): a new word is drawn,
     and it fades in with the row.
-  - **Only at a quiet moment:** a due word changes only when (1) **no pointer is down** on any row key's hit rect,
+  - **The pressed set** *(KR-Q4)* starts empty **when a newly drawn word's keys start to fade in** (a change, a Play
+    entry or a turn-on), and only presses from then on count for it. A short-background return keeps the same word
+    **and its pressed set** (R7, AC-14). A press before that, including a tap on an old key during its fade-out, counts only for the
+    old word, which is already being replaced.
+  - **Only at a quiet moment** *(KR-Q5: checked every frame; the change starts on the first frame where the word
+    is Due and the moment is quiet; a word fading in is not yet Due-checkable, see KR-Q9)*: a due word changes only
+    when (1) **no pointer is down whose current position is** on any row key's hit rect (a pointer that started on
+    a key and moved off no longer blocks; one that started elsewhere and moved onto a key does),
     and (2) **the stage is quiet**: the Press Queue has no current reveal (Empty), or `restingSince ≠ none`
     (current formed, queue empty, its R10). Not under the gate freeze, the panel or the background.
-  - **The change:** the old keys fade out over `word_fade_s` (0.3 s), then the new ones fade in over 0.3 s. The old
+  - **The change:** the **new word is drawn at the start of the change** (the quiet moment; KR-Q3), the old keys fade
+    out over `word_fade_s` (0.3 s), then the new ones fade in over 0.3 s. Every row and word fade is **linear in
+    alpha** (KR-Q8). A word **fading in cannot start a change**: a word that is already Due (for example after a
+    background return, KR-Q9) waits until its fade-in has finished (Showing), then for the next quiet moment. The old
     keys stay touchable until their fade-out ends; the new ones are touchable from the start of their fade-in. A
     key never changes letter under a finger.
   - **Clock:** the due state, the quiet-moment check and both fades run on the **play clock** (Reveal Stage R8), so
@@ -93,7 +108,9 @@ who wants to pick their own letters, and nothing ever moves under the child's fi
 - **Hit rect:** the drawn key plus **8** units on every side, so 144 × 134 units (art bible §7 conflict 1: a little
   larger than drawn). Keys are 16 apart, so neighbouring hit rects share an edge at the gap's centre and never
   overlap. **A touch on a shared edge goes to the key whose centre is nearest**; at an exact tie (the edge itself),
-  the left key wins. This is the same nearest-centre rule Input R7 uses for overlapping hints.
+  the left key wins. This is the same nearest-centre rule Input R7 uses for overlapping hints. *(KR-Q7)* The hit
+  rects are **closed**, `[cx − 72, cx + 72] × [582, 716]`, so a touch at exactly y 582.0 is on the key. A touch in
+  no hit rect is not a row press; it falls through to Input R7's lower layers (the moon, the creature, a sparkle).
 - **Width:** n keys take `144·n − 16` units. The word is capped at **8 letters** (V17), so the row is at most 1136
   units wide, which leaves 72 units on each side of the safe stage. At 9 letters the hit rects would reach −8 and
   1288, outside the safe stage and into Android's back-gesture insets.
@@ -112,7 +129,8 @@ who wants to pick their own letters, and nothing ever moves under the child's fi
 - No outline (art bible §5: UI glows, the cast has ink outlines).
 
 **R5. Press feedback** (Pillar 1; art bible §7 UX: every press is answered).
-- **Any press of a row key**, with any outcome, **lights that key at once**: a warm glow around it
+- **Any press of a row key**, with any outcome, **lights that key at once**, and only that key (with EGG, a tap on
+  the second G lights that G alone; KR-Q6): a warm glow around it
   (`rgba(255, 214, 110, 0.5)`, the halo's colour family) and a scale to `press_scale` (1.08), both fading back over
   `key_flash_s` (0.35 s, as played; F3). The outcome adds its usual answer: a starlight, a token, or the sparkle
   burst plus ping for an ignored press (Reveal Stage R4; Audio & Voice E1/E2).
@@ -147,10 +165,12 @@ who wants to pick their own letters, and nothing ever moves under the child's fi
 
 **R8. Turning it on and off** (Settings Store `keyboardRow`, default off; Parent Gate panel row).
 - **On:** the row fades in over `row_fade_s` once the panel closes (it is set under the dim). Its hit rects are live
-  from the start of the fade-in, and a word is drawn at that moment. The ground lift applies from the next reveal
+  from the start of the fade-in, and a word is drawn **at that moment, the panel's close** (not when the switch
+  flips; KR-Q2), with `last` = the last word shown this run. The play clock runs under the panel (only the gate
+  challenge stops it, Reveal Stage R8), but nothing about the row happens there while it is untouchable. The ground lift applies from the next reveal
   (Reveal Stage R10), so nothing on stage jumps mid-reveal.
 - **Off:** the hit rects go at once, and the row fades out over `row_fade_s`; the lift is removed from the next
-  reveal.
+  reveal. The pressed set is dropped, and the word is kept only as `last` for the next draw (KR-Q10).
 - The current word and its pressed letters are **in memory only** (Settings Store R2: nothing else is stored).
 
 **R9. Mac and hardware keyboards** (K-29). The row shows **whenever the grown-up turned it on**, even with a hardware
