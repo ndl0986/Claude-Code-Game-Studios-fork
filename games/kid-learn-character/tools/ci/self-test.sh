@@ -33,8 +33,12 @@ else echo "SKIP api-surface (run verify.sh first)"; fi
 
 # simulator guards: run a copy of sim-guard against planted env files
 mkdir -p "$T/g/tools/ci" "$T/g/tools/dev/apple" "$T/g/tools/qa/apple"; cp "$ROOT/tools/ci/sim-guard.sh" "$T/g/tools/ci/"
-echo "DEV_SIM_UDID=E9F515E9-0000-0000-0000-000000000000" > "$T/g/tools/dev/apple/sim.env"
-expect_fail "sim-guard --dev refuses QC's simulator" "$T/g/tools/ci/sim-guard.sh" --dev
+echo "DEV_SIM_UDID=475D45B4-557A-4594-B121-60D7F402D033" > "$T/g/tools/dev/apple/sim.env"
+expect_fail "sim-guard --dev refuses QC's iPad simulator" "$T/g/tools/ci/sim-guard.sh" --dev
+echo "DEV_SIM_UDID=e9f515e9-0000-0000-0000-000000000000" > "$T/g/tools/dev/apple/sim.env"
+expect_fail "sim-guard --dev refuses QC's iPhone simulator (any case)" "$T/g/tools/ci/sim-guard.sh" --dev
+echo "DEV_SIM_UDID=4B088DA4-B145-4226-9ED5-23B12DCEA676" > "$T/g/tools/dev/apple/sim.env"
+expect_pass "sim-guard --dev accepts a developer simulator" "$T/g/tools/ci/sim-guard.sh" --dev
 echo "DEV_SIM_UDID=" > "$T/g/tools/dev/apple/sim.env"
 expect_fail "sim-guard --dev refuses empty" "$T/g/tools/ci/sim-guard.sh" --dev
 echo "QC_SIM_UDID=4B088DA4-0000-0000-0000-000000000000" > "$T/g/tools/qa/apple/sim.env"
@@ -42,7 +46,9 @@ expect_fail "sim-guard --qc refuses another simulator" "$T/g/tools/ci/sim-guard.
 echo "QC_SIM_UDID=" > "$T/g/tools/qa/apple/sim.env"
 expect_fail "sim-guard --qc refuses empty" "$T/g/tools/ci/sim-guard.sh" --qc
 echo "QC_SIM_UDID=E9F515E9-0000-0000-0000-000000000000" > "$T/g/tools/qa/apple/sim.env"
-expect_pass "sim-guard --qc accepts QC's simulator" "$T/g/tools/ci/sim-guard.sh" --qc
+expect_fail "sim-guard --qc refuses QC's iPhone simulator (this game is iPad-only)" "$T/g/tools/ci/sim-guard.sh" --qc
+echo "QC_SIM_UDID=475D45B4-557A-4594-B121-60D7F402D033" > "$T/g/tools/qa/apple/sim.env"
+expect_pass "sim-guard --qc accepts QC's iPad simulator" "$T/g/tools/ci/sim-guard.sh" --qc
 
 echo "self-test: $( [ "$bad" -eq 0 ] && echo PASS || echo "FAIL ($bad)")"
 [ "$bad" -eq 0 ]

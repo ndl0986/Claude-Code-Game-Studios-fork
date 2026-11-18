@@ -125,6 +125,10 @@ xcodebuild build -scheme <App> -configuration Release -destination "platform=mac
   - **QC:** `QC_SIM_UDID` from QC's own `tools/qa/apple/sim.env`; on this path the scripts **refuse any simulator other
     than `E9F515E9…`**;
   - both paths refuse an empty value. The scripts take `--dev` or `--qc` and read only that path's variable.
+  - *Note 2026-11-18 (TASK-097; status stays Accepted):* LetterMorph is iPad-only, and `E9F515E9…` is an iPhone, so
+    QC has a dedicated iPad simulator, **`475D45B4…`** ("iPad Pro 11-inch (M5) – qc-ios", iOS 27.0 runtime). For this
+    game the QC path accepts **only `475D45B4…`**; the developer path refuses **both** `475D45B4…` and `E9F515E9…`
+    (`E9F515E9…` stays QC's iPhone simulator for the old game). `tools/ci/sim-guard.sh` and its self-test carry this.
 - **Signed products for the scans:** the Release builds are **signed** (the free Personal Team, K-28, or ad-hoc
   `CODE_SIGN_IDENTITY=-` with `CODE_SIGN_ENTITLEMENTS` applied), never `CODE_SIGNING_ALLOWED=NO`, because an unsigned
   product shows no entitlements and PKC-01's allowlist comparison would pass falsely (D5).
