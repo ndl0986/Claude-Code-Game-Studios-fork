@@ -1,0 +1,6 @@
+# PROTOTYPE - NOT FOR PRODUCTION (TASK-078)
+build/
+SpikeKit/.build/
+*.xcuserstate
+xcuserdata/
+tools/team-id.local
