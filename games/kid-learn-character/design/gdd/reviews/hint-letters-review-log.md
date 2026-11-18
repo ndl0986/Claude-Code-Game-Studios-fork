@@ -41,5 +41,5 @@ Reviewed-Content-Hash: design/gdd/hint-letters.md 15d217671d25cf93d93b2145e8d681
 
 ## Update — 2026-11-18 — TASK-056a review fix 2 (no re-review)
 Review mode: lean · Workflow: standard
-Change: game-qc-android's review: the Frozen state now exits to Dimmed when the challenge fails or times out while the parade is still Walking (Parade R6a), and to Running when the panel closes (the parade has faded out); no replay.
-Reviewed-Content-Hash: design/gdd/hint-letters.md 037f138f95b20d96b97835fb35b03c0d8f4b44be
+Change: game-qc-android's review: the Frozen state now exits to Dimmed when the challenge fails or times out while the parade is still Walking (Parade R6a), and to Running when the panel closes (the parade has faded out); no replay; the 0.5 dim is kept while Frozen.
+Reviewed-Content-Hash: design/gdd/hint-letters.md 1b9e2c650de556f3da60f980276f17631a3e148a
