@@ -1,6 +1,6 @@
 # Parade
 
-> **Status**: In Review
+> **Status**: Approved (independent read by game-dev-ios, merged 2026-11-18)
 > **Author**: game-art-content for Luan (TASK-046); plan reviewed by game-dev-android
 > **Last Updated**: 2026-11-18
 > **Last Verified**: 2026-11-18
