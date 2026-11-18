@@ -171,8 +171,9 @@ never more brightness"; Pillar 3).
   **nothing new starts** while frozen: event times run on the same play clock as the reveal, which stands still.
   The pause itself settles like a cut, so it never clicks: the players fade out over `cut_fade_s` and stop playing
   once `cut_settle_s` has passed (how is the audio ADR's, ADR-0010 D7). **Nothing is skipped:** each sound resumes
-  from **the frame it had reached at the freeze moment, or up to `cut_settle_s` earlier** (a little is heard again;
-  the measured range is 0–17 ms), and fades back in over `cut_fade_s` (TASK-090b).
+  from **the frame it had reached at the freeze moment, or up to `cut_settle_s` earlier** (about 0–20 ms is heard
+  again), and fades back in over `cut_fade_s` (TASK-090b). "Nothing skipped" holds while the platform's capture
+  uncertainty is at most `cut_settle_s` (ADR-0010 D7); device check P-7 measures it (TASK-100).
   On `resume()` (a wrong answer or a timeout) each paused sound **continues** from where it stopped: its remaining
   length is carried over the frozen interval, and an event that falls due while frozen fires when the play clock
   reaches its time after `resume()` *(AU-Q8)*. A correct
