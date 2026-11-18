@@ -37,6 +37,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-055 | /review-all-gdds over the 15 approved GDDs (lean, standard): report only | review | game-qc-android | DONE: first run FAIL `d6ddc24`; re-run PASS `686cf94` (3 Info notes R-1…R-3), both merged | `design/TASK-055-review-all-gdds` | 2026-11-18 |
 | TASK-056 | Cross-review fixes (B-1, W-1…W-11 per the report's file table; K-26) in 4 owner parts | design | dev-android / qc-ios / dev-ios / art-content (review: game-qc-android diff re-run) | DONE: a `ddc0531`, b `86c31dd`, c `ca526ae`, d `e728b85` all merged (review: game-qc-android APPROVE) | `design/TASK-056{a,b,c,d}-*` | 2026-11-18 |
 | TASK-057 | Cross-review re-run Info notes R-1…R-3 (App Shell ready; Child Lock-in early ⌘ window + R3 split; Hint Letters cite) | design | game-dev-ios (b), game-dev-android (a) (review: game-qc-android) | DONE: b `f0b5235`, a `6d5b8fc` merged | `design/TASK-057{a,b}-info` | 2026-11-18 |
+| TASK-058 | Log the independent APPROVE reads (gate CONCERN): morphcore, hint-letters, child-lock-in review logs | design | game-dev-ios, game-qc-android, game-qc-ios | DONE: 47ee06a, e682469, 6d02513 merged | `design/TASK-058-review-logs-*` | 2026-11-18 |
 
 ## Leader log
 

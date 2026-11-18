@@ -81,3 +81,10 @@ softened from a FAIL: no MAJOR REVISION NEEDED exists, and every logged blocker 
   as log entries. Accepted by Luan, 2026-11-18, to be logged as the first Technical Setup task.
 
 Stage advanced to **Technical Setup** on Luan's explicit acceptance (2026-11-18).
+
+### Follow-up — 2026-11-18 (TASK-058): accepted risk closed
+The three review logs now end on a logged independent re-review, Verdict: APPROVED:
+- `morphcore-review-log.md`: game-dev-ios (47ee06a);
+- `hint-letters-review-log.md`: game-qc-android (e682469);
+- `child-lock-in-review-log.md`: game-qc-ios (6d02513).
+Every MVP GDD's review log now ends on an APPROVED verdict.
