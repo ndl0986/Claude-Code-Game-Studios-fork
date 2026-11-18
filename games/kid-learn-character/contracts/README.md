@@ -63,7 +63,7 @@ it is never Done.
 | parade-v1 | not-started: story:parade | 30 |
 | press-queue-v1 | not-started: story:press-queue | 46 |
 | reveal-timing-v1 | not-started: story:reveal-stage | 60 |
-| scene-look-v1 | not-started: story:scene | 39 |
+| scene-look-v1 | not-started: story:scene | 42 |
 | settings-record-v1 | superseded-by: settings-record-v2 | 73 |
 | settings-record-v2 | runner: SettingsRecordRunner | 76 |
 

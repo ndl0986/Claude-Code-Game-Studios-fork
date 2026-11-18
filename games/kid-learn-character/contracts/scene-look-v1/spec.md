@@ -15,12 +15,15 @@
   - each case's contrast (the better of the fill and the edge shown, the worse edge inside 0.303–0.313), its
     brightest sky value, and pass;
   - the anchors 2.68 (Night→Morning, w 0.5) and 4.36 (Day);
-  - two test palettes that must fail: a look below 3:1 at w 1, and a sky stop above L 0.69 (AC-5).
+  - the brightest sky value includes the sun `#ecd29a` (L 0.663) wherever Morning or Day has a share, and snow;
+  - three test cases that must fail: a look below 3:1 at w 1, a sky stop above L 0.69, and a sun above L 0.69
+    (which passes at Night, where no sun is drawn) (AC-5).
 - **F4 counts** on the four rects for rain, snow and cloudy, and the base stars by look (AC-4).
 - **F8 edge switch (TASK-104):**
   - the launch edge at exactly L_x;
   - hysteresis inclusive at 0.313 and 0.303, with nothing between;
-  - the dissolve at 1 per wall-clock second, and a reversal from the current mix.
+  - the dissolve at 1 per wall-clock second, and a reversal at a partial mix (0.4) coming back in 0.4 s;
+  - the state kept across a background (0.306, inside the band, stays amber).
 - **R2 clock jump:**
   - the wall-step threshold (SC-Q2) and the 3 s smoothstep fade of the drawn `skyMidL`, with the edge switching
     during it;

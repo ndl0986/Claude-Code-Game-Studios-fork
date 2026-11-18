@@ -31,6 +31,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -109,6 +110,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -187,6 +189,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -265,6 +268,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -343,6 +347,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -421,6 +426,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -499,6 +505,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -577,6 +584,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -655,6 +663,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -733,6 +742,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -811,6 +821,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -888,6 +899,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -965,6 +977,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -1042,6 +1055,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -1119,6 +1133,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -1196,6 +1211,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -1273,6 +1289,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -1500,7 +1517,7 @@
             {
               "out": "buildCase",
               "contrast": 4.069654890564028,
-              "maxSkyL": 0.2135340998332355,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -1521,7 +1538,7 @@
             {
               "out": "buildCase",
               "contrast": 4.069654890564028,
-              "maxSkyL": 0.3020920050049772,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -1542,7 +1559,7 @@
             {
               "out": "buildCase",
               "contrast": 4.069654890564028,
-              "maxSkyL": 0.2135340998332355,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -1563,7 +1580,7 @@
             {
               "out": "buildCase",
               "contrast": 4.069654890564028,
-              "maxSkyL": 0.3020920050049772,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -1584,7 +1601,7 @@
             {
               "out": "buildCase",
               "contrast": 4.069654890564028,
-              "maxSkyL": 0.2135340998332355,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -1605,7 +1622,7 @@
             {
               "out": "buildCase",
               "contrast": 4.069654890564028,
-              "maxSkyL": 0.3020920050049772,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -1668,7 +1685,7 @@
             {
               "out": "buildCase",
               "contrast": 2.681575413588801,
-              "maxSkyL": 0.35379987540523755,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -1689,7 +1706,7 @@
             {
               "out": "buildCase",
               "contrast": 2.681575413588801,
-              "maxSkyL": 0.41283847885306535,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -1710,7 +1727,7 @@
             {
               "out": "buildCase",
               "contrast": 2.681575413588801,
-              "maxSkyL": 0.35379987540523755,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -1731,7 +1748,7 @@
             {
               "out": "buildCase",
               "contrast": 2.681575413588801,
-              "maxSkyL": 0.41283847885306535,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -1752,7 +1769,7 @@
             {
               "out": "buildCase",
               "contrast": 2.681575413588801,
-              "maxSkyL": 0.35379987540523755,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -1773,7 +1790,7 @@
             {
               "out": "buildCase",
               "contrast": 2.681575413588801,
-              "maxSkyL": 0.41283847885306535,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -1836,7 +1853,7 @@
             {
               "out": "buildCase",
               "contrast": 3.7369791781345665,
-              "maxSkyL": 0.49406565097723965,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -1857,7 +1874,7 @@
             {
               "out": "buildCase",
               "contrast": 3.7369791781345665,
-              "maxSkyL": 0.5235849527011535,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -1878,7 +1895,7 @@
             {
               "out": "buildCase",
               "contrast": 3.7369791781345665,
-              "maxSkyL": 0.49406565097723965,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -1899,7 +1916,7 @@
             {
               "out": "buildCase",
               "contrast": 3.7369791781345665,
-              "maxSkyL": 0.5235849527011535,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -1920,7 +1937,7 @@
             {
               "out": "buildCase",
               "contrast": 3.7369791781345665,
-              "maxSkyL": 0.49406565097723965,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -1941,7 +1958,7 @@
             {
               "out": "buildCase",
               "contrast": 3.7369791781345665,
-              "maxSkyL": 0.5235849527011535,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2004,7 +2021,7 @@
             {
               "out": "buildCase",
               "contrast": 4.792382942680333,
-              "maxSkyL": 0.6343314265492417,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2025,7 +2042,7 @@
             {
               "out": "buildCase",
               "contrast": 4.792382942680333,
-              "maxSkyL": 0.6343314265492417,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2046,7 +2063,7 @@
             {
               "out": "buildCase",
               "contrast": 4.792382942680333,
-              "maxSkyL": 0.6343314265492417,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2067,7 +2084,7 @@
             {
               "out": "buildCase",
               "contrast": 4.792382942680333,
-              "maxSkyL": 0.6343314265492417,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2088,7 +2105,7 @@
             {
               "out": "buildCase",
               "contrast": 4.792382942680333,
-              "maxSkyL": 0.6343314265492417,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2109,7 +2126,7 @@
             {
               "out": "buildCase",
               "contrast": 4.792382942680333,
-              "maxSkyL": 0.6343314265492417,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2172,7 +2189,7 @@
             {
               "out": "buildCase",
               "contrast": 4.792382942680333,
-              "maxSkyL": 0.6343314265492417,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2193,7 +2210,7 @@
             {
               "out": "buildCase",
               "contrast": 4.792382942680333,
-              "maxSkyL": 0.6343314265492417,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2214,7 +2231,7 @@
             {
               "out": "buildCase",
               "contrast": 4.792382942680333,
-              "maxSkyL": 0.6343314265492417,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2235,7 +2252,7 @@
             {
               "out": "buildCase",
               "contrast": 4.792382942680333,
-              "maxSkyL": 0.6343314265492417,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2256,7 +2273,7 @@
             {
               "out": "buildCase",
               "contrast": 4.792382942680333,
-              "maxSkyL": 0.6343314265492417,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2277,7 +2294,7 @@
             {
               "out": "buildCase",
               "contrast": 4.792382942680333,
-              "maxSkyL": 0.6343314265492417,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2340,7 +2357,7 @@
             {
               "out": "buildCase",
               "contrast": 4.683262255420369,
-              "maxSkyL": 0.6390482796757176,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2361,7 +2378,7 @@
             {
               "out": "buildCase",
               "contrast": 4.683262255420369,
-              "maxSkyL": 0.637397381081451,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2382,7 +2399,7 @@
             {
               "out": "buildCase",
               "contrast": 4.683262255420369,
-              "maxSkyL": 0.6390482796757176,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2403,7 +2420,7 @@
             {
               "out": "buildCase",
               "contrast": 4.683262255420369,
-              "maxSkyL": 0.637397381081451,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2424,7 +2441,7 @@
             {
               "out": "buildCase",
               "contrast": 4.683262255420369,
-              "maxSkyL": 0.6390482796757176,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2445,7 +2462,7 @@
             {
               "out": "buildCase",
               "contrast": 4.683262255420369,
-              "maxSkyL": 0.637397381081451,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2508,7 +2525,7 @@
             {
               "out": "buildCase",
               "contrast": 4.574141568160407,
-              "maxSkyL": 0.6437651328021936,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2529,7 +2546,7 @@
             {
               "out": "buildCase",
               "contrast": 4.574141568160407,
-              "maxSkyL": 0.6404633356136604,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2550,7 +2567,7 @@
             {
               "out": "buildCase",
               "contrast": 4.574141568160407,
-              "maxSkyL": 0.6437651328021936,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2571,7 +2588,7 @@
             {
               "out": "buildCase",
               "contrast": 4.574141568160407,
-              "maxSkyL": 0.6404633356136604,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2592,7 +2609,7 @@
             {
               "out": "buildCase",
               "contrast": 4.574141568160407,
-              "maxSkyL": 0.6437651328021936,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2613,7 +2630,7 @@
             {
               "out": "buildCase",
               "contrast": 4.574141568160407,
-              "maxSkyL": 0.6404633356136604,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2676,7 +2693,7 @@
             {
               "out": "buildCase",
               "contrast": 4.465020880900443,
-              "maxSkyL": 0.6484819859286695,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2697,7 +2714,7 @@
             {
               "out": "buildCase",
               "contrast": 4.465020880900443,
-              "maxSkyL": 0.6435292901458698,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2718,7 +2735,7 @@
             {
               "out": "buildCase",
               "contrast": 4.465020880900443,
-              "maxSkyL": 0.6484819859286695,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2739,7 +2756,7 @@
             {
               "out": "buildCase",
               "contrast": 4.465020880900443,
-              "maxSkyL": 0.6435292901458698,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2760,7 +2777,7 @@
             {
               "out": "buildCase",
               "contrast": 4.465020880900443,
-              "maxSkyL": 0.6484819859286695,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2781,7 +2798,7 @@
             {
               "out": "buildCase",
               "contrast": 4.465020880900443,
-              "maxSkyL": 0.6435292901458698,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2844,7 +2861,7 @@
             {
               "out": "buildCase",
               "contrast": 4.355900193640481,
-              "maxSkyL": 0.6531988390551454,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2865,7 +2882,7 @@
             {
               "out": "buildCase",
               "contrast": 4.355900193640481,
-              "maxSkyL": 0.6465952446780792,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2886,7 +2903,7 @@
             {
               "out": "buildCase",
               "contrast": 4.355900193640481,
-              "maxSkyL": 0.6531988390551454,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2907,7 +2924,7 @@
             {
               "out": "buildCase",
               "contrast": 4.355900193640481,
-              "maxSkyL": 0.6465952446780792,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2928,7 +2945,7 @@
             {
               "out": "buildCase",
               "contrast": 4.355900193640481,
-              "maxSkyL": 0.6531988390551454,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -2949,7 +2966,7 @@
             {
               "out": "buildCase",
               "contrast": 4.355900193640481,
-              "maxSkyL": 0.6465952446780792,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3012,7 +3029,7 @@
             {
               "out": "buildCase",
               "contrast": 4.355900193640481,
-              "maxSkyL": 0.6531988390551454,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3033,7 +3050,7 @@
             {
               "out": "buildCase",
               "contrast": 4.355900193640481,
-              "maxSkyL": 0.6465952446780792,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3054,7 +3071,7 @@
             {
               "out": "buildCase",
               "contrast": 4.355900193640481,
-              "maxSkyL": 0.6531988390551454,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3075,7 +3092,7 @@
             {
               "out": "buildCase",
               "contrast": 4.355900193640481,
-              "maxSkyL": 0.6465952446780792,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3096,7 +3113,7 @@
             {
               "out": "buildCase",
               "contrast": 4.355900193640481,
-              "maxSkyL": 0.6531988390551454,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3117,7 +3134,7 @@
             {
               "out": "buildCase",
               "contrast": 4.355900193640481,
-              "maxSkyL": 0.6465952446780792,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3180,7 +3197,7 @@
             {
               "out": "buildCase",
               "contrast": 3.533177623747631,
-              "maxSkyL": 0.5886543527636017,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3201,7 +3218,7 @@
             {
               "out": "buildCase",
               "contrast": 3.533177623747631,
-              "maxSkyL": 0.5850676088622889,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3222,7 +3239,7 @@
             {
               "out": "buildCase",
               "contrast": 3.533177623747631,
-              "maxSkyL": 0.5886543527636017,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3243,7 +3260,7 @@
             {
               "out": "buildCase",
               "contrast": 3.533177623747631,
-              "maxSkyL": 0.5850676088622889,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3264,7 +3281,7 @@
             {
               "out": "buildCase",
               "contrast": 3.533177623747631,
-              "maxSkyL": 0.5886543527636017,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3285,7 +3302,7 @@
             {
               "out": "buildCase",
               "contrast": 3.533177623747631,
-              "maxSkyL": 0.5850676088622889,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3348,7 +3365,7 @@
             {
               "out": "buildCase",
               "contrast": 2.710455053854782,
-              "maxSkyL": 0.524109866472058,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3369,7 +3386,7 @@
             {
               "out": "buildCase",
               "contrast": 2.710455053854782,
-              "maxSkyL": 0.5235399730464987,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3390,7 +3407,7 @@
             {
               "out": "buildCase",
               "contrast": 2.710455053854782,
-              "maxSkyL": 0.524109866472058,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3411,7 +3428,7 @@
             {
               "out": "buildCase",
               "contrast": 2.710455053854782,
-              "maxSkyL": 0.5235399730464987,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3432,7 +3449,7 @@
             {
               "out": "buildCase",
               "contrast": 2.710455053854782,
-              "maxSkyL": 0.524109866472058,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3453,7 +3470,7 @@
             {
               "out": "buildCase",
               "contrast": 2.710455053854782,
-              "maxSkyL": 0.5235399730464987,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3516,7 +3533,7 @@
             {
               "out": "buildCase",
               "contrast": 3.5057707914920915,
-              "maxSkyL": 0.4595653801805144,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3537,7 +3554,7 @@
             {
               "out": "buildCase",
               "contrast": 3.5057707914920915,
-              "maxSkyL": 0.4620123372307085,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3558,7 +3575,7 @@
             {
               "out": "buildCase",
               "contrast": 3.5057707914920915,
-              "maxSkyL": 0.4595653801805144,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3579,7 +3596,7 @@
             {
               "out": "buildCase",
               "contrast": 3.5057707914920915,
-              "maxSkyL": 0.4620123372307085,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3600,7 +3617,7 @@
             {
               "out": "buildCase",
               "contrast": 3.5057707914920915,
-              "maxSkyL": 0.4595653801805144,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -3621,7 +3638,7 @@
             {
               "out": "buildCase",
               "contrast": 3.5057707914920915,
-              "maxSkyL": 0.4620123372307085,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -4695,6 +4712,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -4754,7 +4772,7 @@
             {
               "out": "buildCase",
               "contrast": 2.681575413588801,
-              "maxSkyL": 0.35379987540523755,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -4775,7 +4793,7 @@
             {
               "out": "buildCase",
               "contrast": 4.355900193640481,
-              "maxSkyL": 0.6531988390551454,
+              "maxSkyL": 0.6625914781393968,
               "pass": true
             }
           ]
@@ -4798,6 +4816,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -4857,7 +4876,7 @@
             {
               "out": "buildCase",
               "contrast": 2.6532857636355875,
-              "maxSkyL": 0.6531988390551454,
+              "maxSkyL": 0.6625914781393968,
               "pass": false
             }
           ]
@@ -4881,6 +4900,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -4948,6 +4968,111 @@
       ]
     },
     {
+      "id": "AC5-test-sun-above-cap-fails",
+      "source": "gdd: scene-time-weather.md R1 (the sun), R5 (the cap lists the sun); AC-5",
+      "given": {
+        "knobs": {
+          "crossfade_min": 15.0,
+          "jump_fade_s": 3.0,
+          "jump_threshold_min": 1.0,
+          "L_x": 0.308,
+          "glyph_fill": "#ffd36e",
+          "edge_amber": "#80450f",
+          "edge_cream": "#f8efdc",
+          "lift_peach": "#f0c9b0",
+          "lift_amber": "#d9a070",
+          "lift_amount": 0.35,
+          "snow_colour": "#cfd6e3",
+          "sun_colour": "#fbeec4",
+          "base_stars": {
+            "Morning": 4,
+            "Day": 0,
+            "Dusk": 46,
+            "Night": 50
+          },
+          "mash_factor": 0.5,
+          "mash_fade_s": 0.5,
+          "fade_s": 0.6,
+          "rain_speed": 420.0,
+          "windy_tilt_deg": 15.0,
+          "ground_y": 558.0
+        },
+        "palette": {
+          "Morning": {
+            "top": "#7f9fd6",
+            "mid": "#c7cde6",
+            "horizon": "#f0c9b0"
+          },
+          "Day": {
+            "top": "#6a9ad6",
+            "mid": "#a8c8e8",
+            "horizon": "#c4d6e2"
+          },
+          "Dusk": {
+            "top": "#1f2a55",
+            "mid": "#46558f",
+            "horizon": "#b8a0c8"
+          },
+          "Night": {
+            "top": "#121833",
+            "mid": "#232d57",
+            "horizon": "#3e4a7a"
+          }
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {
+        "scene-weather": []
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "buildCase",
+            "prev": "Morning",
+            "look": "Day",
+            "w": 1.0,
+            "weather": "clear",
+            "lift": false
+          },
+          "expect": [
+            {
+              "out": "buildCase",
+              "contrast": 4.355900193640481,
+              "maxSkyL": 0.8564382328219817,
+              "pass": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "buildCase",
+            "prev": "Dusk",
+            "look": "Night",
+            "w": 1.0,
+            "weather": "clear",
+            "lift": false
+          },
+          "expect": [
+            {
+              "out": "buildCase",
+              "contrast": 11.594831426532759,
+              "maxSkyL": 0.07326832426123346,
+              "pass": true
+            }
+          ]
+        }
+      ],
+      "note": "A test sun #fbeec4 (L ≈ 0.84) fails the cap in Day; at Night no sun is drawn, so the same palette passes there."
+    },
+    {
       "id": "F4-counts-16x9",
       "source": "gdd: scene-time-weather.md F4 table; Precise rules (TASK-101a) SC-Q6; AC-4",
       "given": {
@@ -4963,6 +5088,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -5099,6 +5225,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -5235,6 +5362,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -5371,6 +5499,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -5507,6 +5636,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -5668,6 +5798,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -5747,6 +5878,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -5826,6 +5958,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -6023,6 +6156,300 @@
       "note": "Between 0.303 and 0.313 nothing changes; the dissolve moves the amber alpha at 1 per wall-clock second from where it is."
     },
     {
+      "id": "F8-edge-reversal-at-partial-mix",
+      "source": "gdd: cast-rendering.md F8 (TASK-104) (a reversal turns around from the current mix at 1 per s)",
+      "given": {
+        "knobs": {
+          "crossfade_min": 15.0,
+          "jump_fade_s": 3.0,
+          "jump_threshold_min": 1.0,
+          "L_x": 0.308,
+          "glyph_fill": "#ffd36e",
+          "edge_amber": "#80450f",
+          "edge_cream": "#f8efdc",
+          "lift_peach": "#f0c9b0",
+          "lift_amber": "#d9a070",
+          "lift_amount": 0.35,
+          "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
+          "base_stars": {
+            "Morning": 4,
+            "Day": 0,
+            "Dusk": 46,
+            "Night": 50
+          },
+          "mash_factor": 0.5,
+          "mash_fade_s": 0.5,
+          "fade_s": 0.6,
+          "rain_speed": 420.0,
+          "windy_tilt_deg": 15.0,
+          "ground_y": 558.0
+        },
+        "palette": {
+          "Morning": {
+            "top": "#7f9fd6",
+            "mid": "#c7cde6",
+            "horizon": "#f0c9b0"
+          },
+          "Day": {
+            "top": "#6a9ad6",
+            "mid": "#a8c8e8",
+            "horizon": "#c4d6e2"
+          },
+          "Dusk": {
+            "top": "#1f2a55",
+            "mid": "#46558f",
+            "horizon": "#b8a0c8"
+          },
+          "Night": {
+            "top": "#121833",
+            "mid": "#232d57",
+            "horizon": "#3e4a7a"
+          }
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {
+        "scene-weather": []
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "wall": {
+              "minutesOfDay": 960.0,
+              "dayKey": 1
+            }
+          },
+          "event": {
+            "type": "edgeInput",
+            "skyMidL": 0.3
+          },
+          "expect": [],
+          "expectState": {
+            "edge": "cream",
+            "amberAlpha": 0.0
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "wall": {
+              "minutesOfDay": 960.0166666666667,
+              "dayKey": 1
+            }
+          },
+          "event": {
+            "type": "edgeInput",
+            "skyMidL": 0.313
+          },
+          "expect": [
+            {
+              "out": "edgeSwitch",
+              "to": "amber"
+            }
+          ],
+          "expectState": {
+            "amberAlpha": 0.0
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.4,
+            "wall": {
+              "minutesOfDay": 960.0233333333333,
+              "dayKey": 1
+            }
+          },
+          "event": {
+            "type": "edgeInput",
+            "skyMidL": 0.303
+          },
+          "expect": [
+            {
+              "out": "edgeSwitch",
+              "to": "cream"
+            }
+          ],
+          "expectState": {
+            "edge": "cream",
+            "amberAlpha": 0.4
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.6,
+            "wall": {
+              "minutesOfDay": 960.0266666666666,
+              "dayKey": 1
+            }
+          },
+          "event": {
+            "type": "edgeInput",
+            "skyMidL": 0.3
+          },
+          "expect": [],
+          "expectState": {
+            "amberAlpha": 0.2
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.8,
+            "wall": {
+              "minutesOfDay": 960.03,
+              "dayKey": 1
+            }
+          },
+          "event": {
+            "type": "edgeInput",
+            "skyMidL": 0.3
+          },
+          "expect": [],
+          "expectState": {
+            "amberAlpha": 0.0
+          }
+        }
+      ],
+      "note": "game-dev-ios's review: the reversal at alpha 0.4 comes back in 0.4 s (a restart model would give 0.8 at 1.6; a jump model 0.0 at 1.4)."
+    },
+    {
+      "id": "F8-edge-kept-across-background",
+      "source": "gdd: cast-rendering.md F8 (TASK-104) (a return keeps the state)",
+      "given": {
+        "knobs": {
+          "crossfade_min": 15.0,
+          "jump_fade_s": 3.0,
+          "jump_threshold_min": 1.0,
+          "L_x": 0.308,
+          "glyph_fill": "#ffd36e",
+          "edge_amber": "#80450f",
+          "edge_cream": "#f8efdc",
+          "lift_peach": "#f0c9b0",
+          "lift_amber": "#d9a070",
+          "lift_amount": 0.35,
+          "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
+          "base_stars": {
+            "Morning": 4,
+            "Day": 0,
+            "Dusk": 46,
+            "Night": 50
+          },
+          "mash_factor": 0.5,
+          "mash_fade_s": 0.5,
+          "fade_s": 0.6,
+          "rain_speed": 420.0,
+          "windy_tilt_deg": 15.0,
+          "ground_y": 558.0
+        },
+        "palette": {
+          "Morning": {
+            "top": "#7f9fd6",
+            "mid": "#c7cde6",
+            "horizon": "#f0c9b0"
+          },
+          "Day": {
+            "top": "#6a9ad6",
+            "mid": "#a8c8e8",
+            "horizon": "#c4d6e2"
+          },
+          "Dusk": {
+            "top": "#1f2a55",
+            "mid": "#46558f",
+            "horizon": "#b8a0c8"
+          },
+          "Night": {
+            "top": "#121833",
+            "mid": "#232d57",
+            "horizon": "#3e4a7a"
+          }
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {
+        "scene-weather": []
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "wall": {
+              "minutesOfDay": 960.0,
+              "dayKey": 1
+            }
+          },
+          "event": {
+            "type": "edgeInput",
+            "skyMidL": 0.32
+          },
+          "expect": [],
+          "expectState": {
+            "edge": "amber",
+            "amberAlpha": 1.0
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "wall": {
+              "minutesOfDay": 960.0166666666667,
+              "dayKey": 1
+            }
+          },
+          "event": {
+            "type": "edgeInput",
+            "skyMidL": 0.306
+          },
+          "expect": [],
+          "expectState": {
+            "edge": "amber"
+          }
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "background"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 60.0
+          },
+          "event": {
+            "type": "foreground"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 60.0,
+            "wall": {
+              "minutesOfDay": 961.0,
+              "dayKey": 1
+            }
+          },
+          "event": {
+            "type": "edgeInput",
+            "skyMidL": 0.306
+          },
+          "expect": [],
+          "expectState": {
+            "edge": "amber",
+            "amberAlpha": 1.0
+          }
+        }
+      ],
+      "note": "0.306 is inside the band: a re-initialising model would pick cream (below L_x); the kept state stays amber with no switch."
+    },
+    {
       "id": "R2-clock-jump-fades-3s",
       "source": "gdd: scene-time-weather.md R2, F1 (jump fade); Precise rules (TASK-101a) SC-Q2; AC-3; gdd: cast-rendering.md F8 (TASK-104)",
       "given": {
@@ -6038,6 +6465,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -6225,6 +6653,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -6328,6 +6757,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -6446,6 +6876,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -6620,6 +7051,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -6723,6 +7155,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -6886,6 +7319,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -7028,6 +7462,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -7123,6 +7558,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -7807,6 +8243,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
@@ -8734,6 +9171,7 @@
           "lift_amber": "#d9a070",
           "lift_amount": 0.35,
           "snow_colour": "#cfd6e3",
+          "sun_colour": "#ecd29a",
           "base_stars": {
             "Morning": 4,
             "Day": 0,
