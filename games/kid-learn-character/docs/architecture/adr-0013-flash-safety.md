@@ -228,8 +228,8 @@ ADR-0009 D6 deferred it, ADR-0004 calls F1/F2 "QC tools", and ADR-0011's gate li
 - **Not covered:** SwiftUI overlays drawn above the stage (the gate challenge, the grown-up panel) are outside the
   render. They must hold **no periodic animation** at all. G1 lints their rates when they come from data, and code
   review checks them (a review rule for the overlay stories).
-- **Title:** the Title screen isn't in the K-26 busy case. Its only motion is the play button's breathe (0.38 Hz, App
-  Shell R2), which G1 covers. Adding a Title run to G4 is an open question for the Accessibility owner (below).
+- **Title:** the Title screen isn't in the K-26 busy case. Its motion is the play button's breathe (0.38 Hz, App
+  Shell R2) and the title creature's idle (Cast Rendering, ≤ 1 Hz); G1 covers both. Adding a Title run to G4 is an open question for the Accessibility owner (below).
 
 ### Architecture Diagram
 
@@ -416,7 +416,7 @@ This is a text change only; the rule and thresholds are unchanged. The owner (ga
 this ADR is reviewed.
 
 ## Open Questions
-- **Title run:** add a 10 s Title idle run to G4's matrix? It adds 3 runs; the Title's only motion is 0.38 Hz.
+- **Title run:** add a 10 s Title idle run to G4's matrix? It adds 3 runs; the Title moves only at ≤ 1 Hz (the breathe, the creature's idle).
   Recommendation: yes, it's cheap. This is the Accessibility owner's call.
 - **120 Hz:** if a later ADR lifts ADR-0006 D3's 60 fps cap, G4 runs at the new cap and AC-07's 120 Hz tests become
   live input, not only unit tests.
