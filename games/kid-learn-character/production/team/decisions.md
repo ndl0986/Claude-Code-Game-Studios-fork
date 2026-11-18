@@ -115,6 +115,9 @@ that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per
 - Follow-ups: Privacy L-09 closes with the licence and pinned revision recorded; Audio & Voice R8 and the ADR-0003 D6
   TTS note name the engine (dated note, ADR status stays Accepted); K-35 respellings are made for Kokoro and each
   respelled line is listened to and approved by Luan before it is baked.
+- **K-35 picks (Luan, 2026-11-18, TASK-108 candidates): r2 for all seven:** ankylosaurus "ankie low saurus",
+  quetzalcoatlus "kets all ko at lus", juravenator "joor uh vuh nay tor", tapejara "tah pay jar ah", wuerhosaurus
+  "wur hoe saurus", xenoceratops "zen oh sair uh tops", zuniceratops "zoo nee serra tops". triceratops stays as spelled.
 
 ### K-40 ADR-0004 D5: a visible "not started" contract state (Luan, 2026-11-18)
 

@@ -98,6 +98,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-107 | Device-checks plan: P-2/M-13 three render options; not runnable until A-candidate sha; H-2 before P-2 | qa | game-qc-ios (review: game-dev-android) | MERGED c1b2896f (P-2/M-13 on DeviceSpike b4fa26c9; H-2 device confirm step 1; game-dev-android APPROVE) | `design/TASK-107-plan-0009-options` | 2026-11-18 |
 | TASK-108 | Apply K-41 Kokoro: Privacy L-09 close (licence + pinned revision), Audio R8 + ADR-0003 D6 dated note, K-35 respelled renders for Luan to approve | audio | game-art-content (review: game-qc-android) | MERGED (L-09 closed; R8/Q8; ADR-0003 D6 note; 7 K-35 names flagged, candidates in evidence) → Luan picks per line, then voice-script commit | `design/TASK-108-kokoro-pick` | 2026-11-18 |
 | TASK-109 | MAC FREE run (Luan granted 2026-11-18): first signed build + PKC-01 signed, macOS launch + title-macos.png, macOS UI test (TASK-079 carried items) | qa | game-qc-ios | DONE: all 3 PASS (signed builds + PKC-01 signed; macOS launch title-macos.png; macOS UI test with Luan's auth). Squash-merged (cert id masked at 4bfc5097; unmasked 0ee595e0 only on the qa branch). Mac released | `qa/TASK-079-mac-free` | 2026-11-18 |
+| TASK-110 | Voice script: apply Luan's K-35 picks (r2 ×7) as respelled TTS input; displayed/Key Table names unchanged | audio | game-art-content (review: game-qc-android) | SENT | `design/TASK-110-k35-voice-script` | 2026-11-18 |
 
 ## Leader log
 
