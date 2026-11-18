@@ -88,3 +88,18 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md 7f30e65849f904273ecc1b11ccf812b
 Review mode: lean · Workflow: standard
 Change: E7 in the invalid-timing-set fallback, confirmed with game-dev-ios (Reveal Stage F5): the glyph is drawn and fades out at fallback_glow_s under the creature's fade-in, so E7 plays at fallback_glow_s (0.8 s); none in the glyph-missing fallback; at glow in the art-missing one. AC-1 adds the invalid-set case (E7 0.8, E8 1.30, E9 1.55).
 Reviewed-Content-Hash: design/gdd/audio-voice.md 6d07bd606e108f7878507da7f8831b7411976144
+
+## Update — 2026-11-18 — TASK-090b cut_settle_s (no re-review)
+Review mode: lean · Workflow: standard
+Change: new Tuning Knob `cut_settle_s` = 0.04 s, constrained to ≥ max(cut_fade_s, 0.03) + 0.01, one value for both platforms (ADR-0010 D5/D7 review, game-dev-android R2). Referenced in R2.2 (a cut settles; a replacing sound starts up to cut_settle_s late), R6 (the freeze pause settles; a paused sound continues from about cut_settle_s after the freeze) and AC-21 (continue within cut_settle_s). Review: game-dev-ios.
+Reviewed-Content-Hash: design/gdd/audio-voice.md 6b5e9ff8359ee2e8878794f49c9bcae3def1c21a
+
+## Update — 2026-11-18 — TASK-090b freeze resumes from position (no re-review)
+Review mode: lean · Workflow: standard
+Change: leader's correction: the freeze no longer loses cut_settle_s. R6: the pause fades over cut_fade_s and settles over cut_settle_s (no click), and each sound resumes from the frame it had reached at the freeze moment, fading back in over cut_fade_s; nothing is lost (ADR-0010 resume-from-position, game-dev-ios). AC-21 back to "continue from where they paused", adding: the resume point equals the pause point and the fade-in takes cut_fade_s. The cut_settle_s knob row and R2.2 (cut replacements up to cut_settle_s late) are unchanged.
+Reviewed-Content-Hash: design/gdd/audio-voice.md 1dba2cd72a89be26a558e93092dc5bc5137d76ad
+
+## Update — 2026-11-18 — TASK-090b review (game-dev-ios): REVISE → addressed (no re-review)
+Review mode: lean · Workflow: standard
+Change: R6 and AC-21: a frozen sound resumes from the frame reached at the freeze moment or up to cut_settle_s earlier (a little heard again, nothing skipped; measured 0–17 ms, ADR-0010 H-1), testable as freezeFrame − cut_settle_s × rate ≤ resume ≤ freezeFrame. The nit: the players "stop playing" (API-neutral) instead of "are paused". Knob row reworded to match.
+Reviewed-Content-Hash: design/gdd/audio-voice.md 6f34636324f22949650cd130ff17dcfaed52bb56
