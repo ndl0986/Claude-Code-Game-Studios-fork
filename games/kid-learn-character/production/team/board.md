@@ -66,11 +66,12 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-084 | ADR-0003 D4 + art bible §8 dated note: layer ids `<part>_<layer>` (K-37) | docs | game-art-content (review: game-dev-android) | DONE: MERGED (game-dev-android APPROVE) | `design/TASK-084-d4-layer-ids` | 2026-11-18 |
 | TASK-085a | Follow-up batch A: Reveal Stage R10 row z35 + boxes + invert + sparkles RM; App Shell A1, breathe/touch floor; Privacy V1 clock | design | game-dev-ios (review: game-qc-ios) | DONE: MERGED (game-qc-ios APPROVE @ 239d105e) | `design/TASK-085a-followups` | 2026-11-18 |
 | TASK-085b | Follow-up batch B: Cast twinkle RM; Hint Letters row band + H1; Parent Gate P0/P1 moon; art bible breathe rate | design | game-art-content (review: game-dev-android) | DONE: MERGED (all 7 already landed; bookkeeping only) | `design/TASK-085b-followups` | 2026-11-18 |
-| TASK-086 | Contracts batch 3: reveal-timing-v1 + audio-plan-v1 | qa | game-qc-android (review: game-dev-ios / Audio owner) | SENT 2026-11-18 | `design/TASK-086-contracts-batch3` | 2026-11-18 |
-| TASK-087 | ADR-0010 audio (spike ADR) to Proposed; device rows pending | architecture | game-dev-ios (review: game-dev-android; rows check game-qc-ios) | SENT 2026-11-18 | `design/TASK-087-adr-0010` | 2026-11-18 |
+| TASK-086 | Contracts batch 3: reveal-timing-v1 + audio-plan-v1 | qa | game-qc-android (review: game-dev-ios / Audio owner) | audio 30 APPROVE @ f38b6013; reveal REVISE (invalid-set timeline cases; needs TASK-088d) | `design/TASK-086-contracts-batch3` | 2026-11-18 |
+| TASK-087 | ADR-0010 audio (spike ADR) to Proposed; device rows pending | architecture | game-dev-ios (review: game-dev-android; rows check game-qc-ios) | rows REVISE (game-qc-ios, 4 items); ADR read → game-dev-android | `design/TASK-087-adr-0010` | 2026-11-18 |
 | TASK-088a | Audio R1 E8/E9: s = formedS; E8 on sfx, E9 on hasWord; AU-Q answers | design | game-art-content (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 82f24b2b) | `design/TASK-088a-audio-e8e9` | 2026-11-18 |
 | TASK-088b | Reveal Stage R3/R6: hasWord definition; only-when-hasWord gates E9 only | design | game-dev-ios (review: game-qc-android) | DONE: MERGED 4d83b81e + 7d16be9d (game-qc-android APPROVE); R3 cell + letter_in nits queued | `design/TASK-088b-reveal-hasword` | 2026-11-18 |
 | TASK-088c | Reveal Stage nits: R3 cells 'in the active locale'; invalid-set rise knob fallback_rise_s 0.45 | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE) | `design/TASK-088c-reveal-nits` | 2026-11-18 |
+| TASK-088d | Reveal Stage F3: invalid-set fadeStart = formedS − fallback_fade_s | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 45809435) | `design/TASK-088d-reveal-f3` | 2026-11-18 |
 
 ## Leader log
 
