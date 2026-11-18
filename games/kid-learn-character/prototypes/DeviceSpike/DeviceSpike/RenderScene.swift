@@ -362,7 +362,7 @@ final class RenderScene: SKScene {
         }
         guard dumpRemaining > 0 || dumper != nil, let v = view else { return }
         if dumper == nil {
-            dumper = FrameDump(scene: self, target: FrameDump.target(of: v, scale: pxPerPt), log: onLog)
+            dumper = FrameDump(scene: self, view: v, target: FrameDump.target(of: v, scale: pxPerPt), log: onLog)
             probeOn = []
             if dumper == nil { dumpRemaining = 0; return }
         }

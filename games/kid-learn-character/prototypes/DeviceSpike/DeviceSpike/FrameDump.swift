@@ -30,7 +30,8 @@ final class FrameDump {
                       format: .bgra8Unorm, colorSpace: "unknown (no CAMetalLayer; assumed sRGB)", source: "bounds x scale")
     }
 
-    init?(scene: SKScene, target: Target, log: (String) -> Void) {
+    /// `view`: the SKView presenting `scene`; its draw settings are copied so the dump draws what the view draws.
+    init?(scene: SKScene, view: SKView, target: Target, log: (String) -> Void) {
         guard let d = MTLCreateSystemDefaultDevice(), let q = d.makeCommandQueue() else { log("frame dump: no Metal device"); return nil }
         let bpp: Int
         switch target.format {
@@ -39,14 +40,17 @@ final class FrameDump {
         default: log("frame dump: drawable pixel format \(target.format.rawValue) not handled; not started"); return nil
         }
         device = d; queue = q; self.target = target; bytesPerPixel = bpp
-        renderer = SKRenderer(device: d); renderer.scene = scene; renderer.ignoresSiblingOrder = true
+        renderer = SKRenderer(device: d); renderer.scene = scene
+        renderer.ignoresSiblingOrder = view.ignoresSiblingOrder; renderer.shouldCullNonVisibleNodes = view.shouldCullNonVisibleNodes
         dir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0].appendingPathComponent("framedump", isDirectory: true)
         try? FileManager.default.removeItem(at: dir)
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         let meta = "width \(target.width)\nheight \(target.height)\npixel_format \(target.format.rawValue)\nbytes_per_pixel \(bpp)\n" +
-                   "color_space \(target.colorSpace)\nsource \(target.source)\nmethod SKRenderer render only (no updateAtTime), after the view's update\n"
+                   "color_space \(target.colorSpace)\nsource \(target.source)\nmethod SKRenderer render only (no updateAtTime), after the view's update\n" +
+                   "ignores_sibling_order \(renderer.ignoresSiblingOrder) (copied from the view)\nshould_cull_non_visible_nodes \(renderer.shouldCullNonVisibleNodes) (copied from the view)\n" +
+                   "scale_mode \(scene.scaleMode.rawValue) (how SKRenderer applies it to the viewport is NOT SOURCED; ADR-0013 V2 checks it)\n"
         try? meta.write(to: dir.appendingPathComponent("format.txt"), atomically: true, encoding: .utf8)
-        log("frame dump: \(target.width)x\(target.height) px, format \(target.format.rawValue) (\(bpp) B/px), colour space \(target.colorSpace), from \(target.source)")
+        log("frame dump: \(target.width)x\(target.height) px, format \(target.format.rawValue) (\(bpp) B/px), colour space \(target.colorSpace), from \(target.source); ignoresSiblingOrder \(renderer.ignoresSiblingOrder), shouldCullNonVisibleNodes \(renderer.shouldCullNonVisibleNodes) (from the view)")
     }
 
     /// One frame of the scene as the view is about to draw it. Call from didFinishUpdate (main thread).
@@ -54,7 +58,6 @@ final class FrameDump {
         lock.lock(); let busy = inFlight >= maxInFlight; if !busy { inFlight += 1 }; lock.unlock()
         let i = index; index += 1
         if busy { lock.lock(); dropped += 1; lock.unlock(); return }      // a gap the coverage rule (D5) will see in times.csv
-        times.append(String(format: "%d,%.6f", i, updateTime))
         let d = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: target.format, width: target.width, height: target.height, mipmapped: false)
         d.usage = [.renderTarget, .shaderRead]
         #if os(macOS)
@@ -63,6 +66,7 @@ final class FrameDump {
         d.storageMode = .shared                                       // iOS GPUs share memory with the CPU
         #endif
         guard let tex = device.makeTexture(descriptor: d), let cb = queue.makeCommandBuffer() else { finish(nil, i); return }
+        times.append(String(format: "%d,%.6f", i, updateTime))      // only a frame that is actually rendered gets a row
         let rpd = MTLRenderPassDescriptor()
         rpd.colorAttachments[0].texture = tex; rpd.colorAttachments[0].loadAction = .clear; rpd.colorAttachments[0].storeAction = .store
         var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 1

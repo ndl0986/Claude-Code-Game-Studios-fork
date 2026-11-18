@@ -63,6 +63,9 @@ pad) can show fast changes. Run every row with the child out of view of the scre
   `SKView.texture(from:)` and never PNG-encodes on the main thread. Raw frames are large (an 11" iPad: about 18 MB
   each, 120 frames about 2 GB); a frame dropped at the in-flight cap is a gap in `times.csv`. The update time is the
   `SKView` loop's `currentTime`, not a display-link `targetTimestamp` (the spike has no display link of its own).
+  The renderer copies the view's `ignoresSiblingOrder` and `shouldCullNonVisibleNodes` (both in `format.txt`). How
+  `SKRenderer` applies the scene's `scaleMode` to its viewport is **not sourced**; ADR-0013 V2's presented-frame
+  comparison checks it.
 - **V7 probe (ADR-0013):** the dump's end logs `V7 probe: dump off … px, dump on … px`. More than 0.5 px with the dump
   on means the shared scene was advanced by the dump; ADR-0013 D5's fallback then applies.
 
