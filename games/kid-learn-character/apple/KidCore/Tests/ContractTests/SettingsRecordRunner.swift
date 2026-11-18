@@ -103,7 +103,16 @@ struct SettingsRecordRunner: ContractRunner {
             default: throw ContractError("unsupported change \(f)")
             }
             store.apply(change)
-        case "sliderRelease": store.sliderReleased(e["x"]?.number ?? .nan)
+        case "sliderRelease":
+            // settings-record-v2 spec.md: JSON has no non-finite numbers, so x may be "NaN", "Infinity" or "-Infinity".
+            let x: Double
+            switch e["x"]?.string {
+            case "NaN"?: x = .nan
+            case "Infinity"?: x = .infinity
+            case "-Infinity"?: x = -.infinity
+            default: x = e["x"]?.number ?? .nan
+            }
+            store.sliderReleased(x)
         case "setChildLock": store.setChildLock(e["on"] == .bool(true))
         case "reset": store.reset()
         case "gain": return [.object(["out": .string("gain"), "value": .double(store.gain)])]

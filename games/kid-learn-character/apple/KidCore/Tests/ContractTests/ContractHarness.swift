@@ -187,7 +187,9 @@ enum ContractHarness {
 /// The real run over the repo's contracts (ADR-0004 D5). Each failure is its own XCTFail.
 final class ContractHarnessTests: XCTestCase {
     func test_every_contract_in_the_repo() throws {
-        let report = ContractHarness.runAll(root: try ContractHarness.contractsRoot())
+        // CONTRACTS_ROOT points the run at another contracts folder (a review of a branch's contracts).
+        let override = ProcessInfo.processInfo.environment["CONTRACTS_ROOT"].map { URL(fileURLWithPath: $0) }
+        let report = ContractHarness.runAll(root: try override ?? ContractHarness.contractsRoot())
         for (k, v) in report.counts.sorted(by: { $0.key < $1.key }) { print("CONTRACT \(k): \(v.pass) pass, \(v.fail) fail") }
         for l in report.lines { print("CONTRACT \(l)") }
         for f in report.failures { XCTFail(f) }
