@@ -1,0 +1,7 @@
+# sources.lock for gate-logic-v1 (cut 2026-11-18, TASK-094; re-cut after TASK-098): the ## sections the cases cite.
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/parent-gate-panel.md#Detailed Design 4e826b30e0e3c1c8e91805c4eee4c49adf0fe09e
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/parent-gate-panel.md#Formulas f7ecdcb5473360cc704159e980bd823a77802c7c
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/parent-gate-panel.md#Edge Cases 9866e30eadfcd6b38de1fb46f58c84eebd3f3478
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/parent-gate-panel.md#Acceptance Criteria f10110898904b829a7644ce41aee7b7857080823
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/input-key-filter.md#Detailed Design 31fa8d8327814d1bbd2dd3a6a532452550b13c10
+Reviewed-Section-Hash: games/kid-learn-character/docs/architecture/adr-0002-modules-seams-types.md#Decision 7a622020948197194ccd9e003ecdfe8e243fb356
