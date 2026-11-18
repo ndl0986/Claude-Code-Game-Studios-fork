@@ -81,10 +81,10 @@ Reveal Stage, before returning:
 
 | Case | What plays | formedS | revealLen | hasWord |
 |---|---|---|---|---|
-| **Morph** (glyph, silhouette, valid set, `willForm` true) | glyph → stardust → creature | `T` | `T + form_s` | true if the item has a word line |
-| **Glyph missing** | the creature fades in, no stardust | F5 | = formedS | true if the item has a word line |
+| **Morph** (glyph, silhouette, valid set, `willForm` true) | glyph → stardust → creature | `T` | `T + form_s` | true if the item has a word line in the active locale |
+| **Glyph missing** | the creature fades in, no stardust | F5 | = formedS | true if the item has a word line in the active locale |
 | **Art or silhouette missing** (`willForm` false) | the glyph rises, glows, then sparkles out | `glow + sparkle_out_s` | = formedS | **false** |
-| **Invalid timing set** (MorphCore Rule 9) | the glyph rises and glows as usual until `fallback_glow_s`, then fades out over `fallback_fade_s` while the creature fades in (a crossfade, no stardust) | F5 | = formedS | true if the item has a word line |
+| **Invalid timing set** (MorphCore Rule 9) | the glyph rises over `fallback_rise_s` (the invalid set's own values are not used) and glows until `fallback_glow_s`, then fades out over `fallback_fade_s` while the creature fades in (a crossfade, no stardust) | F5 | = formedS | true if the item has a word line in the active locale |
 
 5. builds the morph (MorphCore) in the morph case, and starts the leaving fade of the previous creature (R5).
 
@@ -374,7 +374,7 @@ All values are bundled data, checked at build.
 | `form_s` | 0.5 s (reduced 0.3) | 0.1–1.5 | one-shot, MorphCore F5 | the creature's fade-in |
 | `leave_s` | 0.45 s | 0.2–1.0 | one-shot | the previous creature's exit |
 | `sparkle_out_s` | 0.6 s | 0.3–1.0 | proposal (one-shot burst life 0.6–1.0) | the art-missing glyph's exit |
-| `fallback_glow_s`, `fallback_fade_s` | 0.8, 0.5 s | — | the normal set's values | the invalid-set fallback |
+| `fallback_rise_s`, `fallback_glow_s`, `fallback_fade_s` | 0.45, 0.8, 0.5 s | — | the normal set's values (`letter_in`, `glow`, `form_s`) | the invalid-set fallback: rise, glow end, crossfade *(TASK-088c)* |
 | `tap_cooldown_s` | 0.9 s | 0.2–3 | one-shot | how often a tap hops and sounds |
 | burst sizes | ignored 8, tap 6, cooldown tap 4 | 2–12 | one-shot | sparkle answers |
 | token row | x 1214, step 66, y 58 | inside the safe stage | one-shot | where queued letters wait |
