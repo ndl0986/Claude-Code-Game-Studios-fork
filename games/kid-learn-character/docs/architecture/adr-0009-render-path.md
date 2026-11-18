@@ -114,8 +114,9 @@ option B **is** B-load (it rasterises at load, at 2.5×), so P-2 measures it dir
 **Apple.** P-2 and M-13 use `DeviceSpike` Render with TASK-077's art, options **A-candidate** (D3: outline merged per
 part, fills per element; the A the rule judges), **B** (B-load) and, for information, the original per-element A; the
 Metrics recorder gives p50 / p99 over the worst case per option, and the screen logs per-creature build ms per
-option. *(The A-candidate option and H-2's overlap mode are game-dev-ios's DeviceSpike change; its sha is recorded
-here when it lands.)* H-2's overlap check runs **before** P-2 (Validation, H-2), and P-2 records which outline path
+option. The A-candidate option ("A: candidate (ADR-0009 D3)") and H-2's **Overlap check** button are in DeviceSpike at
+**d21588c0** (game-dev-ios, design/TASK-103-devicespike-a-candidate; build logs in
+`production/qa/evidence/TASK-103/d21588c0/`). H-2's overlap check runs **before** P-2 (Validation, H-2), and P-2 records which outline path
 (merged stroke or fallback) its A-candidate numbers come from.
 
 ### D2. One structure, both options (platform-neutral)
@@ -295,9 +296,10 @@ Per K-34: headless runs need no MAC FREE; the Mac rows do.
 - **H-2 Equivalence (the adapter story).** A's and B's part boxes within 1 px per role for the three creatures; the
   **outline-overlap test** (D2, D3): an outline stroke that crosses itself, drawn by A and by B over a flat fill,
   reads one alpha (0.8 Ink) at the crossing, not two. It decides D3's group-alpha question; if A darkens there, A uses
-  D3's fallback. **H-2's overlap check runs on the A-candidate DeviceSpike build before P-2** (game-qc-ios; leader's
-  option a): headless, through DeviceSpike's offscreen render, if that can show it; otherwise as the first step of the
-  same device session. P-2 then records **which outline path it measured** (the merged stroke or the fallback), so
+  D3's fallback. **H-2's overlap check runs on the A-candidate DeviceSpike build (d21588c0) before P-2** (game-qc-ios;
+  leader's option a): DeviceSpike's **Overlap check** button logs whether one `SKShapeNode` blends its own overlap
+  twice, for stroke alpha 0.8 and for node alpha 0.8, from the view's own render; headless through an offscreen render
+  if that shows the same, otherwise as the first step of the same device session. P-2 then records **which outline path it measured** (the merged stroke or the fallback), so
   its A numbers belong to the A that would ship.
 - **H-3 Bake output (the bake tool story).** The baked JSON for the three creatures parses back with the a1 rule; its
   byte size is recorded next to H-1's SVG figure.
