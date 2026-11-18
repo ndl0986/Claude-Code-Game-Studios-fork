@@ -1,6 +1,6 @@
 # App Shell & Title
 
-> **Status**: In Review
+> **Status**: Approved (independent read by game-dev-android, merged 2026-11-18)
 > **Author**: game-dev-ios for Luan (TASK-051); plan reviewed by game-dev-android
 > **Last Updated**: 2026-11-18
 > **Last Verified**: 2026-11-18, against Input & Key Filter (Title and Inactive states), Audio & Voice (E5, R2.1,

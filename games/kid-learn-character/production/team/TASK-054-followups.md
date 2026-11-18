@@ -10,7 +10,7 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
   the run value, K-21). Parent Gate and Child Lock-in use this name. (leader call)
 
 ## Input & Key Filter
-- I1 (safety): R6 "no other key held" must not trust a held set that lost a key-up while ⌘ was held:
+- I1 (safety; either route is fine as long as Parent Gate AC-27's stale-key case passes): R6 "no other key held" must not trust a held set that lost a key-up while ⌘ was held:
   read the OS key state at the Q down (e.g. CGEventSource keyState), or clear ⌘-pressed keys on the ⌘
   flagsChanged release. A stale key must never block the kiosk way out. (game-qc-ios)
 - I2: Layer 3 emits `gateTouch(ended)` when the pointer leaves the moon region + 20 pt of slop. (game-qc-ios)
@@ -32,6 +32,10 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
 ## Parent Gate & Panel
 - P1: the moon is the sky's only moon; it takes the Scene's `look`; daytime moon at 70% in Morning/Day.
   (TASK-053 Scene)
+
+## App Shell & Title
+- A1 (wording): AC-3 "in that order" → "all four, before the options" (preconditions arrive in any order);
+  R7's reason → "would move focus away; Child Lock-in releases only on didResignActive". (game-dev-android)
 
 ## Privacy & Kids Compliance
 - V1: the continuous clock used by App Shell R6 (ContinuousClock / mach_continuous_time) — check whether
