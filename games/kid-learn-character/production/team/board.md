@@ -52,7 +52,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-070 | ADR-0006 stage runtime (SpriteKit behind the stage protocol, frame driver, stage fit, window choice, ppi table) | architecture | game-dev-ios (review: game-dev-android) | DONE: MERGED + ACCEPTED (Luan 2026-11-18) | `design/TASK-070-adr-0006` | 2026-11-18 |
 | TASK-071 | ADR-0011 local build, verification and PKC scans | architecture | game-dev-android (review: game-qc-ios) | DONE: MERGED + ACCEPTED (Luan 2026-11-18) | `design/TASK-071-adr-0011` | 2026-11-18 |
 | TASK-072 | Settings Store "Canonical record" note (SS-Q1–Q7 answers) | design | game-dev-android (review: game-qc-android) | DONE `d61880e8`, merged 2026-11-18; nit: F1 slider NaN unstated (next Settings touch) | `design/TASK-072-settings-canonical` | 2026-11-18 |
-| TASK-073 | TTS sample spike: Kokoro af_heart vs Piper ljspeech, ~12 lines, headless; Luan listens and picks (K-33) | audio | game-art-content | DONE (samples @ 64bdb0b9) → Luan listening (pick pending); K-35 respelling decided | `design/TASK-073-tts-samples` | 2026-11-18 |
+| TASK-073 | TTS sample spike: Kokoro af_heart vs Piper ljspeech, ~12 lines, headless; Luan listens and picks (K-33) | audio | game-art-content | MERGED 0a70a1a1 — Luan picked **Kokoro af_heart** (K-41) | `design/TASK-073-tts-samples` | 2026-11-18 |
 | TASK-074 | One device-checks plan: every NOT ASSESSED Mac/iPad check grouped into sessions for Luan (docs only) | qa | game-qc-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ bb52946e) | `design/TASK-074-device-checks` | 2026-11-18 |
 | TASK-075 | Plan for ★ spike ADRs 0007 input / 0008 kiosk / 0009 render / 0010 audio, tied to device-checks rows | architecture | game-dev-ios (review: game-qc-ios) | DONE: MERGED (game-qc-ios APPROVE @ ec4f9d44) | `design/TASK-075-spike-plan` | 2026-11-18 |
 | TASK-076 | Device-checks plan: add P-15 (iPad hardware keyboard) + "Spike run / ADR evidence" column with production re-runs | qa | game-qc-ios (review: game-dev-ios) | DONE: MERGED (game-dev-ios APPROVE @ 7e439190, nit 55fc0e8a) | `design/TASK-076-device-checks-spike` | 2026-11-18 |
@@ -96,6 +96,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-105 | Device-checks plan: M-1 read-ON procedure, M-2 → ADR-0007, M-3/P-4 keyboard part, P-15 → input-filter-v2 | qa | game-qc-ios (review: game-dev-ios) | DONE: MERGED (game-dev-ios APPROVE @ 1416e04c) | `design/TASK-105-plan-0007-0008` | 2026-11-18 |
 | TASK-106 | Device-checks plan: M-12 uses in-app frame dump; P-2 Settings read time → production re-run | qa | game-qc-ios (review: game-dev-android) | DONE: MERGED (game-dev-android APPROVE @ b6493e6e) | `design/TASK-106-plan-0009` | 2026-11-18 |
 | TASK-107 | Device-checks plan: P-2/M-13 three render options; not runnable until A-candidate sha; H-2 before P-2 | qa | game-qc-ios (review: game-dev-android) | MERGED c1b2896f (P-2/M-13 on DeviceSpike b4fa26c9; H-2 device confirm step 1; game-dev-android APPROVE) | `design/TASK-107-plan-0009-options` | 2026-11-18 |
+| TASK-108 | Apply K-41 Kokoro: Privacy L-09 close (licence + pinned revision), Audio R8 + ADR-0003 D6 dated note, K-35 respelled renders for Luan to approve | audio | game-art-content (review: game-qc-android) | SENT | `design/TASK-108-kokoro-pick` | 2026-11-18 |
 
 ## Leader log
 

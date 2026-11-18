@@ -105,6 +105,17 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-41 TTS voice: Kokoro (Luan, 2026-11-18, K-33 pick)
+
+- After listening to the TASK-073 samples, Luan picked **Kokoro-82M, voice `af_heart`, American English
+  (`lang_code='a'`)**, rendered as in TASK-073 (speed 0.88) unless a later listening pass retunes it. Piper is not used.
+- Licence: Apache-2.0 code and weights; the attribution line goes in the app's acknowledgements. Pin the exact Kokoro
+  package version and model weights revision used for the bake. Its phonemiser fallback espeak-ng stays build-machine
+  only (K-36).
+- Follow-ups: Privacy L-09 closes with the licence and pinned revision recorded; Audio & Voice R8 and the ADR-0003 D6
+  TTS note name the engine (dated note, ADR status stays Accepted); K-35 respellings are made for Kokoro and each
+  respelled line is listened to and approved by Luan before it is baked.
+
 ### K-40 ADR-0004 D5: a visible "not started" contract state (Luan, 2026-11-18)
 
 - Contracts are written before code, so ADR-0004 D5 gets a dated note (status stays Accepted). `contracts/README.md`
