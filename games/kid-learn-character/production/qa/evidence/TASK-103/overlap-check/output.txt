@@ -1,0 +1,5 @@
+ADR-0009 H-2 overlap check (SKRenderer offscreen, Apple M4 Pro): white X over black; single blend at 0.8 reads 0.800
+SKShapeNode, stroke alpha 0.8 crossing 0.961  arm 0.800  → BLENDS TWICE
+SKShapeNode, node alpha 0.8 crossing 0.961  arm 0.800  → BLENDS TWICE
+SKEffectNode(shouldRasterize) alpha 0.8 (the fallback) crossing 0.800  arm 0.800  → blends once
+RESULT: a merged outline in one SKShapeNode does NOT give the group look here; use the fallback
