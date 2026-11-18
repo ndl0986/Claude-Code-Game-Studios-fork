@@ -113,3 +113,8 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md 67279ba7ce2335c2b2f9296904aea2a
 Review mode: lean · Workflow: standard
 Change: R6's parenthetical now reads "(about 0–20 ms is heard again)", from ADR-0010 (merged Proposed, 3e39b8d8; the resume rewinds max(20 ms, IO period + 5 ms), capped at cut_settle_s), replacing the earlier 0–17 ms; a note adds that "nothing skipped" holds while the platform's capture uncertainty is at most cut_settle_s (ADR-0010 D7), measured by P-7. Rule and AC-21 unchanged.
 Reviewed-Content-Hash: design/gdd/audio-voice.md 69116ac3ad1a1e939c7adcba58f5eaebbeb916b9
+
+## Update — 2026-11-18 — TASK-108 Kokoro pick (no re-review)
+Review mode: lean · Workflow: standard
+Change: R8 names the engine and settings (K-41: Kokoro-82M, af_heart, lang a, speed 0.88, pinned package and weights), espeak-ng build-only (K-36), Piper not used, and the K-35 respelling rule; the TTS licence open item is removed (L-09 closed). Review: game-qc-android from the diff.
+Reviewed-Content-Hash: design/gdd/audio-voice.md b5677bc5eb639e14f86fbfb80782ec651bfd6957

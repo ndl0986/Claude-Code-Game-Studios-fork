@@ -250,3 +250,8 @@ Review mode: lean · Workflow: standard
 Task: TASK-065
 Change: PKC-14 now also covers the device's accessibility settings (Reduce Motion, VoiceOver, Guided Access, Smart Invert): none is logged in release or ever sent. The code scan and AC-13 include them (Accessibility A11 follow-up). No other change.
 Reviewed-Content-Hash: design/gdd/privacy-kids-compliance.md dcf664a9ba7c30c3f4405b2bb9b596b93c6991ef
+
+## Update — 2026-11-18 — TASK-108 Kokoro pick (no re-review)
+Review mode: lean · Workflow: standard
+Change: L-09 closed for the TTS (K-41): Kokoro-82M af_heart, lang a, speed 0.88; kokoro 0.9.4 / misaki 0.9.4; weights revision f3ff3571791e39611d31c381e3a41a3af07b4987 with hash prefixes; Apache-2.0 with the acknowledgements attribution line; espeak-ng build-machine only (K-36). Cites K-13, K-33, K-36, K-41. The human re-record stays Luan's later call. Review: game-qc-android from the diff.
+Reviewed-Content-Hash: design/gdd/privacy-kids-compliance.md def53257a879999f4704f046a5755a597dc4bcc5
