@@ -41,7 +41,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-059 | /create-architecture: master architecture (module map, seams, Android mirror) + prioritised ADR work plan + first scaffold story | architecture | game-dev-ios (review: game-dev-android) | DONE `c209e63`, merged 2026-11-18 (review: game-dev-android APPROVE); engine ref at docs/engine-reference-local/native-apple/ | `design/TASK-059-architecture` | 2026-11-18 |
 | TASK-060 | GDD: On-screen Keyboard Row (`design/gdd/onscreen-keyboard-row.md`) via /design-system (Vertical Slice) | design | game-art-content (review: game-dev-android) | DONE `71a8d14`, merged 2026-11-18 (review: game-dev-android APPROVE after REVISE) | `design/TASK-060-gdd-keyboard-row` | 2026-11-18 |
 | TASK-061 | GDD: Accessibility (`design/gdd/accessibility.md`) via /design-system (Vertical Slice) | design | game-qc-ios (review: game-qc-android) | IN PROGRESS: PLAN APPROVED 2026-11-18 after REVISE (game-qc-android: WCAG F2, touch split, flags, OS settings) | `design/TASK-061-gdd-accessibility` | 2026-11-18 |
-| TASK-063 | ADR-0002 module layout and seams (via /architecture-decision; Proposed → Luan accepts) | architecture | game-dev-ios (review: game-dev-android) | PLAN REVISE (game-dev-android: 5 more seams, no Character/Float/32-bit Int, iteration order, rounding helper, px in TouchEvent, API surface) | `design/TASK-063-adr-0002` | 2026-11-18 |
+| TASK-063 | ADR-0002 module layout and seams (via /architecture-decision; Proposed → Luan accepts) | architecture | game-dev-ios (review: game-dev-android) | IN PROGRESS: PLAN APPROVED 2026-11-18 after REVISE (game-dev-android) | `design/TASK-063-adr-0002` | 2026-11-18 |
 
 ## Leader log
 
