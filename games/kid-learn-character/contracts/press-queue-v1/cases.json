@@ -1,0 +1,6537 @@
+{
+  "contract": "press-queue-v1",
+  "schema": 1,
+  "uint64AsString": true,
+  "units": {
+    "time": "s"
+  },
+  "tolerance": {
+    "time": 1e-09
+  },
+  "streams": [],
+  "cases": [
+    {
+      "id": "F1-nest-0.5-normal",
+      "source": "gdd: press-queue.md F1 table row 1",
+      "given": {
+        "reveal": {
+          "D": {
+            "formedS": 2.45,
+            "revealLen": 2.95,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ],
+          "expectState": {
+            "current": {
+              "revealId": 1,
+              "holdEff": 3.2
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "F1-triceratops-0.904-normal",
+      "source": "gdd: press-queue.md F1 table row 2",
+      "given": {
+        "reveal": {
+          "D": {
+            "formedS": 2.45,
+            "revealLen": 2.95,
+            "hasWord": true,
+            "wordLen": 0.904,
+            "castId": "tb_d_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ],
+          "expectState": {
+            "current": {
+              "revealId": 1,
+              "holdEff": 3.604
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "F1-quetzalcoatlus-1.15-normal",
+      "source": "gdd: press-queue.md F1 table row 3",
+      "given": {
+        "reveal": {
+          "D": {
+            "formedS": 2.45,
+            "revealLen": 2.95,
+            "hasWord": true,
+            "wordLen": 1.15,
+            "castId": "tb_d_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ],
+          "expectState": {
+            "current": {
+              "revealId": 1,
+              "holdEff": 3.85
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "F1-no-voiceDurations-entry",
+      "source": "gdd: press-queue.md F1 (missing voiceDurations entry); AC-7",
+      "given": {
+        "reveal": {
+          "D": {
+            "formedS": 2.45,
+            "revealLen": 2.95,
+            "hasWord": true,
+            "castId": "tb_d_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "log"
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ],
+          "expectState": {
+            "current": {
+              "revealId": 1,
+              "holdEff": 3.95
+            }
+          }
+        }
+      ],
+      "note": "No wordLen in the stub: word_end = formedS + 1.5, one debug log line."
+    },
+    {
+      "id": "F1-reduced-word-1.25",
+      "source": "gdd: press-queue.md F1 table row 5; F5",
+      "given": {
+        "reveal": {
+          "D": {
+            "formedS": 1.2,
+            "revealLen": 1.5,
+            "hasWord": true,
+            "wordLen": 1.25,
+            "castId": "tb_d_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ],
+          "expectState": {
+            "current": {
+              "revealId": 1,
+              "holdEff": 3.0
+            }
+          }
+        }
+      ],
+      "note": "The fake Reveal Stage answers with the reduced lengths; hold_s stays 3.0 (K-15)."
+    },
+    {
+      "id": "F1-hold-1.0-tuning-nest",
+      "source": "gdd: press-queue.md F1 table row 6",
+      "given": {
+        "reveal": {
+          "D": {
+            "formedS": 2.45,
+            "revealLen": 2.95,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          }
+        },
+        "knobs": {
+          "hold_s": 1.0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ],
+          "expectState": {
+            "current": {
+              "revealId": 1,
+              "holdEff": 2.95
+            }
+          }
+        }
+      ],
+      "note": "The cap (hold_s + 1.5 = 2.5) would cut the word; holdEff is revealLen. The build check forbids this data."
+    },
+    {
+      "id": "F1-word-1.25-normal-cap-not-reached",
+      "source": "gdd: press-queue.md F1 (min with hold_s + hold_ext_max_s)",
+      "given": {
+        "reveal": {
+          "D": {
+            "formedS": 2.45,
+            "revealLen": 2.95,
+            "hasWord": true,
+            "wordLen": 1.25,
+            "castId": "tb_d_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ],
+          "expectState": {
+            "current": {
+              "revealId": 1,
+              "holdEff": 3.95
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC24-hasWord-false",
+      "source": "gdd: press-queue.md AC-24; F1 (term dropped when hasWord is false)",
+      "given": {
+        "reveal": {
+          "D": {
+            "formedS": 2.45,
+            "revealLen": 2.95,
+            "hasWord": false,
+            "wordLen": 1.0,
+            "castId": "tb_d_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ],
+          "expectState": {
+            "current": {
+              "revealId": 1,
+              "holdEff": 3.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC12-fallback-long-revealLen",
+      "source": "gdd: press-queue.md AC-12; R6 (fallback lengths)",
+      "given": {
+        "reveal": {
+          "D": {
+            "formedS": 4.0,
+            "revealLen": 4.0,
+            "hasWord": false,
+            "castId": "tb_d_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ],
+          "expectState": {
+            "current": {
+              "revealId": 1,
+              "holdEff": 4.0
+            }
+          }
+        }
+      ],
+      "note": "A fade-in fallback whose own length exceeds hold_s."
+    },
+    {
+      "id": "AC1-start-at-once",
+      "source": "gdd: press-queue.md AC-1; R3.1",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC2-queue-during-hold-then-advance",
+      "source": "gdd: press-queue.md AC-2; R5.2",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 13.2490234375
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 13.25
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "B",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 13.25
+            }
+          ]
+        }
+      ],
+      "note": "D's holdEff is 3.25 (dyadic stub). A tick just before 13.25 starts nothing; at 13.25 B starts with r0 = 13.25."
+    },
+    {
+      "id": "AC3-formed-guard",
+      "source": "gdd: press-queue.md AC-3; R5.2 (needs current.formed)",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 11.0
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 13.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 13.5
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 13.625
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "B",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 13.625
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC4-ignore-when-full",
+      "source": "gdd: press-queue.md AC-4; R3.3",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "A",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "C",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.75
+          },
+          "event": {
+            "type": "press",
+            "key": "E",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "ignored"
+            }
+          ],
+          "expectState": {
+            "queueKeys": [
+              "A",
+              "B",
+              "C"
+            ],
+            "nextRevealId": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC5-rest-then-start-at-once",
+      "source": "gdd: press-queue.md AC-5; R3.1",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 14.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 14.125
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "B",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 14.125
+            },
+            {
+              "out": "started",
+              "revealId": 2,
+              "r0": 14.125,
+              "castId": "tb_b_item_01"
+            }
+          ]
+        }
+      ],
+      "note": "r0 is the press's own time, not the next tick's."
+    },
+    {
+      "id": "AC6-no-jumping",
+      "source": "gdd: press-queue.md AC-6; R3 (never jump a queued key)",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 12.75
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 13.5
+          },
+          "event": {
+            "type": "press",
+            "key": "C",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 13.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "B",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 13.5
+            }
+          ],
+          "expectState": {
+            "queueKeys": [
+              "C"
+            ]
+          }
+        }
+      ],
+      "note": "At 13.5 the hold has passed but B waits; C still queues behind it."
+    },
+    {
+      "id": "R3-out-of-order-stamp-before-r0",
+      "source": "gdd: press-queue.md R3 (a stamp before r0 is during the hold); Edge Cases",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 13.5
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey",
+            "stampLag": 4.0
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        }
+      ],
+      "note": "The press is delivered at uptime 13.5 but stamped 4.0 s earlier (9.5, before r0 = 10.0): Input R8 never reorders, and the queue treats it as during the hold. `stampLag` is the one way a case states an event stamp different from t (spec.md)."
+    },
+    {
+      "id": "PQ-Q2-empty-queue-press-at-exact-boundary",
+      "source": "gdd: press-queue.md R3.1 (>=); PQ-Q2 (answered by the author, pending TASK-082)",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 13.25
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "B",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 13.25
+            },
+            {
+              "out": "started",
+              "revealId": 2,
+              "r0": 13.25,
+              "castId": "tb_b_item_01"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PQ-Q2-tick-first-at-boundary",
+      "source": "gdd: press-queue.md R5; PQ-Q2 (answered by the author, pending TASK-082)",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 12.75
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 13.25
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "B",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 13.25
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 13.25
+          },
+          "event": {
+            "type": "press",
+            "key": "C",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        }
+      ],
+      "note": "Tick first: the head (B) starts, then C queues at index 0 behind the new current."
+    },
+    {
+      "id": "PQ-Q2-press-first-at-boundary",
+      "source": "gdd: press-queue.md R3; PQ-Q2 (answered by the author, pending TASK-082)",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 12.75
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 13.25
+          },
+          "event": {
+            "type": "press",
+            "key": "C",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 13.25
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "B",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 13.25
+            }
+          ],
+          "expectState": {
+            "queueKeys": [
+              "C"
+            ]
+          }
+        }
+      ],
+      "note": "Press first: C queues behind B (index 1); the tick then starts B."
+    },
+    {
+      "id": "AC8-mash-ten-at-rest",
+      "source": "gdd: press-queue.md AC-8; F3 row 1",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "A",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "A",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_a_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "C",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "E",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "ignored"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "F",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "ignored"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "G",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "ignored"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "H",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "ignored"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "I",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "ignored"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "J",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "ignored"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F3-mash-ten-during-hold",
+      "source": "gdd: press-queue.md F3 row 2",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "A",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "C",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "ignored"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "E",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "ignored"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "F",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "ignored"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "G",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "ignored"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "H",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "ignored"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "I",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "ignored"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "J",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "ignored"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F3-queue-max-0",
+      "source": "gdd: press-queue.md F3 row 3 (tuning test)",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        },
+        "knobs": {
+          "queue_max": 0
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "ignored"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F4-worst-wait-11.55",
+      "source": "gdd: press-queue.md F4 (worst case)",
+      "given": {
+        "reveal": {
+          "Q": {
+            "formedS": 2.45,
+            "revealLen": 2.95,
+            "hasWord": true,
+            "wordLen": 1.15,
+            "castId": "tb_q_item_01"
+          },
+          "R": {
+            "formedS": 2.45,
+            "revealLen": 2.95,
+            "hasWord": true,
+            "wordLen": 1.15,
+            "castId": "tb_r_item_01"
+          },
+          "S": {
+            "formedS": 2.45,
+            "revealLen": 2.95,
+            "hasWord": true,
+            "wordLen": 1.15,
+            "castId": "tb_s_item_01"
+          },
+          "T": {
+            "formedS": 2.45,
+            "revealLen": 2.95,
+            "hasWord": true,
+            "wordLen": 1.15,
+            "castId": "tb_t_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "press",
+            "key": "Q",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "Q",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 0.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 0.0,
+              "castId": "tb_q_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "press",
+            "key": "R",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "press",
+            "key": "S",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "press",
+            "key": "T",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.45
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 3.851
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "R",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 3.851
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 6.301
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 2
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 7.702
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 3,
+              "key": "S",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 7.702
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.152
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 3
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 11.553
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 4,
+              "key": "T",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 11.553
+            }
+          ]
+        }
+      ],
+      "note": "holdEff 3.85 each (the quetzalcoatlus row). Each tick comes 1 ms after its boundary, so a frame's lag adds up as in F4 ('plus at most one frame each'): T starts at 11.553, i.e. 11.55 s plus 3 ms."
+    },
+    {
+      "id": "AC11-formed-for-old-reveal-ignored",
+      "source": "gdd: press-queue.md AC-11; R7",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 7
+          },
+          "expect": [],
+          "expectState": {
+            "current": {
+              "revealId": 1,
+              "formed": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC11-second-formed-ignored",
+      "source": "gdd: press-queue.md AC-11; R7",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": [],
+          "expectState": {
+            "current": {
+              "revealId": 1,
+              "formed": true,
+              "formedAt": 12.5
+            }
+          }
+        },
+        {
+          "t": {
+            "uptime": 12.75
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": [],
+          "expectState": {
+            "current": {
+              "revealId": 1,
+              "formed": true,
+              "formedAt": 12.5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC11-formed-timeout-inclusive",
+      "source": "gdd: press-queue.md AC-11; R5.1; PQ-Q4 (answered by the author, pending TASK-082)",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 13.9990234375
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "current": {
+              "formed": false
+            }
+          }
+        },
+        {
+          "t": {
+            "uptime": 14.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "log"
+            }
+          ],
+          "expectState": {
+            "current": {
+              "formed": true,
+              "formedAt": 14.0
+            }
+          }
+        },
+        {
+          "t": {
+            "uptime": 14.125
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": [],
+          "expectState": {
+            "current": {
+              "formed": true,
+              "formedAt": 14.0
+            }
+          }
+        }
+      ],
+      "note": "Timeout at r0 + revealLen + formed_timeout_s = 10 + 3 + 1 = 14.0, inclusive (>=); a real formed after it is ignored."
+    },
+    {
+      "id": "AC14-panel-clears-and-settles",
+      "source": "gdd: press-queue.md AC-14; R8",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "A",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "C",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 11.0
+          },
+          "event": {
+            "type": "panelOpen"
+          },
+          "expect": [],
+          "expectState": {
+            "queueKeys": [],
+            "current": {
+              "revealId": 1,
+              "formed": true,
+              "formedAt": 11.0
+            },
+            "restingSince": 11.0
+          }
+        },
+        {
+          "t": {
+            "uptime": 20.0
+          },
+          "event": {
+            "type": "panelClose"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 20.5
+          },
+          "event": {
+            "type": "press",
+            "key": "E",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "E",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 20.5
+            },
+            {
+              "out": "started",
+              "revealId": 2,
+              "r0": 20.5,
+              "castId": "tb_e_item_01"
+            }
+          ]
+        }
+      ],
+      "note": "No output for the three dropped presses; the settled creature's hold counts as passed; formedAt and restingSince are the settle's play time (PQ-Q3, answered, pending TASK-082)."
+    },
+    {
+      "id": "AC15-background-clears-and-excludes-time",
+      "source": "gdd: press-queue.md AC-15; R9",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 11.0
+          },
+          "event": {
+            "type": "background"
+          },
+          "expect": [],
+          "expectState": {
+            "queueKeys": [],
+            "current": {
+              "formed": true,
+              "formedAt": 11.0
+            }
+          }
+        },
+        {
+          "t": {
+            "uptime": 311.0
+          },
+          "event": {
+            "type": "foreground"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 311.5
+          },
+          "event": {
+            "type": "press",
+            "key": "C",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "C",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 11.5
+            },
+            {
+              "out": "started",
+              "revealId": 2,
+              "r0": 11.5,
+              "castId": "tb_c_item_01"
+            }
+          ]
+        }
+      ],
+      "note": "Play clock = uptime - background time: the 300 s away do not count, so C's r0 is 11.5 in play time."
+    },
+    {
+      "id": "AC23-gate-freeze-then-timeout",
+      "source": "gdd: press-queue.md AC-23; R8a",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "A",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 11.0
+          },
+          "event": {
+            "type": "freeze"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 31.0
+          },
+          "event": {
+            "type": "resume"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 32.5
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 33.2490234375
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 33.25
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "A",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 13.25
+            }
+          ],
+          "expectState": {
+            "queueKeys": [
+              "B"
+            ]
+          }
+        }
+      ],
+      "note": "Frozen from uptime 11 to 31: the play clock stands still for 20 s. D forms at play 12.5 (uptime 32.5), and A starts at play time 13.25 (r0 + holdEff), 20 s of uptime later."
+    },
+    {
+      "id": "AC23-gate-correct-answer-clears",
+      "source": "gdd: press-queue.md AC-23; R8a then R8",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "A",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 11.0
+          },
+          "event": {
+            "type": "freeze"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 20.0
+          },
+          "event": {
+            "type": "panelOpen"
+          },
+          "expect": [],
+          "expectState": {
+            "queueKeys": [],
+            "current": {
+              "formed": true,
+              "formedAt": 11.0
+            }
+          }
+        }
+      ],
+      "note": "The correct answer opens the panel: R8 clears and settles at the frozen play time 11.0."
+    },
+    {
+      "id": "AC13-reduce-motion-locked-at-start",
+      "source": "gdd: press-queue.md AC-13; F5; R6",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01",
+            "reduced": {
+              "formedS": 1.25,
+              "revealLen": 1.5
+            }
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ],
+          "expectState": {
+            "current": {
+              "holdEff": 3.25
+            }
+          }
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "accessibilityChanged",
+            "reduceMotion": true
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 13.25
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "current": {
+              "revealId": 1
+            }
+          }
+        },
+        {
+          "t": {
+            "uptime": 13.5
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "B",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 13.5
+            },
+            {
+              "out": "started",
+              "revealId": 2,
+              "r0": 13.5,
+              "castId": "tb_b_item_01"
+            }
+          ],
+          "expectState": {
+            "current": {
+              "holdEff": 3.0
+            }
+          }
+        }
+      ],
+      "note": "D keeps its locked 3.25. B starts after the change with the reduced lengths: holdEff = max(3.0, 1.5, min(1.25+0.25+0.5, 4.5)) = 3.0."
+    },
+    {
+      "id": "AC20-restingSince",
+      "source": "gdd: press-queue.md AC-20; R10",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ],
+          "expectState": {
+            "restingSince": null
+          }
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": [],
+          "expectState": {
+            "restingSince": null
+          }
+        },
+        {
+          "t": {
+            "uptime": 13.25
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "B",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 13.25
+            }
+          ],
+          "expectState": {
+            "restingSince": null
+          }
+        },
+        {
+          "t": {
+            "uptime": 15.75
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 2
+          },
+          "expect": [],
+          "expectState": {
+            "restingSince": 15.75
+          }
+        }
+      ]
+    },
+    {
+      "id": "AC22-one-advance-per-tick",
+      "source": "gdd: press-queue.md AC-22; R5.2",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "A",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 100.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "A",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 100.0
+            }
+          ],
+          "expectState": {
+            "queueKeys": [
+              "B"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R5-frame-hitch-r0-is-tick-time",
+      "source": "gdd: press-queue.md Edge Cases (a frame hitch of 200 ms); R5",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 13.453125
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "B",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 13.453125
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC10-revealId-no-gaps",
+      "source": "gdd: press-queue.md AC-10; R2",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "A",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "A",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_a_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "C",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 2
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "E",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "ignored"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 11.0
+          },
+          "event": {
+            "type": "panelOpen"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 12.0
+          },
+          "event": {
+            "type": "panelClose"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "press",
+            "key": "F",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "F",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 12.5
+            },
+            {
+              "out": "started",
+              "revealId": 2,
+              "r0": 12.5,
+              "castId": "tb_f_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 15.0
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 2
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 15.75
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 16.0
+          },
+          "event": {
+            "type": "press",
+            "key": "G",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 3,
+              "key": "G",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 16.0
+            },
+            {
+              "out": "started",
+              "revealId": 3,
+              "r0": 16.0,
+              "castId": "tb_g_item_01"
+            }
+          ],
+          "expectState": {
+            "nextRevealId": 4
+          }
+        }
+      ],
+      "note": "Queued-then-cleared and ignored presses take no number."
+    },
+    {
+      "id": "AC17-first-press-after-title",
+      "source": "gdd: press-queue.md AC-17; R3 (Title)",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 5.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 5.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 5.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        }
+      ],
+      "note": "Play begins with no current and an empty queue; startPlay is not a press (Input's)."
+    },
+    {
+      "id": "R11-snapshot-queue-keys-in-order",
+      "source": "gdd: press-queue.md R11",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "C",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "C",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "A",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 2
+            }
+          ],
+          "expectState": {
+            "queueKeys": [
+              "C",
+              "C",
+              "A"
+            ],
+            "current": {
+              "revealId": 1,
+              "key": "D"
+            }
+          }
+        }
+      ],
+      "note": "The same key may be queued twice (R3)."
+    },
+    {
+      "id": "R3-hold-passed-but-not-formed-queues",
+      "source": "gdd: press-queue.md R3.1 (needs current.formed); F2",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 13.5
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        }
+      ],
+      "note": "The hold (3.25) has passed but D has not formed: B queues."
+    },
+    {
+      "id": "R3-formed-but-hold-not-passed-queues",
+      "source": "gdd: press-queue.md R3.1; F2",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 13.0
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R5-timeout-then-advance-same-tick",
+      "source": "gdd: press-queue.md R5 (step 1 then step 2 in one tick)",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 14.0
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "log"
+            },
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "B",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 14.0
+            }
+          ]
+        }
+      ],
+      "note": "formed never arrives; at 14.0 the timeout marks D formed (one log), and the same tick's advance starts B."
+    },
+    {
+      "id": "R5-timeout-uses-reduced-revealLen",
+      "source": "gdd: press-queue.md R5.1; F5",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01",
+            "reduced": {
+              "formedS": 1.25,
+              "revealLen": 1.5
+            }
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        },
+        "accessibility": {
+          "reduceMotion": true
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "B",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_b_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.4990234375
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [],
+          "expectState": {
+            "current": {
+              "formed": false
+            }
+          }
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "log"
+            }
+          ],
+          "expectState": {
+            "current": {
+              "formed": true,
+              "formedAt": 12.5
+            }
+          }
+        }
+      ],
+      "note": "Reduce Motion on at start: revealLen 1.5, so the timeout is 10 + 1.5 + 1 = 12.5."
+    },
+    {
+      "id": "R7-formedAt-is-arrival-time",
+      "source": "gdd: press-queue.md R7 (formedAt = now)",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.75
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": [],
+          "expectState": {
+            "current": {
+              "formed": true,
+              "formedAt": 12.75
+            },
+            "restingSince": 12.75
+          }
+        }
+      ],
+      "note": "formed can arrive later than s = formedS; formedAt is its arrival (play) time."
+    },
+    {
+      "id": "F3-queue-max-2",
+      "source": "gdd: press-queue.md F3 (queue_max as data, R13)",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        },
+        "knobs": {
+          "queue_max": 2
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "A",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "C",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "ignored"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC18-sources-equal-hardwareKey",
+      "source": "gdd: press-queue.md AC-18; R12",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hardwareKey"
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 13.25
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "B",
+              "source": "hardwareKey",
+              "origin": null,
+              "r0": 13.25
+            }
+          ]
+        }
+      ],
+      "note": "Identical outcomes and times for every source; only origin passes through to startReveal."
+    },
+    {
+      "id": "AC18-sources-equal-hint",
+      "source": "gdd: press-queue.md AC-18; R12",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "hint(3)",
+            "origin": [
+              400.0,
+              200.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "hint(3)",
+              "origin": [
+                400.0,
+                200.0
+              ],
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "hint(3)",
+            "origin": [
+              400.0,
+              200.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 13.25
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "B",
+              "source": "hint(3)",
+              "origin": [
+                400.0,
+                200.0
+              ],
+              "r0": 13.25
+            }
+          ]
+        }
+      ],
+      "note": "Identical outcomes and times for every source; only origin passes through to startReveal."
+    },
+    {
+      "id": "AC18-sources-equal-keyboardRow",
+      "source": "gdd: press-queue.md AC-18; R12",
+      "given": {
+        "reveal": {
+          "A": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_a_item_01"
+          },
+          "B": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_b_item_01"
+          },
+          "C": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_c_item_01"
+          },
+          "D": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_d_item_01"
+          },
+          "E": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_e_item_01"
+          },
+          "F": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_f_item_01"
+          },
+          "G": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_g_item_01"
+          },
+          "H": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_h_item_01"
+          },
+          "I": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_i_item_01"
+          },
+          "J": {
+            "formedS": 2.5,
+            "revealLen": 3.0,
+            "hasWord": true,
+            "wordLen": 0.5,
+            "castId": "tb_j_item_01"
+          }
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "press",
+            "key": "D",
+            "source": "keyboardRow",
+            "origin": [
+              640.0,
+              650.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 1,
+              "key": "D",
+              "source": "keyboardRow",
+              "origin": [
+                640.0,
+                650.0
+              ],
+              "r0": 10.0
+            },
+            {
+              "out": "started",
+              "revealId": 1,
+              "r0": 10.0,
+              "castId": "tb_d_item_01"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 10.5
+          },
+          "event": {
+            "type": "press",
+            "key": "B",
+            "source": "keyboardRow",
+            "origin": [
+              640.0,
+              650.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "queued",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 12.5
+          },
+          "event": {
+            "type": "formed",
+            "revealId": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 13.25
+          },
+          "event": {
+            "type": "tick"
+          },
+          "expect": [
+            {
+              "out": "startReveal",
+              "revealId": 2,
+              "key": "B",
+              "source": "keyboardRow",
+              "origin": [
+                640.0,
+                650.0
+              ],
+              "r0": 13.25
+            }
+          ]
+        }
+      ],
+      "note": "Identical outcomes and times for every source; only origin passes through to startReveal."
+    }
+  ]
+}
