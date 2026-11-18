@@ -38,3 +38,8 @@ Findings:
 - [RECOMMENDED] Engine start: R2.1 (runs from start-up) conflicted with the "Not started" state (starts on first input) → the engine starts silent at launch; "no sound before the first input" means nothing is scheduled (R2.1, R6, States) (fixed)
 - [RECOMMENDED] AC-6 tied letter lines to MorphCore's provisional reduced T → a fixed letter_len_max_s = 1.0 s (A3, knobs, AC-6) (fixed)
 Reviewed-Content-Hash: design/gdd/audio-voice.md 5f743e882a62b62e7206eaa670419154889d6d9a
+
+## Update — 2026-11-18 — TASK-042: F6 names voiceDurations (no re-review)
+Review mode: lean · Workflow: standard
+Change: F6 and Dependencies now name the Key Table's `voiceDurations` field (TASK-042, checked by its V15) as the source of each word line's length; the bound T + 1.5 s stays as the run-time fallback for a missing entry. The first entry's Recommended item on a per-line duration is closed (fixed).
+Reviewed-Content-Hash: design/gdd/audio-voice.md 1f3d8158975fa07f5bac347250674314dc0ac4f0

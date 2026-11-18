@@ -290,10 +290,10 @@ word_end   = T_active + word_offset_s + word_len
 hold_eff  ≥ min( max(hold, word_end), hold + hold_ext_max_s )
 ```
 - `T_active` is the active timing set's T (normal 2.45 s; reduced 1.2 s).
-- `word_len` comes **from data, never from playback**: the build records each word line's duration, and a build
-  check enforces `word_len ≤ word_len_max_s = hold_ext_max_s − word_offset_s = 1.5 − 0.25 = 1.25 s` (AC-6). Until
-  the Key Table carries a per-line duration (follow-up for that GDD), the Press Queue may use the bound
-  `T_active + 1.5 s` for every word.
+- `word_len` comes **from data, never from playback**: the Key Table's `voiceDurations` (written by the build
+  tool from the rendered files; its V15 checks each value against its file within ±0.01 s), and a build check
+  enforces `word_len ≤ word_len_max_s = hold_ext_max_s − word_offset_s = 1.5 − 0.25 = 1.25 s` (AC-6, Key Table
+  V15). If an entry is missing at run time, the Press Queue uses the bound `T_active + 1.5 s` for that word.
 - With the bound, `word_end ≤ T + 1.5`, which is always within `hold + 1.5`, so the cap never has to cut a word.
 
 | Case | word_end | hold 3.0 → effective | extra |
@@ -336,7 +336,7 @@ about **2.7 s** later than with a plain 3.0 s hold. Luan accepted this for a wor
 
 **Upstream (Audio & Voice reads):**
 - **Key Table & Theme Data:** `sfx` paths, `voiceLocales`, voice line ids, the off-main-thread theme load that
-  includes decoding (R4.1). Follow-up for that GDD: a per-line voice duration (F6).
+  includes decoding (R4.1); `voiceDurations`, each voice line's length (F6).
 - **Settings Store:** `volume` 0–10 (default 8) and `muted`, handed over as one gain (its F2), plus the slider preview
   (R5); later the voice locale.
 - **Input & Key Filter (TASK-037):** the press event and `sparkle`, `creatureTap`, `startPlay`, through the Press
