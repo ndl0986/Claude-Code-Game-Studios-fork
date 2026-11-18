@@ -54,7 +54,7 @@ For the child the gate is invisible. The moon is just the moon.
 **G1. Step 1: the moon hold.**
 - **This GDD owns the moon's hit region** and publishes it to Input as touch layer 3 (Input R7): a
   circle of `moon_hit_px` (50 stage px radius, as in the one-shot's `GATE.r`; ≥ 44 pt **diameter** on every supported screen) around the drawn crescent. A touch down on it emits `gateTouch(began, pointerId)`;
-  its up or cancel emits `gateTouch(ended, pointerId)`. **Input change (TASK-054 I2, open):** Input also emits
+  its up or cancel emits `gateTouch(ended, pointerId)`. **Input (TASK-054 I2, landed in TASK-054a (5e1c365)):** Input also emits
   `gateTouch(ended, pointerId)` when that pointer leaves the region grown by `moon_slop_pt` (20 pt), so
   a finger that drifts a little keeps its hold and one that slides away resets. Input R7 emits only
   began/ended today.
@@ -85,7 +85,9 @@ corner of a keyboard holds more keys; game-qc-android item 3).
 - "No other key held" is judged from **the OS's current key state at the moment Q goes down** (for
   example `CGEventSource.keyState`), not from Input's tracked downs, because macOS can drop the key-up
   of a key pressed while ⌘ is held; a stale tracked key must never disable the way out under the kiosk.
-  Input change: **TASK-054 I1 (open, safety)**. Merged Input R6 (TASK-050) still judges from the held set.
+  Input: **TASK-054 I1 (safety), landed in TASK-054a (5e1c365)**. The key-state read ships only if Input AC-1k6 shows no Input
+  Monitoring prompt on a clean Mac; otherwise the chord uses the held set kept honest by the ⌘-release
+  rule (Input R6), which alone passes AC-27.
 - **Moon sleep applies to the chord too:** during sleep the chord does nothing. The chord
   has no 1.5 s hold, so its fastest attempt is a little quicker than the moon's (F2 gives its figure). (A
   grown-up who mistyped waits 10 s.)
@@ -95,7 +97,7 @@ corner of a keyboard holds more keys; game-qc-android item 3).
   (K-12).
 - There is no chord on iPadOS (Input R6) or, for now, Android.
 - Input's `openPanel` output means "start the gate's second step" (Input R6 as merged in TASK-050).
-- Working on Title, and returning to the state the gate opened from: **TASK-054 I4 (open)**.
+- Working on Title, and returning to the state the gate opened from: **TASK-054 I4, landed in TASK-054a (5e1c365)**.
 
 **G3. Step 2: the number challenge.**
 - **Code:** four digits `d1 d2 d3 d4`, each drawn uniformly from 0–9 with an **injected seed**, a new
@@ -211,17 +213,16 @@ finishes first. `panel_max_s` ≥ `panel_idle_s` always. A "Hold to confirm" has
 - The panel owns the **Child lock switch**, macOS only. **On** → writes `childLock = true`. **Off** (after G8's hold) → turns the lock off **for this run only**: the stored value is not set to
   false, so at the next launch the lock engages again once the app is ready (K-21, K-12, Settings Store
   R8). If the lock was never turned on, it stays off.
-- **Runtime state for "off for this run" (TASK-054 S1/S2, open, Settings Store owner):** next to the stored
+- **Runtime state for "off for this run" (TASK-054 S1/S2, landed in TASK-054a (5e1c365); Settings Store R8, R10):** next to the stored
   `childLock`, the store keeps an in-memory `childLockActive` (starts equal to `childLock` at launch).
   Turning the lock off sets `childLockActive = false`, **sends one R10 notification and writes
-  nothing**; turning it on sets both and writes. Reset (R9) sets both to false. Child Lock-in applies `childLockActive`. Merged Settings Store R8 (TASK-050) keeps OFF in memory but
-  doesn't yet name `childLockActive` or define its write-free notification, and its AC-15b differs
-  from this GDD's AC-15 until S1/S2 land.
+  nothing**; turning it on sets both and writes. Reset (R9) sets both to false. Child Lock-in applies `childLockActive`. Settings Store R8 and R10 now define both, and its AC-15b
+  matches this GDD's AC-15.
 - Child Lock-in applies `childLockActive`: a lock **already on stays on while the panel is open** (the
   panel is inside the full-screen app); turning it **off** disengages at once, with the panel still
   open; turning it **on** in the panel engages on `panelDidClose` (TASK-052).
 - **While the lock is on, ⌘-combinations stay swallowed in every Input state**, including Gate
-  challenge and Panel open, so ⌘Q or ⌥⌘Esc typed in the panel can't skip Quit's hold (Input change, **TASK-054 I3, open, safety**).
+  challenge and Panel open, so ⌘Q or ⌥⌘Esc typed in the panel can't skip Quit's hold (Input R5/states, **TASK-054 I3 (safety), landed in TASK-054a (5e1c365)**).
 - **The way out with the lock on:** ⌃⌥⌘Q (works with the kiosk on, Input R6) or the moon → step 2 →
   panel → **Quit** (G8 hold), or turn the lock off (G8 hold) and then ⌘Q works again (Input R5).
 - Events for #13: `panelWillOpen`, `panelDidClose`, and the `childLockActive` changes (via Settings Store
@@ -249,8 +250,8 @@ Moon sleep is a timer on Idle, not a state the grown-up sees.
 
 | System | Direction | What |
 |---|---|---|
-| Input & Key Filter (#2) | in / out | in: `gateTouch`, `openPanel` (chord), touches and keys in Challenge and Panel. out: enter/leave **Gate challenge** and **Panel open**. Done in **TASK-050**: the Gate challenge state, the exact chord (held set), the chord ignored during the challenge. Open in **TASK-054**: I1 the chord judged from OS key state (safety), I2 `gateTouch(ended)` on leaving the slop region, I3 ⌘ swallowed in every state while locked (safety), I4 the chord on Title and return to the origin state |
-| Settings Store (#4) | out | writes `volume`, `muted`, `themeId`, `weather`, `windy`, `keyboardRow`, `childLock`; Reset (R9). K-21's "off for this run" changes R1/R8 and adds the runtime `childLockActive` with a write-free R10 notification (G11): **TASK-054 S1/S2 (open)**; TASK-050 made OFF run-only |
+| Input & Key Filter (#2) | in / out | in: `gateTouch`, `openPanel` (chord), touches and keys in Challenge and Panel. out: enter/leave **Gate challenge** and **Panel open**. Done in **TASK-050**: the Gate challenge state, the exact chord (held set), the chord ignored during the challenge. Landed in TASK-054a (5e1c365): I1 the chord judged from OS key state if AC-1k6 passes (safety), I2 `gateTouch(ended)` on leaving the slop region, I3 ⌘ swallowed in every state while locked (safety), I4 the chord on Title and return to the origin state |
+| Settings Store (#4) | out | writes `volume`, `muted`, `themeId`, `weather`, `windy`, `keyboardRow`, `childLock`; Reset (R9). K-21's "off for this run" changes R1/R8 and adds the runtime `childLockActive` with a write-free R10 notification (G11): **TASK-054 S1/S2, landed in TASK-054a (5e1c365)**; TASK-050 made OFF run-only |
 | Press Queue (#7) | out | challenge open → **freeze**, close → **resume** (TASK-050); panel open → clear and settle (R8, K-15) |
 | Reveal Stage (#9) | out | challenge open → **freeze/resume** pair next to settle (**TASK-049**); panel open → settle to formed |
 | Hint Letters (#10) | out | challenge open → **freeze `hintTime`**, close → resume (**TASK-047**) |
@@ -259,7 +260,8 @@ Moon sleep is a timer on Idle, not a state the grown-up sees.
 | App Shell & Title (#14) | — | the chord works on the Title screen (G2); whether the moon is drawn there; backgrounding closes challenge and panel |
 | Child Lock-in (#13) | out | G11 |
 | Key Table & Theme Data (#1) | — | theme list; next reveal uses the new theme (R3) |
-| Scene (#15), Keyboard Row (#16) | — | their rows appear when they ship |
+| Scene: Time of Day & Weather (#15) | in | `look` and `lookBlend` for the moon's opacity (UI Requirements; Scene R1, F1); the Scene draws no moon disc. The weather row appears when it ships |
+| Keyboard Row (#16) | — | its row appears when it ships |
 | Privacy & Kids Compliance (#5) | constraint | PKC-02, PKC-07, PKC-14 (no input logged in release: the code is never logged) |
 | Localization (#19) | later | the number words and panel text |
 | Accessibility (#17) | — | Reduce Motion rules here (below) |
@@ -344,16 +346,18 @@ leader (Open Questions Q6).
 - **Input & Key Filter** (Approved): R5, R6 (chord), R7 (moon layer), states. TASK-050 added the Gate
   challenge state, the exact chord (from the held set) and the chord ignored during the challenge.
   **Audio:** the parade tune pauses and resumes with the walk (TASK-050, done).
-- **Open follow-up TASK-054** (owners as assigned in `production/team/TASK-054-followups.md`; the Input and
-  Settings Store part, 054a, is game-dev-android's):
+- **Follow-up TASK-054** (`production/team/TASK-054-followups.md`). **TASK-054a** (Input and Settings
+  Store; game-dev-android) is **merged** (5e1c365); **TASK-054b** is split across game-dev-ios,
+  game-dev-android and game-qc-ios. 054a landed (all merged in 5e1c365):
   - **S1** an R10 notification for a run-only OFF with no write; **S2** the run value `childLockActive`
     defined in the Settings Store (at launch = stored `childLock`; OFF changes only the run value);
   - **I1 (safety)** the chord's "no other key held" judged from the OS key state;
   - **I2** `gateTouch(ended)` when the pointer leaves the moon slop region;
   - **I3 (safety)** ⌘-combinations swallowed in every Input state while the lock is on;
   - **I4** the chord on Title, and a closed gate returning to the state it opened from.
-- **Release-blocking:** AC-27 and AC-34 can't pass until I1 and I3 land in Input; AC-15's no-write
-  exception and AC-19 depend on S1/S2; AC-26's drift case depends on I2; AC-31 depends on I4.
+- **Release-blocking (macOS):** I1 and I3 have landed in Input (TASK-054a), so AC-27 and AC-34 are **no longer blocked by design**, but they stay **NOT ASSESSED** until a Mac build runs Input AC-1k6 (no Input
+  Monitoring prompt on a clean Mac; otherwise the key-state read is removed from the build) and the
+  real-Mac ACs. AC-15/19 (S1/S2), AC-26 (I2) and AC-31 (I4) now rest on merged rules.
 - **Press Queue** R8 (K-15) and its new freeze/resume (TASK-050); **Reveal Stage** freeze/resume
   (TASK-049); **Hint Letters** `hintTime` freeze (TASK-047); **Parade** walk pause and debug start
   (TASK-046, K-17).
@@ -390,6 +394,14 @@ knob: it is fixed at 4 by K-20 (G3, AC-05); changing it is a Luan decision.
 - The challenge card and the panel use the grown-up card shape, Dusk Blue controls, 15–22 pt regular.
 - The moon is never highlighted, labelled on screen or animated to invite a touch; only the Starlight
   ring shows while it is held (art bible §3, §4).
+- **The moon's look** (TASK-054 P1; Scene R1, merged in 09459f1): this is **the sky's only moon**; the
+  Scene draws no moon disc. The gate draws it in `#e6d6a4` and takes the Scene's `look` and
+  `lookBlend` (Scene F1): opacity **70% in Morning and Day** (a "daytime moon", art bible §2) and
+  **100% at Dusk and Night**, crossfaded with the Scene's blend:
+  `moonAlpha = (1 − w) · α(prev) + w · α(P)`, with `α(Morning) = α(Day) = 0.7`, `α(Dusk) = α(Night) = 1.0`
+  and `(prev, P, w)` = `lookBlend`. Example: 16:07 (53% Day, 47% Dusk) → 0.7 · 0.533 + 1.0 · 0.467 ≈ 0.84.
+  It follows the wall clock like the Scene, also under the challenge's freeze and the panel. The
+  hit region (G1) and the Starlight ring (opacity 1) never change with the look.
 - **Reduce Motion:** the ring still fills (it is progress, not decoration) and never pulses; the
   challenge and panel appear and leave without a fade or slide; the dim is instant; the confirm ring
   fills the same way.
@@ -478,7 +490,8 @@ All timers use an injected clock and the code an injected seed, so every criteri
     stays THEN the hold continues; WHEN it moves 25 pt outside THEN it resets.
 27. **AC-27 · stale key and chord:** GIVEN the kiosk on and a key whose key-up the app missed (tracked as
     held but up in the OS key state), WHEN exactly ⌃⌥⌘Q go down THEN the challenge opens. GIVEN the
-    challenge or panel showing, the chord does nothing.
+    challenge or panel showing, the chord does nothing. Evidence: Input AC-1k3 (stale key) and AC-1k6
+    (real Mac, release-blocking for macOS, NOT ASSESSED until run).
 28. **AC-28 · Quit and lock rows:** with the lock off, the panel shows no Quit; with it on, Quit is shown.
 29. **AC-29 · hard cap:** GIVEN the panel open and a control tapped every 50 s, THEN it closes at 300 s.
 30. **AC-30 · no code in logs (PKC-14):** in a release build, the code scan finds no log call carrying

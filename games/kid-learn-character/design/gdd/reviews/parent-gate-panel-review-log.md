@@ -173,3 +173,15 @@ Task: TASK-048
   - The hint-over-moon edge case is now a fallback that Hint Letters F4 prevents.
   - Moon sleep runs on the continuous monotonic clock across the background. Added AC-37; the Android AC is now AC-38.
 Post-fix GDD hash: 5aaead63265fa8072bf415160a669e1607cd8665
+
+## Update — 2026-11-18 — TASK-054b Parent Gate follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-054
+Change:
+- P0: cherry-picked fc9bdef (the Quit cell names the covers, per Child Lock-in R4). The TASK-054 owner line is corrected: 054a is game-dev-android's and is merged (5e1c365); 054b is split across game-dev-ios, game-dev-android and game-qc-ios.
+- Every S1/S2 and I1–I4 mention now reads "landed in TASK-054a (5e1c365)".
+- Release-blocking note: AC-27 and AC-34 are no longer blocked by design, but stay NOT ASSESSED until a Mac build runs Input AC-1k6 and the real-Mac ACs.
+- AC-27's evidence: Input AC-1k3 + AC-1k6.
+- P1: the moon is the sky's only moon (Scene R1, 09459f1). Its opacity follows the Scene's look/lookBlend: 0.7 in Morning and Day, 1.0 at Dusk and Night, crossfaded (example 16:07 → 0.84). It follows the wall clock under the freeze and the panel. The hit region and the ring are unchanged.
+- Added the Scene row to Interactions.
+Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 3aa1e879d9aa5e86b13774ef15fec66a67ab3d88
