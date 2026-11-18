@@ -105,6 +105,12 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-36 espeak-ng as a build-time tool only (Luan, 2026-11-18)
+
+- espeak-ng (GPL-3.0) may be used **only on the build machine** as the phonemiser when rendering voice files; it is
+  never bundled, linked or shipped. The app ships only the rendered WAV/audio files. Record under Privacy L-09 and the
+  ADR-0003 D6 TTS note when the K-33 voice pick lands.
+
 ### K-35 Hard dinosaur names are respelled in the voice script (Luan, 2026-11-18)
 
 - When the TTS engine does not say a name the common US way (e.g. quetzalcoatlus, both engines in TASK-073), the voice
