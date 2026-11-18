@@ -5,6 +5,11 @@
 // stderr with the prefix "[net]" and to Documents/<label>-net.txt.
 import Foundation
 
+#if NORIVE
+// TASK-078: the no-Rive build (P-1 baseline) has nothing that loads URLs, so the probe is a no-op and the binary
+// carries no URL-loading code at all.
+enum NetProbe { static func install() {}; static func dump(label: String) {} }
+#else
 final class NetProbe: URLProtocol {
     nonisolated(unsafe) static var seen: [String] = []
     static func install() { URLProtocol.registerClass(NetProbe.self) }
@@ -22,3 +27,4 @@ final class NetProbe: URLProtocol {
         try? text.write(to: docs.appendingPathComponent("\(label)-net.txt"), atomically: true, encoding: .utf8)
     }
 }
+#endif

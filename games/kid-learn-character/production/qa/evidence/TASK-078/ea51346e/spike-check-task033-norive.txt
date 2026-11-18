@@ -1,0 +1,21 @@
+spike-check 2026-11-18T06:13:22Z sha=ea51346e
+PASS 1 builds headless (iOS Simulator + macOS) and unit tests pass: xcodebuild SpikeNoRive iOS Simulator + macOS BUILD SUCCEEDED; MorphCore swift test 7/7 (XCTest)
+NOTE 2/3 sources mention (check the binary scan below):
+Spike/NetProbe.swift:13:final class NetProbe: URLProtocol {
+Spike/NetProbe.swift:15:    static func install() { URLProtocol.registerClass(NetProbe.self) }
+Spike/SpikeApp.swift:9:import RiveRuntime
+Spike/RiveStage.swift:7:import RiveRuntime
+Spike/RiveStage.swift:19:final class TimedRiveViewModel: RiveViewModel {
+Spike/RiveStage.swift:30:    let vm: TimedRiveViewModel
+Spike/RiveStage.swift:42:        vm = TimedRiveViewModel(RiveModel(riveFile: rf), fit: .contain, autoPlay: false)
+PASS 4 no remote Swift package (no XCRemoteSwiftPackageReference)
+--- build/dd-norive/Build/Products/Debug-iphonesimulator/SpikeNoRive.app
+PASS 2/5 entitlements: no network, location, camera or microphone ()
+PASS 5 Info.plist: no NS*UsageDescription, no location key, no URL schemes
+PASS 2/3 binary: links no Rive, WebKit or Network.framework; no URL-loading or Rive symbols (2 image(s) scanned)
+--- build/dd-norive/Build/Products/Debug/SpikeNoRive.app
+PASS 2/5 entitlements: no network, location, camera or microphone ( com.apple.security.app-sandbox com.apple.security.get-task-allow)
+PASS 5 Info.plist: no NS*UsageDescription, no location key, no URL schemes
+PASS 2/3 binary: links no Rive, WebKit or Network.framework; no URL-loading or Rive symbols (2 image(s) scanned)
+NOTE 6 (no Keys screen in this build)
+PASS 7 sha recorded in the header line

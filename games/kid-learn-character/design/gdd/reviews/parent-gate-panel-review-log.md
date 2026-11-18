@@ -219,3 +219,9 @@ Review mode: lean · Workflow: standard
 Task: TASK-065
 Change: Edge Cases: Switch Control / AssistiveTouch are accepted for the MVP and documented (K-29; Accessibility A8). On the Mac, the chord replaces the moon hold; on the iPad, pause Switch Control. This replaces "Not solved here". No other change.
 Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 0b0accd5f91a4b52b6449ddd33d4becfe4948553
+
+## Update — 2026-11-18 — TASK-083 hardware-keyboard digits (no re-review)
+Review mode: lean · Workflow: standard
+Task: TASK-083
+Change: G3 "Mac hardware digits" becomes "Hardware-keyboard digits (Mac and iPad)" (K-19, K-21), taken from Input's new gateDigit(digit, anotherKeyHeld) (anotherKeyHeld = two digit keys down = wrong) and Esc = Cancel from gateCancel (Input R8, TASK-083); the Input dependency row names both. No rule of the gate's own changed. Review: game-qc-android, from the diff.
+Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 5a3ffe0e3a9da6ee8757f02f7fe1467f916f3630
