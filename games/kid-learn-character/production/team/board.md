@@ -43,6 +43,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-061 | GDD: Accessibility (`design/gdd/accessibility.md`) via /design-system (Vertical Slice) | design | game-qc-ios (review: game-qc-android) | DONE `8e85f7d`, merged 2026-11-18 (review: game-qc-android APPROVE; nits included) | `design/TASK-061-gdd-accessibility` | 2026-11-18 |
 | TASK-062 | Follow-ups from Keyboard Row + Accessibility (row band, Smart Invert, twinkle steady, idle timing, sparkles unchanged, play button 0.38 Hz, reduceMotion flag source) | design | game-art-content (review: game-qc-ios) | SENT 2026-11-18 | `design/TASK-062-followups` | 2026-11-18 |
 | TASK-063 | ADR-0002 module layout and seams (via /architecture-decision; Proposed → Luan accepts) | architecture | game-dev-ios (review: game-dev-android) | REWORK: game-dev-android read REVISE (String iteration, modifiersChanged, KeyStateQuery shape, UInt64 scope, kioskModeOn registry); then Luan accepts | `design/TASK-063-adr-0002` | 2026-11-18 |
+| TASK-064 | ADR-0004 KidCore contracts, fixture rules, verification harness (via /architecture-decision; Proposed → Luan) | architecture | game-qc-android (review: game-dev-ios) | SENT 2026-11-18 | `design/TASK-064-adr-0004` | 2026-11-18 |
 
 ## Leader log
 
