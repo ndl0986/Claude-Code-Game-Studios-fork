@@ -36,6 +36,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-054 | Follow-up batch to Approved GDDs (Settings S1–S2, Input I1–I4 incl. 2 safety items, Cast Rendering C1–C2, Hint Letters H1, Parent Gate P1, Privacy V1): `production/team/TASK-054-followups.md` | design | 054a game-dev-android (S1–S2, I1–I4, H1, A1; review game-qc-ios) · 054b later (C1–C2, P1, V1) | 054a DONE `fe63267`, merged 2026-11-18; 054b DONE: android `206de60`, qc `ec2f603`, ios `b2277cf` merged (K-25 edge switch); 054c `bd8d877` merged (review: game-dev-ios APPROVE). TASK-054 COMPLETE. | `design/TASK-054a-followups` | 2026-11-18 |
 | TASK-055 | /review-all-gdds over the 15 approved GDDs (lean, standard): report only | review | game-qc-android | DONE: first run FAIL `d6ddc24`; re-run PASS `686cf94` (3 Info notes R-1…R-3), both merged | `design/TASK-055-review-all-gdds` | 2026-11-18 |
 | TASK-056 | Cross-review fixes (B-1, W-1…W-11 per the report's file table; K-26) in 4 owner parts | design | dev-android / qc-ios / dev-ios / art-content (review: game-qc-android diff re-run) | DONE: a `ddc0531`, b `86c31dd`, c `ca526ae`, d `e728b85` all merged (review: game-qc-android APPROVE) | `design/TASK-056{a,b,c,d}-*` | 2026-11-18 |
+| TASK-057 | Cross-review re-run Info notes R-1…R-3 (App Shell ready; Child Lock-in early ⌘ window + R3 split; Hint Letters cite) | design | game-dev-ios (b), game-dev-android (a) (review: game-qc-android) | DONE: b `f0b5235`, a `6d5b8fc` merged | `design/TASK-057{a,b}-info` | 2026-11-18 |
 
 ## Leader log
 
@@ -99,3 +100,4 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 - 2026-11-18: TASK-055 review-all-gdds: FAIL on one blocker (B-1). Luan decided K-26 (hints dim during a parade; favourite-key case accepted); leader: chord Fn disqualifies. Leader fixed systems-index (W-7, W-9). TASK-056 sent in 4 parts.
 - 2026-11-18: TASK-056 complete (W-1: single `kioskModeOn` signal; Quit shows exactly when ⌘Q is swallowed). Cross-review re-run → game-qc-android.
 - 2026-11-18: cross-review re-run PASS. Info notes R-1 (App Shell "ready" wording vs kioskModeOn), R-2 (⌘ swallowed from Waiting start, ≤ 5 s, Edge Case line), R-3 (Hint Letters "Key Table R4" cite) queued as small text fixes. Ready for /gate-check.
+- 2026-11-18: TASK-057 merged (K-14). Systems Design complete: 14/14 MVP + Scene approved, cross-review PASS. Next: /gate-check Systems Design → Technical Setup with Luan.
