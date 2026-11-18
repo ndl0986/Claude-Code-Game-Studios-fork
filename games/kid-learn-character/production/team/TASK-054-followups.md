@@ -66,8 +66,8 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
   lane (448) visually overlaps the bottom hint slots, accepted (K-26 dims and stills hints). (TASK-060)
 - Reveal Stage: list the keyboard row band next to its published boxes; set `accessibilityIgnoresInvertColors` on
   the stage view (with App Shell). (TASK-060, TASK-061)
-- **Done (TASK-062, b384818b: R6 twinkle × 0.6 reveal-locked, R7 idles next frame with `idle_rm_ease_s`; checked in TASK-085b):** Cast Rendering: stardust twinkle steady under Reduce Motion; ambient idles change on the next frame (K-29).
+- Cast Rendering: stardust twinkle steady under Reduce Motion; ambient idles change on the next frame (K-29).
 - Reveal Stage: Reduce Motion rule for the tap / ignored-press sparkles (owner decides).
-- **Art bible side done (TASK-062, b384818b: §2 rule 2 reads ~~0.48~~ 0.38 Hz, dated; checked in TASK-085b); App Shell side is game-dev-ios's (TASK-085a).** App Shell + art bible: play-button breathe rate 0.38 vs 0.48 Hz; play button's physical touch floor.
+- App Shell + art bible: play-button breathe rate 0.38 vs 0.48 Hz; play button's physical touch floor.
 - **Done (TASK-062, b384818b: all ten motion GDDs name "Accessibility's `reduceMotion` (its A1; never the OS API)"; checked in TASK-085b):** Every motion GDD: read Accessibility's `reduceMotion` flag, not the OS API.
 - Reveal Stage R10: add the On-screen Keyboard Row at z 35 (above the current creature, below glyph/specks) to the draw-order line (ADR-0006 D1, TASK-070).
