@@ -176,7 +176,7 @@ batch is used from then on.
 | Key Table & Theme Data | in | the current theme id (the walker's castId comes from `shown`, R1) |
 | Scene: Time of Day & Weather | out | `paradeWalking` on / off (Walking state) → the warm horizon lift (art bible §2) |
 | Audio & Voice | out | parade start / end → E12 |
-| Accessibility | in | the Reduce Motion flag (passed on to Cast Rendering's step bob) |
+| Accessibility | in | Accessibility's `reduceMotion` (its A1; never the OS API) (passed on to Cast Rendering's step bob; next frame) |
 | Parent Gate & Grown-up Panel | in | panel open → fade out (R6) |
 | App Shell & Title | in | background → drop (R6) |
 

@@ -58,3 +58,8 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md 3a9bb37d3088e038b99fc50c49f1e1f
 Review mode: lean · Workflow: standard
 Change: W-8: the chime-falloff window (F3, knobs) renamed mash_window_s → chime_window_s; mash_window_s is the Scene's mashing window (a different signal). From /review-all-gdds 2026-11-18 (design/gdd/gdd-cross-review-2026-11-18.md) and K-26. Verdict unchanged; diff re-run by game-qc-android.
 Reviewed-Content-Hash: design/gdd/audio-voice.md 54410d1a1974580736d15e121d0ad14fd4f5d306
+
+## Update — 2026-11-18 — TASK-062 follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: Interactions: Accessibility's reduceMotion (A1) reaches the voice timings through MorphCore at reveal start. Follow-ups from the Keyboard Row (TASK-060) and Accessibility (TASK-061) GDDs; verdict unchanged; review by game-qc-ios from the diff.
+Reviewed-Content-Hash: design/gdd/audio-voice.md f72cfa129302bdcb39fc8245ab92752d35164f76

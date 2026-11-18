@@ -61,3 +61,13 @@ Reviewed-Content-Hash: design/gdd/cast-rendering.md dd6e05e7ee77cf26f2d7ae0e71e3
 Review mode: lean · Workflow: standard
 Change: deletes two stray lines of tool markup ("</content>", "</invoke>") left at the end of the file by its author's writing tool; no content or rule changed.
 Reviewed-Content-Hash: design/gdd/cast-rendering.md d8929011578465d6b1ad4118f551540f5bdbc9d9
+
+## Update — 2026-11-18 — TASK-062 follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: R6: the stardust twinkle holds steady under Reduce Motion at alpha × 0.8 (K-29), reveal-locked (Accessibility A2). R7: idles are ambient and change on the next frame, also for a figure already idling, eased over 0.3 s (K-29). Interactions and the mid-reveal edge case updated; the flag is Accessibility's reduceMotion (A1). Follow-ups from the Keyboard Row (TASK-060) and Accessibility (TASK-061) GDDs; verdict unchanged; review by game-qc-ios from the diff.
+Reviewed-Content-Hash: design/gdd/cast-rendering.md b448b0876908c9d8ed79260a30498740b7c29ab1
+
+## Update — 2026-11-18 — TASK-062 value fix from game-qc-ios (no re-review)
+Review mode: lean · Workflow: standard
+Change: game-qc-ios APPROVE of c4d4ef7b with one value fix: the steady twinkle is alpha × 0.6, the true mean of 0.6 + 0.4·sin (range 0.2–1.0), not the 0.8 the previous entry stated (R6 and F3 now say so). The idle ease runs both ways and is a knob, idle_rm_ease_s 0.3 s (R7, the edge case, Tuning Knobs).
+Reviewed-Content-Hash: design/gdd/cast-rendering.md f936a5f0c89f78b8622d7bc90d3b2e3beb6aa662

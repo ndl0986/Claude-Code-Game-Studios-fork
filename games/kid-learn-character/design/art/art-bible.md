@@ -113,7 +113,8 @@ to nothing inside the glyph's halo, and counts as sky for the brightness cap.
    between 60% and 100%; the letter's fill never pulses. This is below the WCAG
    three-flashes-per-second threshold, and it changes blur rather than flashing brightness.
 2. **Every other pulse is ≤ 1 Hz** (the prototype complies: the creature breathes at 0.33 Hz, the
-   play button at 0.48 Hz).
+   play button at ~~0.48~~ **0.38 Hz**). *(Amendment 2026-11-18, TASK-062: App Shell keeps the as-played 0.38 Hz,
+   the one-shot's `sin(2.4t)`; leader's call.)*
 3. **Brightness ceiling while mashing:** extra presses add sparks, never more brightness.
 4. **A reveal ends quieter than it began:** that is what "settles" means in the visual rule.
 5. **Only the parade has foreground sideways motion and a warm horizon.** Slow weather drift is

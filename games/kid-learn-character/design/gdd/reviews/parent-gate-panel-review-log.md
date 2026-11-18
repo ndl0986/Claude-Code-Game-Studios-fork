@@ -208,3 +208,8 @@ Change:
 - G2 cites Input R6 / AC-1j for Fn.
 - G11's header now cites design/gdd/child-lock-in.md, not "the next GDD".
 Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 0576d85a17b704c4e8909134524c669e51c43024
+
+## Update — 2026-11-18 — TASK-062 follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: Interactions: Accessibility's reduceMotion (A1), next frame. Follow-ups from the Keyboard Row (TASK-060) and Accessibility (TASK-061) GDDs; verdict unchanged; review by game-qc-ios from the diff.
+Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 27242886bbc1cb238c13e853a0472ca0e89a8719

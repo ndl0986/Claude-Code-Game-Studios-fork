@@ -62,3 +62,8 @@ Reviewed-Content-Hash: design/gdd/app-shell-title.md 2e7f2ef9dcdbcd02cd50078c115
 Review mode: lean · Workflow: standard
 Change: deletes two stray lines of tool markup ("</content>", "</invoke>") left at the end of the file by its author's writing tool; no content or rule changed.
 Reviewed-Content-Hash: design/gdd/app-shell-title.md f8d7498422bcd569090952989df48366203ecdda
+
+## Update — 2026-11-18 — TASK-062 follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: R2: the play-button breathe stays 0.38 Hz as played (leader's call; the art bible §2 note is amended) and the flag is Accessibility's reduceMotion (A1), next frame. R3: the play button needs no physical touch floor, since any tap except the moon starts play. An Accessibility row added to Interactions. Follow-ups from the Keyboard Row (TASK-060) and Accessibility (TASK-061) GDDs; verdict unchanged; review by game-qc-ios from the diff.
+Reviewed-Content-Hash: design/gdd/app-shell-title.md ff2c7c4cf7970d79f7e66890c113d3f414def5c7

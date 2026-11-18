@@ -30,3 +30,8 @@ Source: game-dev-android's independent read of a6a6532 (all 8 plan items landed;
 - [REQUIRED] States table vs R7 on a short background: background now keeps the word and its pressed letters; a return within App Shell's window fades back in with the same word; only a Title entry (including after a long absence, K-22) draws a new one (States table, R7, AC-14) (fixed)
 - [REQUIRED] Ties on the shared hit-rect edge: the key whose centre is nearest wins, the left key at an exact tie, as Input R7 does for hints (R3, AC-4 boundary case) (fixed)
 Reviewed-Content-Hash: design/gdd/onscreen-keyboard-row.md b805549903a211fb84a2eea508aae46137680d03
+
+## Update — 2026-11-18 — TASK-062 follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: Interactions: Accessibility's reduceMotion (A1), next frame (R7). Follow-ups from the Keyboard Row (TASK-060) and Accessibility (TASK-061) GDDs; verdict unchanged; review by game-qc-ios from the diff.
+Reviewed-Content-Hash: design/gdd/onscreen-keyboard-row.md 82488fc155f6fab5132c1794776e4758f2ba2a5d

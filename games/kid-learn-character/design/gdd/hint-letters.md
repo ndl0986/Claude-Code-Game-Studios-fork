@@ -101,7 +101,13 @@ the safe stage**.
   - the current cast member's box (from the Reveal Stage): ≥ 97.8 from the box;
   - the glyph's box (x 475–805, y 155–485, the 330-unit glyph at 640, 320): ≥ 97.8 (every slot passes statically);
   - the safe stage's edges: the circle plus drift stays inside 0–1280 × 0–720;
+  - **the keyboard row band** (On-screen Keyboard Row R1, published next to the Reveal Stage's boxes): while the
+    row is on, `y ≥ 582` is a clearance box like the cast and glyph boxes (≥ 97.8 from it; every slot passes today:
+    the bottom slots at y 410 are 172 away) *(TASK-062)*;
   - Android: outside the system gesture insets (R11).
+- *Note (TASK-062, accepted):* with the keyboard row on, `row_lift` moves the parade lane to y 448, so walkers
+  (about 85 units tall, y 363–448) visually cross the bottom hint slots (y 410). Touch is unaffected (hints are
+  Input's layer 1), and K-26 already dims hints and holds them still while the parade walks; no new clearance.
 - **Static margins** (zero jitter): L1 is 152.1 from the moon; R1 is 142.0 from the nearest token (1148, 58); every
   slot clears the glyph box with 17.2 to spare beyond its 97.8, and each circle plus drift stays 42.2 inside the
   stage edges. So every slot passes at zero jitter when no
@@ -223,7 +229,7 @@ at once with the burst or the Reduce Motion fade). An ignored touch puts it back
 | Audio & Voice | none | the chime and ping come from the outcome (E1/E2) |
 | Parent Gate & Grown-up Panel | in | challenge open / failed / timed out; panel open / closed (R9) |
 | App Shell & Title | in | Play entered; background and return (R9) |
-| Accessibility | in | the Reduce Motion flag, read live (R10) |
+| Accessibility | in | Accessibility's `reduceMotion` (its A1; never the OS API), read live (R10) |
 | On-screen Keyboard Row | none | hints stay in the sky either way |
 | Parade | in | `paradeWalking` (its Walking state): hints dim and hold still while it is on (R9, K-26); the parade walks the hill line, below the sky band |
 | Settings Store | none | nothing is stored (Settings Store R2) |
@@ -259,7 +265,7 @@ R        = k × (hitRadius + 12.8)                         = 87.8 at k = 1   (hi
 hint     : |c − c_other| ≥ 2R + 10k                       = 185.6
 moon     : |c − (66, 62)| ≥ R + 50 + 10k                   = 147.8 → 148
 token_i  : |c − token_i| ≥ R + 40 + 10k                    = 137.8 → 138     token_i ∈ {(1214,58), (1148,58), (1082,58)}
-box      : dist(c, box) ≥ R + 10k                          = 97.8           box ∈ {cast member, glyph}
+box      : dist(c, box) ≥ R + 10k                          = 97.8           box ∈ {cast member, glyph, keyboard row band (when on)}
 stage    : R ≤ c.x ≤ 1280 − R  and  R ≤ c.y ≤ 720 − R
 insets   : the circle of radius R around c is outside every gesture inset (Android)
 ```

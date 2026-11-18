@@ -150,7 +150,11 @@ letters" and "other pulses ≤ 1 Hz" rules, because the stardust *is* the letter
 - **Per speck,** drawn once per reveal: size `1.4 + 2.4·u` stage units; colour gold `#ffd27a` with probability
   `dust_gold_share` (0.7), else Starlight `#fbeec8`; a twinkle phase in [0, 2π).
 - **Shape:** above `star_min_size` (3.2 units) a four-point star of half-size × 0.55, else a soft round dot.
-- **Twinkle:** alpha × `0.6 + 0.4·sin(9t + phase)` (~1.43 Hz, F3).
+- **Twinkle:** alpha × `0.6 + 0.4·sin(9t + phase)` (~1.43 Hz, F3). **Reduce Motion (K-29):** the twinkle **holds
+  steady** at a fixed alpha × **0.6** (the mean of the term, which runs 0.2–1.0, so the stardust keeps its average
+  brightness), the same pattern as the halo's steady midpoint. It is
+  **reveal-locked** (Accessibility A2): a running reveal keeps its twinkle; the next reveal follows the flag
+  *(TASK-062)*.
 - **Determinism:** the per-speck draws come from each platform's **own** seeded random stream, seeded from the
   reveal's seed (MorphCore Rule 5). They are reproducible on one platform and tested on each platform; they are
   **not** part of the cross-platform morph contract, which is unchanged.
@@ -171,7 +175,10 @@ letters" and "other pulses ≤ 1 Hz" rules, because the stardust *is* the letter
   - **Number babies:** each baby bobs on its own phase (one-shot `|sin(3t + ph)|`, 0.95 Hz).
 - **Phase 0 at formed:** `idleTime = s − formedS`, and every idle is at its rest pose at `idleTime = 0`. The
   silhouette is baked at that rest pose, so the creature that fades in matches the shape the stardust drew.
-- **Reduce Motion (K-16):** every idle amplitude × `reduce_motion_scale` (0.5).
+- **Reduce Motion (K-16):** every idle amplitude × `reduce_motion_scale` (0.5). **Idles are ambient (K-29):** a
+  change of the flag applies **on the next frame**, also to a figure already idling, eased over `idle_rm_ease_s`
+  (0.3 s) **in both directions** (on and off) so nothing
+  jumps; the halo, hop and twinkle stay reveal-locked *(TASK-062)*.
 - **Night dim** (art bible §2: "the creature and ground take a 15% ambient dim"): at **Night** every cast drawing
   (the stage creature, the leaving one, the title creature, parade walkers) and its ground shadow is multiplied by
   0.85 in colour (F8), blended with `lookBlend`. The ground is the Scene's. The glyph and the stardust are not
@@ -271,7 +278,7 @@ A figure's art has a load state; drawing itself is stateless (a pure function of
 | Press Queue | none directly | its numbers (`formedS`, `revealLen`, `holdEff`) are read through the Reveal Stage; R10 never moves them |
 | Audio & Voice | none directly | `willForm` reaches it through the Reveal Stage (`hasWord`) |
 | Parade | in | `drawCast(…, parade, …)` for each walker; the step bob (R8) |
-| Accessibility | in | the Reduce Motion flag, read live; applied at the next reveal (R5, R7, R8) |
+| Accessibility | in | Accessibility's `reduceMotion` (its A1; never the OS API), read live: halo, hop and twinkle from the next reveal; idles on the next frame (R5, R6, R7, R8; K-29) |
 | Scene: Time of Day & Weather | in / out | in: `look`, `lookBlend` (Scene R1, F1) for the halo, top stop and Night dim, and **`skyMidL`** (the blended sky-mid luminance with the weather tint; Scene interface ask, K-25) for the edge switch (R4, R5, R7, F8); out: the halo's current glow radius (R5). The Scene draws behind; Cast Rendering never changes the sky |
 | Mash World (Full Vision) | in | the same draw calls |
 
@@ -304,6 +311,7 @@ t = 0.114 s (a quarter period) → 100%; t = 0.341 s → 60%. Period 0.455 s.
 **F3. Speck alpha.**
 ```
 a_i(s) = a_phase(s) × (0.6 + 0.4 × sin(dust_twinkle_w × s + phase_i))      dust_twinkle_w = 9 rad/s (1.43 Hz)
+                                                   Reduce Motion: a_i(s) = a_phase(s) × 0.6 (the term's mean)
 ```
 `a_phase(s)` (fade in over the dissolve, out over the fade-in) is the Reveal Stage's. Range 0.2–1.0 × `a_phase`.
 
@@ -405,7 +413,7 @@ The stardust cap of F4 uses the current `topStop`, so at Night the specks never 
 | **A part named in the idle data is missing from the art** | That motion is skipped; the rest play; the bake tool reports it as an error at build. |
 | **A forbidden SVG feature** | The bake tool rejects the file at build and names the element (R2). |
 | **A detail marking under 6 px at `list`** | Left out at that size (F1). |
-| **Reduce Motion turns on mid-reveal** | The halo, idles and hop change from the next reveal (MorphCore's rule); a figure already idling keeps its amplitude until then. |
+| **Reduce Motion turns on mid-reveal** | The halo, hop and twinkle change from the next reveal (MorphCore's rule); idles, including a figure already idling, change on the next frame, eased over `idle_rm_ease_s` (0.3 s) both ways (K-29). |
 | **Many specks overlap** (a thin glyph, a mash) | The cap holds (F4): never brighter than the glyph's top colour. |
 | **The same item queued twice** | One resident copy serves both. |
 | **A theme change while figures are resident** | The new theme's figures load for the next reveal; the old ones are released when no longer current or leaving. |
@@ -460,6 +468,7 @@ All values are bundled data (ADR-0001 Decision 6), checked at build.
 | family idles | per idle id | each ≤ 1 Hz | one-shot | each family's character |
 | `hop_px` / `hop_s` | 26 units / 0.45 s | 0–60 / 0.2–1.0 | one-shot | the tap hop |
 | `reduce_motion_scale` | 0.5 | 0.3–0.7 | **proposal** (K-16 "half amplitude", "smaller hop") | idles, hop (13 units) and parade step with Reduce Motion |
+| `idle_rm_ease_s` | 0.3 s | 0.1–0.6 | proposal (TASK-062; K-29 "next frame" is when it starts) | how long an idling figure eases to the new amplitude when Reduce Motion turns on or off |
 | shadow | 210 × 18, 25% | — | one-shot | grounding |
 | `marking_min_px` | 6 px | 4–8 | art bible §5 | detail per size |
 | tier heights | stage 1024, list 192 (proposal), parade 256 px | — | art bible §8 | option B textures |

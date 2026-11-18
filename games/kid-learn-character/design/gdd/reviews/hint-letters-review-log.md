@@ -72,3 +72,8 @@ Later diffs, each approved by game-qc-android:
 - The cross-review (TASK-055) found no Hint Letters blocker; its re-run after TASK-056 was PASS.
 Prior verdict resolved: Yes (NEEDS REVISION, its blocker and recommendations fixed by the author before this read)
 Reviewed-Content-Hash: design/gdd/hint-letters.md 61ee882c83b3075f1b3221a6167fdb308a1040d3
+
+## Update — 2026-11-18 — TASK-062 follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: R5/F4: the keyboard row band (y ≥ 582, while the row is on) is a clearance box like the cast and glyph boxes (every slot passes; the bottom slots are 172 away); a note that with the row on the parade lane (448) visually crosses the bottom slots, accepted under K-26; the Interactions row names Accessibility's reduceMotion (A1). Follow-ups from the Keyboard Row (TASK-060) and Accessibility (TASK-061) GDDs; verdict unchanged; review by game-qc-ios from the diff.
+Reviewed-Content-Hash: design/gdd/hint-letters.md 12ae0610d107d6c5ff6d21ae3f8d4ec418a89cc7

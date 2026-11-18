@@ -44,3 +44,8 @@ Reviewed-Content-Hash: design/gdd/scene-time-weather.md 2ddea70359c94efef29a7dc9
 Review mode: lean · Workflow: standard
 Change: W-8: mash_window_s stays the Scene's knob (the one Reveal Stage R10 cites); Audio's different window is renamed chime_window_s. W-9: Privacy & Kids Compliance added to Dependencies (PKC-13 for any live weather); the 'R11 device measurement' cites now name Cast Rendering's measurement plan under R11 and AC-17. Cast Rendering row and Downstream entry list skyMidL and drop the stale follow-up markers. K-25 added to Normative. From /review-all-gdds 2026-11-18 (design/gdd/gdd-cross-review-2026-11-18.md) and K-26. Verdict unchanged; diff re-run by game-qc-android.
 Reviewed-Content-Hash: design/gdd/scene-time-weather.md 3ec3f5a7be060a8661c26e139282eeeca277347c
+
+## Update — 2026-11-18 — TASK-062 follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: Interactions: Accessibility's reduceMotion (A1), next frame (R8). Follow-ups from the Keyboard Row (TASK-060) and Accessibility (TASK-061) GDDs; verdict unchanged; review by game-qc-ios from the diff.
+Reviewed-Content-Hash: design/gdd/scene-time-weather.md de2ee06fa8e5504dd8a18728e6f426eba2cc0363

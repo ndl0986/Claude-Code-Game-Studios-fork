@@ -204,7 +204,7 @@ The Scene is continuous; these are the conditions it runs under.
 | Parade | in | `paradeWalking` (the horizon lift) |
 | Parent Gate & Grown-up Panel | out | `look`, `lookBlend` for the moon (daytime moon, follow-up); the panel's dim is drawn over the Scene |
 | Hint Letters | none directly | hints sit in the sky band, on their own bubbles |
-| Accessibility | in | the Reduce Motion flag (R8) |
+| Accessibility | in | Accessibility's `reduceMotion` (its A1; never the OS API), applied on the next frame (R8) |
 | App Shell & Title | in | Title entry, background and return (R2 first frame, R10) |
 | Audio & Voice | none | no Scene sound (R11) |
 

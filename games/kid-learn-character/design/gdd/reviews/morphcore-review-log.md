@@ -43,3 +43,8 @@ Findings:
 - [ADVISORY] Rule 4: link the glyph's rise to Input R8's press origin (now carried by Reveal Stage R2 and R5).
 Reviewed-Content-Hash: design/gdd/morphcore.md 936291c0a2a5e5e3df31fba9f300df58920d4adb
 Reviewed-Content-Hash: docs/architecture/morph-contract-v1.md 4935b3ac7490c131eb67bdf4c388b14a5f7ed46b
+
+## Update — 2026-11-18 — TASK-062 follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: Interactions: the timing set is picked from Accessibility's reduceMotion (A1), never the OS API. Follow-ups from the Keyboard Row (TASK-060) and Accessibility (TASK-061) GDDs; verdict unchanged; review by game-qc-ios from the diff.
+Reviewed-Content-Hash: design/gdd/morphcore.md 356e232993cdde915c0d6daf1d3483ec03c5bd43
