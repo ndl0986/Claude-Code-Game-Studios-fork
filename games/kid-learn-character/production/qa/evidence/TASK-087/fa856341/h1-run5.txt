@@ -1,0 +1,31 @@
+H-1 offline cut check (8 start phases per signal; render quantum 5 ms; cut_settle_s 40 ms)
+single tones: predictor residual, threshold -60 dBFS; chord and voice-like line: largest per-sample gain step,
+threshold 1/720 (-57.1 dB: no faster than a 15 ms linear fade; a 30 ms fade is -63.2 dB, a hard stop ~0 dB)
+no cut (detector floor) 100 Hz worst -137.1  best -137.1  PASS (every phase)  [d2 worst -76.3]  [L 336]
+no cut (detector floor) 1 kHz worst -142.1  best -142.1  PASS (every phase)  [L 0]
+no cut (detector floor) 220+347 Hz worst -200.0  best -200.0  PASS (every phase)  [L 96]
+no cut (detector floor) voice-like FM line worst -200.0  best -200.0  PASS (every phase)  [L 336]
+hard stop() 100 Hz worst   -1.0  best  -38.7  FAIL (every phase)  [d2 worst -1.0]  [L 96]
+hard stop() 1 kHz worst   -1.0  best  -18.7  FAIL (every phase)  [L 0]
+hard stop() 220+347 Hz worst    0.0  best  -37.1  FAIL (every phase)  [L 96]
+hard stop() voice-like FM line worst    0.0  best  -37.3  FAIL (every phase)  [L 96]
+.interrupts on a busy player 100 Hz worst   -1.0  best  -38.7  FAIL (every phase)  [d2 worst -1.0]  [L 336]
+.interrupts on a busy player 1 kHz worst   -1.0  best  -18.7  FAIL (every phase)  [L 0]
+.interrupts on a busy player 220+347 Hz worst    0.0  best -200.0  FAIL at some phases  [L 336]
+.interrupts on a busy player voice-like FM line worst    0.0  best  -36.4  FAIL (every phase)  [L 96]
+pause() / play at once 100 Hz worst   -1.0  best  -38.7  FAIL (every phase)  [d2 worst -1.0]  [L 336]
+pause() / play at once 1 kHz worst   -1.0  best  -18.7  FAIL (every phase)  [L 0]
+pause() / play at once 220+347 Hz worst    6.3  best   -5.5  FAIL (every phase)  [L 96]
+pause() / play at once voice-like FM line worst   11.6  best   -4.3  FAIL (every phase)  [L 336]
+D5 cut: gate 0, settle 40 ms, stop 100 Hz worst  -62.6  best  -94.2  PASS (every phase)  [d2 worst -61.0]  [L 96]
+D5 cut: gate 0, settle 40 ms, stop 1 kHz worst  -62.7  best  -74.3  PASS (every phase)  [L 0]
+D5 cut: gate 0, settle 40 ms, stop 220+347 Hz worst  -61.6  best  -61.6  PASS (every phase)  [L 336]
+D5 cut: gate 0, settle 40 ms, stop voice-like FM line worst  -61.6  best  -61.6  PASS (every phase)  [L 96]
+D5 mute: main mixer 0 100 Hz worst  -63.0  best  -72.4  PASS (every phase)  [d2 worst -61.4]  [L 96]
+D5 mute: main mixer 0 1 kHz worst  -62.7  best  -74.3  PASS (every phase)  [L 0]
+D5 mute: main mixer 0 220+347 Hz worst  -61.6  best  -61.6  PASS (every phase)  [L 96]
+D5 mute: main mixer 0 voice-like FM line worst  -61.6  best  -61.6  PASS (every phase)  [L 336]
+D7 freeze: position, gate 0, settle, stop; resume from position, gate 1 100 Hz worst  -62.6  best  -94.2  PASS (every phase)  [d2 worst -61.0]  [L 96]  resumed at freeze point +frames (negative = heard again): -480,-480,-720,-240,-240,-480,-240,-240
+D7 freeze: position, gate 0, settle, stop; resume from position, gate 1 1 kHz worst  -62.7  best  -74.3  PASS (every phase)  [L 0]  resumed at freeze point +frames (negative = heard again): -576,-336,-576,-336,-336,-576,-336,-816
+D7 freeze: position, gate 0, settle, stop; resume from position, gate 1 220+347 Hz worst  -61.6  best  -61.6  PASS (every phase)  [L 336]  resumed at freeze point +frames (negative = heard again): -240,-240,-480,-240,0,-240,0,-240
+D7 freeze: position, gate 0, settle, stop; resume from position, gate 1 voice-like FM line worst  -61.6  best  -61.6  PASS (every phase)  [L 96]  resumed at freeze point +frames (negative = heard again): 0,-240,0,-480,-480,-240,-240,-240
