@@ -130,17 +130,22 @@ worst case per option, and the screen logs per-creature build ms per option.
   the mix; switching is an adapter change, and the baked format never changes with it.
 
 ### D3. Option A, live paths
-**Rule.** Parse the baked file once per figure at load; per part and layer, draw its paths with solid fills and round
-strokes; merge shapes of one part, layer and style into one path, so the draw count is per part-layer-style, not per
-SVG element.
+**Rule.** Parse the baked file once per figure at load; draw each part's paths with solid fills and round strokes.
+**Merge only the outline layer**, into one stroked path per part. **Fills stay one shape each**: merging fills into one
+path is not safe, because with the default nonzero winding rule two overlapping shapes of opposite winding cancel and
+leave a hole (game-dev-ios, TASK-103 review).
 
-**Apple.** One `SKShapeNode` per merged path (`fillColor`, `strokeColor`, `lineWidth`, `.round` joins and caps,
-antialiased). The outline layer's shapes of one part are **one** `CGPath` stroked by **one** node at alpha 0.8, which
-gives the group-opacity look (a path's self-overlaps are stroked once). Per-look colour sets `fillColor` /
-`strokeColor` from the base colour × F8's factor, only when the factor changes (the 1 s edge dissolve, F8), not every
-frame. Expected node count with TASK-077's art after merging: ~3 per part (body fill, outline stroke, detail),
-≈ 10–15 per stage figure, ≈ 8–10 per parade walker; the spike draws one node per SVG element (25–27 per figure, 8
-figures, all layers in the parade), so **its A numbers are an upper bound**.
+**Apple.** One `SKShapeNode` per fill shape and one per part's merged outline path (`fillColor`, `strokeColor`,
+`lineWidth`, `.round` joins and caps, antialiased). The outline path is stroked by **one** node at alpha 0.8.
+**Whether that gives the group-opacity look is unverified:** `SKShapeNode`'s alpha applies per draw, not as a
+composited group, so a stroke that overlaps itself might still darken. **H-2's overlap test decides**; if it darkens,
+the fallback is an `SKEffectNode` with `shouldRasterize` per part, or that part's outline layer drawn as a texture
+(B's rasteriser for that layer alone). Per-look colour sets `fillColor` / `strokeColor` from the base colour × F8's
+factor, only when the factor changes (the 1 s edge dissolve, F8), not every frame.
+**Node count**, measured by game-dev-ios on TASK-077's three SVGs: outline merged per part and fills per element give
+**19–23 nodes per stage figure and 12–15 per parade walker**. The spike draws one node per SVG element (25–27 per
+figure, 8 figures, every layer in the parade), so **its A is about 15–25% above this candidate**: an upper bound, but
+a close one.
 
 ### D4. Option B, textures per part
 **Rule.** Each part becomes one texture per tier, drawn as a sprite at its pivot. A tier is the smallest whose
@@ -197,7 +202,8 @@ KidCore render plan ── RenderSink.drawCast(castId, role, pose) ──▶ sta
 ### Implementation Guidelines
 - Write the renderer as one `CastFigure` adapter type with two backends behind it; the role decides the backend in the
   mix. Production code is written fresh from this ADR, not copied from `DeviceSpike` (prototype rule).
-- Merge paths per part-layer-style at load (A); rasterise with group alpha (B); never per SVG element at run time.
+- A: merge each part's outline layer into one path at load, keep fills one shape each (D3); B: rasterise with group
+  alpha. Parse once at load, never per frame.
 - Unit tests (H-2): for each TASK-077 creature, A's and B's part bounding boxes agree within 1 px at each role; the
   outline overlap test (two overlapping strokes in one part read one alpha, not two).
 
@@ -238,9 +244,11 @@ KidCore render plan ── RenderSink.drawCast(castId, role, pose) ──▶ sta
   Rendering AC-17 on the Dinosaurs set; the bake tool reports shapes per figure so outliers show at build.
 - **"The oldest supported iPad" is not fixed.** Mitigation: P-2 records the model; a newer device's pass does not
   accept A for older ones (the row is re-run if the floor moves down).
-- **The spike's A is an upper bound** (one node per SVG element, all layers in the parade) and its B is B-load at
-  2.5×. If A fails narrowly on the spike, the merged-path A of D3 may pass: P-2 records node counts so that call can
-  be made explicitly (re-run with merged paths rather than switch to B on a near miss).
+- **The spike's A is an upper bound** (one node per SVG element, every layer in the parade: about 15–25% more nodes
+  than D3's candidate) and its B is B-load at 2.5×. If A fails narrowly on the spike, D3's candidate may pass: P-2
+  records node counts so that call is made explicitly, by a re-run with the candidate rather than a switch to B on a
+  near miss. game-dev-ios has offered an "A-candidate" option in DeviceSpike so that P-2 measures D3 directly (the
+  leader's call).
 - **Texture upload stalls** on first draw (B) on an older GPU. Mitigation: textures created at load, off the main
   thread, before the figure is resident; P-2's frame log covers the first frames after a reveal starts.
 
@@ -281,7 +289,9 @@ Per K-34: headless runs need no MAC FREE; the Mac rows do.
   Per creature: **B ≈ 179 KB of PNG vs A ≈ 3.3 KB of SVG** (baked JSON is expected to be similar or smaller);
   ×36 (**partial, linear**): **≈ 6.2 MB vs ≈ 0.1 MB**. F6's 1.5× part-box cap holds (0.37–0.56 of the whole image).
 - **H-2 Equivalence (the adapter story).** A's and B's part boxes within 1 px per role for the three creatures; the
-  outline-overlap test (D2).
+  **outline-overlap test** (D2, D3): an outline stroke that crosses itself, drawn by A and by B over a flat fill,
+  reads one alpha (0.8 Ink) at the crossing, not two. It decides D3's group-alpha question; if A darkens there, A uses
+  D3's fallback.
 - **H-3 Bake output (the bake tool story).** The baked JSON for the three creatures parses back with the a1 rule; its
   byte size is recorded next to H-1's SVG figure.
 - Simulator frame times: **not taken** (leader, 2026-11-18): every boot pushed the Mac's load to 40–55, and Simulator
