@@ -42,3 +42,8 @@ Reviewed-Content-Hash: design/gdd/settings-store.md 92d1cbd1748f0cbe76272d90a514
 Review mode: lean · Workflow: standard
 Change: game-qc-ios's advisory: R10 delivers a notification after the write, if any (the run-only OFF has none).
 Reviewed-Content-Hash: design/gdd/settings-store.md 8b65da436b822e87958e856f7fd1a77ed51b8348
+
+## Update — 2026-11-18 — TASK-056a cross-review fixes (no re-review)
+Review mode: lean · Workflow: standard
+Change: W-10: AC-15 checks all six Child Lock-in R3 preconditions in any order (as Child Lock-in AC-1). W-6: Key Table cites point at its §4. W-9: the Downstream line no longer says the GDDs don't exist. From design/gdd/gdd-cross-review-2026-11-18.md and K-26. Review: game-qc-android (diff re-run).
+Reviewed-Content-Hash: design/gdd/settings-store.md 2ddae72ca6a1ec7067b369e04e1056c9a0148edc

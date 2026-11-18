@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent re-review by game-dev-ios, merged 2026-11-18)
 > **Author**: game-dev-android for Luan (TASK-043); plan reviewed by game-dev-ios
-> **Last Updated**: 2026-11-18 (TASK-050 cross-GDD follow-ups)
+> **Last Updated**: 2026-11-18 (TASK-056a cross-review fixes)
 > **Last Verified**: 2026-11-18, against Input & Key Filter R8, MorphCore F5/F6, Audio & Voice F6/E1/E2, Key Table
 > R3 and `voiceDurations` (V15), Settings Store, K-06, K-13, K-15, the one-shot `pressLetter` / `holdTime`
 > **Implements Pillar**: Pillar 1 (Every Press Answers); serves Pillar 3 (Calm Magic)
@@ -52,7 +52,7 @@ forgotten and the stage is quiet when they return.
 | Drawing the reveal, its no-morph fallbacks, the tokens, the sparkles; reporting `formed` | Reveal Stage |
 | Particle positions, T | MorphCore (it has no hold, its Rule 7) |
 | When the word ends (F6 constraint), chime and ping | Audio & Voice |
-| Which item a key shows; `voiceDurations` | Key Table & Theme Data (resolved when the reveal starts, its R3) |
+| Which item a key shows; `voiceDurations` | Key Table & Theme Data (resolved when the reveal starts, its §4) |
 | Turning presses into events; held keys and repeats | Input & Key Filter (it never drops a press, its R8) |
 | When the parade starts and whether a press ends it | Parade (reads `restingSince`, R10) |
 
@@ -107,7 +107,7 @@ Android: `SystemClock.uptimeMillis() / 1000`, the clock of `getEventTime()`). In
 
 **R6. Starting a reveal.** The queue calls the Reveal Stage's `startReveal(revealId, key, source, origin, r0)`:
 
-- Key Table resolves the item **now**, with the theme active now (its R3); `item` is returned in the outcome.
+- Key Table resolves the item **now**, with the theme active now (its §4); `item` is returned in the outcome.
 - The Reveal Stage returns `{formedS, revealLen, hasWord}` for this reveal, **including its no-morph fallbacks**.
   `hasWord` is false when no word will play (no word line, or Cast Rendering's `willForm` is false):
 
@@ -137,7 +137,7 @@ cleared** (Luan, K-15), and the current reveal **settles at once to formed**: th
 Reveal Stage shows the formed creature under the dim, not a morph frozen half-way. The hold of the settled
 creature counts as passed, so after the panel closes the next press starts at once (same rule as R9; author's
 choice, consistent with K-15). A theme can only be changed in the panel, so the queue is already empty when a new
-theme takes effect; the next reveal uses it (Key Table R3). The theme change itself never clears anything.
+theme takes effect; the next reveal uses it (Key Table §4). The theme change itself never clears anything.
 
 **R8a. Parent-gate challenge: freeze and resume** (K-20; TASK-050). While the gate's number challenge shows (after
 the moon hold or the Mac chord), the queue **freezes**: no tick advances it, the hold and the formed timeout do not
@@ -299,7 +299,7 @@ rests longer on stage and the pace of the queue is unchanged.
 - **Gate challenge shown with 2 keys waiting, then a wrong answer:** nothing is dropped; the reveal and its hold
   continue from where they froze, and the 2 keys play in turn (R8a).
 - **Gate challenge, then the correct answer:** the panel opens and R8 clears and settles as usual.
-- **Theme changed in the panel:** the queue is already empty; the next reveal uses the new theme (R8, Key Table R3).
+- **Theme changed in the panel:** the queue is already empty; the next reveal uses the new theme (R8, Key Table §4).
 - **App backgrounded mid-morph:** the queue is cleared, the creature is formed on return, the next press starts at
   once (R9).
 - **A frame hitch of 200 ms:** the advance happens on the next tick; `r0` of the advanced reveal is that tick's time
@@ -322,7 +322,8 @@ rests longer on stage and the pace of the queue is unchanged.
     E1/E2. Its F6 and Interactions already name the Press Queue.
   - MorphCore (`design/gdd/morphcore.md`): T and F5 through the Reveal Stage; its "hold ≥ T + form_s" constraint is
     F1's `revealLen` term.
-- **Downstream / peers (GDDs not written yet; each must name the Press Queue):**
+- **Downstream / peers (each names the Press Queue; all written except the On-screen Keyboard Row and
+  Accessibility, TASK-056 W-9):**
   - Reveal Stage: `startReveal → {formedS, revealLen}`, `formed(revealId)` exactly once, the fallbacks' lengths,
     `settle`, the snapshot (R6, R7, R11). This is the Press Queue ↔ Reveal Stage contract from the systems index.
   - Hint Letters: consume / keep by outcome (R4).

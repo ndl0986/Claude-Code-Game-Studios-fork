@@ -28,3 +28,18 @@ Reviewed-Content-Hash: production/team/decisions.md cef7e6d8add4a57c0f8df35531c2
 Review mode: lean · Workflow: standard
 Change: H1: F5's Mac 700-pt row replaced by App Shell's 960 × 540 pt minimum (2× 254 ppi: stage_to_px 1.5, 22.5 mm; 1× 109 ppi: 26.2 mm; k = 1); the capacity notes say k > 1 cannot occur in the MVP (phones only); AC-7 keeps 1.10 and 1.2 as simulated factors. Wording and rule edits from the TASK-054 follow-up list (production/team/TASK-054-followups.md @ 84f7ea2); Parent Gate G-numbers cited as given by game-qc-ios (TASK-048 not merged). Review: game-qc-ios, from the diff.
 Reviewed-Content-Hash: design/gdd/hint-letters.md 5501526f0fbbf339c54132d0f52fc61939a8ad8d
+
+## Update — 2026-11-18 — TASK-056a cross-review fixes (no re-review)
+Review mode: lean · Workflow: standard
+Change: K-26 (Luan): while the Parade is Walking (paradeWalking), hints dim to parade_hint_alpha 0.5 (proposal) over 0.6 s, hold still (no drift, ages, lives or spawns), stay tappable, and resume on Ended without the 0/0.7/1.4 replay: R9 rows, a Dimmed state, the Parade Interactions and Dependencies rows, two knobs, AC-18b. W-6: the R9 theme row cites Key Table §4. From design/gdd/gdd-cross-review-2026-11-18.md and K-26. Review: game-qc-android (diff re-run).
+Reviewed-Content-Hash: design/gdd/hint-letters.md 8a0fc351301575da6d305cdc3decd091f8a61016
+
+## Update — 2026-11-18 — TASK-056a review fix (no re-review)
+Review mode: lean · Workflow: standard
+Change: game-qc-android's review: option (a), hintTime stops while the parade is Walking (Dimmed), as in Frozen; R6's hintTime definition, the R9 Parade rows and the Dimmed state say so; the first-press pulse holds; the dim fade runs on the play clock. Dependencies' Parade line is a plain cite (TASK-056d did it).
+Reviewed-Content-Hash: design/gdd/hint-letters.md 15d217671d25cf93d93b2145e8d681910b99493d
+
+## Update — 2026-11-18 — TASK-056a review fix 2 (no re-review)
+Review mode: lean · Workflow: standard
+Change: game-qc-android's review: the Frozen state now exits to Dimmed when the challenge fails or times out while the parade is still Walking (Parade R6a), and to Running when the panel closes (the parade has faded out); no replay; the 0.5 dim is kept while Frozen.
+Reviewed-Content-Hash: design/gdd/hint-letters.md 1b9e2c650de556f3da60f980276f17631a3e148a

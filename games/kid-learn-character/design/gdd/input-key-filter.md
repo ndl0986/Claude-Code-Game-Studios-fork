@@ -2,7 +2,7 @@
 
 > **Status**: Approved (lean review APPROVED 2026-11-18, TASK-037; independent read by game-dev-android APPROVE; merged 2026-11-18)
 > **Author**: game-dev-ios (TASK-037); decisions by Luan; plan reviewed by game-dev-android
-> **Last Updated**: 2026-11-18 (TASK-054b text)
+> **Last Updated**: 2026-11-18 (TASK-056a cross-review fixes)
 > **Last Verified**: 2026-11-18, against ADR-0001 (Accepted), art bible §7, the TASK-033 spike
 > (`prototypes/TASK-033-anim-runtime/Spike/Input.swift`) and the one-shot `prototypes/letter-morph-dinosaur/`
 > **Implements Pillar**: 1 (Every Press Answers), 5 (Safe by Design)
@@ -89,12 +89,14 @@ not a press, not a repeat and not the parent chord:
 - emits **nothing**: no sparkle, no sound, no queue entry;
 - is **never passed on**: iPadOS handles `pressesBegan` without calling `super`; the macOS monitor returns `nil`;
   Android `onKeyDown` returns `true`.
-- **Exception, macOS with the kiosk off:** ⌘-combinations go on to the menus (⌘Q quits, as any Mac app) and are
-  not presses (ADR-0001 Decision 9). With the kiosk on, they are swallowed too.
-- **While `childLockActive` is true** (Settings Store R8; Child Lock-in sets Input's kiosk-on mode as soon as it is
-  true), ⌘-combinations are swallowed **in every state**: Play, Title, Gate challenge and Panel open. They never
+- **One signal for ⌘: Input's kiosk-on mode, `kioskModeOn`** *(TASK-056 W-1)*. Child Lock-in sets it when the lock
+  starts waiting to engage and clears it when the lock is Off (its R4, R7), including after an engage timeout. The
+  Parent Gate's G7 shows Quit exactly while it is on, i.e. whenever ⌘Q doesn't work. **With the mode off**,
+  ⌘-combinations go on to the menus (⌘Q quits, as any Mac app) and are not presses (ADR-0001 Decision 9). **With the
+  mode on**, ⌘-combinations are swallowed **in every state**: Play, Title, Gate challenge and Panel open. They never
   reach the menus, so ⌘Q in the panel can never skip the Quit button's 1.5 s hold (Parent Gate G8/G11, Child Lock-in
-  R2) *(TASK-054 I3)*. With the lock OFF for this run, ⌘Q quits as usual (K-21's second way out).
+  R2) *(TASK-054 I3)*. With the lock OFF for this run, or after an engage timeout, the mode is off and ⌘Q quits as usual (K-21's
+  second way out). Input reads nothing else for this: not `childLockActive`, not the kiosk's presentation options.
 - **Hardware system keys always pass:** volume up/down, mute, power, camera and brightness are never presses
   and never swallowed; they go to the system untouched (Android `onKeyDown` returns `false` / calls `super`, so
   the volume rocker keeps working; iPadOS calls `super`). On the Mac, media keys arrive as system-defined events,
@@ -105,7 +107,9 @@ not a press, not a repeat and not the parent chord:
 
 **R6. The parent chord** (Luan, 2026-11-18). "Open the grown-up panel" is an abstract action with a binding per
 platform.
-- **macOS:** **⌃⌥⌘Q**, exactly those three modifiers plus Q (Shift ignored), as in the TASK-033 kiosk. It counts
+- **macOS:** **⌃⌥⌘Q**, exactly those three modifiers plus Q, as in the TASK-033 kiosk. **Shift and Caps Lock are
+  ignored; Fn disqualifies** *(TASK-056 B-1, leader call in K-26: on a laptop fn sits next to ⌃, so a palm on the
+  bottom-left row hits it)*: ⌃⌥⌘Q with Fn held is not the chord, as R3 already treats Fn. It counts
   **only when no other key is held**: the held set (R4) is **empty when Q goes down** (⌃⌥⌘ are read from the
   modifier flags; on the Mac they arrive as `flagsChanged` and are not in the held set). ⌃⌥⌘Q with D still down is not
   the chord *(TASK-050)*.
@@ -184,8 +188,8 @@ platform.
 | State | Hardware keys | Touches | Enter / leave |
 |---|---|---|---|
 | **Play** | R2–R6 | R7 | entered from the title (play button or a letter/digit key); left by the panel opening or the app leaving the foreground |
-| **Gate challenge** (K-20) | nothing reaches Play or the queue; **digit keys go only to the challenge's keypad**, every other key emits nothing (system keys still pass, R5) | **go only to the keypad**; anywhere else emits nothing | entered by `openPanel` (chord or moon hold); a wrong answer or timeout → **the state it was opened from** (Title or Play), a correct answer → Panel open; the held set clears on enter and on leave. ⌘-combinations swallowed while `childLockActive` (R5); the chord ignored (R6) |
-| **Panel open** | the filter is off; keys go to the grown-up panel as normal input, **except ⌘-combinations while `childLockActive`**, which are swallowed and never reach the menus (R5, TASK-054 I3); the chord is ignored (R6). Only the panel's own close returns to the state the gate was opened from | go to the panel | entered by `openPanel` (chord or moon hold); the held set clears on enter and on leave |
+| **Gate challenge** (K-20) | nothing reaches Play or the queue; **digit keys go only to the challenge's keypad**, every other key emits nothing (system keys still pass, R5) | **go only to the keypad**; anywhere else emits nothing | entered by `openPanel` (chord or moon hold); a wrong answer, a timeout, **Cancel or Esc** → **the state it was opened from** (Title or Play) *(TASK-056 W-2)*, a correct answer → Panel open; the held set clears on enter and on leave. ⌘-combinations swallowed while the kiosk-on mode is on (R5); the chord ignored (R6) |
+| **Panel open** | the filter is off; keys go to the grown-up panel as normal input, **except ⌘-combinations while the kiosk-on mode is on**, which are swallowed and never reach the menus (R5, TASK-054 I3); the chord is ignored (R6). Only the panel's own close returns to the state the gate was opened from | go to the panel | entered by `openPanel` (chord or moon hold); the held set clears on enter and on leave |
 | **Title** | a key-down that would be a press in Play (R2–R6: resolves to A–Z/0–9, no disqualifying modifier, not a repeat or held) emits `startPlay`, the same as the play button, and **is not a press** (no reveal for that key); every other key emits nothing (system keys still pass, R5), except the Mac chord, which emits `openPanel` (R6) | belong to App Shell (the moon goes to the Parent Gate, layer 3) | entered and left by the App Shell; the held set is **kept** from Title into Play, so the starting key's repeats and up are ignored and only its next down is a press (Luan, 2026-11-18) |
 | **Inactive** (background, window not key) | nothing emitted; held set cleared | — | the App Shell switches states |
 
@@ -278,9 +282,10 @@ not depend on their rules.
 | Hint Letters | hint touches become presses here; "touched" back to the hint |
 | On-screen Keyboard Row | row touches become presses here |
 | Reveal Stage | `creatureTap`, `sparkle`, the press `origin` |
+| App Shell & Title | `startPlay` and the Title's touches; the Title, Play and Inactive states it switches *(TASK-056 W-9)* |
 
-**For the leader (systems index):** the index lists Hint Letters and the On-screen Keyboard Row as depending on
-the Press Queue only. Their touches reach the Queue through Input, so both should also list Input & Key Filter.
+**Systems index:** Hint Letters and the On-screen Keyboard Row list Input & Key Filter among their dependencies
+(their touches reach the Queue through Input); this was a leader note and is done *(TASK-056 W-9)*.
 
 **Architecture:** ADR-0001 (Accepted) Decision 4 (`KidCore` has no UI imports) and Decision 9a (the filter in
 `KidCore` with a unit test). The platform adapters live in the app target.
@@ -292,7 +297,7 @@ All values are data, not code.
 | Knob | Default | Safe range | Affects | Owner |
 |---|---|---|---|---|
 | `hint_hit_scale` | **1.25 (provisional)** | 1.0–1.5 | how forgiving a hint touch is; above ~1.5 nearby hints and the moon start to steal each other's touches | Input (F1) |
-| `moon_slop_pt` | 20 pt | 10–40 | how far a finger may slide off the moon before the hold ends (layer 3, Parent Gate G1) *(TASK-054 I2)* | Input / Parent Gate |
+| `moon_slop_pt` | 20 pt | 10–40 | how far a finger may slide off the moon before the hold ends (layer 3, Parent Gate G1) *(TASK-054 I2)* | **Input** (owns the value and the range; Parent Gate cites it, TASK-056 W-8) |
 | `hint_hold_s` | **1.0 s (provisional)** | 0.5–3.0 s | how long a touched hint stays still and visible before it hands over to the glyph | Hint Letters (listed here because the touch rule sets it) |
 | `repress_min_s` | **0 (off)** | 0–0.15 s | filters a bouncy keyboard or a double-hit; above ~0.15 s a deliberate quick re-press is lost (Pillar 1) | Input (F2) |
 | Parent chord (macOS) | **⌃⌥⌘Q (decided)** | — | the grown-up's keyboard way into the panel | Luan, 2026-11-18; fixed in code, not a setting |
@@ -339,18 +344,18 @@ The two provisional values are tuned in play (leader, 2026-11-18).
   - **i.** GIVEN Num Lock off, WHEN numpad 7 goes down, THEN one press of "7".
   - **j.** GIVEN macOS, WHEN ⌃⌥⌘Q goes down, THEN `openPanel` and no press; WHEN ⌃⌥Q (no ⌘) goes down, THEN
     nothing. GIVEN iPadOS, WHEN ⌃⌥⌘Q goes down, THEN nothing (no chord on iPad). GIVEN macOS with D held, WHEN
-    ⌃⌥⌘Q goes down, THEN no `openPanel` (TASK-050). GIVEN the gate challenge showing, WHEN D goes down or the
+    ⌃⌥⌘Q goes down, THEN no `openPanel` (TASK-050). GIVEN macOS, WHEN ⌃⌥⌘Q goes down with Fn held, THEN no
+    `openPanel` (swallowed, R3); with Shift or Caps Lock held, THEN `openPanel` (TASK-056 B-1). GIVEN the gate challenge showing, WHEN D goes down or the
     stage is touched, THEN no press and no sparkle (K-20).
-  - **k.** GIVEN macOS with the kiosk off, WHEN ⌘Q goes down, THEN the filter returns "pass to system"; GIVEN the
-    kiosk on, THEN swallowed.
-  - **k2.** *(TASK-054 I3)* GIVEN macOS with `childLockActive` true, WHEN ⌘Q, ⌘H or ⌘W goes down in Play, the Title,
-    the Gate challenge or Panel open, THEN swallowed (never passed to the menus) in each state; GIVEN `childLockActive`
-    false in Panel open, WHEN ⌘Q goes down, THEN "pass to system".
+  - **k.** *(TASK-054 I3; one signal, TASK-056 W-1)* GIVEN macOS with Input's kiosk-on mode **off**, WHEN ⌘Q goes
+    down, THEN "pass to system". GIVEN the mode **on**, WHEN ⌘Q, ⌘H or ⌘W goes down in Play, the Title, the Gate
+    challenge or Panel open, THEN swallowed (never passed to the menus) in each state. GIVEN `childLockActive` true
+    but the mode off (after Child Lock-in's engage timeout), WHEN ⌘Q goes down, THEN "pass to system".
   - **k3.** *(TASK-054 I1, Parent Gate AC-27)* GIVEN macOS, D down, ⌘ down, D up lost (no key-up delivered), WHEN ⌘ is
     released, THEN D is no longer in the held set; WHEN ⌃⌥⌘Q then goes down with the OS key state showing only Q,
     THEN `openPanel`. GIVEN the OS key state showing D still physically down, THEN no `openPanel`.
   - **k4.** *(TASK-054 I4)* GIVEN the Title, WHEN ⌃⌥⌘Q goes down, THEN `openPanel`; GIVEN the gate opened from the
-    Title, WHEN the answer is wrong or times out, THEN the Title state; GIVEN Panel open or the Gate challenge, WHEN
+    Title, WHEN the answer is wrong or times out, or Cancel or Esc is pressed, THEN the Title state (TASK-056 W-2); GIVEN Panel open or the Gate challenge, WHEN
     ⌃⌥⌘Q goes down, THEN no `openPanel`.
   - **k5.** *(TASK-054 I2)* GIVEN a pointer down on the moon, WHEN it moves to 19 pt outside the moon's region, THEN
     no `gateTouch(ended)`; WHEN it moves to 21 pt outside, THEN exactly one `gateTouch(ended)`, and none again on its up.
