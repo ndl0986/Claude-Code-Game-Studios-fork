@@ -58,7 +58,8 @@ struct KeysScreen: View {
                                    kind: kind, isRepeat: ev.type == .keyDown && ev.isARepeat, time: ev.timestamp)
             KeyFeed.shared.add(e)
             if keyStateOn, kind == .modifiersChanged {
-                SpikeLog.shared.line("[keys] key-state: anyNonModifierDown(except: \(e.physicalId)) = \(Self.anyNonModifierDown(except: Int(ev.keyCode)))")
+                Self.keyStateReads += 1                 // ADR-0007 M-1: proof the read was actually exercised
+                SpikeLog.shared.line("[keys] key-state read called (n=\(Self.keyStateReads)): anyNonModifierDown(except: \(e.physicalId)) = \(Self.anyNonModifierDown(except: Int(ev.keyCode)))")
             }
             return nil                                  // swallowed, as Input R5 would
         }
@@ -70,6 +71,7 @@ struct KeysScreen: View {
         if f.contains(.numericPad) { m |= Mod.numLock }
         return m
     }
+    @MainActor static var keyStateReads = 0
     /// The candidate KeyStateQuery: the adapter enumerates the platform key codes (ADR-0002 D6).
     static func anyNonModifierDown(except code: Int) -> Bool {
         let modifiers: Set<Int> = [54, 55, 56, 57, 58, 59, 60, 61, 62, 63]
