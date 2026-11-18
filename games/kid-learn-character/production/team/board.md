@@ -38,9 +38,9 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-056 | Cross-review fixes (B-1, W-1…W-11 per the report's file table; K-26) in 4 owner parts | design | dev-android / qc-ios / dev-ios / art-content (review: game-qc-android diff re-run) | DONE: a `ddc0531`, b `86c31dd`, c `ca526ae`, d `e728b85` all merged (review: game-qc-android APPROVE) | `design/TASK-056{a,b,c,d}-*` | 2026-11-18 |
 | TASK-057 | Cross-review re-run Info notes R-1…R-3 (App Shell ready; Child Lock-in early ⌘ window + R3 split; Hint Letters cite) | design | game-dev-ios (b), game-dev-android (a) (review: game-qc-android) | DONE: b `f0b5235`, a `6d5b8fc` merged | `design/TASK-057{a,b}-info` | 2026-11-18 |
 | TASK-058 | Log the independent APPROVE reads (gate CONCERN): morphcore, hint-letters, child-lock-in review logs | design | game-dev-ios, game-qc-android, game-qc-ios | DONE: 47ee06a, e682469, 6d02513 merged | `design/TASK-058-review-logs-*` | 2026-11-18 |
-| TASK-059 | /create-architecture: master architecture (module map, seams, Android mirror) + prioritised ADR work plan + first scaffold story | architecture | game-dev-ios (review: game-dev-android) | SENT 2026-11-18 | `design/TASK-059-architecture` | 2026-11-18 |
-| TASK-060 | GDD: On-screen Keyboard Row (`design/gdd/onscreen-keyboard-row.md`) via /design-system (Vertical Slice) | design | game-art-content (review: game-dev-android) | SENT 2026-11-18 | `design/TASK-060-gdd-keyboard-row` | 2026-11-18 |
-| TASK-061 | GDD: Accessibility (`design/gdd/accessibility.md`) via /design-system (Vertical Slice) | design | game-qc-ios (review: game-qc-android) | SENT 2026-11-18 | `design/TASK-061-gdd-accessibility` | 2026-11-18 |
+| TASK-059 | /create-architecture: master architecture (module map, seams, Android mirror) + prioritised ADR work plan + first scaffold story | architecture | game-dev-ios (review: game-dev-android) | PLAN REVISE (game-dev-android: Kotlin-mappable types, injected draws, normalized input events, +4 contracts, fixture origin, contracts/ folder, ADR order); Luan answered (K-28) | `design/TASK-059-architecture` | 2026-11-18 |
+| TASK-060 | GDD: On-screen Keyboard Row (`design/gdd/onscreen-keyboard-row.md`) via /design-system (Vertical Slice) | design | game-art-content (review: game-dev-android) | PLAN IN REVIEW; Luan answered (K-29: random common words/names) | `design/TASK-060-gdd-keyboard-row` | 2026-11-18 |
+| TASK-061 | GDD: Accessibility (`design/gdd/accessibility.md`) via /design-system (Vertical Slice) | design | game-qc-ios (review: game-qc-android) | PLAN IN REVIEW; Luan answered (K-29) | `design/TASK-061-gdd-accessibility` | 2026-11-18 |
 
 ## Leader log
 
@@ -108,3 +108,4 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 - 2026-11-18: /gate-check Systems Design → Technical Setup: CONCERNS (review-log bookkeeping for morphcore, hint-letters, child-lock-in); TD READY, PR READY. Luan accepted the risk; STAGE → Technical Setup. Report: production/gate-checks/2026-11-18-systems-design-to-technical-setup.md.
 - 2026-11-18: TASK-058 merged (gate risk closed). Luan: next is /create-architecture → TASK-059 to game-dev-ios.
 - 2026-11-18: while TASK-059 is written, the last two Vertical Slice GDDs sent: TASK-060 Keyboard Row (game-art-content), TASK-061 Accessibility (game-qc-ios).
+- 2026-11-18: Luan decided K-28 (local CI, free Personal Team, native-apple engine-ref docs) and K-29 (keyboard row: random common words/names; a11y answers).

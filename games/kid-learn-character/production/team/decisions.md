@@ -105,6 +105,30 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-29 Keyboard Row and Accessibility (Luan, 2026-11-18, TASK-060 / TASK-061 questions)
+
+- **Keyboard row keys: as random as possible, drawn from common words/names.** The row shows a short, common
+  word or name (≤ 9 distinct keys at the 18 mm floor), picked at random from a per-theme pool of the most
+  common/familiar words and names — not necessarily the full theme word ("DINOSAUR") or anything longer, as in
+  the first prototype. The pool, the pick rule and when the word changes are TASK-060's to propose.
+- Keyboard row: shown whenever the grown-up turned it on, even with a hardware keyboard; stays fully visible and
+  active during a parade (not dimmed like hints); hidden on the Title, fades in on Play; a hardware press of a row
+  letter also lights that row key.
+- **Reduce Motion: the stardust twinkle holds steady** (fixed alpha, no twinkle), like the halo.
+- **Switch Control / AssistiveTouch grown-ups:** accepted for the MVP and documented (Mac: the chord; iPad: pause
+  Switch Control to open the gate).
+- **Mid-session Reduce Motion toggle:** reveal-locked parts change from the next reveal; ambient motion (clouds,
+  hints, parade, idling creature) changes on the next frame.
+
+### K-28 Architecture setup choices (Luan, 2026-11-18, TASK-059 questions)
+
+- **CI: local first** (xcodebuild / swift test on the Mac under MAC FREE; QC runs the suites); GitHub macOS
+  runners later if needed (paid minutes).
+- **Signing for device spikes: a free Personal Team** on Luan's Apple ID (7-day provisioning, Luan's own iPad);
+  the paid Apple Developer account waits for TestFlight / store.
+- **docs/engine-reference/native-apple/** may be added (docs only: versions and proven/Apple-sourced API notes)
+  so /create-architecture can run; `engine.name` stays unset (ADR-0001).
+
 ### K-26 Busy moments and favourite keys (Luan, 2026-11-18, TASK-055 cross-review)
 
 - **Hints dim while a parade walks:** during the parade's Walking state the hint letters fade to a lower
