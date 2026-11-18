@@ -54,3 +54,33 @@ Reviewed-Content-Hash: design/gdd/parade.md 8fc6e7be1b8b7a12d5212ed76fa446fa9248
 Review mode: lean · Workflow: standard
 Change: PA-Q1–Q9 answered in a new 'Precise rules for the contract' subsection: inclusive start tick on the play clock; the art wait (same tick if resident, else first all-resident tick or the inclusive 0.5 s timeout; 3 of 6 walks, 2 skips; a skip needs a new rest); the Walking-entry order; held keys and the next batch; Ended at pt ≥ 11, panel/background at once with paradeWalking off at once; inclusive draw test and clamped alpha; Reduce Motion bob 2.5 from the next tick; per-theme state; freeze holds the wait, panel/background while Waiting → Armed. Verdict unchanged; review by game-qc-android.
 Reviewed-Content-Hash: design/gdd/parade.md 4634d12d4160f0f88a278ae0fdbb163a3f547a1d
+
+## Update — 2026-11-18 — TASK-120 parade meter (K-44) and start without a rest (K-45) — revision, in review
+Review mode: lean · Workflow: standard
+Change: New R12 parade meter (a cell per new creature at its shown, left to right; full glow 0.5 Hz, 0.35–0.45, steady under Reduce Motion; handover drain over fade_s; per theme, not saved; holds under the gate and panel; not a target; Play only; no sound; drawn by the Reveal Stage from a meter snapshot, Interface 7) and F4 with flash bounds (≤ 1 Hz, glow ΔL ≤ 0.066, ≤ 2 transitions per pixel per second). K-45: R2/F2 rewritten, t_start = armedAt + parade_delay_s (1.5 s after the 6th creature formed, no rest; tune after the word by Audio F6), re-anchored at panel close, return, skip retry (one per formed reveal) and Ended; prefetch from Armed; PA-Q1/Q2/Q4/Q9, States, Interactions (no Press Queue input), Edge Cases, Dependencies, knobs (parade_delay_s 1.5–3; meter knobs), ACs 3, 4, 7, 8, 12, 19 rewritten and AC-20–AC-30 added. Open Questions MT-Q1–Q5 for Luan with recommendations; follow-ups incl. parade-v1 (21 of 30 cases change). Review: game-qc-android (cross-GDD, from the diff); render read by game-dev-ios.
+Reviewed-Content-Hash: design/gdd/parade.md 425d08b1147465b7d10798d8b5f6341c9d57a39b
+
+## Update — 2026-11-18 — TASK-120 glow example fix (no re-review)
+Review mode: lean · Workflow: standard
+Change: from game-qc-android's REVISE: F4's example and AC-23 gave the glow at +0.2 s as 0.20, dropping the sine term; by F4 it is 0.5 · (0.40 + 0.05 · sin(0.2π)) = 0.215.
+Reviewed-Content-Hash: design/gdd/parade.md d056c399102d58342aa5fd09dd73ee40de8c3eb2
+
+## Update — 2026-11-18 — TASK-120 render-read fixes (no re-review)
+Review mode: lean · Workflow: standard
+Change: From game-dev-ios's render read: Interface 7's snapshot carries drainAt (the Walking-entry time) instead of a draining flag, and F4's drain and glow fade-out run from it; the glow swing bound is ≤ 0.085 (≤ 0.067 with sRGB-value blending) after the track went to 70%; MT-Q4 notes the meter is placed from queue_max (art bible §7). The 0.215 example was already fixed at 74da3aad.
+Reviewed-Content-Hash: design/gdd/parade.md c60bccd6a9ed8ddecc5613a80a51ca2be76791a0
+
+## Update — 2026-11-18 — TASK-120 K-46 answers and the meter light (revision, in review)
+Review mode: lean · Workflow: standard
+Change: Luan's K-46 closes MT-Q1–Q5: from Play entry, no sound, beside the tokens, the 1.5 s beat kept (R2 now says K-45 removed the rest, not the beat), and MT-Q3 yes: new R12a, the meter light. A 16-unit Starlight star launched at the counting shown from the cast box's top centre, a quadratic rise-then-glide to its cell over meter_fly_s 0.9 s (sine ease-in-out), fading over the last 0.15 s; the cell lights on arrival (litAt = launch + 0.9; fullAt and the glow move with it; 6th cell full at armedAt + 1.3 < 1.5). One at a time; none for held keys or under Reduce Motion; removed with the cell lit at once on the gate, panel or background; next-batch cells during a walk; z 70 above the meter. F4: path formula and hint check, flash bounds (each pixel ≤ 2 transitions per 1 s, swept strip 26,800 px on iPad). Snapshot adds fullAt and flight. Knobs meter_fly_s, meter_land_s. ACs 22, 23 updated; AC-31–AC-35 added. Review: game-qc-android (cross-GDD) and game-dev-ios (render read of the flight), baad1961..tip.
+Reviewed-Content-Hash: design/gdd/parade.md 76dafbae4a08a832dc47472eefa7928fc7070dc2
+
+## Update — 2026-11-18 — TASK-120 MT-Q3 history row marked superseded (no re-review)
+Review mode: lean · Workflow: standard
+Change: The resolved-questions history row for MT-Q3 now leads with "Superseded: Luan chose yes, K-46; see R12a" so the old recommendation cannot be read as current.
+Reviewed-Content-Hash: design/gdd/parade.md 8b9d74d6d67df241f4103add12585e5af607ab54
+
+## Update — 2026-11-18 — TASK-120 meter light landing crossfade (no re-review)
+Review mode: lean · Workflow: standard
+Change: From game-dev-ios's render read (option a): litAt = launchAt + meter_fly_s − meter_land_s (0.75 s), so the cell's fill starts as the light's fade starts (one crossfade, no dip); fullAt follows (6th cell full at armedAt + 1.15; glow seen ~0.75 s); constraint and knob note updated; the swept strip stated as a range, 10,800–37,400 px on an 11-inch iPad (27,600 default); one line on why a single flight field suffices (meter_fly_s ≤ 1.1 < 1.2 s). AC-22, 23, 31, 35 times updated.
+Reviewed-Content-Hash: design/gdd/parade.md 16a839ee8bf58c44b04bee7228237e422339a804

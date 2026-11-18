@@ -2,7 +2,8 @@
 
 > **Status**: Approved (all 9 sections approved one by one by Luan, 2026-11-17)
 > **Owned By**: art-director
-> **Last Updated**: 2026-11-18 (TASK-117, no re-review: §3 "starlight" and "sparkle burst" terms, §7 hint size figure, §7 play button size and drawing; earlier TASK-069: §8 SVG subset per ADR-0003 D4, `data-pivot`, baked names; K-25 glyph edge and crossfade contrast in §2, §4; K-16 amendments in §2, §4, §5, §7, §8; earlier the same day: §8 says where silhouette path data lives)
+> **Last Updated**: 2026-11-18 (TASK-120, K-44: §7 "Parade meter", the one HUD exception, with §3, §4 rows; in review by
+> game-qc-android and game-dev-ios; earlier TASK-117, no re-review: §3 "starlight" and "sparkle burst" terms, §7 hint size figure, §7 play button size and drawing; earlier TASK-069: §8 SVG subset per ADR-0003 D4, `data-pivot`, baked names; K-25 glyph edge and crossfade contrast in §2, §4; K-16 amendments in §2, §4, §5, §7, §8; earlier the same day: §8 says where silhouette path data lives)
 > **Art Director Sign-Off (AD-ART-BIBLE)**: SKIPPED 2026-11-17 — lean mode
 
 `/art-bible` writes these nine sections in this order and replaces each
@@ -184,6 +185,7 @@ rounded clouds, thin streaks, round flakes.
 | Play button | A rounded pill with a soft right-pointing triangle | The game's only icon |
 | Starlight | A four-point star at the press point | "I heard you": an accepted press (started or queued) |
 | Sparkle burst | A small burst of 8 specks | "I heard you" too: a press that was not taken (queue full), or a tap on the empty stage |
+| Parade meter *(K-44, TASK-120)* | A small rounded bar of 6 rounded cells, lit left to right | "The parade is coming": the child's one HUD element (§7) |
 | Grown-up card | A rounded rectangle with plain rectangular controls | Adult layout; the only text-heavy shapes in the game |
 
 The rule against plain circles applies to creatures only; circles are allowed in the UI. Hint and
@@ -210,7 +212,7 @@ right, or gold for "well done": every press is answered the same way.
 | Token | Hexes | Meaning and use |
 |---|---|---|
 | **Letter Gold** | fill `#fff1b8` / `#ffd36e` / `#f6a93b`; outline `#8a4b12` (the glyph's Morning/Day edge is `#80450f`, K-25); token ink `#b9631c` | "A letter or number lives here." The glyph, hints, queued tokens and the title's play button (their door, Section 2). Nothing else is gold. |
-| **Starlight** | `#fbeec8` (L 0.86) | "I heard you." Sparkles, pale stardust specks, sky stars at ≤ 80% alpha; also the moon's progress ring. |
+| **Starlight** | `#fbeec8` (L 0.86) | "I heard you." Sparkles, pale stardust specks, sky stars at ≤ 80% alpha; also the moon's progress ring and the parade meter's cells (K-44). |
 | **Ink** | `#2a2340`; creature outline at **80%** in every look | "A hero" (Section 3): outlines, pupils, smiles. |
 | **Stage Cream** | stage `#efe2c6` → `#e3d1ae`; highlight `#f8efdc` (L 0.87); bone `#f3e6c8`; card `#fbf4e6` | Ground, token bubbles, horns, toes, eye whites. |
 | **Shared constants** | nest `#a8743f`, fossil rock `#6e4a2c`, moon `#e6d6a4` | The same object in every theme and look. |
@@ -277,6 +279,7 @@ green). F and N are objects and use the shared constants.
   cream bubble loses its edge and crowds the creature's ground line.
 - **"Seen" letters get no mark** (Luan, 2026-11-17): the parade already shows progress, and a mark
   would introduce a reward colour.
+- **Parade meter** *(K-44, TASK-120)*: Starlight cells on an Ink track, never gold (§7 "Parade meter").
 - **Grown-up panel and moon ring:** panel controls in Dusk Blue `#46558f` (6.5:1 on the card) and
   the moon's progress ring in Starlight (Luan, 2026-11-17), so gold means only letters. Trade-off:
   the ring is weaker on the day sky (~2.5:1); its length and the hold time carry it.
@@ -290,6 +293,7 @@ green). F and N are objects and use the shared constants.
 | Hint vs waiting | Same gold on cream | Drifting rounded square vs a small circle in a still row |
 | Which creature | Slot | Silhouette trait and spoken name |
 | Moon gate progress | Ring | Ring length and hold time |
+| Parade progress *(K-44)* | Starlight cells | The number of lit cells, in a fixed row; no colour step means anything |
 
 Under deuteranopia leaf, ochre and coral converge, so raptors R, U and V become one brown. Their
 outline traits (Section 3) tell them apart, which is why markings are never the only difference.
@@ -366,9 +370,66 @@ in the corner is scenery that a grown-up knows to hold.
 
 ### Art view
 
-**No HUD for the child.** The child sees only the hint letters (floating in the sky, almost part
-of the scene), the queue tokens, the play button and the moon; plus, if a grown-up turns it on,
-the on-screen keyboard row (below). The grown-up panel is the only screen with text.
+**No HUD for the child**, with one exception, the parade meter (below; K-44). The child sees only the hint letters
+(floating in the sky, almost part of the scene), the queue tokens, the parade meter, the play button and the moon;
+plus, if a grown-up turns it on, the on-screen keyboard row (below). The grown-up panel is the only screen with text.
+
+**Parade meter** *(amendment 2026-11-18, Luan K-44; TASK-120, in review)*. The one HUD element: a small bar that lights
+one cell per new creature in the batch; when it is full, the parade starts (Parade R12, F4 own when it changes; this
+is its look). **No number and no text.** It is Starlight, because gold is for letters only (§4) and Starlight already
+means "I heard you" and progress (the moon ring).
+- **Box and position:** a track **168 × 28 stage units**, corner radius 14, at y 58 (y 44–72): the top right of the
+  safe stage, on the queue-token row's line, beside the tokens (Luan K-46): the **track's right edge is 24 units, and
+  the meter's glow 20 units, left of the leftmost token's glow** that `queue_max` allows (tokens at x 1214 − 66·j,
+  glow radius 40; TASK-120 render read). Its centre is
+  ```
+  meter_cx = 1214 − 66 · (max(queue_max, 1) − 1) − 40 − 24 − 84 = 1066 − 66 · (max(queue_max, 1) − 1)
+  ```
+  At the default `queue_max` 3 that is **(934, 58)**, x 850–1018; with the glow the box is **x 846–1022, y 40–76**.
+  Across Press Queue's range 0–5 the centre runs from 1066 to 802. That glow box is what the Reveal Stage publishes for
+  Hint Letters (its F4, which passes for every `queue_max` in 0–5). On an 11" iPad it is about 157 × 26 pt
+  (30 × 5 mm).
+- **Inside the safe stage, never the screen corner** (K-20): on a portrait iPad or a tall window (K-39) the extra sky
+  is above it; a wide Mac window adds hills to its right. The keyboard row's `row_lift` does not move it.
+- **Cells:** 6 rounded rectangles, **23 × 18 units**, corner radius 6, 4 units apart, inset 5 from the track: centres
+  at x = 866.5 + 27·i, y 58. They light **left to right**, the way the parade walks.
+- **Colours, the same in every look:** the track is Ink `#2a2340` at **70%** *(TASK-120 render read: 50% fell
+  below 3:1 under linear blending)*; a lit cell is Starlight `#fbeec8` at
+  100%; an unlit cell is Starlight at **25%**. No outline (UI tokens have none, §5) and no gold. It is not tinted by
+  the weather and not dimmed at night (a UI element, like the tokens), and it sits under the panel's dim. Starlight
+  meets the frame cap (L 0.86 < 0.88) and the red check (R/(R+G+B) 0.36).
+- **The looks:**
+  - **Empty:** the track with 6 faint cells.
+  - **A step:** a small light flies from the new creature to its cell (below), and the cell rises from 25% to 100%
+    over 0.4 s, ease-out, as the light lands. Nothing else moves or scales. Under Reduce Motion there is no light: the
+    cell rises as its creature appears.
+  - **Full:** all 6 lit, plus a soft Starlight glow 4 units around the track that **breathes at 0.5 Hz between 35%
+    and 45%**. It is steady at 40% under Reduce Motion. It usually lasts 1.5 s before the parade starts (K-45).
+  - **Handover:** as the parade fades in, the glow and the cells not carried into the next batch fade back over
+    0.6 s.
+- **Per look, contrast** (WCAG, against the sky's top and mid colours, since the meter sits in the upper sky). The
+  alpha composite is computed **both ways**, since the result depends on the renderer's blend space: in 8-bit sRGB
+  values ("gamma", the default for a non-sRGB target) and in linear light (an sRGB-format target). The design holds
+  under either.
+
+  | Look | Lit cell on the track (gamma · linear) | Unlit cell on the track | Track on the sky | Glow swing ΔL |
+  |---|---|---|---|---|
+  | Morning | 7.6 / 6.1 · 5.4 / 3.6 :1 | 1.8 / 1.7 · 2.1 / 1.7 :1 | 3.3 / 4.4 · 2.3 / 2.7 :1 | ≤ 0.067 · 0.074 |
+  | Day | 7.8 / 6.3 · 5.8 / 3.9 :1 | 1.9 / 1.7 · 2.2 / 1.7 :1 | 3.1 / 4.2 · 2.3 / 2.6 :1 | ≤ 0.067 · 0.075 |
+  | Dusk | 12.6 / 10.5 · 12.6 / 9.7 :1 | 2.1 / 2.0 · 3.9 / 3.2 :1 | 1.1 / 1.7 · 1.1 / 1.6 :1 | ≤ 0.067 · 0.084 |
+  | Night | 13.6 / 12.5 · 13.5 / 12.4 :1 | 2.1 / 2.1 · 4.1 / 3.9 :1 | 1.1 / 1.1 · 1.1 / 1.1 :1 | ≤ 0.066 · 0.085 |
+
+  A lit cell is ≥ 3:1 everywhere in both blend spaces (worst: 3.6:1, Morning mid sky, linear), the floor §4 rule 2 sets for the glyph and WCAG 1.4.11 for graphics that must be seen. Unlit cells are faint on purpose:
+  the six places show, and only lit ones draw the eye. At dusk and night the track all but disappears into the sky,
+  so the meter reads as six faint dots that light. The glow's swing stays below ΔL 0.1, so it is never a flash
+  transition (Accessibility F2; ADR-0013).
+- **The meter light** *(Luan K-46; TASK-120)*: a small **Starlight four-point star, 16 units tip to tip**, with a
+  soft Starlight glow of radius 8 at 40%: the press starlight's shape, smaller, so it reads as "the same light, going
+  home". No trail and no burst. It rises from the top of the new creature and glides right into its cell over 0.9 s
+  (sine ease-in-out; Parade R12a and F4 give the curve), fading over its last 0.15 s as the cell lights. One at a
+  time, silent, drawn above the meter, the hints and the parade (z 70). Never gold.
+- **Not a target, no sound** (Parade R12, K-46). **Play only**, from Play entry; not on the Title (K-46).
+
 
 **Typography: the glyph is the UI.** One bundled OFL rounded, heavy sans (the prototype uses Arial
 Rounded as a stand-in; production bundles the font TASK-033 baked the glyphs from). Letters are

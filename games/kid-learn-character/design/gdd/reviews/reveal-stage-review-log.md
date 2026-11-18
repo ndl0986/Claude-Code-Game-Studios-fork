@@ -75,3 +75,23 @@ Review mode: lean · Workflow: standard
 Task: TASK-088d
 Change: F3: for the invalid-set fallback, form_s is replaced by fallback_fade_s in both places, fadeStart (formedS − fallback_fade_s) and the fade length in u (game-qc-android's REVISE: the denominator too); glyph missing keeps formedS − form_s (its set is valid). The values happen to be equal today (0.5), which hid the error; found reviewing reveal-timing-v1. Review: game-qc-android, from the diff.
 Reviewed-Content-Hash: design/gdd/reveal-stage.md e9f98355e1a2e2ae14efcb1613bd2a4219016964
+
+## Update — 2026-11-18 — TASK-120 parade meter drawing and box (no re-review)
+Review mode: lean · Workflow: standard
+Change: R6: draws the parade meter from the Parade's meter snapshot with the art bible §7 look, in the token layer; a touch on it is an empty-stage sparkle. R10: the meter stays inside the safe stage, its box is published with the token circles, and it is in the draw order with the queue tokens. Interactions: Parade in/out. Review: game-qc-android from the diff.
+Reviewed-Content-Hash: design/gdd/reveal-stage.md 2c7743ca2e1d0e933ed4f1c936eae37a884b68c9
+
+## Update — 2026-11-18 — TASK-120 render-read fixes (no re-review)
+Review mode: lean · Workflow: standard
+Change: The meter box values are given at the default queue_max 3 and placed from queue_max (art bible §7).
+Reviewed-Content-Hash: design/gdd/reveal-stage.md ad91cda2866a9354d3735736201377cecd3ffdb3
+
+## Update — 2026-11-18 — TASK-120 meter light (no re-review)
+Review mode: lean · Workflow: standard
+Change: R6 also draws the meter light from the Parade snapshot's flight (Parade R12a; art bible §7), above the meter in the token layer (K-46).
+Reviewed-Content-Hash: design/gdd/reveal-stage.md ad91cda2866a9354d3735736201377cecd3ffdb3
+
+## Update — 2026-11-18 — TASK-120 meter light, applied (no re-review)
+Review mode: lean · Workflow: standard
+Change: The previous entry's R6 line (the meter light drawn from the snapshot's flight, above the meter) was logged but not applied in c983b43e; it is applied here. That entry's hash is of the unchanged file.
+Reviewed-Content-Hash: design/gdd/reveal-stage.md 9c8150ac467d10a46af70d8e43d733aabac6b40d
