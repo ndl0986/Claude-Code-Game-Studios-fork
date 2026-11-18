@@ -87,7 +87,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-098 | Input: digit key-up for the Gate (gateDigitUp or digitKeyHeld) so G13 B7 is expressible; input-filter-v2 later | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ bd9df8bc) | `design/TASK-098-input-gate-digit-up` | 2026-11-18 |
 | TASK-099 | input-filter-v2: v1 + AC-1t gateDigitUp cases; v1 superseded | qa | game-qc-android (review: game-dev-ios) | DONE: MERGED (95 cases, game-dev-ios APPROVE @ 94c776e3) | `design/TASK-099-input-filter-v2` | 2026-11-18 |
 | TASK-101 | Contracts batch 6 (Vertical Slice): parade-v1 + scene-look-v1, with K-40 registry rows | qa | game-qc-android (review: GDD owners) | SENT 2026-11-18 | `design/TASK-101-contracts-batch6` | 2026-11-18 |
-| TASK-100 | Audio R6 figure: about 0–20 ms heard again; nothing-skipped condition (ADR-0010 D7) | design | game-art-content (review: game-dev-ios) | IN REVIEW @ 6bcd32be → game-dev-ios | `design/TASK-100-audio-r6-figure` | 2026-11-18 |
+| TASK-100 | Audio R6 figure: about 0–20 ms heard again; nothing-skipped condition (ADR-0010 D7) | design | game-art-content (review: game-dev-ios) | DONE: MERGED (game-dev-ios APPROVE @ 6bcd32be) | `design/TASK-100-audio-r6-figure` | 2026-11-18 |
 | TASK-102 | ADR-0007 input + ADR-0008 kiosk drafts to Proposed (device rows pending) | architecture | game-dev-ios (review: game-dev-android; rows game-qc-ios) | SENT 2026-11-18 | `design/TASK-102-adr-0007-0008` | 2026-11-18 |
 | TASK-103 | ADR-0009 render path draft to Proposed (device rows pending) | architecture | game-dev-android (review: game-dev-ios; rows game-qc-ios) | SENT 2026-11-18 | `design/TASK-103-adr-0009` | 2026-11-18 |
 
