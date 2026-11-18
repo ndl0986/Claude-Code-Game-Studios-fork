@@ -2,7 +2,7 @@
 
 > **Status**: In Review
 > **Author**: game-art-content for Luan (TASK-041)
-> **Last Updated**: 2026-11-18
+> **Last Updated**: 2026-11-18 (volume aligned with the Settings Store, K-12)
 > **Last Verified**: 2026-11-18
 > **Implements Pillar**: Pillar 1 (Every Press Answers) and Pillar 3 (Calm Magic); serves Pillar 2 (The Letter Comes Alive)
 
@@ -128,9 +128,13 @@ never more brightness"; Pillar 3).
    output. F1 sets bus trims so the limiter acts only in the worst case.
 
 **R5. Volume and mute (Settings Store).**
-- The Settings Store holds **master volume** (0–1, default 0.5 as in the one-shot) and **mute** (default off),
-  changed only in the grown-up panel. Audio & Voice reads them; it stores nothing.
-- Volume is applied through F1 to the main mix. **Mute** ramps the main mix to silence and cuts the voice and cast
+- The Settings Store holds **`volume`**, an integer 0–10 (default 8, K-12), and **`muted`** (default off), changed
+  only in the grown-up panel. It hands Audio one linear **`gain = muted ? 0 : volume / 10`** (Settings Store F2).
+  Audio & Voice applies it; it stores nothing.
+- **Slider preview:** while the grown-up drags the volume slider, the panel sends a preview gain (the same F2 from
+  the slider's position) straight to Audio, which applies it at once, ramped over `cut_fade_s` so the drag never
+  clicks. On release the store writes the level and Audio gets the final gain.
+- The gain is applied through F1 to the main mix. **Mute** ramps the main mix to silence and cuts the voice and cast
   players (R2.2). Unmuting affects the next event; nothing resumes mid-line.
 - **With sound off, everything still reads visually** (art bible §7): every event in R1 also has a visual answer,
   owned by Reveal Stage.
@@ -197,7 +201,7 @@ playing.
 | Reveal Stage | in | reveal start (`s = 0`), the active `glow` and `T`, formed, creature tap outside the cooldown |
 | MorphCore | in (via Reveal Stage) | `glow` and `T` of the active timing set |
 | Parade | in | parade start and end (E12) |
-| Settings Store | in | master volume, mute (R5); later the voice locale |
+| Settings Store | in | `volume` (0–10) and `muted` as one gain (its F2), and the slider preview gain (R5); later the voice locale |
 | Accessibility | in | the reduced-motion flag changes `glow` and `T`, so the voice timings follow (R1) |
 | Parent Gate & Grown-up Panel | in | panel open → cut players (R6) |
 | Localization | out | a new locale is files only; the same checks (A7, A8) per locale |
@@ -206,12 +210,13 @@ playing.
 
 **F1. Gain chain.** The level of a sound at the output, before the limiter:
 ```
-g = g_master(v) × (muted ? 0 : 1) × g_bus × g_event × m × d
-g_master(v) = v²                      (v = master volume 0–1; v² follows loudness better than v)
+g = g_master(v) × g_head × g_bus × g_event × m × d
+g_master(v) = v²     (v = the Settings Store's gain, volume / 10, 0 when muted; v² follows loudness better than v)
 ```
 | Variable | Meaning | Value / range |
 |---|---|---|
-| `v` | master volume (Settings Store) | 0–1, default 0.5 → g_master 0.25 (−12 dB) |
+| `v` | the gain from the Settings Store (its F2) | 0–1 in steps of 0.1; default level 8 → v 0.8 → g_master 0.64 (−3.9 dB) |
+| `g_head` | fixed headroom trim | −3 dB (0.708) |
 | `g_bus` | bus trim (Tuning Knobs) | voice 0 dB, cast −4 dB, ui −10 dB, music −8 dB (provisional) |
 | `g_event` | per-event trim | ping −6 dB vs chime; 1 otherwise |
 | `m` | mash factor (F3) | 0.35–1, ui bus only |
@@ -219,9 +224,10 @@ g_master(v) = v²                      (v = master volume 0–1; v² follows lou
 
 **Headroom (everything at once).** Files peak at most at −1 dBTP (0.89). The worst case is all 7 players peaking
 together: voice 0.89 + cast (ducked) 0.89 × 0.63 × 0.355 = 0.20 + ui 0.89 × 0.32 × 2.57 (F3's loudest four) = 0.72
-+ music (ducked) 0.89 × 0.40 × 0.355 = 0.13, a sum of **1.94** (+5.8 dB) before `g_master`. At v ≤ 0.6
-(g_master 0.36) the aligned sum is 0.70, below full scale, so the limiter never acts at normal volume. Above that, the limiter (R4.5) holds the
-ceiling. Peaks rarely align, so this is a bound, not a typical level.
++ music (ducked) 0.89 × 0.40 × 0.355 = 0.13, a sum of **1.94** (+5.8 dB); with `g_head` it is 1.37. At the default
+level 8 (g_master 0.64) the aligned sum is **0.88**, below full scale, so the limiter never acts at the default
+volume or below. At levels 9–10 (g_master 0.81–1.0) the aligned worst case reaches 1.11–1.37 and the limiter (R4.5)
+holds the ceiling. Peaks rarely align, so this is a bound, not a typical level.
 
 **F2. Ducking.** While a voice line plays, the cast and music buses duck:
 ```
@@ -327,7 +333,8 @@ about **2.7 s** later than with a plain 3.0 s hold. Luan accepted this for a wor
 **Upstream (Audio & Voice reads):**
 - **Key Table & Theme Data:** `sfx` paths, `voiceLocales`, voice line ids, the off-main-thread theme load that
   includes decoding (R4.1). Follow-up for that GDD: a per-line voice duration (F6).
-- **Settings Store (TASK-039):** master volume and mute (R5); later the voice locale.
+- **Settings Store:** `volume` 0–10 (default 8) and `muted`, handed over as one gain (its F2), plus the slider preview
+  (R5); later the voice locale.
 - **Input & Key Filter (TASK-037):** the press event and `sparkle`, `creatureTap`, `startPlay`, through the Press
   Queue and Reveal Stage.
 - **MorphCore:** `glow` and `T` of the active set, through Reveal Stage.
@@ -350,7 +357,8 @@ All values are bundled data (ADR-0001 Decision 6). "One-shot" means Luan played 
 
 | Knob | Value | Safe range | Source | Effect |
 |---|---|---|---|---|
-| `master_volume` default | 0.5 | 0–1 | one-shot `volume` | starting volume; the grown-up changes it (Settings Store) |
+| `volume` default | level 8 (gain 0.8) | 0–10 | Settings Store (K-12; owned there) | starting volume; the grown-up changes it |
+| `g_head` | −3 dB | −6 – 0 dB | F1 | headroom so the limiter is idle at the default level |
 | `word_offset_s` | 0.25 | 0–0.6 | decided (Luan Q1) | gap between the cast sound and the word; larger = longer hold (F6) |
 | `word_len_max_s` | 1.25 | 0.8–1.25 | F6 | longest word line allowed; above 1.25 the cap would cut words |
 | `hold_ext_max_s` | 1.5 | 0–1.5 | decided (Luan Q1) | longest hold extension for a word (Press Queue constraint) |
@@ -427,10 +435,11 @@ Logic criteria run with an injected clock and a fake player layer (no audio hard
     decoded at the output format; decoding never runs on the main thread (thread assertion in debug).
 12. **AC-12 Loudness (build).** Every shipped file is within ±1 LU of its class target (F4) and ≤ −1 dBTP; the build
     fails otherwise.
-13. **AC-13 Limiter and headroom.** With all 7 players driven by full-scale test tones at v = 1, the output never
-    exceeds `limiter_ceiling_dbtp`; at v = 0.5 the limiter applies no gain reduction.
+13. **AC-13 Limiter and headroom.** With all 7 players driven by test tones peaking at −1 dBTP at v = 1, the output never
+    exceeds `limiter_ceiling_dbtp`; at the default level 8 (v = 0.8) the limiter applies no gain reduction.
 14. **AC-14 Mute and volume.** Mute silences the output within `cut_fade_s` and cuts the voice and cast players;
-    unmute plays nothing until the next event. At v = 0.5 the main gain is 0.25 (F1).
+    unmute plays nothing until the next event. At level 8 the main gain is 0.64 × 0.708 = 0.45 (F1). During a slider
+    drag the output follows the preview gain within `cut_fade_s`, without a click.
 15. **AC-15 Interruptions (device).** After a simulated interruption that ends with "should resume", the next press
     chimes; after a route change and a media-services reset, the buffers are re-primed and the next press after
     re-priming chimes. During re-priming, events are skipped and logged, never crashing.

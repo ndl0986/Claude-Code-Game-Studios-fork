@@ -21,3 +21,9 @@ Reviewed-Content-Hash: design/gdd/morphcore.md 699c26fe97e5413c07d09a3f1efeac09d
 Reviewed-Content-Hash: design/art/art-bible.md a01094340e7e5b7bdae636f4cc879d0f84b472b5
 Reviewed-Content-Hash: docs/architecture/adr-0001-native-apple.md 9bd960cdffd4bec53f0f2875d6f4c7a33f873a70
 Reviewed-Content-Hash: production/team/decisions.md 851d029c9350a0f9ce2f6d528146b3ca974207af
+
+## Update — 2026-11-18 — volume aligned with the Settings Store (no re-review)
+Review mode: lean · Workflow: standard
+Change: the leader flagged a mismatch with the merged Settings Store GDD (K-12): `volume` is an integer 0–10, default 8, handed to Audio as `gain = muted ? 0 : level/10`, with a slider preview from the panel. R5, F1 (v is that gain; a fixed −3 dB headroom trim `g_head` added so the aligned worst case stays below full scale at the default level 8: 0.88), Interactions, Dependencies, Tuning Knobs, AC-13 and AC-14 updated. The recommended Settings Store finding from the first entry is resolved. Verdict unchanged; game-dev-ios's independent read is in progress.
+Reviewed-Content-Hash: design/gdd/audio-voice.md 22672ded5e7e1f5475dafc4113cbe7a0ebd0db79
+Reviewed-Content-Hash: design/gdd/settings-store.md 6e2df80d2d4061d730f3e2cb322e8d9669e51359
