@@ -26,3 +26,8 @@ Reviewed-Content-Hash: production/team/decisions.md fe4761035a309a289bdb33b864b7
 Review mode: lean · Workflow: standard
 Change: game-qc-ios's independent read (REVISE, bookkeeping): R5's chord bullet now says the chord is judged from the OS key state once TASK-054 I1 lands (merged Input R6 uses the held set today); open follow-ups are named, not credited as done (I1, I3 and S1/S2, open in TASK-054a, owner game-dev-android); a release-blocking note says AC-3/AC-6 need S1/S2 and I3, and AC-17's chord path needs I1; AC-16/AC-17 marked NOT ASSESSED inline; the cover colour cited as App Shell's launch colour (proposal). No rule changed.
 Reviewed-Content-Hash: design/gdd/child-lock-in.md 4f3fefd7aacd007bb5d0b41c207f87972b1759c2
+
+## Update — 2026-11-18 — TASK-054b text (no re-review)
+Review mode: lean · Workflow: standard
+Change: L1: R5's chord bullet matches the merged build decision: judged from the OS key state (if Input AC-1k6 passes), otherwise from the held set kept honest by the ⌘-release rule (Input R6, TASK-054a). Text only; no rule changed. Review: game-qc-ios, from the diff.
+Reviewed-Content-Hash: design/gdd/child-lock-in.md cf1eb385e2c2e6b376c0d964cd09aed562bc894a

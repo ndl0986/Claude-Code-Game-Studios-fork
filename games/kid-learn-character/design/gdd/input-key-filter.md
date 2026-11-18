@@ -2,7 +2,7 @@
 
 > **Status**: Approved (lean review APPROVED 2026-11-18, TASK-037; independent read by game-dev-android APPROVE; merged 2026-11-18)
 > **Author**: game-dev-ios (TASK-037); decisions by Luan; plan reviewed by game-dev-android
-> **Last Updated**: 2026-11-18 (TASK-054a follow-ups)
+> **Last Updated**: 2026-11-18 (TASK-054b text)
 > **Last Verified**: 2026-11-18, against ADR-0001 (Accepted), art bible §7, the TASK-033 spike
 > (`prototypes/TASK-033-anim-runtime/Spike/Input.swift`) and the one-shot `prototypes/letter-morph-dinosaur/`
 > **Implements Pillar**: 1 (Every Press Answers), 5 (Safe by Design)
@@ -125,8 +125,8 @@ platform.
     from the build, and the chord uses the held set alone, kept honest by the ⌘-release rule (AC-1k6). There is no
     run-time fallback: a prompt at the first chord would already be in front of the child or the grown-up.
   - **Limit of the held set alone:** if ⌘ stays down without a break, a stale key keeps blocking the chord until ⌘ is
-    released; **releasing ⌘ and pressing the chord again always clears it.** The chord replaces the moon hold only: the gate's second step (the number in words)
-  still shows (K-19).
+    released; **releasing ⌘ and pressing the chord again always clears it.**
+- The chord replaces the moon hold only: the gate's second step (the number in words) still shows (K-19).
 - **iPadOS: no chord**, even with a hardware keyboard. Holding the moon is the only way in. ⌃⌥⌘Q on an iPad is
   an ordinary disqualified key: swallowed (R3, R5).
 - **Android:** chosen by its ADR.

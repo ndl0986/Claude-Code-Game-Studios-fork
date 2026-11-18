@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent read by game-qc-ios, merged 2026-11-18; TASK-054a merged 2026-11-18 — Mac release ACs NOT ASSESSED until a Mac build runs AC-1k6 and the real-Mac ACs)
 > **Author**: game-dev-android for Luan (TASK-052); plan reviewed by game-qc-ios
-> **Last Updated**: 2026-11-18
+> **Last Updated**: 2026-11-18 (TASK-054b text)
 > **Last Verified**: 2026-11-18, against ADR-0001 Decision 9 (a–c), the TASK-033 spike report (Child lock-in),
 > Input & Key Filter R5/R6 and its Gate challenge state, Settings Store R1/R8 (TASK-050, K-21; `childLockActive` pending TASK-054 S1/S2), App Shell & Title
 > (TASK-051) R1/R7, the Parent Gate & Grown-up Panel interface (TASK-048: G2, G7, G8, G11, `panelWillOpen` /
@@ -112,7 +112,8 @@ before the keys are released, so there is never a moment with ⌘-keys live and 
   2. the panel → turn the lock **OFF** → ⌘Q (K-21);
   3. a long press of the power key, always (R2).
 - **The chord, as the gate defines it** (Parent Gate G2): it counts only when **exactly** ⌃⌥⌘Q is down, judged from
-  the OS key state once **TASK-054 I1** lands (safety; the merged Input R6 today uses the held set); it works on the Title and in Play; it does nothing
+  the OS key state (if Input AC-1k6 passes), otherwise from the held set kept honest by the ⌘-release rule (Input
+  R6, TASK-054a); it works on the Title and in Play; it does nothing
   during the gate's 10 s moon sleep after a wrong or timed-out code (K-20, K-21); it is ignored while the challenge or
   the panel shows. **Note: a mistyped code delays the chord by 10 s.**
 - **No lock before the way out works:** preconditions 1–3 of R3 are the way out; the kiosk is never applied before
