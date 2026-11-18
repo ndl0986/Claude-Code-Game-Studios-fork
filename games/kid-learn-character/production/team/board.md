@@ -73,6 +73,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-088c | Reveal Stage nits: R3 cells 'in the active locale'; invalid-set rise knob fallback_rise_s 0.45 | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE) | `design/TASK-088c-reveal-nits` | 2026-11-18 |
 | TASK-088d | Reveal Stage F3: invalid-set fadeStart = formedS − fallback_fade_s | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 45809435) | `design/TASK-088d-reveal-f3` | 2026-11-18 |
 | TASK-089 | Contracts batch 4: hint-letters-v1 + keyboard-row-v1 | qa | game-qc-android (review: GDD authors) | SENT 2026-11-18 | `design/TASK-089-contracts-batch4` | 2026-11-18 |
+| TASK-089a | Keyboard Row GDD: KR-Q1–Q11 answers as rules | design | game-art-content (review: game-qc-android) | IN REVIEW @ d4a33f71 | `design/TASK-089-row-answers` | 2026-11-18 |
 
 ## Leader log
 
