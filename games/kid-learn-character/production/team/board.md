@@ -40,7 +40,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-058 | Log the independent APPROVE reads (gate CONCERN): morphcore, hint-letters, child-lock-in review logs | design | game-dev-ios, game-qc-android, game-qc-ios | DONE: 47ee06a, e682469, 6d02513 merged | `design/TASK-058-review-logs-*` | 2026-11-18 |
 | TASK-059 | /create-architecture: master architecture (module map, seams, Android mirror) + prioritised ADR work plan + first scaffold story | architecture | game-dev-ios (review: game-dev-android) | IN PROGRESS: PLAN APPROVED 2026-11-18 after REVISE (game-dev-android, K-28) | `design/TASK-059-architecture` | 2026-11-18 |
 | TASK-060 | GDD: On-screen Keyboard Row (`design/gdd/onscreen-keyboard-row.md`) via /design-system (Vertical Slice) | design | game-art-content (review: game-dev-android) | PLAN IN REVIEW; Luan answered (K-29: random common words/names) | `design/TASK-060-gdd-keyboard-row` | 2026-11-18 |
-| TASK-061 | GDD: Accessibility (`design/gdd/accessibility.md`) via /design-system (Vertical Slice) | design | game-qc-ios (review: game-qc-android) | PLAN IN REVIEW; Luan answered (K-29) | `design/TASK-061-gdd-accessibility` | 2026-11-18 |
+| TASK-061 | GDD: Accessibility (`design/gdd/accessibility.md`) via /design-system (Vertical Slice) | design | game-qc-ios (review: game-qc-android) | IN PROGRESS: PLAN APPROVED 2026-11-18 after REVISE (game-qc-android: WCAG F2, touch split, flags, OS settings) | `design/TASK-061-gdd-accessibility` | 2026-11-18 |
 
 ## Leader log
 
