@@ -116,8 +116,10 @@ part, fills per element; the A the rule judges), **B** (B-load) and, for informa
 Metrics recorder gives p50 / p99 over the worst case per option, and the screen logs per-creature build ms per
 option. The A-candidate option ("A: candidate (ADR-0009 D3)") and H-2's **Overlap check** button are in DeviceSpike at
 **d21588c0** (game-dev-ios, design/TASK-103-devicespike-a-candidate; build logs in
-`production/qa/evidence/TASK-103/d21588c0/`); the candidate's outline moves into the effect node (D3) in game-dev-ios's
-follow-up build, whose sha is recorded here when it lands. H-2 is answered (headless, 6e455bfc; Validation), and P-2
+`production/qa/evidence/TASK-103/d21588c0/`); the follow-up **b4fa26c9** (logs 99962cff,
+`production/qa/evidence/TASK-103/b4fa26c9/`) is **the build P-2 and M-13 run**: the effect-node outline by default
+(D3), the device Overlap check switching to stroke or node alpha only where those blend once, parade walkers drawing
+`body` + `outline` for every option (R3), and `outline=<variant>` in the `[render]` line. H-2 is answered (headless, 6e455bfc; Validation), and P-2
 records which outline path (the effect node, or the texture fallback) its A-candidate numbers come from.
 
 ### D2. One structure, both options (platform-neutral)
@@ -303,7 +305,8 @@ Per K-34: headless runs need no MAC FREE; the Mac rows do.
 - **H-2 Equivalence (the adapter story).** A's and B's part boxes within 1 px per role for the three creatures; the
   **outline-overlap test** (D2, D3): an outline stroke that crosses itself, drawn by A and by B over a flat fill,
   reads one alpha (0.8 Ink) at the crossing, not two. It decided D3's group-alpha question before P-2 (game-qc-ios;
-  leader's option a). **Result (2026-11-18, headless, game-dev-ios, 6e455bfc, `SKRenderer` offscreen):** one
+  leader's option a). **Result (2026-11-18, headless, game-dev-ios, 6e455bfc, `SKRenderer` offscreen; `tools/overlap-check.swift`,
+`production/qa/evidence/TASK-103/overlap-check/`):** one
   `SKShapeNode` at 0.8 blends its self-overlap **twice** (crossing 0.961, arm 0.800; stroke alpha and node alpha
   alike); an `SKEffectNode` with `shouldRasterize` at 0.8 blends **once**. So D3's outline is the merged path inside an
   effect node per part. DeviceSpike's **Overlap check** button repeats it on the device as the first step of the
