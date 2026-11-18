@@ -288,6 +288,11 @@ both hold a hint; L1 and R1 also fail the scaled moon and token clearances (167.
 142.0), and the widest creature blocks the inner slots (117.4). That leaves L3 and R3: **2 hints** on screen, not 3.
 This is stated, not hidden; it occurs only on a small Mac window.
 
+**Where it starts** (game-qc-android): at zero jitter L1 fails the scaled moon clearance once `97.8k + 50 > 152.1`,
+i.e. `k > 1.044`, and R1 the token clearance once `97.8k + 40 > 142.0`, `k > 1.043`. Between about 1.044 and 1.18 they
+pass only with a favourable jitter (L1 at (+10, +10) is 165.5 from the moon). So with the widest creature on stage,
+from `k ≈ 1.044` (including the 700-pt Mac row, `k = 1.10`) the screen may show 2 hints rather than 3.
+
 ## Edge Cases
 
 - **All 36 keys excluded** (cannot happen with 3 hints, 1 current and ≤ 3 queued: at most 7 excluded) → no spawn;
@@ -376,7 +381,7 @@ a fake Reveal Stage (cast box, `stage_to_px`, freezes) and the slot table. No wa
 - **AC-6 Widest creature:** with the widest shipped creature's box held on stage, the inner slots are blocked at
   their static centres (L2, L4, R2, R4 at the estimate) and 3 hints still spawn on the outer slots.
 - **AC-7 Never empty (seeded, worst case):** over 10,000 simulated minutes **with the widest shipped creature held
-  on stage**, at `k = 1.0` and at `k = 1.2`, with presses and outcomes from a seeded mash: Play is never without a
+  on stage**, at `k = 1.0`, `1.10` and `1.2`, with presses and outcomes from a seeded mash: Play is never without a
   hint for more than one gap (0.7 s) after the first spawn, and no two hit circles overlap; at `k = 1.2` at most 2
   hints are on screen.
 - **AC-8 Life and fades (F2):** every life is in 4.8–7.2 s; alpha and scale match F2 at the example ages within
