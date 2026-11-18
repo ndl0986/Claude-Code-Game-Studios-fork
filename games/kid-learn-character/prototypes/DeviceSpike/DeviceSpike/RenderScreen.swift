@@ -40,7 +40,8 @@ final class RenderModel: ObservableObject {
                          scene.stats.percentile(0.5), scene.stats.percentile(0.99), scene.stats.deltas.count, f.scale, f.visibleX, f.visibleY, f.visibleW, f.visibleH,
                          Double(scene.pxPerPt), ppi, "\(src)", "\(reduce)", "\(invert)")
     }
-    func logStats() { refresh(); SpikeLog.shared.line("[render] option=\(option == .a ? "A" : "B") fps120=\(fps120) \(readout)") }
+    func logStats() { refresh(); SpikeLog.shared.line("[render] option=\(option.rawValue) outline=\(scene.outlineVariant.rawValue) fps120=\(fps120) \(readout)") }
+    func overlapCheck() { scene.overlapCheck() }
 
     static func ppi() -> (Double, PPI.Source) {
         #if os(iOS)
@@ -63,6 +64,7 @@ struct RenderScreen: View {
                 Picker("Option", selection: $model.option) { ForEach(RenderOption.allCases) { Text($0.rawValue).tag($0) } }.pickerStyle(.segmented).frame(maxWidth: 420)
                 Toggle("120 Hz", isOn: $model.fps120).fixedSize()
                 Button("Log stats") { model.logStats() }
+                Button("Overlap check") { model.overlapCheck() }
                 Button("Reset stats") { model.scene.stats.reset() }
                 Button("Dump 120 frames") { model.scene.dumpIndex = 0; model.scene.dumpRemaining = 120 }
             }.buttonStyle(.bordered)
