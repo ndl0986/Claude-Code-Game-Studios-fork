@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent review by game-dev-ios, merged 2026-11-18)
 > **Author**: game-art-content (TASK-036), with Luan's answers via game-leader; plan reviewed by game-dev-ios
-> **Last Updated**: 2026-11-18 (TASK-050 cross-GDD follow-ups; K-22 `titleCastId`)
+> **Last Updated**: 2026-11-18 (TASK-060: schema 2, `rowWords`, V17; earlier: TASK-050, K-22 `titleCastId`)
 > **Last Verified**: 2026-11-18
 > **Implements Pillar**: Pillar 1 (Every Press Answers), Pillar 4 (Things the Child Loves), Pillar 5 (Safe by Design)
 
@@ -66,7 +66,7 @@ There are three kinds of file, all JSON, bundled in the app, and read with plain
 
 | Field | Type | Rule |
 |---|---|---|
-| `schemaVersion` | integer | The data format's major version. The app **refuses** a value it doesn't know (Edge Cases). Starts at `1`. |
+| `schemaVersion` | integer | The data format's major version. The app **refuses** a value it doesn't know (Edge Cases). Started at `1`; **`2`** adds `rowWords` (TASK-060). The app knows **1 and 2**; a v1 theme loads with the `rowWords` fallback (Edge Cases). |
 | `contentVersion` | string | The theme's content version, e.g. `"1.0.0"`. Informational: the app never rejects on it. |
 | `id` | string | Lowercase, `[a-z]+`. Used in asset names (`dino`). |
 | `name` | string | The grown-up panel name ("Dinosaurs"). |
@@ -77,6 +77,7 @@ There are three kinds of file, all JSON, bundled in the app, and read with plain
 | `soundExceptions` | object | Key → the decision that allows it to break T5, e.g. `{ "X": "K-09, Luan 2026-11-18" }`. Empty by default. |
 | `voiceDurations` | object | Locale → line id → **duration in seconds** (number, 3 decimals), for every voice line the theme uses, e.g. `{ "en-us": { "letter_c": 0.512, "word_triceratops": 0.904, "number_3": 0.430, "word_three_baby_dinosaurs": 1.180 } }`. **Written by the build tool** from the rendered files, never by hand; checked by V15. Read by Audio & Voice (F6) and the Press Queue to hold a waiting key until the word ends, without reading the file at play time. |
 | `titleCastId` | string | The one cast member who idles on the **Title** screen (K-22, Luan 2026-11-18). For Dinosaurs: the **T-Rex** (`dino_t_trex_01` under the castId pattern), as played. Must name an item's `castId` in this theme (V16). |
+| `rowWords` | string[] | **Required from schema 2.** The pool of short, common, familiar words the On-screen Keyboard Row draws from (K-29): each 2–8 letters `A`–`Z`, uppercase. No people's given names. Checked by V17. Dinosaurs: see the theme section. |
 | `keys` | object | Key ("A"…"9") → key entry (b). All 36 keys are required. |
 
 **b. Key entry and item**
@@ -212,6 +213,7 @@ lowercase with underscores:
 | V14 | Every `weight`, when present, is > 0 (F1 needs a positive total). |
 | V15 | `voiceDurations` has an entry for **every** voice line of every item, for every locale in `voiceLocales`, and no other entries. Each value **matches its file's decoded duration within ±0.01 s**: the **decoded length with the AAC encoder priming and end padding removed** (the sample count the app's decoder returns, which Audio & Voice schedules), **not** the container's duration; AAC priming alone is about 2112 samples, ≈ 44 ms at 48 kHz, which would break ±0.01 s. The build tool measures it with the same trimming the app's decoder applies. **Word lines ≤ 1.25 s** (Audio & Voice `word_len_max_s`, F6) and **letter and number lines ≤ 1.0 s** (`letter_len_max_s`, Audio A3). |
 | V16 | `titleCastId` is present and equals the `castId` of an item in this theme (K-22). |
+| V17 | *(schema 2 and later)* `rowWords` has **≥ 8 entries**, all **unique**, each **2–8 letters**, only `A`–`Z`, and every letter is a key of this theme (K-29; On-screen Keyboard Row R2). Each entry passes the toddler-safe content review (T-rules: no rude, scary or confusing word; no people's given names). |
 
 #### 7. Toddler-safe content rules (every theme)
 
@@ -247,6 +249,7 @@ the theme changes.
 | Press Queue | — | Queues keys, not items. Whether closing the grown-up panel clears the queue is **Press Queue's / Reveal Stage's call** (dependency stated, not decided here). |
 | Reveal Stage | out | At reveal start: `resolve(key) → item` (pick rule). For prefetch: `peek(key) → item`, no state change (Rule 4.5). |
 | App Shell & Title | out | `titleCastId` → the Title's cast member (K-22); fallback: key A's item 0. |
+| On-screen Keyboard Row | out | `rowWords` (V17) for the row's word; the v1 / invalid fallback (Edge Cases). |
 | MorphCore | out | The glyph path (glyph set) and the silhouette path (item). The morph seed and timings are not here. |
 | Cast Rendering | out | `art`, `family`, `variant`, `hueSlot`; idle params by family id. |
 | Audio & Voice | out | `sfx` path; voice paths built from `voiceLocales` + line ids. |
@@ -308,6 +311,7 @@ whenever C is non-empty. C is never empty: n ≥ 1, and `last` is only excluded 
 | A theme fails the load check when picked in the panel | It is not shown. The current theme stays, with one debug log line. No message to the child. The grown-up panel may grey out the theme (Parent Gate GDD's call). |
 | The stored theme fails the check **at launch** (or is not bundled) | Dinosaurs loads in memory; the stored `themeId` is kept, not rewritten (Settings Store R6). One debug log line. The next launch tries the stored theme again. |
 | `titleCastId` missing or naming no cast member at theme load (despite V16) | The theme still loads. The Title shows the **first item in canonical order** (key `A`, item 0: Ankylosaurus in Dinosaurs) instead; one debug log line (K-22). |
+| A **v1** theme (no `rowWords`), or `rowWords` failing V17 at load | The theme still loads. The keyboard row uses the **first cast `name` of 2–8 letters** (uppercased, letters only) in canonical order (Dinosaurs: `FOSSIL`, key F; A–E are too long), else `"ABC"`; one debug log line (On-screen Keyboard Row R2). |
 | A `voiceDurations` entry is missing or wrong at run time (despite V15) | The Press Queue uses the bound `T + 1.5 s` for that word (Audio & Voice F6). One debug log line. Playback never measures the file. |
 | Silhouette or art missing at run time (despite the gate) | Per asset, nothing shown to the child, one debug log line. **The glyph glows and sparkles out** instead of morphing, and the letter voice plays if present (game-dev-ios point 6). |
 | Glyph missing | No morph: the cast member fades in, with the voice (matches TASK-038). |
@@ -349,6 +353,7 @@ whenever C is non-empty. C is never empty: n ≥ 1, and `last` is only excluded 
 | Localization | `voiceLocales`, line ids. |
 | Settings Store (`design/gdd/settings-store.md`) | Stores only the chosen `themeId`; hands it over at launch and on change. At launch a failing stored theme → Dinosaurs in memory, `themeId` kept (its R6; section 5 here). |
 | App Shell & Title | `titleCastId` (K-22): the cast member idling on the Title; the canonical-order fallback. |
+| On-screen Keyboard Row (`design/gdd/onscreen-keyboard-row.md`) | `rowWords` (V17) and its fallback. |
 
 ## Tuning Knobs
 
@@ -386,6 +391,10 @@ the theme pick (Parent Gate & Grown-up Panel GDD).
 From the played prototype (iterations 1–4). Families, variants and hue slots follow art bible §3–§4.
 SFX kinds are the prototype's synth recipes, which stand in until real sounds are sourced. **Flag
 column:** ✅ passes T5; ✳ recorded exception (K-09).
+
+**Schema 2.** `rowWords` (K-29, Luan 2026-11-18), 16 words, the theme's simplest names plus very common first
+words, no people's given names: `REX`, `EGG`, `NEST`, `ROAR`, `DINO`, `BABY`, `MOM`, `DAD`, `SUN`, `MOON`, `STAR`,
+`CAT`, `DOG`, `BALL`, `HAT`, `BUS` (longest 4 letters; V17 passes).
 
 ### Letters
 
@@ -486,8 +495,8 @@ Each criterion is checked by the validator on the data, or by a unit test with f
 4. **Files:** every art, silhouette, sfx and voice path (built for each locale in `voiceLocales`)
    resolves to a file in the bundle. 0 missing. Removing one file makes the build fail and names it.
 5. **Hue slots:** no slot holds more than 4 items, and no two siblings share a slot (validator output).
-6. **Schema:** a theme with `schemaVersion: 2` is refused by an app that knows only 1, and the app
-   keeps the current theme (unit test).
+6. **Schema:** a theme with `schemaVersion: 3` is refused by an app that knows 1 and 2, and the app
+   keeps the current theme; a v1 test theme without `rowWords` loads with the row fallback (unit test).
 7. **Load off the main thread:** loading a theme runs off the main thread (test asserts the thread),
    and a theme that fails the check is never made active (unit test with a broken fixture).
 8. **Pick rule:** with seed S from the shared fixture, `n = 5` and no weights, 10,000 reveals of one
@@ -514,3 +523,6 @@ Each criterion is checked by the validator on the data, or by a unit test with f
 16. **Title cast member:** the validator passes Dinosaurs with `titleCastId` = the T-Rex's castId, and fails a
     test theme whose `titleCastId` names no item (naming the theme). At run time, loading a test theme with a
     bad `titleCastId` makes the Title show key A's item 0 and writes one debug log line (unit test).
+17. **Row words (V17):** the validator passes Dinosaurs' 16 `rowWords`, and fails test themes with 7 entries, a
+    duplicate, a 9-letter word, a word with a digit or lowercase letter, and a schema-2 theme without `rowWords`,
+    each naming the theme and the rule (validator test).
