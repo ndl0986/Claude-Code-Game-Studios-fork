@@ -65,7 +65,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-083 | Input R8 new outputs gateDigit / gateCancel (IF-Q4) + Parent Gate hardware digits incl. iPad keyboard | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 241909aa) | `design/TASK-083-input-gate-outputs` | 2026-11-18 |
 | TASK-084 | ADR-0003 D4 + art bible §8 dated note: layer ids `<part>_<layer>` (K-37) | docs | game-art-content (review: game-dev-android) | DONE: MERGED (game-dev-android APPROVE) | `design/TASK-084-d4-layer-ids` | 2026-11-18 |
 | TASK-085a | Follow-up batch A: Reveal Stage R10 row z35 + boxes + invert + sparkles RM; App Shell A1, breathe/touch floor; Privacy V1 clock | design | game-dev-ios (review: game-qc-ios) | SENT 2026-11-18 | `design/TASK-085a-followups` | 2026-11-18 |
-| TASK-085b | Follow-up batch B: Cast twinkle RM; Hint Letters row band + H1; Parent Gate P0/P1 moon; art bible breathe rate | design | game-art-content (review: game-dev-android) | SENT 2026-11-18 | `design/TASK-085b-followups` | 2026-11-18 |
+| TASK-085b | Follow-up batch B: Cast twinkle RM; Hint Letters row band + H1; Parent Gate P0/P1 moon; art bible breathe rate | design | game-art-content (review: game-dev-android) | DONE: MERGED (all 7 already landed; bookkeeping only) | `design/TASK-085b-followups` | 2026-11-18 |
 
 ## Leader log
 
