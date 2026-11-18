@@ -105,6 +105,14 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-32 Monetisation and voice licence (Luan, 2026-11-18)
+
+- **No ads, reaffirmed.** Luan asked about a free release with ads; after the conflicts were laid out (concept
+  "Monetization: None", PKC-02/05, App Store Kids category Guideline 1.3, Google Families ad rules, COPPA), Luan
+  chose to **keep the game ad-free**. Free, no ads, no in-app purchases (concept unchanged).
+- **The TTS voice still needs a licence that allows public distribution of the rendered audio**, even for a free
+  app; L-09 stays open until the engine is chosen. Until then the pipeline uses placeholder files (ADR-0003 D6).
+
 ### K-31 Build tools (Luan, 2026-11-18, TASK-066 Q2)
 
 - **Own Swift build tools, no third-party build tools:** SVG parsing (XMLParser), loudness (BS.1770 in Swift),
