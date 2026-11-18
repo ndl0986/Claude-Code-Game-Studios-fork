@@ -105,6 +105,13 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-35 Hard dinosaur names are respelled in the voice script (Luan, 2026-11-18)
+
+- When the TTS engine does not say a name the common US way (e.g. quetzalcoatlus, both engines in TASK-073), the voice
+  script carries a **respelled input** (e.g. "ket sul koh AT lus") for that line only; the displayed name and the Key
+  Table name stay spelled correctly. Each respelled line is listened to and approved before it is baked.
+- Applies whichever engine is picked (K-33 pick still pending: Luan listens to the TASK-073 samples).
+
 ### K-34 Device-time rule and an ADR-0002 correction (Luan, 2026-11-18)
 
 - **MAC FREE applies to anything that takes the Mac's screen, keyboard or focus** (launching the macOS app, macOS
