@@ -1817,7 +1817,6 @@
             "type": "creatureAt",
             "case": "morph",
             "formedS": 2.45,
-            "form_s": 0.5,
             "s": 2.7
           },
           "expect": [
@@ -1869,9 +1868,8 @@
           "event": {
             "type": "creatureAt",
             "case": "morph",
-            "formedS": 2.45,
-            "form_s": 0.5,
-            "s": 2.7
+            "formedS": 1.2,
+            "s": 1.35
           },
           "expect": [
             {
@@ -1920,7 +1918,6 @@
             "type": "creatureAt",
             "case": "glyphMissing",
             "formedS": 1.3,
-            "form_s": 0.5,
             "s": 1.05
           },
           "expect": [
@@ -1970,7 +1967,6 @@
             "type": "creatureAt",
             "case": "morph",
             "formedS": 2.45,
-            "form_s": 0.5,
             "s": 3.0
           },
           "expect": [
@@ -2080,6 +2076,594 @@
               "scale": 1.0
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "F5-invalid-set-glyph-rise",
+      "source": "gdd: reveal-stage.md R3 invalid-set row (fallback_rise_s; TASK-088c); F2",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.3,
+          "glow": 0.6,
+          "T": 2.0,
+          "form_s": 0.2,
+          "valid": false
+        },
+        "reducedSet": {
+          "letter_in": 0.3,
+          "glow": 0.6,
+          "T": 2.0,
+          "form_s": 0.2,
+          "valid": false
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "glyphAt",
+            "case": "invalidSet",
+            "s": 0.225,
+            "origin": [
+              300.0,
+              250.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "glyph",
+              "pos": [
+                470.0,
+                285.0
+              ],
+              "scale": 0.625
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "glyphAt",
+            "case": "invalidSet",
+            "s": 0.45,
+            "origin": [
+              300.0,
+              250.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "glyph",
+              "pos": [
+                640.0,
+                320.0
+              ],
+              "scale": 1.0
+            }
+          ]
+        }
+      ],
+      "note": "The invalid set says letter_in 0.3; the rise uses fallback_rise_s 0.45, so s 0.225 is the midpoint."
+    },
+    {
+      "id": "F5-invalid-set-haloOn",
+      "source": "gdd: reveal-stage.md R3 invalid-set row; R10 (haloOn); TASK-088b/c",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.3,
+          "glow": 0.6,
+          "T": 2.0,
+          "form_s": 0.2,
+          "valid": false
+        },
+        "reducedSet": {
+          "letter_in": 0.3,
+          "glow": 0.6,
+          "T": 2.0,
+          "form_s": 0.2,
+          "valid": false
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "startReveal",
+            "revealId": 1,
+            "key": "D",
+            "source": "hardwareKey",
+            "origin": [
+              640.0,
+              700.0
+            ],
+            "item": {
+              "castId": "tb_d_item_01",
+              "hasGlyph": true,
+              "willForm": true,
+              "hasWordLine": true,
+              "sfx": true
+            }
+          },
+          "expect": [
+            {
+              "out": "startResult",
+              "case": "invalidSet",
+              "formedS": 1.3,
+              "revealLen": 1.3,
+              "hasWord": true
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.45
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "haloOn": false
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.453125
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "haloOn": true
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.8
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "haloOn": true
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.8125
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "haloOn": false
+          }
+        }
+      ],
+      "note": "haloOn runs fallback_rise_s < s <= fallback_glow_s (0.45, 0.8), not the set's 0.3 and 0.6."
+    },
+    {
+      "id": "F3-invalid-set-fade",
+      "source": "gdd: reveal-stage.md F3 (the invalid set fades over fallback_fade_s); TASK-088b",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.3,
+          "glow": 0.6,
+          "T": 2.0,
+          "form_s": 0.2,
+          "valid": false
+        },
+        "reducedSet": {
+          "letter_in": 0.3,
+          "glow": 0.6,
+          "T": 2.0,
+          "form_s": 0.2,
+          "valid": false
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": false
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "creatureAt",
+            "case": "invalidSet",
+            "formedS": 1.3,
+            "s": 1.05
+          },
+          "expect": [
+            {
+              "out": "creature",
+              "alpha": 0.5,
+              "pop": 0.99
+            }
+          ]
+        }
+      ],
+      "note": "fadeStart = 1.3 - fallback_fade_s 0.5 = 0.8; at s 1.05, u = 0.5. The set's form_s 0.2 is not used."
+    },
+    {
+      "id": "F5-invalid-set-glyph-rise-reduced",
+      "source": "gdd: reveal-stage.md R3 invalid-set row (fallback_rise_s; TASK-088c); F2",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.3,
+          "glow": 0.6,
+          "T": 2.0,
+          "form_s": 0.2,
+          "valid": false
+        },
+        "reducedSet": {
+          "letter_in": 0.3,
+          "glow": 0.6,
+          "T": 2.0,
+          "form_s": 0.2,
+          "valid": false
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": true
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "glyphAt",
+            "case": "invalidSet",
+            "s": 0.225,
+            "origin": [
+              300.0,
+              250.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "glyph",
+              "pos": [
+                470.0,
+                285.0
+              ],
+              "scale": 0.625
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "glyphAt",
+            "case": "invalidSet",
+            "s": 0.45,
+            "origin": [
+              300.0,
+              250.0
+            ]
+          },
+          "expect": [
+            {
+              "out": "glyph",
+              "pos": [
+                640.0,
+                320.0
+              ],
+              "scale": 1.0
+            }
+          ]
+        }
+      ],
+      "note": "The invalid set says letter_in 0.3; the rise uses fallback_rise_s 0.45, so s 0.225 is the midpoint."
+    },
+    {
+      "id": "F5-invalid-set-haloOn-reduced",
+      "source": "gdd: reveal-stage.md R3 invalid-set row; R10 (haloOn); TASK-088b/c",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.3,
+          "glow": 0.6,
+          "T": 2.0,
+          "form_s": 0.2,
+          "valid": false
+        },
+        "reducedSet": {
+          "letter_in": 0.3,
+          "glow": 0.6,
+          "T": 2.0,
+          "form_s": 0.2,
+          "valid": false
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": true
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "startReveal",
+            "revealId": 1,
+            "key": "D",
+            "source": "hardwareKey",
+            "origin": [
+              640.0,
+              700.0
+            ],
+            "item": {
+              "castId": "tb_d_item_01",
+              "hasGlyph": true,
+              "willForm": true,
+              "hasWordLine": true,
+              "sfx": true
+            }
+          },
+          "expect": [
+            {
+              "out": "startResult",
+              "case": "invalidSet",
+              "formedS": 1.3,
+              "revealLen": 1.3,
+              "hasWord": true
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.45
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "haloOn": false
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.453125
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "haloOn": true
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.8
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "haloOn": true
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.8125
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "haloOn": false
+          }
+        }
+      ],
+      "note": "haloOn runs fallback_rise_s < s <= fallback_glow_s (0.45, 0.8), not the set's 0.3 and 0.6."
+    },
+    {
+      "id": "F3-invalid-set-fade-reduced",
+      "source": "gdd: reveal-stage.md F3 (the invalid set fades over fallback_fade_s); TASK-088b",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.3,
+          "glow": 0.6,
+          "T": 2.0,
+          "form_s": 0.2,
+          "valid": false
+        },
+        "reducedSet": {
+          "letter_in": 0.3,
+          "glow": 0.6,
+          "T": 2.0,
+          "form_s": 0.2,
+          "valid": false
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        },
+        "accessibility": {
+          "reduceMotion": true
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "creatureAt",
+            "case": "invalidSet",
+            "formedS": 1.3,
+            "s": 1.05
+          },
+          "expect": [
+            {
+              "out": "creature",
+              "alpha": 0.5,
+              "pop": 0.96
+            }
+          ]
+        }
+      ],
+      "note": "fadeStart = 1.3 - fallback_fade_s 0.5 = 0.8; at s 1.05, u = 0.5. The set's form_s 0.2 is not used."
+    },
+    {
+      "id": "R4-settle-morph-shows-creature-once",
+      "source": "gdd: reveal-stage.md R4; R8 settle",
+      "given": {
+        "timingSet": {
+          "letter_in": 0.45,
+          "glow": 0.8,
+          "T": 2.45,
+          "form_s": 0.5,
+          "valid": true
+        },
+        "reducedSet": {
+          "letter_in": 0.225,
+          "glow": 0.4,
+          "T": 1.2,
+          "form_s": 0.3,
+          "valid": true
+        },
+        "knobs": {
+          "sparkle_out_s": 0.6,
+          "fallback_rise_s": 0.45,
+          "fallback_glow_s": 0.8,
+          "fallback_fade_s": 0.5,
+          "letter_len_max_s": 1.0,
+          "word_offset_s": 0.25
+        }
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 10.0
+          },
+          "event": {
+            "type": "startReveal",
+            "revealId": 1,
+            "key": "D",
+            "source": "hardwareKey",
+            "origin": [
+              640.0,
+              700.0
+            ],
+            "item": {
+              "castId": "tb_d_item_01",
+              "hasGlyph": true,
+              "willForm": true,
+              "hasWordLine": true,
+              "sfx": true
+            }
+          },
+          "expect": [
+            {
+              "out": "startResult",
+              "case": "morph",
+              "formedS": 2.45,
+              "revealLen": 2.95,
+              "hasWord": true
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 11.0
+          },
+          "event": {
+            "type": "settle"
+          },
+          "expect": [
+            {
+              "out": "shown",
+              "revealId": 1,
+              "key": "D",
+              "castId": "tb_d_item_01",
+              "kind": "creature"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 13.0
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": []
         }
       ]
     },
