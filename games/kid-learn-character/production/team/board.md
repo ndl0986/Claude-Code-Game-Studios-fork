@@ -33,7 +33,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-051 | GDD: App Shell & Title (`design/gdd/app-shell-title.md`) via /design-system | design | game-dev-ios (review: game-dev-android) | DONE `0bb713b`, merged 2026-11-18 (review: game-dev-android APPROVE after REVISE) | `design/TASK-051-gdd-app-shell-title` | 2026-11-18 |
 | TASK-052 | GDD: Child Lock-in (`design/gdd/child-lock-in.md`) via /design-system | design | game-dev-android (review: game-qc-ios) | DONE `7908a20`, merged 2026-11-18 (review: game-qc-ios APPROVE after REVISE); S1/S2, I1, I3 landed in TASK-054a | `design/TASK-052-gdd-child-lock-in` | 2026-11-18 |
 | TASK-053 | GDD: Scene: Time of Day & Weather (`design/gdd/scene-time-weather.md`) via /design-system (Vertical Slice) | design | game-art-content (review: game-dev-ios) | DONE `cc692ef`, merged 2026-11-18 (review: game-dev-ios APPROVE + F4 fix) | `design/TASK-053-gdd-scene-time-weather` | 2026-11-18 |
-| TASK-054 | Follow-up batch to Approved GDDs (Settings S1–S2, Input I1–I4 incl. 2 safety items, Cast Rendering C1–C2, Hint Letters H1, Parent Gate P1, Privacy V1): `production/team/TASK-054-followups.md` | design | 054a game-dev-android (S1–S2, I1–I4, H1, A1; review game-qc-ios) · 054b later (C1–C2, P1, V1) | 054a DONE `fe63267`, merged 2026-11-18; 054b SENT in 3 parts: ios (C1, C2, R1, V1 finding; review game-art-content), android (I5, L1; review game-qc-ios), qc (P0 incl. fc9bdef, P1; review game-qc-android) | `design/TASK-054a-followups` | 2026-11-18 |
+| TASK-054 | Follow-up batch to Approved GDDs (Settings S1–S2, Input I1–I4 incl. 2 safety items, Cast Rendering C1–C2, Hint Letters H1, Parent Gate P1, Privacy V1): `production/team/TASK-054-followups.md` | design | 054a game-dev-android (S1–S2, I1–I4, H1, A1; review game-qc-ios) · 054b later (C1–C2, P1, V1) | 054a DONE `fe63267`, merged 2026-11-18; 054b: android part merged `206de60` and qc part merged `ec2f603`; ios part (C1, C2, R1, V1 finding; review game-art-content) pending | `design/TASK-054a-followups` | 2026-11-18 |
 
 ## Leader log
 
@@ -91,3 +91,4 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 - 2026-11-18: TASK-053 Scene merged (K-14): first Vertical Slice GDD (1/3).
 - 2026-11-18: TASK-052 Child Lock-in merged (K-14). ALL 14 MVP GDDs APPROVED (plus Scene, VS 1/3). Next: /gate-check Systems Design → Technical Setup (ask Luan).
 - 2026-11-18: TASK-054a merged (K-14). Luan: finish TASK-054, then /review-all-gdds, then /gate-check → Technical Setup. TASK-054b sent.
+- 2026-11-18: TASK-054b android + qc parts merged (K-14). Waiting on the ios part.
