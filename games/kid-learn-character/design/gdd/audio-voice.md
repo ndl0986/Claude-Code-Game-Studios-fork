@@ -252,7 +252,7 @@ back over 250 ms (if still playing).
 **F3. Mash factor (ui bus).**
 ```
 m = max(mash_floor, 1 / (1 + mash_k × n))
-n = the number of E1/E2/E3 sounds started in the last mash_window_s before this one
+n = the number of E1/E2/E3 sounds started in the last chime_window_s before this one
 ```
 | | n | m | level |
 |---|---|---|---|
@@ -261,7 +261,7 @@ n = the number of E1/E2/E3 sounds started in the last mash_window_s before this 
 | 4 presses in a second | 3 | 0.40 | −8 dB |
 | 10 presses/s | 9 | max(0.35, 0.18) = **0.35** | −9 dB (floor) |
 
-With `mash_k` 0.5, `mash_floor` 0.35, `mash_window_s` 1.0. Each extra press is quieter than the first. The ui bus
+With `mash_k` 0.5, `mash_floor` 0.35, `chime_window_s` 1.0. Each extra press is quieter than the first. The ui bus
 sum is bounded too: at most 4 ui sounds play (R2.5), and the loudest four in a row are a fresh press and the next
 three (m = 1 + 0.67 + 0.5 + 0.4 = **2.57** × one chime, +8.2 dB if their peaks align). In a steady mash at
 10 presses/s every m sits at the floor, so the sum is 4 × 0.35 = 1.4 (+2.9 dB).
@@ -381,7 +381,7 @@ All values are bundled data (ADR-0001 Decision 6). "One-shot" means Luan played 
 | `duck_attack_s` / `duck_release_s` | 0.05 / 0.25 | 0.01–0.2 / 0.1–0.6 | proposed | how fast the duck comes and goes |
 | `mash_k` | 0.5 | 0.2–1.5 | proposed | how fast close presses get quieter (F3) |
 | `mash_floor` | 0.35 | 0.2–0.7 | proposed | the quietest a mashed chime gets |
-| `mash_window_s` | 1.0 | 0.5–2 | proposed | how far back presses count for F3 |
+| `chime_window_s` | 1.0 | 0.5–2 | proposed | how far back presses count for F3 (renamed from `mash_window_s`, TASK-056: that name is the Scene's mashing window, a different signal) |
 | `cut_fade_s` | 0.03 | 0.01–0.08 | proposed | fade on any cut; long enough for no click (AC-9) |
 | bus trims | voice 0, cast −4, ui −10, music −8 dB | ±6 dB each | proposed; one-shot ratios `roar_volume` 0.35, `chime_volume` 0.12 | balance between classes; F1 headroom |
 | `limiter_ceiling_dbtp` | −1 | −3 – −0.5 | decided (Luan Q5) | the output ceiling |

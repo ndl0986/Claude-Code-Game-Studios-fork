@@ -86,7 +86,7 @@ something they see happen, not two pictures side by side.
    hops and makes its own sound again (iteration 4), so the child links the creature to its sound.
 4. **Mash control:** a queue of at most 3 pending keys; further presses only sparkle; while keys
    are queued, each reveal holds for about 3 s.
-5. **Parade:** every 8 new cast members met, those 8 walk across the hills once (Luan's favourite
+5. **Parade:** every 6 new cast members met, those 6 walk across the hills once (K-17) (Luan's favourite
    moment in the playtest: Keep).
 6. **Parent gate and child lock-in:** settings sit behind a grown-up check (hold the moon, or the
    parent key chord on the Mac). Child lock-in keeps the child in the app: a kiosk mode on the Mac,
@@ -143,7 +143,7 @@ hop and make its sound again.
 
 Exploration: which key becomes what? The child finds favourites and presses them again. Numbers
 count: **3** becomes three baby dinosaurs, and the voice says "three… three baby dinosaurs".
-Every 8 new cast members met, they walk across the hills in a parade.
+Every 6 new cast members met, they walk across the hills in a parade (K-17).
 
 ### Session-Level (30-120 minutes)
 
@@ -315,7 +315,7 @@ comes back to it, because every key turns into a magical, spoken letter and obje
 2. The shared stardust morph, the cast member's sound and the US English line ("C… triceratops");
    tap the cast member to hear its sound again.
 3. Mash control: a queue of at most 3, about 3 s per reveal while queued; nothing ever breaks.
-4. The parade every 8 new cast members.
+4. The parade every 6 new cast members (K-17).
 5. Fully offline, no data; a parent gate for anything that is not play; child lock-in.
 6. Runs on iPad and Mac (iPhone later).
 

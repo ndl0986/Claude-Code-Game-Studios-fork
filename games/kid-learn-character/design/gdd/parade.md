@@ -287,7 +287,7 @@ with a pinned `parade_s`.
 ## Dependencies
 
 **Upstream (Parade reads):**
-- **Reveal Stage** (no GDD yet): `shown(...)`, the lane y, draw order, tap routing, the visible rect (K-20),
+- **Reveal Stage** (`design/gdd/reveal-stage.md`): `shown(...)`, the lane y, draw order, tap routing, the visible rect (K-20),
   `freeze` / `resume` (Interface).
 - **Cast Rendering** (`design/gdd/cast-rendering.md`, TASK-044): the `parade` role, the 256 px tier, the step bob
   (R8), `isResident` / `prefetch` / `release`. Its F6 and R10 now count `parade_count` figures (merged in
@@ -295,11 +295,13 @@ with a pinned `parade_s`.
 - **Press Queue** (`design/gdd/press-queue.md`): `restingSince` (R10), the current reveal's `formedS` and
   `revealLen` (R6). Follow-up: its R10 example "`now ≥ restingSince + parade_delay_s`" is replaced by F2 here.
 - **Key Table & Theme Data:** the current theme id.
-- **Scene: Time of Day & Weather (#15):** draws the warm horizon lift while Walking (`paradeWalking`).
 - **Accessibility:** the Reduce Motion flag.
 
 **Downstream (depend on Parade):**
-- **Audio & Voice:** E12, the parade tune at walk start (its R1).
+- **Audio & Voice:** E12, the parade tune at walk start (its R1), paused and resumed on the gate freeze (its R6).
+- **Scene: Time of Day & Weather (#15):** reads `paradeWalking` and draws the warm horizon lift while Walking (its R7).
+- **Hint Letters:** reads `paradeWalking`; during the walk the hints fade to a lower opacity and hold still, with no
+  new spawns, and stay tappable (K-26).
 - **Accessibility:** relies on R7.
 - **Mash World** (Full Vision): may reuse the batch later.
 
@@ -397,8 +399,8 @@ Logic criteria use an injected clock and fake Reveal Stage, Press Queue and Cast
 None for Luan; K-17 answered all of them. Follow-ups for other GDDs (not blocking this one):
 - **Reveal Stage:** restate the Interface section (shown, lane y, draw order, walker taps, visible rect,
   freeze/resume).
-- **Audio & Voice:** pause and resume E12 on the gate freeze (R6a); its R6 names no pause today.
-- **Scene: Time of Day & Weather:** the horizon lift on `paradeWalking`.
+- *Closed:* Audio & Voice pauses and resumes E12 on the gate freeze (its R6, TASK-050).
+- *Closed:* the Scene's horizon lift on `paradeWalking` (Scene R7).
 - *Closed:* the stage fit is K-20 (Interface 5); Cast Rendering's `parade_count` fix is merged (e2d665e).
 - **Press Queue:** R10's example start rule is superseded by F2 here.
 
