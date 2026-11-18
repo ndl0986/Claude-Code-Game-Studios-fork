@@ -142,9 +142,13 @@ theme takes effect; the next reveal uses it (Key Table R3). The theme change its
 **R8a. Parent-gate challenge: freeze and resume** (K-20; TASK-050). While the gate's number challenge shows (after
 the moon hold or the Mac chord), the queue **freezes**: no tick advances it, the hold and the formed timeout do not
 run, and nothing is cleared. Input sends no presses during the challenge (Input R6). On a **wrong answer or a
-timeout**, the queue **resumes** exactly where it stopped: the frozen time never counts (`r0` and `formedAt` of
-`current` move forward by the frozen duration, so `holdEff`, the timeout and `restingSince` see no gap). Only a
-**correct answer** opens the panel, and R8's clear and settle apply then (K-15, K-20).
+timeout**, the queue **resumes** exactly where it stopped. Only a **correct answer** opens the panel, and R8's
+clear and settle apply then (K-15, K-20).
+- **The play clock.** All the queue's times (`now` in `tick`, `r0`, `formedAt`, `restingSince`, the hold and the
+  formed timeout) run on the **play clock = uptime − total frozen time** (Reveal Stage `freeze()` / `resume()`).
+  While frozen the play clock stands still, so the frozen time never counts and nothing sees a gap. A press's
+  `p.time` (uptime, Input R8) is turned into play-clock time when it arrives; no press arrives while frozen.
+  With no freeze since launch the play clock equals uptime, so every other rule reads the same.
 
 **R9. App to background** (Input & Key Filter: Inactive). The queue is cleared and the current reveal settles to
 formed with its hold passed (Luan, K-15). On return, the formed creature is on stage and the next press starts at
@@ -393,8 +397,8 @@ frames, no randomness.
 - **AC-22 One advance per tick:** GIVEN two queued presses and a tick far past both holds, THEN only one starts on
   that tick.
 - **AC-23 Gate freeze (TASK-050):** GIVEN a reveal at s = 1.0 with 2 keys queued, WHEN the gate challenge shows for
-  20 s and then times out, THEN the queue still holds 2 keys, `current.r0` moved forward by 20 s, and the first
-  queued key starts at `r0 + holdEff` measured without the 20 s. WHEN instead the answer is correct, THEN the queue
+  20 s and then times out, THEN the queue still holds 2 keys, the play clock advanced 0 s during the challenge,
+  and the first queued key starts at play time `r0 + holdEff` (20 s of uptime later than without the challenge). WHEN instead the answer is correct, THEN the queue
   is cleared and the reveal settles (R8).
 - **AC-24 hasWord (TASK-050):** GIVEN `startReveal` returns `hasWord` false for an item that has a word line
   (`willForm` false), THEN `holdEff = max(hold_s, revealLen)`.

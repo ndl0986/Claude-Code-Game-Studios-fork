@@ -27,3 +27,8 @@ Reviewed-Content-Hash: production/team/decisions.md 851d029c9350a0f9ce2f6d528146
 Review mode: independent read by game-dev-ios (peer review, not /design-review) · Workflow: standard
 Summary: All plan-review must-cover items and Luan's K-12 answers landed; the self-fixed blocker (window-frame autosave / AC-3) is fixed. Merged into docs/kid-learn-character-plan on Luan's go.
 Follow-ups (not blocking): volume preview while dragging; debug logs at .debug level (not on disk); name the SwiftUI/AppKit/iPadOS restoration switches; App Shell owns startPlay during theme load; Key Table §5 to add the launch case (failing stored theme → Dinosaurs in memory).
+
+## Update — 2026-11-18 — TASK-050 follow-ups, part 2 (no re-review)
+Review mode: lean · Workflow: standard
+Change: Rule change by Luan, **K-21**: the Mac child lock turned OFF in the panel lasts for this run only; childLock is stored only as ON (never persisted as false once on), and the next launch engages it again once the app is ready (R8 order, K-12). R1 row, R4 write exception, R8 bullet, AC-15b. Only Reset clears the stored ON. Verdict unchanged; review by game-dev-ios.
+Reviewed-Content-Hash: design/gdd/settings-store.md d0629a5f8a9ed9bb6d224656bb1606456dea1ddd

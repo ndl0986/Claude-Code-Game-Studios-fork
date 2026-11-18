@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent review by game-dev-ios, 2026-11-18)
 > **Author**: game-dev-android for Luan (TASK-039); plan reviewed by game-dev-ios
-> **Last Updated**: 2026-11-18 (TASK-039 touch-up: slider preview, `.debug` logging, restoration off)
+> **Last Updated**: 2026-11-18 (TASK-050: K-21 child lock OFF for this run only)
 > **Last Verified**: 2026-11-18, against ADR-0001 (Accepted) Decisions 8 and 9, art bible §2, §4 and §7, TASK-034
 > **Implements Pillar**: Pillar 5 (Safe by Design)
 
@@ -50,7 +50,7 @@ about, and "Start over" really does return the app to how it was on day one.
 | `weather` | one of `clear`, `cloudy`, `lightRain`, `snow` | `clear` | Scene: Time of Day & Weather |
 | `windy` | boolean; takes effect only with `lightRain` or `snow` (art bible §2) | `false` | Scene: Time of Day & Weather |
 | `keyboardRow` | boolean | `false` (art bible §7: off by default) | On-screen Keyboard Row, Input & Key Filter |
-| `childLock` | boolean; **macOS only** (the key does not exist on iPadOS or Android) | `false` | Child Lock-in |
+| `childLock` | boolean; **macOS only** (the key does not exist on iPadOS or Android) | `false` | Child Lock-in. **Stored only as ON** (K-21, R8): turning it OFF in the panel lasts for this run only |
 
 - **Reserved, not in v1:** `voiceLocale` (Alpha, K-02 Vietnamese voice). It arrives with a schema bump (R7).
 - `muted` keeps `volume` untouched: unmuting returns to the same level.
@@ -105,7 +105,8 @@ only the record:
   `UserDefaults` key `settings`), or as **one file written atomically** (write to a temporary file, then rename).
   Individual fields are never stored under separate keys. So a write either replaces the whole record or does
   not happen; a crash or power loss mid-write leaves the old record or the new one, never a mix.
-- **Writes:** on every grown-up change, the store writes the full in-memory record at once. The volume slider
+- **Writes:** on every grown-up change, the store writes the full in-memory record at once (one exception: a
+  run-only `childLock` OFF is written as `true`, R8, K-21). The volume slider
   writes when it is released, not on every step while dragging. **While dragging**, the grown-up panel sends
   the preview gain (F2 from the slider's current position) straight to Audio & Voice, so the grown-up hears the
   level as they move it; the store is not involved. **On release**, the store writes `volume` (F1) and sends one
@@ -176,6 +177,12 @@ only the record:
   (Input & Key Filter R5). The kiosk blocks force-quit and shutdown, so it must never engage before the way out
   works (game-dev-ios's safety point).
 - The `childLock` key does not exist off macOS (R1, R6).
+- **OFF lasts for this run only** (Luan, K-21; TASK-050). Turning the lock **ON** in the panel writes
+  `childLock: true`. Turning it **OFF** changes only the **in-memory** value: the kiosk turns off for this run, and
+  every write keeps `childLock: true` in the record, so `childLock` is **never persisted as false** once it has been
+  turned on. At the next launch the lock is ON again and engages once the app is ready (the order above, K-12).
+  Closing the panel with the lock OFF shows "Child lock is OFF" for a few seconds (the panel GDD's). The only way to
+  clear the stored ON is Reset (R9), which removes the record.
 
 **R9. Reset ("Start over").**
 
@@ -358,6 +365,10 @@ All are unit tests against an in-memory or temporary store unless stated.
 - **AC-15 Mac child lock order (integration, macOS):** GIVEN `childLock` true stored, WHEN the app launches, THEN
   the kiosk presentation options are applied only after the first frame AND after the ⌃⌥⌘Q handler and Input's
   kiosk-on mode are active (checked by a launch-order log or test seam), AND ⌃⌥⌘Q opens the panel right after.
+- **AC-15b Child lock OFF is for this run (macOS, K-21):** GIVEN `childLock` true stored, WHEN the grown-up turns it
+  OFF in the panel, THEN the kiosk turns off now AND the record on disk still holds `childLock: true` after that
+  write and after any other field's write; WHEN the app relaunches, THEN the lock is ON and engages per AC-15. GIVEN
+  Reset, THEN the record is removed and the next launch has the lock off (default).
 - **AC-16 No sync (build check):** the app binary and sources reference no `NSUbiquitousKeyValueStore`, CloudKit or
   network API for the store; Android declares no cloud or network service for it. The Apple privacy manifest
   lists `NSPrivacyAccessedAPICategoryUserDefaults` with `CA92.1` and no file-timestamp category.

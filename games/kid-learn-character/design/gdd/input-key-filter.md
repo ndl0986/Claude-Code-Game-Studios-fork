@@ -158,7 +158,7 @@ platform.
 | State | Hardware keys | Touches | Enter / leave |
 |---|---|---|---|
 | **Play** | R2–R6 | R7 | entered from the title (play button or a letter/digit key); left by the panel opening or the app leaving the foreground |
-| **Gate challenge** (K-20) | nothing reaches play; keys go to the challenge only | go to the challenge only | entered by `openPanel` (chord or moon hold); a wrong answer or timeout → Play, a correct answer → Panel open; the held set clears on enter and on leave |
+| **Gate challenge** (K-20) | nothing reaches Play or the queue; **digit keys go only to the challenge's keypad**, every other key emits nothing (system keys still pass, R5) | **go only to the keypad**; anywhere else emits nothing | entered by `openPanel` (chord or moon hold); a wrong answer or timeout → Play, a correct answer → Panel open; the held set clears on enter and on leave |
 | **Panel open** | the filter is off; keys go to the grown-up panel as normal input. Only the panel's own close returns to Play | go to the panel | entered by `openPanel` (chord or moon hold); the held set clears on enter and on leave |
 | **Title** | a key-down that would be a press in Play (R2–R6: resolves to A–Z/0–9, no disqualifying modifier, not a repeat or held) emits `startPlay`, the same as the play button, and **is not a press** (no reveal for that key); every other key emits nothing (system keys still pass, R5) | belong to App Shell | entered and left by the App Shell; the held set is **kept** from Title into Play, so the starting key's repeats and up are ignored and only its next down is a press (Luan, 2026-11-18) |
 | **Inactive** (background, window not key) | nothing emitted; held set cleared | — | the App Shell switches states |

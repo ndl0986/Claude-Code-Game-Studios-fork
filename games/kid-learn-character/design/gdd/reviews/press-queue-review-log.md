@@ -34,3 +34,8 @@ Carried to Reveal Stage (non-blocking): (1) the glyph-sparkles-out fallback form
 Review mode: lean · Workflow: standard
 Change: TASK-050: startReveal returns {formedS, revealLen, hasWord} and F1 drops the word term when hasWord is false (not only when there is no word line); R10's start rule points to Parade F2; new R8a: the queue freezes while the parent-gate challenge shows and resumes on a wrong answer or timeout, frozen time never counting; K-15's clear only when the panel actually opens (K-20). Interactions, Edge Cases, AC-23, AC-24. Wording and interface follow-ups from K-18/K-19/K-20 and the Cast Rendering and Reveal Stage reviews; verdict unchanged; review by game-dev-ios.
 Reviewed-Content-Hash: design/gdd/press-queue.md e3f251e964d1741a83ea0ab55fa7bd1b608560fc
+
+## Update — 2026-11-18 — TASK-050 follow-ups, part 2 (no re-review)
+Review mode: lean · Workflow: standard
+Change: R8a restated on the play clock (uptime minus total frozen time, Reveal Stage freeze/resume, K-20) instead of shifting r0/formedAt; AC-23 updated. Verdict unchanged; review by game-dev-ios.
+Reviewed-Content-Hash: design/gdd/press-queue.md 74baa26023078384bde9b731ff69dcfd30c25fff

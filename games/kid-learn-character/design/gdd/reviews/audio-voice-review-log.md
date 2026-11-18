@@ -48,3 +48,8 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md 1f3d8158975fa07f5bac34725067431
 Review mode: lean · Workflow: standard
 Change: TASK-050: E9 is skipped when hasWord is false; Edge Cases confirm E8/E9 play on time during Cast Rendering's late-art wait and nothing is cut if the specks sparkle out; hasWord false skips E8 and E9. Wording and interface follow-ups from K-18/K-19/K-20 and the Cast Rendering and Reveal Stage reviews; verdict unchanged; review by game-dev-ios.
 Reviewed-Content-Hash: design/gdd/audio-voice.md df83c5e1d8eac9184fb8852c95464ac2e8f77e73
+
+## Update — 2026-11-18 — TASK-050 follow-ups, part 2 (no re-review)
+Review mode: lean · Workflow: standard
+Change: Reveal Stage freeze()/resume() for the gate challenge (K-20): every player pauses in place (E12 included), nothing new starts, resume continues them; panel and background keep cut/settle. Frozen state row, AC-21. Verdict unchanged; review by game-dev-ios.
+Reviewed-Content-Hash: design/gdd/audio-voice.md 3a9bb37d3088e038b99fc50c49f1e1fa7e2b5ce1

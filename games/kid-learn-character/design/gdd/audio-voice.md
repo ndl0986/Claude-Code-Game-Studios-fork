@@ -159,6 +159,12 @@ never more brightness"; Pillar 3).
 - **Background / the panel:** going to the background cuts every player and pauses the engine; coming back
   follows the interruption rule. Opening the grown-up panel cuts the voice, cast and music players; the panel is
   quiet.
+- **Gate challenge freeze (K-20; TASK-050):** on the Reveal Stage's `freeze()` (the parent-gate number challenge
+  shows), Audio **pauses** every player where it is (voice, cast, ui, and music, so the parade tune E12 too), and
+  **nothing new starts** while frozen: event times run on the same play clock as the reveal, which stands still.
+  On `resume()` (a wrong answer or a timeout) each paused sound **continues** from where it stopped. A correct
+  answer opens the panel, and the panel rule above (cut) applies. Pausing and continuing follow R2.2: no click.
+  Only the gate challenge freezes; the panel and the background keep their cut / settle behaviour.
 - **No sound before the first input** at launch: the engine is already running (R2.1), but **nothing is
   scheduled** until a key or a tap, so the title screen is silent and the first chime pays no engine-start time.
 
@@ -191,6 +197,7 @@ and that the TTS licence allows a commercial kids' app (Open Questions).
 | **Interrupted** | an interruption began, or background | none; events are skipped | "should resume" → Running (re-prime); otherwise the next press restarts it |
 | **Re-priming** | a format change or a media reset | none; events are skipped and logged | buffers ready → Running |
 | **Muted** | mute on (Settings Store) | none; the engine keeps running | mute off → Running |
+| **Frozen** | `freeze()` (gate challenge, K-20) | none; players paused in place, nothing scheduled | `resume()` → Running, sounds continue; a correct answer → the panel cut |
 
 Theme loading is the Key Table's state: until the new theme is Active (R4.1), the old theme's buffers keep
 playing.
@@ -463,6 +470,9 @@ Logic criteria run with an injected clock and a fake player layer (no audio hard
 20. **AC-20 Silent mode (iPad only).** With the iPad in silent mode, no sound is heard for any event, a full reveal
     still shows every visual answer, and music playing in another app is stopped, not mixed (`.soloAmbient`
     behaviour). macOS has no silent mode and is not tested here.
+21. **AC-21 Gate freeze (TASK-050).** With the word line half played and the parade tune running, `freeze()` for
+    10 s then `resume()`: both are silent during the freeze, nothing new starts (an E8 due during it plays only
+    after the resume, at its play-clock time), and both continue from where they paused with no click (AC-9).
 
 ## Open Questions
 
