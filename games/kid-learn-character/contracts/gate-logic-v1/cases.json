@@ -1639,6 +1639,17 @@
         },
         {
           "t": {
+            "uptime": 2.25,
+            "away": 2.25
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 4
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 2.5,
             "away": 2.5
           },
@@ -1656,6 +1667,17 @@
         },
         {
           "t": {
+            "uptime": 2.75,
+            "away": 2.75
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 3.0,
             "away": 3.0
           },
@@ -1670,6 +1692,17 @@
               "n": 3
             }
           ]
+        },
+        {
+          "t": {
+            "uptime": 3.25,
+            "away": 3.25
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 7
+          },
+          "expect": []
         },
         {
           "t": {
@@ -2346,6 +2379,17 @@
         },
         {
           "t": {
+            "uptime": 1.25,
+            "away": 1.25
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 4
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.5,
             "away": 1.5
           },
@@ -2363,6 +2407,17 @@
         },
         {
           "t": {
+            "uptime": 1.75,
+            "away": 1.75
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 2.0,
             "away": 2.0
           },
@@ -2377,6 +2432,17 @@
               "n": 3
             }
           ]
+        },
+        {
+          "t": {
+            "uptime": 2.25,
+            "away": 2.25
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 7
+          },
+          "expect": []
         },
         {
           "t": {
@@ -3543,6 +3609,17 @@
         },
         {
           "t": {
+            "uptime": 1.25,
+            "away": 1.25
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 4
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.5,
             "away": 1.5
           },
@@ -3560,6 +3637,17 @@
         },
         {
           "t": {
+            "uptime": 1.75,
+            "away": 1.75
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 2.0,
             "away": 2.0
           },
@@ -3574,6 +3662,17 @@
               "n": 3
             }
           ]
+        },
+        {
+          "t": {
+            "uptime": 2.25,
+            "away": 2.25
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 7
+          },
+          "expect": []
         },
         {
           "t": {
@@ -3805,6 +3904,17 @@
         },
         {
           "t": {
+            "uptime": 1.25,
+            "away": 1.25
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 4
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.5,
             "away": 1.5
           },
@@ -3822,6 +3932,17 @@
         },
         {
           "t": {
+            "uptime": 1.75,
+            "away": 1.75
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 2.0,
             "away": 2.0
           },
@@ -3836,6 +3957,17 @@
               "n": 3
             }
           ]
+        },
+        {
+          "t": {
+            "uptime": 2.25,
+            "away": 2.25
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 7
+          },
+          "expect": []
         },
         {
           "t": {
@@ -3946,6 +4078,17 @@
         },
         {
           "t": {
+            "uptime": 1.125,
+            "away": 1.125
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 4
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.25,
             "away": 1.25
           },
@@ -3963,6 +4106,17 @@
         },
         {
           "t": {
+            "uptime": 1.375,
+            "away": 1.375
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.5,
             "away": 1.5
           },
@@ -3977,6 +4131,17 @@
               "n": 3
             }
           ]
+        },
+        {
+          "t": {
+            "uptime": 1.625,
+            "away": 1.625
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 7
+          },
+          "expect": []
         },
         {
           "t": {
@@ -4152,6 +4317,17 @@
         },
         {
           "t": {
+            "uptime": 1.125,
+            "away": 1.125
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 4
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.25,
             "away": 1.25
           },
@@ -4169,6 +4345,17 @@
         },
         {
           "t": {
+            "uptime": 1.375,
+            "away": 1.375
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.5,
             "away": 1.5
           },
@@ -4183,6 +4370,17 @@
               "n": 3
             }
           ]
+        },
+        {
+          "t": {
+            "uptime": 1.625,
+            "away": 1.625
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 7
+          },
+          "expect": []
         },
         {
           "t": {
@@ -4333,6 +4531,17 @@
         },
         {
           "t": {
+            "uptime": 1.125,
+            "away": 1.125
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 4
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.25,
             "away": 1.25
           },
@@ -4350,6 +4559,17 @@
         },
         {
           "t": {
+            "uptime": 1.375,
+            "away": 1.375
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.5,
             "away": 1.5
           },
@@ -4364,6 +4584,17 @@
               "n": 3
             }
           ]
+        },
+        {
+          "t": {
+            "uptime": 1.625,
+            "away": 1.625
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 7
+          },
+          "expect": []
         },
         {
           "t": {
@@ -4485,6 +4716,17 @@
         },
         {
           "t": {
+            "uptime": 1.125,
+            "away": 1.125
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 4
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.25,
             "away": 1.25
           },
@@ -4502,6 +4744,17 @@
         },
         {
           "t": {
+            "uptime": 1.375,
+            "away": 1.375
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.5,
             "away": 1.5
           },
@@ -4516,6 +4769,17 @@
               "n": 3
             }
           ]
+        },
+        {
+          "t": {
+            "uptime": 1.625,
+            "away": 1.625
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 7
+          },
+          "expect": []
         },
         {
           "t": {
@@ -4644,6 +4908,17 @@
         },
         {
           "t": {
+            "uptime": 1.125,
+            "away": 1.125
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 4
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.25,
             "away": 1.25
           },
@@ -4661,6 +4936,17 @@
         },
         {
           "t": {
+            "uptime": 1.375,
+            "away": 1.375
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.5,
             "away": 1.5
           },
@@ -4675,6 +4961,17 @@
               "n": 3
             }
           ]
+        },
+        {
+          "t": {
+            "uptime": 1.625,
+            "away": 1.625
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 7
+          },
+          "expect": []
         },
         {
           "t": {
@@ -4804,6 +5101,17 @@
         },
         {
           "t": {
+            "uptime": 1.125,
+            "away": 1.125
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 4
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.25,
             "away": 1.25
           },
@@ -4821,6 +5129,17 @@
         },
         {
           "t": {
+            "uptime": 1.375,
+            "away": 1.375
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.5,
             "away": 1.5
           },
@@ -4835,6 +5154,17 @@
               "n": 3
             }
           ]
+        },
+        {
+          "t": {
+            "uptime": 1.625,
+            "away": 1.625
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 7
+          },
+          "expect": []
         },
         {
           "t": {
@@ -4986,6 +5316,17 @@
         },
         {
           "t": {
+            "uptime": 1.125,
+            "away": 1.125
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 4
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.25,
             "away": 1.25
           },
@@ -5003,6 +5344,17 @@
         },
         {
           "t": {
+            "uptime": 1.375,
+            "away": 1.375
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.5,
             "away": 1.5
           },
@@ -5017,6 +5369,17 @@
               "n": 3
             }
           ]
+        },
+        {
+          "t": {
+            "uptime": 1.625,
+            "away": 1.625
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 7
+          },
+          "expect": []
         },
         {
           "t": {
@@ -5168,6 +5531,17 @@
         },
         {
           "t": {
+            "uptime": 1.125,
+            "away": 1.125
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 4
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.25,
             "away": 1.25
           },
@@ -5185,6 +5559,17 @@
         },
         {
           "t": {
+            "uptime": 1.375,
+            "away": 1.375
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.5,
             "away": 1.5
           },
@@ -5199,6 +5584,17 @@
               "n": 3
             }
           ]
+        },
+        {
+          "t": {
+            "uptime": 1.625,
+            "away": 1.625
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 7
+          },
+          "expect": []
         },
         {
           "t": {
@@ -5347,6 +5743,17 @@
         },
         {
           "t": {
+            "uptime": 1.125,
+            "away": 1.125
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 4
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.25,
             "away": 1.25
           },
@@ -5364,6 +5771,17 @@
         },
         {
           "t": {
+            "uptime": 1.375,
+            "away": 1.375
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.5,
             "away": 1.5
           },
@@ -5378,6 +5796,17 @@
               "n": 3
             }
           ]
+        },
+        {
+          "t": {
+            "uptime": 1.625,
+            "away": 1.625
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 7
+          },
+          "expect": []
         },
         {
           "t": {
@@ -5553,6 +5982,17 @@
         },
         {
           "t": {
+            "uptime": 1.125,
+            "away": 1.125
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 4
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.25,
             "away": 1.25
           },
@@ -5570,6 +6010,17 @@
         },
         {
           "t": {
+            "uptime": 1.375,
+            "away": 1.375
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.5,
             "away": 1.5
           },
@@ -5584,6 +6035,17 @@
               "n": 3
             }
           ]
+        },
+        {
+          "t": {
+            "uptime": 1.625,
+            "away": 1.625
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 7
+          },
+          "expect": []
         },
         {
           "t": {
@@ -5706,8 +6168,103 @@
       ]
     },
     {
-      "id": "B8-confirm-never-hides-during-hold",
-      "source": "gdd: parent-gate-panel.md G8; G13 B8 (never while a hold is in progress)",
+      "id": "B7-keypad-while-digit-key-held",
+      "source": "gdd: parent-gate-panel.md G13 B7; input-key-filter.md R8 gateDigitUp (TASK-098)",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 1,
+            "digit": 1
+          },
+          "expect": [
+            {
+              "out": "close",
+              "reason": "wrong",
+              "sleep": true,
+              "to": "Play"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": false
+            }
+          ],
+          "expectState": {
+            "asleep": true
+          }
+        }
+      ],
+      "note": "The 4 key is still down (no gateDigitUp yet): a keypad pointer is a second digit input → wrong, with sleep."
+    },
+    {
+      "id": "B7-keypad-after-digit-key-up",
+      "source": "gdd: parent-gate-panel.md G13 B7; TASK-098",
       "given": {
         "knobs": {
           "gate_hold_s": 1.5,
@@ -5777,6 +6334,113 @@
             "away": 1.25
           },
           "event": {
+            "type": "gateDigitUp",
+            "digit": 4
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.5,
+            "away": 1.5
+          },
+          "event": {
+            "type": "keypadDown",
+            "pointerId": 1,
+            "digit": 1
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B8-confirm-never-hides-during-hold",
+      "source": "gdd: parent-gate-panel.md G8; G13 B8 (never while a hold is in progress)",
+      "given": {
+        "knobs": {
+          "gate_hold_s": 1.5,
+          "moon_sleep_s": 10.0,
+          "challenge_timeout_s": 20.0,
+          "overlap_grace_s": 0.15,
+          "confirm_hold_s": 1.5,
+          "panel_idle_s": 60.0,
+          "panel_max_s": 300.0,
+          "burst_count": 3,
+          "burst_window_s": 1.0
+        },
+        "origin": "Play"
+      },
+      "draws": {
+        "gate-code": [
+          "7493989779944505344",
+          "2017612633061982208",
+          "12970366926827028480",
+          "3746994889972252672"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0,
+            "away": 0.0
+          },
+          "event": {
+            "type": "openPanel"
+          },
+          "expect": [
+            {
+              "out": "challenge",
+              "code": "4172",
+              "text": "Enter four · one · seven · two"
+            },
+            {
+              "out": "gateOverlayShown",
+              "shown": true
+            }
+          ],
+          "expectState": {
+            "mode": "Challenge"
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0,
+            "away": 1.0
+          },
+          "event": {
+            "type": "gateDigit",
+            "digit": 4,
+            "anotherKeyHeld": false
+          },
+          "expect": [
+            {
+              "out": "dot",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.125,
+            "away": 1.125
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 4
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 1.25,
+            "away": 1.25
+          },
+          "event": {
             "type": "gateDigit",
             "digit": 1,
             "anotherKeyHeld": false
@@ -5787,6 +6451,17 @@
               "n": 2
             }
           ]
+        },
+        {
+          "t": {
+            "uptime": 1.375,
+            "away": 1.375
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 1
+          },
+          "expect": []
         },
         {
           "t": {
@@ -5804,6 +6479,17 @@
               "n": 3
             }
           ]
+        },
+        {
+          "t": {
+            "uptime": 1.625,
+            "away": 1.625
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 7
+          },
+          "expect": []
         },
         {
           "t": {
@@ -5956,6 +6642,17 @@
         },
         {
           "t": {
+            "uptime": 1.125,
+            "away": 1.125
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 4
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.25,
             "away": 1.25
           },
@@ -5973,6 +6670,17 @@
         },
         {
           "t": {
+            "uptime": 1.375,
+            "away": 1.375
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.5,
             "away": 1.5
           },
@@ -5987,6 +6695,17 @@
               "n": 3
             }
           ]
+        },
+        {
+          "t": {
+            "uptime": 1.625,
+            "away": 1.625
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 7
+          },
+          "expect": []
         },
         {
           "t": {
@@ -6195,6 +6914,17 @@
         },
         {
           "t": {
+            "uptime": 1.125,
+            "away": 1.125
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 4
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.25,
             "away": 1.25
           },
@@ -6212,6 +6942,17 @@
         },
         {
           "t": {
+            "uptime": 1.375,
+            "away": 1.375
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 1
+          },
+          "expect": []
+        },
+        {
+          "t": {
             "uptime": 1.5,
             "away": 1.5
           },
@@ -6226,6 +6967,17 @@
               "n": 3
             }
           ]
+        },
+        {
+          "t": {
+            "uptime": 1.625,
+            "away": 1.625
+          },
+          "event": {
+            "type": "gateDigitUp",
+            "digit": 7
+          },
+          "expect": []
         },
         {
           "t": {

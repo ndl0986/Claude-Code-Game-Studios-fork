@@ -21,7 +21,8 @@
 - **Keypad and hardware digits** (AC-07):
   - B6 grace: 0.10 and 0.149 accepted; a lift at exactly 0.15 is wrong; a palm is wrong at 0.15; three pointers
     are wrong at once; a pending second lifting first is cancelled (AC-06, AC-36);
-  - B7 mixed input: a hardware digit while a keypad pointer is down is wrong; two digit keys are wrong.
+  - B7 mixed input, both ways: a hardware digit while a keypad pointer is down is wrong; a keypad pointer while a
+    digit key is held (no `gateDigitUp` yet) is wrong, and after the up it counts; two digit keys are wrong.
 - **B11 background** (AC-22): the challenge closes as Cancel with no sleep, and the flags clear; the panel closes.
 - **B13 the chord:** ignored in the challenge and the panel; Esc and Cancel return to the origin, Title or Play
   (AC-25, AC-31).
@@ -62,6 +63,7 @@ timer is on the away clock (G13).
 | `openPanel` | — (Input's chord) | `challenge {code, text}`, `gateOverlayShown {true}` |
 | `keypadDown`, `keypadUp` | `pointerId`, `digit` | `dot {n}`, `panel`, or `close` |
 | `gateDigit` | `digit`, `anotherKeyHeld` | `dot`, `panel`, or `close` |
+| `gateDigitUp` | `digit` (Input R8, TASK-098: a key that gave a `gateDigit` left the held set) | — (the gate's count of digit keys down drops by one) |
 | `cancel` | `how`? (`esc`, `back`) | `close {reason: cancel}` in the challenge, `panelClose` in the panel |
 | `cardTouch` | `on`: `outside` (challenge), `control`, `empty`, `scroll`, `slider`, `confirmTrigger` (+ `action`), `confirm` | `confirm {state: shown}` |
 | `confirmUp`, `sliderEnd`, `keyDown` | — | `sliderWrite` at a drag's end |
