@@ -106,7 +106,8 @@ production app.
 **The minimal spike check before any spike install** (TASK-075, extended by the review): it builds headless and its
 unit tests pass; no network entitlement and no `URLSession` / `NWConnection` / web view; **no Rive** (also for the
 TASK-033 install); no remote Swift package; **no `NS*UsageDescription`, no location / camera / microphone
-entitlement, no URL schemes** (nothing that could put a prompt or a link in front of the child); the build's short sha
+entitlement, no URL schemes** (nothing that could put a prompt or a link in front of the child); **the Mac key-state
+read off by default** (the Keys screen's switch, so M-1 sees a clean first launch); the build's short sha
 recorded in `results.md`.
 
 ## Sessions
