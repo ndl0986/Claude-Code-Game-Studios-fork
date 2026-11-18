@@ -75,3 +75,8 @@ Review mode: lean · Workflow: standard
 Task: TASK-088d
 Change: F3: for the invalid-set fallback, form_s is replaced by fallback_fade_s in both places, fadeStart (formedS − fallback_fade_s) and the fade length in u (game-qc-android's REVISE: the denominator too); glyph missing keeps formedS − form_s (its set is valid). The values happen to be equal today (0.5), which hid the error; found reviewing reveal-timing-v1. Review: game-qc-android, from the diff.
 Reviewed-Content-Hash: design/gdd/reveal-stage.md e9f98355e1a2e2ae14efcb1613bd2a4219016964
+
+## Update — 2026-11-18 — TASK-120 parade meter drawing and box (no re-review)
+Review mode: lean · Workflow: standard
+Change: R6: draws the parade meter from the Parade's meter snapshot with the art bible §7 look, in the token layer; a touch on it is an empty-stage sparkle. R10: the meter stays inside the safe stage, its box is published with the token circles, and it is in the draw order with the queue tokens. Interactions: Parade in/out. Review: game-qc-android from the diff.
+Reviewed-Content-Hash: design/gdd/reveal-stage.md 2c7743ca2e1d0e933ed4f1c936eae37a884b68c9

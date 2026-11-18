@@ -90,14 +90,18 @@ the safe stage**.
   uniform in ±`hint_jitter` (10) per axis and **check F4 on the jittered centre**. If it fails, draw again, up to
   4 times; then try zero jitter; if that fails too, the slot is blocked for this spawn and the next slot is tried.
   If no slot passes, nothing spawns this time (R6 retries).
-- **The moon, token and glyph positions are not this system's:** the moon's circle comes from the Parent Gate, the
-  token circles and the glyph and cast boxes from the Reveal Stage, as published rectangles in stage units. The
+- **The moon, token, meter and glyph positions are not this system's:** the moon's circle comes from the Parent
+  Gate, the token circles, the parade meter's box and the glyph and cast boxes from the Reveal Stage, as published
+  rectangles in stage units. The
   values below are the one-shot's and the art bible's, used until those GDDs publish theirs; the build check
   (AC-5) re-runs on the published values.
 - **Clearances** (F4), all on the jittered centre and all including the drift (F3, at most 12.8 units):
   - each other hint: centres ≥ 185.6 apart (hit circles plus drift never touch);
   - the moon (66, 62), radius 50: ≥ 148 (rounded for reading; the check uses F4's exact 147.8);
   - each queue token (1214, 58), (1148, 58), (1082, 58), glow radius 40: ≥ 138 (rounded; F4's exact 137.8);
+  - **the parade meter's box** (Parade R12; art bible §7: x 846–1022, y 40–76 with its glow): ≥ 97.8 from the box,
+    like the cast and glyph boxes. Every slot passes at any jitter: R2 (920, 200) is 124 from it (114 at jy −10) and R1
+    is 178 *(TASK-120, K-44)*;
   - the current cast member's box (from the Reveal Stage): ≥ 97.8 from the box;
   - the glyph's box (x 475–805, y 155–485, the 330-unit glyph at 640, 320): ≥ 97.8 (every slot passes statically);
   - the safe stage's edges: the circle plus drift stays inside 0–1280 × 0–720;
@@ -303,7 +307,7 @@ R        = k × (hitRadius + 12.8)                         = 87.8 at k = 1   (hi
 hint     : |c − c_other| ≥ 2R + 10k                       = 185.6
 moon     : |c − (66, 62)| ≥ R + 50 + 10k                   = 147.8 (148 in R5 is this, rounded)
 token_i  : |c − token_i| ≥ R + 40 + 10k                    = 137.8 (138, rounded)   token_i ∈ {(1214,58), (1148,58), (1082,58)}
-box      : dist(c, box) ≥ R + 10k                          = 97.8           box ∈ {cast member, glyph, keyboard row band (when on)}
+box      : dist(c, box) ≥ R + 10k                          = 97.8           box ∈ {cast member, glyph, keyboard row band (when on), parade meter (TASK-120)}
 stage    : R ≤ c.x ≤ 1280 − R  and  R ≤ c.y ≤ 720 − R
 insets   : the circle of radius R around c is outside every gesture inset (Android)
 ```
@@ -343,6 +347,8 @@ to phones, which are out of scope (R11) *(TASK-054 H1)*.
 i.e. `k > 1.044`, and R1 the token clearance once `97.8k + 40 > 142.0`, `k > 1.043`. Between about 1.044 and 1.18 they
 pass only with a favourable jitter (L1 at (+10, +10) is 165.5 from the moon). So with the widest creature on stage,
 from `k ≈ 1.044` the screen may show 2 hints rather than 3 (again, not reachable on the MVP's iPads and Macs).
+The parade meter's box (TASK-120) moves no threshold: R2 would fail it at zero jitter only above `k ≈ 1.27`
+(124 / 97.8), where the creature already blocks that inner slot.
 
 ## Edge Cases
 

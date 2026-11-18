@@ -1,7 +1,7 @@
 # Game Concept: Letter Morph
 
 *Created: 2026-11-17*
-*Status: Approved (revised 2026-11-18 after /design-review to match decisions K-01…K-08, the art bible and the prototype iterations 1–4)*
+*Status: Approved (revised 2026-11-18 after /design-review to match decisions K-01…K-08, the art bible and the prototype iterations 1–4; K-44 lines added 2026-11-18, TASK-120)*
 *Working title. The final name is decision K-04 (open). Project folder: `kid-learn-character`.*
 
 ---
@@ -152,7 +152,9 @@ when the child wanders off or a parent closes the app; nothing is lost, there is
 
 ### Long-Term Progression
 
-None for the child: no scores, levels, unlocks or "seen" marks (art bible §4). The toy grows
+None for the child: no scores, levels, unlocks or "seen" marks (art bible §4). There is **a parade meter, not a
+score** (K-44): it lights one step per new creature toward the next parade, empties with each parade and is never
+saved. The toy grows
 instead: the Dinosaurs theme first, then new themes (Vehicles…) chosen by a parent, driven by the
 child's feedback, and more items per key (K-07). It is a toy, so it is
 never "done".
@@ -197,7 +199,8 @@ A parent can hand the device over without worry: offline, no data, a parent gate
 
 ### Anti-Pillars (What This Game Is NOT)
 
-- **NOT scores, timers, quizzes or fail states**: they would compromise Calm Magic and Every Press Answers.
+- **NOT scores, timers, quizzes or fail states**: they would compromise Calm Magic and Every Press Answers. *(K-44:
+  a parade meter, not a score: it shows the way to the next parade, holds no total and is never saved.)*
 - **NOT text the child must read** (beyond the letter or number itself): it would compromise The Letter Comes Alive.
 - **NOT ads, in-app purchases, accounts, network or analytics**: they would compromise Safe by Design.
 - **NOT strobing effects, loud stings or endless reward loops**: they would compromise Calm Magic.

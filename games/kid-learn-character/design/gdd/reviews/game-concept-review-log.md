@@ -26,3 +26,8 @@ Reviewed-Content-Hash: design/game-brief.md ca66d372d8235f6f0effd7a6f6957c85c44d
 Review mode: lean · Workflow: standard
 Change: W-7: 'every 8' → 'every 6' at Core Mechanics 5, the parade sentence and the MVP list (K-17). From /review-all-gdds 2026-11-18 (design/gdd/gdd-cross-review-2026-11-18.md) and K-26. Verdict unchanged; diff re-run by game-qc-android.
 Reviewed-Content-Hash: design/gdd/game-concept.md 5a150a0e8ee9e4c4bed1749196abf72271d4d8e8
+
+## Update — 2026-11-18 — TASK-120 K-44 lines (no re-review)
+Review mode: lean · Workflow: standard
+Change: Long-Term Progression and the first anti-pillar gain 'a parade meter, not a score' (K-44): it lights toward the next parade, holds no total, is never saved. Review: game-qc-android from the diff.
+Reviewed-Content-Hash: design/gdd/game-concept.md d765abb119cf45d5695396a58a7dabe2ad74fc68

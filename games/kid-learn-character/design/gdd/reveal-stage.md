@@ -144,6 +144,9 @@ MorphCore F1).
 - The **queue tokens** are drawn from the Press Queue snapshot (its R11): small round cream bubbles with the key in
   Letter Gold ink, in a still row at the top right of the safe stage, 66 units apart from x 1214, y 58 (as
   played). They appear without bounce (art bible §7).
+- The **parade meter** *(TASK-120, K-44)* is drawn from the Parade's **meter snapshot** (Parade R12, F4, Interface 7)
+  with the art bible §7 look (x 846–1022, y 40–76 with its glow), just left of the token row, inside the safe stage,
+  in the token layer. A touch on it is an empty-stage `sparkle(point)`.
 
 **R7. Tapping the creature.**
 - The Reveal Stage publishes the **current, formed** creature's hit shape to Input (its R7 layer 4): the
@@ -197,15 +200,16 @@ MorphCore F1).
   `row_lift` (proposal: 110 units); the glyph centre stays; hints stay in the sky.
 - **Stage fit (decided, K-20): contain, then extend.** The safe stage is scaled to fit the screen whole (F1) and
   centred; the Scene extends the sky and ground to fill the rest. No bars, nothing cropped. iPads (narrower than
-  16:9) fit by width and gain sky and ground; wide Mac windows fit by height and gain hills to the sides. Hints and
-  queue tokens stay inside the safe stage.
+  16:9) fit by width and gain sky and ground; wide Mac windows fit by height and gain hills to the sides. Hints,
+  queue tokens and the parade meter stay inside the safe stage.
 - The Reveal Stage **owns this transform** and publishes `stage_to_px` (physical px per stage unit) and the
   **visible rect** in stage units (it extends past 0…1280 or 0…720). Cast Rendering (its F1), the Scene, the
   Parade (its F3: `W` = the visible width, starting at the rect's left edge), Hint Letters and Input's hit testing
   use it. App Shell owns the window and the safe-area insets it hands over.
 - It also publishes, in stage units and updated whenever they move (`row_lift`, a token-row change, a new
   creature): the **cast box** (the current creature's box at its anchor), the **glyph box** (the glyph's drawn
-  box at full size), the **token circles** (the queue row) and, while it is on, the **keyboard row band** (`y ≥ 582`,
+  box at full size), the **token circles** (the queue row), the **meter box** (the parade meter, x 846–1022, y 40–76
+  with its glow; TASK-120) and, while it is on, the **keyboard row band** (`y ≥ 582`,
   published by the On-screen Keyboard Row, its R1) *(TASK-062)*. Hint Letters reads them for its clearances (its R5);
   the moon's rect comes from the Parent Gate.
 - And two flags, for the Scene (its R3, R3a), on the play clock:
@@ -216,7 +220,7 @@ MorphCore F1).
     freeze (play clock) and is false after a settle (the queue is empty).
 - **Draw order** (back to front): Scene backdrop (sky, hills, ground, weather) → parade walkers → the leaving
   creature → the current creature → **the On-screen Keyboard Row** (while it is on) → the glyph or the specks → starlights and sparkles → hint letters → queue
-  tokens → the moon → the gate and panel. During a parade the stage creature stays where it is, in front of the
+  tokens and the parade meter (TASK-120) → the moon → the gate and panel. During a parade the stage creature stays where it is, in front of the
   walkers (Parade R5). The `zPosition` of each layer is ADR-0006 D1's table (the keyboard row at z 35: above the
   current creature at 30, below the glyph or specks at 40) *(TASK-085a; TASK-070)*; this line gives the order only,
   and D1's table is the one source for the numbers.
@@ -243,7 +247,7 @@ The Reveal Stage's own state follows the Press Queue's, plus freeze:
 | MorphCore | in | the morph per reveal (glyph path, silhouette, spec, seed); `position(i, s)`, T, phase |
 | Cast Rendering | out / in | `drawGlyph`, `drawDust`, `drawCast` each frame with the halo on/off, alphas, `idleTime`, `hop`; `willForm`, `isResident`, `prefetch`, `release` |
 | Audio & Voice | out | E1–E3 from the outcome; E6–E10 at their times (R6); pause / resume on freeze; `hasWord` |
-| Parade | out | `shown(revealId, key, castId, kind)`; the lane y; the visible rect; draw order; freeze / settle |
+| Parade | out / in | out: `shown(revealId, key, castId, kind)`; the lane y; the visible rect; draw order; freeze / settle. In: the parade meter snapshot, which it draws (Parade R12; TASK-120) |
 | Parent Gate & Grown-up Panel | in | `freeze` (challenge open), `resume` (wrong or timeout), `settle` (correct → panel) |
 | App Shell & Title | in | enters Play; background → settle; the window size and safe area |
 | Scene: Time of Day & Weather | out | the visible rect to fill (sky and ground extension), the ground line, the play clock and freeze / resume, the glyph box, `haloOn` and `mashing` (R8, R10) |
