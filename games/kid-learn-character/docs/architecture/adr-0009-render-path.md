@@ -116,8 +116,9 @@ part, fills per element; the A the rule judges), **B** (B-load) and, for informa
 Metrics recorder gives p50 / p99 over the worst case per option, and the screen logs per-creature build ms per
 option. The A-candidate option ("A: candidate (ADR-0009 D3)") and H-2's **Overlap check** button are in DeviceSpike at
 **d21588c0** (game-dev-ios, design/TASK-103-devicespike-a-candidate; build logs in
-`production/qa/evidence/TASK-103/d21588c0/`). H-2's overlap check runs **before** P-2 (Validation, H-2), and P-2 records which outline path
-(merged stroke or fallback) its A-candidate numbers come from.
+`production/qa/evidence/TASK-103/d21588c0/`); the candidate's outline moves into the effect node (D3) in game-dev-ios's
+follow-up build, whose sha is recorded here when it lands. H-2 is answered (headless, 6e455bfc; Validation), and P-2
+records which outline path (the effect node, or the texture fallback) its A-candidate numbers come from.
 
 ### D2. One structure, both options (platform-neutral)
 - Both options read **the same baked file** (ADR-0003 D4): parts with pivots, nested; inside each part the layers
@@ -141,11 +142,14 @@ path is not safe, because with the default nonzero winding rule two overlapping 
 leave a hole (game-dev-ios, TASK-103 review).
 
 **Apple.** One `SKShapeNode` per fill shape and one per part's merged outline path (`fillColor`, `strokeColor`,
-`lineWidth`, `.round` joins and caps, antialiased). The outline path is stroked by **one** node at alpha 0.8.
-**Whether that gives the group-opacity look is unverified:** `SKShapeNode`'s alpha applies per draw, not as a
-composited group, so a stroke that overlaps itself might still darken. **H-2's overlap test decides**; if it darkens,
-the fallback is an `SKEffectNode` with `shouldRasterize` per part, or that part's outline layer drawn as a texture
-(B's rasteriser for that layer alone). Per-look colour sets `fillColor` / `strokeColor` from the base colour × F8's
+`lineWidth`, `.round` joins and caps, antialiased). **The outline is the merged path stroked opaque inside an
+`SKEffectNode` with `shouldRasterize`, one per part, at the layer's opacity (0.8)**: H-2 (headless, 6e455bfc) showed a
+single `SKShapeNode` blends its own self-overlap **twice** at 0.8 (crossing 0.961 against arm 0.800, for stroke alpha
+and node alpha alike), and the effect node blends **once**. The effect node holds only that part's outline, which never
+changes, so its raster is reused while the part's own node rotates (idles); a per-look colour change (F8) re-rasterises
+it once. P-2 checks two things this introduces: the raster stays crisp at the stage size, and it is not rebuilt per
+frame (the frame log after a reveal starts). If either fails, the outline layer becomes a texture (B's rasteriser for
+that layer alone). Per-look colour sets `fillColor` / `strokeColor` from the base colour × F8's
 factor, only when the factor changes (the 1 s edge dissolve, F8), not every frame.
 **Node count**, measured by game-dev-ios on TASK-077's three SVGs: outline merged per part and fills per element give
 **19–23 nodes per stage figure and 12–15 per parade walker**. The spike draws one node per SVG element (25–27 per
@@ -296,12 +300,14 @@ Per K-34: headless runs need no MAC FREE; the Mac rows do.
   ×36 (**partial, linear**): **≈ 6.2 MB vs ≈ 0.1 MB**. F6's 1.5× part-box cap holds (0.37–0.56 of the whole image).
 - **H-2 Equivalence (the adapter story).** A's and B's part boxes within 1 px per role for the three creatures; the
   **outline-overlap test** (D2, D3): an outline stroke that crosses itself, drawn by A and by B over a flat fill,
-  reads one alpha (0.8 Ink) at the crossing, not two. It decides D3's group-alpha question; if A darkens there, A uses
-  D3's fallback. **H-2's overlap check runs on the A-candidate DeviceSpike build (d21588c0) before P-2** (game-qc-ios;
-  leader's option a): DeviceSpike's **Overlap check** button logs whether one `SKShapeNode` blends its own overlap
-  twice, for stroke alpha 0.8 and for node alpha 0.8, from the view's own render. It is answered **on the device, as
-  the first step of the device session, before P-2** (not headless). P-2 then records **which outline path it measured** (the merged stroke or the fallback), so
-  its A numbers belong to the A that would ship.
+  reads one alpha (0.8 Ink) at the crossing, not two. It decided D3's group-alpha question before P-2 (game-qc-ios;
+  leader's option a). **Result (2026-11-18, headless, game-dev-ios, 6e455bfc, `SKRenderer` offscreen):** one
+  `SKShapeNode` at 0.8 blends its self-overlap **twice** (crossing 0.961, arm 0.800; stroke alpha and node alpha
+  alike); an `SKEffectNode` with `shouldRasterize` at 0.8 blends **once**. So D3's outline is the merged path inside an
+  effect node per part. DeviceSpike's **Overlap check** button repeats it on the device as the first step of the
+  session (a confirmation, since the device GPU could differ), and P-2 records **which outline path it measured** (the
+  effect node, or the texture fallback), so its A numbers belong to the A that would ship. The A-and-B box equivalence
+  half of H-2 stays with the adapter story.
 - **H-3 Bake output (the bake tool story).** The baked JSON for the three creatures parses back with the a1 rule; its
   byte size is recorded next to H-1's SVG figure.
 - Simulator frame times: **not taken** (leader, 2026-11-18): every boot pushed the Mac's load to 40–55, and Simulator
