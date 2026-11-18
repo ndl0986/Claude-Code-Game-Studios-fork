@@ -1,7 +1,7 @@
 # sources.lock for key-table-schema-v1 (cut 2026-11-18, TASK-068): the ## sections the cases cite.
-Reviewed-Section-Hash: games/kid-learn-character/design/gdd/key-table-theme-data.md#Detailed Design 817522a793bfe859d1b7bd2323c397a3e77d668c
-Reviewed-Section-Hash: games/kid-learn-character/design/gdd/key-table-theme-data.md#Formulas 372dbcad6bbdb4d1431e060c7694b45bd2a03b82
-Reviewed-Section-Hash: games/kid-learn-character/design/gdd/key-table-theme-data.md#Edge Cases b4ca693f7b29e14f1f14c60fd93736354aea371f
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/key-table-theme-data.md#Detailed Design c8685f7e506c2a8cd8c68654dd63cda5247ef1d9
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/key-table-theme-data.md#Formulas 9989d1f76b40ad2b6daebad19d4fbb408f6b3595
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/key-table-theme-data.md#Edge Cases 8079d60a502a3ca5145612e3f28e7e8e501beba7
 Reviewed-Section-Hash: games/kid-learn-character/design/gdd/key-table-theme-data.md#The Dinosaurs theme (first content set) d4de26d7901f30940b1078aacccd682ed203a25f
-Reviewed-Section-Hash: games/kid-learn-character/design/gdd/key-table-theme-data.md#Acceptance Criteria 4607f153e332578b15cc463127772d8e98d28054
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/key-table-theme-data.md#Acceptance Criteria 47c88f0a5be726a1c8912502949197a3931bd257
 Reviewed-Section-Hash: games/kid-learn-character/docs/architecture/adr-0002-modules-seams-types.md#Decision 7a622020948197194ccd9e003ecdfe8e243fb356

@@ -5,7 +5,7 @@
 
 ## What it covers
 
-- The validator's verdicts, V1–V17 (§6), each with at least one pass and one fail.
+- The validator's verdicts, V1–V18 (§6), each with at least one pass and one fail.
 - The §4 / F1 item pick with raw draws from the `key-variety` stream, the D4 u helper, `resolve`, `peek`, and the
   `lastShown` reset on a theme change.
 - `titleCastId` and its fallback.
@@ -29,19 +29,26 @@
 - **`file`** (apple/Tools test target): theme-file bytes go in, and a decoded model or a decode error comes out.
   It uses Tools' decoder and reads this same `cases.json`.
 
-Each harness runs only its own layer. The current file has 66 `model` cases and 3 `file` cases.
+Each harness runs only its own layer. The current file has 86 `model` cases and 7 `file` cases.
 
 ## Fixtures
 
-- **`theme`**: a synthetic, schema-2, 36-key test theme `testbase` with one item per key, built to pass V1–V17:
+- **`theme`**: a synthetic, schema-2, 36-key test theme, `id` `testbase` with `assetPrefix` `tb`, one item per key,
+  built to pass V1–V18. Every castId and asset name uses the prefix (`tb_d_item_01`, `cast/cast_tb_d_item_01.json`):
   - every letter item: word `<letter>item`, sound `start`, its own family and variant, hue slots cycling through the
     eight slots (at most 4 per slot);
   - digits 1–9: `<number word> test toy(s)`; 0: the empty item `an empty box`, all with hue slot `shared`;
   - `rowWords` are Dinosaurs' 16 words from the GDD;
   - `voiceDurations` 0.5 s for every line.
-  It depends on question KT-Q7 (whether `shared` counts in V10).
+  `shared` is outside V10 (KT-Q7), so the digits use it.
+- **`themeV1`** / **`assetsV1`**: the same theme at schema 1, with no `assetPrefix` and no `rowWords`, so its castIds
+  use the `id` (V6).
+- **`themePrefix9`** / **`assetsPrefix9`**: the same theme with a 9-letter `assetPrefix`, used consistently everywhere
+  (V18's format).
 - **`assets`**: what the validator needs to know about the files, as measured upstream:
-  - `files`: the relative paths present;
+  - `folder`: the theme's folder name (V18);
+  - `otherThemePrefixes`: the `assetPrefix` of every other bundled theme (V18);
+  - `files`: the relative paths present, in exact case (V7);
   - `silhouettePaths`: path → morph-v1 path string;
   - `sfxDurations`: path → seconds;
   - `voiceMeasured`: voice path → decoded seconds.
@@ -50,7 +57,8 @@ Each harness runs only its own layer. The current file has 66 `model` cases and 
 
 ## `given` fields
 
-`theme`, `assets`, `glyphSet` (each usually a `$fixture` with a `patch`); `state` (`{ "lastShown": { key: index } }`);
+`theme`, `assets`, `glyphSet` (each usually a `$fixture` with a `patch`); `buildSettings` (`{ "singleItemPerKey": bool }`:
+present means a build-time run, absent a load-time run; V2, KT-Q4); `state` (`{ "lastShown": { key: index } }`);
 `themeBytes` (file layer: the theme file as UTF-8 text, key order as written).
 
 ## Entry points (contract-local events)
@@ -58,9 +66,9 @@ Each harness runs only its own layer. The current file has 66 `model` cases and 
 | Event | Fields | Emits |
 |---|---|---|
 | `validate` | — | `verdict` |
-| `pick` | `n`, `last`?, `weights`? | `picked` (F1 on its own, one `key-variety` draw unless `n` = 1) |
+| `pick` | `n`, `last`?, `weights`? | `picked` (F1 on its own; one `key-variety` draw only when \|C\| ≥ 2) |
 | `nextU` | `stream` | `u`: the D4 helper on the stream's next draw |
-| `resolve` | `key` | `item`; consumes one draw when the key has ≥ 2 items (but see KT-Q2) |
+| `resolve` | `key` | `item`; consumes one draw only when there are ≥ 2 candidates (KT-Q2) |
 | `peek` | `key` | `item`; reads the stream's next value **without consuming it**, and leaves `lastShown` alone (§4.5) |
 | `themeChanged` | `theme` | nothing; resets `lastShown` |
 | `keysInOrder` | — | `keys` |
@@ -84,38 +92,30 @@ Each harness runs only its own layer. The current file has 66 `model` cases and 
 
 ## Stream `key-variety`
 
-One draw per `resolve` of a key with ≥ 2 items, taken when the reveal resolves (§4.1). `pick` draws the same way.
-`n` = 1 draws nothing. `peek` reads the next value but never consumes it. The u conversion is ADR-0002 D4's.
+One draw per `resolve` when there are **≥ 2 candidates** (\|C\| ≥ 2, KT-Q2), taken when the reveal resolves (§4.1).
+`pick` draws the same way. `n` = 1, and `n` = 2 with `last` set, draw nothing. `peek` reads the next value but never consumes it. The u conversion is ADR-0002 D4's.
 
-## Pending (not guessed; cases come in a later version)
+## Answers from the GDD owner (key-table-theme-data.md, TASK-069)
 
-- **ADR-0003 `assetPrefix`** and the **`id` = "dinosaurs"** rule, with the Key Table follow-up. Until then, V6 is
-  tested for `castId` uniqueness only, not for the naming pattern, and the asset-naming part of V6 is not tested.
+The questions in the first draft are now rules in the GDD, and the cases follow them:
+- **KT-Q1:** per-platform seeds, and the fixture feeds raw draws (F1, AC 8).
+- **KT-Q2:** a draw is consumed only when \|C\| ≥ 2 (`F1-n2-last-set-draws-nothing`).
+- **KT-Q3:** a missing key is V2 only; V3 is an extra or malformed key.
+- **KT-Q4:** "exactly 1" is the build setting `singleItemPerKey`, not checked at load (`V2-fail-singleItemPerKey-at-build`,
+  `V2-pass-two-items-at-load`).
+- **KT-Q5:** V5 is an exact match on `<number word> <singular|plural>` (`V5-fail-key1-plural`,
+  `V5-fail-double-space`).
+- **KT-Q6:** V6 is `^<prefix>_<key>_<name>_<nn>$`, where nn is the item's two-digit position and the prefix is the
+  `assetPrefix` (the `id` for a v1 theme). Covered by the `V6-*` cases.
+- **KT-Q7:** `shared` is outside V10 (the base fixture).
+- **KT-Q8:** V17's key clause is intentionally redundant, so it has no case.
+- **KT-Q9:** an unknown field and a missing required field are decode errors. `rowWords` and `assetPrefix` decode as
+  absent and are checked by V17 and V18 (the `file-*` cases).
 
-## Questions for the GDD owner (game-art-content)
+## Not covered yet
 
-None of these is guessed in a case. A case that depends on an answer says so in its `note`.
-
-- **KT-Q1.** F1's last paragraph and AC 8 still say the variety stream is SplitMix64 with one shared seed, so that
-  a fixture checks both apps. ADR-0002 D4 and ADR-0004 D4 make seeding per platform and feed raw draws instead.
-  This contract follows the ADRs. Can F1 and AC 8 be updated? AC 8's 10,000-reveal statistics stay a per-platform
-  unit test.
-- **KT-Q2.** With `n` ≥ 2 and only one candidate (`n` = 2 with `last` set, so C = {the other}), is a draw consumed?
-  F1 says only that `n` = 1 draws nothing. This decides the stream's consumption order, so there is no case for it
-  yet.
-- **KT-Q3.** A missing key fails V2. Does V3 ("Keys are exactly A–Z, 0–9") also fire? `V2-fail-key-missing`
-  expects V2 only.
-- **KT-Q4.** V2's "MVP themes have exactly 1": how does the validator know a theme is an MVP theme (a build
-  setting, a field)? The exact-1 clause has no case yet.
-- **KT-Q5.** V5 for key 1: "contains `countedItem.singular`". The plural contains the singular ("test toys"
-  contains "test toy"). Must key 1's word *not* contain the plural? The cases avoid this.
-- **KT-Q6.** V6's `castId` pattern `<theme>_<key>_<name>_<variant>`: is `<variant>` the two-digit index (`01`), as
-  in every example, or the item's `variant` field (`tri-horn`)? Is `<theme>` the asset prefix? See also ADR-0003.
-- **KT-Q7.** V10: does hue slot `shared` count toward the per-slot cap and the sibling rule? In Dinosaurs, F and N
-  are both family `object` and `shared`, so they would break the sibling rule if it counted. The `theme` fixture
-  assumes `shared` is outside both, and gives digits `shared`.
-- **KT-Q8.** V17's "every letter is a key of this theme" can't fail while V2 passes. Is it intentionally redundant?
-  There is no case for it.
-- **KT-Q9.** File layer: is an unknown field in `theme.json` ignored or a decode error? Which layer reports a
-  missing required field other than `rowWords` (a decode error, or the validator)? There are no cases for either
-  yet.
+- V7's build-only check that each baked file's source exists (`src/art/…svg`): that is the bake tool's run
+  (ADR-0003), not a theme-decode or validator case.
+- AC 18's "prefix `Dino`" example: an uppercase prefix also breaks V6's lower-case naming, so v1 tests V18's format
+  with a 9-letter prefix instead (`V18-fail-prefix-nine-letters`). AC 18's wrong-case `art` path is tested from the
+  file side (`V7-fail-wrong-case-file`) for the same reason.

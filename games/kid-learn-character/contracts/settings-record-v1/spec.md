@@ -1,6 +1,6 @@
 # settings-record-v1
 
-**Owner GDD:** `design/gdd/settings-store.md`. **ADR:** ADR-0004 (D1, D3), ADR-0002 (D2 rounding, D8 same bytes).
+**Owner GDD:** `design/gdd/settings-store.md` (including R6a, "The canonical record", TASK-072). **ADR:** ADR-0004 (D1, D3), ADR-0002 (D2 rounding, D8 same bytes).
 **Cases:** hand-written by game-qc-android (TASK-068), reviewed by game-dev-android.
 
 ## What it covers
@@ -35,7 +35,8 @@ JSON library. Kotlin mirrors them one-to-one, so both platforms write the same b
 - The written record has `schemaVersion` plus exactly the R1 fields for the platform: `childLock` only on macOS
   (AC-3), and the app's own version (R7).
 
-String escaping is question SS-Q1; every case uses ASCII strings with nothing to escape.
+Strings escape **only** `"` → `\"`, `\` → `\\` and U+0000–U+001F as lowercase `\u00xx`; everything else, `/` and
+non-ASCII included, is raw UTF-8 (R6a). The reader accepts every JSON escape.
 
 ## `given` fields
 
@@ -69,20 +70,18 @@ String escaping is question SS-Q1; every case uses ASCII strings with nothing to
 
 **Field kinds:** `gain.value` is `gain` (1e-12). `value.value` is exact. No other doubles.
 
-## Questions for the GDD owner
+## Answers from the GDD owner (settings-store.md R6a, TASK-072)
 
-None of these is guessed in a case. Nothing has been asked yet, and the reviewer, game-dev-android, may answer or
-forward them.
+The first draft's questions are now rules, and the cases follow them:
+- **SS-Q1:** the escaping above (`R6a-escape-*`: quote, backslash, `\t` read and written as `\u0009`, é read raw or
+  as `\u00e9` and written raw).
+- **SS-Q2:** any JSON number token is a number: `8.0` → 8, `1e1` → 10, `-0` → 0 (`R6a-number-token-*`).
+- **SS-Q3:** a bare `NaN` or `Infinity` makes the whole record unreadable (`R6a-bare-*-unreadable`). A slider NaN
+  isn't covered until F1 states it (the leader's note for the next Settings change).
+- **SS-Q4:** rounding writes no log (`F1-read-6.6-rounds-to-7`, the number-token cases).
+- **SS-Q5:** several bad fields log in R1's table order (`R6a-log-order-R1`).
+- **SS-Q6:** a duplicate key makes the record unreadable (`R6a-duplicate-key-unreadable`).
+- **SS-Q7:** a no-op change does nothing (`R6a-no-op-*`, `R6a-lock-on-when-active-is-no-op`). ON while the stored
+  value is true but `childLockActive` is false is a real change (`R6a-lock-on-after-run-only-off-is-a-change`).
 
-- **SS-Q1.** How does the canonical writer escape strings? A `themeId` read from a record can be any non-empty
-  string, and the kept value is written back (R6). The rule must be byte-identical on both platforms: which
-  characters are escaped, the `\u` form and its case, `/`, and non-ASCII. Until then, cases are ASCII only.
-- **SS-Q2.** Which number forms count as an integer `volume` when reading: `8.0`, `1e1`, `-0`? A non-integer number
-  inside 0–10 is rounded (R6). Are these "numbers" too? Only 6.6, 10, 10.4, 12 and −1 are tested.
-- **SS-Q3.** AC-4 lists "volume NaN", but JSON has no NaN. A record containing `NaN` isn't valid JSON. Is that the
-  whole record unreadable (AC-7, all defaults) or only `volume` (AC-4)? There is no NaN case.
-- **SS-Q4.** Does reading 6.6 → 7 write a debug log line? R6 says "every fallback writes one debug log line".
-  Rounding may not be a fallback. `F1-read-6.6-rounds-to-7` expects no log.
-- **SS-Q5.** In which order are the log lines written when several fields are bad? Every case has one bad field.
-- **SS-Q6.** What does the reader do with a duplicate key in the record?
-- **SS-Q7.** A `change` to a field's current value: a write and a notification, or nothing? There is no case.
+A missing field takes its default and logs one line, like any R6 fallback (`R7-missing-schemaVersion-is-v1`).

@@ -1214,6 +1214,10 @@
           },
           "expect": [
             {
+              "out": "log",
+              "field": "schemaVersion"
+            },
+            {
               "out": "record",
               "record": {
                 "childLock": false,
@@ -1229,7 +1233,8 @@
             }
           ]
         }
-      ]
+      ],
+      "note": "A missing field takes its default and every fallback logs one line (R6)."
     },
     {
       "id": "R6-childLock-on-ipad-ignored-and-dropped",
@@ -2715,6 +2720,842 @@
                 "windy": false
               },
               "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R6a-escape-quote",
+      "source": "gdd: settings-store.md R6a (strings escape only quote, backslash, U+0000-U+001F; SS-Q1)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"a\\\"b\",\"volume\":5,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "a\"b",
+                "volume": 5,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "volume",
+            "value": 6
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"a\\\"b\",\"volume\":6,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "a\"b",
+                "volume": 6,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "The reader accepts every JSON escape; the writer escapes only quote, backslash and control characters (as lowercase \\u00xx) and writes everything else raw."
+    },
+    {
+      "id": "R6a-escape-backslash",
+      "source": "gdd: settings-store.md R6a (strings escape only quote, backslash, U+0000-U+001F; SS-Q1)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"a\\\\b\",\"volume\":5,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "a\\b",
+                "volume": 5,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "volume",
+            "value": 6
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"a\\\\b\",\"volume\":6,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "a\\b",
+                "volume": 6,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "The reader accepts every JSON escape; the writer escapes only quote, backslash and control characters (as lowercase \\u00xx) and writes everything else raw."
+    },
+    {
+      "id": "R6a-escape-tab-escape-t",
+      "source": "gdd: settings-store.md R6a (strings escape only quote, backslash, U+0000-U+001F; SS-Q1)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"a\\tb\",\"volume\":5,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "a\tb",
+                "volume": 5,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "volume",
+            "value": 6
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"a\\u0009b\",\"volume\":6,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "a\tb",
+                "volume": 6,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "The reader accepts every JSON escape; the writer escapes only quote, backslash and control characters (as lowercase \\u00xx) and writes everything else raw."
+    },
+    {
+      "id": "R6a-escape-e-acute-raw",
+      "source": "gdd: settings-store.md R6a (strings escape only quote, backslash, U+0000-U+001F; SS-Q1)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"café\",\"volume\":5,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "café",
+                "volume": 5,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "volume",
+            "value": 6
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"café\",\"volume\":6,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "café",
+                "volume": 6,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "The reader accepts every JSON escape; the writer escapes only quote, backslash and control characters (as lowercase \\u00xx) and writes everything else raw."
+    },
+    {
+      "id": "R6a-escape-e-acute-u-escape",
+      "source": "gdd: settings-store.md R6a (strings escape only quote, backslash, U+0000-U+001F; SS-Q1)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"caf\\u00e9\",\"volume\":5,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "café",
+                "volume": 5,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "volume",
+            "value": 6
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"café\",\"volume\":6,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "café",
+                "volume": 6,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "The reader accepts every JSON escape; the writer escapes only quote, backslash and control characters (as lowercase \\u00xx) and writes everything else raw."
+    },
+    {
+      "id": "R6a-number-token-8.0",
+      "source": "gdd: settings-store.md R6a (any JSON number token is a number; SS-Q2)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8.0,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "Rounded by F1; rounding writes no log (SS-Q4)."
+    },
+    {
+      "id": "R6a-number-token-1e1",
+      "source": "gdd: settings-store.md R6a (any JSON number token is a number; SS-Q2)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":1e1,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 10,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "Rounded by F1; rounding writes no log (SS-Q4)."
+    },
+    {
+      "id": "R6a-number-token--0",
+      "source": "gdd: settings-store.md R6a (any JSON number token is a number; SS-Q2)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":-0,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 0,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "Rounded by F1; rounding writes no log (SS-Q4)."
+    },
+    {
+      "id": "R6a-bare-NaN-unreadable",
+      "source": "gdd: settings-store.md R6a (a bare NaN or Infinity is not JSON; SS-Q3); AC-7",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":NaN,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "record"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R6a-bare-Infinity-unreadable",
+      "source": "gdd: settings-store.md R6a (a bare NaN or Infinity is not JSON; SS-Q3); AC-7",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":Infinity,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "record"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R6a-duplicate-key-unreadable",
+      "source": "gdd: settings-store.md R6a (a duplicate key makes the record unreadable; SS-Q6)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":3,\"volume\":4,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "record"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R6a-log-order-R1",
+      "source": "gdd: settings-store.md R6a (several bad fields log in R1 order; SS-Q5)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":\"yes\",\"muted\":false,\"schemaVersion\":\"x\",\"themeId\":5,\"volume\":\"loud\",\"weather\":\"storm\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "log",
+              "field": "schemaVersion"
+            },
+            {
+              "out": "log",
+              "field": "volume"
+            },
+            {
+              "out": "log",
+              "field": "themeId"
+            },
+            {
+              "out": "log",
+              "field": "weather"
+            },
+            {
+              "out": "log",
+              "field": "keyboardRow"
+            },
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        }
+      ],
+      "note": "Members appear in byte order in the bytes; the logs follow R1's table order."
+    },
+    {
+      "id": "R6a-no-op-change",
+      "source": "gdd: settings-store.md R6a (a no-op change does nothing; SS-Q7)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "change",
+            "field": "muted",
+            "value": false
+          },
+          "expect": []
+        }
+      ]
+    },
+    {
+      "id": "R6a-no-op-slider-same-level",
+      "source": "gdd: settings-store.md R6a (no-op); F1",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":false,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":7,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": false,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 7,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "sliderRelease",
+            "x": 7.2
+          },
+          "expect": []
+        }
+      ]
+    },
+    {
+      "id": "R6a-lock-on-when-active-is-no-op",
+      "source": "gdd: settings-store.md R6a (no-op)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":true,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": true,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": true
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "setChildLock",
+            "on": true
+          },
+          "expect": []
+        }
+      ]
+    },
+    {
+      "id": "R6a-lock-on-after-run-only-off-is-a-change",
+      "source": "gdd: settings-store.md R6a (ON while stored true but childLockActive false is a real change; SS-Q7)",
+      "given": {
+        "platform": "macOS",
+        "settingsBytes": "{\"childLock\":true,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+      },
+      "draws": {},
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "read"
+          },
+          "expect": [
+            {
+              "out": "record",
+              "record": {
+                "childLock": true,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": true
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "setChildLock",
+            "on": false
+          },
+          "expect": [
+            {
+              "out": "notify",
+              "record": {
+                "childLock": true,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": false
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "setChildLock",
+            "on": true
+          },
+          "expect": [
+            {
+              "out": "write",
+              "bytes": "{\"childLock\":true,\"keyboardRow\":false,\"muted\":false,\"schemaVersion\":1,\"themeId\":\"dinosaurs\",\"volume\":8,\"weather\":\"clear\",\"windy\":false}"
+            },
+            {
+              "out": "notify",
+              "record": {
+                "childLock": true,
+                "keyboardRow": false,
+                "muted": false,
+                "schemaVersion": 1,
+                "themeId": "dinosaurs",
+                "volume": 8,
+                "weather": "clear",
+                "windy": false
+              },
+              "childLockActive": true
             }
           ]
         }

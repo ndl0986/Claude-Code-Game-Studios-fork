@@ -5,6 +5,10 @@ The written spec for every `contracts/<name>-vN/cases.json` (ADR-0004 D4). Every
 the tables below, and applies every FAIL rule **before** any case runs. No third-party schema validator is used
 (PKC-03(a)). A schema error is a FAIL that names the file and the JSON path.
 
+**Additions to ADR-0004 D4's example** (approved by the leader, 2026-11-18, TASK-068): the top-level `fixtures` map
+with `$fixture` / `patch` references (section 3), so a large input isn't repeated in every case; and a `source` that
+may append `"; adr: <file> <section>"` for a rule an ADR pins (section 2).
+
 **Self-test rule:** every rule marked **(S#)** below has a negative fixture in the harness's own tests that must
 FAIL. A rule added here without its negative fixture is REVISE at review (ADR-0004 D4).
 
