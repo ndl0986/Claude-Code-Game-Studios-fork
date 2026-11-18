@@ -109,7 +109,7 @@ that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per
 
 - A fifth Swift package `apple/ContractKit` is allowed **for tests only**: the shared contract discovery and strict
   structural check used by both the KidCore and Tools harnesses. It is never linked into the app. ADR-0002 D1 gets a
-  dated note (status stays Accepted); the ban grep covers it; PKC-03(a) reads the app project's package references and
+  dated note (status stays Accepted); the ban grep applies its import/platform rules to it, but not the JSON/decoding ban (test-only, never linked; leader clarification 2026-11-18 after TASK-079 S1 review); PKC-03(a) reads the app project's package references and
   the app's Package.resolved, so ContractKit is not a finding.
 
 ### K-37 App identifiers, signing and the SVG layer-id note (Luan, 2026-11-18)
