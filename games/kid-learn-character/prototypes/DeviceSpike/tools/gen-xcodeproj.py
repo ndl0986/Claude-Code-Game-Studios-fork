@@ -19,7 +19,7 @@ pkg_kit = add("pkg.SpikeKit", '{isa = XCLocalSwiftPackageReference; relativePath
 pkg_core = add("pkg.MorphCore", '{isa = XCLocalSwiftPackageReference; relativePath = ../TASK-033-anim-runtime/MorphCore; }')
 
 settings = {
-    "PRODUCT_NAME": "\"$(TARGET_NAME)\"", "PRODUCT_BUNDLE_IDENTIFIER": "com.galaxyandsun.spike.devicespike",
+    "PRODUCT_NAME": "\"$(TARGET_NAME)\"", "PRODUCT_BUNDLE_IDENTIFIER": "com.galaxyandsun.devicespike",
     "SDKROOT": "auto", "SUPPORTED_PLATFORMS": '"iphoneos iphonesimulator macosx"', "SUPPORTS_MACCATALYST": "NO",
     "TARGETED_DEVICE_FAMILY": "2", "IPHONEOS_DEPLOYMENT_TARGET": "26.0", "MACOSX_DEPLOYMENT_TARGET": "26.0",
     "GENERATE_INFOPLIST_FILE": "YES", "INFOPLIST_KEY_UILaunchScreen_Generation": "YES",

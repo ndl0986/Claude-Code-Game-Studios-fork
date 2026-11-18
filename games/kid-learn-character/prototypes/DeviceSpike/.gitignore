@@ -3,3 +3,4 @@ build/
 SpikeKit/.build/
 *.xcuserstate
 xcuserdata/
+tools/team-id.local
