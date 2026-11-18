@@ -118,9 +118,14 @@ corner of a keyboard holds more keys; game-qc-android item 3).
   and **any third simultaneous pointer is wrong at once** (a palm can't enter an ordered sequence;
   item 2). F2 is unchanged: random digits still pass with p = 10⁻⁴. A digit is otherwise entered on its touch *down*, or on
   accessibility activation (VoiceOver double-tap, Switch Control) of the key.
-- **Mac hardware digits:** keys 0–9 on the main row and the numeric keypad enter digits too
-  (keyboard-only grown-ups, art bible §7). Two digit keys down at once = wrong. A key already held
-  when the challenge opens is ignored until it is released. Other keys do nothing; Esc = Cancel.
+- **Hardware-keyboard digits (Mac and iPad)** *(TASK-083; K-19, K-21)*: on any hardware keyboard, the
+  main-row and numeric-keypad keys 0–9 enter digits too (keyboard-only grown-ups, art bible §7). The gate
+  takes them from Input as **`gateDigit(digit, anotherKeyHeld)`** (Input R8: resolved by R2, so the numpad
+  counts with Num Lock on or off and AZERTY's digit row by position; no ⌃, ⌥, ⌘ or Fn; no repeats).
+  `anotherKeyHeld` true = two digit keys down at once = **wrong**. A key already held when the challenge
+  opens is ignored until it is released (Input clears its held set on enter, so that key gives only
+  repeats and an up, which emit nothing). Other keys do nothing. **Esc = Cancel**, from Input's
+  **`gateCancel`**.
 - **Judging:** each digit is checked when entered. **The first wrong digit closes the challenge at
   once** (wrong). The fourth right digit opens the panel (G6).
 - **Dull on purpose** (item 4): a plain grown-up card on the dimmed stage. No sound, no animation, no
@@ -257,7 +262,7 @@ Moon sleep is a timer on Idle, not a state the grown-up sees.
 
 | System | Direction | What |
 |---|---|---|
-| Input & Key Filter (#2) | in / out | in: `gateTouch`, `openPanel` (chord), touches and keys in Challenge and Panel. out: enter/leave **Gate challenge** and **Panel open**. Done in **TASK-050**: the Gate challenge state, the exact chord (held set), the chord ignored during the challenge. Landed in TASK-054a (5e1c365): I1 the chord judged from OS key state if AC-1k6 passes (safety), I2 `gateTouch(ended)` on leaving the slop region, I3 ⌘ swallowed in every state while locked (safety), I4 the chord on Title and return to the origin state |
+| Input & Key Filter (#2) | in / out | in: `gateTouch`, `openPanel` (chord), `gateDigit(digit, anotherKeyHeld)` and `gateCancel` in Challenge (TASK-083), touches in Challenge and Panel, keys in Panel (Input emits nothing there; they pass to the panel). out: enter/leave **Gate challenge** and **Panel open**. Done in **TASK-050**: the Gate challenge state, the exact chord (held set), the chord ignored during the challenge. Landed in TASK-054a (5e1c365): I1 the chord judged from OS key state if AC-1k6 passes (safety), I2 `gateTouch(ended)` on leaving the slop region, I3 ⌘ swallowed in every state while locked (safety), I4 the chord on Title and return to the origin state |
 | Settings Store (#4) | out | writes `volume`, `muted`, `themeId`, `weather`, `windy`, `keyboardRow`, `childLock`; Reset (R9). K-21's "off for this run" changes R1/R8 and adds the runtime `childLockActive` with a write-free R10 notification (G11): **TASK-054 S1/S2, landed in TASK-054a (5e1c365)**; TASK-050 made OFF run-only |
 | Press Queue (#7) | out | challenge open → **freeze**, close → **resume** (TASK-050); panel open → clear and settle (R8, K-15) |
 | Reveal Stage (#9) | out | challenge open → **freeze/resume** pair next to settle (**TASK-049**); panel open → settle to formed |
