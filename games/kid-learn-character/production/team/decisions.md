@@ -105,6 +105,14 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-15 Press Queue rules (Luan, 2026-11-18, TASK-043 questions)
+
+- Opening the grown-up panel **clears the queue**; the current reveal settles to formed under the dim.
+- App to background mid-reveal: **clear the queue**, the creature is shown formed on return; the next
+  press starts at once.
+- Reduce Motion keeps the **3 s hold** (it changes motion, not pace).
+- A hint touched while the queue is full (ignored) **stays** on screen.
+
 ### K-14 Merge authority (Luan, 2026-11-18)
 
 The leader merges a finished task into `docs/kid-learn-character-plan` and pushes **without asking
