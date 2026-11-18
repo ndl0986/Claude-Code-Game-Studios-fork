@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent read by game-dev-ios, merged 2026-11-18)
 > **Author**: game-art-content for Luan (TASK-053); plan reviewed by game-dev-ios
-> **Last Updated**: 2026-11-18
+> **Last Updated**: 2026-11-18 (TASK-054c: K-25 edge model and thresholds; live halo radius)
 > **Last Verified**: 2026-11-18
 > **Implements Pillar**: Pillar 3 (Calm Magic); serves Pillar 5 (Safe by Design) and Pillar 1 (the glyph stays first)
 
@@ -89,8 +89,9 @@ ever competes with the letter.
 - **A change from the panel fades in over ~2 s** (`weather_fade_s`) while the panel is open (K-24), so the parent
   sees it on close. (The art bible's slow crossfade is for time of day only.)
 - **Inside the glyph's glow:** weather fades to nothing near the glyph. Each element's alpha is multiplied by the
-  halo factor F3d, using the **glyph box from Reveal Stage R10** and the **halo glow radius from Cast Rendering R5**
-  (230 u). Neither is hard-coded here. The factor is 1 when no glyph is shown.
+  halo factor F3d, using the **glyph box from Reveal Stage R10** and **the halo's current glow radius published by
+  Cast Rendering R5** (230 u, 161 u at full Night; its F8). Neither is hard-coded here. The factor is 1 while the
+  Reveal Stage's `haloOn` is false.
 - Weather is **sky**: it counts toward the sky brightness cap (R5) and is drawn behind the hills.
 
 **R3a. Mashing thins the weather** (art bible §2, state table, Mashing row: "weather particles halve").
@@ -106,13 +107,20 @@ ever competes with the letter.
 
 **R5. Readability in every look and weather** (art bible §1, §2, §4).
 - **The caps** (art bible §2, §4 rules 1–3): every sky stop, sun, cloud, streak and flake is at **L ≤ 0.69**; the
-  glyph reaches **≥ 3:1** against the sky's mid band through its fill or its amber outline; the sky uses **no
-  Letter Gold** and its yellow stays pale (the sun).
+  glyph reaches **≥ 3:1** against the sky's mid band through its fill or its edge **at the looks themselves**, and
+  **≥ 2.5:1 inside a crossfade** (K-25, a dated exception in the art bible); the sky uses **no Letter Gold** and its
+  yellow stays pale (the sun).
 - **Build check (AC-5):** over every look pair in the cycle (Night → Morning → Day → Dusk → Night) at blend weights
   0, 0.25, 0.5, 0.75 and 1 (F1), × the four weathers, × the horizon lift off and on (R7), the check computes every
-  sky colour and fails the build on any cap breach. The glyph's edge style (fill and amber outline) is **blended with
-  the same weight** (F2) before its contrast is measured: 4 × 5 × 4 × 2 = **160 cases**. Because the extension
-  clamps to the end stops (R6), the extended areas are covered by the same colours.
+  sky colour and fails the build on any cap breach: 4 × 5 × 4 × 2 = **160 cases**. The glyph's edge follows **the
+  same edge model as Cast Rendering F8** (K-25): cream `#f8efdc` at 100% where the case's blended sky-mid L is below
+  L_x ≈ 0.308, amber `#80450f` at or above it. The 1 s switch cross-dissolve is **excluded** (it is a wall-clock
+  moment, not a case). The check asserts **≥ 3:1 at w = 0 and 1** and **≥ 2.5:1 at w = 0.25, 0.5, 0.75**, against
+  the case's blended sky mid band, through the better of the fill (`#ffd36e`) and the edge. Because the worst point
+  (the crossover, where cream and amber are equal) can fall between samples, the check **also asserts the edge's
+  contrast at L_x itself is ≥ 2.5:1**, which bounds every in-between frame. With the shipped data: lowest sampled
+  2.68:1 (Night→Morning, w 0.5), at L_x 2.57:1, at the looks 4.36:1 (Day) and above. Because the extension clamps to the end stops (R6), the extended
+  areas are covered by the same colours.
 - **Hints** sit on their own cream bubble with gold ink (Hint Letters R12), so the sky does not carry their
   contrast; they are in the sky band y 150–420, where only stars, the sun, clouds and weather can be.
 - **Creatures** keep their 80% Ink outline in every look (art bible §4), which separates them from any ground.
@@ -187,7 +195,7 @@ The Scene is continuous; these are the conditions it runs under.
 |---|---|---|
 | Settings Store | in | `weather`, `windy`, and the change notification (its R10) |
 | Reveal Stage | in | the visible rect, the ground line (with `row_lift`), the play clock and `freeze`/`resume`, `mashing`, the glyph box and whether the glyph's halo is shown (its R8, R10) |
-| Cast Rendering | in / out | in: the halo glow radius (its R5, 230 u); out: `look`, `lookBlend` for the per-look glyph and creature changes (follow-up) |
+| Cast Rendering | in / out | in: the halo's current glow radius (its R5, 230 → 161 u at Night) and the glyph edge model (its F8, K-25); out: `look`, `lookBlend` for the per-look glyph and creature changes (follow-up) |
 | Parade | in | `paradeWalking` (the horizon lift) |
 | Parent Gate & Grown-up Panel | out | `look`, `lookBlend` for the moon (daytime moon, follow-up); the panel's dim is drawn over the Scene |
 | Hint Letters | none directly | hints sit in the sky band, on their own bubbles |
@@ -224,8 +232,10 @@ blended in **linear RGB**:
 c = toSRGB( lerp( toLinear(a), toLinear(b), w ) )
 ```
 Relative luminance is linear in linear RGB, so `L(c)` lies between `L(a)` and `L(b)`: if both ends pass the L ≤ 0.69
-cap, every blend does **by construction**. The **3:1 glyph contrast is not guaranteed by construction** (it depends on
-two blended colours), so the build check samples w = 0.25, 0.5, 0.75 (R5).
+cap, every blend does **by construction**. The **glyph contrast is not guaranteed by construction** (it depends on
+the blended sky and on which edge is drawn), so the build check samples w = 0.25, 0.5, 0.75 (R5; K-25). The edge is
+**never** colour-blended over sky L (a mixed edge drops to about 1.4:1); it switches at L_x with a 1 s dissolve
+(Cast Rendering F8).
 
 Example: Day mid `#a8c8e8` (L 0.56) and Dusk mid `#46558f` (L 0.10) at w 0.5 → L 0.33, between the two, under
 the cap.
@@ -238,7 +248,8 @@ the cap.
   `A` 12 u; the tilt as for rain.
 - **c. Clouds:** drift `≤ 8` u/s (×2 windy with rain or snow), wrapping across the visible rect width plus a margin.
 - **d. Halo factor:** with `d` = the element's distance from the glyph box centre (Reveal Stage R10) and `r` = the
-  halo glow radius (Cast Rendering R5, 230 u): `h = smoothstep(clamp(d / r, 0, 1))` while the halo is shown, else 1.
+  halo's current glow radius published by Cast Rendering R5 (230 u, 161 u at full Night):
+  `h = smoothstep(clamp(d / r, 0, 1))` while `haloOn` (Reveal Stage R10), else 1.
   An element at the glyph's centre is invisible; at `r` and beyond it is untouched.
 - **e. Factors:** `speed × 0.5` and `count × 0.5` under Reduce Motion (R8); `count × mash` under mashing (R3a), where
   `mash` fades between 1 and 0.5 over 0.5 s. Counts are applied by fading surplus elements' alpha, never by
@@ -306,7 +317,8 @@ shapes.
 - **Reveal Stage** (`design/gdd/reveal-stage.md`): the visible rect and ground line (R10, F1), the play clock and
   `freeze`/`resume` (R8), the glyph box and halo state. **Interface ask:** publish `mashing` (queue length ≥ 1 or an
   ignored press in the last 1 s, R3a).
-- **Cast Rendering** (`design/gdd/cast-rendering.md`): the halo glow radius (R5).
+- **Cast Rendering** (`design/gdd/cast-rendering.md`): the halo's current glow radius (R5) and the glyph edge model
+  (F8, K-25), which R5's build check shares.
 - **Parade** (`design/gdd/parade.md`): `paradeWalking`.
 - **Accessibility:** the Reduce Motion flag.
 
@@ -374,8 +386,11 @@ Logic criteria use an injected wall clock, play clock, settings and rect. Screen
    (± one frame); the same change while in the background shows Night on the first frame back.
 4. **AC-4 Weather caps.** For each weather, the element counts, opacities, speeds and sway stay within R3's limits on
    the four F4 rects; rain and snow show 2–3 clouds; clear shows none.
-5. **AC-5 Build check.** The check runs the 160 cases of R5 and passes the shipped data; a test palette with a cloud
-   at L 0.72, or a Day→Dusk mid-blend glyph contrast of 2.9:1, fails the build and names the case.
+5. **AC-5 Build check.** The check runs the 160 cases of R5 with Cast Rendering F8's edge model and passes the
+   shipped data (≥ 3:1 at w 0 and 1, lowest 4.36:1; ≥ 2.5:1 at the samples inside, lowest 2.68:1; ≥ 2.5:1 at L_x,
+   2.57:1). A test palette with a cloud at L 0.72, a look
+   at w 1 below 3:1, or the old edge (amber `#8a4b12`, cream at 85%: 2.32:1 inside) fails the build and names the
+   case. The 1 s switch dissolve is not a case.
 6. **AC-6 Windy.** With windy on: rain and snow tilt 15° and their clouds drift ×2; with cloudy or clear nothing
    changes.
 7. **AC-7 Panel pick.** Picking snow in the panel reaches full count within 2 s ± 0.1 s, before the panel closes.

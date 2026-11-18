@@ -2,7 +2,7 @@
 
 > **Status**: Approved (all 9 sections approved one by one by Luan, 2026-11-17)
 > **Owned By**: art-director
-> **Last Updated**: 2026-11-18 (K-16 amendments in §2, §4, §5, §7, §8; earlier the same day: §8 says where silhouette path data lives)
+> **Last Updated**: 2026-11-18 (K-25 glyph edge and crossfade contrast in §2, §4; K-16 amendments in §2, §4, §5, §7, §8; earlier the same day: §8 says where silhouette path data lives)
 > **Art Director Sign-Off (AD-ART-BIBLE)**: SKIPPED 2026-11-17 — lean mode
 
 `/art-bible` writes these nine sections in this order and replaces each
@@ -59,8 +59,8 @@ the right look.
 
 | Look | From | Sky top / mid / horizon | Hills back / front · ground | Light and sky elements | Glyph vs the sky's mid band |
 |---|---|---|---|---|---|
-| Morning | 06:00 | `#7f9fd6` / `#c7cde6` / `#f0c9b0` | `#8a9fc4` / `#9fb9b4` · `#f2dfc6` | Soft warm peach; low pale sun `#ecd29a`, no rays; 3–5 faint stars fading out | fill 1.1:1, so the amber outline `#8a4b12` carries it: **4.3:1** |
-| Day | 10:00 | `#6a9ad6` / `#a8c8e8` / `#c4d6e2` | `#7fa3c0` / `#8fb89a` · `#efe2c6` | Neutral, slightly cool; high sun `#ecd29a`; no stars | outline `#8a4b12`: **3.9:1** |
+| Morning | 06:00 | `#7f9fd6` / `#c7cde6` / `#f0c9b0` | `#8a9fc4` / `#9fb9b4` · `#f2dfc6` | Soft warm peach; low pale sun `#ecd29a`, no rays; 3–5 faint stars fading out | fill 1.1:1, so the amber outline ~~`#8a4b12`~~ `#80450f` carries it: ~~4.3:1~~ **4.8:1** *(K-25)* |
+| Day | 10:00 | `#6a9ad6` / `#a8c8e8` / `#c4d6e2` | `#7fa3c0` / `#8fb89a` · `#efe2c6` | Neutral, slightly cool; high sun `#ecd29a`; no stars | outline ~~`#8a4b12`~~ `#80450f`: ~~3.9:1~~ **4.4:1** *(K-25)* |
 | Dusk (home) | 16:00 | `#1f2a55` / `#46558f` / `#b8a0c8` | `#5a6a9c` / `#6f8aa6` · `#efe2c6` | Cool blue, lilac horizon; the prototype's stars | fill **5.0:1** |
 | Night | 19:30 | `#121833` / `#232d57` / `#3e4a7a` | `#2f3a63` / `#3d4d75` · `#a89d88` | Deep cool blue, moonlit; more stars, twinkling at ≤ 0.35 Hz | fill **9.3:1** |
 
@@ -71,10 +71,21 @@ Contrast is WCAG relative luminance against the glyph's colours: top `#fff1b8` (
 
 - **Sky brightness cap:** no sky stop, sun, moon, cloud or snowflake is brighter than the glyph's
   middle colour (L 0.69). **Frame cap:** nothing on screen is brighter than the glyph's top colour.
-- **Morning and day:** the glyph's cream outline becomes a deep amber outline (`#8a4b12`, 6 px) and
-  its halo a saturated amber, so it stays the warmest thing against a pale sky.
+- **Morning and day:** the glyph's cream outline becomes a deep amber outline (~~`#8a4b12`~~ `#80450f`, 6 px;
+  K-25) and its halo a saturated amber, so it stays the warmest thing against a pale sky.
 - **Night:** the glyph drops its palest stop and its halo shrinks to 70%; the creature and ground
   take a 15% ambient dim. The glyph itself never dims. Night stays dim and calm for play before bed.
+- *(Amendment 2026-11-18, K-25: glyph edge and contrast during sky crossfades.)*
+  - **The edge switches with the sky:** the glyph's edge is **cream `#f8efdc` drawn at 100%** (no longer 85%) on
+    skies whose mid band is darker than **L_x ≈ 0.308**, and the **deep amber `#80450f`** (was `#8a4b12`; L 0.089)
+    on lighter ones, with a **1 s wall-clock cross-dissolve** at the switch. A colour blend between the two over a
+    range of sky would drop to about 1.4:1, so it is never used.
+  - **Exception to rule 2 of Section 4 (≥ 3:1):** at the looks themselves the glyph is ≥ 3:1; **inside** a 15-min
+    time-of-day crossfade (or the 3 s clock-jump fade) it is **≥ 2.5:1** (measured minimum 2.57:1 at sky L 0.307),
+    for a few minutes around 16:04–16:12 and 06:04–06:13. The halo behind the glyph still carries it, and the child
+    never watches a crossfade happen. The 1 s switch dissolve is outside the check.
+  - **The saturated amber halo** of Morning and Day is `rgba(246, 169, 59, 0.95)`: `#f6a93b`, the glyph's own
+    bottom stop, so it stays part of the letter (Cast Rendering R5, F8).
 - **The moon (the parent gate)** is dimmed to `#e6d6a4` (L 0.68), and shown at 70% opacity as a
   "daytime moon" in morning and day (Luan, 2026-11-17). It meets the sky cap and draws less of the
   child's attention; parents still find it.
@@ -192,7 +203,7 @@ right, or gold for "well done": every press is answered the same way.
 
 | Token | Hexes | Meaning and use |
 |---|---|---|
-| **Letter Gold** | fill `#fff1b8` / `#ffd36e` / `#f6a93b`; outline `#8a4b12`; token ink `#b9631c` | "A letter or number lives here." The glyph, hints, queued tokens and the title's play button (their door, Section 2). Nothing else is gold. |
+| **Letter Gold** | fill `#fff1b8` / `#ffd36e` / `#f6a93b`; outline `#8a4b12` (the glyph's Morning/Day edge is `#80450f`, K-25); token ink `#b9631c` | "A letter or number lives here." The glyph, hints, queued tokens and the title's play button (their door, Section 2). Nothing else is gold. |
 | **Starlight** | `#fbeec8` (L 0.86) | "I heard you." Sparkles, pale stardust specks, sky stars at ≤ 80% alpha; also the moon's progress ring. |
 | **Ink** | `#2a2340`; creature outline at **80%** in every look | "A hero" (Section 3): outlines, pupils, smiles. |
 | **Stage Cream** | stage `#efe2c6` → `#e3d1ae`; highlight `#f8efdc` (L 0.87); bone `#f3e6c8`; card `#fbf4e6` | Ground, token bubbles, horns, toes, eye whites. |
@@ -211,7 +222,8 @@ creature has formed, the stardust fades out and no gold stays on the cast member
 
 Section 2's table holds every stage hex. A look or a weather tint is valid when all three hold:
 1. every sky stop, sun, moon, cloud and flake stays at or below L 0.69;
-2. the glyph reaches ≥ 3:1 against the sky's mid band, through its fill or its amber outline;
+2. the glyph reaches ≥ 3:1 against the sky's mid band, through its fill or its amber outline *(K-25 exception:
+   ≥ 2.5:1 inside a sky crossfade; see Section 2, "The glyph stays first")*;
 3. it uses no Letter Gold, and any stage yellow stays pale, like the sun `#ecd29a`.
 
 **Temperature:** the glyph is the warmest thing in every look. *Morning:* cool at the top, warmth
