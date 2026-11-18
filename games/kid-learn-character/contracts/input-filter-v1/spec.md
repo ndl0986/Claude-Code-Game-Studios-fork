@@ -35,7 +35,7 @@ D6).
 
 **Not covered here, and why:**
 - **Hardware system keys and AC-1m:** they never become a `KeyEvent` (IF-Q2). AC-1m is tested in the **adapter
-  suites**, with device checks P-4 and M-3 as the on-hardware confirmation.
+  suites** (the iOS, macOS and Android adapter tests), with device checks P-4 and M-3 as the on-hardware confirmation.
 - **The numpad and Esc mappings:** the adapters give a keypad key `character` nil plus its digit `positionKey`
   (IF-Q1), and Esc `character` "\u001b" (IF-Q8). Those mappings are tested in the adapter suites; KidCore's cases
   start from the adapter's output.
