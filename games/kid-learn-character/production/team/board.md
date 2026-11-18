@@ -33,7 +33,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-051 | GDD: App Shell & Title (`design/gdd/app-shell-title.md`) via /design-system | design | game-dev-ios (review: game-dev-android) | DONE `0bb713b`, merged 2026-11-18 (review: game-dev-android APPROVE after REVISE) | `design/TASK-051-gdd-app-shell-title` | 2026-11-18 |
 | TASK-052 | GDD: Child Lock-in (`design/gdd/child-lock-in.md`) via /design-system | design | game-dev-android (review: game-qc-ios) | CODE REVIEW: done `3a06dc4` (lean NEEDS REVISION → fixed); game-qc-ios independent read | `design/TASK-052-gdd-child-lock-in` | 2026-11-18 |
 | TASK-053 | GDD: Scene: Time of Day & Weather (`design/gdd/scene-time-weather.md`) via /design-system (Vertical Slice) | design | game-art-content (review: game-dev-ios) | IN PROGRESS: PLAN APPROVED 2026-11-18 after REVISE (game-dev-ios; one moon = the gate) | `design/TASK-053-gdd-scene-time-weather` | 2026-11-18 |
-| TASK-054 | Follow-up batch to Approved GDDs (Settings S1–S2, Input I1–I4 incl. 2 safety items, Cast Rendering C1–C2, Hint Letters H1, Parent Gate P1, Privacy V1): `production/team/TASK-054-followups.md` | design | game-art-content (review: game-qc-ios) | QUEUED (send after TASK-048/051/052 merge) | `design/TASK-054-followups` | 2026-11-18 |
+| TASK-054 | Follow-up batch to Approved GDDs (Settings S1–S2, Input I1–I4 incl. 2 safety items, Cast Rendering C1–C2, Hint Letters H1, Parent Gate P1, Privacy V1): `production/team/TASK-054-followups.md` | design | 054a game-dev-android (S1–S2, I1–I4, H1, A1; review game-qc-ios) · 054b later (C1–C2, P1, V1) | 054a SENT 2026-11-18; 054b QUEUED | `design/TASK-054a-followups` | 2026-11-18 |
 
 ## Leader log
 
