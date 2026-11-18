@@ -41,6 +41,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-059 | /create-architecture: master architecture (module map, seams, Android mirror) + prioritised ADR work plan + first scaffold story | architecture | game-dev-ios (review: game-dev-android) | DONE `c209e63`, merged 2026-11-18 (review: game-dev-android APPROVE); engine ref at docs/engine-reference-local/native-apple/ | `design/TASK-059-architecture` | 2026-11-18 |
 | TASK-060 | GDD: On-screen Keyboard Row (`design/gdd/onscreen-keyboard-row.md`) via /design-system (Vertical Slice) | design | game-art-content (review: game-dev-android) | DONE `71a8d14`, merged 2026-11-18 (review: game-dev-android APPROVE after REVISE) | `design/TASK-060-gdd-keyboard-row` | 2026-11-18 |
 | TASK-061 | GDD: Accessibility (`design/gdd/accessibility.md`) via /design-system (Vertical Slice) | design | game-qc-ios (review: game-qc-android) | DONE `8e85f7d`, merged 2026-11-18 (review: game-qc-android APPROVE; nits included) | `design/TASK-061-gdd-accessibility` | 2026-11-18 |
+| TASK-062 | Follow-ups from Keyboard Row + Accessibility (row band, Smart Invert, twinkle steady, idle timing, sparkles unchanged, play button 0.38 Hz, reduceMotion flag source) | design | game-art-content (review: game-qc-ios) | SENT 2026-11-18 | `design/TASK-062-followups` | 2026-11-18 |
 | TASK-063 | ADR-0002 module layout and seams (via /architecture-decision; Proposed → Luan accepts) | architecture | game-dev-ios (review: game-dev-android) | REWORK: game-dev-android read REVISE (String iteration, modifiersChanged, KeyStateQuery shape, UInt64 scope, kioskModeOn registry); then Luan accepts | `design/TASK-063-adr-0002` | 2026-11-18 |
 
 ## Leader log
@@ -114,3 +115,4 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 - 2026-11-18: TASK-059b merged. TASK-063 ADR-0002 sent.
 - 2026-11-18: TASK-060 Keyboard Row merged (K-14), Vertical Slice 2/3; Key Table is schema v2.
 - 2026-11-18: TASK-061 Accessibility merged (K-14). Vertical Slice GDDs 3/3; 17 GDDs approved. Reviewer nits merged too (8e85f7d).
+- 2026-11-18: TASK-062 sent. Leader calls: RM sparkles unchanged; play button keeps 0.38 Hz (art bible amended).
