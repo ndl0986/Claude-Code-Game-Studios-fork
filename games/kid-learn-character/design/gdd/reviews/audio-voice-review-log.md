@@ -103,3 +103,8 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md 1dba2cd72a89be26a558e93092dc5bc
 Review mode: lean · Workflow: standard
 Change: R6 and AC-21: a frozen sound resumes from the frame reached at the freeze moment or up to cut_settle_s earlier (a little heard again, nothing skipped; measured 0–17 ms, ADR-0010 H-1), testable as freezeFrame − cut_settle_s × rate ≤ resume ≤ freezeFrame. The nit: the players "stop playing" (API-neutral) instead of "are paused". Knob row reworded to match.
 Reviewed-Content-Hash: design/gdd/audio-voice.md 6f34636324f22949650cd130ff17dcfaed52bb56
+
+## Update — 2026-11-18 — TASK-093 knob wording (no re-review)
+Review mode: lean · Workflow: standard
+Change: the cut_settle_s knob row's Effect now says "the player is stopped" (was "stopped or paused"), matching R6's API-neutral wording.
+Reviewed-Content-Hash: design/gdd/audio-voice.md 67279ba7ce2335c2b2f9296904aea2a9648427f4
