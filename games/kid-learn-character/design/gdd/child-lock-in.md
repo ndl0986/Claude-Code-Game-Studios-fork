@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent read by game-qc-ios, merged 2026-11-18; TASK-054a merged 2026-11-18 — Mac release ACs NOT ASSESSED until a Mac build runs AC-1k6 and the real-Mac ACs)
 > **Author**: game-dev-android for Luan (TASK-052); plan reviewed by game-qc-ios
-> **Last Updated**: 2026-11-18 (TASK-056a cross-review fixes)
+> **Last Updated**: 2026-11-18 (TASK-057a re-run info notes)
 > **Last Verified**: 2026-11-18, against ADR-0001 Decision 9 (a–c), the TASK-033 spike report (Child lock-in),
 > Input & Key Filter R5/R6 and its Gate challenge state, Settings Store R1/R8 (TASK-050, K-21; `childLockActive` landed in TASK-054a, 5e1c365), App Shell & Title
 > (TASK-051) R1/R7, the Parent Gate & Grown-up Panel interface (TASK-048: G2, G7, G8, G11, `panelDidClose`), Privacy & Kids Compliance PKC-07, decisions K-10, K-12, K-19, K-21, K-23
@@ -75,8 +75,8 @@ gives up quietly if it can't start, and comes off the moment they turn it off or
 - **Never blockable, by design:** a long press of the power key forces a shutdown. That is the grown-up's hardware
   way out of last resort.
 
-**R3. When it engages.** The kiosk is applied only when **all** of these hold (App Shell's "ready" is the first
-four; Child Lock-in adds 5 and 6):
+**R3. When it engages.** The kiosk is applied only when **all** of these hold (App Shell's "ready" is items 1, 2 and 4;
+Child Lock-in adds 3, 5 and 6):
 
 1. the first frame has been drawn;
 2. the ⌃⌥⌘Q chord handler is installed (Input R6);
@@ -228,6 +228,7 @@ failed (the timer counted 0.2 s).
 | Case | What happens |
 |---|---|
 | **Lock stored ON, the app launches** | Waiting from the settings read; Locked once R3 holds (F1). |
+| **⌘ swallowed before the chord works** (lock stored ON, the start of Waiting) | `kioskModeOn` is set at the settings read, so ⌘-keys are swallowed from then on, possibly before the ⌃⌥⌘Q handler is installed. Accepted, not a trap: the window is at most `engage_timeout_s` (5 s, R7) and in practice the launch up to the first frame; no presentation options are applied yet, so the Dock, menu bar and Force Quit (⌥⌘Esc, a system hotkey the app's monitor never sees) all still work. The real-Mac run of Input AC-1k6 should also note how long this window is and that ⌥⌘Esc works during it *(TASK-057 R-2)*. |
 | **Lock ON, the chord handler fails to install** | Never Locked; after 5 s Off with the flag; the panel shows "Child lock couldn't turn on" (R7). |
 | **The grown-up clicks another app during launch** | Suspended: the timer pauses; Locked when the app is active again. |
 | **Turned ON in the panel** | Locked after `panelDidClose` (R3). |
