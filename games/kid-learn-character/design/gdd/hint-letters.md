@@ -193,7 +193,9 @@ unchanged.
 **R12. The look** (art bible §3, §4, §7). A rounded square bubble `hint_size` 120 units (corner radius 36%),
 highlight cream `#f8efdc`, the letter in Letter Gold ink `#b9631c` at about 80 units (0.66 × size) in the bundled
 glyph font, a soft gold glow disk behind it and one twinkle star at the top-right corner (one-shot `drawHints`).
-Gold means "a letter lives here" (art bible §4). Hints are drawn above the sky and below the glyph and creature.
+Gold means "a letter lives here" (art bible §4). Draw order is the Reveal Stage's (its R10): hints are drawn above the creature, the glyph, the specks and the
+sparkles, and below the queue tokens and the moon, matching the touch order (Input R7: a hint is above a cast
+member).
 
 ### States and Transitions
 
@@ -293,8 +295,8 @@ This is stated, not hidden; it occurs only on a small Mac window.
 - **No free slot** (a wide creature plus occupied slots) → no spawn; retried at the next gap (R5, R6).
 - **A jitter fails a clearance** → redrawn up to 4 times, then zero jitter, then the next slot (R5).
 - **A creature appears where a hint already is** (a reveal starts after the hint spawned): the hint is not moved;
-  the cast clearance applies to the next spawns. The hint is drawn below the creature (R12), and the creature's
-  touch layer is below the hint's (Input R7), so a touch on the overlap is a hint press; the overlap lasts at most
+  the cast clearance applies to the next spawns. The hint is drawn above the creature (R12, Reveal Stage R10), and
+  the creature's touch layer is below the hint's (Input R7), so what the child sees on top is what a touch hits; the overlap lasts at most
   the hint's remaining life.
 - **The child touches a fading hint** → it counts (R6), and if ignored it restarts its life (R8).
 - **Two fingers on two hints** → two presses in the sorted batch order (Input R7); each hint follows its own
