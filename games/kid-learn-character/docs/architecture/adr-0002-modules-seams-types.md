@@ -249,8 +249,12 @@ against it.
 ## Risks
 - **Apple ppi is NOT SOURCEABLE.** No public API gives an Apple screen's pixel density, so `DisplayMetrics.ppiX/Y`
   comes from a bundled device-model table until ADR-0006 sources it. **Unknown model:** use a conservative ppi
-  that makes physical targets **larger, never smaller** (the lowest ppi in the table for that device class), and
+  that makes physical targets **larger, never smaller** (~~the lowest ppi in the table for that device class~~), and
   write one `DebugLog` line naming the model. Android reads `xdpi`/`ydpi`.
+  - *Amendment 2026-11-18 (K-34, Luan; status unchanged, Accepted):* the direction above was inverted. The rule is
+    **assume the HIGHEST ppi in the device class, so physical targets never shrink** (a target of M mm is drawn as
+    M × ppi_assumed / 25.4 px, so assuming a lower ppi than the real one would make it smaller). ADR-0006 D7 is the
+    detailed rule (the iPad table, the Mac `CGDisplayScreenSize` path, the 72 dpi no-EDID case).
 - **The ban grep misses a case** (a type alias, a new API). Mitigation: the committed API surface and code review;
   the grep list grows by ADR revision.
 - **Iteration order slips in through a library call.** Mitigation: contract cases that shuffle inputs (ADR-0004).

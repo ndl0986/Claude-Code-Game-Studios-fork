@@ -165,6 +165,7 @@ interfaces:
     signal_signature: "tick(now:) on the uptime clock, once per frame before drawing"
     referenced_by:
       - docs/architecture/adr-0002-modules-seams-types.md
+      - docs/architecture/adr-0006-stage-runtime.md
     added: 2026-11-18
     revised: ""
   - contract: platform_seams
@@ -178,6 +179,7 @@ interfaces:
     referenced_by:
       - docs/architecture/adr-0002-modules-seams-types.md
       - docs/architecture/adr-0005-settings-persistence.md
+      - docs/architecture/adr-0006-stage-runtime.md
     added: 2026-11-18
     revised: ""
   - contract: freeze_settle_chain
@@ -294,6 +296,16 @@ api_decisions:
     reason: "one all-or-nothing record, one app-written key (PKC-05), one privacy reason CA92.1 (PKC-09), no sync (PKC-01, K-12)"
     referenced_by:
       - docs/architecture/adr-0005-settings-persistence.md
+    added: 2026-11-18
+    revised: ""
+  - purpose: stage_view
+    status: active
+    api: "one SKView per window via UIViewRepresentable / NSViewRepresentable, implementing RenderSink; display link targetTimestamp -> tick(now:), 30-60 fps preferred 60; fixed layer zPositions in Reveal Stage R10 order; gate and panel as SwiftUI overlays in the same window"
+    not: "SwiftUI SpriteView; a separate window, sheet or popover for the gate or panel; fixed-step catch-up loops; UIRequiresFullScreen"
+    adr: docs/architecture/adr-0006-stage-runtime.md
+    reason: "control over accessibilityIgnoresInvertColors and the frame source; never resign key (Child Lock-in R5); time-based rules"
+    referenced_by:
+      - docs/architecture/adr-0006-stage-runtime.md
     added: 2026-11-18
     revised: ""
 
