@@ -41,6 +41,7 @@ struct AudioScreen: View {
                 }
                 Button("Tone mute") { audio?.toneTest(.mute, on: .voice) }
                 Button("Tone freeze") { audio?.toneTest(.freeze, on: .music) }
+                Button("Freeze continuity") { audio?.continuityTest(on: .voice) }
                 Button("Tone + arm 5 s") { audio?.toneArmed5s() }
                 #if os(iOS)
                 Button("Simulate media reset") { audio?.simulateMediaServicesReset() }

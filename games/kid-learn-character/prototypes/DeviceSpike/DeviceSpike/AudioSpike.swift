@@ -33,6 +33,9 @@ final class AudioSpike: @unchecked Sendable {
         var pending: (AVAudioPCMBuffer, String)?
     }
     private var ps: [PlayerState]
+    // ADR-0010 P-7/M-14 continuity measurement (DeviceSpike only)
+    private var lastFreezeHost: UInt64 = 0, lastRewind: AVAudioFramePosition = 0
+    private var lastFreezeRaw: [Int: AVAudioFramePosition] = [:], lastResumeFrom: [Int: AVAudioFramePosition] = [:]
     private var uiNext = 0
     var log: (String) -> Void = { _ in }
 
@@ -118,6 +121,9 @@ final class AudioSpike: @unchecked Sendable {
         let notes = [523.25, 659.25, 783.99, 1046.5, 783.99, 659.25, 523.25, 659.25]
         buffers["music"] = make(2.0) { t in let k = min(notes.count - 1, Int(t / 0.25)); return 0.4 * sin(2 * .pi * notes[k] * t) * exp(-(t - Double(k) * 0.25) * 4) }
         buffers["tone100"] = make(2.0) { t in 0.891 * sin(2 * .pi * 100 * t) }   // ADR-0010 P-7/M-14 test tone, −1 dBFS
+        // ADR-0010 P-7/M-14 continuity: a linear chirp 200 → 2000 Hz over 2 s; aperiodic, so the content frame at any
+        // output sample is found unambiguously by correlation
+        buffers["chirp"] = make(2.0) { t in 0.891 * sin(2 * .pi * (200 * t + 450 * t * t)) }
         log("primed \(buffers.count) buffers at \(format.sampleRate) Hz mono")
     }
 
@@ -210,6 +216,7 @@ final class AudioSpike: @unchecked Sendable {
         queue.async {
             for i in self.players.indices where self.ps[i].state == .sounding {
                 self.ps[i].frozenAt = max(0, self.currentSample(i) - self.ps[i].startSample)
+                self.lastFreezeHost = mach_absolute_time(); self.lastFreezeRaw[i] = self.ps[i].frozenAt
                 self.ps[i].state = .frozen; self.ps[i].stopped = false; self.ps[i].gen += 1
                 let g = self.ps[i].gen, p = self.players[i]
                 p.mix.outputVolume = 0
@@ -232,7 +239,12 @@ final class AudioSpike: @unchecked Sendable {
                     // ADR-0010 D7: rewind = max(20 ms, actual IO period + 5 ms), capped at cutSettle, so nothing is skipped
                     // (the captured position runs ahead by the schedule-to-first-render delay, ≤ one IO period; H-1)
                     let rewindS = min(self.cutSettle, max(0.020, self.ioBufferMs / 1000 + 0.005))
+                    if self.ioBufferMs / 1000 + 0.005 > self.cutSettle {   // ADR-0010 Risks (game-dev-android): capped rewind
+                        self.log(String(format: "IO period %.1f ms + 5 ms > cut_settle_s %.0f ms: the capped rewind may skip up to %.1f ms",
+                                        self.ioBufferMs, self.cutSettle * 1000, self.ioBufferMs + 5 - self.cutSettle * 1000))
+                    }
                     let rewind = AVAudioFramePosition(rewindS * self.format.sampleRate)
+                    self.lastResumeFrom[i] = max(0, self.ps[i].frozenAt - rewind); self.lastRewind = rewind
                     self.schedule(i, b, name: "resume", handed: ProcessInfo.processInfo.systemUptime, from: max(0, self.ps[i].frozenAt - rewind))
                     self.log("resume player \(i) from frame \(self.ps[i].frozenAt)")
                 }
@@ -285,13 +297,20 @@ final class AudioSpike: @unchecked Sendable {
     private let tapLock = NSLock()
     private var tapOn = false, tapMax: Float = 0, tapA: Float = 0, tapB: Float = 0
     private var tapInstalled = false
+    private var captureOn = false, capture: [Float] = [], captureStart: AVAudioFramePosition?
+    private var captureAnchor: (host: UInt64, sample: AVAudioFramePosition)?
 
     private func ensureTap() {
         guard !tapInstalled else { return }
         tapInstalled = true
-        engine.mainMixerNode.installTap(onBus: 0, bufferSize: 1024, format: nil) { [weak self] buf, _ in
+        engine.mainMixerNode.installTap(onBus: 0, bufferSize: 1024, format: nil) { [weak self] buf, when in
             guard let self, let d = buf.floatChannelData?[0] else { return }
             self.tapLock.lock(); defer { self.tapLock.unlock() }
+            if self.captureOn {                                   // P-7/M-14 continuity: samples on the output timeline
+                if self.captureStart == nil, when.isSampleTimeValid { self.captureStart = when.sampleTime }
+                if when.isHostTimeValid, when.isSampleTimeValid { self.captureAnchor = (when.hostTime, when.sampleTime) }
+                self.capture.append(contentsOf: UnsafeBufferPointer(start: d, count: Int(buf.frameLength)))
+            }
             var a = self.tapA, b = self.tapB
             for i in 0..<Int(buf.frameLength) {
                 let x = d[i]
@@ -329,6 +348,57 @@ final class AudioSpike: @unchecked Sendable {
             if test == .mute { self.setMuted(false) }
         }
     }
+    /// ADR-0010 D7 on the device (P-7 / M-14 measure, game-qc-ios): plays the chirp on a bus, freezes at 0.8 s and resumes
+    /// at 1.1 s, with the main mixer tapped. From the tap: the content frame actually audible at the freeze instant
+    /// (correlation just before it, gain 1, mapped through the tap's host/sample times), the frame the app resumed from,
+    /// Δ = resume − freeze (pass when −cut_settle_s ≤ Δ ≤ 0, Audio AC-21) and the start delay (captured − audible),
+    /// logged against the rewind (if the delay ever reaches the rewind, the IO-period term is wrong for this device).
+    func continuityTest(on bus: Bus) {
+        ensureTap()
+        guard let chirp = buffers["chirp"], let idx = players.firstIndex(where: { $0.bus == bus }) else { return }
+        tapLock.lock(); captureOn = false; capture = []; captureStart = nil; captureAnchor = nil; tapLock.unlock()
+        play("chirp", on: bus)
+        let q = DispatchQueue.main
+        q.asyncAfter(deadline: .now() + 0.3) { self.tapLock.lock(); self.captureOn = true; self.tapLock.unlock() }
+        q.asyncAfter(deadline: .now() + 0.8) { self.freeze() }
+        q.asyncAfter(deadline: .now() + 1.1) { self.resume() }
+        q.asyncAfter(deadline: .now() + 1.5) {
+            self.tapLock.lock(); self.captureOn = false
+            let cap = self.capture, start = self.captureStart, anchor = self.captureAnchor; self.tapLock.unlock()
+            DispatchQueue.global(qos: .utility).async {
+                self.measureContinuity(cap: cap, start: start, anchor: anchor, chirp: chirp, player: idx, bus: bus)
+            }
+        }
+    }
+
+    private func measureContinuity(cap: [Float], start: AVAudioFramePosition?, anchor: (host: UInt64, sample: AVAudioFramePosition)?,
+                                   chirp: AVAudioPCMBuffer, player i: Int, bus: Bus) {
+        let rate = format.sampleRate
+        guard let start, let anchor, let raw = lastFreezeRaw[i], let from = lastResumeFrom[i], lastFreezeHost != 0 else {
+            log("continuity \(bus.rawValue): not measured (no capture or no freeze)"); return
+        }
+        // the freeze instant on the output timeline (tap sample time), from the anchor's host/sample pair
+        let dt = AVAudioTime.seconds(forHostTime: lastFreezeHost) - AVAudioTime.seconds(forHostTime: anchor.host)
+        let freezeOut = anchor.sample + AVAudioFramePosition((dt * rate).rounded())
+        // the content frame at a known output sample, by correlation over a 4096-sample window 50–135 ms before the freeze
+        let w = 4096, winOut = freezeOut - AVAudioFramePosition(0.05 * rate) - AVAudioFramePosition(w)
+        let ci = Int(winOut - start)
+        guard ci >= 0, ci + w <= cap.count else { log("continuity \(bus.rawValue): capture window out of range"); return }
+        let src = chirp.floatChannelData![0], n = Int(chirp.frameLength)
+        func score(_ c: Int) -> Float { var acc: Float = 0; for k in 0..<w { acc += cap[ci + k] * src[c + k] }; return acc }
+        var best = 0, bestS = -Float.infinity
+        for c in stride(from: 0, to: n - w, by: 8) { let sc = score(c); if sc > bestS { bestS = sc; best = c } }
+        for c in max(0, best - 8)...min(n - w - 1, best + 8) { let sc = score(c); if sc > bestS { bestS = sc; best = c } }
+        let freezeContent = AVAudioFramePosition(best) + (freezeOut - winOut)        // content audible at the freeze instant
+        let delta = from - freezeContent, delay = raw - freezeContent
+        let lo = -AVAudioFramePosition(cutSettle * rate)
+        let ok = delta <= 0 && delta >= lo
+        log(String(format: "continuity %@: resume − freeze Δ = %lld frames (%.1f ms) → %@ (pass −%.0f…0 ms); start delay %lld frames (%.1f ms) vs rewind %lld (%.1f ms)%@",
+                   bus.rawValue, delta, Double(delta) / rate * 1000, ok ? "PASS" : "FAIL", cutSettle * 1000,
+                   delay, Double(delay) / rate * 1000, lastRewind, Double(lastRewind) / rate * 1000,
+                   delay >= lastRewind ? " — DELAY REACHES THE REWIND: the IO-period term is wrong on this device" : ""))
+    }
+
     /// Plays the tone on the voice bus and arms the detector for 5 s, for the headphones-out case (unplug meanwhile).
     func toneArmed5s() {
         ensureTap(); play("tone100", on: .voice); arm(true)

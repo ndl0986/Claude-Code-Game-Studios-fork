@@ -211,12 +211,18 @@ smoothing rounds the steps.
 - **A freeze skips nothing:** on `resume()` each frozen sound continues **from the frame it had reached at the freeze
   call, or up to `cut_settle_s` earlier** (a little heard again, never skipped; Audio R6 and AC-21 as amended by
   TASK-090b). The fade-out and fade-in are the only change, both without a click.
+- The resume starts a **rewind** before the captured position: **rewind ≥ the platform's capture-to-rendered
+  uncertainty, at least 20 ms, at most `cut_settle_s`** (game-dev-android). "Nothing skipped" holds **while that
+  uncertainty is below `cut_settle_s`**; above it, the capped rewind can skip up to (uncertainty − `cut_settle_s`)
+  (Risks). Each platform states its form: Apple below; an Android own-mixer read pointer is about one burst of
+  uncertainty (20 ms flat suffices), a write-ahead output needs a timestamp-based capture instead.
 - No new event starts while frozen (the plan's play clock; R6). The engine keeps running.
 
 **Apple.** `pause()`: for each sounding player, capture its position (`playerTime(forNodeTime: lastRenderTime)` minus
 the sample at which its buffer started), set the gate to 0, and after `cut_settle_s` `stop()` it (state frozen, token
 kept). `resume()`: for each frozen player, schedule **the rest of its buffer from a rewind before the captured frame**,
-clamped at 0, with **rewind = max(20 ms, the session's actual IO period + 5 ms), capped at `cut_settle_s`** (a sub-buffer
+clamped at 0, with **rewind = max(20 ms, the session's actual IO period + 5 ms), capped at `cut_settle_s`** (the Apple
+form of the Rule; a debug line is logged when IO + 5 ms > `cut_settle_s`) (a sub-buffer
 copy made at resume, never on a press; `scheduleSegment` exists only for files), start the player, and raise the gate
 (the mixer smooths the rise). A resume within `cut_settle_s` (not yet stopped) only raises the gate (D4). The captured position runs **ahead** of the frame actually audible by the delay between a buffer's scheduling (where
 its start sample is taken) and its first render, at most one IO period in the app; H-1 measures exactly
@@ -262,8 +268,8 @@ Which notification is observed is chosen with `if #available(iOS 27, *)`; the de
 | Row | Pass (decides this ADR) | If it fails |
 |---|---|---|
 | **P-1** latency, candidate graph on `DeviceSpike` (and the TASK-033 no-Rive baseline) | **both**: (1) the film, as a screen: every measured press's filmed lag (chime onset − first answering frame) ≤ 1 display period **+ 10 ms** (the method's A/V uncertainty); (2) the in-app split (D9) ≤ 1 display period for every press. The display rate (60 / 120 Hz) is recorded | if the **baseline** passes and the candidate fails: the extra stages are suspect: remove the per-player gates for the ui pool (cut ui sounds only by letting them end; they are ≤ 0.4 s), re-run; if both fail: raise to Luan with the split from D9's logs (IO buffer, output latency, scheduling); the ADR then records the measured figure and AC-16 goes back to Audio & Voice |
-| **P-7** no click, iPad speaker and headphones-out | **both**: (1) the capture is an **in-app digital tap** (`installTap`) on the main mixer's output during `DeviceSpike`'s 100 Hz tone tests (cut on voice, cast and music; mute; freeze / resume; headphones out while armed), run through H-1's detector: no discontinuity above −60 dBFS; (2) listening on the built-in speaker to the program sounds' cuts: no click heard (AC-9 asks for both). An acoustic recording is not the detector's input | replace the gate fade with a per-sample gain ramp (Alternative 4) and re-run H-1 and P-7 |
-| **M-14** no click, Mac speaker | as P-7 (tap and listening; no headphones case) | as P-7 |
+| **P-7** no click, iPad speaker and headphones-out | **both**: (1) the capture is an **in-app digital tap** (`installTap`) on the main mixer's output during `DeviceSpike`'s 100 Hz tone tests (cut on voice, cast and music; mute; freeze / resume; headphones out while armed), run through H-1's detector: no discontinuity above −60 dBFS; (2) listening on the built-in speaker to the program sounds' cuts: no click heard (AC-9 asks for both). An acoustic recording is not the detector's input. **(3) Continuity is measured**: the "Freeze continuity" test plays a 200 → 2000 Hz chirp (position-encoded), freezes and resumes; from the tap, Δ = resume − freeze in content frames must satisfy **−`cut_settle_s` ≤ Δ ≤ 0 on every run** (AC-21 as amended), and the measured start delay is recorded against the rewind (a delay reaching the rewind means D7's IO-period term is wrong for that device), with the IO period and whether the capped-rewind line was logged | replace the gate fade with a per-sample gain ramp (Alternative 4) and re-run H-1 and P-7 |
+| **M-14** no click, Mac speaker | as P-7 (tap, continuity measure and listening; no headphones case) | as P-7 |
 | **P-8** interruptions, route change, reset | after a real interruption (Siri or an alarm) and a real route change (headphones out), the next press chimes (after re-priming), no crash; the log shows **which** interruption notification fired on the iPad's OS version. **Media-services reset**: a real one cannot be produced on demand, so the handler is exercised by **posting the notification in a debug build, recorded as "simulated"**; a real reset stays **NOT ASSESSED** and does not hold up acceptance | fix the handlers (not a design change); if the 27 replacements do not fire on iPadOS 27, observe the deprecated one there too and record it |
 | **P-9** silent mode | no sound for any event; other app's music stops | `.soloAmbient` is the only category that both obeys silent mode and does not mix (D1, Alternatives); a failure goes to Luan (R6 is his decision Q4) |
 Acceptance needs all five rows passing, or Luan accepting a recorded exception.
@@ -339,7 +345,10 @@ KidCore audio plan ──AudioOutput (ADR-0002 D6)──▶ AudioAdapter (app)
 ## Risks
 - **The offline rig's player start moves by whole render quanta** (0 to ~5500 frames seen), which made several
   alignment-based measures unreliable during development (each fixed and recorded in H-1); the click verdicts never
-  depended on it. Resume continuity stays a device claim (P-7, the production AC-21).
+  depended on it. Resume continuity stays a device claim (P-7 and M-14 measure it by tap; the production AC-21).
+- **An IO period above `cut_settle_s`** (game-dev-android): the capped rewind can then skip up to (IO − 40 ms) on a
+  freeze. Detection: a debug line when IO + 5 ms > `cut_settle_s`; P-1 and P-7 record the actual IO period and whether
+  it happened. Mitigation: raise `cut_settle_s` (an Audio knob, ≤ 0.09) or capture the position by output timestamp.
 - **The mixer's smoothing changes or differs on the device.** Mitigation: H-1 runs in CI-local builds; P-7 and M-14
   listen on the speakers; Alternative 4 is ready.
 - **The iOS 27 resumption notifications behave differently from the deprecated one.** Mitigation: P-8 logs which
@@ -429,12 +438,12 @@ Per K-34: headless runs need no MAC FREE; anything on the Mac's screen or speake
     during development: about 5500, which produced a +95 ms reading); where the delay is under 20 ms the resume lands
     0–20 ms **before** the freeze frame (heard again, nothing skipped); the 2 positive readings (+720, +960 frames)
     are renderings whose start delay (1680, 1920) exceeded the rewind. In the app the delay is at most one IO period,
-    hence D7's rule tying the rewind to the actual IO period. **"Nothing skipped" remains a device claim:** P-7 listens
-    to the freeze and the production re-run of Audio AC-21 measures it.
+    hence D7's rule tying the rewind to the actual IO period. **"Nothing skipped" remains a device claim:** P-7 and M-14
+    **measure it (tap, chirp, Δ) and listen**, and the production re-run of Audio AC-21 measures it again.
     **Scoped out offline:** on the chord and the voice-like line the gain metric does not cover the resumed segment
     (aligning content across a player restart is not reliable offline: the start delay moves by whole render
     quanta); it covers the freeze's fade-out. The resume's fade-in is proven click-free on the single tones at every
-    phase (their residual needs no alignment), and **P-7 and M-14** listen to it on the device.
+    phase (their residual needs no alignment), and **P-7 and M-14** measure it (tap) and listen to it on the device.
 - **H-2 Build:** `DeviceSpike` with `AudioSpike` implementing D1–D8 (the gate cut, the freeze, the iOS 27 branches)
   builds for iOS Simulator and macOS with no warnings (2026-11-18, this ADR's sha). Its minimal spike check runs
   before each install (TASK-078 `tools/device-build.sh`).
