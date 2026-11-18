@@ -49,4 +49,7 @@ Findings:
 - [RECOMMENDED, applied] R7: stable order within one iPad touch batch (timestamp, then stage x, then y); AC-3e
   extended.
 - [RECOMMENDED, applied] R1: the Android ADR should catch keys in `dispatchKeyEvent`.
-Reviewed-Content-Hash: design/gdd/input-key-filter.md 1f1562cec168b748178fd42b5f0d5160f195a5d1
+- [DECISION, applied] Open Question Q1 closed (Luan, 2026-11-18): on the title screen any letter or digit key
+  starts play (`startPlay`), like the play button, and is not a press; the held set carries into Play. States
+  table, R8 outputs, AC-1o.
+Reviewed-Content-Hash: design/gdd/input-key-filter.md bbbc45714a1c29c1a25ec86c921a6e938773b71f

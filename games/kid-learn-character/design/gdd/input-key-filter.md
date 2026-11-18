@@ -143,16 +143,17 @@ platform.
   out-of-order timestamp never reorders or drops an event; `time` is carried for the Queue's use only.
 - **No dropping:** Input never drops or rate-limits a press. The mash rule (3 queued, extras sparkle) is the
   Press Queue's.
-- **Other outputs:** `sparkle(point)`, `creatureTap(point)`, `gateTouch(began | ended, pointerId)` and
-  `openPanel`. A swallowed or ignored key emits nothing.
+- **Other outputs:** `sparkle(point)`, `creatureTap(point)`, `gateTouch(began | ended, pointerId)`,
+  `openPanel` and, on the title screen only, `startPlay`. A swallowed or ignored key emits nothing.
 
 ### States and Transitions
 
 | State | Hardware keys | Touches | Enter / leave |
 |---|---|---|---|
-| **Play** | R2–R6 | R7 | entered from the title's play button; left by the panel opening or the app leaving the foreground |
+| **Play** | R2–R6 | R7 | entered from the title (play button or a letter/digit key); left by the panel opening or the app leaving the foreground |
 | **Panel open** | the filter is off; keys go to the grown-up panel as normal input. Only the panel's own close returns to Play | go to the panel | entered by `openPanel` (chord or moon hold); the held set clears on enter and on leave |
-| **Inactive** (background, window not key, title screen) | nothing emitted; held set cleared | the title screen's touches belong to App Shell | the App Shell switches states; for keys on the title screen see Open Question Q1 |
+| **Title** | a key-down that would be a press in Play (R2–R6: resolves to A–Z/0–9, no disqualifying modifier, not a repeat or held) emits `startPlay`, the same as the play button, and **is not a press** (no reveal for that key); every other key emits nothing (system keys still pass, R5) | belong to App Shell | entered and left by the App Shell; the held set is **kept** from Title into Play, so the starting key's repeats and up are ignored and only its next down is a press (Luan, 2026-11-18) |
+| **Inactive** (background, window not key) | nothing emitted; held set cleared | — | the App Shell switches states |
 
 ### Interactions with Other Systems
 
@@ -313,6 +314,9 @@ The two provisional values are tuned in play (leader, 2026-11-18).
   - **n.** GIVEN Android ids, WHEN key-downs arrive with `scanCode` 0 and `keyCode`s for D and B, THEN two
     presses (D, B); WHEN D's second down arrives before its up, THEN nothing; WHEN a key with `scanCode` 32 and one
     with `scanCode` 0 / `keyCode` 32 are both down, THEN they are two different held keys.
+  - **o.** GIVEN the Title state, WHEN D goes down, THEN `startPlay` and no press; WHEN D repeats or goes up
+    after the switch to Play, THEN nothing; WHEN D goes down again, THEN one press of "D". GIVEN Title, WHEN
+    Space or ⌘D goes down, THEN nothing.
 - **AC-2 Order:** GIVEN three key-downs delivered in the order D (t = 5.002), B (t = 5.001), 3 (t = 5.001), WHEN
   they are filtered, THEN the presses come out D, B, 3 in delivery order with their own `time` values, none
   dropped.
@@ -356,9 +360,10 @@ The two provisional values are tuned in play (leader, 2026-11-18).
 
 ## Open Questions
 
-- **Q1 (for Luan / App Shell):** on the title screen, does a letter key start play (and count as the first
-  press), or only the play button? Until decided, keys on the title screen emit nothing (States table).
+- None open.
 - **Decided, recorded here:**
+  - Title screen: any letter or digit key starts play, like the play button; it is not itself a press (Luan,
+    2026-11-18; States table).
   - Layout: character first, position fallback (Luan, 2026-11-18).
   - Parent chord: ⌃⌥⌘Q on the Mac only; no chord on iPad, the moon hold only (Luan, 2026-11-18).
   - Swallowed keys give nothing (Luan's play notes, via the leader, 2026-11-18).
