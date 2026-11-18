@@ -84,7 +84,8 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-095 | App Shell: AS-Q author decisions (start in Play ignored; Title return; Gate/Panel return via F3; F4 uptime; background drops pending start) | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 114796ff) | `design/TASK-095-appshell-asq` | 2026-11-18 |
 | TASK-096 | Parent Gate G13 timing/boundaries (GL-Q answers), G4 slip, AC-36 wording, AC-38 → deferEdges | design | game-qc-ios (review: game-qc-android; AC-38 line: game-dev-ios) | DONE: MERGED (game-qc-android APPROVE @ 5c207fcb) | `design/TASK-096-gate-g13` | 2026-11-18 |
 | TASK-097 | QC iPad simulator: sim-guard --qc accepts it, --dev refuses; ADR-0011 D3 dated note | tools | game-dev-android (review: game-qc-ios) | APPROVE (game-qc-ios @ bd76f904); merges with TASK-079 as its candidate | `design/TASK-097-qc-ipad-sim` | 2026-11-18 |
-| TASK-098 | Input: digit key-up for the Gate (gateDigitUp or digitKeyHeld) so G13 B7 is expressible; input-filter-v2 later | design | game-dev-ios (review: game-qc-android) | SENT 2026-11-18 | `design/TASK-098-input-gate-digit-up` | 2026-11-18 |
+| TASK-098 | Input: digit key-up for the Gate (gateDigitUp or digitKeyHeld) so G13 B7 is expressible; input-filter-v2 later | design | game-dev-ios (review: game-qc-android) | IN REVIEW @ bd9df8bc (gateDigitUp) → game-qc-android | `design/TASK-098-input-gate-digit-up` | 2026-11-18 |
+| TASK-099 | input-filter-v2: v1 + AC-1t gateDigitUp cases; v1 superseded | qa | game-qc-android (review: game-dev-ios) | QUEUED after TASK-098 | `design/TASK-099-input-filter-v2` | 2026-11-18 |
 
 ## Leader log
 
