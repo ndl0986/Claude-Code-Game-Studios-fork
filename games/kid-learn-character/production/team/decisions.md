@@ -105,6 +105,13 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-38 Test-only ContractKit package (Luan, 2026-11-18)
+
+- A fifth Swift package `apple/ContractKit` is allowed **for tests only**: the shared contract discovery and strict
+  structural check used by both the KidCore and Tools harnesses. It is never linked into the app. ADR-0002 D1 gets a
+  dated note (status stays Accepted); the ban grep covers it; PKC-03(a) reads the app project's package references and
+  the app's Package.resolved, so ContractKit is not a finding.
+
 ### K-37 App identifiers, signing and the SVG layer-id note (Luan, 2026-11-18)
 
 - **Bundle ID follows the previous game's pattern** (com.galaxyandsun.daidatanhhung), with only the game part changed:
