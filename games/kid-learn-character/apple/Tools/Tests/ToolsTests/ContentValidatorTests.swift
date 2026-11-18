@@ -60,6 +60,34 @@ final class ContentValidatorTests: XCTestCase {
         XCTAssertEqual(r.findings.map(\.rule), ["stale"], "\(r.findings)")
     }
 
+    /// TASK-125: a folder with only `src/` (build inputs, ADR-0003 D1) is a theme in progress, not a finding.
+    func test_a_src_only_theme_folder_is_in_progress_not_a_finding() throws {
+        let wip = content.appendingPathComponent("themes/wip/src/voice-scripts")
+        try FileManager.default.createDirectory(at: wip, withIntermediateDirectories: true)
+        try Data("{}".utf8).write(to: wip.appendingPathComponent("en-us.json"))
+        let r = ContentValidator.run(contentDir: content)
+        XCTAssertEqual(r.inProgress, ["wip"])
+        XCTAssertEqual(r.findings, [])
+        XCTAssertEqual(r.themes, ["testbase"])
+    }
+
+    /// TASK-125: anything shipped (here a cast/ folder) without a theme.json is still a V1 FAIL, not "in progress".
+    func test_shipped_files_without_theme_json_still_fail_V1() throws {
+        let root = content.appendingPathComponent("themes/broken")
+        try FileManager.default.createDirectory(at: root.appendingPathComponent("src/art"), withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: root.appendingPathComponent("cast"), withIntermediateDirectories: true)
+        let r = ContentValidator.run(contentDir: content)
+        XCTAssertEqual(r.inProgress, [])
+        XCTAssertEqual(r.findings.map { "\($0.theme) \($0.rule)" }, ["broken V1"])
+    }
+
+    /// TASK-125: an empty theme folder is not "in progress" either.
+    func test_an_empty_theme_folder_still_fails_V1() throws {
+        try FileManager.default.createDirectory(at: content.appendingPathComponent("themes/empty"), withIntermediateDirectories: true)
+        let r = ContentValidator.run(contentDir: content)
+        XCTAssertEqual(r.findings.map { "\($0.theme) \($0.rule)" }, ["empty V1"])
+    }
+
     func test_no_themes_is_zero_themes_and_passes() throws {
         let empty = FileManager.default.temporaryDirectory.appendingPathComponent("empty-\(UUID().uuidString)")
         defer { try? FileManager.default.removeItem(at: empty) }

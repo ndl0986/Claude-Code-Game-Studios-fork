@@ -16,7 +16,20 @@ public enum ContentValidator {
     public struct Report: Sendable {
         public var themes: [String] = []
         public var findings: [Finding] = []
+        /// Theme folders that hold only build inputs under `src/` (ADR-0003 D1: B files) and no `theme.json` yet: a
+        /// theme in progress. Reported NOT ASSESSED, never PASS; `--release` FAILs on any (TASK-125).
+        public var inProgress: [String] = []
         public var pass: Bool { findings.isEmpty }
+    }
+
+    /// True when `folder` holds nothing but a `src/` directory (hidden files aside): build-only inputs, nothing the
+    /// bundle would ship (ADR-0003 D1, D8). Any other entry (cast/, sil/, sfx/, voice/, a stray file) makes it a theme
+    /// that must have a `theme.json`.
+    static func isSourceOnly(_ folder: URL) -> Bool {
+        let entries = ((try? FileManager.default.contentsOfDirectory(atPath: folder.path)) ?? []).filter { !$0.hasPrefix(".") }
+        var isDir: ObjCBool = false
+        return entries == ["src"]
+            && FileManager.default.fileExists(atPath: folder.appendingPathComponent("src").path, isDirectory: &isDir) && isDir.boolValue
     }
 
     /// Validates `content/themes/*/theme.json` under `contentDir`. `singleItemPerKey` is the MVP build setting (V2).
@@ -28,7 +41,9 @@ public enum ContentValidator {
         for f in folders {
             let file = themesDir.appendingPathComponent(f).appendingPathComponent("theme.json")
             guard let bytes = FileManager.default.contents(atPath: file.path) else {
-                report.findings.append(Finding(theme: f, rule: "V1", message: "no theme.json")); continue
+                if isSourceOnly(themesDir.appendingPathComponent(f)) { report.inProgress.append(f) }
+                else { report.findings.append(Finding(theme: f, rule: "V1", message: "no theme.json")) }
+                continue
             }
             do { decoded.append((f, try ThemeDecoder.decode(Array(bytes)))) } catch {
                 report.findings.append(Finding(theme: f, rule: "V1", message: "decode: \(error)"))

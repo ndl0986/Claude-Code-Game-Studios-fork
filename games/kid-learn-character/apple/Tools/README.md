@@ -9,6 +9,13 @@
   built from key-table-schema-v1's fixtures: the theme passes, a wrong-case file fails V7, a missing SVG source fails
   the staleness stub.
 
+- **A theme in progress** (TASK-125): a `content/themes/<id>/` folder holding **only** `src/` (build inputs, ADR-0003
+  D1's B files, such as voice scripts before the theme file exists) and no `theme.json` is reported
+  `NOT ASSESSED theme <id>: in progress`, not a finding, so it does not fail a merge. `kidtools validate --release`
+  (run by `verify.sh --release`) **fails** on any theme in progress. A folder with anything else in it (a shipped
+  `cast/`, `sil/`, `sfx/` or `voice/` folder, a stray file) or an empty folder still fails V1 for its missing
+  `theme.json`.
+
 ## What the stub does not do yet (the bake tool story, ADR-0003 D4)
 
 - **Staleness** checks only that each baked `cast/…json` and `sil/…json` has its source by the stem rule
