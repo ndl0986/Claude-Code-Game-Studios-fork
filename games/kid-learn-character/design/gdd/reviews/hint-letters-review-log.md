@@ -23,3 +23,8 @@ Reviewed-Content-Hash: design/gdd/input-key-filter.md 14c4a9a102f93f6ed093d038b3
 Reviewed-Content-Hash: design/gdd/press-queue.md f73cb9bd44f9d6ca15ca48975e5a43d77bb7870f
 Reviewed-Content-Hash: design/gdd/key-table-theme-data.md e108179924cb3f53191a26f006791f88e7e342bd
 Reviewed-Content-Hash: production/team/decisions.md cef7e6d8add4a57c0f8df35531c29f8c12fc3f1e
+
+## Update — 2026-11-18 — TASK-054a follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: H1: F5's Mac 700-pt row replaced by App Shell's 960 × 540 pt minimum (2× 254 ppi: stage_to_px 1.5, 22.5 mm; 1× 109 ppi: 26.2 mm; k = 1); the capacity notes say k > 1 cannot occur in the MVP (phones only); AC-7 keeps 1.10 and 1.2 as simulated factors. Wording and rule edits from the TASK-054 follow-up list (production/team/TASK-054-followups.md @ 84f7ea2); Parent Gate G-numbers cited as given by game-qc-ios (TASK-048 not merged). Review: game-qc-ios, from the diff.
+Reviewed-Content-Hash: design/gdd/hint-letters.md 5501526f0fbbf339c54132d0f52fc61939a8ad8d
