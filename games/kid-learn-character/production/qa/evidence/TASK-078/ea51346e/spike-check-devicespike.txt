@@ -1,0 +1,14 @@
+spike-check 2026-11-18T06:13:22Z sha=ea51346e
+PASS 1 builds headless (iOS Simulator + macOS) and unit tests pass: xcodebuild iOS Simulator + macOS BUILD SUCCEEDED; SpikeKit swift test 7/7
+PASS 2/3 sources: no network or Rive code
+PASS 4 no remote Swift package (no XCRemoteSwiftPackageReference)
+--- build/dd/Build/Products/Debug-iphonesimulator/DeviceSpike.app
+PASS 2/5 entitlements: no network, location, camera or microphone ()
+PASS 5 Info.plist: no NS*UsageDescription, no location key, no URL schemes
+PASS 2/3 binary: links no Rive, WebKit or Network.framework; no URL-loading or Rive symbols (2 image(s) scanned)
+--- build/dd/Build/Products/Debug/DeviceSpike.app
+PASS 2/5 entitlements: no network, location, camera or microphone ( com.apple.security.app-sandbox com.apple.security.get-task-allow)
+PASS 5 Info.plist: no NS*UsageDescription, no location key, no URL schemes
+PASS 2/3 binary: links no Rive, WebKit or Network.framework; no URL-loading or Rive symbols (2 image(s) scanned)
+PASS 6 Mac key-state read OFF by default
+PASS 7 sha recorded in the header line
