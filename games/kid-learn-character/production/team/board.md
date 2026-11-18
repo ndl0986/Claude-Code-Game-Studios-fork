@@ -111,8 +111,8 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-120 | K-44 parade meter: Parade GDD rules + art bible §7 exception + concept anti-pillar note + clearance (Hint Letters F4, Reveal Stage boxes) + contract impact | design | game-art-content (review: game-qc-android; render read game-dev-ios) | MERGED (a686007d) | `design/TASK-120-parade-meter` | 2026-11-18 |
 | TASK-121 | Prototype re-test build: parade every 6, starts when the 6th has formed (K-45), provisional K-44 meter top-right | prototype | game-dev-ios (review: game-qc-android) | MERGED (e7307310) → Luan replays with the child; align flight 0.6→0.9 s at next touch | `proto/TASK-121-parade-meter` | 2026-11-18 |
 | TASK-122 | parade-v2 contract (K-45 start, R12/R12a/F4 meter + light, AC-1..35); parade-v1 → superseded-by | contracts | game-qc-android (review: game-art-content) | SENT | `contracts/TASK-122-parade-v2` | 2026-11-18 |
-| TASK-123 | ADR-0006 D1 dated note: z 70 holds the parade meter + light (K-46) | architecture | game-dev-ios (review: game-qc-ios) | SENT | `docs/TASK-123-adr-0006-meter` | 2026-11-18 |
-| TASK-124 | Accessibility A4/A6/A7 rows for the parade meter + light; check ADR-0013 G4 scenario covers it | design | game-qc-ios (review: game-dev-android) | SENT | `docs/TASK-124-a11y-meter` | 2026-11-18 |
+| TASK-123 | ADR-0006 D1 dated note: z 70 holds the parade meter + light (K-46) | architecture | game-dev-ios (review: game-qc-ios) | MERGED (e4f6db6d) | `docs/TASK-123-adr-0006-meter` | 2026-11-18 |
+| TASK-124 | Accessibility A4/A6/A7 rows for the parade meter + light; check ADR-0013 G4 scenario covers it | design | game-qc-ios (review: game-dev-android) | @ 7710bd45 (+ F2 Scenario handover line) → game-dev-android; ADR-0013 needs no note | `docs/TASK-124-a11y-meter` | 2026-11-18 |
 
 ## Leader log
 
