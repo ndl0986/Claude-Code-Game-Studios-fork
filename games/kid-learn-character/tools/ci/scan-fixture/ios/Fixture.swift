@@ -5,6 +5,8 @@ import AdSupport
 import AVFoundation
 import BackgroundAssets
 import CloudKit
+import CoreLocation
+import DeclaredAgeRange
 import CoreSpotlight
 import Darwin
 import Foundation
@@ -49,6 +51,17 @@ import WebKit
     var al = attrlist(); keep(getattrlist("/", &al, nil, 0, 0))
     keep(ProcessInfo.processInfo.systemUptime)
     keep(mach_absolute_time())
+    keep(CLLocationManager())
+    keep(AgeRangeService.shared)
+    let fsa = try FileManager.default.attributesOfFileSystem(forPath: "/")
+    keep(fsa[.systemFreeSize] as Any); keep(fsa[.systemSize] as Any)
+    let vk = try URL(fileURLWithPath: "/").resourceValues(forKeys: [.volumeAvailableCapacityKey, .volumeAvailableCapacityForOpportunisticUsageKey, .volumeTotalCapacityKey])
+    keep(vk.volumeAvailableCapacity as Any); keep(vk.volumeAvailableCapacityForOpportunisticUsage as Any); keep(vk.volumeTotalCapacity as Any)
+    keep((try FileManager.default.attributesOfItem(atPath: "/") as NSDictionary).fileModificationDate() as Any)
+    var st2 = Darwin.stat(); keep(fstatat(AT_FDCWD, "/", &st2, 0))
+    var al2 = attrlist(); keep(getattrlistbulk(0, &al2, nil, 0, 0))
+    var vfs = Darwin.statvfs(); keep(statvfs("/", &vfs)); keep(fstatvfs(0, &vfs))
+    var sf2 = Darwin.statfs(); keep(fstatfs(0, &sf2))
     keep(BADownloadManager.shared)
     let a = NSUserActivity(activityType: "x"); a.isEligibleForHandoff = true; a.isEligibleForSearch = true; keep(a)
     keep(CSSearchableItem())

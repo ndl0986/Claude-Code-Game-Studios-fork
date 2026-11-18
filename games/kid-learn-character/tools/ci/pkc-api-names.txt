@@ -1,7 +1,11 @@
 # The APIs the PKC rows name (privacy-kids-compliance.md PKC-01…12 and Edge Cases; ADR-0005 D8). One per line:
 # <PKC row> <name> [ios|macos|both]. A name ending in ':' is an Objective-C selector prefix. Matching is whole-name.
 # Names are the spelling found in the binary (proven on the fixtures, ADR-0011 V7): the Objective-C class or selector
-# a Swift API compiles to (URLSession -> NSURLSession; isEligibleForHandoff = true -> setEligibleForHandoff:).
+# a Swift API compiles to (URLSession -> NSURLSession; isEligibleForHandoff = true -> setEligibleForHandoff:;
+# FileAttributeKey.modificationDate -> NSFileModificationDate; URLResourceKey.volumeTotalCapacityKey ->
+# NSURLVolumeTotalCapacityKey; .systemFreeSize -> NSFileSystemFreeSize). A Swift-only framework (DeclaredAgeRange) is
+# found by its module name in the demangled symbols; it also shows in otool -L (PKC-03 lines). Every name here is proven
+# on the fixtures; none relies on otool -L or code review alone.
 PKC-01 NSURLSession both
 PKC-01 NSURLConnection both
 PKC-01 NWConnection both
@@ -18,7 +22,10 @@ PKC-02 requestReview both
 PKC-02 UIActivityViewController ios
 PKC-02 NSSharingService macos
 PKC-02 NSWorkspace macos
+PKC-04 CLLocationManager both
 PKC-05 ASIdentifierManager both
+PKC-05 DeclaredAgeRange both
+PKC-05 AgeRangeService both
 PKC-05 identifierForVendor ios
 PKC-06 AVCaptureDevice both
 PKC-06 AVCaptureSession both
@@ -29,6 +36,17 @@ PKC-09 contentModificationDate both
 PKC-09 NSURLContentModificationDateKey both
 PKC-09 NSURLCreationDateKey both
 PKC-09 NSFileModificationDate both
+PKC-09 fileModificationDate both
+PKC-09 fstatat both
+PKC-09 getattrlistbulk both
+PKC-09 statvfs both
+PKC-09 fstatfs both
+PKC-09 fstatvfs both
+PKC-09 NSFileSystemFreeSize both
+PKC-09 NSFileSystemSize both
+PKC-09 NSURLVolumeAvailableCapacityKey both
+PKC-09 NSURLVolumeAvailableCapacityForOpportunisticUsageKey both
+PKC-09 NSURLVolumeTotalCapacityKey both
 PKC-09 stat both
 PKC-09 fstat both
 PKC-09 lstat both

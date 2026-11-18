@@ -9,8 +9,8 @@ expect_fail() { local name="$1"; shift; if "$@" >/dev/null 2>&1; then echo "MISS
 expect_pass() { local name="$1"; shift; if "$@" >/dev/null 2>&1; then echo "ok     $name"; else echo "BROKEN $name"; bad=$((bad + 1)); fi; }
 
 # ban grep: a clean copy passes, each plant fails
-mkdir -p "$T/ban/apple"; cp -R "$ROOT/apple/KidCore" "$ROOT/apple/MorphCore" "$T/ban/apple/"
-rm -rf "$T/ban/apple/KidCore/.build" "$T/ban/apple/MorphCore/.build"
+mkdir -p "$T/ban/apple"; cp -R "$ROOT/apple/KidCore" "$ROOT/apple/MorphCore" "$ROOT/apple/ContractKit" "$T/ban/apple/"
+rm -rf "$T/ban/apple/KidCore/.build" "$T/ban/apple/MorphCore/.build" "$T/ban/apple/ContractKit/.build"
 expect_pass "ban-grep clean tree" "$ROOT/tools/ci/ban-grep.sh" "$T/ban"
 plant() { cp -R "$T/ban" "$T/p"; printf '%s\n' "$1" >> "$T/p/apple/KidCore/Sources/KidCore/Helpers.swift"; expect_fail "ban-grep planted: $1" "$ROOT/tools/ci/ban-grep.sh" "$T/p"; rm -rf "$T/p"; }
 plant 'let plantedDate = Date()'
@@ -18,6 +18,11 @@ plant 'import UIKit'
 plant 'let plantedChar: Character = "a"'
 plant 'let plantedRound = round(2.5)'
 plant 'let n = key.count'
+# ContractKit (K-38): the import rule only; JSON decoding is allowed there, a UI or app import is not
+CK="apple/ContractKit/Sources/ContractKit/Fixture.swift"
+cp -R "$T/ban" "$T/p"; printf 'import UIKit\n' >> "$T/p/$CK"; expect_fail "ban-grep planted in ContractKit: import UIKit" "$ROOT/tools/ci/ban-grep.sh" "$T/p"; rm -rf "$T/p"
+cp -R "$T/ban" "$T/p"; printf 'import LetterMorph\n' >> "$T/p/$CK"; expect_fail "ban-grep planted in ContractKit: import LetterMorph" "$ROOT/tools/ci/ban-grep.sh" "$T/p"; rm -rf "$T/p"
+cp -R "$T/ban" "$T/p"; printf 'let ckDecoder = JSONDecoder()\n' >> "$T/p/$CK"; expect_pass "ban-grep allows JSONDecoder in ContractKit" "$ROOT/tools/ci/ban-grep.sh" "$T/p"; rm -rf "$T/p"
 
 # API surface: a stale file fails the check
 SG="$ROOT/.build/swiftpm/KidCore/out/symbolgraph" K="$ROOT/.build/swiftpm/Tools/debug/kidtools"

@@ -52,7 +52,7 @@ gate "api-surface (ADR-0002 V4)" api_check
 # 3. Content and contracts (ADR-0003, ADR-0004): wired in S2.
 say "OBSERVED contracts: harness not wired until S2, $(ls -d contracts/*-v*/ 2>/dev/null | wc -l | tr -d ' ') contracts unrun"
 # 4. swift test
-for m in MorphCore KidCore Tools; do gate "swift test $m" swift test --package-path "apple/$m" --scratch-path "$BUILD/swiftpm/$m"; done
+for m in MorphCore KidCore ContractKit Tools; do gate "swift test $m" swift test --package-path "apple/$m" --scratch-path "$BUILD/swiftpm/$m"; done
 # 5. Xcode, headless
 if [ "$XCODE" = 1 ]; then
   gate "xcodebuild build macOS" xcodebuild -project apple/LetterMorph.xcodeproj -scheme LetterMorph -destination platform=macOS -derivedDataPath "$BUILD/xcode" -quiet build
