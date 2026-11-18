@@ -1,0 +1,6 @@
+# sources.lock for input-filter-v2 (cut 2026-11-18, TASK-099): the ## sections the cases cite.
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/input-key-filter.md#Detailed Design 31fa8d8327814d1bbd2dd3a6a532452550b13c10
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/input-key-filter.md#Formulas b854ac8838f0fe6ca806f1b73c4b0f6abc7d110d
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/input-key-filter.md#Edge Cases 37cb325bb80241376e2e3e66f823c7c97636261b
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/input-key-filter.md#Acceptance Criteria 3756e3a17e9b4f8b2f8ab306db79a42836340dd0
+Reviewed-Section-Hash: games/kid-learn-character/docs/architecture/adr-0002-modules-seams-types.md#Decision 7a622020948197194ccd9e003ecdfe8e243fb356
