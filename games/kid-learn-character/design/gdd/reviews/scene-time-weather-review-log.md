@@ -39,3 +39,8 @@ Reviewed-Content-Hash: production/team/decisions.md 91dfbeea83b146e126e09a893a0d
 Review mode: lean · Workflow: standard
 Change: interface ask from game-dev-ios (Cast Rendering b2277cf): R1 publishes skyMidL (the drawn sky-mid luminance after the weather tint and any jump fade, on the wall clock), defined in F2; R5's build check reads the same value and, inside the switch's hysteresis band 0.303–0.313, takes the worse of the two edges (2.53:1 cream at 0.313, 2.54:1 amber at 0.303; both ≥ 2.5).
 Reviewed-Content-Hash: design/gdd/scene-time-weather.md 2ddea70359c94efef29a7dc93a63827057dee964
+
+## Update — 2026-11-18 — TASK-056d cross-review fixes (no re-review)
+Review mode: lean · Workflow: standard
+Change: W-8: mash_window_s stays the Scene's knob (the one Reveal Stage R10 cites); Audio's different window is renamed chime_window_s. W-9: Privacy & Kids Compliance added to Dependencies (PKC-13 for any live weather); the 'R11 device measurement' cites now name Cast Rendering's measurement plan under R11 and AC-17. Cast Rendering row and Downstream entry list skyMidL and drop the stale follow-up markers. K-25 added to Normative. From /review-all-gdds 2026-11-18 (design/gdd/gdd-cross-review-2026-11-18.md) and K-26. Verdict unchanged; diff re-run by game-qc-android.
+Reviewed-Content-Hash: design/gdd/scene-time-weather.md 3ec3f5a7be060a8661c26e139282eeeca277347c

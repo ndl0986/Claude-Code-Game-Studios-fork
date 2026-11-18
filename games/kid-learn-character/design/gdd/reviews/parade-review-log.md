@@ -39,3 +39,8 @@ Reviewed-Content-Hash: production/team/decisions.md 23b7f9ecc504f023e181c4fea06d
 Review mode: lean · Workflow: standard
 Change: Interface 6 now cites the Reveal Stage R8 signals (settle, freeze, resume) and the Press Queue R8, R9 and R8a (the gate freeze on the play clock, added in TASK-050), from game-dev-ios's nit. Verdict unchanged.
 Reviewed-Content-Hash: design/gdd/parade.md f2e4445aca32b3e358a730460d0350de4df83d2f
+
+## Update — 2026-11-18 — TASK-056d cross-review fixes (no re-review)
+Review mode: lean · Workflow: standard
+Change: W-9: Scene moved from Upstream to Downstream (it reads paradeWalking); Reveal Stage cited by path instead of 'no GDD yet'; Audio's freeze pause closed (TASK-050). K-26: Hint Letters added to Downstream (reads paradeWalking to dim and hold the hints). From /review-all-gdds 2026-11-18 (design/gdd/gdd-cross-review-2026-11-18.md) and K-26. Verdict unchanged; diff re-run by game-qc-android.
+Reviewed-Content-Hash: design/gdd/parade.md 1635d85de1ff5176df125b7a673418f883a2eac6

@@ -97,7 +97,9 @@ ever competes with the letter.
 
 **R3a. Mashing thins the weather** (art bible §2, state table, Mashing row: "weather particles halve").
 - `mashing` is true while the Press Queue snapshot's queue length is ≥ 1, **or** an `ignored` press happened in the
-  last `mash_window_s` (1 s) on the play clock. The Reveal Stage publishes it (Interface).
+  last `mash_window_s` (1 s) on the play clock. The Reveal Stage publishes it (Interface). This **Scene-owned**
+  knob is the one the Reveal Stage cites (its R10). Audio & Voice's chime falloff uses its own, separate
+  `chime_window_s` (Audio F3).
 - While true, the **rain or snow count** is multiplied by `mash_factor` (0.5), faded in and out over
   `mash_fade_s` (0.5 s) by alpha. Clouds and stars are unchanged.
 - It stacks with Reduce Motion's factor (R8): the lowest is ×0.25.
@@ -198,7 +200,7 @@ The Scene is continuous; these are the conditions it runs under.
 |---|---|---|
 | Settings Store | in | `weather`, `windy`, and the change notification (its R10) |
 | Reveal Stage | in | the visible rect, the ground line (with `row_lift`), the play clock and `freeze`/`resume`, `mashing`, the glyph box and whether the glyph's halo is shown (its R8, R10) |
-| Cast Rendering | in / out | in: the halo's current glow radius (its R5, 230 → 161 u at Night) and the glyph edge model (its F8, K-25); out: `look`, `lookBlend` for the per-look glyph and creature changes (follow-up) |
+| Cast Rendering | in / out | in: the halo's current glow radius (its R5, 230 → 161 u at Night) and the glyph edge model (its F8, K-25); out: `look`, `lookBlend` and `skyMidL` for the per-look glyph and creature changes and the edge switch (its R4, R7, F8) |
 | Parade | in | `paradeWalking` (the horizon lift) |
 | Parent Gate & Grown-up Panel | out | `look`, `lookBlend` for the moon (daytime moon, follow-up); the panel's dim is drawn over the Scene |
 | Hint Letters | none directly | hints sit in the sky band, on their own bubbles |
@@ -294,7 +296,7 @@ under the cap.
 
 **F6. Draw cost** (no separate claim). The worst case is **snow 60 + windy, 3 clouds, 50 stars, mashing off,
 Reduce Motion off** at Night: 113 small sprites + 3 gradient fills + 2 hill shapes + the ground. It is folded into
-**Cast Rendering R11's device measurement** as **one combined run** with its 240 specks (p99 ≤ 16.7 ms target, NOT
+**Cast Rendering's measurement plan (under its R11, run as its AC-17)** as **one combined run** with its 240 specks (p99 ≤ 16.7 ms target, NOT
 ASSESSED on a real iPad until that run). No textures are needed: the gradients are fills, the elements are small
 shapes.
 
@@ -337,13 +339,17 @@ shapes.
 **Downstream (read the Scene):**
 - **Parent Gate & Grown-up Panel:** `look`, `lookBlend` for the moon. **Queued follow-up:** the gate draws the
   daytime moon (70% in Morning and Day) and takes `lookBlend`.
-- **Cast Rendering:** `look`, `lookBlend`. **Queued follow-up (game-dev-ios):** the per-look glyph and creature
-  changes of art bible §2 (amber 6 px outline and saturated halo in Morning and Day; at Night the palest stop
-  dropped, the halo at 70%, the creature's 15% ambient dim), blended by `lookBlend`, which the R5 build check needs.
+- **Cast Rendering:** `look`, `lookBlend` and `skyMidL` for the per-look glyph and creature changes of art bible §2
+  (its R4, R5, R7, F8: the amber `#80450f` / cream edge switched on `skyMidL`, K-25; the saturated halo in Morning and
+  Day; at Night the palest stop dropped, the halo at 70%, the creature's 15% ambient dim).
 - **App Shell & Title:** the same Scene on the Title (R10).
 - **Parade:** the mirrored hills under the walk on wide windows (R6).
 
-**Normative:** K-08, K-12, K-20, K-22, K-24; TASK-034; art bible §1, §2, §4, §6, §7.
+- **Privacy & Kids Compliance** (`design/gdd/privacy-kids-compliance.md`): the Scene is clock and hand-picked
+  weather only, with no network, location or data; any live weather is a PKC-13 change that re-opens that GDD
+  (TASK-034 stays the starting point).
+
+**Normative:** K-08, K-12, K-20, K-22, K-24, K-25; TASK-034; art bible §1, §2, §4, §6, §7.
 
 ## Tuning Knobs
 
@@ -358,7 +364,7 @@ shapes.
 | `rain` base / speed / length | 55 / 420 u/s / 18 u | 40–70 / 250–600 / 10–30 | art bible §2 (count); proposed (speed, length) | rain density |
 | `snow` base / speed / sway | 45 / 20–40 u/s / ≤ 0.3 Hz, 12 u | ≤ 60 / art bible / 0–20 u | art bible §2 | snow density |
 | `windy_tilt_deg` | 15 | 0–20 | art bible §2 (≤ 20°) | wind lean |
-| `mash_factor` / `mash_window_s` / `mash_fade_s` | 0.5 / 1 / 0.5 | 0.25–1 / 0.5–2 / 0.2–1 | art bible §2 Mashing row; proposed | weather thinning while mashing |
+| `mash_factor` / `mash_window_s` / `mash_fade_s` | 0.5 / 1 / 0.5 | 0.25–1 / 0.5–2 / 0.2–1 | art bible §2 Mashing row; proposed; `mash_window_s` is owned here (Reveal Stage R10 cites it; Audio's window is `chime_window_s`) | weather thinning while mashing |
 | Reduce Motion count / speed | 0.5 / 0.5 | 0–1 | K-24 | calmer weather |
 | `lift_amount` | 0.35 | 0.1–0.5 | K-24 | horizon warmth in a parade |
 | lift targets | peach `#f0c9b0` / amber `#d9a070` | L ≤ 0.69, not Letter Gold | art bible §2; proposed amber | the warm colour |
@@ -380,7 +386,8 @@ None. The weather picker is in the grown-up panel (Parent Gate & Grown-up Panel 
 - `design/gdd/systems-index.md`: system #15.
 - `design/gdd/settings-store.md`: R1 (`weather`, `windy`), R6, R10.
 - `design/gdd/reveal-stage.md`: R8 (play clock, freeze), R10 and F1 (visible rect, ground line, draw order).
-- `design/gdd/cast-rendering.md`: R5 (halo radius), R11 (device measurement).
+- `design/gdd/cast-rendering.md`: R4 and F8 (edge model), R5 (halo radius), the measurement plan for the
+  SVG-rendering ADR (under R11) and AC-17 (the device run).
 - `design/gdd/parade.md`: `paradeWalking`, F3 (the walk on wide windows).
 - `design/gdd/hint-letters.md`: the sky band, R12 (hint bubbles).
 - `design/compliance/TASK-034-kids-weather-rules.md`.
@@ -428,7 +435,8 @@ Logic criteria use an injected wall clock, play clock, settings and rect. Screen
 17. **AC-17 Title.** The Title at 21:00 with snow shows the Night sky and snow, with no lift.
 18. **AC-18 No network, no sound.** The Scene's code calls no network or location API and requests no audio
     (code review and a build check over its sources).
-19. **AC-19 Device cost.** The F6 worst case is part of Cast Rendering R11's single device run (NOT ASSESSED until
+19. **AC-19 Device cost.** The F6 worst case is part of Cast Rendering's single device run (its measurement plan
+    under R11, AC-17) (NOT ASSESSED until
     then).
 
 ## Open Questions

@@ -21,3 +21,8 @@ Reviewed-Content-Hash: .claude/skills/design-review/SKILL.md 4dcc8b81162613c7571
 Reviewed-Content-Hash: design/art/art-bible.md a01094340e7e5b7bdae636f4cc879d0f84b472b5
 Reviewed-Content-Hash: production/team/decisions.md f952e72dffded60e03757aa070e59bbc13fc03f4
 Reviewed-Content-Hash: design/game-brief.md ca66d372d8235f6f0effd7a6f6957c85c44df681
+
+## Update — 2026-11-18 — TASK-056d cross-review fixes (no re-review)
+Review mode: lean · Workflow: standard
+Change: W-7: 'every 8' → 'every 6' at Core Mechanics 5, the parade sentence and the MVP list (K-17). From /review-all-gdds 2026-11-18 (design/gdd/gdd-cross-review-2026-11-18.md) and K-26. Verdict unchanged; diff re-run by game-qc-android.
+Reviewed-Content-Hash: design/gdd/game-concept.md 5a150a0e8ee9e4c4bed1749196abf72271d4d8e8

@@ -81,8 +81,9 @@ Contrast is WCAG relative luminance against the glyph's colours: top `#fff1b8` (
     on lighter ones, with a **1 s wall-clock cross-dissolve** at the switch. A colour blend between the two over a
     range of sky would drop to about 1.4:1, so it is never used.
   - **Exception to rule 2 of Section 4 (≥ 3:1):** at the looks themselves the glyph is ≥ 3:1; **inside** a 15-min
-    time-of-day crossfade (or the 3 s clock-jump fade) it is **≥ 2.5:1** (measured minimum 2.57:1 at sky L 0.307),
-    for a few minutes around 16:04–16:12 and 06:04–06:13. The halo behind the glyph still carries it, and the child
+    time-of-day crossfade (or the 3 s clock-jump fade) it is **≥ 2.5:1** (2.57:1 at the crossover, sky L 0.307; the
+    edge actually shown can be the worse one by the switch's ±0.005 hysteresis, so the shown-edge floor is **2.53:1**),
+    below 3:1 for about **16:06–16:10 and 06:06–06:09 in clear weather**, a little wider with a weather tint. The halo behind the glyph still carries it, and the child
     never watches a crossfade happen. The 1 s switch dissolve is outside the check.
   - **The saturated amber halo** of Morning and Day is `rgba(246, 169, 59, 0.95)`: `#f6a93b`, the glyph's own
     bottom stop, so it stays part of the letter (Cast Rendering R5, F8).
