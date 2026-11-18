@@ -115,6 +115,13 @@ window behaviour, two accessibility settings and pixel density, which ADR-0002's
   starlight or sparkle that answers a row press (40, 50), with hints (60) and tokens (70) above it. Row touches stay
   at Input's layer 2. Under `row_lift` the creature cannot overlap the row (anchor y 490; the row starts at y 582).
   **Reveal Stage R10's draw-order line needs the same entry** (a GDD follow-up routed by the leader; not edited here).
+  - *Note 2026-11-18 (K-44, K-46, TASK-123; status unchanged, Accepted):* **z 70 also holds the parade meter and its
+    light** (Parade R12 / R12a meter snapshot, drawn by the Reveal Stage; art bible §7). The meter and the tokens never
+    overlap: the meter is placed from `queue_max`, left of the leftmost token the knob allows (Parade R12, art bible §7).
+    **Within z 70 the meter light is above the meter**, set by a child `zPosition` inside the layer node (tokens and
+    meter 0, the light 1), never by child order: a view may set `ignoresSiblingOrder` (DeviceSpike does), and then
+    sibling order does not decide drawing. The meter is above the hint letters (z 60) by the layer order, as Reveal
+    Stage R10 says; Hint Letters keeps its slots clear of the meter box (its R5).
 - **The gate challenge and the grown-up panel** (with its 55% dim) are **SwiftUI overlays above the `SKView` in the
   same window**: never a separate window, sheet or popover (App Shell R7, Child Lock-in R5).
 - The adapter only maps the render plan onto nodes; no rule lives in the scene.
@@ -269,6 +276,7 @@ TR-IDs are provisional (architecture.md's baseline).
 |------------|-------------|--------------------------|
 | reveal-stage.md R10, F1 | TR-reveal-003: contain-and-extend fit; draw order | D1 layers; D2 transform and resize |
 | app-shell-title.md R7 | windows on iPad and Mac; overlays in the main window | D4; D1 overlays |
+| parade.md R12, R12a (K-44, K-46) | the parade meter and its light in the token layer, the light above the meter | D1 note 2026-11-18 (TASK-123) |
 | app-shell-title.md R7 (K-39), AC-14 | TR-shell-004: iPad status bar hidden; home indicator and edge deferral follow `edgeDeferral` | D4 note 2026-11-18 (TASK-115) |
 | child-lock-in.md R5 | never resign key for the gate or panel | D1 overlays; D4 constraints for ADR-0008 |
 | hint-letters.md F5, R11; parent-gate-panel.md (moon slop) | physical target sizes | D7 ppi rule |
@@ -292,7 +300,7 @@ never QC's E9F515E9….
 1. **Stage fit (Simulator window, MAC FREE):** screenshots on the 11" and 13" iPad simulators and a Split View /
    Windowed Apps size; the safe stage is whole, no bars, and F1's scale and visible rect match the logged values.
 2. **Layer order (headless):** a render plan with one node per layer yields D1's `zPosition` order (a node-tree
-   snapshot test).
+   snapshot test), including z 70's meter light above the meter by its child `zPosition` (D1 note, TASK-123).
 3. **Frame driver (headless):** a test display-link source with skipped `targetTimestamp`s: due events fire once, no
    catch-up, `tick` receives uptime values.
 4. **Smart Invert (headless):** the iPad `SKView` reports `accessibilityIgnoresInvertColors == true`; the panel overlay
