@@ -259,11 +259,12 @@ keep(e)        = layer(e) ≠ detail  OR  (role ≠ parade AND onScreen_px(e) �
 |---|---|---|
 | `e.size_artboard` | the smaller side of a detail element's box, artboard units | from the baked file |
 | `role_height_units` | the figure's height on the stage | stage ~320, list ~80, parade ~85 |
-| `stage_to_px` | physical px per stage unit on this screen | e.g. 1.6 on an 11" iPad in landscape at 2× |
+| `stage_to_px` | physical px per stage unit on this screen; set by the stage-fit rule (Reveal Stage, TASK-049) | 11" iPad landscape (2388 × 1668): 1.87 fitting by width (2388/1280), 2.32 by height (1668/720) |
 | `marking_min_px` | the smallest marking kept | 6 px |
 
-Example: a 10-unit spot on the artboard, `list` at 80 units, `stage_to_px` 1.6 → 10 × 80/440 × 1.6 = 2.9 px → left
-out; at `stage` (320) → 11.6 px → kept.
+Example (11" iPad, fit by width, 1.87): a 10-unit spot on the artboard, `list` at 80 units → 10 × 80/440 × 1.87 =
+3.4 px → left out; at `stage` (320) → 13.6 px → kept. Fit by height (2.32) gives 4.2 px and 16.9 px: the same
+result.
 
 **F2. Halo blur.**
 ```
@@ -281,11 +282,13 @@ a_i(s) = a_phase(s) × (0.6 + 0.4 × sin(dust_twinkle_w × s + phase_i))      du
 
 **F4. The stardust cap.** For each output pixel and colour channel:
 ```
-C = min( C_cap,  C_scene + Σ_i a_i × c_i )
+C = max( C_scene,  min( C_cap,  C_scene + Σ_i a_i × c_i ) )
 ```
 `c_i` the speck colour (linear), `a_i` from F3 times its coverage of the pixel, `C_cap` = the glyph's top colour
 `#fff1b8` (L 0.88, the frame cap, art bible §2, §4). Example: three gold specks of alpha 0.8 over a dusk sky add
-to more than the cap → the pixel shows the cap, never brighter. With one speck the cap is not reached.
+to more than the cap → the pixel shows the cap, never brighter. With one speck the cap is not reached. The outer
+`max` means specks only ever **add** light: where a scene channel is already above the cap (the Day sky's blue,
+highlight cream), the pixel keeps its scene value and is never darkened by a speck (game-dev-android's read).
 
 **F5. Idle and hop.**
 ```
@@ -330,6 +333,7 @@ waiting, nothing can replace the creature, so the full 0.5 s is safe.
 |---|---|
 | **Art missing or failed the theme check** | `willForm` = false; the glyph glows and sparkles out (R9); one log line. No cast sound or word (`hasWord` false, through the Reveal Stage). |
 | **Art not loaded at `formedS`** | The specks hold the shape for the F7 wait, then the creature fades in; if still not loaded, the specks sparkle out; one log line (R10). `formed` stays at `formedS`. |
+| **Sound during the late-art wait** | The cast sound (Audio E8, s = T) and the word (E9, T + 0.25) play on time while the specks still hold the silhouette. Accepted: the wait is ≤ 0.5 s and the shape is already the creature's; Audio does not hold E8. |
 | **A key is queued during the late-art wait** | The wait is cut to the F7 bound; if it has passed, the specks sparkle out at once. |
 | **A key is queued during a late fade-in** (after the wait) | The fade-in continues; if the hold passes first, the next reveal starts and the creature leaves with the normal leaving fade (R10, accepted limit). |
 | **The baked file fails to decode at load, after `willForm` said true** | Treated as late art that never arrives (R10). The word may already be playing over the sparkle-out; logged. |
@@ -406,14 +410,15 @@ Logic tests use an injected clock and a fake drawing surface; screenshots are re
 5. **AC-5 Parts:** rotating a part 10° about its pivot moves the pivot point by 0 and a point 100 units away by
    17.4 units (±0.1).
 6. **AC-6 6 px rule (F1):** the F1 example: a 10-unit spot is kept at `stage` and left out at `list` with
-   `stage_to_px` 1.6.
+   `stage_to_px` 1.87 and with 2.32.
 7. **AC-7 Halo (F2):** blur at t = 0.114 s is 100% and at 0.341 s is 60% (±1%); the glyph fill alpha is constant
    while the blur pulses; with Reduce Motion the blur is constant 80%.
 8. **AC-8 Glyph swap:** the solid glyph's outline and the MorphCore start points overlay within 1 px at the swap.
 9. **AC-9 Specks:** for a fixed seed, the speck looks are the same on every run on one platform (per-platform
    test); 70% ± 5% gold over 240 specks for 100 seeds; specks above 3.2 units are stars.
 10. **AC-10 Cap (F4):** 50 specks of alpha 1 on one pixel never exceed `C_cap`; under a 10/s mash for 60 s no
-    pixel of the dust layer exceeds it (sampled).
+    pixel of the dust layer exceeds it (sampled); a speck over a scene pixel whose channel is already above the
+    cap (e.g. Day sky blue) leaves that pixel unchanged, never darker.
 11. **AC-11 Idles:** at `idleTime` 0 every part is at rest (the render matches the silhouette within 1 px of
     outline); every idle in the shipped data is ≤ 1 Hz (build check); with Reduce Motion every amplitude is half.
 12. **AC-12 Hop (F5):** 26 units at τ = 0.225 s, 0 at 0.45 s; 13 units with Reduce Motion.

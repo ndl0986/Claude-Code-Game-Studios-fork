@@ -30,3 +30,14 @@ Reviewed-Content-Hash: production/team/decisions.md 4baed8206a9b8920b39a20154cb0
 Review mode: lean · Workflow: standard
 Change: K-17 makes a parade every 6 creatures: R10, F6, the measurement plan and an edge case now use `parade_count` (6; ≈ 1.1 MB at the 256 tier) instead of 8, and a walker that is also the current stage creature keeps a separate parade-role copy (Parade plan, TASK-046).
 Reviewed-Content-Hash: design/gdd/cast-rendering.md 7638b1bbf8c772dd1014f27375a2c17811cee115
+
+## Update — 2026-11-18 — game-dev-android independent read: REVISE, addressed
+Review mode: lean · Workflow: standard
+Source: game-dev-android's independent read of 3aa1c99 (relayed by the leader); the MorphCore ownership wording (73e9c9a) and parade_count (febd066) were already on the branch.
+Findings:
+- [BLOCKING] F4 capped the scene too, so a speck over a scene channel above the cap (Day sky blue, highlight cream) darkened it → C = max(C_scene, min(C_cap, C_scene + Σ aᵢcᵢ)); AC-10 checks a speck over a brighter scene pixel leaves it unchanged (fixed)
+- [RECOMMENDED] Late art and sound: E8/E9 play during the F7 wait while the specks hold the silhouette → Edge Case accepts it (≤ 0.5 s; Audio does not hold E8) (fixed)
+- [RECOMMENDED] F1 / AC-6: stage_to_px 1.6 matched no fit → 11" iPad 1.87 (by width) and 2.32 (by height), tied to the TASK-049 stage-fit rule; the 6 px results are unchanged (fixed)
+- [RECOMMENDED] MorphCore ownership row split when / look (73e9c9a, its log) (fixed)
+- [RECOMMENDED] F6/R10 parade_count 6 (K-17, ≈ 1.1 MB) and a separate parade copy of a walker that is the stage creature (febd066) (fixed)
+Reviewed-Content-Hash: design/gdd/cast-rendering.md 8a503e2f8257d53ce8cf3c406690e6b420f6b43b
