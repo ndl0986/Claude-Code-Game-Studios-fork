@@ -130,8 +130,9 @@ that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per
   runners later if needed (paid minutes).
 - **Signing for device spikes: a free Personal Team** on Luan's Apple ID (7-day provisioning, Luan's own iPad);
   the paid Apple Developer account waits for TestFlight / store.
-- **docs/engine-reference/native-apple/** may be added (docs only: versions and proven/Apple-sourced API notes)
-  so /create-architecture can run; `engine.name` stays unset (ADR-0001).
+- **A native-apple engine reference** may be added (docs only: versions and proven/Apple-sourced API notes) so
+  /create-architecture can run; `engine.name` stays unset (ADR-0001). Luan, same day: **keep it inside this game's
+  folder** (the game's docs/engine-reference/ is a symlink to the template's shared folder; nothing goes there).
 
 ### K-26 Busy moments and favourite keys (Luan, 2026-11-18, TASK-055 cross-review)
 
