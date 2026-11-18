@@ -105,6 +105,14 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-22 App Shell & Title (Luan, 2026-11-18, TASK-051 questions)
+
+- **Long background:** returning after more than 30 min away (process still alive, uptime clock, in
+  memory only) goes to the Title; a shorter absence returns to Play with the settled creature (K-15).
+- **Title start by touch: any tap except the moon** (as played); letter and digit keys too (K-10).
+- **No text on the Title** (no wordmark, no control hints); only the grown-up panel has text.
+- **One title creature per theme** (Dinosaurs: T-Rex, as played): a Key Table field `titleCastId`.
+
 ### K-21 Gate risk and Mac child lock (Luan, 2026-11-18, TASK-048 revised plan)
 
 - **Correction to K-20's risk figure:** with 4 number words and a 10 s moon sleep, the hourly pass
