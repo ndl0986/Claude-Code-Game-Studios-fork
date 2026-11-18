@@ -133,12 +133,15 @@ interfaces:
       - hint-letters
       - onscreen-keyboard-row
       - morphcore
+      - parent-gate-panel        # gate-code stream (G3), named in ADR-0004 D2
+      - scene-time-weather       # scene-weather stream (F3), named in ADR-0004 D2
     adr: docs/architecture/adr-0002-modules-seams-types.md
     signal_signature: "RandomSource.next() -> UInt64; u = Double(x >> 11) * 2^-53; one source per stream"
     referenced_by:
       - docs/architecture/adr-0002-modules-seams-types.md
+      - docs/architecture/adr-0004-contracts-fixtures-harness.md
     added: 2026-11-18
-    revised: ""
+    revised: "2026-11-18 (ADR-0004: gate-code and scene-weather consumers)"
   - contract: normalized_events
     status: active
     pattern: direct_call
@@ -206,6 +209,20 @@ interfaces:
     signal_signature: "settings read -> Child Lock-in Waiting sets kioskModeOn -> App Shell ready -> Child Lock-in R3 -> KioskEffects.apply(); kioskModeOn cleared on Off (incl. after the engage timeout); read by Input, Child Lock-in, Parent Gate G7"
     referenced_by:
       - docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+    revised: ""
+  - contract: behaviour_contracts
+    status: active
+    pattern: shared_fixtures
+    producer: qc (hand-written cases from the GDDs; the system's dev reviews)
+    consumers:
+      - kidcore
+      - morphcore
+      - apple-tools
+    adr: docs/architecture/adr-0004-contracts-fixtures-harness.md
+    signal_signature: "contracts/<name>-vN/{spec.md, cases.json, sources.lock[, cases-generated.json]} checked by each harness's hand-written strict structural check against contracts/case-schema-v1.md (no third-party validator, PKC-03); typed events, given seam state, raw UInt64 draws per stream, ordered expect lists, play clock never given; ContractHarness (XCTest) / JUnit 5 later; FAIL never skip"
+    referenced_by:
+      - docs/architecture/adr-0004-contracts-fixtures-harness.md
     added: 2026-11-18
     revised: ""
 
@@ -353,6 +370,24 @@ forbidden_patterns:
     description: "one random generator shared by several streams"
     why: "one stream's draws must never shift another's (ADR-0002 D4)"
     adr: docs/architecture/adr-0002-modules-seams-types.md
+    added: 2026-11-18
+  - pattern: contract_fixture_edit_in_place
+    status: active
+    description: "editing a merged contracts/<name>-vN/ cases.json or spec.md instead of cutting -v(N+1)"
+    why: "a version must mean one fixed case set on every platform (ADR-0004 D6, architecture rule (d))"
+    adr: docs/architecture/adr-0004-contracts-fixtures-harness.md
+    added: 2026-11-18
+  - pattern: contract_harness_silent_skip
+    status: active
+    description: "a contract harness that skips an unknown, empty, unreadable or layer-less contract instead of failing"
+    why: "a check that cannot report it did not run is not a check (ADR-0004 D5)"
+    adr: docs/architecture/adr-0004-contracts-fixtures-harness.md
+    added: 2026-11-18
+  - pattern: fixture_precomputed_draws_or_play_clock
+    status: active
+    description: "a contract case carrying a precomputed u, a seed (morph-contract-v1 excepted) or a play-clock value"
+    why: "draws must go through the production u helper and the play clock is derived in KidCore (ADR-0004 D4, ADR-0002 D3-D4)"
+    adr: docs/architecture/adr-0004-contracts-fixtures-harness.md
     added: 2026-11-18
 
 # Example:
