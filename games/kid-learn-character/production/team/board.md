@@ -29,6 +29,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-047 | GDD: Hint Letters (`design/gdd/hint-letters.md`) via /design-system | design | game-dev-android (review: game-qc-android) | PLAN REVISE (game-qc-android: drift clearances, slots + empty-screen AC, 18 mm floor, gesture insets, testability); revised plan → game-qc-android re-check | `design/TASK-047-gdd-hint-letters` | 2026-11-18 |
 | TASK-048 | GDD: Parent Gate & Grown-up Panel (`design/gdd/parent-gate-panel.md`) via /design-system | design | game-qc-ios (review: game-qc-android) | PLAN REVISE (game-qc-android: hourly risk, multi-touch, chord palm, dull challenge, freeze, timers, lock hand-off); Luan answered (K-20) | `design/TASK-048-gdd-parent-gate-panel` | 2026-11-18 |
 | TASK-049 | GDD: Reveal Stage (`design/gdd/reveal-stage.md`) via /design-system | design | game-dev-ios (review: game-dev-android) | IN PROGRESS: PLAN APPROVED 2026-11-18 (K-20 stage fit + Reduce Motion) | `design/TASK-049-gdd-reveal-stage` | 2026-11-18 |
+| TASK-050 | Cross-GDD follow-ups: Key Table peek resolve; Press Queue hasWord + Parade F2 + gate freeze; Input R8 origin + R6 exact chord + challenge; Audio late-art/hasWord | design | game-art-content (review: game-dev-ios) | SENT 2026-11-18 | `design/TASK-050-cross-gdd-followups` | 2026-11-18 |
 
 ## Leader log
 
