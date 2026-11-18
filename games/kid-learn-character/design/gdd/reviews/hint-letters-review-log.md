@@ -92,3 +92,8 @@ Reviewed-Content-Hash: (pending review) design/gdd/hint-letters.md a557920dc32a0
 Review mode: lean · Workflow: standard
 Change: R5 and F4: the parade meter's box (x 846–1022, y 40–76 with its glow, published by the Reveal Stage) is a clearance box (≥ 97.8); every slot passes at any jitter (R2 124 / 114, R1 178); no capacity threshold moves (R2 would fail only above k ≈ 1.27). Review: game-qc-android from the diff.
 Reviewed-Content-Hash: design/gdd/hint-letters.md cd7dbb2f94e689df982b5680cd4b315ac1727bc7
+
+## Update — 2026-11-18 — TASK-120 render-read fixes (no re-review)
+Review mode: lean · Workflow: standard
+Change: The meter box is placed from queue_max (art bible §7); the clearance holds for every queue_max in 0–5 (nearest slot ≥ 124 at zero jitter, ≥ 114 at any jitter); the capacity note restated.
+Reviewed-Content-Hash: design/gdd/hint-letters.md 2dedd30359e3c318c287457b75553160fa73beb5

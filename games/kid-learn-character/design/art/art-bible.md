@@ -378,15 +378,22 @@ plus, if a grown-up turns it on, the on-screen keyboard row (below). The grown-u
 one cell per new creature in the batch; when it is full, the parade starts (Parade R12, F4 own when it changes; this
 is its look). **No number and no text.** It is Starlight, because gold is for letters only (§4) and Starlight already
 means "I heard you" and progress (the moon ring).
-- **Box and position:** a track **168 × 28 stage units**, corner radius 14, centred on **(934, 58)** (x 850–1018,
-  y 44–72): the top right of the safe stage, on the queue-token row's line, just left of it (the tokens' glow starts at
-  x 1042). With the glow the box is **x 846–1022, y 40–76**; that is the box the Reveal Stage publishes for Hint
-  Letters (its F4). On an 11" iPad it is about 157 × 26 pt (30 × 5 mm).
+- **Box and position:** a track **168 × 28 stage units**, corner radius 14, at y 58 (y 44–72): the top right of the
+  safe stage, on the queue-token row's line, **24 units left of the leftmost token's glow** that `queue_max` allows
+  (tokens at x 1214 − 66·j, glow radius 40; TASK-120 render read). Its centre is
+  ```
+  meter_cx = 1214 − 66 · (max(queue_max, 1) − 1) − 40 − 24 − 84 = 1066 − 66 · (max(queue_max, 1) − 1)
+  ```
+  At the default `queue_max` 3 that is **(934, 58)**, x 850–1018; with the glow the box is **x 846–1022, y 40–76**.
+  Across Press Queue's range 0–5 the centre runs from 1066 to 802. That glow box is what the Reveal Stage publishes for
+  Hint Letters (its F4, which passes for every `queue_max` in 0–5). On an 11" iPad it is about 157 × 26 pt
+  (30 × 5 mm).
 - **Inside the safe stage, never the screen corner** (K-20): on a portrait iPad or a tall window (K-39) the extra sky
   is above it; a wide Mac window adds hills to its right. The keyboard row's `row_lift` does not move it.
 - **Cells:** 6 rounded rectangles, **23 × 18 units**, corner radius 6, 4 units apart, inset 5 from the track: centres
   at x = 866.5 + 27·i, y 58. They light **left to right**, the way the parade walks.
-- **Colours, the same in every look:** the track is Ink `#2a2340` at **50%**; a lit cell is Starlight `#fbeec8` at
+- **Colours, the same in every look:** the track is Ink `#2a2340` at **70%** *(TASK-120 render read: 50% fell
+  below 3:1 under linear blending)*; a lit cell is Starlight `#fbeec8` at
   100%; an unlit cell is Starlight at **25%**. No outline (UI tokens have none, §5) and no gold. It is not tinted by
   the weather and not dimmed at night (a UI element, like the tokens), and it sits under the panel's dim. Starlight
   meets the frame cap (L 0.86 < 0.88) and the red check (R/(R+G+B) 0.36).
@@ -397,16 +404,19 @@ means "I heard you" and progress (the moon ring).
     and 45%**. It is steady at 40% under Reduce Motion. It usually lasts 1.5 s before the parade starts (K-45).
   - **Handover:** as the parade fades in, the glow and the cells not carried into the next batch fade back over
     0.6 s.
-- **Per look, contrast** (WCAG, against the sky's top and mid colours, since the meter sits in the upper sky):
+- **Per look, contrast** (WCAG, against the sky's top and mid colours, since the meter sits in the upper sky). The
+  alpha composite is computed **both ways**, since the result depends on the renderer's blend space: in 8-bit sRGB
+  values ("gamma", the default for a non-sRGB target) and in linear light (an sRGB-format target). The design holds
+  under either.
 
-  | Look | Lit cell on the track | Unlit cell on the track | Track on the sky | Glow swing ΔL |
+  | Look | Lit cell on the track (gamma · linear) | Unlit cell on the track | Track on the sky | Glow swing ΔL |
   |---|---|---|---|---|
-  | Morning | 5.3 / 3.7 :1 | 1.6 / 1.5 :1 | 2.3 / 2.7 :1 | ≤ 0.064 |
-  | Day | 5.6 / 3.9 :1 | 1.7 / 1.5 :1 | 2.2 / 2.6 :1 | ≤ 0.065 |
-  | Dusk | 12.4 / 9.0 :1 | 2.1 / 1.9 :1 | 1.0 / 1.5 :1 | ≤ 0.066 |
-  | Night | 14.0 / 12.2 :1 | 2.1 / 2.1 :1 | 1.1 / 1.1 :1 | ≤ 0.065 |
+  | Morning | 7.6 / 6.1 · 5.4 / 3.6 :1 | 1.8 / 1.7 · 2.1 / 1.7 :1 | 3.3 / 4.4 · 2.3 / 2.7 :1 | ≤ 0.067 · 0.074 |
+  | Day | 7.8 / 6.3 · 5.8 / 3.9 :1 | 1.9 / 1.7 · 2.2 / 1.7 :1 | 3.1 / 4.2 · 2.3 / 2.6 :1 | ≤ 0.067 · 0.075 |
+  | Dusk | 12.6 / 10.5 · 12.6 / 9.7 :1 | 2.1 / 2.0 · 3.9 / 3.2 :1 | 1.1 / 1.7 · 1.1 / 1.6 :1 | ≤ 0.067 · 0.084 |
+  | Night | 13.6 / 12.5 · 13.5 / 12.4 :1 | 2.1 / 2.1 · 4.1 / 3.9 :1 | 1.1 / 1.1 · 1.1 / 1.1 :1 | ≤ 0.066 · 0.085 |
 
-  A lit cell is ≥ 3:1 everywhere, the floor §4 rule 2 sets for the glyph and WCAG 1.4.11 for graphics that must be seen. Unlit cells are faint on purpose:
+  A lit cell is ≥ 3:1 everywhere in both blend spaces (worst: 3.6:1, Morning mid sky, linear), the floor §4 rule 2 sets for the glyph and WCAG 1.4.11 for graphics that must be seen. Unlit cells are faint on purpose:
   the six places show, and only lit ones draw the eye. At dusk and night the track all but disappears into the sky,
   so the meter reads as six faint dots that light. The glow's swing stays below ΔL 0.1, so it is never a flash
   transition (Accessibility F2; ADR-0013).

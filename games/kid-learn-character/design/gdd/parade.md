@@ -292,7 +292,8 @@ batch is used from then on.
    and `freeze()` / `resume()` for the gate challenge (K-20). The Press Queue follows the same signals (its R8, R9,
    and R8a: the gate freeze on the play clock).
 7. **The parade meter** *(TASK-120, K-44)*: the Reveal Stage draws the meter from the Parade's **meter snapshot**
-   `{cells: parade_count, filled, litAt[], armed, armedAt, draining}` (R12, F4), with the art bible §7 look, in the
+   `{cells: parade_count, filled, litAt[], armed, armedAt, drainAt}` (R12, F4; `drainAt` = the Walking-entry time,
+   or none; TASK-120 render read), with the art bible §7 look, in the
    queue-token layer, and publishes its **meter box** next to the token circles for Hint Letters' clearances (F4
    there). It routes a touch on the meter as an empty-stage `sparkle(point)`.
 
@@ -365,9 +366,9 @@ litAt_i       = play time of the shown(...) that made filled > i
 a_i(t)        = e + (1 − e) · ease(clamp((t − litAt_i) / meter_step_s, 0, 1))     lit cell
               = e                                                                  unlit cell
 ease(u)       = 1 − (1 − u)²                                                       ease-out
-drain         : at Walking entry each cell i ≥ filled goes linearly from its alpha to e over fade_s
+drain         : from drainAt (the Walking-entry time) each cell i ≥ filled goes linearly from its alpha to e over fade_s
 glow(t)       = ramp(t) · (g0 + g1 · sin(2π · meter_pulse_hz · (t − armedAt)))     Armed or Waiting for art
-              = fades linearly to 0 over fade_s from Walking entry; 0 otherwise
+              = from drainAt, linearly from its value at drainAt to 0 over fade_s; 0 otherwise
 ramp(t)       = clamp((t − armedAt) / meter_step_s, 0, 1)
 ```
 | Variable | Meaning | Value |
@@ -388,8 +389,8 @@ fade to 0.25 over 0.6 s; cell 0 stays at 1.
 
 **Flash bounds (ADR-0013):**
 - **Rates (F1, G1):** the only periodic part is the glow at 0.5 Hz, ≤ 1 Hz: no exception needed.
-- **The pulse is not a transition:** Starlight at 0.35–0.45 alpha changes relative luminance by **≤ 0.066** in every
-  look, on the track and on the sky (art bible §7 table), below WCAG's 0.1, so F2 counts no transitions from it.
+- **The pulse is not a transition:** Starlight at 0.35–0.45 alpha changes relative luminance by **≤ 0.085** in every
+  look (≤ 0.067 if the renderer blends in sRGB values), on the track and on the sky (art bible §7 table), below WCAG's 0.1, so F2 counts no transitions from it.
 - **Fills are rare:** a cell fills once per formed reveal (reveals form ≥ 1.2 s apart, the reduced `formedS`) and the
   drain happens once per parade: at most 2 transitions per pixel in any 1 s window, below F2's 7, **at any size**.
 - **Area (the D7 style):** the meter's box with its glow, 176 × 36 units, is 22,156 px on an 11" iPad (1.87 px per
@@ -585,7 +586,7 @@ Logic criteria use an injected clock and fake Reveal Stage, Press Queue and Cast
 | MT-Q1 | Show the meter from Play entry (empty at first), or hide it until the first creature joins the batch? | **From Play entry**, empty: an empty bar says "something fills here" before the first creature, which is the gap Luan's playtest found. Not on the Title either way. |
 | MT-Q2 | A sound when the meter fills? | **No.** The parade tune E12 starts 1.5 s later and is the full moment's sound; an extra sting would be a reward sound (anti-pillars). |
 | MT-Q3 | A small light that flies from the new creature to its cell? | **No, not for the MVP:** it crosses the stage over the glyph and creature on every new key. The cell lighting as the creature forms carries the link. |
-| MT-Q4 | The very corner for the meter, moving the queue tokens left of it, instead of the meter left of the tokens? | **Keep the tokens where they are** (meter at x 846–1022): no change to the Reveal Stage's token row or Hint Letters' token clearances; both are still the top right. |
+| MT-Q4 | The very corner for the meter, moving the queue tokens left of it, instead of the meter left of the tokens? | **Keep the tokens where they are** (meter at x 846–1022 at the default `queue_max` 3, art bible §7): no change to the Reveal Stage's token row or Hint Letters' token clearances; both are still the top right. |
 | MT-Q5 | K-45's beat: 1.5 s after the 6th creature has formed, or the parade at its fade-in end (0.5 s)? | **1.5 s** (`parade_delay_s`, the brief's pinned value): the child hears the creature's name first, and the tune never starts under it (F2). 0.5 s would duck the tune under the name. |
 
 Follow-ups for other GDDs (not blocking this one):

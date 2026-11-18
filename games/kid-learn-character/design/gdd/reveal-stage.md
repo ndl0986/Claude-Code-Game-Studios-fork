@@ -145,7 +145,8 @@ MorphCore F1).
   Letter Gold ink, in a still row at the top right of the safe stage, 66 units apart from x 1214, y 58 (as
   played). They appear without bounce (art bible §7).
 - The **parade meter** *(TASK-120, K-44)* is drawn from the Parade's **meter snapshot** (Parade R12, F4, Interface 7)
-  with the art bible §7 look (x 846–1022, y 40–76 with its glow), just left of the token row, inside the safe stage,
+  with the art bible §7 look (placed from `queue_max`: x 846–1022, y 40–76 with its glow at the default 3), just left
+  of the token row, inside the safe stage,
   in the token layer. A touch on it is an empty-stage `sparkle(point)`.
 
 **R7. Tapping the creature.**
@@ -208,7 +209,7 @@ MorphCore F1).
   use it. App Shell owns the window and the safe-area insets it hands over.
 - It also publishes, in stage units and updated whenever they move (`row_lift`, a token-row change, a new
   creature): the **cast box** (the current creature's box at its anchor), the **glyph box** (the glyph's drawn
-  box at full size), the **token circles** (the queue row), the **meter box** (the parade meter, x 846–1022, y 40–76
+  box at full size), the **token circles** (the queue row), the **meter box** (the parade meter, art bible §7; x 846–1022, y 40–76 at `queue_max` 3
   with its glow; TASK-120) and, while it is on, the **keyboard row band** (`y ≥ 582`,
   published by the On-screen Keyboard Row, its R1) *(TASK-062)*. Hint Letters reads them for its clearances (its R5);
   the moon's rect comes from the Parent Gate.

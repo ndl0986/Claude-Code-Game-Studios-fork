@@ -64,3 +64,8 @@ Reviewed-Content-Hash: design/gdd/parade.md 425d08b1147465b7d10798d8b5f6341c9d57
 Review mode: lean · Workflow: standard
 Change: from game-qc-android's REVISE: F4's example and AC-23 gave the glow at +0.2 s as 0.20, dropping the sine term; by F4 it is 0.5 · (0.40 + 0.05 · sin(0.2π)) = 0.215.
 Reviewed-Content-Hash: design/gdd/parade.md d056c399102d58342aa5fd09dd73ee40de8c3eb2
+
+## Update — 2026-11-18 — TASK-120 render-read fixes (no re-review)
+Review mode: lean · Workflow: standard
+Change: From game-dev-ios's render read: Interface 7's snapshot carries drainAt (the Walking-entry time) instead of a draining flag, and F4's drain and glow fade-out run from it; the glow swing bound is ≤ 0.085 (≤ 0.067 with sRGB-value blending) after the track went to 70%; MT-Q4 notes the meter is placed from queue_max (art bible §7). The 0.215 example was already fixed at 74da3aad.
+Reviewed-Content-Hash: design/gdd/parade.md c60bccd6a9ed8ddecc5613a80a51ca2be76791a0
