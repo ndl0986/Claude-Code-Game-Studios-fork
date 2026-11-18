@@ -37,3 +37,8 @@ Findings:
 - [RECOMMENDED] R7: native full screen vs a borderless window at the screen frame → "decided in the Mac build, NOT ASSESSED", naming window(_:willUseFullScreenPresentationOptions:) for the native case (fixed)
 - [RECOMMENDED] R7 (game-qc-ios): the gate challenge and the panel are overlays in the main window, never separate windows or sheets, so didResignKey never drops the lock (fixed)
 Reviewed-Content-Hash: design/gdd/app-shell-title.md ef2a879a99004c2f3244890c39cc9e560dbf64be
+
+## Update — 2026-11-18 — TASK-054a follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: A1: AC-3 logs all four ready conditions in any order of arrival before the options; R7's overlay reason now says another window would move focus away and Child Lock-in releases only on didResignActive. Wording and rule edits from the TASK-054 follow-up list (production/team/TASK-054-followups.md @ 84f7ea2); Parent Gate G-numbers cited as given by game-qc-ios (TASK-048 not merged). Review: game-qc-ios, from the diff.
+Reviewed-Content-Hash: design/gdd/app-shell-title.md 02d7c90895449c9ad40a1dbbe9996794c33d8bbf

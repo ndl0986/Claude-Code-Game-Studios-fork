@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent review by game-dev-ios, 2026-11-18)
 > **Author**: game-dev-android for Luan (TASK-039); plan reviewed by game-dev-ios
-> **Last Updated**: 2026-11-18 (TASK-050: K-21 child lock OFF for this run only)
+> **Last Updated**: 2026-11-18 (TASK-054a follow-ups)
 > **Last Verified**: 2026-11-18, against ADR-0001 (Accepted) Decisions 8 and 9, art bible §2, §4 and §7, TASK-034
 > **Implements Pillar**: Pillar 5 (Safe by Design)
 
@@ -50,7 +50,7 @@ about, and "Start over" really does return the app to how it was on day one.
 | `weather` | one of `clear`, `cloudy`, `lightRain`, `snow` | `clear` | Scene: Time of Day & Weather |
 | `windy` | boolean; takes effect only with `lightRain` or `snow` (art bible §2) | `false` | Scene: Time of Day & Weather |
 | `keyboardRow` | boolean | `false` (art bible §7: off by default) | On-screen Keyboard Row, Input & Key Filter |
-| `childLock` | boolean; **macOS only** (the key does not exist on iPadOS or Android) | `false` | Child Lock-in. **Stored only as ON** (K-21, R8): turning it OFF in the panel lasts for this run only |
+| `childLock` | boolean; **macOS only** (the key does not exist on iPadOS or Android) | `false` | Child Lock-in. **Stored only as ON** (K-21, R8): turning it OFF in the panel lasts for this run only; the run value is `childLockActive` (R8) |
 
 - **Reserved, not in v1:** `voiceLocale` (Alpha, K-02 Vietnamese voice). It arrives with a schema bump (R7).
 - `muted` keeps `volume` untouched: unmuting returns to the same level.
@@ -106,7 +106,8 @@ only the record:
   Individual fields are never stored under separate keys. So a write either replaces the whole record or does
   not happen; a crash or power loss mid-write leaves the old record or the new one, never a mix.
 - **Writes:** on every grown-up change, the store writes the full in-memory record at once (one exception: a
-  run-only `childLock` OFF is written as `true`, R8, K-21). The volume slider
+  run-only child-lock OFF changes only `childLockActive` and writes **nothing**, R8, K-21; the record keeps
+  `childLock: true`). The volume slider
   writes when it is released, not on every step while dragging. **While dragging**, the grown-up panel sends
   the preview gain (F2 from the slider's current position) straight to Audio & Voice, so the grown-up hears the
   level as they move it; the store is not involved. **On release**, the store writes `volume` (F1) and sends one
@@ -175,12 +176,18 @@ only the record:
 - If `childLock` is `true` at launch, Child Lock-in engages it **only after all of**: the first frame has been
   drawn; the ⌃⌥⌘Q parent chord handler is installed (Input & Key Filter R6); and Input's kiosk-on mode is active
   (Input & Key Filter R5). The kiosk blocks force-quit and shutdown, so it must never engage before the way out
-  works (game-dev-ios's safety point).
+  works (game-dev-ios's safety point). Child Lock-in R3 holds the full list (also the window covering its display,
+  the app active, and `childLockActive`).
 - The `childLock` key does not exist off macOS (R1, R6).
-- **OFF lasts for this run only** (Luan, K-21; TASK-050). Turning the lock **ON** in the panel writes
-  `childLock: true`. Turning it **OFF** changes only the **in-memory** value: the kiosk turns off for this run, and
-  every write keeps `childLock: true` in the record, so `childLock` is **never persisted as false** once it has been
-  turned on. At the next launch the lock is ON again and engages once the app is ready (the order above, K-12).
+- **The run value `childLockActive`** (macOS only; TASK-054 S2). Besides the stored `childLock`, the store keeps a
+  **run value** `childLockActive`, in memory only and never written: **at launch it equals the stored `childLock`**
+  (false when there is no record). It is what Child Lock-in engages and disengages on (Child Lock-in R3, R4), and
+  what the Parent Gate's switch shows and sets (Parent Gate G11).
+- **OFF lasts for this run only** (Luan, K-21; TASK-050). Turning the lock **ON** in the panel sets
+  `childLockActive = true` **and** writes `childLock: true` (one write, one notification). Turning it **OFF** sets
+  only `childLockActive = false`: **no write**, one notification (R10); the kiosk turns off for this run. Every
+  later write of another field keeps `childLock: true` in the record, so `childLock` is **never persisted as false**
+  once it has been turned on. At the next launch the lock is ON again and engages once the app is ready (the order above, K-12).
   Closing the panel with the lock OFF shows "Child lock is OFF" for a few seconds (the panel GDD's). The only way to
   clear the stored ON is Reset (R9), which removes the record.
 
@@ -189,15 +196,19 @@ only the record:
 - The Parent Gate & Grown-up Panel owns the button and its confirmation. The store's part: Reset **removes the
   record** (or replaces it with an empty one), so the app is back to the first-launch state (R5), and every field
   takes its R1 default in memory.
-- Reset sends **one** change notification carrying the whole new record (R10), not one per field.
+- Reset sends **one** change notification carrying the whole new record (R10), not one per field, with
+  `childLockActive = false`.
 - Since nothing else is stored (R2), this is all of the app's saved state. If `childLock` was on, Child Lock-in
   turns the kiosk off when it receives the notification.
 
 **R10. Change notifications.**
 
 - Consumers read the current in-memory record and subscribe to changes. A change is delivered **on the main
-  thread**, after the write has been issued, as the whole new record (consumers compare what they care about).
-- One grown-up change → one notification. Reset → one notification. Reads at launch send none (consumers read the
+  thread**, after the write has been issued, as the whole new record plus `childLockActive` (consumers compare what
+  they care about).
+- One grown-up change → one notification. Reset → one notification. **A run-only child-lock OFF → one
+  notification with no write** (`childLockActive` false, the record unchanged; TASK-054 S1), so Child Lock-in can
+  disengage. Reads at launch send none (consumers read the
   record directly in the R5 order).
 
 **R11. Ownership.** The Settings Store owns storage, defaults, validation, migration, Reset and notifications. It
@@ -226,7 +237,7 @@ is already the new one.
 | Scene: Time of Day & Weather | reads | `weather` and `windy`; time of day comes from the clock, not the store |
 | On-screen Keyboard Row | reads | `keyboardRow` |
 | Input & Key Filter | reads (indirectly) | the keyboard row's on/off decides whether row rectangles are published; Child Lock-in sets Input's kiosk-on mode |
-| Child Lock-in | reads | `childLock` (macOS only); engages per R8 |
+| Child Lock-in | reads | `childLockActive` (macOS only) and its notifications; engages per R8 and Child Lock-in R3 |
 | Privacy & Kids Compliance | evidence | R1–R4 are its list of stored data, its "no sync" and its Required-Reason entry |
 | Accessibility | none | Reduce Motion is read live from the OS (R2), never stored |
 | MorphCore, Press Queue, Parade, Hint Letters, Reveal Stage | none | keep no persisted state (R2) |
@@ -298,7 +309,7 @@ perceptual curve; that curve is its own and the store only hands over `gain`.
   - Audio & Voice (`volume`, `muted`).
   - Scene: Time of Day & Weather (`weather`, `windy`).
   - On-screen Keyboard Row (`keyboardRow`).
-  - Child Lock-in (`childLock`, R8 ordering).
+  - Child Lock-in (`childLockActive`, R8 ordering; its R3 lists the full preconditions).
   - Input & Key Filter (keyboard row on/off and kiosk-on mode, both indirectly).
   - Privacy & Kids Compliance (R1–R4 as evidence; privacy manifest).
 - **Documents:** ADR-0001 Decision 8 (network none) and 9b (kiosk); art bible §2 (weather list, "today's weather"
@@ -366,8 +377,9 @@ All are unit tests against an in-memory or temporary store unless stated.
   the kiosk presentation options are applied only after the first frame AND after the ⌃⌥⌘Q handler and Input's
   kiosk-on mode are active (checked by a launch-order log or test seam), AND ⌃⌥⌘Q opens the panel right after.
 - **AC-15b Child lock OFF is for this run (macOS, K-21):** GIVEN `childLock` true stored, WHEN the grown-up turns it
-  OFF in the panel, THEN the kiosk turns off now AND the record on disk still holds `childLock: true` after that
-  write and after any other field's write; WHEN the app relaunches, THEN the lock is ON and engages per AC-15. GIVEN
+  OFF in the panel, THEN `childLockActive` is false, exactly one notification is delivered, **no write happens** (the
+  bytes on disk are unchanged), and the kiosk turns off now; AND after any other field's write the record still
+  holds `childLock: true`; GIVEN a launch, THEN `childLockActive` equals the stored `childLock`; WHEN the app relaunches, THEN the lock is ON and engages per AC-15. GIVEN
   Reset, THEN the record is removed and the next launch has the lock off (default).
 - **AC-16 No sync (build check):** the app binary and sources reference no `NSUbiquitousKeyValueStore`, CloudKit or
   network API for the store; Android declares no cloud or network service for it. The Apple privacy manifest

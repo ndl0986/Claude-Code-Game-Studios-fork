@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent read by game-dev-android, merged 2026-11-18)
 > **Author**: game-dev-ios for Luan (TASK-051); plan reviewed by game-dev-android
-> **Last Updated**: 2026-11-18
+> **Last Updated**: 2026-11-18 (TASK-054a follow-ups)
 > **Last Verified**: 2026-11-18, against Input & Key Filter (Title and Inactive states), Audio & Voice (E5, R2.1,
 > R6), Settings Store (R5, R8), Key Table & Theme Data §5, Press Queue (R3, R9), Reveal Stage (R8, R10), Hint
 > Letters (R9), Parade (R6), Privacy & Kids Compliance (PKC-01, 02, 05, 09, 12, 14; L-07), decisions K-10, K-12,
@@ -130,8 +130,8 @@ reset only at launch (Parade R1).
   at the screen's frame is **decided in the Mac build, NOT ASSESSED**. Closing the window quits the app (one
   window). ⌘Q quits only with the kiosk off (Input R5).
 - **One window, overlays inside it:** the gate's challenge and the grown-up panel are **overlays drawn in the main
-  window**, never separate windows, sheets or popovers, so the window never resigns key while they show (a
-  `didResignKey` would drop the lock; Child Lock-in review).
+  window**, never separate windows, sheets or popovers, so the window never resigns key while they show (another
+  window would move focus away; Child Lock-in releases only on `didResignActive`, its R5) *(TASK-054 A1)*.
 - **Any resize** (window, rotation, Split View change) republishes the Reveal Stage's fit; the reveal in progress
   is not restarted, and Cast Rendering may change texture tier (its edge case).
 
@@ -282,8 +282,7 @@ Parade and Child Lock-in. Screenshots are retained in `production/qa/evidence/`.
 2. **AC-2 First frame:** at 06:30, 12:00, 17:00 and 21:00 (injected clock) the first frame is the matching look
    (screenshots), with no text on screen.
 3. **AC-3 Mac kiosk order:** with `childLock` stored true, the kiosk options are applied only after the first frame,
-   the chord handler, Input's kiosk-on mode **and the window covering its display** (a test seam logs each, in that
-   order, before the options); ⌃⌥⌘Q opens the gate right after. The gate and panel open as overlays in the same
+   the chord handler, Input's kiosk-on mode **and the window covering its display** (a test seam logs all four, in any order of arrival, before the options) *(TASK-054 A1)*; ⌃⌥⌘Q opens the gate right after. The gate and panel open as overlays in the same
    window (no window resigns key).
 4. **AC-4 K-21:** child lock turned off in the panel, then a relaunch: the kiosk engages again once ready.
 5. **AC-5 Title starts:** D, 7 and a tap at (200, 200) each start play; Space, Esc and a tap on the moon do not.

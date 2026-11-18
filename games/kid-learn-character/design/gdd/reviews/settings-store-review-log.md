@@ -32,3 +32,8 @@ Follow-ups (not blocking): volume preview while dragging; debug logs at .debug l
 Review mode: lean · Workflow: standard
 Change: Rule change by Luan, **K-21**: the Mac child lock turned OFF in the panel lasts for this run only; childLock is stored only as ON (never persisted as false once on), and the next launch engages it again once the app is ready (R8 order, K-12). R1 row, R4 write exception, R8 bullet, AC-15b. Only Reset clears the stored ON. Verdict unchanged; review by game-dev-ios.
 Reviewed-Content-Hash: design/gdd/settings-store.md d0629a5f8a9ed9bb6d224656bb1606456dea1ddd
+
+## Update — 2026-11-18 — TASK-054a follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: S1: R10 sends one notification for a run-only child-lock OFF, with no write. S2: the run value childLockActive defined in R8 (= stored childLock at launch; OFF changes only it, K-21); R1 row, R4's write exception, R9 Reset, R10, AC-15b and the Child Lock-in rows aligned (no write on OFF; the record keeps childLock: true). Wording and rule edits from the TASK-054 follow-up list (production/team/TASK-054-followups.md @ 84f7ea2); Parent Gate G-numbers cited as given by game-qc-ios (TASK-048 not merged). Review: game-qc-ios, from the diff.
+Reviewed-Content-Hash: design/gdd/settings-store.md 92d1cbd1748f0cbe76272d90a514feba935fe9d3

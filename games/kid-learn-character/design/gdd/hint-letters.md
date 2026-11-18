@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent read by game-qc-android, merged 2026-11-18)
 > **Author**: game-dev-android for Luan (TASK-047); plan reviewed by game-qc-android
-> **Last Updated**: 2026-11-18
+> **Last Updated**: 2026-11-18 (TASK-054a follow-ups)
 > **Last Verified**: 2026-11-18, against Input & Key Filter R7/F1, Press Queue R3/R4/R11, Key Table (36 keys), art
 > bible §2–§4, §6, §7, the one-shot (`config.js` hint_*, `index.html` spawnHint / hintAt / takeHint / drawHints),
 > decisions K-06, K-08, K-10, K-15, K-16, K-18, K-20
@@ -277,7 +277,8 @@ With `k > 1`, the bubble, `hitRadius`, the drift clearance, the spacing and ever
 | 11" iPad (2388 × 1668) | 2388 / 1280 = 1.87 | 264 | 280 px ≈ **27.0 mm** | 1 |
 | 13" iPad (2752 × 2064) | 2.15 | 264 | 322 px ≈ 31 mm | 1 |
 | Mac, 1280-pt window on a 2× 254-ppi screen | 2.0 | 254 | 300 px = 30 mm | 1 |
-| Mac, 700-pt window, same screen | 1.09 | 254 | 164 px ≈ 16.4 mm | 1.10 |
+| Mac, the smallest window (960 × 540 pt, App Shell R7) on a 2× 254-ppi screen *(TASK-054 H1)* | 1920 / 1280 = 1.5 | 254 | 225 px ≈ 22.5 mm | 1 |
+| Mac, the smallest window on a 1× ~109-ppi external display | 0.75 | 109 | 112.5 px ≈ 26.2 mm | 1 |
 | 10" Android tablet (later; `xdpi`) | screen px / 1280 | `xdpi` | by formula | NOT ASSESSED |
 
 `stage_to_px` comes from the Reveal Stage (K-20). On the Mac, `ppi` comes from the display's physical size
@@ -286,12 +287,14 @@ With `k > 1`, the bubble, `hitRadius`, the drift clearance, the spacing and ever
 **Capacity at k > 1:** at `k = 1.2` the hint spacing is 222.7, so the two slots in one column (210 apart) cannot
 both hold a hint; L1 and R1 also fail the scaled moon and token clearances (167.4 and 157.4 against 152.1 and
 142.0), and the widest creature blocks the inner slots (117.4). That leaves L3 and R3: **2 hints** on screen, not 3.
-This is stated, not hidden; it occurs only on a small Mac window.
+This is stated, not hidden. **It cannot occur in the MVP:** every iPad and every Mac window allowed by App Shell's
+960 × 540 pt minimum gives `k = 1` (the table above; the smallest is 22.5 mm). It applies only below the floor, i.e.
+to phones, which are out of scope (R11) *(TASK-054 H1)*.
 
 **Where it starts** (game-qc-android): at zero jitter L1 fails the scaled moon clearance once `97.8k + 50 > 152.1`,
 i.e. `k > 1.044`, and R1 the token clearance once `97.8k + 40 > 142.0`, `k > 1.043`. Between about 1.044 and 1.18 they
 pass only with a favourable jitter (L1 at (+10, +10) is 165.5 from the moon). So with the widest creature on stage,
-from `k ≈ 1.044` (including the 700-pt Mac row, `k = 1.10`) the screen may show 2 hints rather than 3.
+from `k ≈ 1.044` the screen may show 2 hints rather than 3 (again, not reachable on the MVP's iPads and Macs).
 
 ## Edge Cases
 
@@ -381,7 +384,7 @@ a fake Reveal Stage (cast box, `stage_to_px`, freezes) and the slot table. No wa
 - **AC-6 Widest creature:** with the widest shipped creature's box held on stage, the inner slots are blocked at
   their static centres (L2, L4, R2, R4 at the estimate) and 3 hints still spawn on the outer slots.
 - **AC-7 Never empty (seeded, worst case):** over 10,000 simulated minutes **with the widest shipped creature held
-  on stage**, at `k = 1.0`, `1.10` and `1.2`, with presses and outcomes from a seeded mash: Play is never without a
+  on stage**, at `k = 1.0` (every MVP device) and, as simulated factors for a later phone, `1.10` and `1.2`, with presses and outcomes from a seeded mash: Play is never without a
   hint for more than one gap (0.7 s) after the first spawn, and no two hit circles overlap; at `k = 1.2` at most 2
   hints are on screen.
 - **AC-8 Life and fades (F2):** every life is in 4.8–7.2 s; alpha and scale match F2 at the example ages within
