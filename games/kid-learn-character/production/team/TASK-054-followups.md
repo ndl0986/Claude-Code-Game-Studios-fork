@@ -70,3 +70,4 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
 - Reveal Stage: Reduce Motion rule for the tap / ignored-press sparkles (owner decides).
 - App Shell + art bible: play-button breathe rate 0.38 vs 0.48 Hz; play button's physical touch floor.
 - Every motion GDD: read Accessibility's `reduceMotion` flag, not the OS API.
+- Reveal Stage R10: add the On-screen Keyboard Row at z 35 (above the current creature, below glyph/specks) to the draw-order line (ADR-0006 D1, TASK-070).
