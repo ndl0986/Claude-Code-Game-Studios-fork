@@ -40,7 +40,9 @@ public enum StructuralCheck {
     static let forbidden: Set<String> = ["play", "u", "seed"]
 
     /// Every schema error in `root`, the decoded `cases.json` of directory `directory` (for example `settings-record-v1`).
-    public static func check(_ root: JSONValue, directory: String, file: String, declaration: ContractDeclaration) -> [SchemaError] {
+    /// With no `declaration` (a contract whose code is not started, K-40) the generic rules run and the
+    /// `spec.md`-specific ones (S7's layer names, S8's given fields, S18's event types and fields) are skipped.
+    public static func check(_ root: JSONValue, directory: String, file: String, declaration: ContractDeclaration?) -> [SchemaError] {
         var errors: [SchemaError] = []
         func fail(_ path: String, _ rule: String) { errors.append(SchemaError(file: file, path: path, rule: rule)) }
         guard case .object(let top) = root else { fail("$", "top level is not an object"); return errors }
@@ -67,11 +69,13 @@ public enum StructuralCheck {
                 if !ids.insert(id).inserted { fail("\(p).id", "S5 duplicate id \(id)") }
             } else { fail("\(p).id", "S5 id required") }
             if let s = o["source"]?.string, validSource(s) {} else { fail("\(p).source", "S6 source format") }
-            if declaration.layers.isEmpty {
-                if o["layer"] != nil { fail("\(p).layer", "S7 layer where spec.md defines none") }
-            } else if let l = o["layer"]?.string, declaration.layers.contains(l) {} else { fail("\(p).layer", "S7 layer missing or unknown") }
+            if let declaration {
+                if declaration.layers.isEmpty {
+                    if o["layer"] != nil { fail("\(p).layer", "S7 layer where spec.md defines none") }
+                } else if let l = o["layer"]?.string, declaration.layers.contains(l) {} else { fail("\(p).layer", "S7 layer missing or unknown") }
+            } else if o["layer"] != nil && o["layer"]?.string == nil { fail("\(p).layer", "S7 layer must be a string") }
             if case .object(let g)? = o["given"] {
-                for k in g.keys.sorted() where !declaration.givenFields.contains(k) { fail("\(p).given.\(k)", "S8 unknown given field") }
+                for k in g.keys.sorted() where declaration.map({ !$0.givenFields.contains(k) }) ?? false { fail("\(p).given.\(k)", "S8 unknown given field") }
                 for (k, v) in g { checkFixtureRefs(v, fixtures, "\(p).given.\(k)", fail) }
             } else { fail("\(p).given", "given required object") }
             if case .object(let d)? = o["draws"] {
@@ -92,6 +96,7 @@ public enum StructuralCheck {
                 last = up
                 guard case .object(let e)? = s["event"], let type = e["type"]?.string else { fail("\(sp).event", "S18 event type required"); continue }
                 if e["time"] != nil { fail("\(sp).event.time", "S17 events carry no time") }
+                guard let declaration else { if s["expect"]?.array == nil { fail("\(sp).expect", "expect must be an ordered list") }; continue }
                 guard let fields = declaration.events[type] else { fail("\(sp).event.type", "S18 undeclared event type \(type)"); continue }
                 for k in e.keys.sorted() where k != "type" && k != "time" && !fields.contains(k) { fail("\(sp).event.\(k)", "S18 undeclared event field") }
                 for (k, v) in e { checkFixtureRefs(v, fixtures, "\(sp).event.\(k)", fail) }

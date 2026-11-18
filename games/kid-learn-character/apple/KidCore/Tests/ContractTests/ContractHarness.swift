@@ -35,34 +35,86 @@ final class DrawQueues {
     var leftover: [String: Int] { queues.filter { !$0.value.isEmpty }.mapValues(\.count) }
 }
 
-/// The KidCore harness (ADR-0004 D5). Every failure is a message; an empty list is a pass.
+/// The KidCore harness (ADR-0004 D5, with the K-40 note). Every failure is a message; an empty list is a pass.
+/// The list of contracts and their states is `contracts/README.md`'s registry, never a list here; this file only maps
+/// a registry runner name to the runner type that implements it.
 enum ContractHarness {
-    /// The runners this harness registers. A contract directory with no runner here is a FAIL.
-    static let registry: [ContractRunner.Type] = [SettingsRecordRunner.self, KeyTableModelRunner.self]
+    /// The runner types this harness implements, found by the name the registry row gives.
+    static let runners: [ContractRunner.Type] = [SettingsRecordRunner.self, KeyTableModelRunner.self]
 
     struct Report {
         var failures: [String] = []
         var counts: [String: (pass: Int, fail: Int)] = [:]
+        /// The K-40 lines: `structure: …`, `NOT ASSESSED …`, `SUPERSEDED …`, `contracts: …`.
+        var lines: [String] = []
     }
 
-    /// Runs every `contracts/*-v*/cases.json` under `root` (and `cases-generated.json` where present).
-    static func runAll(root: URL, registry: [ContractRunner.Type] = registry) -> Report {
+    static func name(_ r: ContractRunner.Type) -> String { String(describing: r) }
+
+    /// Runs every `contracts/*-v*/` under `root` by its registry row (K-40).
+    static func runAll(root: URL, runners: [ContractRunner.Type] = runners) -> Report {
         var report = Report()
         let fm = FileManager.default
-        let dirs = ((try? fm.contentsOfDirectory(atPath: root.path)) ?? [])
-            .filter { $0.range(of: #"-v[0-9]+$"#, options: .regularExpression) != nil }
-            .sorted()
+        let gameRoot = root.deletingLastPathComponent()
+        let readme = (try? String(contentsOf: root.appendingPathComponent("README.md"), encoding: .utf8)) ?? ""
+        let registry = ContractRegistry(readme: readme)
+        report.failures += registry.problems
+        let dirs = ContractRegistry.directories(root: root)
+        for k in registry.entries.keys.sorted() where !dirs.contains(k) { report.failures.append("registry \(k): no such directory") }
+
+        var structureOK = 0, wellFormed = 0, passed: [String] = [], notStarted: [String] = [], superseded: [String] = [], failed = Set<String>()
         for dir in dirs {
-            guard let runner = registry.first(where: { $0.contract == dir }) else {
-                report.failures.append("\(dir): no registered runner (ADR-0004 D5)")
-                continue
+            guard let entry = registry.entries[dir] else {
+                report.failures.append("\(dir): no registry row in contracts/README.md (K-40)"); failed.insert(dir); continue
             }
-            for name in ["cases.json", "cases-generated.json"] {
-                let url = root.appendingPathComponent(dir).appendingPathComponent(name)
-                if name == "cases-generated.json" && !fm.fileExists(atPath: url.path) { continue }
-                run(file: url, directory: dir, runner: runner, into: &report)
+            let file = root.appendingPathComponent(dir).appendingPathComponent("cases.json")
+            let fname = "\(dir)/cases.json"
+            guard let json = try? Fixture.load(file) else { report.failures.append("\(fname): unreadable"); failed.insert(dir); continue }
+            let mine: [ContractRunner.Type]
+            if case .runner(let names) = entry.row { mine = runners.filter { names.contains(name($0)) } } else { mine = [] }
+            let errors = StructuralCheck.check(json, directory: dir, file: fname, declaration: mine.first?.declaration)
+            let n = json["cases"]?.array?.count ?? 0
+            if !errors.isEmpty { report.failures += errors.map(\.description); failed.insert(dir); continue }
+            if n != entry.cases { report.failures.append("\(dir): \(n) cases, the registry declares \(entry.cases) (K-40)"); failed.insert(dir); continue }
+            structureOK += 1; wellFormed += n
+            let claimed = runners.filter { $0.contract == dir }
+            switch entry.row {
+            case .notStarted(let story):
+                if !claimed.isEmpty { report.failures.append("\(dir): not-started but runner \(claimed.map(name).joined(separator: ", ")) is registered (K-40)"); failed.insert(dir); continue }
+                if ContractRegistry.storyIsDone(story, gameRoot: gameRoot) { report.failures.append("\(dir): not-started but story \(story) is Done (K-40)"); failed.insert(dir); continue }
+                report.lines.append("NOT ASSESSED \(dir): not started (story \(story)); structure OK, 0 of \(n) cases run")
+                notStarted.append(dir)
+            case .supersededBy(let next):
+                var bad: [String] = []
+                switch registry.entries[next]?.row {
+                case .runner?, .notStarted?: if !dirs.contains(next) { bad.append("\(next) has no directory") }
+                default: bad.append("\(next) has no runner: or not-started: row")
+                }
+                if !claimed.isEmpty { bad.append("runner \(claimed.map(name).joined(separator: ", ")) still registered") }
+                let cites = ContractRegistry.sourcesCiting(dir, gameRoot: gameRoot)
+                if !cites.isEmpty { bad.append("cited by \(cites.joined(separator: ", "))") }
+                if !bad.isEmpty { report.failures.append("\(dir): superseded-by \(next): \(bad.joined(separator: "; ")) (K-40)"); failed.insert(dir); continue }
+                report.lines.append("SUPERSEDED \(dir) → \(next): not run (\(n) cases)")
+                superseded.append(dir)
+            case .runner(let names):
+                for r in claimed where !names.contains(name(r)) { report.failures.append("\(dir): runner \(name(r)) is not in its registry row (K-40)"); failed.insert(dir) }
+                let unknown = names.filter { n in !n.hasPrefix("Tools.") && !runners.contains { name($0) == n } }
+                if !unknown.isEmpty { report.failures.append("\(dir): no runner named \(unknown.joined(separator: ", ")) in this harness"); failed.insert(dir); continue }
+                let before = report.failures.count
+                for r in mine {
+                    for fileName in ["cases.json", "cases-generated.json"] {
+                        let url = root.appendingPathComponent(dir).appendingPathComponent(fileName)
+                        if fileName == "cases-generated.json" && !fm.fileExists(atPath: url.path) { continue }
+                        run(file: url, directory: dir, runner: r, into: &report)
+                    }
+                }
+                if report.failures.count > before { failed.insert(dir) } else if !mine.isEmpty { passed.append(dir) }
             }
         }
+        report.lines.insert("structure: \(structureOK)/\(dirs.count) contracts OK (\(wellFormed) cases well-formed)", at: 0)
+        let passText = passed.isEmpty ? "" : " (\(passed.joined(separator: ", ")))"
+        let nsText = notStarted.isEmpty ? "" : " (not-started: \(notStarted.joined(separator: ", ")))"
+        report.lines.append("contracts: \(passed.count) run PASS\(passText), \(notStarted.count) NOT ASSESSED\(nsText), \(superseded.count) SUPERSEDED, \(failed.count) FAIL")
         return report
     }
 
@@ -137,6 +189,7 @@ final class ContractHarnessTests: XCTestCase {
     func test_every_contract_in_the_repo() throws {
         let report = ContractHarness.runAll(root: try ContractHarness.contractsRoot())
         for (k, v) in report.counts.sorted(by: { $0.key < $1.key }) { print("CONTRACT \(k): \(v.pass) pass, \(v.fail) fail") }
+        for l in report.lines { print("CONTRACT \(l)") }
         for f in report.failures { XCTFail(f) }
     }
 }

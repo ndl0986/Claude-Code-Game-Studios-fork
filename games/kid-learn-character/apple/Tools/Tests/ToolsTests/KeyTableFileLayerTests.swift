@@ -70,7 +70,13 @@ final class KeyTableFileLayerTests: XCTestCase {
     }
 
     func test_key_table_schema_v1_file_layer() throws {
-        let url = try Fixture.contractsRoot(from: #filePath).appendingPathComponent("\(Self.contract)/cases.json")
+        // K-40: the registry decides; this harness runs only if the row names it.
+        let root = try Fixture.contractsRoot(from: #filePath)
+        let reg = ContractRegistry(readme: (try? String(contentsOf: root.appendingPathComponent("README.md"), encoding: .utf8)) ?? "")
+        guard case .runner(let names)? = reg.entries[Self.contract]?.row, names.contains("Tools.KeyTableFileLayer") else {
+            return XCTFail("\(Self.contract): the registry row does not name Tools.KeyTableFileLayer (K-40)")
+        }
+        let url = root.appendingPathComponent("\(Self.contract)/cases.json")
         let r = Self.run(file: url)
         print("CONTRACT \(Self.contract) [file]: \(r.pass) pass, \(r.failures.count) fail")
         for f in r.failures { XCTFail(f) }

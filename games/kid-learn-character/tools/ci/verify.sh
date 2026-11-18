@@ -1,18 +1,20 @@
 #!/usr/bin/env bash
 # ADR-0011 D4: the gates, fastest first. Exits non-zero if any gate fails. Runs at nice 10 and stops if the load
 # average goes above LOAD_MAX (default 40). Headless only (K-34): no Simulator window, no macOS app launch.
-#   tools/ci/verify.sh (--dev | --qc) [--app <path.app>]... [--evidence <dir>] [--no-xcode]
+#   tools/ci/verify.sh (--dev | --qc) [--app <path.app>]... [--evidence <dir>] [--no-xcode] [--release]
+#   --release: a release-candidate run; FAILs while any contract is NOT ASSESSED (not-started, K-40).
 set -u
 if [ -z "${VERIFY_NICED:-}" ]; then VERIFY_NICED=1 exec nice -n 10 "$0" "$@"; fi
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT" || exit 2
-SIMPATH="" EVIDENCE="" XCODE=1 APPS=()
+SIMPATH="" EVIDENCE="" XCODE=1 RELEASE=0 APPS=()
 while [ $# -gt 0 ]; do
   case "$1" in
     --dev|--qc) SIMPATH="$1" ;;
     --app) shift; APPS+=("$1") ;;
     --evidence) shift; EVIDENCE="$1" ;;
     --no-xcode) XCODE=0 ;;
+    --release) RELEASE=1 ;;
     *) echo "verify: unknown option $1" >&2; exit 2 ;;
   esac; shift
 done
@@ -56,6 +58,10 @@ for m in MorphCore KidCore ContractKit Tools; do
   gate "swift test $m" sh -c 'swift test --package-path "apple/$1" --scratch-path "$2/swiftpm/$1" > "$2/test-$1.log" 2>&1; r=$?; cat "$2/test-$1.log"; exit $r' _ "$m" "$BUILD"
   grep -h '^CONTRACT ' "$BUILD/test-$m.log" 2>/dev/null | sort -u | while IFS= read -r l; do say "OBSERVED ${l#CONTRACT }"; done
 done
+if [ "$RELEASE" = 1 ]; then
+  ns="$(grep -h '^CONTRACT NOT ASSESSED' "$BUILD"/test-*.log 2>/dev/null | sort -u | wc -l | tr -d ' ')"
+  if [ "$ns" -gt 0 ]; then say "FAIL release candidate: $ns contract(s) NOT ASSESSED (K-40)"; fails=$((fails + 1)); else say "PASS release candidate: no contract NOT ASSESSED (K-40)"; fi
+fi
 # 5. Xcode, headless
 if [ "$XCODE" = 1 ]; then
   gate "xcodebuild build macOS" xcodebuild -project apple/LetterMorph.xcodeproj -scheme LetterMorph -destination platform=macOS -derivedDataPath "$BUILD/xcode" -quiet build

@@ -247,6 +247,24 @@ no remote package pins, even in test targets, so no third-party schema validator
     are reported separately;
   - an unreadable or invalid file;
   - a layer with 0 cases where `spec.md` lists cases for it (D3).
+- *Note 2026-11-18 (K-40, TASK-079 S2; status stays Accepted):* contracts are written before their code, so a
+  contract may be **accepted but not started**. `contracts/README.md`'s `## Registry` table is the only list: every
+  `*-v*/` directory has exactly one row, `runner: <Name>[ + <Name>]`, `not-started: <story id>` or
+  `superseded-by: <contract-vN+1>`, with its declared case count. The harnesses keep no list of their own.
+  - **Every** cases.json is structure-checked (case-schema-v1; a not-started contract gets the generic rules, since
+    its `spec.md` declarations have no runner yet), and its case count must equal the row's. Reported on its own line:
+    `structure: <ok>/<all> contracts OK (<n> cases well-formed)`.
+  - The result line is separate: `contracts: <a> run PASS (…), <b> NOT ASSESSED (not-started: …), <c> SUPERSEDED,
+    <d> FAIL`. A not-started contract reads `NOT ASSESSED <contract>: not started (story <id>); structure OK, 0 of <n>
+    cases run`; a superseded one `SUPERSEDED <contract> → <next>: not run (<n> cases)`. Neither is ever PASS.
+  - **FAIL**, besides this section's list: a directory with no row; a row with no directory; a case count other than
+    the declared one; a not-started row with a registered runner, or whose story is Done (a `production/` story file
+    naming the id with `Status: Done`); a superseded row whose target has no directory or no runner / not-started
+    row, whose runner is still registered, or that code under `apple/*/Sources` cites.
+  - **Gates:** `verify.sh --release` (every release candidate) FAILs while any row is not-started; so does the
+    Production gate. **`/story-done` must refuse to close a system's story while its contract is not-started:** that
+    check belongs to the studio skill, not the harness (routed by the leader).
+  - Story ids are placeholders (`story:<system>`) until /create-epics and /create-stories exist.
 - Each case runs in its own `XCTContext.runActivity` named `<contract>/<caseId>`. A failure reads:
   `<contract>/<caseId> [<source>] <field path>: expected E, got A (tol T)`.
   The run ends with a pass/fail count per contract (and per layer).
