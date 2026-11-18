@@ -37,33 +37,588 @@
 #   its fields sit two columns past the dash. Quote a value that holds ": ". A
 #   line in any other shape is reported as unsupported layout, with its number.
 
-version: 1
-last_updated: ""
+version: 2
+last_updated: "2026-11-18"
 
-requirements: []
-
-# --- EXAMPLE ENTRIES (remove when first real entries are added) ---
-#
-# - id: TR-combat-001
-#   system: combat
-#   gdd: design/gdd/combat-system.md
-#   requirement: "Player takes damage from enemies based on attack power minus defence"
-#   created: 2026-03-10
-#   revised: ""
-#   status: active
-#
-# - id: TR-combat-002
-#   system: combat
-#   gdd: design/gdd/combat-system.md
-#   requirement: "Combo window timing is 0.4 seconds between hits"
-#   created: 2026-03-10
-#   revised: "2026-04-01"
-#   status: active
-#
-# - id: TR-combat-003
-#   system: combat
-#   gdd: design/gdd/combat-system.md
-#   requirement: "Old damage formula using raw stats"
-#   created: 2026-03-10
-#   revised: ""
-#   status: "superseded-by: TR-combat-001"
+requirements:
+- id: TR-input-001
+  system: input
+  gdd: design/gdd/input-key-filter.md
+  requirement: "Classify normalized key events: character first, position fallback, modifiers, held set, chord (R2-R6)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-input-002
+  system: input
+  gdd: design/gdd/input-key-filter.md
+  requirement: "Touch layers, batch sort and hint hit radius (R7, F1)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-input-003
+  system: input
+  gdd: design/gdd/input-key-filter.md
+  requirement: "Kiosk command-key exception and the Mac chord under kioskModeOn (R5, R6)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-input-004
+  system: input
+  gdd: design/gdd/input-key-filter.md
+  requirement: "Platform adapters: UIKit presses and AppKit key monitor produce normalized events; HID position map; Input Monitoring prompt (AC-1k6)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-input-005
+  system: input
+  gdd: design/gdd/input-key-filter.md
+  requirement: "Only letters and digits count; held keys, repeats and all other keys swallowed, system keys untouched (R4, R5)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-keytable-001
+  system: keytable
+  gdd: design/gdd/key-table-theme-data.md
+  requirement: "Bundled themes validated at build and at load; unknown versions refused (V1-V17, sections 5-6)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-keytable-002
+  system: keytable
+  gdd: design/gdd/key-table-theme-data.md
+  requirement: "Item pick with no immediate repeat; peek for prefetch (section 4)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-keytable-003
+  system: keytable
+  gdd: design/gdd/key-table-theme-data.md
+  requirement: "Data-driven per-key database (K-07), versioned JSON schema, one validator"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-keytable-004
+  system: keytable
+  gdd: design/gdd/key-table-theme-data.md
+  requirement: "Voice and sfx pipeline: pre-rendered TTS, AAC mono, loudness target, voiceDurations from data (V12, V15)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-keytable-005
+  system: keytable
+  gdd: design/gdd/key-table-theme-data.md
+  requirement: "rowWords valid with v1 fallback (V17)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-morph-001
+  system: morph
+  gdd: design/gdd/morphcore.md
+  requirement: "Morph positions within 1e-3 of the shared fixture on every platform"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-morph-002
+  system: morph
+  gdd: design/gdd/morphcore.md
+  requirement: "UI-free math; glyph and silhouette paths in the v1 SVG subset, glyphs baked from the OFL font"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-morph-003
+  system: morph
+  gdd: design/gdd/morphcore.md
+  requirement: "Frame time p99 within one refresh with 240 specks (AC-11)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-settings-001
+  system: settings
+  gdd: design/gdd/settings-store.md
+  requirement: "One record, atomic write, per-field validation, migration (R1-R7)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-settings-002
+  system: settings
+  gdd: design/gdd/settings-store.md
+  requirement: "Device only, no sync, one app-written key (R3; PKC-01, 05, 09)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-settings-003
+  system: settings
+  gdd: design/gdd/settings-store.md
+  requirement: "Settings read before the first frame (R5)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-settings-004
+  system: settings
+  gdd: design/gdd/settings-store.md
+  requirement: "childLock stored only as ON; OFF is run-only (R8, K-21); Reset removes the record (R9)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-settings-005
+  system: settings
+  gdd: design/gdd/settings-store.md
+  requirement: "Same bytes on both platforms; F1 rounding, F2 gain"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-pkc-001
+  system: pkc
+  gdd: design/gdd/privacy-kids-compliance.md
+  requirement: "No network, no SDK, no identifiers, no location (PKC-01..04)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-pkc-002
+  system: pkc
+  gdd: design/gdd/privacy-kids-compliance.md
+  requirement: "Privacy manifest with CA92.1 / 35F9.1; entitlements allowlist (PKC-05..09)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-pkc-003
+  system: pkc
+  gdd: design/gdd/privacy-kids-compliance.md
+  requirement: "No log call carrying input, code or accessibility state in release builds (PKC-14)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-pkc-004
+  system: pkc
+  gdd: design/gdd/privacy-kids-compliance.md
+  requirement: "Scans run on signed Release products, evidence retained per release candidate"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-audio-001
+  system: audio
+  gdd: design/gdd/audio-voice.md
+  requirement: "Event schedule E1-E12, no stacking speech, mash ceiling, freeze pause (R1-R4, R6)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-audio-002
+  system: audio
+  gdd: design/gdd/audio-voice.md
+  requirement: "Press to chime within one frame of the first answering frame, on a device (AC-16)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-audio-003
+  system: audio
+  gdd: design/gdd/audio-voice.md
+  requirement: "Fixed primed players, nothing created or decoded on a press, max 7 sounds (R2, AC-5, AC-10)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-audio-004
+  system: audio
+  gdd: design/gdd/audio-voice.md
+  requirement: "No click on a cut; mute and volume; limiter and mash gain F1 (R2.2, R3, R4.5, AC-9, AC-13, AC-14)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-audio-005
+  system: audio
+  gdd: design/gdd/audio-voice.md
+  requirement: "Session category, interruptions, silent mode, route and format changes (R6, AC-15, AC-20, AC-21)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-audio-006
+  system: audio
+  gdd: design/gdd/audio-voice.md
+  requirement: "Voice source, licence and no run-time TTS (R8, Q8, L-09)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-queue-001
+  system: queue
+  gdd: design/gdd/press-queue.md
+  requirement: "Accept, queue (max 3), ignore; holdEff; timeout (R3-R7, F1)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-queue-002
+  system: queue
+  gdd: design/gdd/press-queue.md
+  requirement: "formed reported exactly once; Press Queue and Reveal Stage contract (R6, R7, R11)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-queue-003
+  system: queue
+  gdd: design/gdd/press-queue.md
+  requirement: "Gate freeze, panel and background clear and settle (R8, R9, AC-20..24)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-cast-001
+  system: cast
+  gdd: design/gdd/cast-rendering.md
+  requirement: "SVG subset bake tool; one baked file and one draw interface for both render options (R2, R7, R11)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-cast-002
+  system: cast
+  gdd: design/gdd/cast-rendering.md
+  requirement: "Load on demand, resident cap, late-art wait that never moves the queue (R10, F6, F7, AC-15)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-cast-003
+  system: cast
+  gdd: design/gdd/cast-rendering.md
+  requirement: "Per-look edge switch on skyMidL, halo, dim (F8, K-25)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-cast-004
+  system: cast
+  gdd: design/gdd/cast-rendering.md
+  requirement: "Render-path decision (live paths, textures or a mix) backed by a device measurement (R11, AC-17)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-cast-005
+  system: cast
+  gdd: design/gdd/cast-rendering.md
+  requirement: "Draw interface carries no platform types (R12, AC-16)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-cast-006
+  system: cast
+  gdd: design/gdd/cast-rendering.md
+  requirement: "Speck cap F4, 6 px rule F1, tap hop F5 as pure functions (F1, F4, F5, F7)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-cast-007
+  system: cast
+  gdd: design/gdd/cast-rendering.md
+  requirement: "Shipped idles at or under 1 Hz (AC-11): a build check on the data"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-reveal-001
+  system: reveal
+  gdd: design/gdd/reveal-stage.md
+  requirement: "startReveal lengths, formed and shown, timeline, shared transforms (R3-R5)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-reveal-002
+  system: reveal
+  gdd: design/gdd/reveal-stage.md
+  requirement: "Play clock, freeze, resume, settle (R8)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-reveal-003
+  system: reveal
+  gdd: design/gdd/reveal-stage.md
+  requirement: "Stage fit contain-and-extend; published rects and boxes (R10, F1)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-reveal-004
+  system: reveal
+  gdd: design/gdd/reveal-stage.md
+  requirement: "Fixed draw-order layers; SpriteKit scene behind RenderSink; display-link frame driver"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-reveal-005
+  system: reveal
+  gdd: design/gdd/reveal-stage.md
+  requirement: "Reduce Motion timing set picked at start (R9)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-reveal-006
+  system: reveal
+  gdd: design/gdd/reveal-stage.md
+  requirement: "Tap-the-creature hop and cooldown (F6)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-hints-001
+  system: hints
+  gdd: design/gdd/hint-letters.md
+  requirement: "Spawn, clearances, life, originFor, freeze and Dimmed (R2-R9, F1-F4)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-hints-002
+  system: hints
+  gdd: design/gdd/hint-letters.md
+  requirement: "Hit diameter at least 18 mm from ppi, with bubble scale k (R11, F5)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-hints-003
+  system: hints
+  gdd: design/gdd/hint-letters.md
+  requirement: "Hint knobs data-validated at build, slots pass F4 (AC-21)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-parade-001
+  system: parade
+  gdd: design/gdd/parade.md
+  requirement: "Batches per theme, start rule, walk across the visible rect, own clock (R1-R8, F2, F3)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-parade-002
+  system: parade
+  gdd: design/gdd/parade.md
+  requirement: "Walkers drawn at parade detail size within the resident set; art wait (AC-12, AC-18)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-gate-001
+  system: gate
+  gdd: design/gdd/parent-gate-panel.md
+  requirement: "Two-step gate: moon hold, code challenge, sleep, timeout, confirm holds (G1-G10, F1)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-gate-002
+  system: gate
+  gdd: design/gdd/parent-gate-panel.md
+  requirement: "Challenge code from its own seeded random stream; words, never numerals"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-gate-003
+  system: gate
+  gdd: design/gdd/parent-gate-panel.md
+  requirement: "Gate and panel are in-window overlays, never a separate window, sheet or popover (G11, AC-34)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-gate-004
+  system: gate
+  gdd: design/gdd/parent-gate-panel.md
+  requirement: "Hardware digits and the Mac chord open and answer the gate (AC-03, AC-07)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-gate-005
+  system: gate
+  gdd: design/gdd/parent-gate-panel.md
+  requirement: "Quit row follows kioskModeOn; overlays keep key; lock page shows Guided Access line (G7, G8, AC-28, AC-35)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-gate-006
+  system: gate
+  gdd: design/gdd/parent-gate-panel.md
+  requirement: "Panel accessibility: VoiceOver, Dynamic Type to largest size, 44 pt targets, 60 pt keypad (AC-24, AC-32, Accessibility AC-13)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-gate-007
+  system: gate
+  gdd: design/gdd/parent-gate-panel.md
+  requirement: "Failed settings write handled; lock back ON after relaunch (AC-19, AC-33)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-lock-001
+  system: lock
+  gdd: design/gdd/child-lock-in.md
+  requirement: "Engage only after ready + R3; never trap; engage timeout; options set (R2-R7)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-lock-002
+  system: lock
+  gdd: design/gdd/child-lock-in.md
+  requirement: "iPad Guided Access instructions and observation (R8)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-lock-003
+  system: lock
+  gdd: design/gdd/child-lock-in.md
+  requirement: "Way out: parent chord opens the gate at any time the kiosk is on (R5)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-lock-004
+  system: lock
+  gdd: design/gdd/child-lock-in.md
+  requirement: "Extra displays covered; sleep and wake keep the lock (R6)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-lock-005
+  system: lock
+  gdd: design/gdd/child-lock-in.md
+  requirement: "Kiosk full-screen mode (borderless or native) and kill -9 recovery (AC-13..17)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-shell-001
+  system: shell
+  gdd: design/gdd/app-shell-title.md
+  requirement: "Launch order, Title starts, pending start, ready set (R1-R6, F1)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-shell-002
+  system: shell
+  gdd: design/gdd/app-shell-title.md
+  requirement: "Away rule counts device sleep: 30 min on the away clock (R6, F3)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-shell-003
+  system: shell
+  gdd: design/gdd/app-shell-title.md
+  requirement: "Windows on iPad and Mac, safe stage, overlays in the main window (R7)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-shell-004
+  system: shell
+  gdd: design/gdd/app-shell-title.md
+  requirement: "iPad status bar and home indicator hidden, edge-swipe deferral follows the gate (R7, K-39, AC-14)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-shell-005
+  system: shell
+  gdd: design/gdd/app-shell-title.md
+  requirement: "Memory-warning shedding order (F4, AC-11)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-shell-006
+  system: shell
+  gdd: design/gdd/app-shell-title.md
+  requirement: "No collection APIs; cold launch restores nothing (AC-9, AC-12)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-scene-001
+  system: scene
+  gdd: design/gdd/scene-time-weather.md
+  requirement: "Wall-clock looks, lookBlend, jump fade, weather pick (R2-R9, F1, F3)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-scene-002
+  system: scene
+  gdd: design/gdd/scene-time-weather.md
+  requirement: "Weather element draw within caps and device cost F6 worst case (R3, AC-4, AC-19)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-scene-003
+  system: scene
+  gdd: design/gdd/scene-time-weather.md
+  requirement: "Contrast build check: 160 cases with the F8 edge model (R5, AC-5)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-scene-004
+  system: scene
+  gdd: design/gdd/scene-time-weather.md
+  requirement: "Two clocks; freeze stops elements, look follows wall clock (AC-11)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-scene-005
+  system: scene
+  gdd: design/gdd/scene-time-weather.md
+  requirement: "No network, location or audio from the Scene (AC-18; K-08)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-kbrow-001
+  system: kbrow
+  gdd: design/gdd/onscreen-keyboard-row.md
+  requirement: "Layout, hit rect, light, word draw, Due and change (F1-F4)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-kbrow-002
+  system: kbrow
+  gdd: design/gdd/onscreen-keyboard-row.md
+  requirement: "Row words from theme data with v1 fallback (AC-16)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-kbrow-003
+  system: kbrow
+  gdd: design/gdd/onscreen-keyboard-row.md
+  requirement: "Row is a layer at z 35 and feeds the same press path as a touch (R12)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-kbrow-004
+  system: kbrow
+  gdd: design/gdd/onscreen-keyboard-row.md
+  requirement: "Off by default, kept in settings; hit rect at least 18 mm (AC-1, AC-3)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-a11y-001
+  system: a11y
+  gdd: design/gdd/accessibility.md
+  requirement: "One Reduce Motion flag read live, never stored, re-read on return (A1, AC-01..04)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-a11y-002
+  system: a11y
+  gdd: design/gdd/accessibility.md
+  requirement: "Smart Invert opt-out on the stage, panel inverted (A10, K-30)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-a11y-003
+  system: a11y
+  gdd: design/gdd/accessibility.md
+  requirement: "Flash safety: F2 flash detector gate on the busy scenario (WCAG 2.3.1), F2b red-flash palette check (AC-07..09)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-a11y-004
+  system: a11y
+  gdd: design/gdd/accessibility.md
+  requirement: "Palette and idle lints in the build: F1 idle frequency, A5 contrast for hints and panel (AC-05, AC-10)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-a11y-005
+  system: a11y
+  gdd: design/gdd/accessibility.md
+  requirement: "Child touch floor at least 18 mm on each device class (AC-12)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-a11y-006
+  system: a11y
+  gdd: design/gdd/accessibility.md
+  requirement: "No accessibility value stored, sent or logged (AC-16; PKC-05, 14)"
+  created: 2026-11-18
+  revised: ""
+  status: active
+- id: TR-android-001
+  system: android
+  gdd: design/gdd/accessibility.md
+  requirement: "Android port: Kotlin modules, adapters, Remove animations, TalkBack, gesture insets (Accessibility AC-17, Hint Letters AC-20, Keyboard Row AC-19, Parent Gate AC-39)"
+  created: 2026-11-18
+  revised: ""
+  status: active
