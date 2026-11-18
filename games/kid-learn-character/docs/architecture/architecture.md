@@ -325,14 +325,17 @@ v2 status (TASK-111 review). Any run on Luan's Mac needs the leader's MAC FREE; 
 | 3 | ADR-0009, ADR-0010 ★ | Proposed | accept after P-2, M-13 and P-1, P-7, P-8, P-9, M-14 (TASK-111 B-1) |
 | 4 | Flash safety gate (TR-a11y-003): where Accessibility F2 and F2b run, and that a FAIL blocks a release candidate | **Needed** (TASK-111 B-3) | an ADR-0011 amendment or a small ADR; with it the F1 / A5 lints (TR-a11y-004) and hint-knob validation |
 | 5 | Grown-up panel accessibility (VoiceOver, Dynamic Type, target sizes; TR-gate-006) | Advisory (TASK-111) | an ADR or the panel story |
-| 6 | iPad presentation (`edgeDeferral`, status bar, home indicator; TR-shell-004) | **Covered by an ADR-0006 dated note** (K-42) | — |
+| 6 | iPad presentation (`edgeDeferral`, status bar, home indicator; TR-shell-004) | **ADR-0006 note (TASK-115)** (K-42) | game-dev-ios's TASK-115 |
 | 7 | ADR-0012 Android | Later | Kotlin modules, adapters, the Android gaps listed above (TASK-111 AD-4: nothing writes it yet) |
 
 ## The First Scaffold Story (described here; not created in TASK-059)
 
 **v2: done.** TASK-079 built it and merged as a4adca84 (QC's `--qc` evidence PASS, df6a154e): the packages, the app
 targets, the ban grep, `verify.sh` and `pkc-scan.sh`, the contract harness with the K-40 registry, and the headless
-Title screenshot. The Mac launch, the first signed build and the macOS UI test wait for MAC FREE. The goal as
+Title screenshot. The MAC FREE items passed in TASK-109 (merged 0b2278d6; evidence
+`production/qa/evidence/TASK-079/8b30e7a5/`): the signed builds with PKC-01 on the signed products, the macOS launch
+with `title-macos.png`, and the macOS UI test. Only the runtime and device rows remain, in
+`production/qa/device-checks-plan.md`. The goal as
 written in v1 follows, unchanged.
 
 **Goal:** the `apple/` skeleton that every later story builds on.
