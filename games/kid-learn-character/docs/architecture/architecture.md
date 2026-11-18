@@ -186,7 +186,7 @@ All seams are protocols in `KidCore` (names provisional; ADR-0002 fixes them).
 | `AwayClock` | `now() → Double`, counts sleep (App Shell R6); named so it does not shadow Swift's `ContinuousClock` | app: Swift `ContinuousClock` / `mach_continuous_time` |
 | `WallClock` | `{minutesOfDay, dayKey}` (Scene R2) | app: the local calendar and time zone |
 | `RandomSource` (one per stream) | `next() → UInt64` | app: one seeded generator per stream, seed logged in debug; tests and fixtures: a draw list per stream |
-| `KeyEvent`, `TouchEvent` | normalized events (input-filter-v1) | app input adapters |
+| `KeyEvent`, `TouchEvent` | normalized events (input-filter-v2) | app input adapters |
 | `SettingsBackend` | `read() → bytes?`, `write(bytes) → ok?`, `remove()` | app: `UserDefaults` single key |
 | `KioskEffects` | `apply()`, `remove()`, `coverDisplays()`, `isActive`, `windowCoversDisplay` | app: `NSApplication` (Mac); no-op on iPad |
 | `AudioOutput` | play / duck / pause / cut a planned event; set gain | app: `AVAudioEngine` adapter |
@@ -209,7 +209,7 @@ All seams are protocols in `KidCore` (names provisional; ADR-0002 fixes them).
   continuous → `SystemClock.elapsedRealtime()`; wall → `System.currentTimeMillis()` + `ZoneId` →
   `{minutesOfDay, dayKey}`.
 - `RandomSource`: the same `UInt64 → u` contract (`ULong` in Kotlin), one per stream as on Apple.
-- `settings-record-v1` is **the same bytes** on both platforms: UTF-8 JSON, sorted keys, no whitespace, integers
+- `settings-record-v2` (v1 superseded, K-42) is **the same bytes** on both platforms: UTF-8 JSON, sorted keys, no whitespace, integers
   as numbers.
 - Android-only gaps go to ADR-0012: DataStore vs SharedPreferences, screen pinning instead of the kiosk, gesture
   insets, xdpi/dpi for tiers and target size, audio latency, the scanCode/keyCode mapping (Input R4).
