@@ -88,3 +88,8 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md 7f30e65849f904273ecc1b11ccf812b
 Review mode: lean · Workflow: standard
 Change: E7 in the invalid-timing-set fallback, confirmed with game-dev-ios (Reveal Stage F5): the glyph is drawn and fades out at fallback_glow_s under the creature's fade-in, so E7 plays at fallback_glow_s (0.8 s); none in the glyph-missing fallback; at glow in the art-missing one. AC-1 adds the invalid-set case (E7 0.8, E8 1.30, E9 1.55).
 Reviewed-Content-Hash: design/gdd/audio-voice.md 6d07bd606e108f7878507da7f8831b7411976144
+
+## Update — 2026-11-18 — TASK-090b cut_settle_s (no re-review)
+Review mode: lean · Workflow: standard
+Change: new Tuning Knob `cut_settle_s` = 0.04 s, constrained to ≥ max(cut_fade_s, 0.03) + 0.01, one value for both platforms (ADR-0010 D5/D7 review, game-dev-android R2). Referenced in R2.2 (a cut settles; a replacing sound starts up to cut_settle_s late), R6 (the freeze pause settles; a paused sound continues from about cut_settle_s after the freeze) and AC-21 (continue within cut_settle_s). Review: game-dev-ios.
+Reviewed-Content-Hash: design/gdd/audio-voice.md 6b5e9ff8359ee2e8878794f49c9bcae3def1c21a
