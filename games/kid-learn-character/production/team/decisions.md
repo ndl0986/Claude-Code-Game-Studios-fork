@@ -105,6 +105,16 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-16 Cast rendering choices (Luan, 2026-11-18, TASK-044 questions)
+
+- **Reduce Motion softens:** idles at half amplitude, a smaller tap hop, the glyph halo holds steady
+  (no pulse).
+- **MVP keeps per-part idles** as in the prototype (neck sway, jaw nod, wing flap…): each SVG carries
+  named part groups with a pivot.
+- **Stardust stays as played** (70% gold specks, ~1.4 Hz twinkle; the parade's step bob too): a
+  recorded exception to the art bible's "gold only for letters" and "other pulses ≤ 1 Hz" rules.
+- **Art not loaded in time:** the stardust holds the shape up to 0.5 s, then the creature fades in.
+
 ### K-15 Press Queue rules (Luan, 2026-11-18, TASK-043 questions)
 
 - Opening the grown-up panel **clears the queue**; the current reveal settles to formed under the dim.
