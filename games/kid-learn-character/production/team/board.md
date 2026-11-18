@@ -72,12 +72,13 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-088b | Reveal Stage R3/R6: hasWord definition; only-when-hasWord gates E9 only | design | game-dev-ios (review: game-qc-android) | DONE: MERGED 4d83b81e + 7d16be9d (game-qc-android APPROVE); R3 cell + letter_in nits queued | `design/TASK-088b-reveal-hasword` | 2026-11-18 |
 | TASK-088c | Reveal Stage nits: R3 cells 'in the active locale'; invalid-set rise knob fallback_rise_s 0.45 | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE) | `design/TASK-088c-reveal-nits` | 2026-11-18 |
 | TASK-088d | Reveal Stage F3: invalid-set fadeStart = formedS − fallback_fade_s | design | game-dev-ios (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 45809435) | `design/TASK-088d-reveal-f3` | 2026-11-18 |
-| TASK-089 | Contracts batch 4: hint-letters-v1 + keyboard-row-v1 | qa | game-qc-android (review: GDD authors) | SENT 2026-11-18 | `design/TASK-089-contracts-batch4` | 2026-11-18 |
+| TASK-089 | Contracts batch 4: hint-letters-v1 + keyboard-row-v1 | qa | game-qc-android (review: GDD authors) | IN REVIEW @ 62a5afb2 (hints 52 → game-dev-android, row 36 → game-art-content) | `design/TASK-089-contracts-batch4` | 2026-11-18 |
 | TASK-089a | Keyboard Row GDD: KR-Q1–Q11 answers as rules | design | game-art-content (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 1525bd52) | `design/TASK-089-row-answers` | 2026-11-18 |
 | TASK-089b | Hint Letters R13 draw and tick order (HL-Q answers) + rounded 148/138 marked | design | game-dev-android (review: game-qc-android) | DONE: MERGED (game-qc-android APPROVE @ 0dd33c3a) | `design/TASK-089b-hint-r13` | 2026-11-18 |
-| TASK-090 | App Shell R7: portrait allowed (contain + extend), hidden status bar + deferred edge gestures (K-39) | design | game-dev-ios (review: game-qc-ios) | SENT 2026-11-18 | `design/TASK-090-appshell-k39` | 2026-11-18 |
-| TASK-090b | Audio knob cut_settle_s 0.04 (≥ max(cut_fade_s, 0.03) + 0.01) for ADR-0010 R2 | design | game-art-content (review: game-dev-ios) | IN REVIEW @ 99254074 → game-dev-ios (freeze loses nothing) | `design/TASK-090b-audio-cut-settle` | 2026-11-18 |
-| TASK-091 | settings-record-v2: fix F1-slider-release-7.5 (5 → 8) + non-finite slider case; v1 superseded | qa | game-qc-android (review: game-dev-android) | QUEUED after TASK-089 | `design/TASK-091-settings-record-v2` | 2026-11-18 |
+| TASK-090 | App Shell R7: portrait allowed (contain + extend), hidden status bar + deferred edge gestures (K-39) | design | game-dev-ios (review: game-qc-ios) | DONE: MERGED (game-qc-ios APPROVE @ 78e98d5a) | `design/TASK-090-appshell-k39` | 2026-11-18 |
+| TASK-090b | Audio knob cut_settle_s 0.04 (≥ max(cut_fade_s, 0.03) + 0.01) for ADR-0010 R2 | design | game-art-content (review: game-dev-ios) | DONE: MERGED (game-dev-ios APPROVE @ 85770ed7) | `design/TASK-090b-audio-cut-settle` | 2026-11-18 |
+| TASK-091 | settings-record-v2: fix F1-slider-release-7.5 (5 → 8) + non-finite slider case; v1 superseded | qa | game-qc-android (review: game-dev-android) | DONE: MERGED (game-dev-android APPROVE @ 38d40df0) | `design/TASK-091-settings-record-v2` | 2026-11-18 |
+| TASK-092 | Parent Gate Interactions: stop deferring edge gestures while challenge/panel shows (R7, K-39) + AC; device-checks plan P-16 iPad overlays | design/qa | game-qc-ios (review: game-dev-ios) | SENT 2026-11-18 | `design/TASK-092-gate-overlays-p16` | 2026-11-18 |
 
 ## Leader log
 

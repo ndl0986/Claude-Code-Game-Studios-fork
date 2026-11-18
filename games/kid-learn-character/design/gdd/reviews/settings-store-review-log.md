@@ -59,3 +59,9 @@ Review mode: lean · Workflow: standard
 Change: F1 states that a non-finite slider value leaves volume unchanged (no write, no notification, one log line); R7 states that a missing or invalid schemaVersion writes one log line (a fallback). Review: game-qc-android, from the diff.
 fixture: settings-record-v1 (the slider-NaN case follows this change)
 Reviewed-Content-Hash: design/gdd/settings-store.md 7c7b51ce297ced5efcd22c21f5f012f4aef0f4f1
+
+## Update — 2026-11-18 — TASK-091 fixture settings-record-v2 (no GDD change)
+Review mode: lean · Workflow: standard
+Change: none to the GDD. settings-record-v2 supersedes settings-record-v1 (K-40): v1's `F1-slider-release-7.5` contradicted R6a's no-op rule (stored 8, release 7.5 → 8 expected a write); v2 starts it at 5. v2 also adds the non-finite slider cases that F1 has stated since TASK-082. Cases: game-qc-android; review: game-dev-android.
+fixture: settings-record-v2 (supersedes settings-record-v1; TASK-091)
+Reviewed-Content-Hash: design/gdd/settings-store.md 7c7b51ce297ced5efcd22c21f5f012f4aef0f4f1

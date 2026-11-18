@@ -16,7 +16,8 @@ Cross-platform behaviour contracts for Kid Learn Character (ADR-0004). Each cont
 |---|---|---|---|---|
 | morph-contract-v1 | v1 | morphcore.md | MorphCore | Accepted. It lives at `docs/architecture/morph-contract-v1.md` and `content/fixtures/morph-contract-v1.json` and moves here only with a v2 |
 | key-table-schema-v1 | v1 | key-table-theme-data.md | model (KidCore), file (apple/Tools) | first cases (TASK-068) |
-| settings-record-v1 | v1 | settings-store.md | KidCore | first cases (TASK-068). **Pending v2:** the non-finite slider case (settings-store F1, TASK-082), batched with the next settings change |
+| settings-record-v1 | v1 | settings-store.md | KidCore | superseded-by: settings-record-v2 (K-40; TASK-091: `F1-slider-release-7.5` contradicted R6a) |
+| settings-record-v2 | v2 | settings-store.md | KidCore | TASK-091: v1's slider case fixed; the non-finite slider cases added (F1, TASK-082) |
 | input-filter-v1 | v1 | input-key-filter.md | KidCore | batch 2 (TASK-081) |
 | press-queue-v1 | v1 | press-queue.md | KidCore | batch 2 (TASK-081) |
 | reveal-timing-v1 | v1 | reveal-stage.md; cast-rendering.md F1, F2, F4, F5, F7 | KidCore | batch 3 (TASK-086) |

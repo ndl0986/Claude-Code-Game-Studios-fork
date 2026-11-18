@@ -99,7 +99,10 @@ theme (K-09). A creature tap never replays the word; only its sound (as played i
    **At most 7 sounds play at once**, whatever the input.
 2. **No click on a cut.** Any sound that is cut, by another sound, mute, the panel or a theme switch, ends without
    an audible click or pop. The requirement is the result (AC-9); how (a short fade, a ramp, a zero-crossing) is the
-   audio ADR's. The proposed fade is `cut_fade_s` (Tuning Knobs).
+   audio ADR's. The proposed fade is `cut_fade_s` (Tuning Knobs). **A cut settles after `cut_settle_s`** (0.04 s,
+   one value on both platforms; TASK-090b, ADR-0010 D5): the cut player is then stopped and free. A sound that
+   **replaces** a busy one (E6 over a line, E8/E10/E11 on the cast player, a ui-pool steal) starts when the cut has
+   settled, so up to `cut_settle_s` late; a sound on an idle player starts at once.
 3. **Speech never stacks.** The voice bus has one player, so two lines can never overlap. E6 always replaces any
    line still playing. Under the hold rule (F6) and the word-length build check (AC-6) that never happens in
    normal play; the cut is a safety net, and it is never because a key was waiting.
@@ -166,6 +169,10 @@ never more brightness"; Pillar 3).
 - **Gate challenge freeze (K-20; TASK-050):** on the Reveal Stage's `freeze()` (the parent-gate number challenge
   shows), Audio **pauses** every player where it is (voice, cast, ui, and music, so the parade tune E12 too), and
   **nothing new starts** while frozen: event times run on the same play clock as the reveal, which stands still.
+  The pause itself settles like a cut, so it never clicks: the players fade out over `cut_fade_s` and stop playing
+  once `cut_settle_s` has passed (how is the audio ADR's, ADR-0010 D7). **Nothing is skipped:** each sound resumes
+  from **the frame it had reached at the freeze moment, or up to `cut_settle_s` earlier** (a little is heard again;
+  the measured range is 0–17 ms), and fades back in over `cut_fade_s` (TASK-090b).
   On `resume()` (a wrong answer or a timeout) each paused sound **continues** from where it stopped: its remaining
   length is carried over the frozen interval, and an event that falls due while frozen fires when the play clock
   reaches its time after `resume()` *(AU-Q8)*. A correct
@@ -395,6 +402,7 @@ All values are bundled data (ADR-0001 Decision 6). "One-shot" means Luan played 
 | `mash_floor` | 0.35 | 0.2–0.7 | proposed | the quietest a mashed chime gets |
 | `chime_window_s` | 1.0 | 0.5–2 | proposed | how far back presses count for F3 (renamed from `mash_window_s`, TASK-056: that name is the Scene's mashing window, a different signal) |
 | `cut_fade_s` | 0.03 | 0.01–0.08 | proposed | fade on any cut; long enough for no click (AC-9) |
+| `cut_settle_s` | 0.04 | **≥ max(`cut_fade_s`, 0.03) + 0.01**; 0.04–0.09 | TASK-090b (ADR-0010 D5, D7; measured clean at 40 ms) | when a cut or a freeze pause has settled: the player is stopped or paused; after a cut a replacing sound starts up to this late (a freeze skips nothing: it resumes at or up to this much before the freeze-moment frame, R6). One value shared by both platforms |
 | bus trims | voice 0, cast −4, ui −10, music −8 dB | ±6 dB each | proposed; one-shot ratios `roar_volume` 0.35, `chime_volume` 0.12 | balance between classes; F1 headroom |
 | `limiter_ceiling_dbtp` | −1 | −3 – −0.5 | decided (Luan Q5) | the output ceiling |
 | loudness targets | F4 | ±4 LU | decided (Luan Q5), tuned in play | per-class loudness |
@@ -490,7 +498,9 @@ Logic criteria run with an injected clock and a fake player layer (no audio hard
     behaviour). macOS has no silent mode and is not tested here.
 21. **AC-21 Gate freeze (TASK-050).** With the word line half played and the parade tune running, `freeze()` for
     10 s then `resume()`: both are silent during the freeze, nothing new starts (an E8 due during it plays only
-    after the resume, at its play-clock time), and both continue from where they paused with no click (AC-9).
+    after the resume, at its play-clock time), and both continue from where they paused, with no click (AC-9): the
+    resume point is **at or before** the frame reached at the freeze moment and **no more than `cut_settle_s` ×
+    sample rate earlier** (nothing skipped), and the fade-in takes `cut_fade_s`.
 
 ## Open Questions
 

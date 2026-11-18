@@ -2,11 +2,11 @@
 
 > **Status**: Approved (independent read by game-dev-android, merged 2026-11-18)
 > **Author**: game-dev-ios for Luan (TASK-051); plan reviewed by game-dev-android
-> **Last Updated**: 2026-11-18 (TASK-054a follow-ups)
+> **Last Updated**: 2026-11-18 (TASK-090: K-39 portrait and system overlays)
 > **Last Verified**: 2026-11-18, against Input & Key Filter (Title and Inactive states), Audio & Voice (E5, R2.1,
 > R6), Settings Store (R5, R8), Key Table & Theme Data §5, Press Queue (R3, R9), Reveal Stage (R8, R10), Hint
 > Letters (R9), Parade (R6), Privacy & Kids Compliance (PKC-01, 02, 05, 09, 12, 14; L-07), decisions K-10, K-12,
-> K-13, K-15, K-18, K-20–K-22, the art bible §2 and §7, and the one-shot's title scene
+> K-13, K-15, K-18, K-20–K-22, K-39, the art bible §2 and §7, and the one-shot's title scene
 > **Implements Pillar**: Pillar 1 (Every Press Answers), Pillar 5 (Safe by Design)
 
 ## Summary
@@ -126,11 +126,19 @@ reset only at launch (Parade R1).
   because nothing is stored (Settings Store R2).
 
 **R7. Windows and the safe area.**
-- **iPad:** landscape (both ways) when full screen. iPadOS no longer lets an app require full screen, so Split View,
-  Slide Over and Stage Manager windows of any shape are supported: App Shell hands the window size and safe-area
+- **iPad: every orientation and any window shape** *(K-39, TASK-090)*: landscape both ways **and portrait** both
+  ways when full screen. iPadOS no longer lets an app require full screen, so Split View, Slide Over and Stage
+  Manager windows of any shape are supported too: App Shell hands the window size and safe-area
   insets to the Reveal Stage, whose contain-and-extend fit (its R10) keeps the whole safe stage visible inside the
-  safe area; a narrow or portrait window simply gets more sky and ground. Guided Access (Child Lock-in) normally
-  keeps the app full screen.
+  safe area; a narrow or portrait window simply gets more sky and ground, **never letterbox bars** (K-20). Guided
+  Access (Child Lock-in) normally keeps the app full screen.
+- **iPad system overlays during play** *(K-39, TASK-090)*: while the child-facing stage shows (the **Title** and
+  **Play**), the status bar is hidden (`prefersStatusBarHidden`; `.persistentSystemOverlays(.hidden)` for the home
+  indicator) and system edge gestures are deferred on every edge (`preferredScreenEdgesDeferringSystemGestures`),
+  so a stray swipe from an edge needs a second swipe before the system acts. In the gate challenge and the grown-up
+  panel the edge gestures are **not** deferred (a grown-up's swipe works at once); the status bar stays hidden
+  throughout, so the safe area and the stage fit never jump when the panel opens or closes. This is a speed bump, not
+  a lock: **Guided Access stays the real lock** (Child Lock-in); the Mac has no equivalent and uses its kiosk.
 - **Mac:** one resizable window, minimum `mac_min_window` 960 × 540 pt (proposal); full screen allowed. With the
   kiosk on, the window fills the screen and stays so (ADR-0001 Decision 9b; Child Lock-in). Whether that is native
   full screen (the options then go through `window(_:willUseFullScreenPresentationOptions:)`) or a borderless window
@@ -242,6 +250,7 @@ at 100 s and 140 s → both level 1.
 | **The process was ended while in the background** | A cold launch: the Title (R6). |
 | **A theme changed in the panel, then a return to the Title** | The Title shows the new theme's title creature. |
 | **Split View makes the window narrow or portrait** | Contain-and-extend; more sky and ground; the reveal continues (R7). |
+| **The iPad is rotated to portrait mid-reveal** | Allowed (K-39): the fit is republished, the reveal continues, more sky and ground; no letterbox (R7). |
 | **The Mac window resized below the minimum** | Not possible; the window stops at 960 × 540 pt (R7). |
 | **The kiosk is on and the grown-up tries to resize or leave full screen** | The kiosk keeps it full screen (Child Lock-in). |
 | **Child lock turned off in the panel, app relaunched** | The kiosk comes back once the app is ready (K-21). |
@@ -267,7 +276,7 @@ at 100 s and 140 s → both level 1.
   - **Privacy & Kids Compliance:** the continuous clock for "away" (R6) and its required-reason entry (PKC-09);
     OS crash reports stay L-07.
   - **Child Lock-in:** the "app is ready" signal from R1 step 5.
-- **Decisions:** K-10, K-12, K-13, K-15, K-18, K-20, K-21, K-22.
+- **Decisions:** K-10, K-12, K-13, K-15, K-18, K-20, K-21, K-22, K-39.
 
 ## Tuning Knobs
 
@@ -304,9 +313,14 @@ Parade and Child Lock-in. Screenshots are retained in `production/qa/evidence/`.
    Title; a simulated 8 h sleep (continuous clock advanced, uptime not) → the Title.
 9. **AC-9 Cold launch:** after the process is ended in the background, the next launch shows the Title with
    nothing restored.
-10. **AC-10 Windows (screenshots):** an iPad full screen in both landscape directions, a Split View narrow window and
-    Stage Manager; a Mac window at the minimum, at full screen and with the kiosk on: the safe stage is always
-    whole and inside the safe area.
+10. **AC-10 Windows (screenshots):** an iPad full screen in both landscape directions **and both portrait
+    directions** (K-39), a Split View narrow window and Stage Manager; a Mac window at the minimum, at full screen and with the kiosk on: the safe stage is always
+    whole and inside the safe area, and portrait shows more sky and ground with no letterbox bars.
+14. **AC-14 iPad overlays (K-39; Simulator screenshots, and the edge swipes on a device, NOT ASSESSED until run):** on
+    the Title and in Play the status bar and the home indicator are not shown (screenshot); a single swipe up from the
+    bottom edge and a single swipe down from the top edge leave the app in front (the system shows only its grabber),
+    a second swipe acts; with the grown-up panel open, a single swipe up from the bottom edge goes home at once; the
+    stage fit is identical with the panel open and closed (no safe-area change). Checked with Guided Access **off**.
 11. **AC-11 Memory (F4):** a warning sheds prefetched, leaving and list textures in that order, never the current
     creature or the decoded audio; a second within 30 s also ends a walking parade, counted as played.
 12. **AC-12 No collection (scan):** the API scan finds no crash reporter, MetricKit subscriber, diagnostics upload,
