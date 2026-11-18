@@ -105,6 +105,16 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-37 App identifiers, signing and the SVG layer-id note (Luan, 2026-11-18)
+
+- **Bundle ID follows the previous game's pattern** (com.galaxyandsun.daidatanhhung), with only the game part changed:
+  `com.galaxyandsun.lettermorph`, target `LetterMorph` (working name until K-04; changeable before the first store
+  upload). Tests/preview suffixes as in the previous game.
+- **Signing: Luan's Personal Team** (already signed in to Xcode; used for the previous game on iPhone). Automatic signing;
+  the team ID stays in an untracked local config, never committed.
+- **ADR-0003 D4 / art bible §8:** layer groups are identified by an id ending in `_body`, `_outline` or `_detail`
+  (`<part>_<layer>`, unique in the file); a dated clarification note, ADR status stays Accepted.
+
 ### K-36 espeak-ng as a build-time tool only (Luan, 2026-11-18)
 
 - espeak-ng (GPL-3.0) may be used **only on the build machine** as the phonemiser when rendering voice files; it is
