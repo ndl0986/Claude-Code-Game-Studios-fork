@@ -1,4 +1,4 @@
-# TASK-078 DeviceSpike v1 — minimal spike check (headless, K-34) — headless proof that the check works, NOT install evidence (see ../849dd1d0/)
+# TASK-078 DeviceSpike v1 — minimal spike check (headless, K-34) — headless proof that the check works, NOT install evidence (see ../2f2803d7/)
 
 - **sha:** `ea51346e` (code `dbdc8930` + check fix `ea51346e`), branch `design/TASK-078-devicespike-v1`.
 - **Check:** `prototypes/DeviceSpike/tools/spike-check.sh` (TASK-075 "Checks before an install", the 7 items).
