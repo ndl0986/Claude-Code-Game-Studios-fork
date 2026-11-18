@@ -105,6 +105,12 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-43 ADR-0013 flash safety accepted (Luan, 2026-11-18)
+
+- Luan accepted ADR-0013 (five gates G1–G5; NOT ASSESSED fails a release candidate; red backstop; per-class ppi floors;
+  TV play outside the supported setup). Follow-ups it names: the GDD sync in accessibility.md and parent-gate-panel.md
+  G3, a dated note on Accepted ADR-0011 D4 (G1–G3 and `--flash`; status stays Accepted), and a dated note on ADR-0009 D6.
+
 ### K-42 Pre-Production gate calls (Luan, 2026-11-18)
 
 - **CI: local only.** `tools/ci/verify.sh` run on the Mac is the "equivalent" test workflow; no GitHub Actions workflow is

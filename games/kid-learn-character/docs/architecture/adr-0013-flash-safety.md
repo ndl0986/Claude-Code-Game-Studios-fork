@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed (TASK-116, 2026-11-18). Acceptance is Luan's. **Gates G1–G3 can be built now. G4 waits for the stage (Scene, Cast
+Accepted (Luan, 2026-11-18; recorded by game-leader on Luan's explicit acceptance, K-43). Proposed in TASK-116. **Gates G1–G3 can be built now. G4 waits for the stage (Scene, Cast
 Rendering, Parade, Press Queue), and G5 waits for device time.** Until they run, they report NOT ASSESSED, never PASS.
 
 > **Who may move this to `Accepted`: the user, or `technical-director` on the
