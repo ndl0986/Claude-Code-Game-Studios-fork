@@ -227,7 +227,7 @@ ADR-0009 D6 deferred it, ADR-0004 calls F1/F2 "QC tools", and ADR-0011's gate li
   that reports **less** (a TV, 30–50 ppi) is judged at its real ppi, which is stricter, and the floor is never
   substituted for a known lower value. **If D7 reports "unknown", the detector takes the class floor.**
 - **A stated limitation, below the floor (a Mac on a TV):** F2's field is a 10° visual angle at 300 mm. At a TV's real
-  viewing distance (1 m or more) the same angle covers several times more pixels, so the floor is stricter than reality
+  viewing distance (1 m or more) the same angle covers several times more pixels, so F2's 300 mm assumption is stricter than reality
   there; but a child at 300 mm from a large low-ppi screen, or a TV whose ppi reads "unknown" (judged at the looser
   floor), is **not covered** by G4 or G5. Play on a TV is outside the supported setup (the Mac class is a built-in or a
   desk display); this is recorded here, not hidden.
@@ -242,9 +242,10 @@ ADR-0009 D6 deferred it, ADR-0004 calls F1/F2 "QC tools", and ADR-0011's gate li
 ### D7. Scope: what the frames contain
 - **Covered:** G4 and G5 capture the SpriteKit stage, which is everything the child sees while playing (Accessibility
   "Every visible system | gate").
-- **Overlay press feedback** is not a large luminance change: a key or button highlight stays under `area_max` of the
-  smallest class field (4,347 px at the 72 ppi floor) or changes by less than ΔL 0.1, so a child mashing the gate keypad
-  can't make it flash. SwiftUI's default `Button` press dimming counts, so overlay buttons use a style that meets this
+- **Overlay press feedback** is not a flash: on each device class, a key or button's pressed-state change either covers
+  **at most that class's floor `area_max`** (iPad 58,449 px; Mac 2× 54,105 px; Mac 1× 4,347 px; D6) or changes
+  relative luminance by **less than ΔL 0.1**, so a child mashing the gate keypad can't make it flash. It's F2's own
+  bound per class, nothing stricter. SwiftUI's default `Button` press dimming counts, so overlay buttons use a style that meets this
   (the same failure as DeviceSpike's Audio pad, Risks).
 - **Not covered:** SwiftUI overlays drawn above the stage (the gate challenge, the grown-up panel) are outside the
   render. They must hold **no periodic animation** at all. G1 lints their rates when they come from data, and code
@@ -440,7 +441,7 @@ Per K-34: headless runs need no MAC FREE; G5 on the Mac (M-12) does.
 
 ## GDD sync
 
-**⚠️ GDD SYNC REQUIRED: `accessibility.md`.**
+**⚠️ GDD SYNC REQUIRED: `accessibility.md` and `parent-gate-panel.md`.**
 - F2 **Where**: "the simulator runs it on every build" → "the offline render (ADR-0013 G4) runs it on every
   stage-touching merge candidate".
 - AC-08's last sentence: "The simulator run passes on every build" → "G4 passes on every stage-touching merge
@@ -451,6 +452,8 @@ Per K-34: headless runs need no MAC FREE; G5 on the Mac (M-12) does.
 - AC-09: "the F2 capture's logged per-pixel maximum stays < 0.8" gains "**over pixels with R + G + B ≥ 0.1**
   (normalised): near-black pixels are excluded as rounding noise, since (1,0,0) reads 1.0 and can't carry a saturated-red
   transition". This excludes noise; it is **not** a threshold change (0.8 stays).
+- **`parent-gate-panel.md` G3** ("a key shows only its pressed state"): add "the pressed state stays within F2 per
+  device class (at most the class's floor `area_max` changing, or ΔL < 0.1), ADR-0013 D7".
 - F2 **The 10° field** table: add the **Mac 1× floor, 72 ppi: `field_px` 148.8, `area_max` 4,347** (ADR-0013 D6), with
   the note "G4 uses each class's floor; the device run uses its real ppi".
 
