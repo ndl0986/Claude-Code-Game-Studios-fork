@@ -107,6 +107,7 @@ final class AudioSpike: @unchecked Sendable {
         }
         let notes = [523.25, 659.25, 783.99, 1046.5, 783.99, 659.25, 523.25, 659.25]
         buffers["music"] = make(2.0) { t in let k = min(notes.count - 1, Int(t / 0.25)); return 0.4 * sin(2 * .pi * notes[k] * t) * exp(-(t - Double(k) * 0.25) * 4) }
+        buffers["tone100"] = make(2.0) { t in 0.891 * sin(2 * .pi * 100 * t) }   // ADR-0010 P-7/M-14 test tone, −1 dBFS
         log("primed \(buffers.count) buffers at \(format.sampleRate) Hz mono")
     }
 
@@ -201,4 +202,69 @@ final class AudioSpike: @unchecked Sendable {
         }
         #endif
     }
+
+    // MARK: ADR-0010 row helpers (P-7 / M-14 capture, P-8 simulated reset)
+    // H-1's detector on the live output: the largest |x[n] − 2x[n−1] + x[n−2]| of the main mixer's output, read by an
+    // installTap. Only meaningful on the 100 Hz test tone (program sounds have large second differences of their own).
+    private let tapLock = NSLock()
+    private var tapOn = false, tapMax: Float = 0, tapA: Float = 0, tapB: Float = 0
+    private var tapInstalled = false
+
+    private func ensureTap() {
+        guard !tapInstalled else { return }
+        tapInstalled = true
+        engine.mainMixerNode.installTap(onBus: 0, bufferSize: 1024, format: nil) { [weak self] buf, _ in
+            guard let self, let d = buf.floatChannelData?[0] else { return }
+            self.tapLock.lock(); defer { self.tapLock.unlock() }
+            var a = self.tapA, b = self.tapB
+            for i in 0..<Int(buf.frameLength) {
+                let x = d[i]
+                if self.tapOn { self.tapMax = max(self.tapMax, abs(x - 2 * b + a)) }
+                a = b; b = x
+            }
+            self.tapA = a; self.tapB = b
+        }
+    }
+    private func arm(_ on: Bool) { tapLock.lock(); tapOn = on; if on { tapMax = 0 }; tapLock.unlock() }
+    private func report(_ what: String) {
+        tapLock.lock(); let m = tapMax; tapLock.unlock()
+        let db = m > 0 ? 20 * log10(m) : -200
+        log(String(format: "detector %@: max|d2x| %.1f dBFS → %@ (AC-9 threshold −60)", what, db, db <= -60 ? "PASS" : "FAIL"))
+    }
+
+    enum ToneTest: String { case cut, mute, freeze }
+    /// Plays the 100 Hz tone on a bus, then at 0.5 s cuts / mutes / freezes (resume 0.3 s later), with the detector
+    /// armed over the whole event; logs the result. P-7 (iPad) and M-14 (Mac) run it per bus; the ear checks the
+    /// program sounds with the normal Play / Cut buttons.
+    func toneTest(_ test: ToneTest, on bus: Bus) {
+        ensureTap()
+        play("tone100", on: bus)
+        let q = DispatchQueue.main
+        q.asyncAfter(deadline: .now() + 0.45) { self.arm(true) }
+        q.asyncAfter(deadline: .now() + 0.5) {
+            switch test {
+            case .cut: self.cut(bus)
+            case .mute: self.setMuted(true)
+            case .freeze: self.freeze(); q.asyncAfter(deadline: .now() + 0.3) { self.resume() }
+            }
+        }
+        q.asyncAfter(deadline: .now() + 1.0) {
+            self.arm(false); self.report("\(test.rawValue) \(bus.rawValue)")
+            if test == .mute { self.setMuted(false) }
+        }
+    }
+    /// Plays the tone on the voice bus and arms the detector for 5 s, for the headphones-out case (unplug meanwhile).
+    func toneArmed5s() {
+        ensureTap(); play("tone100", on: .voice); arm(true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) { self.arm(false); self.report("armed 5 s (headphones out)") }
+    }
+
+    #if os(iOS)
+    /// P-8: a real media-services reset cannot be produced on demand; this posts the notification so the handler runs.
+    /// The log says "simulated"; a real reset stays NOT ASSESSED (ADR-0010 decision rule).
+    func simulateMediaServicesReset() {
+        log("media services reset: SIMULATED (posted by the app, debug)")
+        NotificationCenter.default.post(name: AVAudioSession.mediaServicesWereResetNotification, object: nil)
+    }
+    #endif
 }

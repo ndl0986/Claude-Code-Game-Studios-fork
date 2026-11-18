@@ -32,6 +32,18 @@ struct AudioScreen: View {
                 Button("Scripted reveal") { scripted() }
                 Toggle("Mute", isOn: $muted).onChange(of: muted) { _, m in audio?.setMuted(m) }.fixedSize()
                 Button("Freeze") { audio?.freeze() }; Button("Resume") { audio?.resume() }
+            }
+            // ADR-0010 row helpers: P-7 / M-14 tone tests (detector on the live output), P-8 simulated reset
+            HStack {
+                ForEach([AudioSpike.Bus.voice, .cast, .music], id: \.self) { b in
+                    Button("Tone cut \(b.rawValue)") { audio?.toneTest(.cut, on: b) }
+                }
+                Button("Tone mute") { audio?.toneTest(.mute, on: .voice) }
+                Button("Tone freeze") { audio?.toneTest(.freeze, on: .music) }
+                Button("Tone + arm 5 s") { audio?.toneArmed5s() }
+                #if os(iOS)
+                Button("Simulate media reset") { audio?.simulateMediaServicesReset() }
+                #endif
             }.buttonStyle(.bordered)
             LogView()
         }
