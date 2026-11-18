@@ -35,6 +35,8 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
 
 ## Parent Gate & Panel
 - P0 (text): Dependencies name game-art-content as TASK-054 owner; 054a (Settings, Input) is game-dev-android.
+  Already drafted by game-qc-ios as fc9bdef on design/TASK-048-gdd-parent-gate-panel (after the merge): the owner
+  line and the covers in G7's Quit cell (matches TASK-052 R4). Merge that commit into the 054b branch and review it there.
 - P1: the moon is the sky's only moon; it takes the Scene's `look`; daytime moon at 70% in Morning/Day.
   (TASK-053 Scene)
 
