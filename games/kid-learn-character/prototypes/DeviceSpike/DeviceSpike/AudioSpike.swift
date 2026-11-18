@@ -126,6 +126,11 @@ final class AudioSpike: @unchecked Sendable {
             let schedule = {
                 p.node.scheduleBuffer(b, at: nil, options: .interrupts)   // the player is silent here: no hard cut
                 if !p.node.isPlaying { self.startPlayer(p.node) }
+                // ADR-0010 D9 in-app split: estimated acoustic onset = schedule time + IO buffer + output latency
+                let at = ProcessInfo.processInfo.systemUptime
+                self.log(String(format: "split %@: handed %.4f scheduled %.4f io %.2f ms out %.2f ms estOnset %.4f",
+                                name, handed, at, self.ioBufferMs, self.outputLatencyMs,
+                                at + (self.ioBufferMs + self.outputLatencyMs) / 1000))
                 self.busyUntil[idx] = ProcessInfo.processInfo.systemUptime + dur
             }
             if self.busyUntil[idx] > now {                                 // busy: cut first (D5), then start

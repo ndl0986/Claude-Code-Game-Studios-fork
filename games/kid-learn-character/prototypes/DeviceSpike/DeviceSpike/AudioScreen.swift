@@ -2,6 +2,7 @@
 // The pad: a press (touch or any key) flashes the pad white on the next frame and plays the chime, for the
 // TASK-033 240 fps camera procedure. Buttons play and cut each bus for the click checks.
 import SwiftUI
+import QuartzCore
 
 struct AudioScreen: View {
     @State private var audio: AudioSpike? = nil
@@ -56,6 +57,9 @@ struct AudioScreen: View {
         let t = audio?.play("chime", on: .ui) ?? 0
         lastHandOff = String(format: "%@ handed to the audio queue at uptime %.4f", source, t)
         SpikeLog.shared.line("[audio] press \(source) handed=\(String(format: "%.4f", t))")
+        #if os(iOS)
+        NextFrame.log(after: t)      // ADR-0010 D9: the first frame that draws the flash
+        #endif
     }
 
     /// Audio E6 → E9 timing on the normal set: letter at 0, twinkle at 0.8, cast at 2.45, word at 2.70 (cast ducked).
@@ -68,3 +72,24 @@ struct AudioScreen: View {
         SpikeLog.shared.line("[audio] scripted reveal E6/E7/E8/E9")
     }
 }
+
+#if os(iOS)
+/// ADR-0010 D9: logs the `targetTimestamp` (display time) and the display rate of the next display-link frame after a
+/// press: the flash set in the same callback is drawn in that frame. One-shot; the link invalidates itself.
+@MainActor final class NextFrame: NSObject {
+    private var link: CADisplayLink?
+    private let handed: Double
+    private static var live: [NextFrame] = []
+    private init(_ handed: Double) { self.handed = handed }
+    static func log(after handed: Double) {
+        let f = NextFrame(handed); live.append(f)
+        f.link = CADisplayLink(target: f, selector: #selector(tick(_:)))
+        f.link?.add(to: .main, forMode: .common)
+    }
+    @objc private func tick(_ l: CADisplayLink) {
+        let hz = l.targetTimestamp > l.timestamp ? 1 / (l.targetTimestamp - l.timestamp) : 0
+        SpikeLog.shared.line(String(format: "[audio] split frame: handed %.4f firstFrame %.4f (%.0f Hz)", handed, l.targetTimestamp, hz))
+        l.invalidate(); NextFrame.live.removeAll { $0 === self }
+    }
+}
+#endif

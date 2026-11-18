@@ -166,7 +166,9 @@ player(music) ─ gate ─┘                                     (g_master × g
   **`cut_settle_s` = `cut_fade_s` + 0.01 s** (0.04 s with Audio's 0.03) `stop()` the player, restart it, and set the
   gate back to 1 (silent then, so no smoothing matters).
 - If Audio ever sets `cut_fade_s` above the mixer's smoothing, the gate is stepped toward 0 over `cut_fade_s` in steps
-  of one IO period (≤ 5 ms); each step is smoothed (H-1: a 30 ms stepped ramp also passes).
+  of one IO period (≤ 5 ms); each step is smoothed (H-1: a 30 ms stepped ramp also passes; its 1 ms-step variant once
+  measured −62.7 dBFS, 2.7 dB inside the threshold, so if that path is used its H-1 case runs N = 20 times and every run
+  must pass).
 - **Mute** (R5, AC-14): the main mixer's volume to 0 (smoothed the same way) and D5 cuts on the voice and cast players.
   **Volume and the slider preview**: `setGain` sets the main mixer to F1's `g_master × g_head`, stepped over
   `cut_fade_s` when the change is large.
@@ -201,8 +203,15 @@ Which notification is observed is chosen with `if #available(iOS 27, *)`; the de
 - "Within one display frame of the first answering frame": the chime's acoustic onset no more than one display period
   (16.7 ms at 60 Hz, ADR-0006 D3) after the first frame that draws the press's answer, on built-in or wired output,
   filmed at 240 fps with the TASK-033 procedure. Bluetooth is NOT ASSESSED.
-- The adapter logs, per press in debug builds: the event's uptime stamp, the hand-off to the audio queue, the schedule
-  call, and the session's `ioBufferDuration` and `outputLatency`, so a failing P-1 can be split into its parts.
+- **The film cannot resolve one frame by itself**: 240 fps gives 4.17 ms per film frame and the phone's audio/video
+  offset is about ±10 ms, while one display period is 16.7 ms at 60 Hz and 8.3 ms at 120 Hz. So P-1 uses two
+  measurements (decision rule): the **film as a screen** and **the in-app split** as the decider within the film's
+  resolution.
+- **The in-app split** (debug builds, per press): the event's uptime stamp; the hand-off to the audio queue; the
+  `scheduleBuffer` call; the session's `ioBufferDuration` and `outputLatency`; and the `targetTimestamp` of the first
+  display-link frame that draws the press's answer. Estimated onset = schedule time + `ioBufferDuration` +
+  `outputLatency`; the split passes when estimated onset − that frame's `targetTimestamp` ≤ 1 display period.
+- Every P-1 run records the display rate in use (60 or 120 Hz; ADR-0006 D3 caps at 60 until ADR-0009).
 
 ### D10. Voice source: engine-agnostic (ADR-0003 D6; K-33, K-36)
 - The adapter plays decoded files by line id; it does not know or care how a line was made. No speech synthesis at
@@ -212,12 +221,15 @@ Which notification is observed is chosen with `if #available(iOS 27, *)`; the de
 ### Decision rule (fixed before the rows run)
 | Row | Pass (decides this ADR) | If it fails |
 |---|---|---|
-| **P-1** latency, candidate graph on `DeviceSpike` (and the TASK-033 no-Rive baseline) | every measured press: chime onset ≤ 1 display period after the first answering frame (AC-16, the TASK-033 procedure's presses) | if the **baseline** passes and the candidate fails: the extra stages are suspect: remove the per-player gates for the ui pool (cut ui sounds only by letting them end; they are ≤ 0.4 s), re-run; if both fail: raise to Luan with the split from D9's logs (IO buffer, output latency, scheduling); the ADR then records the measured figure and AC-16 goes back to Audio & Voice |
-| **P-7** no click, iPad speaker and headphones-out | no discontinuity above −60 dBFS in the capture (H-1's detector on the capture) and no click heard | replace the gate fade with a per-sample gain ramp (Alternative 4) and re-run H-1 and P-7 |
-| **M-14** no click, Mac speaker | as P-7 | as P-7 |
-| **P-8** interruptions, route change, reset | the next press after each chimes (after re-priming), no crash; the log shows **which** interruption notification fired on the iPad's OS version | fix the handlers (not a design change); if the 27 replacements do not fire on iPadOS 27, observe the deprecated one there too and record it |
+| **P-1** latency, candidate graph on `DeviceSpike` (and the TASK-033 no-Rive baseline) | **both**: (1) the film, as a screen: every measured press's filmed lag (chime onset − first answering frame) ≤ 1 display period **+ 10 ms** (the method's A/V uncertainty); (2) the in-app split (D9) ≤ 1 display period for every press. The display rate (60 / 120 Hz) is recorded | if the **baseline** passes and the candidate fails: the extra stages are suspect: remove the per-player gates for the ui pool (cut ui sounds only by letting them end; they are ≤ 0.4 s), re-run; if both fail: raise to Luan with the split from D9's logs (IO buffer, output latency, scheduling); the ADR then records the measured figure and AC-16 goes back to Audio & Voice |
+| **P-7** no click, iPad speaker and headphones-out | **both**: (1) the capture is an **in-app digital tap** (`installTap`) on the main mixer's output during `DeviceSpike`'s 100 Hz tone tests (cut on voice, cast and music; mute; freeze / resume; headphones out while armed), run through H-1's detector: no discontinuity above −60 dBFS; (2) listening on the built-in speaker to the program sounds' cuts: no click heard (AC-9 asks for both). An acoustic recording is not the detector's input | replace the gate fade with a per-sample gain ramp (Alternative 4) and re-run H-1 and P-7 |
+| **M-14** no click, Mac speaker | as P-7 (tap and listening; no headphones case) | as P-7 |
+| **P-8** interruptions, route change, reset | after a real interruption (Siri or an alarm) and a real route change (headphones out), the next press chimes (after re-priming), no crash; the log shows **which** interruption notification fired on the iPad's OS version. **Media-services reset**: a real one cannot be produced on demand, so the handler is exercised by **posting the notification in a debug build, recorded as "simulated"**; a real reset stays **NOT ASSESSED** and does not hold up acceptance | fix the handlers (not a design change); if the 27 replacements do not fire on iPadOS 27, observe the deprecated one there too and record it |
 | **P-9** silent mode | no sound for any event; other app's music stops | `.soloAmbient` is the only category that both obeys silent mode and does not mix (D1, Alternatives); a failure goes to Luan (R6 is his decision Q4) |
 Acceptance needs all five rows passing, or Luan accepting a recorded exception.
+
+**Spike rows decide this ADR. The Audio ACs (AC-9 by P-7 / M-14, AC-15 by P-8, AC-16 by P-1, AC-20 by P-9) pass only
+on the production re-run** (device-checks plan, Spike runs); a spike pass is not an AC pass.
 
 ### Architecture Diagram
 ```
@@ -260,7 +272,8 @@ KidCore audio plan ──AudioOutput (ADR-0002 D6)──▶ AudioAdapter (app)
 
 ### Alternative 4: A per-sample gain ramp (an `AVAudioSourceNode` or a fade written into a copy of the buffer)
 - **Kept as the fallback** if P-7 or M-14 hears a click: exact and independent of the mixer's undocumented
-  smoothing, but more code on the render thread.
+  smoothing, but more code on the render thread. If it is adopted, its H-1 case is re-run N = 20 times (not once),
+  since offline results varied by up to 14 dB between runs for the stepped variants.
 
 ### Alternative 5: Scheduling on the main thread
 - **Rejected**: 3–10 ms of the frame (TASK-033, ADR-0001); R4.3.
@@ -341,7 +354,8 @@ Per K-34: headless runs need no MAC FREE; anything on the Mac's screen or speake
 - **H-3 Simulator smoke** (dev simulator, headless): the Audio screen opens; the engine logs its rate, IO buffer and
   output latency (TASK-078). Simulator timings are never evidence.
 
-**Device rows (pending; the decision rule above):** P-1 (`ipad-1/P-1/`), P-7 (`ipad-1/P-7/`), P-8 (`ipad-1/P-8/`),
+**Device rows (pending; the decision rule above; `DeviceSpike`'s Audio screen carries the tone tests with the
+detector tap and the simulated reset for them):** P-1 (`ipad-1/P-1/`), P-7 (`ipad-1/P-7/`), P-8 (`ipad-1/P-8/`),
 P-9 (`ipad-1/P-9/`), M-14 (`mac-1/M-14/`), as in `production/qa/device-checks-plan.md`.
 
 ## Related
