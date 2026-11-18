@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent read by game-qc-android, merged 2026-11-18)
 > **Author**: game-dev-android for Luan (TASK-047); plan reviewed by game-qc-android
-> **Last Updated**: 2026-11-18 (TASK-057a re-run info notes)
+> **Last Updated**: 2026-11-18 (TASK-089b: R13 draw and tick order; rounded clearances marked)
 > **Last Verified**: 2026-11-18, against Input & Key Filter R7/F1, Press Queue R3/R4/R11, Key Table (36 keys), art
 > bible §2–§4, §6, §7, the one-shot (`config.js` hint_*, `index.html` spawnHint / hintAt / takeHint / drawHints),
 > decisions K-06, K-08, K-10, K-15, K-16, K-18, K-20
@@ -96,8 +96,8 @@ the safe stage**.
   (AC-5) re-runs on the published values.
 - **Clearances** (F4), all on the jittered centre and all including the drift (F3, at most 12.8 units):
   - each other hint: centres ≥ 185.6 apart (hit circles plus drift never touch);
-  - the moon (66, 62), radius 50: ≥ 148;
-  - each queue token (1214, 58), (1148, 58), (1082, 58), glow radius 40: ≥ 138;
+  - the moon (66, 62), radius 50: ≥ 148 (rounded for reading; the check uses F4's exact 147.8);
+  - each queue token (1214, 58), (1148, 58), (1082, 58), glow radius 40: ≥ 138 (rounded; F4's exact 137.8);
   - the current cast member's box (from the Reveal Stage): ≥ 97.8 from the box;
   - the glyph's box (x 475–805, y 155–485, the 330-unit glyph at 640, 320): ≥ 97.8 (every slot passes statically);
   - the safe stage's edges: the circle plus drift stays inside 0–1280 × 0–720;
@@ -205,6 +205,44 @@ Gold means "a letter lives here" (art bible §4). Draw order is the Reveal Stage
 sparkles, and below the queue tokens and the moon, matching the touch order (Input R7: a hint is above a cast
 member).
 
+**R13. Draw and tick order** (TASK-089b; the hint-letters-v1 contract pins it, ADR-0004 D2). Every random number
+comes from the `hints` stream (R4), one raw 64-bit draw per `u`, with `u = unitDraw(x) = (x >> 11) × 2⁻⁵³` in [0, 1)
+(ADR-0002 D4). `floor` below is that of a non-negative number.
+
+- **One spawn attempt draws in this order, and nothing else:**
+  1. **Key** (F1): `pool` keeps Key Table canonical order (A–Z, then 0–9) after the exclusions. `|pool| = 0`: no
+     draw, no spawn, and the attempt draws nothing more. `|pool| = 1`: that key, no draw (as Key Table F1).
+     `|pool| ≥ 2`: one draw, index `floor(u × |pool|)`.
+  2. **Slots** (R5), a lazy pick without replacement: `free` = the free slots in the base order **L1, L2, L3, L4,
+     R1, R2, R3, R4**. While `free` is not empty: with `|free| ≥ 2` draw one `u` and take index `floor(u × |free|)`;
+     with `|free| = 1` take it, no draw; remove it from `free` (the rest keep their order) and try it (step 3). The
+     next slot is drawn only when this one is blocked.
+  3. **Jitter**, per slot: up to **5 jittered tries** (the first and 4 redraws), each two draws, `jx = (2u − 1) ×
+     hint_jitter` then `jy = (2u − 1) × hint_jitter`; then zero jitter, no draw; if that fails too, the slot is
+     blocked and step 2 continues.
+  4. If a slot passed: **life** `= hint_life_s × (0.8 + 0.4u)`, then **phase** `φ = 2π × u`. If no slot passed, the
+     key, slot and jitter draws stay used and life and phase are not drawn.
+- **Hint ids** are 1, 2, 3, … in spawn order per launch (never reset by Play entry or the background, never reused);
+  they are Input's `source = hint(id)`.
+- **The gap test** is `hintTime − lastAttempt ≥ hint_gap_s` (inclusive), made only while fewer than `hint_count`
+  hints are on screen; `lastAttempt` moves only on an attempt. Entering Play and returning from the background
+  attempt at once (`lastAttempt = −∞`).
+- **The tick**, once per frame while `hintTime` advances (not while Frozen or Dimmed): (1) remove every hint with
+  `age ≥ life` (inclusive); (2) attempt a spawn if the gap test passes, **unless a hint was removed in this frame**,
+  by that expiry or by a consume in this frame's press callbacks (R8: "never in the same frame"). So after a consume
+  or an expiry with the gap already run out, the attempt comes at the first tick after that frame.
+- **The Reduce Motion consume fade** (R10, 0.3 s) is drawing only: the hint no longer counts toward `hint_count`,
+  holds no slot for F4, is not in F1's exclusions, answers no `originFor` and takes no touch. Its key is excluded
+  anyway (it is now the current reveal or queued). A new hint may spawn in that slot during the fade (≤ 0.3 s of
+  overlap, accepted).
+- **`originFor(key)`** returns the drawn centre: the jittered slot centre plus the F3 offset at the current age, or
+  the frozen offset for a hint held still (a touch, R7; Reduce Motion, R10).
+- **The pulse's "first press"** is any press delivered to the Press Queue in this Play entry, including one while
+  Dimmed. A press while Frozen cannot happen: Input routes it to the challenge.
+- **The dim fade** (R9, K-26): the dim factor moves linearly toward its target (`parade_hint_alpha` or 1) at the
+  constant rate `(1 − parade_hint_alpha) / parade_hint_fade_s` per second of the play clock, from its current value;
+  a reversal mid-fade takes proportionally less than `parade_hint_fade_s`.
+
 ### States and Transitions
 
 | State | Meaning | Leaves to |
@@ -263,13 +301,14 @@ Example: φ = 0, a = π/1.4 ≈ 2.24 s → x = cx + 10, y = cy + 8 × sin(2.92) 
 ```
 R        = k × (hitRadius + 12.8)                         = 87.8 at k = 1   (hitRadius 75, Input F1)
 hint     : |c − c_other| ≥ 2R + 10k                       = 185.6
-moon     : |c − (66, 62)| ≥ R + 50 + 10k                   = 147.8 → 148
-token_i  : |c − token_i| ≥ R + 40 + 10k                    = 137.8 → 138     token_i ∈ {(1214,58), (1148,58), (1082,58)}
+moon     : |c − (66, 62)| ≥ R + 50 + 10k                   = 147.8 (148 in R5 is this, rounded)
+token_i  : |c − token_i| ≥ R + 40 + 10k                    = 137.8 (138, rounded)   token_i ∈ {(1214,58), (1148,58), (1082,58)}
 box      : dist(c, box) ≥ R + 10k                          = 97.8           box ∈ {cast member, glyph, keyboard row band (when on)}
 stage    : R ≤ c.x ≤ 1280 − R  and  R ≤ c.y ≤ 720 − R
 insets   : the circle of radius R around c is outside every gesture inset (Android)
 ```
-`dist(c, box)` is 0 inside the box, else the distance to its nearest point. Examples: L1 (130, 200) → moon 152.1 ✓;
+Every check is inclusive (≥, ≤) and uses these exact values, never the rounded ones. `dist(c, box)` is the
+Euclidean distance to the closed box: 0 inside it or on its edge, else the distance to its nearest point. Examples: L1 (130, 200) → moon 152.1 ✓;
 L1 jittered (120, 190) → 138.9 ✗ (redraw); R1 (1150, 200) → token (1148, 58) 142.0 ✓; slot spacing 230 × 210 minus
 2 × 10 jitter → ≥ 190 ✓.
 
@@ -435,6 +474,9 @@ a fake Reveal Stage (cast box, `stage_to_px`, freezes) and the slot table. No wa
 - **AC-22 Look (retained screenshots):** on Day and Night, at the 11" iPad (extended sky and ground, K-20) and a
   16:9 Mac window: the worst case of the widest creature, 3 hints, 3 queue tokens and the moon, with no overlap;
   plus one Reduce Motion frame; plus the full-queue case where a touched hint stays (Press Queue AC-19).
+- **AC-23 Draw and tick order (contract hint-letters-v1):** for each fixture (seed, press and clock sequence, cast
+  box, keyboard row on or off, `k`), the model's spawns match exactly: hint id, key, slot, jittered centre, life and
+  phase, the frame of each attempt and removal, and the number of `hints` draws each attempt used (R13).
 
 **NOT ASSESSED:** Android gesture insets and `xdpi` (AC-20) until an Android build; whether 27 mm targets and a 6 s
 life suit a 2.5-year-old's aim (playtest).
