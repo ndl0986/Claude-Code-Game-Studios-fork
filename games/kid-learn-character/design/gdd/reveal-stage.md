@@ -84,7 +84,7 @@ Reveal Stage, before returning:
 | **Morph** (glyph, silhouette, valid set, `willForm` true) | glyph → stardust → creature | `T` | `T + form_s` | true if the item has a word line |
 | **Glyph missing** | the creature fades in, no stardust | F5 | = formedS | true if the item has a word line |
 | **Art or silhouette missing** (`willForm` false) | the glyph rises, glows, then sparkles out | `glow + sparkle_out_s` | = formedS | **false** |
-| **Invalid timing set** (MorphCore Rule 9) | the creature fades in, on the stage's own fallback timings | F5 | = formedS | true if the item has a word line |
+| **Invalid timing set** (MorphCore Rule 9) | the glyph rises and glows as usual until `fallback_glow_s`, then fades out over `fallback_fade_s` while the creature fades in (a crossfade, no stardust) | F5 | = formedS | true if the item has a word line |
 
 5. builds the morph (MorphCore) in the morph case, and starts the leaving fade of the previous creature (R5).
 
@@ -322,7 +322,7 @@ Example: taps at 10.0, 10.5 and 11.0 → the first and third count (0.5 < 0.9; 1
 | **Art not loaded at `formedS`** | Cast Rendering's late-art wait (R5); `formed` is not moved; sound plays on time. |
 | **Glyph missing** | The creature fades in on F5's time; no stardust; letter voice, cast sound and word as usual. |
 | **Art missing (`willForm` false)** | The glyph glows and sparkles out; `hasWord` false; no cast sound or word; `shown(glyphOnly)`. |
-| **Timing set invalid** | No morph; the creature fades in on the stage's fallback timings (F5); one log line. |
+| **Timing set invalid** | No morph; the glyph glows until `fallback_glow_s`, then crossfades into the creature over `fallback_fade_s` (F5); E7 at `fallback_glow_s` *(TASK-088b)*; one log line. |
 | **A tap during the fade-in** | Counts (the hit shape exists from `formedS`). |
 | **A tap on the leaving creature or a walker** | A sparkle only (R7, K-17). |
 | **Taps faster than the cooldown** | Only one per 0.9 s hops and sounds; the others sparkle (F6). |
