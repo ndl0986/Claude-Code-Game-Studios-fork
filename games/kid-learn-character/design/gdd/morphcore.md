@@ -1,6 +1,6 @@
 # MorphCore
 
-> **Status**: In Review
+> **Status**: Approved (independent review by game-dev-ios, merged 2026-11-18)
 > **Author**: game-dev-android for Luan (TASK-038)
 > **Last Updated**: 2026-11-18
 > **Last Verified**: 2026-11-18

@@ -1,6 +1,6 @@
 # Key Table & Theme Data
 
-> **Status**: In Review
+> **Status**: Approved (independent review by game-dev-ios, merged 2026-11-18)
 > **Author**: game-art-content (TASK-036), with Luan's answers via game-leader; plan reviewed by game-dev-ios
 > **Last Updated**: 2026-11-18
 > **Last Verified**: 2026-11-18

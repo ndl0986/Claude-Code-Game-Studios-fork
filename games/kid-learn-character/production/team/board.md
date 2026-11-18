@@ -55,3 +55,4 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 - 2026-11-18: TASK-037 merged (3/14 MVP GDDs approved); ADR-0001/art-bible sil_….json wording clarified (merged).
 - 2026-11-18: TASK-039/040/041 plans approved; Luan decided K-12 (settings) and K-13 (audio).
 - 2026-11-18: TASK-039 Settings Store merged (4/14 MVP). Follow-ups: Settings touch-up (volume preview, .debug logs, restoration switches) → game-dev-android; Key Table §5 launch case → game-art-content; startPlay during theme load → App Shell GDD.
+- 2026-11-18: Settings Store touch-up merged (K-14). GDD status lines set to Approved for the 4 merged GDDs.

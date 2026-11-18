@@ -1,6 +1,6 @@
 # Settings Store
 
-> **Status**: In Review
+> **Status**: Approved (independent review by game-dev-ios, 2026-11-18)
 > **Author**: game-dev-android for Luan (TASK-039); plan reviewed by game-dev-ios
 > **Last Updated**: 2026-11-18 (TASK-039 touch-up: slider preview, `.debug` logging, restoration off)
 > **Last Verified**: 2026-11-18, against ADR-0001 (Accepted) Decisions 8 and 9, art bible §2, §4 and §7, TASK-034

@@ -1,6 +1,6 @@
 # Input & Key Filter
 
-> **Status**: Designed (lean review APPROVED 2026-11-18, TASK-037; independent read by game-dev-android, Android items applied)
+> **Status**: Approved (lean review APPROVED 2026-11-18, TASK-037; independent read by game-dev-android APPROVE; merged 2026-11-18)
 > **Author**: game-dev-ios (TASK-037); decisions by Luan; plan reviewed by game-dev-android
 > **Last Updated**: 2026-11-18
 > **Last Verified**: 2026-11-18, against ADR-0001 (Accepted), art bible §7, the TASK-033 spike
