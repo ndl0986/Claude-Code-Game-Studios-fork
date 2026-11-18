@@ -22,3 +22,8 @@ Reviewed-Content-Hash: docs/architecture/adr-0001-native-apple.md 9bd960cdffd4be
 Reviewed-Content-Hash: design/gdd/key-table-theme-data.md f8f54faf82ac675dfdf929b0465ef4bdff8253c8
 Reviewed-Content-Hash: design/compliance/TASK-034-kids-weather-rules.md efc8d1ecc3ad747f52894344afb5442089e0c52d
 Reviewed-Content-Hash: production/team/decisions.md 851d029c9350a0f9ce2f6d528146b3ca974207af
+
+## Re-review — 2026-11-18 — Verdict: APPROVED
+Review mode: independent read by game-dev-ios (peer review, not /design-review) · Workflow: standard
+Summary: All plan-review must-cover items and Luan's K-12 answers landed; the self-fixed blocker (window-frame autosave / AC-3) is fixed. Merged into docs/kid-learn-character-plan on Luan's go.
+Follow-ups (not blocking): volume preview while dragging; debug logs at .debug level (not on disk); name the SwiftUI/AppKit/iPadOS restoration switches; App Shell owns startPlay during theme load; Key Table §5 to add the launch case (failing stored theme → Dinosaurs in memory).
