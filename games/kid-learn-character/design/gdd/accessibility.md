@@ -148,7 +148,7 @@ diameter; scaled up by `k` if a device would go under it).
 | Target | Size | Source |
 |---|---|---|
 | Hint letter | hit diameter 27–31 mm on iPads, ≥ 22.5 mm on the smallest Mac window (k = 1 on every MVP device) | Hint Letters F5 |
-| On-screen keyboard row key | hit rect 144 × 134 units (the drawn key plus 8 units a side), which meets the 18 mm floor; a short common word or name, at most 8 letters | `onscreen-keyboard-row.md` (hit rect, F2; its V17 caps the word at 8, as K-29 does) |
+| On-screen keyboard row key | hit rect 144 × 134 units (the drawn key plus 8 units a side), which meets the 18 mm floor; a short common word or name, at most 8 letters | `onscreen-keyboard-row.md` (hit rect, F2; Key Table V17 caps the word at 8, as K-29 does) |
 
 
 Not targets: the title play button (any tap except the moon starts play, App Shell R3), a tap on a
@@ -286,12 +286,13 @@ transitions (zig-zag rule, per pixel p): keep the running extreme E since the la
   from E, and the darker of E and L(p, f) is < 0.80, a transition is stamped at frame f; the direction
   flips and E = L(p, f). Otherwise E follows L while it moves in the current direction.
   (Changes smaller than 0.1 never register, so sub-threshold noise is ignored.)
-window(t)        = the frames in (t − 1 s, t]: exactly 60 frames at 60 fps (half-open)
+window(t)        = the frames in (t − 1 s, t] (half-open): 60 frames at 60 Hz, 120 at 120 Hz
 flashing(p, t)   = (transitions of p stamped in window(t)) / 2 > 3      i.e. 7 or more transitions
 FAIL if ∃ t, ∃ field position F:  #{ p ∈ F : flashing(p, t) } > area_max
 ```
 
-- **Capture:** 60 fps, every frame, the full stage at the device's native resolution, sRGB values
+- **Capture:** at the display's refresh rate (60 Hz, or 120 Hz on ProMotion iPads; the rate is recorded
+  per run), every frame, the full stage at the device's native resolution, sRGB values
   converted per WCAG; the field slides over every position (step ≤ `field_px` / 4) for every frame.
 - **Scenario:** the K-26 busy case: a seeded mash (the Press Queue's mash fixture) with a walking
   parade, at Night and at Day, with light rain and with snow; once with Reduce Motion off and once on.
@@ -390,11 +391,11 @@ GDD's (A8).
 6. **AC-06 · F2 field math:** for ppi 264, 254 and 109 the tool's `field_px` is 545.6, 524.9 and 225.3 and
    `area_max` 58,449, 54,105 and 9,964 px (unit test; from the unrounded `field_px`).
 7. **AC-07 · F2 detector:** a synthetic clip with a full-screen 4 Hz black/white flash FAILs; the same
-   flash confined to 20% of a field passes; a 3 Hz full-screen flash passes **at every phase offset** against the 60-frame window; a 3.5 Hz
+   flash confined to 20% of a field passes; a 3 Hz full-screen flash passes **at every phase offset** against the 1 s window (at 60 and at 120 Hz); a 3.5 Hz
    full-screen flash FAILs; a ΔL = 0.08 flicker passes (below 10%); random noise of ±0.04 passes; a
    flicker between L 0.85 and 1.0 passes (darker ≥ 0.80) (unit tests on the detector).
 8. **AC-08 · F2 gate (NOT ASSESSED until device time):** the K-26 busy scenario, Night and Day, rain and
-   snow, Reduce Motion off and on, on a real iPad and a real Mac at 60 fps: no FAIL. The simulator run
+   snow, Reduce Motion off and on, on a real iPad and a real Mac at the display's refresh rate: no FAIL. The simulator run
    passes on every build.
 9. **AC-09 · F2b red flash:** the palette check over every hex in the art bible reports the highest
    R/(R+G+B) (8-bit 0.604, linear 0.781) and passes (< 0.8); adding `#ff0000` to a test palette fails it. It runs on the shipped palette, theme data and SVG fills.

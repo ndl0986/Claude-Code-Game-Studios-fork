@@ -92,3 +92,8 @@ Change:
 - A7 restores the keyboard-row row from onscreen-keyboard-row.md (444e2a9): a 144 × 134 u hit rect meets the 18 mm floor (its F2), and the word is capped at 8 letters (its V17, within K-29's ≤ 9).
 - AC-12 now cites Keyboard Row F2, and its follow-up row is removed.
 Reviewed-Content-Hash: design/gdd/accessibility.md 47a61c595bbae74d3740e75cac338093399daf17
+
+## Update — 2026-11-18 — game-qc-android nits after APPROVE (no re-review)
+Task: TASK-061
+Change: A7 cites Key Table V17. F2 captures at the display refresh rate (60 or 120 Hz on ProMotion; recorded per run), with the window being the frames in (t − 1 s, t]. AC-07 and AC-08 match.
+Reviewed-Content-Hash: design/gdd/accessibility.md 4cc7c647cc87a9deb798a2f73a0dc5f20b0acdfa
