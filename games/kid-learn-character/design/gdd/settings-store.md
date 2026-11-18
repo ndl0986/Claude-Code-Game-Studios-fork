@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent review by game-dev-ios, 2026-11-18)
 > **Author**: game-dev-android for Luan (TASK-039); plan reviewed by game-dev-ios
-> **Last Updated**: 2026-11-18 (TASK-072 canonical record, R6a)
+> **Last Updated**: 2026-11-18 (TASK-082 nits)
 > **Last Verified**: 2026-11-18, against ADR-0001 (Accepted) Decisions 8 and 9, art bible §2, §4 and §7, TASK-034
 > **Implements Pillar**: Pillar 5 (Safe by Design)
 
@@ -179,7 +179,9 @@ read and write the record with the same hand-written code (ADR-0002 D8, ADR-0004
 - **Older record** (version < app's): migrations run in steps, v1 → v2 → … → current, each a pure function from
   one record to the next, each unit-tested with a fixture. The result is used in memory and written at the next
   grown-up change (reads never write, R4).
-- **Missing or invalid `schemaVersion`** (not an integer ≥ 1) → treated as version 1 and validated per R6.
+- **Missing or invalid `schemaVersion`** (not an integer ≥ 1) → treated as version 1 and validated per R6. This is
+  a fallback, so it writes **one debug log line** naming `schemaVersion` (R6) *(TASK-082; settings-record-v1's
+  `R7-missing-schemaVersion-is-v1`)*.
 - **Newer record** (version > app's; only after a downgrade, which the App Store does not do but TestFlight and
   development builds can): the app reads the fields it knows, with R6 validation, and ignores the rest. When this
   older app next writes, it writes the record **at its own version, and the newer fields are lost**. This is
@@ -275,6 +277,8 @@ From the record: `level = round(r)` if `r` is a finite number with `0 ≤ r ≤ 
 
 `round` is half away from zero. The slider is clamped (its output can only leave 0–10 by rounding error); a read
 value is never clamped: out of range or non-finite means the record is wrong, so the field takes its default.
+**A non-finite slider value** (NaN or ±∞, which a slider should never report) **leaves `volume` unchanged**: no write,
+no notification, and **one debug log line** *(TASK-082)*.
 
 Examples: slider at 7.4 → 7; at 7.5 → 8; at 0.4 → 0. Read 6.6 → 7; read 10 → 10; read 12, −1, 10.4 or NaN → 8.
 

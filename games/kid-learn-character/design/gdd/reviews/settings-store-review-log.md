@@ -53,3 +53,9 @@ Review mode: lean · Workflow: standard
 Change: new R6a writes the answers to settings-record-v1's SS-Q1–Q7 (TASK-068): minimal string escaping (only quote, backslash and U+0000–U+001F as lowercase \u00xx; everything else raw UTF-8), any JSON number token read as a number, bare NaN and duplicate keys make the whole record unreadable, rounding inside 0–10 logs nothing, several bad fields log in R1 order, a no-op change does nothing. No other rule changed. Review: game-qc-android, from the diff.
 fixture: settings-record-v1 (cases added in TASK-068)
 Reviewed-Content-Hash: design/gdd/settings-store.md d88b459d1131866ca6da1eb08e11d76b196c782f
+
+## Update — 2026-11-18 — TASK-082 nits (no re-review)
+Review mode: lean · Workflow: standard
+Change: F1 states that a non-finite slider value leaves volume unchanged (no write, no notification, one log line); R7 states that a missing or invalid schemaVersion writes one log line (a fallback). Review: game-qc-android, from the diff.
+fixture: settings-record-v1 (the slider-NaN case follows this change)
+Reviewed-Content-Hash: design/gdd/settings-store.md 7c7b51ce297ced5efcd22c21f5f012f4aef0f4f1

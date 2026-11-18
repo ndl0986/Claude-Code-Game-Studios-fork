@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent re-review by game-dev-ios, merged 2026-11-18)
 > **Author**: game-dev-android for Luan (TASK-043); plan reviewed by game-dev-ios
-> **Last Updated**: 2026-11-18 (TASK-056a cross-review fixes)
+> **Last Updated**: 2026-11-18 (TASK-082 nits)
 > **Last Verified**: 2026-11-18, against Input & Key Filter R8, MorphCore F5/F6, Audio & Voice F6/E1/E2, Key Table
 > R3 and `voiceDurations` (V15), Settings Store, K-06, K-13, K-15, the one-shot `pressLetter` / `holdTime`
 > **Implements Pillar**: Pillar 1 (Every Press Answers); serves Pillar 3 (Calm Magic)
@@ -69,7 +69,8 @@ forgotten and the stage is quiet when they return.
   ignored never take a number, so the count advances only when a reveal starts.
 
 **R3. A press arrives** (`press(p)`, called synchronously from Input's event callback, in delivery order; `p` is
-Input's R8 event `{key, source, time, origin}`). The decision uses `p.time` on the monotonic uptime clock:
+Input's R8 event `{key, source, time, origin}`). The decision uses `p.time`, **converted to play-clock time on
+arrival (R8a)**, and compares it with play-clock times only:
 
 1. **Start at once** if there is no `current`, **or** the queue is empty **and** `current.formed` **and**
    `p.time ≥ current.r0 + current.holdEff`. The reveal starts with `r0 = p.time` (R6). Outcome:
@@ -105,6 +106,15 @@ Android: `SystemClock.uptimeMillis() / 1000`, the clock of `getEventTime()`). In
 2. **Advance:** if the queue is not empty, `current.formed`, and `now ≥ r0 + holdEff`, pop the front press and
    start it with `r0 = now` (R6). At most **one** reveal starts per tick.
 
+- **Both comparisons are inclusive** (`≥`): the formed timeout fires at exactly `r0 + revealLen + formed_timeout_s`,
+  and the advance happens at exactly `r0 + holdEff` *(TASK-082, PQ-Q4)*.
+- **Order with presses** *(TASK-082, PQ-Q2)*: presses and ticks are handled **in delivery order**; `tick(now)` is one
+  more event in that order, with no fixed place before or after a frame's input callbacks. A press can never jump a
+  queued key either way (R3), so the order changes at most its queue index. Example: with a key waiting, a press at
+  exactly `r0 + holdEff` in the same frame as the tick: tick first, the head starts and the press queues at index
+  0; press first, it queues at index 1 and the tick then starts the head. With an empty queue, a press at exactly
+  `r0 + holdEff` starts at once (R3.1, `≥`).
+
 **R6. Starting a reveal.** The queue calls the Reveal Stage's `startReveal(revealId, key, source, origin, r0)`:
 
 - Key Table resolves the item **now**, with the theme active now (its §4); `item` is returned in the outcome.
@@ -134,8 +144,10 @@ Android: `SystemClock.uptimeMillis() / 1000`, the clock of `getEventTime()`). In
 
 **R8. Grown-up panel.** When the panel opens (Parent Gate & Grown-up Panel, chord or moon hold), **the queue is
 cleared** (Luan, K-15), and the current reveal **settles at once to formed**: the queue marks it formed and the
-Reveal Stage shows the formed creature under the dim, not a morph frozen half-way. The hold of the settled
-creature counts as passed, so after the panel closes the next press starts at once (same rule as R9; author's
+Reveal Stage shows the formed creature under the dim, not a morph frozen half-way. The settled reveal's `formedAt` is the **play-clock time of the settle**, so `restingSince = formedAt` from that
+moment (R10) and it **is published while the panel is open** (the play clock does not stop under the panel, Reveal
+Stage R8; whether the Parade may start then is the Parade's rule, its R6) *(TASK-082, PQ-Q3)*. The hold of the
+settled creature counts as passed, so after the panel closes the next press starts at once (same rule as R9; author's
 choice, consistent with K-15). A theme can only be changed in the panel, so the queue is already empty when a new
 theme takes effect; the next reveal uses it (Key Table §4). The theme change itself never clears anything.
 
@@ -152,7 +164,7 @@ clear and settle apply then (K-15, K-20).
   With no freeze since launch the play clock equals uptime, so every other rule reads the same.
 
 **R9. App to background** (Input & Key Filter: Inactive). The queue is cleared and the current reveal settles to
-formed with its hold passed (Luan, K-15). On return, the formed creature is on stage and the next press starts at
+formed with its hold passed (Luan, K-15), with `formedAt` the play-clock time of the settle, as in R8. On return, the formed creature is on stage and the next press starts at
 once. Time spent in the background never counts towards anything.
 
 **R10. Resting signal for the Parade.** The queue publishes `restingSince`: when the queue is empty and

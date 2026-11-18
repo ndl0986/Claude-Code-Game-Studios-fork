@@ -49,3 +49,8 @@ Reviewed-Content-Hash: design/gdd/press-queue.md a4fc49fbda37a95a7730b76bb140543
 Review mode: lean · Workflow: standard
 Change: W-6: four Key Table cites point at its §4 (the pick rule). W-9: the peers list is no longer 'not written yet'. From design/gdd/gdd-cross-review-2026-11-18.md and K-26. Review: game-qc-android (diff re-run).
 Reviewed-Content-Hash: design/gdd/press-queue.md d8d2ac774eeff254e1e18f65d9ab9b76ec0d80e5
+
+## Update — 2026-11-18 — TASK-082 nits (no re-review)
+Review mode: lean · Workflow: standard
+Change: answers to press-queue-v1 PQ-Q1–Q4 (TASK-080) written as rules: R3 compares p.time converted to play-clock time (R8a); R5 comparisons inclusive and presses and ticks handled in delivery order, a press never jumping a queued key; R8 and R9 settle set formedAt to the settle time, with restingSince published under the panel. Review: game-qc-android, from the diff.
+Reviewed-Content-Hash: design/gdd/press-queue.md d29da5f89c7d76ed6cc0fdb1d4c6fca5b435a4b6
