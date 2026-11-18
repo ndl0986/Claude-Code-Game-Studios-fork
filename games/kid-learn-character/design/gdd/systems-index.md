@@ -57,7 +57,7 @@ child lock-in, privacy compliance), because the player is 2.5–3 years old.
 | # | System Name | Category | Priority | Status | Design Doc | Depends On |
 |---|-------------|----------|----------|--------|------------|------------|
 | 1 | Key Table & Theme Data | Data | MVP | Approved | design/gdd/key-table-theme-data.md | — |
-| 2 | Input & Key Filter | Core | MVP | In Review | design/gdd/input-key-filter.md | — |
+| 2 | Input & Key Filter | Core | MVP | Approved | design/gdd/input-key-filter.md | — |
 | 3 | MorphCore | Core | MVP | Approved | design/gdd/morphcore.md | — |
 | 4 | Settings Store (inferred) | Persistence | MVP | Not Started | design/gdd/settings-store.md | — |
 | 5 | Privacy & Kids Compliance (inferred) | Meta | MVP | Not Started | design/gdd/privacy-kids-compliance.md | — |
@@ -226,10 +226,10 @@ Effort: S = 1 session, M = 2–3 sessions.
 | Metric | Count |
 |--------|-------|
 | Total systems identified | 20 |
-| Design docs started | 3 |
+| Design docs started | 6 |
 | Design docs reviewed | 3 |
-| Design docs approved | 2 |
-| MVP systems designed | 2/14 |
+| Design docs approved | 3 |
+| MVP systems designed | 3/14 |
 | Vertical Slice systems designed | 0/3 |
 
 ---
