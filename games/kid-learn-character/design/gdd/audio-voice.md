@@ -512,11 +512,9 @@ Logic criteria run with an injected clock and a fake player layer (no audio hard
 
 - **Q7. Human voice for release.** The MVP uses build-time TTS (R8). Whether to re-record with a human voice
   (adult actor, licence buy-out) before release stays open.
-- **Q8. TTS licence (open item).** The chosen TTS voice's licence must allow its rendered audio in a commercial
-  app for children. To be checked before the voice files are rendered for release.
 - **Q9. Memory budget.** F5's ~20 MB per theme needs the real iPad memory budget (ADR-0001).
 
-**Resolved (Luan, 2026-11-18), now in the rules:** Q1 the word plays 0.25 s after the cast sound, ducked over it,
+**Resolved (Luan, 2026-11-18), now in the rules:** Q8 (TTS licence) closed by K-41: Kokoro-82M, Apache-2.0, attribution in the acknowledgements; Privacy L-09 (R8). Q1 the word plays 0.25 s after the cast sound, ducked over it,
 and a waiting key does not cut it (E9, F6); Q2 an overflow press gets the softer ping (E2); Q3 the MVP voice is
 TTS pre-rendered at build time (R8); Q4 silent mode is respected (R6); Q5 the loudness targets as
 proposed, tuned in play (F4); Q6 one chirp per baby, counting along up to 9 (E11).

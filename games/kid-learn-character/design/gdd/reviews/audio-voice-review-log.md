@@ -118,3 +118,8 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md 69116ac3ad1a1e939c7adcba58f5eae
 Review mode: lean · Workflow: standard
 Change: R8 names the engine and settings (K-41: Kokoro-82M, af_heart, lang a, speed 0.88, pinned package and weights), espeak-ng build-only (K-36), Piper not used, and the K-35 respelling rule; the TTS licence open item is removed (L-09 closed). Review: game-qc-android from the diff.
 Reviewed-Content-Hash: design/gdd/audio-voice.md b5677bc5eb639e14f86fbfb80782ec651bfd6957
+
+## Update — 2026-11-18 — TASK-108 Q8 closed (no re-review)
+Review mode: lean · Workflow: standard
+Change: from game-qc-android's REVISE: Open Question Q8 (TTS licence) moved to Resolved, "closed by K-41: Kokoro-82M, Apache-2.0, attribution in the acknowledgements; Privacy L-09 (R8)".
+Reviewed-Content-Hash: design/gdd/audio-voice.md 434d426d4bdf9e67e25a23e31b922bb88f5d4e0f
