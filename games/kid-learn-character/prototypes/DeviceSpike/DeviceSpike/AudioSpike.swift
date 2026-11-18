@@ -1,8 +1,11 @@
 // PROTOTYPE - NOT FOR PRODUCTION (TASK-078 DeviceSpike, ADR-0010 candidate graph)
 // The candidate audio graph from Audio & Voice R2/R4/R6: 7 players on 4 buses (voice 1, cast 1, ui 4, music 1),
 // buses → submix → peak limiter → main mixer. Players start once and keep running; a sound is started by
-// scheduling a primed buffer with .interrupts, off the main thread. A cut ramps that player's own mixer to 0 over
-// cut_fade_s (the candidate no-click mechanism, checked by P-7 / M-14). Buffers are synthesised at the output rate.
+// scheduling a primed buffer, off the main thread. ADR-0010 D5 (TASK-087): a sounding player is never stopped,
+// paused or interrupted hard (that clicks: tools/offline-cut-check.swift). A cut sets the player's own mixer volume
+// to 0 (the mixer smooths it, ~27 ms to below −60 dBFS offline), waits cut_settle_s, then stops it and restores the
+// volume; a sound for a busy player starts after that cut. Freeze/resume (D7) do the same around pause/play.
+// Buffers are synthesised at the output rate.
 import AVFoundation
 import QuartzCore
 
@@ -18,12 +21,14 @@ final class AudioSpike: @unchecked Sendable {
         componentManufacturer: kAudioUnitManufacturer_Apple, componentFlags: 0, componentFlagsMask: 0))
     var format: AVAudioFormat
     var buffers: [String: AVAudioPCMBuffer] = [:]
-    var cutFade = 0.03
+    var cutSettle = 0.04          // ADR-0010 D5 cut_settle_s: the mixer's smoothing (~27 ms) plus margin
+    private var busyUntil: [Double]
     private var uiNext = 0
     var log: (String) -> Void = { _ in }
 
     init(log: @escaping (String) -> Void) {
         self.log = log
+        busyUntil = []
         #if os(iOS)
         let s = AVAudioSession.sharedInstance()
         try? s.setCategory(.soloAmbient, mode: .default)       // obeys silent mode, does not mix (Audio R6)
@@ -44,6 +49,7 @@ final class AudioSpike: @unchecked Sendable {
                 players.append((b, p, pm))
             }
         }
+        busyUntil = Array(repeating: 0, count: players.count)
         busMixers[.cast]?.outputVolume = 0.63; busMixers[.ui]?.outputVolume = 0.32; busMixers[.music]?.outputVolume = 0.40
         engine.connect(submix, to: limiter, format: nil)
         engine.connect(limiter, to: engine.mainMixerNode, format: nil)
@@ -55,8 +61,15 @@ final class AudioSpike: @unchecked Sendable {
     func start(reason: String) {
         engine.prepare()
         do { try engine.start() } catch { log("engine start failed (\(reason)): \(error)") }
-        for p in players where !p.node.isPlaying { p.node.play() }
+        for p in players where !p.node.isPlaying { startPlayer(p.node) }
         log("engine running (\(reason)) rate=\(format.sampleRate) io=\(String(format: "%.2f", ioBufferMs)) ms out=\(String(format: "%.2f", outputLatencyMs)) ms")
+    }
+
+    /// `play()` is deprecated from the 27 SDKs; `playAudio()` (throws) exists only on 27+ (deployment is 26).
+    func startPlayer(_ n: AVAudioPlayerNode) {
+        if #available(iOS 27, macOS 27, *) {
+            do { try n.playAudio() } catch { log("playAudio failed: \(error)") }
+        } else { n.play() }
     }
 
     var ioBufferMs: Double {
@@ -106,28 +119,51 @@ final class AudioSpike: @unchecked Sendable {
         else { idx = players.firstIndex { $0.bus == bus }! }
         guard let b = buffers[name] else { return handed }
         let p = players[idx]
+        let dur = Double(b.frameLength) / format.sampleRate
         queue.async {
-            p.mix.outputVolume = 1
-            p.node.scheduleBuffer(b, at: nil, options: .interrupts)
-            if !p.node.isPlaying { p.node.play() }
+            let now = ProcessInfo.processInfo.systemUptime
+            let schedule = {
+                p.node.scheduleBuffer(b, at: nil, options: .interrupts)   // the player is silent here: no hard cut
+                if !p.node.isPlaying { self.startPlayer(p.node) }
+                self.busyUntil[idx] = ProcessInfo.processInfo.systemUptime + dur
+            }
+            if self.busyUntil[idx] > now {                                 // busy: cut first (D5), then start
+                self.cutPlayer(idx) { schedule() }
+            } else { schedule() }
         }
         return handed
     }
 
-    /// Ramps the bus's players to silence over cutFade, then stops the scheduled sound (P-7 / M-14 listen for clicks).
-    func cut(_ bus: Bus) {
-        let targets = players.filter { $0.bus == bus }
-        let steps = max(1, Int(cutFade / 0.001))
-        queue.async {
-            for s in 0...steps { for t in targets { t.mix.outputVolume = Float(1 - Double(s) / Double(steps)) }; usleep(1000) }
-            for t in targets { t.node.stop(); t.node.play(); t.mix.outputVolume = 1 }
+    /// ADR-0010 D5, on the audio queue: volume 0 (smoothed by the mixer), wait cutSettle, stop, volume back to 1.
+    private func cutPlayer(_ idx: Int, then: (() -> Void)? = nil) {
+        let p = players[idx]
+        p.mix.outputVolume = 0
+        queue.asyncAfter(deadline: .now() + cutSettle) {
+            p.node.stop(); self.startPlayer(p.node); p.mix.outputVolume = 1; self.busyUntil[idx] = 0
+            then?()
         }
-        log("cut \(bus.rawValue) fade=\(Int(cutFade * 1000)) ms")
+    }
+
+    /// Cuts every player on a bus without a click (P-7 / M-14 listen for clicks).
+    func cut(_ bus: Bus) {
+        queue.async { for i in self.players.indices where self.players[i].bus == bus { self.cutPlayer(i) } }
+        log("cut \(bus.rawValue) settle=\(Int(cutSettle * 1000)) ms")
     }
 
     func setMuted(_ m: Bool) { let target: Float = m ? 0 : 1; queue.async { let from = self.engine.mainMixerNode.outputVolume; for s in 0...30 { self.engine.mainMixerNode.outputVolume = from + (target - from) * Float(s) / 30; usleep(1000) } }; log("mute \(m)") }
-    func freeze() { queue.async { for p in self.players { p.node.pause() } }; log("freeze: players paused") }
-    func resume() { queue.async { for p in self.players { p.node.play() } }; log("resume") }
+    /// ADR-0010 D7: volume 0, wait cutSettle, pause (the position is held ~cutSettle after the freeze moment).
+    func freeze() {
+        queue.async {
+            for p in self.players { p.mix.outputVolume = 0 }
+            self.queue.asyncAfter(deadline: .now() + self.cutSettle) { for p in self.players { p.node.pause() } }
+        }
+        log("freeze: players faded and paused")
+    }
+    /// ADR-0010 D7: play from the held position, then volume 1 (the mixer smooths the rise).
+    func resume() {
+        queue.async { for p in self.players { self.startPlayer(p.node); p.mix.outputVolume = 1 } }
+        log("resume")
+    }
 
     private func observe() {
         let nc = NotificationCenter.default
@@ -135,6 +171,19 @@ final class AudioSpike: @unchecked Sendable {
             self?.log("configuration change → restart and re-prime"); self?.primeBuffers(); self?.start(reason: "config change")
         }
         #if os(iOS)
+        if #available(iOS 27, *) {
+            // ADR-0010 D8: on iPadOS 27 the interruption notification is deprecated; its replacements:
+            nc.addObserver(forName: AVAudioSession.didBecomeInactiveNotification, object: nil, queue: .main) { [weak self] n in
+                let ctx = n.userInfo?[AVAudioSession.deactivationContextKey] as? AVAudioSession.DeactivationContext
+                self?.log("session inactive source=\(ctx.map { "\($0.source.rawValue)" } ?? "?")")
+            }
+            nc.addObserver(forName: AVAudioSession.resumptionRecommendationNotification, object: nil, queue: .main) { [weak self] n in
+                let ctx = n.userInfo?[AVAudioSession.resumptionContextKey] as? AVAudioSession.ResumptionContext
+                let resume = ctx?.recommendation == .shouldResume
+                self?.log("resumption recommendation shouldResume=\(resume)")
+                if resume { try? AVAudioSession.sharedInstance().setActive(true); self?.start(reason: "resumption") }
+            }
+        }
         nc.addObserver(forName: AVAudioSession.interruptionNotification, object: nil, queue: .main) { [weak self] n in
             let type = (n.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt).flatMap(AVAudioSession.InterruptionType.init)
             let opts = (n.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt).map(AVAudioSession.InterruptionOptions.init) ?? []
