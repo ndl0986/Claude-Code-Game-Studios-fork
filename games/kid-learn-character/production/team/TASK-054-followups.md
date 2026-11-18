@@ -20,14 +20,16 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
   on Title and is ignored in Panel open. (game-qc-ios)
 
 ## Cast Rendering
-- C1: per-look glyph and creature changes keyed by the Scene's `look` + `lookBlend`: amber 6 px outline and
+- C1: per-look glyph and creature changes keyed by the Scene's `look` + `lookBlend`, taking the Scene GDD's exact
+  list so its 160-case build check and Cast Rendering share one edge model: amber 6 px outline and
   saturated halo in Morning/Day; at Night the palest stop dropped, halo at 70%, creature 15% dim; blends
   with lookBlend (art bible §2). (game-dev-ios takes it)
 - C2: add the Scene's worst case (snow 60 + windy) to the R11 device measurement run.
 
 ## Reveal Stage
 - R1: publish `mashing` (Press Queue snapshot queue length ≥ 1, or an ignored press in the last 1 s) for the
-  Scene's R3a weather halving. (TASK-053)
+  Scene's R3a weather halving; also publish `haloOn` (on through the glow phase, R5 timeline) for the Scene's
+  halo fade-out. (TASK-053, game-dev-ios)
 
 ## Hint Letters
 - H1: F5's "Mac 700-pt window, k 1.10" row cannot occur (App Shell minimum 960×540 pt → stage_to_px 1.5,
