@@ -25,6 +25,10 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
   with lookBlend (art bible §2). (game-dev-ios takes it)
 - C2: add the Scene's worst case (snow 60 + windy) to the R11 device measurement run.
 
+## Reveal Stage
+- R1: publish `mashing` (Press Queue snapshot queue length ≥ 1, or an ignored press in the last 1 s) for the
+  Scene's R3a weather halving. (TASK-053)
+
 ## Hint Letters
 - H1: F5's "Mac 700-pt window, k 1.10" row cannot occur (App Shell minimum 960×540 pt → stage_to_px 1.5,
   22.5 mm, k = 1); correct the row and AC-7's k values. (game-dev-android)
