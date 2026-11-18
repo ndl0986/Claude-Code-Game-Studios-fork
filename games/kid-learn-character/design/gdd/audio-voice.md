@@ -62,7 +62,7 @@ morph, the fade-in's end for the glyph-missing and invalid-set fallbacks *(TASK-
 | E4 | **Silence** | a swallowed or ignored key (Input R4/R5, K-10), a creature tap inside the cooldown | — | — | Nothing plays. A tap inside the cooldown still sparkles (Reveal Stage). |
 | E5 | **Title chime** | `startPlay` from a key or the play button on the title screen (K-10) | at the press | ui pool | The chime only; **no letter voice**, because the title key is not a press. |
 | E6 | **Letter / number voice** | reveal start (Reveal Stage) | `s = 0` | voice | `vo_<locale>_letter_<id>` or `vo_<locale>_number_<id>`. Always cuts any line still playing (R2.3). |
-| E7 | **Twinkle** | the solid glyph starts to break up: it dissolves (a morph) or sparkles out (the art-missing fallback) | `s = glow` | ui pool | One per reveal; not mash-scaled. **Not played** when there is no glyph (the glyph-missing fallback: the creature only fades in) *(AU-Q2)*. |
+| E7 | **Twinkle** | the solid glyph starts to end: it dissolves (a morph), sparkles out (the art-missing fallback) or fades out under the creature's fade-in (the invalid-timing-set fallback) | `s = glow`; **`s = fallback_glow_s`** (0.8 s) in the invalid-set fallback (Reveal Stage F5) | ui pool | One per reveal; not mash-scaled. **Not played** when there is no glyph (the glyph-missing fallback: the creature only fades in) *(AU-Q2; TASK-088a, confirmed with game-dev-ios)*. |
 | E8 | **Cast sound** | the reveal is formed | `s = formedS` | cast | The item's `sfx` (≤ 2 s). Plays **when a creature is shown** (`willForm` true: the morph or a fade-in) and the `sfx` exists; skipped if `willForm` is false, or `sfx` is null or missing. It does **not** depend on `hasWord`: a creature with no word line still makes its sound *(AU-Q1)*. |
 | E9 | **Word voice** | the reveal is formed | `s = formedS + word_offset_s` (0.25 s, decided, Luan Q1) | voice | `vo_<locale>_word_<id>`. The cast sound is ducked under it (F2). **A waiting key does not cut it** (F6). **Plays only when `hasWord`** (the Reveal Stage's answer: the reveal forms a creature, i.e. Cast Rendering's `willForm` is true, **and** the active locale has the item's word line; TASK-088a) *(TASK-050)*. |
 | E10 | **Creature-tap sound** | `creatureTap` on the formed cast member, outside the cooldown (Reveal Stage) | at the tap | cast | The same `sfx` again; cuts the cast player's current sound (R2.4). During the word it is ducked like E8 (F2): the word stays on top. |
@@ -440,7 +440,8 @@ Logic criteria run with an injected clock and a fake player layer (no audio hard
    s = 0.8, E8 at s = 2.45, E9 at s = 2.70 (each ±1 ms in the logic test). With the reduced set: 0, 0.4, 1.2, 1.45.
    **Same as Reveal Stage AC-5 (TASK-088a/b):** for an item with `sfx` but no word line for the locale, E8 at 2.45 and
    no E9; for art missing (`willForm` false), neither E8 nor E9 (E7 still at 0.8, the sparkle-out). **Glyph missing:**
-   E7 is not scheduled, and E8/E9 come at the fade-in's `formedS` (and `+ 0.25`).
+   E7 is not scheduled, and E8/E9 come at the fade-in's `formedS` (and `+ 0.25`). **Invalid timing set:** E7 at
+   `fallback_glow_s` (0.8), E8/E9 at that case's `formedS` (1.30) and 1.55.
 2. **AC-2 Press sounds.** GIVEN an empty queue, a press schedules E1. GIVEN a full queue, a press schedules E2 (the
    ping) and no chime. A swallowed key and a tap inside the cooldown schedule nothing. A `sparkle` schedules E3.
 3. **AC-3 Title.** `startPlay` schedules E5 and **no** voice line.

@@ -83,3 +83,8 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md b9db0299f13d5297edb4ee3af732483
 Review mode: lean · Workflow: standard
 Change: from game-qc-android's REVISE: F3 counts the E1/E2/E3 sounds started in (t − chime_window_s, t] that come before this one in delivery order, so a same-timestamp batch is attenuated (the half-open (t − w, t) of AU-Q3 left them all at n = 0); AC-8 adds the one-batch case.
 Reviewed-Content-Hash: design/gdd/audio-voice.md 7f30e65849f904273ecc1b11ccf812bd9071f3c3
+
+## Update — 2026-11-18 — TASK-088a review item 2 (no re-review)
+Review mode: lean · Workflow: standard
+Change: E7 in the invalid-timing-set fallback, confirmed with game-dev-ios (Reveal Stage F5): the glyph is drawn and fades out at fallback_glow_s under the creature's fade-in, so E7 plays at fallback_glow_s (0.8 s); none in the glyph-missing fallback; at glow in the art-missing one. AC-1 adds the invalid-set case (E7 0.8, E8 1.30, E9 1.55).
+Reviewed-Content-Hash: design/gdd/audio-voice.md 6d07bd606e108f7878507da7f8831b7411976144
