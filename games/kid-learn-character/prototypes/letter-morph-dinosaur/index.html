@@ -626,7 +626,8 @@ function reset() {
     seen: [],           // letters met this session
     batch: [],          // new creatures met since the last parade, in the order met (K-17: a key again in the batch counts once)
     batchFullAt: null,  // state.t when the batch's last creature finished forming (K-45: the parade starts from here)
-    meter: [],          // the K-44 meter's per-step fill, 0..1, eased toward its target
+    meter: { litAt: [], armedAt: null, fullAt: null, drainAt: null, drainFrom: [], glowAtDrain: 0 }, // K-44 meter (art bible §7, Parade F4)
+    flights: [],        // lights flying from a new creature to its cell: { i, t, x0, y0 } (K-46 MT-Q3)
     firstPress: false,
     parade: null,       // a parade of the batch, every parade_count new creatures (K-17, K-45)
     reveals: 0, queued: 0, ignored: 0,
@@ -747,7 +748,9 @@ const scenes = {
           cur.fired.form = true; creatureSound(cur.letter); say(KEY_TABLE[cur.letter].word, false);
           if (!state.seen.includes(cur.letter)) state.seen.push(cur.letter);
           if (!state.batch.includes(cur.letter) && state.batch.length < Math.round(tune.parade_count)) {
-            state.batch.push(cur.letter);                                   // the meter fills one step as it appears
+            state.batch.push(cur.letter);                                   // a light flies to its cell; the cell lights on arrival
+            const b = shapes[cur.letter].box, sc = tune.creature_scale;
+            state.flights.push({ i: state.batch.length - 1, t: 0, x0: ANCHOR_X + (b.x0 + b.x1) / 2 * sc, y0: ANCHOR_Y + (b.y0 + b.y1) / 2 * sc });
             if (state.batch.length === Math.round(tune.parade_count)) cur.completesBatch = true;
           }
           events.push({ type: 'formed', letter: cur.letter });
@@ -756,10 +759,12 @@ const scenes = {
         if (state.queue.length && cur.t >= holdTime()) { const q = state.queue.shift(); startReveal(q.L, q.from); }
       }
       if (state.prev) { state.prev.t += dt; state.prev.fade += dt; if (state.prev.fade > 0.45) state.prev = null; }
-      // the parade (K-45): as soon as the batch's last creature has finished forming, with no rest needed. Presses keep
-      // being answered in front of it while it walks. A batch filled during a walk waits for that walk to end.
+      // the parade (K-45, K-46): parade_delay_s (1.5 s) after the batch's 6th creature has finished forming, with no rest
+      // needed; presses keep being answered in front of it while it walks. A batch that fills during a walk is armed
+      // when that walk ends (Parade PA-Q4), and starts parade_delay_s later.
       if (cur && cur.completesBatch && !cur.fired.formDone && cur.t >= ph.formEnd) { cur.fired.formDone = true; state.batchFullAt = state.t; }
-      if (state.batchFullAt !== null && !state.parade && state.t >= state.batchFullAt + tune.parade_delay_s) startParade();
+      if (state.batchFullAt !== null && state.meter.armedAt === null && !state.parade) state.meter.armedAt = Math.max(state.batchFullAt, state.t);
+      if (state.meter.armedAt !== null && !state.parade && state.t >= state.meter.armedAt + tune.parade_delay_s) startParade();
       updateMeter(dt);
       if (state.parade) { state.parade.t += dt; if (state.parade.t > tune.parade_s) state.parade = null; }
       for (const k in keyFlash) { keyFlash[k] -= dt; if (keyFlash[k] <= 0) delete keyFlash[k]; }
@@ -773,47 +778,94 @@ const scenes = {
       if (state.parade) drawParade();
       if (state.prev) drawPrev();
       if (state.cur) drawReveal();
-      drawMeter();      // behind the hint letters (TASK-121)
       drawHints();
+      drawMeter();      // with the queue tokens, above the hints (Reveal Stage R10, TASK-120)
       drawQueue();
+      drawFlights();
       drawSparks();
     },
   },
 };
-function startParade() { // the batch walks, in the order met; the batch and the meter start again
-  const n = Math.round(tune.parade_count);
+function startParade() { // the batch walks, in the order met; the next batch starts counting, and the meter drains
+  const n = Math.round(tune.parade_count), m = state.meter;
   let who = state.batch.slice();
   if (who.length < n) who = KEY_ORDER.filter(k => /[A-Z]/.test(k)).slice(0, n); // the grown-up button before a batch is full
   state.parade = { t: 0, who };
   events.push({ type: 'parade', who: who.join(''), batchFull: state.batch.length >= n });
-  state.batch = []; state.batchFullAt = null;
+  m.drainFrom = []; for (let i = 0; i < n; i++) m.drainFrom[i] = cellAlpha(i);
+  m.glowAtDrain = glowAlpha(); m.drainAt = state.t;
+  m.litAt = []; m.armedAt = null; m.fullAt = null;
+  state.batch = []; state.batchFullAt = null; state.flights.length = 0;
   paradeTune();
 }
 
-// ---- The parade meter: PROVISIONAL (TASK-120 designs the real one; K-44) ---------------------
-// A small bar at the top right, one step per new creature in the batch, no number or text. Starlight #fbeec8 on a soft
-// dark track (gold is for letters only). Each step eases in over meter_fill_s when its creature appears, and the whole
-// bar eases out when the parade starts. Nothing in it blinks or pulses: every change is one ease, never periodic, and
-// the bar is a few small segments, far under any flash area (ADR-0013 spirit). At the top edge, above the queue tokens
-// (discs from y 32) and clear of the hint bubbles (which reach up to y ~90); drawn behind the hint letters.
-const METER = { right: 1250, y: 14, seg: 18, h: 10, gap: 5 };
-function updateMeter(dt) {
-  const n = Math.round(tune.parade_count), k = dt / Math.max(0.05, tune.meter_fill_s);
-  state.meter.length = n;
-  for (let i = 0; i < n; i++) {
-    const target = i < state.batch.length ? 1 : 0, v = state.meter[i] || 0;
-    state.meter[i] = target > v ? Math.min(target, v + k) : Math.max(target, v - k);
+// ---- The parade meter (K-44, K-46; art bible §7 and Parade R12 / F4 at TASK-120 baad1961) ---------------
+// Six Starlight cells on an Ink track beside the queue tokens, no number or text. A cell lights (0.4 s ease-out) when
+// the light flying from its new creature arrives; when all are lit and the batch is armed, a soft Starlight glow
+// breathes at 0.5 Hz between 0.35 and 0.45 (steady 0.40 under Reduce Motion) until the parade starts; then the cells
+// and the glow drain over 0.6 s. Only the glow is periodic (0.5 Hz <= 1 Hz), and its swing is under ΔL 0.1 (ADR-0013).
+// The flying light is PROVISIONAL (K-46 MT-Q3; TASK-120 designs it).
+const easeOut = u => 1 - (1 - clamp01(u)) * (1 - clamp01(u));
+const reduceMotion = () => tune.reduce_motion >= 1 || (typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches);
+function meterGeom() {
+  const q = Math.max(Math.round(tune.queue_max), 1), cx = 1066 - 66 * (q - 1), cy = 58;
+  return { cx, cy, w: 168, h: 28, r: 14, cw: 23, ch: 18, cr: 6, x0: cx - 84 + 5 + 11.5 }; // cell centres x0 + 27 i
+}
+function cellAlpha(i) {
+  const m = state.meter, e = tune.meter_empty_alpha;
+  if (m.litAt[i] !== undefined) return e + (1 - e) * easeOut((state.t - m.litAt[i]) / tune.meter_step_s);
+  if (m.drainAt !== null && m.drainFrom[i] !== undefined) {
+    const u = clamp01((state.t - m.drainAt) / tune.meter_fade_s); return m.drainFrom[i] + (e - m.drainFrom[i]) * u;
   }
+  return e;
+}
+function glowAlpha() {
+  const m = state.meter;
+  if (m.armedAt !== null && m.fullAt !== null && !state.parade) {
+    const from = Math.max(m.armedAt, m.fullAt), t = state.t - from;
+    const swing = reduceMotion() ? 0 : 0.05 * Math.sin(TAU * tune.meter_pulse_hz * t);
+    return clamp01(t / tune.meter_step_s) * (tune.meter_glow + swing);
+  }
+  if (m.drainAt !== null) return m.glowAtDrain * (1 - clamp01((state.t - m.drainAt) / tune.meter_fade_s));
+  return 0;
+}
+function updateMeter(dt) {
+  const n = Math.round(tune.parade_count), m = state.meter;
+  for (let k = state.flights.length - 1; k >= 0; k--) {
+    const f = state.flights[k]; f.t += dt;
+    if (f.t >= tune.flight_s) { m.litAt[f.i] = state.t; state.flights.splice(k, 1); }    // the cell lights on arrival
+  }
+  if (m.fullAt === null && m.litAt.filter(v => v !== undefined).length >= n) m.fullAt = state.t;
+  if (m.drainAt !== null && state.t - m.drainAt > tune.meter_fade_s) { m.drainAt = null; m.drainFrom = []; m.glowAtDrain = 0; }
 }
 function drawMeter() {
-  const n = state.meter.length, { right, y, seg, h, gap } = METER, x0 = right - n * seg - (n - 1) * gap;
+  const g = meterGeom(), n = Math.round(tune.parade_count), glow = glowAlpha();
   ctx.save();
+  if (glow > 0) { // the full glow: a soft Starlight halo about 4 units around the track. Its blurred shadow is cast
+    // from a copy of the track drawn far off the canvas, so only the halo lands here and the track's own colour stays.
+    const off = 4000;
+    ctx.save(); ctx.shadowColor = `rgba(251,238,200,${glow})`; ctx.shadowBlur = 8; ctx.shadowOffsetX = off;
+    ctx.fillStyle = '#000'; roundRect(g.cx - g.w / 2 - off, g.cy - g.h / 2, g.w, g.h, g.r); ctx.fill(); ctx.restore();
+  }
+  ctx.globalAlpha = tune.meter_track_alpha; ctx.fillStyle = '#2a2340';
+  roundRect(g.cx - g.w / 2, g.cy - g.h / 2, g.w, g.h, g.r); ctx.fill();
+  ctx.fillStyle = '#fbeec8';
   for (let i = 0; i < n; i++) {
-    const x = x0 + i * (seg + gap), f = smooth(state.meter[i] || 0);
-    ctx.fillStyle = 'rgba(28, 32, 64, 0.32)'; roundRect(x, y, seg, h, h / 2); ctx.fill();            // the soft dark track
-    if (f > 0) { ctx.globalAlpha = f; ctx.fillStyle = '#fbeec8'; roundRect(x, y, seg, h, h / 2); ctx.fill(); ctx.globalAlpha = 1; }
+    ctx.globalAlpha = cellAlpha(i);
+    roundRect(g.x0 + 27 * i - g.cw / 2, g.cy - g.ch / 2, g.cw, g.ch, g.cr); ctx.fill();
   }
   ctx.restore();
+}
+function drawFlights() { // a small Starlight light on a gentle arc from the creature to its cell; no trail
+  const g = meterGeom();
+  for (const f of state.flights) {
+    const u = smooth(f.t / tune.flight_s), x1 = g.x0 + 27 * f.i, y1 = g.cy;
+    const x = f.x0 + (x1 - f.x0) * u, y = f.y0 + (y1 - f.y0) * u - Math.sin(Math.PI * u) * 60;
+    const gr = ctx.createRadialGradient(x, y, 0, x, y, 16);       // Starlight to clear: no gold (gold is for letters)
+    gr.addColorStop(0, 'rgba(251,238,200,0.45)'); gr.addColorStop(1, 'rgba(251,238,200,0)');
+    ctx.fillStyle = gr; ctx.fillRect(x - 16, y - 16, 32, 32);
+    ctx.save(); ctx.fillStyle = '#fbeec8'; ctx.beginPath(); ctx.arc(x, y, 5, 0, TAU); ctx.fill(); ctx.restore();
+  }
 }
 function roundRect(x, y, w, h, r) {
   ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);

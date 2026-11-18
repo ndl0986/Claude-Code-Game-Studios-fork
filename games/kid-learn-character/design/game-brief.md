@@ -17,6 +17,7 @@ After play: tệ nhất là khi nhấn vào các phím controls, thì có thê b
 After play: trong bản dùng thử, phần đọc ký tự A đang bị sai, đang theo tiếng Việt, không đúng tiếng Anh
 After play: nên bổ sung âm thanh khi bé tap lên con vật hoặc xe, những đối tượng có âm thanh đặc trưng, sẽ giúp bé học nhanh hơn cách nhận biết
 After play (Luan's decisions K-44 and K-45, 2026-11-18, as recorded in production/team/decisions.md, not word for word): the child did not know the parade was coming, or waited too long to see it, and met more than 8 keys without one; a small energy bar in the top-right corner that fills in 6 steps; the parade starts as soon as the batch is full, with no rest needed
+After play (Luan's decisions K-46, 2026-11-18, as recorded, not word for word): the 1.5 s beat after the 6th creature stays (K-45 removed only the rest); the meter shows from Play entry, empty, beside the queue tokens, with no sound when full; a light flies from each new creature to its cell
 
 **Pitch:** Dinosaurs is the theme: a toddler presses any letter or number, and the big glowing letter dissolves into stardust and becomes a dinosaur-world creature (C: triceratops) or that many baby dinosaurs, while a voice says "C… triceratops!".
 
@@ -39,7 +40,7 @@ After play (Luan's decisions K-44 and K-45, 2026-11-18, as recorded in productio
 The screen shows a soft dusk scene with a few glowing letters drifting in at random spots, pulsing gently until the first press. The child taps anything: the key lights up, the letter rises big and golden, glows, dissolves into stardust and becomes the creature with its sound, and the voice says "D… dinosaur!". The next tap brings another. Mashing queues up to three, and each one plays in turn. *(provisional)*
 
 ## Challenge
-None by design: there is no failure and no wrong key. What changes: discovering all 36 keys; every 6 new creatures met (K-17), a soft "parade" of those 6 walks across once, as soon as the 6th has formed (K-45). *(provisional)*
+None by design: there is no failure and no wrong key. What changes: discovering all 36 keys; every 6 new creatures met (K-17), a soft "parade" of those 6 walks across once, 1.5 s after the 6th has formed, with no rest needed (K-45, K-46). *(provisional)*
 
 ## Core loop
 - Press a letter (screen or keyboard), and the key lights up at once.
@@ -56,13 +57,14 @@ None by design: there is no failure and no wrong key. What changes: discovering 
 - [x] Theme Dinosaurs: 26 drawn dinosaur-world creatures A–Z, one per key, name contains the letter (A Ankylosaurus … C Triceratops, F Fossil, N Nest … Z Zuniceratops), each with its own outline and an idle bob; digits 1–9 become that many baby dinosaurs, 0 an empty nest
 - [ ] Sound: synthesized roar or chirp per creature plus sparkle chime; browser speech in US English, just the letter's name then the word: "D… dinosaur" (never "letter D")
 - [x] Mash queue: max 3 pending, ~3 s hold while queued, extra presses sparkle only
-- [x] A parade of each batch of 6 new creatures (letters and digits; a key again in the batch counts once), starting as soon as the 6th has formed, while presses keep being answered in front of it (K-17, K-45; `parade_count`)
-- [x] A small parade meter at the top right: 6 steps of Starlight on a soft dark track, no number or text, filling as each new creature appears and emptying when the parade starts (K-44, provisional: TASK-120 designs the real one)
+- [x] A parade of each batch of 6 new creatures (letters and digits; a key again in the batch counts once), starting 1.5 s after the 6th has formed, with no rest needed, while presses keep being answered in front of it (K-17, K-45, K-46; `parade_count`, `parade_delay_s`)
+- [x] The parade meter beside the queue tokens, from Play entry (K-44, K-46; art bible §7): 6 Starlight cells on an Ink track, no number or text, no sound; a cell lights as the light from its new creature arrives; when full, a soft glow breathes (0.5 Hz; steady under Reduce Motion) until the parade starts, then it drains
+- [x] A small light flies from each new creature to its cell (K-46 MT-Q3) *(provisional: TASK-120 designs it)*
 - [x] Tap the creature on stage: it hops and makes its own sound again (a short cooldown so sounds never stack)
 - [x] Tweak panel (queue size, hold time, morph speed, volume), hidden behind a long-press corner (parent gate stand-in) *(provisional)*
 
 ## Keep
-- the dinosaur parade running across after a run of keys: the most fun, a happy surprise *(you said)*; parade_delay_s moved from 1.5 to 0 by Luan's K-45 (the parade starts as soon as the batch is full) · pins: parade_s 11, parade_delay_s 0
+- the dinosaur parade running across after a run of keys: the most fun, a happy surprise *(you said)*; K-45 removed the rest; the 1.5 s beat stays (K-46) · pins: parade_s 11, parade_delay_s 1.5
 
 ## Avoid
 - A fixed DINOSAUR key row on screen *(you said)*

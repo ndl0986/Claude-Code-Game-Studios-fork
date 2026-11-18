@@ -18,7 +18,7 @@ done	672	play	stop	11.2	163
 measured	1280x720
 screen	672	play	881660f3	drawn
 uncaught	0
-shot	<tmp>tudios-fork-game-dev-001/b19775e5-f3c7-4ab0-b999-3ad2d9652947/scratchpad/wt121/games/kid-learn-character/prototypes/letter-morph-dinosaur/evidence/iteration-5-meter-3of6.png	179441
+shot	<wt121>/games/kid-learn-character/prototypes/letter-morph-dinosaur/evidence/iteration-5-meter-3of6.png	179441
 
 ## run: batch-full
 browser	/Applications/Google Chrome.app/Contents/MacOS/Google Chrome
@@ -40,7 +40,7 @@ done	1206	play	stop	20.1	242
 measured	1280x720
 screen	1206	play	e8bc75c1	drawn
 uncaught	0
-shot	<tmp>tudios-fork-game-dev-001/b19775e5-f3c7-4ab0-b999-3ad2d9652947/scratchpad/wt121/games/kid-learn-character/prototypes/letter-morph-dinosaur/evidence/iteration-5-batch-full.png	148322
+shot	<wt121>/games/kid-learn-character/prototypes/letter-morph-dinosaur/evidence/iteration-5-batch-full.png	148322
 
 ## run: parade-start
 browser	/Applications/Google Chrome.app/Contents/MacOS/Google Chrome
@@ -62,7 +62,7 @@ done	1260	play	stop	21.0	250
 measured	1280x720
 screen	1260	play	d119db31	drawn
 uncaught	0
-shot	<tmp>tudios-fork-game-dev-001/b19775e5-f3c7-4ab0-b999-3ad2d9652947/scratchpad/wt121/games/kid-learn-character/prototypes/letter-morph-dinosaur/evidence/iteration-5-parade-start.png	204113
+shot	<wt121>/games/kid-learn-character/prototypes/letter-morph-dinosaur/evidence/iteration-5-parade-start.png	204113
 
 ## run: play
 browser	/Applications/Google Chrome.app/Contents/MacOS/Google Chrome
@@ -84,7 +84,7 @@ done	1806	play	stop	30.1	340
 measured	1280x720
 screen	1806	play	8e816ca	drawn
 uncaught	0
-shot	<tmp>tudios-fork-game-dev-001/b19775e5-f3c7-4ab0-b999-3ad2d9652947/scratchpad/wt121/games/kid-learn-character/prototypes/letter-morph-dinosaur/evidence/iteration-5-play.png	253795
+shot	<wt121>/games/kid-learn-character/prototypes/letter-morph-dinosaur/evidence/iteration-5-play.png	253795
 
 ## run: old-1260
 browser	/Applications/Google Chrome.app/Contents/MacOS/Google Chrome
@@ -106,7 +106,7 @@ done	1260	play	stop	21.0	252
 measured	1280x720
 screen	1260	play	e581fa80	drawn
 uncaught	0
-shot	<tmp>tudios-fork-game-dev-001/b19775e5-f3c7-4ab0-b999-3ad2d9652947/scratchpad/old121-parade-moment.png	199326
+shot	<old121>-parade-moment.png	199326
 
 ## run: old
 browser	/Applications/Google Chrome.app/Contents/MacOS/Google Chrome
@@ -128,5 +128,5 @@ done	1806	play	stop	30.1	334
 measured	1280x720
 screen	1806	play	8a9c7a7c	drawn
 uncaught	0
-shot	<tmp>tudios-fork-game-dev-001/b19775e5-f3c7-4ab0-b999-3ad2d9652947/scratchpad/old121-end.png	252726
+shot	<old121>-end.png	252726
 
