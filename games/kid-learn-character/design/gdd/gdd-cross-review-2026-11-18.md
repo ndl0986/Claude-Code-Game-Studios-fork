@@ -284,3 +284,72 @@ remain, nearly all text-only sweeps, plus one design decision for Luan (W-11).
 ### Decisions for Luan
 - **W-11:** at the parade + reveal + hints + weather peak, keep as played or calm it, with options (a)–(c) above.
 - Confirm on purpose: a favourite-key-only child never sees a parade (K-17, Info).
+
+---
+
+## Re-run — 2026-11-18 (after TASK-056)
+
+Task: TASK-055 re-run. Reviewer: game-qc-android. Base: `origin/docs/kid-learn-character-plan` @ c64d6c6. TASK-056
+landed in four parts: 056a 7663676, 056b efe9997, 056c 7352682, 056d f4ccb4a. The leader's index fix is 27a12d4, and
+K-26 is in d91fc9e.
+
+**Scope** (the `since-last-review` mode):
+- every finding above (B-1, W-1…W-11), checked against the merged text;
+- every change since 801a2fd in the 13 GDDs that changed, plus the concept doc, the systems index and the art bible;
+- anything the fixes introduced, looked at hardest in the `kioskModeOn` chain (Input, Child Lock-in, Parent Gate,
+  App Shell, Settings Store) and the Hint Letters Dimmed/Frozen states.
+
+Key Table & Theme Data and MorphCore have not changed since the first run. Their "Not checked" items above are carried
+over: still unchecked, not clean.
+
+GDDs Reviewed: 15 of 15 present (13 changed, re-read in their changed sections; 2 unchanged). Not read: none.
+
+### Status of the first-run findings
+
+| ID | Status | Evidence at c64d6c6 |
+|---|---|---|
+| B-1 Fn in the chord | **Resolved** | Input §R6: "Shift and Caps Lock are ignored; Fn disqualifies" (K-26); AC-1j has an Fn case. Parent Gate §G2: "Fn disqualifies it … (Input R6 and AC-1j)"; AC-03 adds "with Fn held THEN nothing opens" |
+| W-1 Engage failure | **Resolved** | One signal, `kioskModeOn` (Child Lock-in §R7: on in Waiting, Locked and Suspended, off in Off, including after the timeout). Input §R5 keys all ⌘ swallowing on it, and AC-k covers "`childLockActive` true but the mode off → pass to system". Parent Gate §G7 shows Quit "exactly while `kioskModeOn` is on", and AC-28 matches. Either ⌘Q works or Quit is shown, so the grown-up always has a way out |
+| W-2 Cancel/Esc origin | **Resolved** | Input States (Gate challenge) and AC-1k4; App Shell §R5, the States Gate row and Edge Cases |
+| W-3 Cast Rendering clock | **Resolved** | Cast Rendering §R3: "`s` and `idleTime` are **play-clock** values supplied by the caller (Reveal Stage R8)" |
+| W-4 Timeout clock | **Resolved** | Parent Gate §G3: on the continuous monotonic clock, with the reason given |
+| W-5 Panel hint freeze | **Resolved** | Parent Gate §G6 and the Interactions Hint Letters row |
+| W-6 "Key Table R3" | **Resolved** | No "Key Table R3" left in any GDD; the citations read §4 |
+| W-7 "every 8" | **Resolved** | game-concept.md says 6 (K-17) in all three places; the systems index too |
+| W-8 Knob owners | **Resolved** | Audio F3 uses `chime_window_s`; `mash_window_s` is the Scene's (Reveal Stage R10 cites it). Input owns `moon_slop_pt` 10–40, and the Parent Gate cites it |
+| W-9 Index and stale markers | **Resolved** | The index rows and layers are fixed (Child Lock-in upstreams, App Shell not a leaf, Scene's reads); the one-sided dependencies are added; no "no GDD yet", "(follow-up)" or "is the next GDD" is left |
+| W-10 Lock wording | **Resolved** | Child Lock-in §R2 includes the Title; `panelWillOpen` is dropped from Child Lock-in (still published for others); Settings AC-15 checks all six preconditions; App Shell names `childLockActive` |
+| W-11 Busy moment | **Resolved by K-26** | Hint Letters §R6/§R9 and the Dimmed state: hints dim to 0.5 and hold still while the parade walks; still tappable, no replay. Frozen leaves to Dimmed if `paradeWalking` is still on. Parade Downstream names Hint Letters |
+| Info: play clock under the panel | **Resolved** | Reveal Stage §R8: "Under the panel the play clock runs" |
+| Known nits (skyMidL, 2.53, K-25 windows, PKC-09) | **Resolved** | Scene and Cast Rendering rows, Cast Rendering F8 and the art bible (2.53:1 shown-edge floor; 16:06–16:10 and 06:06–06:09 in clear weather), PKC-09's continuous-clock note |
+
+### New findings from the fixes
+
+No Blocking findings and no Warnings.
+
+ℹ️ **R-1 · App Shell's "ready" lists `kioskModeOn`, which is now Child Lock-in's own output** (`app-shell-title.md`
+§R1 step 5 and F1 `t_ready`; `child-lock-in.md` §R3 and §R7)
+- Child Lock-in now sets the mode when it enters Waiting, so with the lock off it never turns on, and App Shell's
+  "ready" never fires.
+- Nothing breaks: Child Lock-in is the only consumer of "ready", and its own R3 lists the same preconditions.
+- **Option:** App Shell R1 step 5 reads "Input's kiosk-on mode is on (set by Child Lock-in on Waiting; only when
+  `childLockActive`)", or drops it from "ready" and leaves it to Child Lock-in R3.
+
+ℹ️ **R-2 · ⌘ is swallowed from the start of Waiting, before the chord handler is installed** (Child Lock-in §R7;
+Input §R5)
+- At launch with the lock stored on, Waiting begins at the settings read. For that short window, at most
+  `engage_timeout_s`, ⌘Q is swallowed and the chord may not be live yet.
+- K-12's concern still holds: the presentation options that block Force Quit apply only after all six preconditions,
+  and ⌥⌘Esc is the system's hotkey, not an app key. So nothing traps the grown-up.
+- **Option:** keep as is, or state this window in Child Lock-in's Edge Cases so the real-Mac AC-1k6 run checks it.
+
+ℹ️ **R-3 · Hint Letters §R4 cites "Key Table R4"** for the variety seed. Key Table has no R-numbers; its seed and pick
+are in §4. A pointer nit, the same kind as W-6.
+
+### Re-run verdict: PASS (`since-last-review` scope)
+
+B-1 and all eleven Warnings are resolved in the merged text. The fixes introduced no contradiction; three Info notes
+(R-1…R-3) are optional text edits. The scope is the TASK-056 diffs and the first run's findings. The first run's
+"Not checked" list still stands, and the unchanged Key Table and MorphCore weren't re-read.
+
+Recommended next: `/gate-check` (Systems Design → Technical Setup).
