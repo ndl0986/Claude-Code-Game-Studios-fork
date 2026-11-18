@@ -73,5 +73,5 @@ Reviewed-Content-Hash: design/gdd/reveal-stage.md bba04d187103932c1475f2935a7ed4
 ## Update — 2026-11-18 — TASK-088d F3 fadeStart for the invalid set (no re-review)
 Review mode: lean · Workflow: standard
 Task: TASK-088d
-Change: F3: the invalid-set fallback fades in from formedS − fallback_fade_s (its own form_s is not trusted); glyph missing keeps formedS − form_s (its set is valid). The values happen to be equal today (0.5), which hid the error; found reviewing reveal-timing-v1. Review: game-qc-android, from the diff.
-Reviewed-Content-Hash: design/gdd/reveal-stage.md 3289bf38a1ea48cfa41fdc7b4b5c1a65139a824c
+Change: F3: for the invalid-set fallback, form_s is replaced by fallback_fade_s in both places, fadeStart (formedS − fallback_fade_s) and the fade length in u (game-qc-android's REVISE: the denominator too); glyph missing keeps formedS − form_s (its set is valid). The values happen to be equal today (0.5), which hid the error; found reviewing reveal-timing-v1. Review: game-qc-android, from the diff.
+Reviewed-Content-Hash: design/gdd/reveal-stage.md e9f98355e1a2e2ae14efcb1613bd2a4219016964
