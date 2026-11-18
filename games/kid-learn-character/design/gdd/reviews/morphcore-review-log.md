@@ -24,3 +24,22 @@ Reviewed-Content-Hash: docs/architecture/adr-0001-native-apple.md 9bd960cdffd4be
 Review mode: lean · Workflow: standard
 Change: TASK-044 (Cast Rendering R1): the ownership table splits the halo: WHEN it is on (and the creature's `form_s` fade-in) is the Reveal Stage's, how it LOOKS (the ~2.2 Hz blur pulse, steady under Reduce Motion) is Cast Rendering's; Visual/Audio Requirements line matched. Wording only; no rule changed.
 Reviewed-Content-Hash: design/gdd/morphcore.md 936291c0a2a5e5e3df31fba9f300df58920d4adb
+
+## Re-review — 2026-11-18 — Verdict: APPROVED
+Review mode: lean (independent read) · Workflow: standard
+Reviewer: game-dev-ios (independent of the author, game-dev-android), for the leader, TASK-038; recorded here for the TASK-058 bookkeeping after the gate check.
+What was read: morphcore.md at 89fb1cc (content 699c26fe97e5413c07d09a3f1efeac09db825f43, the file the first entry stamps, with its fixes already applied). Re-checked today against the current file: the only changes since are the Status line and the halo ownership wording (the "ownership wording" update above, TASK-044); no rule changed.
+Prior verdict resolved: Yes — the first entry's blocker (Rule 9's undefined runtime fallback) is fixed as stated there: bundled timing data validated at build time (AC-7), and bad data at run time builds no morph and takes the missing-glyph fallback (the creature fades in), with no hard-coded timings.
+Checked:
+- F1 maps travel = flow_s + spread_s, so each speck's flight lasts flow_s; the worked sets recomputed: normal T 2.45 s, plus form_s 2.95 s; reduced T 1.2 s, 1.5 s.
+- Rule 4: the solid glyph stays until s > glow, and the specks start on its baked outline.
+- Rule 7: no hold in the morph spec (the Press Queue owns it); Rule 5: an injectable seed source, derived per platform from (key, count), tested with fixed seeds (AC-12); Reduce Motion takes effect at the next reveal.
+- Luan's decisions written as decided: 240 particles, a different morph on every press, the v1 multi-piece share.
+- AC-11's performance basis against the TASK-033 run summaries: Mac SpriteKit frame p99 26.73 ms, iPad Simulator 17.07 ms (both match).
+- The missing-asset fallbacks agree with Key Table & Theme Data (silhouette missing → the glyph sparkles out; glyph missing → the creature fades in).
+Findings:
+- [ADVISORY] Rule 4: place the glyph by MorphCore's unit box, not the renderer's bounds, so the swap never shifts (now carried by Reveal Stage R5's shared transforms and its AC-6).
+- [ADVISORY] Rule 5 still says "press count"; "reveal count" is more exact, since presses the mash rule drops don't advance it (Press Queue R2 and Reveal Stage R3 use the reveal count; the meaning is already stated in Rule 5).
+- [ADVISORY] Rule 4: link the glyph's rise to Input R8's press origin (now carried by Reveal Stage R2 and R5).
+Reviewed-Content-Hash: design/gdd/morphcore.md 936291c0a2a5e5e3df31fba9f300df58920d4adb
+Reviewed-Content-Hash: docs/architecture/morph-contract-v1.md 4935b3ac7490c131eb67bdf4c388b14a5f7ed46b
