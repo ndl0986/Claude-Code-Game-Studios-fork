@@ -68,3 +68,8 @@ Not a re-review; it records one consumer fix and Luan's decisions.
 - Still open: hue-slot cap counted per edition (art-director). The silhouette-storage and family-name
   findings are handled outside this GDD (leader).
 Reviewed-Content-Hash: design/gdd/key-table-theme-data.md f8f54faf82ac675dfdf929b0465ef4bdff8253c8
+
+## Update — 2026-11-18 — TASK-042 follow-ups (no re-review)
+Review mode: lean · Workflow: standard
+Change: three follow-ups from the Settings Store and Audio & Voice GDDs. (1) Section 5 and Edge Cases: at launch there is no current theme, so a stored themeId that fails the check (or is not bundled) loads Dinosaurs in memory and the stored themeId is kept (Settings Store R6). (2) New theme field `voiceDurations` (locale → line id → seconds, written by the build tool) and validator rule V15: complete, within ±0.01 s of each file, word lines ≤ 1.25 s, letter/number lines ≤ 1.0 s (Audio & Voice F6, A3); run-time fallback to the bound T + 1.5 s. (3) Dependencies: back-references to Audio & Voice and Settings Store, and the Press Queue's use of the durations. ACs 13–14 added. Verdict unchanged.
+Reviewed-Content-Hash: design/gdd/key-table-theme-data.md 6fa1ce3101c052754590905f734280abc25e3540

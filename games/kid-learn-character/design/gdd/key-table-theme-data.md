@@ -2,7 +2,7 @@
 
 > **Status**: Approved (independent review by game-dev-ios, merged 2026-11-18)
 > **Author**: game-art-content (TASK-036), with Luan's answers via game-leader; plan reviewed by game-dev-ios
-> **Last Updated**: 2026-11-18
+> **Last Updated**: 2026-11-18 (TASK-042: launch fallback, voice durations, back-references)
 > **Last Verified**: 2026-11-18
 > **Implements Pillar**: Pillar 1 (Every Press Answers), Pillar 4 (Things the Child Loves), Pillar 5 (Safe by Design)
 
@@ -75,6 +75,7 @@ There are three kinds of file, all JSON, bundled in the app, and read with plain
 | `families` | object | Family id → `{ idle: <idle param id> }`. The idle parameters themselves live in Cast Rendering data (art bible §5, §8). |
 | `countedItem` | object | The thing numbers count and the "empty" item for 0: `{ castId, singular, plural, emptyCastId, emptyWord }`, e.g. `baby dinosaur` / `baby dinosaurs`, `dino_0_nest_01` / `an empty nest`. |
 | `soundExceptions` | object | Key → the decision that allows it to break T5, e.g. `{ "X": "K-09, Luan 2026-11-18" }`. Empty by default. |
+| `voiceDurations` | object | Locale → line id → **duration in seconds** (number, 3 decimals), for every voice line the theme uses, e.g. `{ "en-us": { "letter_c": 0.512, "word_triceratops": 0.904, "number_3": 0.430, "word_three_baby_dinosaurs": 1.180 } }`. **Written by the build tool** from the rendered files, never by hand; checked by V15. Read by Audio & Voice (F6) and the Press Queue to hold a waiting key until the word ends, without reading the file at play time. |
 | `keys` | object | Key ("A"…"9") → key entry (b). All 36 keys are required. |
 
 **b. Key entry and item**
@@ -176,8 +177,13 @@ lowercase with underscores:
     `schemaVersion`, all 36 keys, every referenced file, and every path parsing under morph-v1.
   - A theme that fails is **never shown**. The app stays on the current theme and writes one debug log
     line. The child sees nothing.
-  - At launch, the default theme (Dinosaurs) is checked the same way. If it fails, the build gate has
-    already failed, so this cannot ship (Edge Cases).
+  - **At launch there is no current theme yet.** If the stored `themeId` (Settings Store) names a theme
+    that is not bundled or that fails the check, **Dinosaurs loads in memory instead and the stored
+    `themeId` is kept**: this system never writes it back (Settings Store R6). One debug log line. A
+    theme that fails once is not lost from the grown-up's choice, and the child still gets a working
+    theme.
+  - The default theme (Dinosaurs) is checked the same way. If it fails, the build gate has already
+    failed, so this cannot ship (Edge Cases).
 
 #### 6. Validation rules (the build gate; also run at load)
 
@@ -197,6 +203,7 @@ lowercase with underscores:
 | V12 | Every sfx is ≤ 2.0 s long (art bible §8). |
 | V13 | `family` exists in the theme's `families`. |
 | V14 | Every `weight`, when present, is > 0 (F1 needs a positive total). |
+| V15 | `voiceDurations` has an entry for **every** voice line of every item, for every locale in `voiceLocales`, and no other entries. Each value **matches its file's decoded duration within ±0.01 s**. **Word lines ≤ 1.25 s** (Audio & Voice `word_len_max_s`, F6) and **letter and number lines ≤ 1.0 s** (`letter_len_max_s`, Audio A3). |
 
 #### 7. Toddler-safe content rules (every theme)
 
@@ -290,6 +297,8 @@ whenever C is non-empty. C is never empty: n ≥ 1, and `last` is only excluded 
 | A key has 1 item | Always that item. F1 draws no random number. |
 | `schemaVersion` unknown (newer major) | The theme is refused at load and the app stays on the current theme. If it is the default theme, it can't ship: the build validator uses the same version list. |
 | A theme fails the load check when picked in the panel | It is not shown. The current theme stays, with one debug log line. No message to the child. The grown-up panel may grey out the theme (Parent Gate GDD's call). |
+| The stored theme fails the check **at launch** (or is not bundled) | Dinosaurs loads in memory; the stored `themeId` is kept, not rewritten (Settings Store R6). One debug log line. The next launch tries the stored theme again. |
+| A `voiceDurations` entry is missing or wrong at run time (despite V15) | The Press Queue uses the bound `T + 1.5 s` for that word (Audio & Voice F6). One debug log line. Playback never measures the file. |
 | Silhouette or art missing at run time (despite the gate) | Per asset, nothing shown to the child, one debug log line. **The glyph glows and sparkles out** instead of morphing, and the letter voice plays if present (game-dev-ios point 6). |
 | Glyph missing | No morph: the cast member fades in, with the voice (matches TASK-038). |
 | sfx missing | Skipped. The rest of the reveal plays. |
@@ -318,17 +327,17 @@ whenever C is non-empty. C is never empty: n ≥ 1, and `last` is only excluded 
 | System | Uses |
 |---|---|
 | Input & Key Filter (TASK-037) | Shares the key value format (Rule 1). |
-| Audio & Voice | sfx path; voice paths from `voiceLocales` + line ids. |
+| Audio & Voice (`design/gdd/audio-voice.md`, TASK-041) | sfx path; voice paths from `voiceLocales` + line ids; `voiceDurations` (its F6); decoding its audio is part of this system's off-main-thread theme load, and a theme is Active only when that is done (its R4.1). |
 | Cast Rendering | art, family, variant, hueSlot; idle params per family. |
 | MorphCore | glyph and silhouette path data (morph-v1). |
 | Reveal Stage | `resolve(key)` at reveal start; the missing-asset fallbacks. |
-| Press Queue | Whether a theme change clears the queue (decided there). |
+| Press Queue | Whether a theme change clears the queue (decided there); `voiceDurations` for the word-end hold (Audio & Voice F6). |
 | Hint Letters | The 36 keys in canonical order. |
 | Parade | Stable `castId`. |
 | Parent Gate & Grown-up Panel | Theme pick; the cast list by `name`. |
 | Theme Packs | This format. |
 | Localization | `voiceLocales`, line ids. |
-| Settings Store | Stores only the chosen theme id. |
+| Settings Store (`design/gdd/settings-store.md`) | Stores only the chosen `themeId`; hands it over at launch and on change. At launch a failing stored theme → Dinosaurs in memory, `themeId` kept (its R6; section 5 here). |
 
 ## Tuning Knobs
 
@@ -482,3 +491,9 @@ Each criterion is checked by the validator on the data, or by a unit test with f
     voice removed, only "dee" plays.
 12. **Toddler-safe review:** a content reviewer signs a checklist for T1–T8 for every item of a theme
     before it ships. Every letter item's `sound` value was set by that listening check.
+13. **Launch fallback:** with the stored `themeId` naming a broken test theme, launch shows Dinosaurs,
+    the stored record still holds the broken theme's id afterwards, and one debug log line is written
+    (unit test with an injected Settings Store).
+14. **Voice durations:** the validator reports a `voiceDurations` entry for every voice line in every
+    locale, each within ±0.01 s of its file; a test word line of 1.30 s and a test letter line of 1.10 s
+    each fail the build and name the file.
