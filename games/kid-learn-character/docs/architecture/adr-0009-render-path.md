@@ -193,6 +193,16 @@ sprite's `color` with `colorBlendFactor` 1 multiplies the texture by F8's factor
 - P-3 / M-12 rehearse Accessibility F2 on the spike's frame dump; the release gate is the production busy case.
 - P-11 / M-10 close ADR-0006's window and ppi rows; P-13 checks the stage half of Smart Invert (ADR-0006 D5).
 None of these changes the choice in D1.
+- *Note 2026-11-18 (K-43, TASK-119b; status stays Proposed):* **the flash gate is decided in ADR-0013** (Accepted).
+  - **G4** (the offline busy case and Title runs, rendered headless through `SKRenderer`) runs on **every merge
+    candidate that touches `apple/` or `content/`** and on every release run (ADR-0013 D1). Until the stage exists it
+    reports NOT ASSESSED in the K-40 form and does not fail a merge.
+  - **G5** (the device run on a Debug frame dump, per ADR-0013 D5: render-only, windowed by `targetTimestamp`) runs
+    **per release candidate** (P-3, M-12). **A release needs G1–G5 all PASS** (ADR-0013 D1).
+  - The P-3 / M-12 rehearsal above now uses DeviceSpike's render-only **FrameDump** (TASK-118, merged ae2aa92f), not
+    the earlier `texture(from:)` dump. That rehearsal dump is timed by the `SKView` loop's `currentTime`, not by
+    `targetTimestamp` as production G5 is. It is still a rehearsal, not AC-08.
+  - Nothing here changes D1's choice.
 
 ### Architecture Diagram
 ```
