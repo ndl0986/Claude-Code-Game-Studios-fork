@@ -1,0 +1,9 @@
+TASK-127 iPad session 1a: DeviceSpike install log (masked: <udid>, <ipad>, <id>, <worktree>)
+19:38 install 1 (iPad locked earlier at 19:36 attempt): "Installing cryptex com.apple.MobileAsset.DDI is disallowed because developer mode is not enabled"
+19:40 install 2 after cable replug: same
+19:41:56-19:45:01 Xcode + Device Hub opened (leader/Luan OK, K-34 for this step only); <ipad> selected; Device Hub: "Enable Developer Mode"
+19:46:10 devicectl: developerModeStatus enabled (Luan: Settings > Privacy & Security > Developer Mode, restart, Turn On)
+19:46:20 install 3: "This provisioning profile cannot be installed on this device" (0xe8008012): the Personal Team profile did not list the iPad (generic-destination build)
+19:46 xcodebuild -destination platform=iOS,id=<udid> -allowProvisioningUpdates -allowProvisioningDeviceRegistration (registration only; product not installed, not kept)
+19:47 tools/device-build.sh ios re-run on the exact product (spike check exit 0, sha adc11194 = 7db7511a source + evidence only); embedded profile lists <udid>
+19:47:30 install 4: App installed, bundleID com.galaxyandsun.devicespike
