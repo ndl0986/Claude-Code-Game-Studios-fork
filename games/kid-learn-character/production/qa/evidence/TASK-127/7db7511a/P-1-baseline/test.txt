@@ -1,0 +1,58 @@
+Building for debugging...
+[Planning deferred tasks]
+[38 / 76]
+[45 / 83] MorphCore
+[59 / 85] MorphCore
+[65 / 86] MorphCore-product
+[65 / 86] morph-contract-fixture-product
+[75 / 122]
+[80 / 122]
+[82 / 122] MorphCoreTests-product
+[91 / 161]
+[96 / 161]
+[103 / 161]
+[104 / 161]
+[109 / 161]
+[110 / 161]
+[123 / 161]
+[127 / 161]
+[130 / 161]
+[133 / 161]
+[135 / 161] morph-fixture-product
+[139 / 161] morph-fixture-product
+[143 / 161]
+[144 / 161]
+[146 / 161]
+[155 / 161] MorphCoreTests-product
+[157 / 161] MorphCoreTests-product
+Build complete! (7,26 secs)
+Test Suite 'All tests' started at 2026-11-19 19:38:59.890.
+Test Suite 'MorphCoreTests.xctest' started at 2026-11-19 19:38:59.891.
+Test Suite 'ContractV1Tests' started at 2026-11-19 19:38:59.891.
+Test Case '-[MorphCoreTests.ContractV1Tests test_every_case_reproduces]' started.
+Test Case '-[MorphCoreTests.ContractV1Tests test_every_case_reproduces]' passed (0.010 seconds).
+Test Case '-[MorphCoreTests.ContractV1Tests test_tokenizer_cases]' started.
+Test Case '-[MorphCoreTests.ContractV1Tests test_tokenizer_cases]' passed (0.002 seconds).
+Test Suite 'ContractV1Tests' passed at 2026-11-19 19:38:59.902.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.012 (0.012) seconds
+Test Suite 'MorphCoreTests' started at 2026-11-19 19:38:59.902.
+Test Case '-[MorphCoreTests.MorphCoreTests test_ends_on_the_glyph_and_the_silhouette]' started.
+Test Case '-[MorphCoreTests.MorphCoreTests test_ends_on_the_glyph_and_the_silhouette]' passed (0.000 seconds).
+Test Case '-[MorphCoreTests.MorphCoreTests test_sampling_is_even_by_arc_length_and_normalised]' started.
+Test Case '-[MorphCoreTests.MorphCoreTests test_sampling_is_even_by_arc_length_and_normalised]' passed (0.000 seconds).
+Test Case '-[MorphCoreTests.MorphCoreTests test_shared_fixture_matches]' started.
+Test Case '-[MorphCoreTests.MorphCoreTests test_shared_fixture_matches]' passed (0.002 seconds).
+Test Case '-[MorphCoreTests.MorphCoreTests test_splitmix64_reference_values]' started.
+Test Case '-[MorphCoreTests.MorphCoreTests test_splitmix64_reference_values]' passed (0.000 seconds).
+Test Case '-[MorphCoreTests.MorphCoreTests test_svg_subset_parses_relative_and_absolute]' started.
+Test Case '-[MorphCoreTests.MorphCoreTests test_svg_subset_parses_relative_and_absolute]' passed (0.000 seconds).
+Test Suite 'MorphCoreTests' passed at 2026-11-19 19:38:59.906.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.003 (0.003) seconds
+Test Suite 'MorphCoreTests.xctest' passed at 2026-11-19 19:38:59.906.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.015 (0.015) seconds
+Test Suite 'All tests' passed at 2026-11-19 19:38:59.906.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.015 (0.016) seconds
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.
