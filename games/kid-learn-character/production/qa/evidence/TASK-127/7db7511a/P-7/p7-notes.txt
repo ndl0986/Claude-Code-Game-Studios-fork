@@ -1,0 +1,25 @@
+TASK-127 P-7 (partial), DeviceSpike gate sha adc11194 (source 7db7511a), iPad13,4, iPadOS 27.2 (24B119), 2026-11-19.
+Route: built-in speaker. Audio screen at 20:20 (p7-route-builtin.png): engine running (launch) rate=48000.0
+io=5.33 ms out=5.50 ms (Bluetooth speaker disconnected by Luan first; DND on). Mute off.
+
+Spike detector (max |second difference| of the main mixer output, armed 0.45-1.0 s around each event), transcribed
+from p7-log-1.png (20:21:56):
+2124.8294 cut voice settle=40 ms      2125.3227 detector cut voice: max|d2x| -66.4 dBFS -> PASS (AC-9 threshold -60)
+2136.6244 cut cast settle=40 ms       2137.1187 detector cut cast:  max|d2x| -69.7 dBFS -> PASS
+2143.2438 cut music settle=40 ms      2143.7374 detector cut music: max|d2x| -73.6 dBFS -> PASS
+2147.7288 mute true                    2148.2273 detector mute voice: max|d2x| -73.9 dBFS -> PASS
+Tone freeze, Freeze continuity (Δ, start delay vs rewind, capped-rewind line) and the Play/Cut lines are below the
+log box's visible area (it does not scroll by itself); not read. p7-log-2.png (20:24:04) shows the same lines.
+
+Luan's observations (relayed by the leader, word for word):
+- "có" (yes: a click or pop was heard)
+- "Tone Freeze không có tiếng đi kèm" (Tone Freeze had no sound with it): expected on this speaker; the tone is
+  100 Hz, which the built-in speaker barely reproduces.
+- "có tiếng Bụp" (there was a pop sound)
+- "các nút ngoài Tone freeze" (the buttons other than Tone freeze): a pop on every button except Tone freeze.
+Start vs stop not split: the single-button re-run (leader's list) did not run; Luan paused the session at ~20:23.
+
+Status: row open. The detector passes every cut it measured; the pop Luan heard is unexplained. The detector does
+not cover a sound's start (it arms 50 ms before the cut). Follow-up (headless, before the weekend): find the
+pop's cause and add a start-of-sound detector window, then the weekend re-run separates start from stop.
+Bluetooth route change (headphones-out stand-in): not run.
