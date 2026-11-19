@@ -1,0 +1,18 @@
+TASK-127 P-2 run 1 (20:06-20:10), DeviceSpike gate sha adc11194 (source 7db7511a), iPad13,4, iPadOS 27.2 (24B119)
+Transcribed from the app's on-screen log (Lock / Guided Access screen) at 20:10:29. The screenshot itself was
+deleted, not kept: a system notification banner covered its top (personal content).
+
+1469.2933 launch build=dev uptime=1469.2933359583335
+1469.3592 [render] art: root,root,root
+1469.3649 [render] creatures built with option A: A#0=0.1 ms A#1=0.1 ms Ap#0=0.1 ms Ap#1=0.1 ms Ap#2=0.1 ms Ap#3=0.1 ms Ap#4=0.1 ms Ap#5=0.1 ms
+1490.5366 [render] creatures built with option B: Ac#0=0.1 ms Ac#1=0.1 ms Acp#0=0.1 ms Acp#1=0.1 ms Acp#2=0.1 ms Acp#3=0.1 ms Acp#4=0.1 ms Acp#5=0.1 ms
+1498.6769 [render] creatures built with option B: B#0=5.7 ms B#1=5.5 ms Bp#0=4.1 ms Bp#1=5.0 ms Bp#2=4.6 ms Bp#3=4.0 ms Bp#4=5.3 ms Bp#5=4.6 ms
+1502.9620 [render] creatures built with option A: A#0=0.1 ms A#1=0.1 ms Ap#0=0.1 ms Ap#1=0.1 ms Ap#2=0.1 ms Ap#3=0.1 ms Ap#4=0.1 ms Ap#5=0.1 ms
+
+Notes:
+- The 1490.5366 line is the A-candidate: its keys are Ac#/Acp#; the "option B" label is the spike's label bug
+  (RenderScene: option == .a ? "A" : "B").
+- No "[render] option=…" Log stats line was logged, so run 1 has no frame-time numbers (A-candidate ran ~8 s,
+  B ~4 s before the next switch). Load times per creature are above (A and A-candidate 0.1 ms, B 4.0-5.7 ms).
+- Each option change logs one "creatures built" line and no others: the creatures are rebuilt on an option
+  change only, not per frame.

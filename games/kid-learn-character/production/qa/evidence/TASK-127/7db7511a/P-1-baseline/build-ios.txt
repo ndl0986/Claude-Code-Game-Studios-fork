@@ -1,0 +1,660 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project SpikeNoRive.xcodeproj -scheme SpikeNoRive -destination generic/platform=iOS -derivedDataPath build/device CODE_SIGN_STYLE=Automatic DEVELOPMENT_TEAM=<TEAM> -allowProvisioningUpdates build
+
+Build settings from command line:
+    CODE_SIGN_STYLE = Automatic
+    DEVELOPMENT_TEAM = <TEAM>
+
+Resolve Package Graph
+
+
+Resolved source packages:
+  MorphCore: <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore @ local
+
+2026-11-19 19:38:42.212 xcodebuild[52625:21853984] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (3 targets)
+    Target 'SpikeNoRive' in project 'SpikeNoRive'
+        ➜ Explicit dependency on target 'MorphCore-product' in project 'MorphCore'
+    Target 'MorphCore-product' in project 'MorphCore'
+        ➜ Explicit dependency on target 'MorphCore' in project 'MorphCore'
+    Target 'MorphCore' in project 'MorphCore' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 2b84addf10ccd774638b6f2e83270918
+Build description path: <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/XCBuildData/2b84addf10ccd774638b6f2e83270918.xcbuilddata
+CreateBuildDirectory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    builtin-create-build-directory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex
+
+CreateBuildDirectory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/CompilationCache.noindex
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    builtin-create-build-directory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/CompilationCache.noindex
+
+CreateBuildDirectory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    builtin-create-build-directory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules
+
+CreateBuildDirectory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    builtin-create-build-directory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex
+
+CreateBuildDirectory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    builtin-create-build-directory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products
+
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -o <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache
+
+CreateBuildDirectory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    builtin-create-build-directory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+CreateBuildDirectory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/PrecompiledHeaders
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    builtin-create-build-directory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/PrecompiledHeaders
+
+CreateBuildDirectory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/ExplicitPrecompiledModules
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    builtin-create-build-directory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+CreateBuildDirectory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphoneos
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    builtin-create-build-directory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphoneos
+
+CreateBuildDirectory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    builtin-create-build-directory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive-5b3acf347ab31e97a56895301df10449-VFS-iphoneos/all-product-headers.yaml
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive-5b3acf347ab31e97a56895301df10449-VFS-iphoneos/all-product-headers.yaml
+
+CreateBuildDirectory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/PackageFrameworks
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    builtin-create-build-directory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/PackageFrameworks
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/empty-SpikeNoRive.plist (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/empty-SpikeNoRive.plist
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-project-headers.hmap (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-project-headers.hmap
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive.DependencyStaticMetadataFileList (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive.hmap (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive.hmap
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-own-target-headers.hmap (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-own-target-headers.hmap
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-generated-files.hmap (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-generated-files.hmap
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-all-target-headers.hmap (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-all-target-headers.hmap
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-all-non-framework-target-headers.hmap (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-all-non-framework-target-headers.hmap
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-DebugDylibPath-normal-arm64.txt (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-DebugDylibPath-normal-arm64.txt
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive.DependencyMetadataFileList (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive.DependencyMetadataFileList
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-DebugDylibInstallName-normal-arm64.txt (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-DebugDylibInstallName-normal-arm64.txt
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.LinkFileList (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.LinkFileList
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.SwiftFileList (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.SwiftFileList
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive-OutputFileMap.json (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive-OutputFileMap.json
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive_const_extract_protocols.json (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive_const_extract_protocols.json
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.SwiftConstValuesFileList (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.SwiftConstValuesFileList
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/DerivedSources/Entitlements.plist (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/DerivedSources/Entitlements.plist
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-OutputFileMap.json (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-OutputFileMap.json
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftFileList (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftFileList
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftConstValuesFileList (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftConstValuesFileList
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.LinkFileList (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.LinkFileList
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore_const_extract_protocols.json (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore_const_extract_protocols.json
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/MorphCore.modulemap (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/MorphCore.modulemap
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/MorphCore.DependencyStaticMetadataFileList (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/MorphCore.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/MorphCore.DependencyMetadataFileList (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore
+    write-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/MorphCore.DependencyMetadataFileList
+
+MkDir <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    /bin/mkdir -p <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app
+
+Copy <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/GeneratedModuleMaps-iphoneos/MorphCore.modulemap <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/MorphCore.modulemap (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/MorphCore.modulemap <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/GeneratedModuleMaps-iphoneos
+
+SwiftDriver MorphCore normal arm64 com.apple.xcode.tools.swift.compiler (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -parse-as-library -module-name MorphCore -Onone @<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftFileList -DSWIFT_PACKAGE -DDEBUG -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -DXcode -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios26.0 -g -module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib -F <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk/Developer/Library/Frameworks -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache -output-file-map <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex -sdk-module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -package-name morphcore -emit-const-values -const-gather-protocols-list <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore_const_extract_protocols.json -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/include -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/DerivedSources-normal/arm64 -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/DerivedSources/arm64 -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/DerivedSources -Xcc -DSWIFT_PACKAGE -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-Swift.h -working-directory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj -experimental-emit-module-separately -disable-cmo
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/SwiftShims-5VJDR89NL57EOZ4PM4GUK4O83.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/_SwiftConcurrencyShims-4YH5VOR3M7WDV6AL5P2IWRR8B.pcm
+
+SwiftCompile normal arm64 Compiling\ Morph.swift <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore/Sources/MorphCore/Morph.swift (in target 'MorphCore' from project 'MorphCore')
+
+SwiftCompile normal arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore/Sources/MorphCore/Morph.swift (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    builtin-SwiftPerFileCompile Morph.swift
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ MorphCore (in target 'MorphCore' from project 'MorphCore')
+
+SwiftCompile normal arm64 (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    
+
+SwiftCompile normal arm64 Compiling\ SplitMix64.swift <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore/Sources/MorphCore/SplitMix64.swift (in target 'MorphCore' from project 'MorphCore')
+
+SwiftCompile normal arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore/Sources/MorphCore/SplitMix64.swift (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    builtin-SwiftPerFileCompile SplitMix64.swift
+
+SwiftCompile normal arm64 Compiling\ SVGPath.swift <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore/Sources/MorphCore/SVGPath.swift (in target 'MorphCore' from project 'MorphCore')
+
+SwiftCompile normal arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore/Sources/MorphCore/SVGPath.swift (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    builtin-SwiftPerFileCompile SVGPath.swift
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for MorphCore (in target 'MorphCore' from project 'MorphCore')
+
+SwiftDriver\ Compilation\ Requirements MorphCore normal arm64 com.apple.xcode.tools.swift.compiler (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -parse-as-library -module-name MorphCore -Onone @<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftFileList -DSWIFT_PACKAGE -DDEBUG -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -DXcode -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios26.0 -g -module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib -F <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk/Developer/Library/Frameworks -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache -output-file-map <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex -sdk-module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -package-name morphcore -emit-const-values -const-gather-protocols-list <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore_const_extract_protocols.json -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/include -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/DerivedSources-normal/arm64 -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/DerivedSources/arm64 -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/DerivedSources -Xcc -DSWIFT_PACKAGE -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-Swift.h -working-directory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj -experimental-emit-module-separately -disable-cmo
+
+SwiftMergeGeneratedHeaders <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/GeneratedModuleMaps-iphoneos/MorphCore-Swift.h <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-Swift.h (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore
+    builtin-swiftHeaderTool -arch arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-Swift.h -o <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/GeneratedModuleMaps-iphoneos/MorphCore-Swift.h
+
+Copy <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/MorphCore.swiftmodule/arm64-apple-ios.swiftdoc <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftdoc (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftdoc <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/MorphCore.swiftmodule/arm64-apple-ios.swiftdoc
+
+Copy <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/MorphCore.swiftmodule/arm64-apple-ios.abi.json <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.abi.json (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.abi.json <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/MorphCore.swiftmodule/arm64-apple-ios.abi.json
+
+Copy <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/MorphCore.swiftmodule/arm64-apple-ios.swiftmodule <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftmodule (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftmodule <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/MorphCore.swiftmodule/arm64-apple-ios.swiftmodule
+
+Copy <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/MorphCore.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftsourceinfo (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftsourceinfo <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/MorphCore.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo
+
+ProcessProductPackaging ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/888fff3f-0080-41e5-bb72-0d37a751ea92.mobileprovision <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/embedded.mobileprovision (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-productPackagingUtility ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/888fff3f-0080-41e5-bb72-0d37a751ea92.mobileprovision -o <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/embedded.mobileprovision
+
+ProcessProductPackaging "" <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive.app.xcent (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    
+    Entitlements:
+    
+    {
+    "application-identifier" = "<TEAM>.com.galaxyandsun.spike033.norive";
+    "com.apple.developer.team-identifier" = <TEAM>;
+    "get-task-allow" = 1;
+}
+    
+    builtin-productPackagingUtility -entitlements -format xml -o <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive.app.xcent
+
+ProcessProductPackagingDER <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive.app.xcent <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive.app.xcent.der (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    /usr/bin/derq query -f xml -i <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive.app.xcent -o <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive.app.xcent.der --raw
+
+SwiftDriver SpikeNoRive normal arm64 com.apple.xcode.tools.swift.compiler (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name SpikeNoRive -Onone @<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.SwiftFileList -DNORIVE -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios26.0 -g -module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex -Xfrontend -serialize-debugging-options -index-store-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Index.noindex/DataStore -swift-version 5 -I <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos -F <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/PackageFrameworks -F <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache -output-file-map <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex -sdk-module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive_const_extract_protocols.json -Xcc -iquote -Xcc <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-generated-files.hmap -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-own-target-headers.hmap -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive-5b3acf347ab31e97a56895301df10449-VFS-iphoneos/all-product-headers.yaml -Xcc -iquote -Xcc <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-project-headers.hmap -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/include -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/DerivedSources-normal/arm64 -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/DerivedSources/arm64 -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/DerivedSources -emit-objc-header -emit-objc-header-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive-Swift.h -working-directory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime -experimental-emit-module-separately -disable-cmo
+
+SwiftDriverJobDiscovery normal arm64 Compiling SplitMix64.swift (in target 'MorphCore' from project 'MorphCore')
+
+SwiftDriverJobDiscovery normal arm64 Compiling Morph.swift (in target 'MorphCore' from project 'MorphCore')
+
+SwiftDriverJobDiscovery normal arm64 Compiling SVGPath.swift (in target 'MorphCore' from project 'MorphCore')
+
+SwiftDriver\ Compilation MorphCore normal arm64 com.apple.xcode.tools.swift.compiler (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -parse-as-library -module-name MorphCore -Onone @<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftFileList -DSWIFT_PACKAGE -DDEBUG -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -DXcode -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios26.0 -g -module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib -F <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk/Developer/Library/Frameworks -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache -output-file-map <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex -sdk-module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -package-name morphcore -emit-const-values -const-gather-protocols-list <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore_const_extract_protocols.json -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/include -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/DerivedSources-normal/arm64 -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/DerivedSources/arm64 -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/DerivedSources -Xcc -DSWIFT_PACKAGE -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-Swift.h -working-directory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/SpikeNoRive.xcodeproj -experimental-emit-module-separately -disable-cmo
+
+Ld <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/MorphCore.o normal (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios26.0 -r -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -O0 -Xlinker -no_warn_duplicate_libraries -F<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphoneos -F<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos -iframework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks -iframework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk/Developer/Library/Frameworks -filelist <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.LinkFileList -nostdlib -Xlinker -object_path_lto -Xlinker <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore_lto.o -Xlinker -no_deduplicate -Xlinker -dependency_info -Xlinker <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftmodule -o <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/MorphCore.o
+
+ExtractAppIntentsMetadata (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name MorphCore --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk --xcode-version 27A9275 --platform-family iOS --deployment-target 26.0 --bundle-identifier morphcore.MorphCore --output <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/MorphCore.appintents --target-triple arm64-apple-ios26.0 --binary-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/MorphCore.o --dependency-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore_dependency_info.dat --stringsdata-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftFileList --metadata-file-list <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/MorphCore.DependencyMetadataFileList --static-metadata-file-list <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/MorphCore.DependencyStaticMetadataFileList --swift-const-vals-list <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/MorphCore.build/Debug-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftConstValuesFileList --force --compile-time-extraction --deployment-aware-processing --no-app-shortcuts-localization
+2026-11-19 19:38:47.137 appintentsmetadataprocessor[53145:21855617] Starting appintentsmetadataprocessor export
+2026-11-19 19:38:47.175 appintentsmetadataprocessor[53145:21855617] Extracted no relevant App Intents symbols, skipping writing output
+
+Ld <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/__preview.dylib normal (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios26.0 -dynamiclib -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -Os -Xlinker -no_warn_duplicate_libraries -L<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos -F<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/PackageFrameworks -F<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos -install_name @rpath/SpikeNoRive.debug.dylib -Xlinker -dead_strip -Xlinker -dependency_info -Xlinker <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive_dependency_info.dat -Xlinker -no_adhoc_codesign -o <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/__preview.dylib
+
+ProcessInfoPlistFile <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/Info.plist <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/empty-SpikeNoRive.plist (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-infoPlistUtility <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/empty-SpikeNoRive.plist -producttype com.apple.product-type.application -genpkginfo <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/PkgInfo -expandbuildsettings -format binary -platform iphoneos -requiredArchitecture arm64 -o <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/Info.plist
+
+CpResource <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/fixtures <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/fixtures (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/fixtures <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app
+
+CpResource <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/roar.wav <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/roar.wav (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/roar.wav <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/DeveloperToolsSupport-CVYL1BO85503M10QSAY5QUBR.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/_Builtin_float-797KADHAZL1D4WOO1RCRA3NZT.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/ptrauth-9UCFABTT0ZKUVK9UN151H7Y51.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/_AvailabilityInternal-4JYYEY7XVZBOKBGBZAM52X9GI.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/ptrcheck-DGO56O9J5TWW0WLWN7FVR0IOQ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/_SwiftConcurrencyShims-6YI0ONTCK7IGPVO0GGHAZILN1.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/SwiftShims-4QGKANP4WGM06FYFA60Y7VZ3K.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/_Builtin_stddef-DN3HUKU49ON1BM1U7LMDCGGHC.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/_Builtin_stdarg-3O4UCSGC53HEA11TTZNA39SX1.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/_Builtin_stdbool-F2W4V2NVYL6WKHBEMZDCUBMPY.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/_DarwinFoundation1-7W6MQUJRS6UAHA7TMO8K1Z48X.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/_DarwinFoundation2-EMKAUGAPAWUCU5CNF3S4R7KHQ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/_Builtin_limits-6S2B6CAU2W6R6MTXVKMZGM7U8.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/_Builtin_tgmath-30XMSJQLCH0TSYN1981SS09VM.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/_Builtin_stdint-7DN9T5NWZ9YAFMLCR5V4XADDF.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/sys_types-BII1BHS6I3KGYC467W8B7RWNP.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/string_h-E4ZH9VGDJJJAQPV183CECG8DT.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/_Builtin_stdatomic-7T8K7TLS6VI7XWYQ7O4UQU6X7.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/_DarwinFoundation3-7AHZFULQCNPGBX79OV5GNP7ZX.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/_Builtin_intrinsics-BW2J0PGOA0GGFSJA5LN50Z7IE.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/_Builtin_inttypes-5ZEFTHFG3VIIFAA4FJGPKV153.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/Darwin-39W7HQB47IYOQR8CXJ3S6LDDO.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/simd-3GNXBU323GL18R290FKZAPRFM.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/MachO-9G4FL0V73EGKUZ4PNRHEDOFS0.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/ObjectiveC-1YPWOGB2P0U21D2NOLKBT38VE.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/os_object-7MYCBXD0XPHNGRHD4ODGJY5I2.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/os_workgroup-CNT8K8U4WTZFQALCY2DMC4BQS.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/Spatial-BHH15WSV267PHXHAWVBQX47UA.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/Dispatch-DN1FZLOTRHINVU4I7MBTDAXJ2.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/XPC-4M8FU4V8V8KURMAVZOIMFK03O.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/dnssd-67T29UXZQ4EDDV6VS5URUK28N.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/CoreFoundation-HJB5EC0PA4CRGFMNJKRUXM46.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/os-C434P6PTGVJ5QGQEYPD75MIT4.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/Security-DIM5WP81DRS71BHX6XE2KI06C.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/CoreGraphics-12CEHLQV81Z36YAMAF3TN39P3.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/CFNetwork-6C4ZE64Q46VL7IEJBR0BKQN9M.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/CoreAudioTypes-9ZSJXVSNE8IKJZQ3LGEEK4JUL.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/CoreAudio-41AVUF7Z11CFGCF5DXSPP6WPM.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/Foundation-EUD7D3SYQ9518RJR8ZJF7C36Q.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/CoreText-26Q2ZJHE4BLEZ3KL9JGEOYWCB.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/ImageIO-8KQ2W7F3Q2ZLA2X8IB7GCUWHM.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/Network-9DCUBIR1K9NZ5GS5P4VY3WFI3.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/_LocationEssentials-F0PPY97B28TUC6AICZ96KRDI0.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/Accessibility-19KPID65LN9VPYHDWHUMH5U8I.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/UniformTypeIdentifiers-CM3U71UAIDEDDED55W5J0660O.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/UserNotifications-31FI4MZYX5K0XP1N2FLKWF72B.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/Symbols-6QCM8R3SA555U4H3PRON1LF2Q.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/CoreMIDI-BQKE34SZQWBFNXFEKDSDK5J5.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/CoreData-6DGLX8KJNXEXM8A9RYUUKQ7PO.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/ModelIO-1GCA9Y2KD4DUAI9GX4S2BI6O8.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/IOSurface-4ZLNH0HH3E905SSX7X3XIWB8X.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/FileProvider-DBP84TGGMTBA54ZCX0XHFLQU9.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/CoreTransferable-CP5MKGLPXURF2JWG8L2806R9.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/OSLog-A0H9TC2FPYZLLQSZQHIPMCK8T.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/UIUtilities-LUCTLYDJATB82QR0SDHTWW.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/CoreLocation-EPCJSOF6P4YUEWQVU8A9ILF4C.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/DataDetection-3ZDLBE1WMXHPOQOAD3DXWQHJC.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/Metal-2ACH54XLAZI0OC3AJBDABSR9E.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/OpenGLES-41P8WPTGPKZ7FM074AB1CBUD4.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/AVRouting-ABEK36GBQJOUS96Q19LGW6V2S.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/AudioToolbox-1ZA5UYIFNE000G4880M0EUOZJ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/CoreMotion-4Y9L7RYV3D9VZT1KJ1AUDS32.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/CoreVideo-6SAFDNE3UUCLE2NR4LL22FK48.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/CoreImage-EIZLHEHFHYVPVFDXVPC9B54MV.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/CoreMedia-AI2RRG1YFCUO99QDVVXITC00S.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/QuartzCore-9L8MW2CZ29N7CYAHNA4IG1ON4.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/SwiftUICore-6UVNZO7SX4O2DW50DUAP0B8QZ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/AVFAudio-17D3LX3VTLY4425XFEA8XRV76.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/VideoToolbox-2206KXGE29EA1IY5PU1YNS2GZ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/MediaToolbox-8OCPBUY4CLNGF0Q20GWTN8Y5N.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/UIKit-B9KP1M2BXDRN22LFYFKCP6RSP.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/AVFoundation-QOO9GTMEUFNVXF81R4H1K5P3.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/GLKit-7OTX1TM71GQ4G8QC43DKIUVC1.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/SwiftUI-42LB77F19PXYZDD8AF7720MN0.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules/SpriteKit-DJGWQV6G897KK8A5MP1I527SR.pcm
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ SpikeNoRive (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftCompile normal arm64 (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    
+
+SwiftCompile normal arm64 Compiling\ SpikeController.swift <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/SpikeController.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftCompile normal arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/SpikeController.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-SwiftPerFileCompile SpikeController.swift
+
+SwiftCompile normal arm64 Compiling\ RiveStage.swift <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/RiveStage.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftCompile normal arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/RiveStage.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-SwiftPerFileCompile RiveStage.swift
+
+SwiftCompile normal arm64 Compiling\ MorphScene.swift <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/MorphScene.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftCompile normal arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/MorphScene.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-SwiftPerFileCompile MorphScene.swift
+
+SwiftCompile normal arm64 Compiling\ NetProbe.swift <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/NetProbe.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftCompile normal arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/NetProbe.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-SwiftPerFileCompile NetProbe.swift
+
+SwiftCompile normal arm64 Compiling\ Kiosk.swift <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/Kiosk.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftCompile normal arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/Kiosk.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-SwiftPerFileCompile Kiosk.swift
+
+SwiftCompile normal arm64 Compiling\ Audio.swift <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/Audio.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftCompile normal arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/Audio.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-SwiftPerFileCompile Audio.swift
+
+SwiftCompile normal arm64 Compiling\ Metrics.swift <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/Metrics.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftCompile normal arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/Metrics.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-SwiftPerFileCompile Metrics.swift
+
+SwiftCompile normal arm64 Compiling\ SpikeApp.swift <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/SpikeApp.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftCompile normal arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/SpikeApp.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-SwiftPerFileCompile SpikeApp.swift
+
+SwiftCompile normal arm64 Compiling\ Input.swift <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/Input.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftCompile normal arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/Spike/Input.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-SwiftPerFileCompile Input.swift
+
+SwiftDriverJobDiscovery normal arm64 Compiling RiveStage.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for SpikeNoRive (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftDriver\ Compilation\ Requirements SpikeNoRive normal arm64 com.apple.xcode.tools.swift.compiler (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name SpikeNoRive -Onone @<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.SwiftFileList -DNORIVE -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios26.0 -g -module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex -Xfrontend -serialize-debugging-options -index-store-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Index.noindex/DataStore -swift-version 5 -I <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos -F <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/PackageFrameworks -F <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache -output-file-map <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex -sdk-module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive_const_extract_protocols.json -Xcc -iquote -Xcc <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-generated-files.hmap -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-own-target-headers.hmap -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive-5b3acf347ab31e97a56895301df10449-VFS-iphoneos/all-product-headers.yaml -Xcc -iquote -Xcc <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-project-headers.hmap -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/include -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/DerivedSources-normal/arm64 -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/DerivedSources/arm64 -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/DerivedSources -emit-objc-header -emit-objc-header-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive-Swift.h -working-directory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime -experimental-emit-module-separately -disable-cmo
+
+SwiftMergeGeneratedHeaders <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/DerivedSources/SpikeNoRive-Swift.h <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive-Swift.h (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-swiftHeaderTool -arch arm64 <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive-Swift.h -o <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/DerivedSources/SpikeNoRive-Swift.h
+
+Copy <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.swiftmodule/arm64-apple-ios.swiftmodule <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.swiftmodule (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.swiftmodule <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.swiftmodule/arm64-apple-ios.swiftmodule
+
+Copy <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.swiftmodule/arm64-apple-ios.abi.json <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.abi.json (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.abi.json <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.swiftmodule/arm64-apple-ios.abi.json
+
+Copy <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.swiftmodule/arm64-apple-ios.swiftdoc <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.swiftdoc (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.swiftdoc <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.swiftmodule/arm64-apple-ios.swiftdoc
+
+Copy <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.swiftsourceinfo (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.swiftsourceinfo <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo
+
+SwiftDriverJobDiscovery normal arm64 Compiling NetProbe.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftDriverJobDiscovery normal arm64 Compiling Kiosk.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftDriverJobDiscovery normal arm64 Compiling SpikeController.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftDriverJobDiscovery normal arm64 Compiling Metrics.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftDriverJobDiscovery normal arm64 Compiling Audio.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftDriverJobDiscovery normal arm64 Compiling MorphScene.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftDriverJobDiscovery normal arm64 Compiling SpikeApp.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftDriverJobDiscovery normal arm64 Compiling Input.swift (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+SwiftDriver\ Compilation SpikeNoRive normal arm64 com.apple.xcode.tools.swift.compiler (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name SpikeNoRive -Onone @<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.SwiftFileList -DNORIVE -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios26.0 -g -module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex -Xfrontend -serialize-debugging-options -index-store-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Index.noindex/DataStore -swift-version 5 -I <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos -F <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/PackageFrameworks -F <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache -output-file-map <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex -sdk-module-cache-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive_const_extract_protocols.json -Xcc -iquote -Xcc <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-generated-files.hmap -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-own-target-headers.hmap -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive-5b3acf347ab31e97a56895301df10449-VFS-iphoneos/all-product-headers.yaml -Xcc -iquote -Xcc <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-project-headers.hmap -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/include -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/DerivedSources-normal/arm64 -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/DerivedSources/arm64 -Xcc -I<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/DerivedSources -emit-objc-header -emit-objc-header-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive-Swift.h -working-directory <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime -experimental-emit-module-separately -disable-cmo
+
+Ld <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/SpikeNoRive.debug.dylib normal (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios26.0 -dynamiclib -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -Os -Xlinker -no_warn_duplicate_libraries -L<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphoneos -L<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos -F<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphoneos -F<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/PackageFrameworks -F<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos -filelist <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.LinkFileList -install_name @rpath/SpikeNoRive.debug.dylib -Xlinker -rpath -Xlinker @loader_path -Xlinker -rpath -Xlinker <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/PackageFrameworks -Xlinker -rpath -Xlinker @executable_path/Frameworks -Xlinker -dead_strip -Xlinker -object_path_lto -Xlinker <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive_lto.o -rdynamic -Xlinker -dependency_info -Xlinker <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.swiftmodule -Xlinker -alias -Xlinker _main -Xlinker ___debug_main_executable_dylib_entry_point -Xlinker -no_adhoc_codesign -o <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/SpikeNoRive.debug.dylib
+
+ConstructStubExecutorLinkFileList <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-ExecutorLinkFileList-normal-arm64.txt (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    construct-stub-executor-link-file-list <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/SpikeNoRive.debug.dylib /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/libPreviewsJITStubExecutor_no_swift_entry_point.a /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/libPreviewsJITStubExecutor.a --output <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-ExecutorLinkFileList-normal-arm64.txt
+note: Using stub executor library with Swift entry point. (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+Ld <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/SpikeNoRive normal (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios26.0 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -Os -Xlinker -no_warn_duplicate_libraries -L<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos -F<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/PackageFrameworks -F<worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos -Xlinker -rpath -Xlinker @executable_path -Xlinker -rpath -Xlinker @loader_path -Xlinker -rpath -Xlinker <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/PackageFrameworks -Xlinker -rpath -Xlinker @executable_path/Frameworks -rdynamic -e ___debug_blank_executor_main -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_dylib -Xlinker <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-DebugDylibPath-normal-arm64.txt -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_instlnm -Xlinker <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-DebugDylibInstallName-normal-arm64.txt -Xlinker -filelist -Xlinker <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive-ExecutorLinkFileList-normal-arm64.txt <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/SpikeNoRive.debug.dylib -Xlinker -no_adhoc_codesign -o <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/SpikeNoRive
+
+CopySwiftLibs <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-swiftStdLibTool --copy --verbose --sign 0F78FB03BF1127421B5D9DA53FD38AC3A8DB9CF2 --scan-executable <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/SpikeNoRive.debug.dylib --scan-folder <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/Frameworks --scan-folder <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/PlugIns --scan-folder <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/SystemExtensions --scan-folder <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/Extensions --platform iphoneos --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+ExtractAppIntentsMetadata (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name SpikeNoRive --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk --xcode-version 27A9275 --platform-family iOS --deployment-target 26.0 --bundle-identifier com.galaxyandsun.spike033.norive --output <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app --target-triple arm64-apple-ios26.0 --binary-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/SpikeNoRive --dependency-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive_dependency_info.dat --stringsdata-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.SwiftFileList --metadata-file-list <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive.DependencyMetadataFileList --static-metadata-file-list <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive.DependencyStaticMetadataFileList --swift-const-vals-list <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/Objects-normal/arm64/SpikeNoRive.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --no-app-shortcuts-localization
+2026-11-19 19:38:50.799 appintentsmetadataprocessor[53365:21856280] Starting appintentsmetadataprocessor export
+2026-11-19 19:38:50.801 appintentsmetadataprocessor[53365:21856280] warning: Metadata extraction skipped, no AppIntents.framework dependency found
+
+AppIntentsSSUTraining (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsnltrainingprocessor --infoplist-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/Info.plist --temp-dir-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/ssu --bundle-id com.galaxyandsun.spike033.norive --product-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app --extracted-metadata-path <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/Metadata.appintents --metadata-file-list <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive.DependencyMetadataFileList --source-file <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/Info.plist --archive-ssu-assets
+2026-11-19 19:38:50.820 appintentsnltrainingprocessor[53366:21856282] Parsing options for appintentsnltrainingprocessor
+2026-11-19 19:38:50.820 appintentsnltrainingprocessor[53366:21856282] Starting AppIntents SSU YAML Generation
+2026-11-19 19:38:50.821 appintentsnltrainingprocessor[53366:21856282] No AppShortcuts found - Skipping.
+
+CodeSign <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/SpikeNoRive.debug.dylib (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    
+    Signing Identity:     "Apple Development: <apple-id> (<cert-id>)"
+    Provisioning Profile: "iOS Team Provisioning Profile: com.galaxyandsun.spike033.norive"
+                          (888fff3f-0080-41e5-bb72-0d37a751ea92)
+    
+    /usr/bin/codesign --force --sign 0F78FB03BF1127421B5D9DA53FD38AC3A8DB9CF2 --timestamp\=none --generate-entitlement-der <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/SpikeNoRive.debug.dylib
+
+CodeSign <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/__preview.dylib (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    
+    Signing Identity:     "Apple Development: <apple-id> (<cert-id>)"
+    Provisioning Profile: "iOS Team Provisioning Profile: com.galaxyandsun.spike033.norive"
+                          (888fff3f-0080-41e5-bb72-0d37a751ea92)
+    
+    /usr/bin/codesign --force --sign 0F78FB03BF1127421B5D9DA53FD38AC3A8DB9CF2 --timestamp\=none --generate-entitlement-der <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app/__preview.dylib
+
+CodeSign <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    
+    Signing Identity:     "Apple Development: <apple-id> (<cert-id>)"
+    Provisioning Profile: "iOS Team Provisioning Profile: com.galaxyandsun.spike033.norive"
+                          (888fff3f-0080-41e5-bb72-0d37a751ea92)
+    
+    /usr/bin/codesign --force --sign 0F78FB03BF1127421B5D9DA53FD38AC3A8DB9CF2 --entitlements <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SpikeNoRive.build/Debug-iphoneos/SpikeNoRive.build/SpikeNoRive.app.xcent --timestamp\=none --generate-entitlement-der <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app
+
+RegisterExecutionPolicyException <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-RegisterExecutionPolicyException <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app
+
+Validate <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    builtin-validationUtility <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app -shallow-bundle -infoplist-subpath Info.plist
+warning: All interface orientations must be supported unless the app requires full screen. (in target 'SpikeNoRive' from project 'SpikeNoRive')
+
+Touch <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app (in target 'SpikeNoRive' from project 'SpikeNoRive')
+    cd <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime
+    /usr/bin/touch -c <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app
+
+PruneExplicitPrecompiledModules <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/SDKExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/build/device/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+** BUILD SUCCEEDED **
+

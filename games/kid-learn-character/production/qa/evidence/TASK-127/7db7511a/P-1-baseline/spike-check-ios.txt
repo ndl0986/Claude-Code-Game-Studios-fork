@@ -1,0 +1,16 @@
+spike-check 2026-11-19T12:39:00Z sha=b30e9713
+PASS 1 builds and unit tests pass (caller-asserted; logs beside this file): xcodebuild SpikeNoRive ios exit 0; MorphCore swift test exit 0 (build-ios.txt, test.txt)
+PASS 2/3 sources: no network or Rive code
+PASS 4 no remote Swift package (no XCRemoteSwiftPackageReference)
+--- build/device/Build/Products/Debug-iphoneos/SpikeNoRive.app
+PASS 2/5 entitlements: no network, location, camera or microphone ( application-identifier com.apple.developer.team-identifier get-task-allow)
+PASS 5 Info.plist: no NS*UsageDescription, no location key, no URL schemes
+PASS 2/3 binary: links no Rive, WebKit or Network.framework; no URL-loading or Rive symbols, selectors or URL literals (2 image(s) scanned)
+NOTE 6 (no Keys screen in this build)
+PASS 7 sha b30e9713 recorded, clean tree
+Identifier=com.galaxyandsun.spike033.norive
+Signature size=4790
+Authority=Apple Development: <apple-id> (<cert-id>)
+Authority=Apple Worldwide Developer Relations Certification Authority
+Authority=Apple Root CA
+TeamIdentifier=<TEAM>

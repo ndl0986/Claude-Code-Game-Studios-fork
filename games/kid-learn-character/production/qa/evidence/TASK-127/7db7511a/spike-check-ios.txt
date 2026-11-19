@@ -1,0 +1,16 @@
+spike-check 2026-11-19T12:47:24Z sha=adc11194
+PASS 1 builds and unit tests pass (caller-asserted; logs beside this file): xcodebuild DeviceSpike ios exit 0; SpikeKit swift test exit 0 (build-ios.txt, test.txt)
+PASS 2/3 sources: no network or Rive code
+PASS 4 no remote Swift package (no XCRemoteSwiftPackageReference)
+--- build/device/Build/Products/Debug-iphoneos/DeviceSpike.app
+PASS 2/5 entitlements: no network, location, camera or microphone ( application-identifier com.apple.developer.team-identifier get-task-allow)
+PASS 5 Info.plist: no NS*UsageDescription, no location key, no URL schemes
+PASS 2/3 binary: links no Rive, WebKit or Network.framework; no URL-loading or Rive symbols, selectors or URL literals (2 image(s) scanned)
+PASS 6 Mac key-state read OFF by default
+PASS 7 sha adc11194 recorded, clean tree
+Identifier=com.galaxyandsun.devicespike
+Signature size=4790
+Authority=Apple Development: <apple-id> (<cert-id>)
+Authority=Apple Worldwide Developer Relations Certification Authority
+Authority=Apple Root CA
+TeamIdentifier=<TEAM>

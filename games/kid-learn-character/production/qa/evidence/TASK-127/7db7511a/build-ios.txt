@@ -1,0 +1,74 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project DeviceSpike.xcodeproj -scheme DeviceSpike -destination generic/platform=iOS -derivedDataPath build/device CODE_SIGN_STYLE=Automatic DEVELOPMENT_TEAM=<TEAM> -allowProvisioningUpdates build
+
+Build settings from command line:
+    CODE_SIGN_STYLE = Automatic
+    DEVELOPMENT_TEAM = <TEAM>
+
+Resolve Package Graph
+
+
+Resolved source packages:
+  MorphCore: <worktree>/games/kid-learn-character/prototypes/TASK-033-anim-runtime/MorphCore @ local
+  SpikeKit: <worktree>/games/kid-learn-character/prototypes/DeviceSpike/SpikeKit @ local
+
+2026-11-19 19:47:22.358 xcodebuild[66796:21902248] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (5 targets)
+    Target 'DeviceSpike' in project 'DeviceSpike'
+        ➜ Explicit dependency on target 'SpikeKit-product' in project 'SpikeKit'
+        ➜ Explicit dependency on target 'MorphCore-product' in project 'MorphCore'
+    Target 'MorphCore-product' in project 'MorphCore'
+        ➜ Explicit dependency on target 'MorphCore' in project 'MorphCore'
+    Target 'MorphCore' in project 'MorphCore' (no dependencies)
+    Target 'SpikeKit-product' in project 'SpikeKit'
+        ➜ Explicit dependency on target 'SpikeKit' in project 'SpikeKit'
+    Target 'SpikeKit' in project 'SpikeKit' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 5a5ca121334711ab96ff0a2a80cc6ba7
+Build description path: <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/Build/Intermediates.noindex/XCBuildData/5a5ca121334711ab96ff0a2a80cc6ba7.xcbuilddata
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache
+    cd <worktree>/games/kid-learn-character/prototypes/DeviceSpike/DeviceSpike.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -o <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache
+
+ProcessProductPackaging ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/19ae6cd2-1d26-45d0-8f7b-19a191c210b8.mobileprovision <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/Build/Products/Debug-iphoneos/DeviceSpike.app/embedded.mobileprovision (in target 'DeviceSpike' from project 'DeviceSpike')
+    cd <worktree>/games/kid-learn-character/prototypes/DeviceSpike
+    builtin-productPackagingUtility ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/19ae6cd2-1d26-45d0-8f7b-19a191c210b8.mobileprovision -o <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/Build/Products/Debug-iphoneos/DeviceSpike.app/embedded.mobileprovision
+
+ProcessInfoPlistFile <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/Build/Products/Debug-iphoneos/DeviceSpike.app/Info.plist <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/Build/Intermediates.noindex/DeviceSpike.build/Debug-iphoneos/DeviceSpike.build/empty-DeviceSpike.plist (in target 'DeviceSpike' from project 'DeviceSpike')
+    cd <worktree>/games/kid-learn-character/prototypes/DeviceSpike
+    builtin-infoPlistUtility <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/Build/Intermediates.noindex/DeviceSpike.build/Debug-iphoneos/DeviceSpike.build/empty-DeviceSpike.plist -producttype com.apple.product-type.application -genpkginfo <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/Build/Products/Debug-iphoneos/DeviceSpike.app/PkgInfo -expandbuildsettings -format binary -platform iphoneos -requiredArchitecture arm64 -o <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/Build/Products/Debug-iphoneos/DeviceSpike.app/Info.plist
+
+CopySwiftLibs <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/Build/Products/Debug-iphoneos/DeviceSpike.app (in target 'DeviceSpike' from project 'DeviceSpike')
+    cd <worktree>/games/kid-learn-character/prototypes/DeviceSpike
+    builtin-swiftStdLibTool --copy --verbose --sign 0F78FB03BF1127421B5D9DA53FD38AC3A8DB9CF2 --scan-executable <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/Build/Products/Debug-iphoneos/DeviceSpike.app/DeviceSpike.debug.dylib --scan-folder <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/Build/Products/Debug-iphoneos/DeviceSpike.app/Frameworks --scan-folder <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/Build/Products/Debug-iphoneos/DeviceSpike.app/PlugIns --scan-folder <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/Build/Products/Debug-iphoneos/DeviceSpike.app/SystemExtensions --scan-folder <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/Build/Products/Debug-iphoneos/DeviceSpike.app/Extensions --platform iphoneos --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/Build/Products/Debug-iphoneos/DeviceSpike.app/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/Build/Intermediates.noindex/DeviceSpike.build/Debug-iphoneos/DeviceSpike.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+PruneExplicitPrecompiledModules <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/SDKExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules <worktree>/games/kid-learn-character/prototypes/DeviceSpike/build/device/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+** BUILD SUCCEEDED **
+

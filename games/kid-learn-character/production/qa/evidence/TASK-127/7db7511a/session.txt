@@ -1,0 +1,14 @@
+TASK-127 iPad session 1a, 2026-11-19, iPad13,4 (iPad Pro 11-inch, 3rd gen), iPadOS 27.2 (24B119), <ipad>
+Builds: DeviceSpike source 7db7511a, installed product gated at adc11194 (spike-check-ios.txt, exit 0);
+TASK-033 SpikeNoRive gated at b30e9713 (P-1-baseline/), never installed.
+Setup: F-2 Developer Mode 19:46:10 (after Xcode Device Hub 19:41:56-19:45:01, leader/Luan OK); F-3 trust ~19:48;
+F-4 not done (P-4 not run).
+Rows run: H-2 (P-2/h2-overlap.txt), P-2 (P-2/p2-run2.txt; crispness still not captured), P-7 partial (P-7/p7-notes.txt).
+Not run: P-1 (no 240 fps camera; weekend), P-8, P-9, P-4 (Luan paused the session ~20:23; weekend), P-15 and P-4's
+shortcut / media-key parts (no hardware keyboard).
+P-2 crispness: not captured. The A-candidate cannot be selected by a launch argument (only `-option b`), so a
+headless still needs a tap; with Luan away it was skipped.
+DeviceSpike removed from the iPad, 20:24:19 (devicectl device uninstall app; devicectl device info apps: 0 matches).
+The TASK-033 app was never installed.
+Screenshots: only frames checked to show DeviceSpike's own view are committed; frames with a system notification
+banner were deleted from disk (20:06 loop frames, the 20:10 run-1 log frame).

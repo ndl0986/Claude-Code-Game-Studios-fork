@@ -1,0 +1,18 @@
+TASK-127 H-2 device confirmation (P-2 step 1), DeviceSpike gate sha adc11194 (source 7db7511a)
+Device: iPad13,4 (iPad Pro 11-inch, 3rd gen), iPadOS 27.2 (24B119). 2026-11-19.
+Read from the app's on-screen log (Lock / Guided Access screen), captured with devicectl device capture screenshot at 19:57:41 (h2-log-screen.png; the app's own Lock / Guided Access screen, status bar shows only time, Wi-Fi, battery).
+Luan tapped Overlap check on Render (it ran twice: 692.47 and 704.03 s uptime, identical results), then Log stats.
+
+692.4722 [render] overlap check (stroke alpha 0.8): crossing 0.961, arm 0.800 → BLENDS TWICE (the outline needs an effect node or a texture)
+692.4982 [render] overlap check (node alpha 0.8): crossing 0.961, arm 0.800 → BLENDS TWICE (the outline needs an effect node or a texture)
+692.4982 [render] overlap check: outline variant for the A-candidate = effect node
+704.0311 [render] overlap check (stroke alpha 0.8): crossing 0.961, arm 0.800 → BLENDS TWICE (the outline needs an effect node or a texture)
+704.0576 [render] overlap check (node alpha 0.8): crossing 0.961, arm 0.800 → BLENDS TWICE (the outline needs an effect node or a texture)
+704.0576 [render] overlap check: outline variant for the A-candidate = effect node
+718.7817 [render] option=A: per element outline=effect node fps120=false p50 16.67 ms  p99 16.67 ms  (n=1200)  |  s_fit 1.8469  visible -0,-4 1280×729  pxPerPt 2.0  ppi 326 (unknownClassMax)  |  reduceMotion false  ignoresInvert true
+
+Observation: the device agrees with the headless result (6e455bfc): one SKShapeNode blends its self-overlap twice
+(0.961 ≈ 1-(1-0.8)^2 = 0.96) for both stroke alpha and node alpha; the A-candidate is measured with outline=effect node.
+No disagreement, so the lower-bound rule does not apply.
+Side notes: launch line says build=dev (the SpikeCommit Info key is not set; the sha comes from the gate log).
+ppi 326 "unknownClassMax": the spike's PPI table has no iPad13,4 row (Apple spec: 264 ppi).
