@@ -625,7 +625,7 @@ function reset() {
     hints: [],          // glowing letters drifting on screen: { L, x, y, age, life, ph }
     seen: [],           // letters met this session
     batch: [],          // new creatures met since the last parade, in the order met (K-17: a key again in the batch counts once)
-    batchFullAt: null,  // state.t when the batch's last creature finished forming (K-45: the parade starts from here)
+    batchFullAt: null,  // state.t of the shown that added the batch's last key (Parade R2: armedAt; the parade starts parade_delay_s later)
     meter: { litAt: [], armedAt: null, fullAt: null, drainAt: null, drainFrom: [], glowAtDrain: 0 }, // K-44 meter (art bible §7, Parade F4)
     flights: [],        // meter lights in the air (Parade R12a): { i, t, x0, y0 }; at most one in the usual case
     firstPress: false,
@@ -752,7 +752,7 @@ const scenes = {
             const b = shapes[cur.letter].box, sc = tune.creature_scale, i = state.batch.length - 1;
             if (reduceMotion()) state.meter.litAt[i] = state.t;              // Reduce Motion: no light; the cell lights at the shown
             else state.flights.push({ i, t: 0, x0: ANCHOR_X + (b.x0 + b.x1) / 2 * sc, y0: ANCHOR_Y + b.y0 * sc }); // from the cast box's top centre
-            if (state.batch.length === Math.round(tune.parade_count)) cur.completesBatch = true;
+            if (state.batch.length === Math.round(tune.parade_count)) state.batchFullAt = state.t; // Parade R2: armed at the 6th key's shown
           }
           events.push({ type: 'formed', letter: cur.letter });
         }
@@ -760,10 +760,9 @@ const scenes = {
         if (state.queue.length && cur.t >= holdTime()) { const q = state.queue.shift(); startReveal(q.L, q.from); }
       }
       if (state.prev) { state.prev.t += dt; state.prev.fade += dt; if (state.prev.fade > 0.45) state.prev = null; }
-      // the parade (K-45, K-46): parade_delay_s (1.5 s) after the batch's 6th creature has finished forming, with no rest
-      // needed; presses keep being answered in front of it while it walks. A batch that fills during a walk is armed
-      // when that walk ends (Parade PA-Q4), and starts parade_delay_s later.
-      if (cur && cur.completesBatch && !cur.fired.formDone && cur.t >= ph.formEnd) { cur.fired.formDone = true; state.batchFullAt = state.t; }
+      // the parade (Parade R2, K-45, K-46): armed at the shown that adds the 6th key (formedS), and it starts parade_delay_s
+      // (1.5 s) later with no rest needed; the 6th cell is full at armedAt + 1.15 (R12a). Presses keep being answered in
+      // front of it while it walks. A batch that fills during a walk is armed when that walk ends (PA-Q4).
       if (state.batchFullAt !== null && state.meter.armedAt === null && !state.parade) state.meter.armedAt = Math.max(state.batchFullAt, state.t);
       if (state.meter.armedAt !== null && !state.parade && state.t >= state.meter.armedAt + tune.parade_delay_s) startParade();
       updateMeter(dt);
