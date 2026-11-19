@@ -342,7 +342,7 @@ supported iPad**, so these figures are "measured on iPad13,4", not D1's deciding
 | Row | Result | Detail |
 |---|---|---|
 | **H-2 on the device** | **PASS, agrees with the headless result (6e455bfc)** | stroke alpha 0.8 and node alpha 0.8: crossing 0.961, arm 0.800, so a single `SKShapeNode` **blends twice**; two runs identical. The Overlap check therefore kept **`outline = effect node`**, D3's default: **D3's outline rule is confirmed on a device**, and P-2's A-candidate numbers are the shipping outline path (`P-2/h2-overlap.txt`) |
-| **P-2 frame time** | **PASS on iPad13,4** | run 2, each option held 38–43 s, stats over the last 1,200 frames (10 s) at 120 Hz: p50 / p99 **8.34 / 8.34 ms** for the A-candidate, B-load and the original A alike. That is under D1's 16.7 ms, and under the 120 Hz frame (8.33 ms) to within the measurement's rounding |
+| **P-2 frame time** | **PASS on iPad13,4** | run 2, each option held 38–43 s, stats over the last 1,200 frames (10 s) at 120 Hz: p50 / p99 **8.34 / 8.34 ms** for the A-candidate, B-load and the original A alike. That is under D1's 16.7 ms, and at the display's frame pace: every frame delta in the window is one 120 Hz interval (8.34 ms as logged), so no frame was dropped; the deltas measure pacing, not render cost, so the headroom under the frame is not measured |
 | **P-2 load per creature** | **PASS on iPad13,4** | A-candidate **0.1–0.2 ms**, B-load **3.9–5.6 ms**, original A 0.1 ms: all far under D1's 1.2 s |
 | **P-2 not rebuilt per frame** | **PASS** | one "creatures built" line per option change, none during the holds (D3's P-2 check on the effect node's raster) |
 | **P-2 memory** (physical footprint, xctrace, ~1 s samples) | **recorded** (D1 has no memory row) | A-candidate **137.9–138.3 MiB** (peak 139.8), B-load **118.5–118.6 MiB** (peak 128.4), original A **93.5–94.3 MiB** |
@@ -351,8 +351,9 @@ supported iPad**, so these figures are "measured on iPad13,4", not D1's deciding
 | app-size delta, Settings Store read time | not measured on the spike | production re-run (device-checks plan, Spike runs) |
 
 **What the memory figures mean.** The A-candidate uses **about 44 MiB more than the original A** and about 20 MiB more
-than B-load. The likeliest cause is the effect nodes' rasters: one cached outline texture per part for the 8 figures
-on stage (D3), which the original A does not have. This is the A-candidate's real cost of the group-alpha look, now
+than B-load. The likeliest cause is the effect nodes' rasters: each `shouldRasterize` effect node keeps a cached texture at pixel
+size plus an offscreen target, one per part for the 8 figures on stage (D3); the original A has neither, and B's
+textures are one per part (not verified per node: the trace has no allocation breakdown). This is the A-candidate's real cost of the group-alpha look, now
 measured, not a defect.
 - **There is no memory budget to judge it against.** `project.yaml` sets none (art bible §8: "No performance budgets
   are set"), D1's rule has no memory row, and Cast Rendering F6 sizes textures for option B only. So the figure is
