@@ -1,0 +1,15 @@
+TASK-127 P-2 run 1: DeviceSpike physical footprint (xctrace "Activity Monitor", headless, launched by xctrace at 20:06:08
+with -screen render; ~1 s samples). Trace t=0 is the app launch (log uptime 1469.29). Windows from the log's
+"creatures built" uptimes: A 0-21.2 s, A-candidate (effect node) 21.2-29.4 s, B 29.4-33.7 s, A 33.7-~40 s, then the
+Lock screen (CPU ~1%). The trace file is kept locally (not committed: it is large and holds device identifiers).
+
+window              footprint (MiB)                     CPU
+A (launch)          108.0 -> 125.5 peak at 3.2 s        34-41%
+A steady            93.3-94.5                           38-54% (rise at ~14.6 s: 120 Hz switched on)
+A-candidate         140.1 peak, 138.1-140.1 steady       48-52%
+B (4 s only)        130.1 -> 104.3 (transition)         39-50%
+A again             93.4-95.1                            50-54%
+Lock screen         66 -> 34.7                           0-6%
+
+Observation: the A-candidate (an SKEffectNode per part, rasterised) holds ~44 MiB more than A per element on this
+stage. B's window was too short (4 s) to read a steady value.
