@@ -1,0 +1,42 @@
+Building for debugging...
+[Planning deferred tasks]
+[28 / 52]
+[29 / 53] SpikeKit
+[41 / 91]
+[46 / 91]
+[48 / 91]
+[52 / 91]
+[55 / 91]
+[60 / 91]
+[61 / 91]
+[62 / 91]
+[63 / 91]
+[67 / 91] SpikeKit
+[75 / 91] SpikeKit
+[81 / 92] SpikeKitTests-product
+[82 / 97]
+[86 / 97] SpikeKitTests-product
+[91 / 97] SpikeKitTests-product
+[93 / 97] SpikeKitTests-product
+Build complete! (5,69 secs)
+Test Suite 'All tests' started at 2026-11-19 19:36:50.203.
+Test Suite 'All tests' passed at 2026-11-19 19:36:50.205.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.002) seconds
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Test readsPartsLayersAndPivots() started.
+◇ Test parentChord() started.
+◇ Test rejectsOutsideTheSubset() started.
+◇ Test foldIsASCIIOnly() started.
+◇ Test ppiUnknownTakesClassMaximum() started.
+◇ Test characterFirstThenPosition() started.
+◇ Test stageFitMatchesRevealStageF1() started.
+✔ Test ppiUnknownTakesClassMaximum() passed after 0.001 seconds.
+✔ Test parentChord() passed after 0.001 seconds.
+✔ Test foldIsASCIIOnly() passed after 0.001 seconds.
+✔ Test stageFitMatchesRevealStageF1() passed after 0.001 seconds.
+✔ Test characterFirstThenPosition() passed after 0.001 seconds.
+✔ Test readsPartsLayersAndPivots() passed after 0.001 seconds.
+✔ Test rejectsOutsideTheSubset() passed after 0.001 seconds.
+✔ Test run with 7 tests in 0 suites passed after 0.001 seconds.
