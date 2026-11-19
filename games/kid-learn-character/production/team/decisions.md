@@ -105,6 +105,17 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-47 The child's iPad and the "oldest supported iPad" (Luan, 2026-11-19)
+
+- **The child's everyday iPad is the one measured in TASK-127:** iPad13,4 (iPad Pro 11-inch, 3rd gen, M1), iPadOS 27.2.
+  No older iPad is available to measure.
+- **The "oldest supported iPad" (ADR-0009 P-2 decisive run, App Shell P-10) is decided at release prep**, not now.
+  Until then ADR-0009 stays Proposed and its decisive-run row stays NOT ASSESSED; the Pre-Production gate carries it
+  as an open condition. Options shown to Luan: take the child's iPad as the reference (older iPads unmeasured risk),
+  borrow or buy an older iPad, or decide at release prep (chosen).
+- Note for that decision: the TASK-127 P-2 figures are frame pacing (every delta one 120 Hz interval, no frame
+  dropped); render headroom was not measured (TASK-129).
+
 ### K-46 Parade meter details (Luan, 2026-11-18, TASK-120 MT-Q1..Q5)
 
 - **MT-Q5 beat:** the parade starts **1.5 s** after the 6th creature has formed (`armedAt + parade_delay_s`, 1.5 s
