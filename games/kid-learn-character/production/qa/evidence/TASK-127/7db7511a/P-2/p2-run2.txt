@@ -1,0 +1,31 @@
+TASK-127 P-2 run 2 (20:14:23-20:17:58), DeviceSpike gate sha adc11194 (source 7db7511a), iPad13,4, iPadOS 27.2 (24B119),
+Do Not Disturb on, 120 Hz switch on. Log transcribed from p2-run2-log-screen.png (the app's Lock / Guided Access
+screen, 20:17:15; no banner). Memory: xctrace "Activity Monitor" (headless, launched by xctrace with -screen render),
+~1 s samples, t=0 = app launch (log uptime 1758.88). The trace file is kept locally (large, holds device identifiers).
+
+Log (verbatim; the "option B" label on the Ac#/Acp# lines is the spike's label bug, they are the A-candidate):
+1758.8821 launch build=dev uptime=1758.882061875
+1758.9120 [render] art: root,root,root
+1758.9169 [render] creatures built with option A: A#0=0.1 ms A#1=0.1 ms Ap#0=0.1 ms Ap#1=0.1 ms Ap#2=0.1 ms Ap#3=0.1 ms Ap#4=0.1 ms Ap#5=0.1 ms
+1776.3903 [render] creatures built with option B: Ac#0=0.1 ms Ac#1=0.1 ms Acp#0=0.1 ms Acp#1=0.1 ms Acp#2=0.1 ms Acp#3=0.1 ms Acp#4=0.1 ms Acp#5=0.1 ms
+1783.7874 [render] creatures built with option B: B#0=4.7 ms B#1=5.6 ms Bp#0=4.2 ms Bp#1=5.0 ms Bp#2=4.6 ms Bp#3=3.9 ms Bp#4=5.0 ms Bp#5=4.5 ms
+1791.2536 [render] creatures built with option B: Ac#0=0.2 ms Ac#1=0.1 ms Acp#0=0.1 ms Acp#1=0.1 ms Acp#2=0.1 ms Acp#3=0.1 ms Acp#4=0.1 ms Acp#5=0.1 ms
+1824.3466 [render] option=A: candidate (ADR-0009 D3) outline=effect node fps120=true p50 8.34 ms  p99 8.34 ms  (n=1200)  |  s_fit 1.8469  visible -0,-4 1280×729  pxPerPt 2.0  ppi 326 (unknownClassMax)  |  reduceMotion false  ignoresInvert true
+1829.3731 [render] option=A: candidate (ADR-0009 D3) outline=effect node fps120=true p50 8.34 ms  p99 8.34 ms  (n=1200)  |  (same)
+1830.4885 [render] creatures built with option B: B#0=4.6 ms B#1=5.6 ms Bp#0=4.1 ms Bp#1=5.0 ms Bp#2=4.7 ms Bp#3=3.9 ms Bp#4=4.8 ms Bp#5=4.6 ms
+1864.1204 [render] option=B: per-part textures outline=effect node fps120=true p50 8.34 ms  p99 8.34 ms  (n=1200)  |  s_fit 1.8469  visible -0,-4 1280×729  pxPerPt 2.0  ppi 326 (unknownClassMax)  |  reduceMotion false  ignoresInvert true
+1868.4666 [render] creatures built with option A: A#0=0.1 ms A#1=0.1 ms Ap#0=0.1 ms Ap#1=0.1 ms Ap#2=0.1 ms Ap#3=0.1 ms Ap#4=0.1 ms Ap#5=0.1 ms
+1911.3633 [render] option=A: per element outline=effect node fps120=true p50 8.34 ms  p99 8.34 ms  (n=1200)  |  s_fit 1.8469  visible -0,-4 1280×729  pxPerPt 2.0  ppi 326 (unknownClassMax)  (line cut at the screen edge)
+
+Per option (frame time = the last 1200 frame deltas, i.e. the last 10 s at 120 Hz; memory = physical footprint):
+option                         held     p50 / p99 (ms)   load per creature (ms)   footprint steady (peak)   CPU
+A-candidate (effect node)      39 s     8.34 / 8.34      0.1-0.2                  137.9-138.3 (139.8) MiB   47-51%
+B-load (per-part textures)     38 s     8.34 / 8.34      3.9-5.6                  118.5-118.6 (128.4) MiB   41-43%
+A per element (information)    43 s     8.34 / 8.34      0.1                      93.5-94.3 (94.3) MiB      49-54%
+
+Observations:
+- All three hold 120 Hz on iPad13,4 over the measured 10 s windows (p99 = one 120 Hz frame); the frame time does not
+  separate them on this device. Memory does: A-candidate +44 MiB over A per element, B +24 MiB.
+- Not rebuilt per frame: each option change logs one "creatures built" line, none during the 30-40 s holds.
+- Crisp at the stage size: not yet checked for the effect-node outline (needs a still of the A-candidate; follows).
+- This iPad is not the oldest supported device; these are iPad13,4 numbers. App-size delta: not measured (spike).
