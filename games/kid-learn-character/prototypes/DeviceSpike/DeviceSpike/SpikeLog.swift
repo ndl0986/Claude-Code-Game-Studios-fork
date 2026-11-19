@@ -19,7 +19,11 @@ final class SpikeLog: ObservableObject {
 struct LogView: View {
     @ObservedObject var log = SpikeLog.shared
     var body: some View {
-        ScrollView { VStack(alignment: .leading) { ForEach(Array(log.lines.enumerated()), id: \.offset) { Text($0.element).font(.caption.monospaced()) } } }
-            .frame(maxHeight: 220).background(Color.black.opacity(0.05))
+        // follows the newest line (TASK-128): a headless screen capture of the iPad must show the latest results
+        ScrollViewReader { r in
+            ScrollView { VStack(alignment: .leading) { ForEach(Array(log.lines.enumerated()), id: \.offset) { Text($0.element).font(.caption.monospaced()).id($0.offset) } } }
+                .onChange(of: log.lines.count) { _, n in if n > 0 { r.scrollTo(n - 1, anchor: .bottom) } }
+        }
+        .frame(maxHeight: 220).background(Color.black.opacity(0.05))
     }
 }

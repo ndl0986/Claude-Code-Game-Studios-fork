@@ -1,0 +1,19 @@
+TASK-128 (follow-up to TASK-127 P-7: Luan heard a pop on every Audio button but Tone freeze, on the iPad13,4 speaker)
+
+1. Fixtures alone (the spike's primeBuffers formulas, 10 ms linear edge fades), click metric at each sound's start,
+   body and end: tone100 predictor residual onset -86.3 / end -86.3 dBFS; tone1k -66.3 / -66.3. The fades are not a
+   digital click at the AC-9 threshold (-60).
+2. Offline replay of every button (tools/offline-button-check.swift; the spike's graph, bus volumes, 5 ms quanta,
+   cut_settle_s 40 ms, D7 rewind 20 ms): offline-button-check.txt. Every phase (start, cut, mute/unmute, freeze,
+   resume, natural end, body) of every button at or below -60 dBFS: no digital click anywhere, including a sound's
+   start, which the device detector never measured.
+3. The D7 variant with a 10 ms fade-in on the resumed remainder (--resume-fade): offline-button-check-resume-fade.txt.
+   Resume phases: Tone freeze -102.2 -> -96.2, 1 kHz freeze -82.2 -> -76.3, Freeze continuity -76.2 -> -76.2; no
+   improvement (the gate's mixer-smoothed rise from 0 already hides the mid-waveform restart, as ADR-0010 D7 states).
+   So the planned resume fade (b) is not made, and no D7 note is drafted.
+   (Phases on non-tone sounds move a few dB between runs: the excess-|d2| metric depends on the reference render's
+   alignment; every run is below -60.)
+Conclusion: the pop is not in the spike's digital output as rendered offline. What remains: the device's real-time
+render path and its speaker (e.g. the iPad's handling of a near-full-scale 100 Hz onset). The weekend re-run uses the
+whole-sound detector on the device (start vs stop measured, not only heard) and the 1 kHz tone (the ear and the
+detector judge the same sound).

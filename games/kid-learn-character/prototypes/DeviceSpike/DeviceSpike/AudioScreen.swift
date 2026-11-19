@@ -10,6 +10,7 @@ struct AudioScreen: View {
     @State private var audio: AudioSpike? = nil
     @State private var pressed = false
     @State private var muted = false
+    @State private var tone1k = false     // TASK-128: the Tone buttons' test tone, 100 Hz (default) or 1 kHz (audible on the iPad speaker)
     @State private var lastHandOff = ""
     var body: some View {
         VStack(spacing: 10) {
@@ -40,6 +41,7 @@ struct AudioScreen: View {
                 Button("Freeze") { audio?.freeze() }; Button("Resume") { audio?.resume() }
             }
             // ADR-0010 row helpers: P-7 / M-14 tone tests (detector on the live output), P-8 simulated reset
+            Toggle("Tone 1 kHz (off: 100 Hz)", isOn: $tone1k).onChange(of: tone1k) { _, on in audio?.toneHz = on ? 1000 : 100 }.fixedSize()
             HStack {
                 ForEach([AudioSpike.Bus.voice, .cast, .music], id: \.self) { b in
                     Button("Tone cut \(b.rawValue)") { audio?.toneTest(.cut, on: b) }

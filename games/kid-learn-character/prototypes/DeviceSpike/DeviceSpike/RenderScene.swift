@@ -264,7 +264,7 @@ final class RenderScene: SKScene {
         current = creature(0, scale: 0.8); current!.position = CGPoint(x: 640, y: 600); layers[30]!.addChild(current!)
         leaving = creature(1, scale: 0.8); leaving!.position = CGPoint(x: 300, y: 600); leaving!.alpha = 0.5; layers[20]!.addChild(leaving!)
         for i in 0..<6 { let w = creature(i, scale: 0.2, parade: true); w.position = CGPoint(x: -100 - Double(i) * 150, y: 558); layers[10]!.addChild(w); walkers.append(w) }
-        onLog("creatures built with option \(option == .a ? "A" : "B"): " + loadMs.sorted { $0.key < $1.key }.map { "\($0.key)=\(String(format: "%.1f", $0.value)) ms" }.joined(separator: " "))
+        onLog("creatures built with option \(option.rawValue): " + loadMs.sorted { $0.key < $1.key }.map { "\($0.key)=\(String(format: "%.1f", $0.value)) ms" }.joined(separator: " "))
         loadMs = [:]; stats.reset()
     }
 
