@@ -333,6 +333,45 @@ B-load, and the original A for information) over the worst case, per-creature lo
 if available), M-13 (`mac-1/M-13/`), and on the same build P-3 / M-12 (F2 rehearsal), P-11 / M-10, P-13, as in
 `production/qa/device-checks-plan.md`.
 
+**Evidence, iPad session 1a (2026-11-19, TASK-127; TASK-129 entry; status stays Proposed).** Source:
+`production/qa/evidence/TASK-127/7db7511a/results.md` and its `P-2/` files (QC game-qc-ios; driver game-dev-ios; Luan
+on the device). Device **iPad13,4** (iPad Pro 11-inch, 3rd generation, M1), iPadOS 27.2, ProMotion at **120 Hz**;
+DeviceSpike from source 7db7511a (installed product gated at adc11194, evidence commits only). **Not the oldest
+supported iPad**, so these figures are "measured on iPad13,4", not D1's deciding run.
+
+| Row | Result | Detail |
+|---|---|---|
+| **H-2 on the device** | **PASS, agrees with the headless result (6e455bfc)** | stroke alpha 0.8 and node alpha 0.8: crossing 0.961, arm 0.800, so a single `SKShapeNode` **blends twice**; two runs identical. The Overlap check therefore kept **`outline = effect node`**, D3's default: **D3's outline rule is confirmed on a device**, and P-2's A-candidate numbers are the shipping outline path (`P-2/h2-overlap.txt`) |
+| **P-2 frame time** | **PASS on iPad13,4** | run 2, each option held 38–43 s, stats over the last 1,200 frames (10 s) at 120 Hz: p50 / p99 **8.34 / 8.34 ms** for the A-candidate, B-load and the original A alike. That is under D1's 16.7 ms, and under the 120 Hz frame (8.33 ms) to within the measurement's rounding |
+| **P-2 load per creature** | **PASS on iPad13,4** | A-candidate **0.1–0.2 ms**, B-load **3.9–5.6 ms**, original A 0.1 ms: all far under D1's 1.2 s |
+| **P-2 not rebuilt per frame** | **PASS** | one "creatures built" line per option change, none during the holds (D3's P-2 check on the effect node's raster) |
+| **P-2 memory** (physical footprint, xctrace, ~1 s samples) | **recorded** (D1 has no memory row) | A-candidate **137.9–138.3 MiB** (peak 139.8), B-load **118.5–118.6 MiB** (peak 128.4), original A **93.5–94.3 MiB** |
+| **P-2 crispness at ~775 px** | **NOT ASSESSED** | not run this session (the A-candidate needed a tap to select and Luan was away); a 13" iPad was not available |
+| **P-2 on the oldest supported iPad** | **NOT ASSESSED** | **the decisive run** (D1 judges P-2 on the oldest supported iPad); carried to the next iPad session |
+| app-size delta, Settings Store read time | not measured on the spike | production re-run (device-checks plan, Spike runs) |
+
+**What the memory figures mean.** The A-candidate uses **about 44 MiB more than the original A** and about 20 MiB more
+than B-load. The likeliest cause is the effect nodes' rasters: one cached outline texture per part for the 8 figures
+on stage (D3), which the original A does not have. This is the A-candidate's real cost of the group-alpha look, now
+measured, not a defect.
+- **There is no memory budget to judge it against.** `project.yaml` sets none (art bible §8: "No performance budgets
+  are set"), D1's rule has no memory row, and Cast Rendering F6 sizes textures for option B only. So the figure is
+  **recorded, not judged**. 138 MiB is a small share of the M1 iPad's memory, but the decisive device is older and
+  smaller.
+- **For the decisive run:** P-2 on the oldest supported iPad must record the same three footprints, and whether the
+  OS sends a memory warning during the holds. **If a memory budget is set later** (with `/project-settings`), the
+  A-candidate is judged against it there. The order would follow D1's spirit: B-load first if the A-candidate is over
+  and B-load is under. That would be a D1 change, so it needs Luan.
+
+**Open conditions before acceptance** (D1 unchanged):
+1. P-2 on the oldest supported iPad: frame time, load, not-rebuilt, and the three memory footprints.
+2. P-2 crispness at ~775 px (a 13" iPad if one is available, else the class's largest stage figure).
+3. M-13 on the Mac.
+
+**D1's text is not changed by this evidence.** On iPad13,4 every option passes both of D1's conditions (frame time,
+load), so on this device row 2 ("A passes both → A") would pick the A-candidate. The decisive run is still the oldest
+supported iPad's.
+
 ## Related
 - Cast Rendering GDD (R2, R3, R7, R10–R12, F1, F6, F8, AC-11, AC-15–AC-17); MorphCore GDD AC-11; art bible §4, §8.
 - ADR-0003 (D1, D4 and its K-37 clarification); ADR-0006 (D1–D3, D5, D8); ADR-0002 (D6).
