@@ -116,6 +116,7 @@ that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per
 - **MT-Q4:** the meter sits **beside the queue tokens**, left of them on the same row (tokens stay in the corner).
 - **ADR-0006 D1 dated note approved** (status stays Accepted): z 70 also holds the parade meter (Parade R12 snapshot,
   drawn by the Reveal Stage); it and the tokens never overlap. game-dev-ios writes it after TASK-120 merges.
+- **Replay result (Luan, 2026-11-19):** Luan replayed prototype iteration 6 (TASK-121) with the child: "the energy bar shows and works fine" (meter OK). No change asked. The prototype's provisional light (0.6 s from the creature centre) is aligned to R12a in TASK-126.
 
 ### K-45 The parade starts as soon as the batch is full (Luan, 2026-11-18)
 
