@@ -627,7 +627,7 @@ function reset() {
     batch: [],          // new creatures met since the last parade, in the order met (K-17: a key again in the batch counts once)
     batchFullAt: null,  // state.t when the batch's last creature finished forming (K-45: the parade starts from here)
     meter: { litAt: [], armedAt: null, fullAt: null, drainAt: null, drainFrom: [], glowAtDrain: 0 }, // K-44 meter (art bible §7, Parade F4)
-    flights: [],        // lights flying from a new creature to its cell: { i, t, x0, y0 } (K-46 MT-Q3)
+    flights: [],        // meter lights in the air (Parade R12a): { i, t, x0, y0 }; at most one in the usual case
     firstPress: false,
     parade: null,       // a parade of the batch, every parade_count new creatures (K-17, K-45)
     reveals: 0, queued: 0, ignored: 0,
@@ -748,9 +748,10 @@ const scenes = {
           cur.fired.form = true; creatureSound(cur.letter); say(KEY_TABLE[cur.letter].word, false);
           if (!state.seen.includes(cur.letter)) state.seen.push(cur.letter);
           if (!state.batch.includes(cur.letter) && state.batch.length < Math.round(tune.parade_count)) {
-            state.batch.push(cur.letter);                                   // a light flies to its cell; the cell lights on arrival
-            const b = shapes[cur.letter].box, sc = tune.creature_scale;
-            state.flights.push({ i: state.batch.length - 1, t: 0, x0: ANCHOR_X + (b.x0 + b.x1) / 2 * sc, y0: ANCHOR_Y + (b.y0 + b.y1) / 2 * sc });
+            state.batch.push(cur.letter);                                   // R12a: launch the meter light at this shown
+            const b = shapes[cur.letter].box, sc = tune.creature_scale, i = state.batch.length - 1;
+            if (reduceMotion()) state.meter.litAt[i] = state.t;              // Reduce Motion: no light; the cell lights at the shown
+            else state.flights.push({ i, t: 0, x0: ANCHOR_X + (b.x0 + b.x1) / 2 * sc, y0: ANCHOR_Y + b.y0 * sc }); // from the cast box's top centre
             if (state.batch.length === Math.round(tune.parade_count)) cur.completesBatch = true;
           }
           events.push({ type: 'formed', letter: cur.letter });
@@ -833,7 +834,8 @@ function updateMeter(dt) {
   const n = Math.round(tune.parade_count), m = state.meter;
   for (let k = state.flights.length - 1; k >= 0; k--) {
     const f = state.flights[k]; f.t += dt;
-    if (f.t >= tune.flight_s) { m.litAt[f.i] = state.t; state.flights.splice(k, 1); }    // the cell lights on arrival
+    if (m.litAt[f.i] === undefined && f.t >= tune.meter_fly_s - tune.meter_land_s) m.litAt[f.i] = state.t; // fill starts as the light's fade starts (one crossfade)
+    if (f.t >= tune.meter_fly_s) state.flights.splice(k, 1);
   }
   if (m.fullAt === null && m.litAt.filter(v => v !== undefined).length >= n) m.fullAt = state.t;
   if (m.drainAt !== null && state.t - m.drainAt > tune.meter_fade_s) { m.drainAt = null; m.drainFrom = []; m.glowAtDrain = 0; }
@@ -856,16 +858,25 @@ function drawMeter() {
   }
   ctx.restore();
 }
-function drawFlights() { // a small Starlight light on a gentle arc from the creature to its cell; no trail
+function drawFlights() { // Parade R12a / F4: a 16-unit Starlight four-point star with a r8 glow at 40%, never gold; no trail
   const g = meterGeom();
   for (const f of state.flights) {
-    const u = smooth(f.t / tune.flight_s), x1 = g.x0 + 27 * f.i, y1 = g.cy;
-    const x = f.x0 + (x1 - f.x0) * u, y = f.y0 + (y1 - f.y0) * u - Math.sin(Math.PI * u) * 60;
-    const gr = ctx.createRadialGradient(x, y, 0, x, y, 16);       // Starlight to clear: no gold (gold is for letters)
-    gr.addColorStop(0, 'rgba(251,238,200,0.45)'); gr.addColorStop(1, 'rgba(251,238,200,0)');
-    ctx.fillStyle = gr; ctx.fillRect(x - 16, y - 16, 32, 32);
-    ctx.save(); ctx.fillStyle = '#fbeec8'; ctx.beginPath(); ctx.arc(x, y, 5, 0, TAU); ctx.fill(); ctx.restore();
+    const tau = clamp01(f.t / tune.meter_fly_s), u = (1 - Math.cos(Math.PI * tau)) / 2;      // sine ease-in-out
+    const x2 = g.x0 + 27 * f.i, y2 = g.cy;                                                   // P2: the cell's centre
+    const x = f.x0 + u * u * (x2 - f.x0), y = y2 + (1 - u) * (1 - u) * (f.y0 - y2);           // B(u), P1 = (P0.x, P2.y)
+    const a = clamp01((tune.meter_fly_s - f.t) / tune.meter_land_s);                          // 1, fading over the last meter_land_s
+    ctx.save(); ctx.globalAlpha = a;
+    const gr = ctx.createRadialGradient(x, y, 0, x, y, 8);
+    gr.addColorStop(0, 'rgba(251,238,200,0.4)'); gr.addColorStop(1, 'rgba(251,238,200,0)');
+    ctx.fillStyle = gr; ctx.fillRect(x - 8, y - 8, 16, 16);
+    ctx.fillStyle = '#fbeec8'; star4(x, y, 16 / 4.4);                                         // star4's tips are 2.2 s from centre
+    ctx.restore();
   }
+}
+// R12a: the gate, the panel or the background removes a light in flight and lights its cell at once
+function settleFlights() {
+  for (const f of state.flights) if (state.meter.litAt[f.i] === undefined) state.meter.litAt[f.i] = state.t - tune.meter_step_s;
+  state.flights.length = 0;
 }
 function roundRect(x, y, w, h, r) {
   ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
@@ -1048,7 +1059,8 @@ function buildPanel() {
   document.getElementById('clear').onclick = () => { closePanel(); reset(); };
   document.getElementById('close').onclick = closePanel;
 }
-function openPanel() { panelOpen = true; panel.style.display = 'flex'; down.clear(); hit.clear(); taps.length = 0; }
+function openPanel() { if (state) settleFlights(); panelOpen = true; panel.style.display = 'flex'; down.clear(); hit.clear(); taps.length = 0; }
+document.addEventListener('visibilitychange', () => { if (document.hidden && state) settleFlights(); });
 function closePanel() { panelOpen = false; panel.style.display = 'none'; }
 buildPanel();
 

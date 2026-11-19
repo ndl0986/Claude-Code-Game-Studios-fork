@@ -45,7 +45,9 @@ window.CONFIG = {
   meter_pulse_hz: { value: 0.5, min: 0, max: 1, step: 0.05 },       // the full glow's breathe (<= 1 Hz, ADR-0013 F1)
   meter_glow: { value: 0.4, min: 0, max: 0.6, step: 0.05 },         // the full glow's middle alpha (it swings +-0.05)
   meter_fade_s: { value: 0.6, min: 0.2, max: 1.5, step: 0.05 },     // s: the drain and the glow's fade when the parade starts
-  flight_s: { value: 0.6, min: 0.2, max: 1.5, step: 0.05 },         // s: the light flying from a new creature to its cell (K-46 MT-Q3, provisional)
+  meter_fly_s: { value: 0.9, min: 0.6, max: 1.1, step: 0.05 },     // s: the meter light's flight from the new creature's cast-box top to its cell (Parade R12a, F4; safe range 0.6-1.1)
+  meter_land_s: { value: 0.15, min: 0.05, max: 0.3, step: 0.05 },   // s: the light fades out over its last meter_land_s while its cell starts to fill (R12a: litAt = launch + fly - land)
+  // constraint (R12a): meter_fly_s - meter_land_s + meter_step_s <= parade_delay_s, so the 6th cell is full before the parade (0.75 + 0.4 <= 1.5)
   reduce_motion: { value: 0, min: 0, max: 1, step: 1 },             // 1 = Reduce Motion (also on when the browser prefers reduced motion): the full glow is steady
   parade_s: { value: 11, min: 4, max: 25, step: 0.5 },           // s: the parade's walk across
   gate_hold_s: { value: 1.5, min: 0.5, max: 4, step: 0.25 },     // s: hold the moon to open the grown-up panel
