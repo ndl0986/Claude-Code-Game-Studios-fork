@@ -375,7 +375,7 @@ final class AudioSpike: @unchecked Sendable {
                    what, toneHz, cells, db(worst) <= -60 ? "PASS" : "FAIL", ms(worstBin) - ms(first)))
     }
 
-    enum ToneTest: String { case cut, mute, freeze }
+    enum ToneTest: String { case none = "no event", cut, mute, freeze }   // none: the control (start and natural end only; game-dev-android, TASK-128)
     /// Plays the 100 Hz tone on a bus, then at 0.5 s cuts / mutes / freezes (resume 0.3 s later), with the detector
     /// armed over the whole event; logs the result. P-7 (iPad) and M-14 (Mac) run it per bus; the ear checks the
     /// program sounds with the normal Play / Cut buttons.
@@ -390,6 +390,7 @@ final class AudioSpike: @unchecked Sendable {
             case .cut: self.mark("cut"); self.cut(bus)
             case .mute: self.mark("mute"); self.setMuted(true)
             case .freeze: self.mark("freeze"); self.freeze(); q.asyncAfter(deadline: .now() + 0.3) { self.mark("resume"); self.resume() }
+            case .none: break
             }
         }
         q.asyncAfter(deadline: .now() + 1.0) {

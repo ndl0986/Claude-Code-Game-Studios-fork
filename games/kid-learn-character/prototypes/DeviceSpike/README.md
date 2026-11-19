@@ -73,7 +73,7 @@ pad) can show fast changes. Run every row with the child out of view of the scre
   residual of the test tone over the whole sound (5 ms bins, from before the press to after its natural end), plus
   where the worst bin was. The older line (`max|d2x|`, 0.45–1.0 s only) is kept for comparison. **"Tone 1 kHz"** switches
   the test tone from 100 Hz (near-silent on the iPad speaker) to 1 kHz, so the ear and the detector judge the same
-  sound. "Tone + arm 5 s" marks a route change (`route`) in the same timeline. `tools/offline-button-check.swift`
+  sound. "Tone, no event" is the control (the tone's start and natural end only). "Tone + arm 5 s" marks a route change (`route`) in the same timeline. `tools/offline-button-check.swift`
   replays every Audio button offline with these fixtures (`--resume-fade` for the D7 variant).
 - **Headless capture:** the log box follows its newest line, and `-option a|candidate|b` opens Render on that option,
   so `devicectl device capture screenshot` can read results and take the crispness still without a tap.

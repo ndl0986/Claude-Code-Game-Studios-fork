@@ -1,17 +1,19 @@
+every probed phase is checked for sensitivity first (a -50 dBFS click injected there must read above -60); a phase that cannot see it prints n/a (blind)
 TASK-128 offline button check (spike fixtures, bus volumes, 5 ms quanta, cut_settle_s 40 ms, rewind 20 ms), resume remainder faded in over 10 ms
-metric: tones = sine-predictor residual; other sounds = excess |d2| over the no-event render, per 5 ms bin; threshold -60 dBFS
+metric: tones = sine-predictor residual; other sounds = excess |d2| over the no-event render, per 5 ms bin (start and natural end: |d2| of the residual out − G·src against the aligned, gain-matched source buffer, since the no-event render shares them); threshold -60 dBFS
 phase windows: start = first 30 ms; each event = -10..+90 ms; end = the sound's last 20 ms to +60 ms; body = the rest
+Tone, no event start -86.3 | end -86.3 | body -138.5  → PASS
 Tone cut voice start -86.3 | cut -94.2 | body -138.5  → PASS
 Tone cut cast start -90.3 | cut -98.2 | body -138.5  → PASS
-Tone cut music start -94.2 | cut -102.2 | body -102.2  → PASS
-Tone mute start -86.3 | mute -64.6 | unmute -64.6 | end -86.3 | body -64.6  → PASS
-Tone freeze start -94.2 | freeze -102.2 | resume -96.2 | end -94.2 | body -102.2  → PASS
-Freeze continuity start -200.0 | freeze -200.0 | resume -76.2 | end -76.0 | body -68.5  → PASS
+Tone cut music start -94.2 | cut -102.2 | body -141.0  → PASS
+Tone mute start -86.3 | mute -64.6 | unmute -64.6 | end -86.3 | body -138.5  → PASS
+Tone freeze start -94.2 | freeze -102.2 | resume -96.2 | end -94.2 | body -141.0  → PASS
+Freeze continuity start -200.0 | freeze n/a (blind) | resume n/a (blind) | end -200.0 | body -200.0  → PASS
 1 kHz cut voice start -66.3 | cut -74.3 | body -138.5  → PASS
 1 kHz freeze music start -74.3 | freeze -82.2 | resume -76.3 | end -74.3 | body -144.5  → PASS
 Play voice (to end) start -200.0 | end -200.0 | body -200.0  → PASS
 Play voice + Cut start -200.0 | cut -200.0 | body -88.4  → PASS
-Play cast + Cut start -200.0 | cut -200.0 | body -200.0  → PASS
+Play cast + Cut start -200.0 | cut n/a (blind) | body -200.0  → PASS
 Play music (to end) start -200.0 | end -200.0 | body -200.0  → PASS
 Play music + Cut start -200.0 | cut -200.0 | body -200.0  → PASS
 Play ui (chime) start -200.0 | end -200.0 | body -200.0  → PASS

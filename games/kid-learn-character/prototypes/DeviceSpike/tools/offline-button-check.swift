@@ -19,6 +19,8 @@ let quantum: AVAudioFrameCount = 240                    // 5 ms
 let settle = 0.04                                       // cut_settle_s
 let rewindS = max(0.020, 5.33 / 1000 + 0.005)           // D7 rewind with the iPad's logged IO period (5.33 ms)
 let resumeFade = CommandLine.arguments.contains("--resume-fade")
+// --self-check: prints the built-in probe's values instead of the measurement (see `injected` below)
+let selfCheck = CommandLine.arguments.contains("--self-check")
 
 // MARK: the spike's fixtures (AudioSpike.primeBuffers), at 48 kHz
 func make(_ dur: Double, _ f: (Double) -> Double) -> [Float] {
@@ -145,6 +147,7 @@ func metric(_ b: Button, _ out: [Float], _ ref: [Float], shift: (Int) -> Int) ->
 }
 
 let buttons: [Button] = [
+    Button(name: "Tone, no event", sound: "tone100", bus: "voice", event: .none, eventAt: 0, seconds: 2.3),
     Button(name: "Tone cut voice", sound: "tone100", bus: "voice", event: .cut, eventAt: 0.5, seconds: 2.3),
     Button(name: "Tone cut cast", sound: "tone100", bus: "cast", event: .cut, eventAt: 0.5, seconds: 2.3),
     Button(name: "Tone cut music", sound: "tone100", bus: "music", event: .cut, eventAt: 0.5, seconds: 2.3),
@@ -161,8 +164,9 @@ let buttons: [Button] = [
     Button(name: "Play ui (chime)", sound: "chime", bus: "ui", event: .none, eventAt: 0, seconds: 0.7),
 ]
 
+print(selfCheck ? "SELF-CHECK RUN: the probe values (a -50 dBFS click injected at +10 ms, 10 ms after each event, 10 ms before a natural end)" : "every probed phase is checked for sensitivity first (a -50 dBFS click injected there must read above -60); a phase that cannot see it prints n/a (blind)")
 print("TASK-128 offline button check (spike fixtures, bus volumes, 5 ms quanta, cut_settle_s 40 ms, rewind \(Int(rewindS * 1000)) ms)\(resumeFade ? ", resume remainder faded in over 10 ms" : "")")
-print("metric: tones = sine-predictor residual; other sounds = excess |d2| over the no-event render, per 5 ms bin; threshold -60 dBFS")
+print("metric: tones = sine-predictor residual; other sounds = excess |d2| over the no-event render, per 5 ms bin (start and natural end: |d2| of the residual out − G·src against the aligned, gain-matched source buffer, since the no-event render shares them); threshold -60 dBFS")
 print("phase windows: start = first 30 ms; each event = -10..+90 ms; end = the sound's last 20 ms to +60 ms; body = the rest")
 var anyFail = false
 for b in buttons {
@@ -172,38 +176,109 @@ for b in buttons {
     let start = marks.first { $0.0 == "start" }!.1, refStart = refMarks.first { $0.0 == "start" }!.1
     let lat = (out[start...].firstIndex { abs($0) > 1e-6 } ?? start) - start
     let refLat = (ref[refStart...].firstIndex { abs($0) > 1e-6 } ?? refStart) - refStart
-    let s0 = (start + lat) - (refStart + refLat)
-    let res = marks.first { $0.0 == "resume" }?.1, from = marks.first { $0.0 == "from" }?.1
-    // after a resume the output plays src[from...] from the resume mark: out[i] ↔ ref[i − (res + lat) + from + refStart + refLat]
-    let m = metric(b, out, ref) { i in
-        if let res, let from, i >= res + lat { return (res + lat) - from - (refStart + refLat) }
-        return s0
-    }
-    var phase = [String: Float]()
-    func put(_ k: String, _ a: Int, _ z: Int) {
-        let lo = max(0, a + lat), hi = min(m.count, z + lat); guard lo < hi else { return }
-        phase[k] = max(phase[k] ?? 0, m[lo..<hi].max() ?? 0)
-    }
-    let ten = Int(0.01 * sr), w = Int(0.09 * sr)
-    put("start", start, start + Int(0.03 * sr))
-    var covered = [(start, start + Int(0.03 * sr))]
-    for (k, at) in marks where k != "start" && k != "from" { put(k, at - ten, at + w); covered.append((at - ten, at + w)) }
-    // the natural end of the (last scheduled part of the) sound, when no cut ended it first
-    if case .cut = b.event {} else {
-        let len = fixtures[b.sound]!.count
-        var endAt = start + len
-        if let res = marks.first(where: { $0.0 == "resume" }), let from = marks.first(where: { $0.0 == "from" }) {
-            endAt = res.1 + len - from.1
+    // Built-in sensitivity probe: the same metrics on a copy with a −50 dBFS one-sample click 10 ms into the sound,
+    // 10 ms after each event and 10 ms before a natural end. A phase that does not read above −60 on the probe is
+    // blind for this sound and is printed "n/a (blind)" (Freeze continuity's chirp and the noisy cast at their events).
+    func injected(_ x: [Float]) -> [Float] {
+        var y = x
+        func add(_ i: Int) { if i >= 0, i < y.count { y[i] += 0.00316 } }
+        add(start + lat + Int(0.01 * sr))
+        if case .cut = b.event {} else {                 // the natural end, as phasesOf finds it
+            let len = fixtures[b.sound]!.count
+            var endAt = start + len
+            if let r = marks.first(where: { $0.0 == "resume" }), let f = marks.first(where: { $0.0 == "from" }) { endAt = r.1 + len - f.1 }
+            add(endAt + lat - Int(0.01 * sr))
         }
-        put("end", endAt - Int(0.02 * sr), endAt + Int(0.06 * sr)); covered.append((endAt - Int(0.02 * sr), endAt + Int(0.06 * sr)))
+        for (k, at) in marks where ["cut", "mute", "freeze", "resume"].contains(k) { add(at + lat + Int(0.01 * sr)) }
+        return y
     }
-    var body: Float = 0
-    for i in 0..<m.count where !covered.contains(where: { i - lat >= $0.0 && i - lat < $0.1 }) { body = max(body, m[i]) }
-    phase["body"] = body
+    func phasesOf(_ out: [Float]) -> [String: Float] {
+        let s0 = (start + lat) - (refStart + refLat)
+        let res = marks.first { $0.0 == "resume" }?.1, from = marks.first { $0.0 == "from" }?.1
+        // after a resume the output plays src[from...] from the resume mark: out[i] ↔ ref[i − (res + lat) + from + refStart + refLat]
+        // Start and natural end of a non-tone sound: the no-event reference shares them, so a click there would cancel
+        // (game-dev-android, TASK-128 review). Those two phases are measured against the source buffer itself instead:
+        // srcRef[i] = G·src[i − (start + lat)] (and src[from + …] after a resume), G the least-squares output gain.
+        let isTone = b.sound == "tone100" || b.sound == "tone1k"
+        var mSrc: [Float] = []
+        var dStart = 0, dRes = 0
+        if !isTone {
+            let src = fixtures[b.sound]!
+            // alignment: the first non-zero output sample is not exactly src[0] (the fade starts at 0), and a resumed part
+            // starts after its own render delay, so each part's offset is searched (least squared error) around its guess
+            func srcIndex(_ i: Int) -> Int? {
+                if let res, let from, i >= res + lat { let j = i - (res + lat) + from + dRes; return j >= 0 && j < src.count ? j : nil }
+                let j = i - (start + lat) + dStart; return j >= 0 && j < src.count ? j : nil
+            }
+            func err(_ range: Range<Int>) -> Double {
+                var e = 0.0, n = 0.0, d = 0.0
+                for i in range where i < out.count { if let j = srcIndex(i) { n += Double(out[i]) * Double(src[j]); d += Double(src[j]) * Double(src[j]) } }
+                let g = d > 0 ? n / d : 1
+                for i in range where i < out.count { if let j = srcIndex(i) { let r = Double(out[i]) - g * Double(src[j]); e += r * r } }
+                return e
+            }
+            let a0 = start + lat, w50 = Int(0.05 * sr)
+            dStart = (-8...8).min { dStart = $0; let e0 = err(a0..<(a0 + w50)); dStart = $1; return e0 < err(a0..<(a0 + w50)) }!
+            if let res {
+                let r0 = res + lat
+                // searched after the gate's smoothed rise (~27 ms), where the output is G·src again; ±30 ms, since the
+                // restarted player's first render can land a few quanta after the resume call (a ±10 ms search missed it
+                // in some runs: Freeze continuity's end read the chirp itself)
+                let g0 = r0 + Int(0.04 * sr)
+                dRes = (-1440...1440).min { dRes = $0; let e0 = err(g0..<(g0 + w50)); dRes = $1; return e0 < err(g0..<(g0 + w50)) }!
+            }
+            // G from the first 50 ms only: a cut or a freeze zeroes later output while the source goes on (that would
+            // underestimate G and read the start's own content as excess)
+            var num = 0.0, den = 0.0
+            for i in a0..<min(out.count, a0 + w50) { if let j = srcIndex(i) { num += Double(out[i]) * Double(src[j]); den += Double(src[j]) * Double(src[j]) } }
+            let G = Float(den > 0 ? num / den : 1)
+            let srcRef = (0..<out.count).map { i in srcIndex(i).map { G * src[$0] } ?? 0 }
+            // the second difference of the residual out − G·src, per sample: ~0 for a gain-only path, a click's size at a click
+            // (a per-bin max-vs-max comparison hid a click under noisy or bright content: the --self-check run)
+            mSrc = [Float](repeating: 0, count: out.count)
+            for i in 2..<out.count where srcIndex(i) != nil && srcIndex(i - 2) != nil {
+                let e0 = out[i] - srcRef[i], e1 = out[i - 1] - srcRef[i - 1], e2 = out[i - 2] - srcRef[i - 2]
+                mSrc[i] = abs(e0 - 2 * e1 + e2)
+            }
+        }
+        // the event metric against the no-event render; after a resume, aligned with the searched offset too
+        let m = metric(b, out, ref) { i in
+            if let res, let from, i >= res + lat { return (res + lat) - from - dRes - (refStart + refLat) }
+            return s0
+        }
+        if isTone { mSrc = m }
+        var phase = [String: Float]()
+        func put(_ k: String, _ a: Int, _ z: Int) {
+            let mm = (!isTone && (k == "start" || k == "end")) ? mSrc : m
+            let lo = max(0, a + lat), hi = min(mm.count, z + lat); guard lo < hi else { return }
+            phase[k] = max(phase[k] ?? 0, mm[lo..<hi].max() ?? 0)
+        }
+        let ten = Int(0.01 * sr), w = Int(0.09 * sr)
+        put("start", start, start + Int(0.03 * sr))
+        var covered = [(start, start + Int(0.03 * sr))]
+        for (k, at) in marks where k != "start" && k != "from" { put(k, at - ten, at + w); covered.append((at - ten, at + w)) }
+        // the natural end of the (last scheduled part of the) sound, when no cut ended it first
+        if case .cut = b.event {} else {
+            let len = fixtures[b.sound]!.count
+            var endAt = start + len
+            if let res = marks.first(where: { $0.0 == "resume" }), let from = marks.first(where: { $0.0 == "from" }) {
+                endAt = res.1 + len - from.1
+            }
+            put("end", endAt - Int(0.02 * sr), endAt + Int(0.06 * sr)); covered.append((endAt - Int(0.02 * sr), endAt + Int(0.06 * sr)))
+        }
+        var body: Float = 0
+        for i in 0..<m.count where !covered.contains(where: { i - lat >= $0.0 && i - lat < $0.1 }) { body = max(body, m[i]) }
+        phase["body"] = body
+        return phase
+    }
+    let probe = phasesOf(injected(out))
+    let phase = selfCheck ? probe : phasesOf(out)
+    let probed: Set<String> = ["start", "cut", "mute", "freeze", "resume", "end"]
+    let blind = Set(probe.filter { probed.contains($0.key) && dbfs($0.value) <= -60 }.map(\.key))
     let order = ["start", "cut", "mute", "unmute", "freeze", "resume", "end", "body"]
-    let worst = phase.values.max() ?? 0
+    let worst = phase.filter { selfCheck || !blind.contains($0.key) }.values.max() ?? 0
     if dbfs(worst) > -60 { anyFail = true }
-    let cells = order.compactMap { k in phase[k].map { String(format: "%@ %.1f", k, dbfs($0)) } }.joined(separator: " | ")
+    let cells = order.compactMap { k in phase[k].map { !selfCheck && blind.contains(k) ? "\(k) n/a (blind)" : String(format: "%@ %.1f", k, dbfs($0)) } }.joined(separator: " | ")
     print(String(format: "%-22@ %@  → %@", b.name as NSString, cells, dbfs(worst) <= -60 ? "PASS" : "FAIL"))
 }
 print(anyFail ? "RESULT: at least one phase above -60 dBFS (see FAIL rows)" : "RESULT: every phase of every button at or below -60 dBFS")

@@ -1,0 +1,20 @@
+SELF-CHECK RUN: the probe values (a -50 dBFS click injected at +10 ms, 10 ms after each event, 10 ms before a natural end)
+TASK-128 offline button check (spike fixtures, bus volumes, 5 ms quanta, cut_settle_s 40 ms, rewind 20 ms)
+metric: tones = sine-predictor residual; other sounds = excess |d2| over the no-event render, per 5 ms bin (start and natural end: |d2| of the residual out − G·src against the aligned, gain-matched source buffer, since the no-event render shares them); threshold -60 dBFS
+phase windows: start = first 30 ms; each event = -10..+90 ms; end = the sound's last 20 ms to +60 ms; body = the rest
+Tone, no event start -44.0 | end -43.9 | body -138.5  → FAIL
+Tone cut voice start -44.0 | cut -44.0 | body -94.2  → FAIL
+Tone cut cast start -44.0 | cut -44.0 | body -138.5  → FAIL
+Tone cut music start -44.0 | cut -44.0 | body -141.0  → FAIL
+Tone mute start -44.0 | mute -44.0 | unmute -64.6 | end -43.9 | body -64.6  → FAIL
+Tone freeze start -44.0 | freeze -44.0 | resume -44.0 | end -44.0 | body -141.0  → FAIL
+Freeze continuity start -44.0 | freeze -200.0 | resume -200.0 | end -44.0 | body -200.0  → FAIL
+1 kHz cut voice start -44.1 | cut -43.8 | body -138.5  → FAIL
+1 kHz freeze music start -44.1 | freeze -44.1 | resume -44.2 | end -43.8 | body -82.2  → FAIL
+Play voice (to end) start -44.0 | end -44.0 | body -200.0  → FAIL
+Play voice + Cut start -44.0 | cut -45.8 | body -200.0  → FAIL
+Play cast + Cut start -44.0 | cut -200.0 | body -200.0  → FAIL
+Play music (to end) start -44.0 | end -44.0 | body -200.0  → FAIL
+Play music + Cut start -44.0 | cut -47.0 | body -200.0  → FAIL
+Play ui (chime) start -44.0 | end -44.0 | body -200.0  → FAIL
+RESULT: at least one phase above -60 dBFS (see FAIL rows)

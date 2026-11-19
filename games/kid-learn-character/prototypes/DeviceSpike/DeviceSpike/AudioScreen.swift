@@ -46,6 +46,7 @@ struct AudioScreen: View {
                 ForEach([AudioSpike.Bus.voice, .cast, .music], id: \.self) { b in
                     Button("Tone cut \(b.rawValue)") { audio?.toneTest(.cut, on: b) }
                 }
+                Button("Tone, no event") { audio?.toneTest(.none, on: .voice) }   // control: the tone's start and end only
                 Button("Tone mute") { audio?.toneTest(.mute, on: .voice) }
                 Button("Tone freeze") { audio?.toneTest(.freeze, on: .music) }
                 Button("Freeze continuity") { audio?.continuityTest(on: .voice) }
