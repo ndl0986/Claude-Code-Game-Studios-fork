@@ -51,7 +51,8 @@ public enum SVGBake {
     ///
     /// `parts` come in document order (a parent before its children); `layers` in the fixed order body, outline,
     /// detail. `parent` is the enclosing part's id or null. `pivot` is the `data-pivot` in artboard units after the
-    /// transforms. All coordinates are artboard units (the `viewBox`, origin moved to 0 0) with every transform baked in.
+    /// transforms. A layer's `opacity` is its own group's opacity exactly (opacity is allowed on `<part>_<layer>` groups
+    /// only; a part group with `opacity` is rejected), so the renderer applies it once per layer. All coordinates are artboard units (the `viewBox`, origin moved to 0 0) with every transform baked in.
     public static func bakeCast(svg: String, file: String = "cast.svg") throws -> [UInt8] {
         var b = Baker(file: file)
         let root = try b.parse(svg)
@@ -390,7 +391,12 @@ private struct Baker {
         if let r = segs.first(where: { Baker.layerNames.contains($0) }) {
             throw err(g, "id", "'\(r)' is reserved for layers and may not be a segment of the part name '\(id)'")
         }
-        let own = try transform(g), m = ctm.concat(own), op = try opacity(g, parentOpacity)
+        // Group opacity composites a group once in SVG, so a part's opacity can't be split into its layers without a
+        // double blend (game-dev-ios review; TASK-127 H-2): opacity lives on <part>_<layer> groups only.
+        if g.attrs["opacity"] != nil {
+            throw err(g, "opacity", "not allowed on part group '\(id)': put it on a '\(id)_body', '\(id)_outline' or '\(id)_detail' group")
+        }
+        let own = try transform(g), m = ctm.concat(own), op = parentOpacity
         guard let pv = g.attrs["data-pivot"] else { throw err(g, "data-pivot", "missing: every part carries data-pivot=\"x y\" in artboard units") }
         guard let n = SVGNumber.list(pv), n.count == 2 else { throw err(g, "data-pivot", "'\(pv)' must be two plain numbers: x y") }
         let acc = PartAcc(id: id, parent: parent?.id, pivot: m.apply(P(x: n[0], y: n[1])))

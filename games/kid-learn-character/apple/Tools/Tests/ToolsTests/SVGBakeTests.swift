@@ -163,6 +163,10 @@ final class SVGBakeTests: XCTestCase {
         assertRejected(cast("<path d=\"M0 0L1 1\" stroke-dasharray=\"1 2\"/>"), element: "path", attribute: "stroke-dasharray", line: 4)
         assertRejected(cast(okPath, root: " xmlns:xlink=\"http://www.w3.org/1999/xlink\""), element: "svg", attribute: "xmlns:xlink", line: 1)
     }
+    func test_opacity_on_a_part_group_is_rejected() {
+        assertRejected(cast("<path d=\"M0 0L1 1\"/>", partAttrs: "data-pivot=\"10 20\" opacity=\"0.5\""), element: "g", attribute: "opacity", line: 2)
+    }
+
     func test_opacity_on_a_shape_is_rejected() {
         assertRejected(cast("<path d=\"M0 0L1 1\" opacity=\"0.5\"/>"), element: "path", attribute: "opacity", line: 4)
     }
@@ -333,7 +337,7 @@ final class SVGBakeTests: XCTestCase {
         let svg = """
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 440">
           <g id="root" data-pivot="320 410">
-            <g id="left_arm" data-pivot="10 20" transform="translate(5 5)" opacity="0.5">
+            <g id="left_arm" data-pivot="10 20" transform="translate(5 5)">
               <g id="left_arm_detail"><path d="M0 0L1 1"/></g>
               <g id="left_arm_body" opacity="0.5"><path d="M0 0L2 2" fill="#abc"/></g>
               <g id="left_arm_outline"><path d="M0 0L3 3" fill="none" stroke="rgb(1, 2, 3)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></g>
@@ -352,7 +356,8 @@ final class SVGBakeTests: XCTestCase {
         XCTAssertEqual(parts[1]["pivot"] as? [Double], [15, 25], "the pivot goes through the part's own transform")
         let layers = try XCTUnwrap(parts[1]["layers"] as? [[String: Any]])
         XCTAssertEqual(layers.map { $0["layer"] as? String }, ["body", "outline", "detail"], "fixed order, not document order")
-        XCTAssertEqual(layers[0]["opacity"] as? Double, 0.25, "group opacities multiply")
+        XCTAssertEqual(layers[0]["opacity"] as? Double, 0.5, "a layer's opacity is its own group's, applied once")
+        XCTAssertEqual(layers[1]["opacity"] as? Double, 1, "no opacity attribute means 1")
         let body = try XCTUnwrap((layers[0]["shapes"] as? [[String: Any]])?.first)
         XCTAssertEqual(body["d"] as? String, "M5 5L7 7")
         XCTAssertEqual(body["fill"] as? String, "#aabbcc")
