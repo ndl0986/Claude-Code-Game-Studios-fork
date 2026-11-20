@@ -201,7 +201,7 @@ def duckbill(k, trait):
     # the front leg comes down from under the chest (TASK-137 review: a leg in front of the body read as a post)
     rootb = [(F, [rrect(250, 330, 42, 80, 20), rrect(334, 320, 26, 90, 12)]),
              (B, [ell(300, 290, 95, 60, -8), ell(382, 240, 30, 46, 35), ell(272, 322, 40, 46), rrect(270, 330, 46, 80, 22), rrect(354, 300, 28, 110, 13)]),
-             (BL, [ell(312, 310, 56, 32, -8)]), (BONE, [ell(312, 404, 13, 6), ell(378, 404, 10, 5)])]
+             (BL, [ell(312, 310, 56, 32, -8)]), (BONE, [ell(312, 404, 13, 6), ell(378, 404, 10, 6)])]
     extra_det = []
     if trait == 'thumb-spike':   # I: a cream thumb spike pointing up from the front hand
         rootb[3] = (BONE, rootb[3][1] + [rpoly([(372, 336), (410, 300), (384, 346)], 4)])
@@ -222,9 +222,9 @@ def horned(k, trait):
     if trait in ('tri-horn', 'zuni-horns'):
         horns += [ell(494, 268, 34, 6, -32), ell(486, 278, 30, 6, -24)]   # two long brow horns
     else:
-        horns += [ell(486, 286, 14, 5, -35)]                               # short brow horns
+        horns += [ell(486, 286, 14, 6, -35)]                               # short brow horns
     if trait == 'tri-horn':
-        horns.append(ell(512, 314, 11, 5, -60))                            # short nose horn
+        horns.append(ell(512, 314, 11, 6, -60))                            # short nose horn
     hb, hd = face(462, 310, 10, (482, 330, 8, 5), (470, 340, 482, 345, 494, 337))
     head = Part('head', (430, 300), body=[(acc['frill'], fgroup), (B, [ell(458, 322, 52, 38, 8)]), (acc['horns'], horns)] + hb, detail=hd)
     tail = Part('tail', (190, 320), body=[(B, [ell(160, 330, 82, 22, 10)])])
@@ -243,7 +243,7 @@ def plated(k, trait):
         near = [rpoly([(x - 20, 276), (x, 220 - (26 if 1 <= i <= 3 else 0)), (x + 20, 276)], 9) for i, x in enumerate([190, 238, 286, 334, 382])]
         groups = [(acc['plates_far'], far)]
         nearg = (acc['plates'], near)
-        tailx = [(acc['plates'], [ell(78, 306, 18, 5, -40), ell(94, 300, 18, 5, -60), ell(70, 334, 18, 5, 30), ell(88, 340, 18, 5, 50)])]
+        tailx = [(acc['plates'], [ell(78, 306, 18, 6, -40), ell(94, 300, 18, 6, -60), ell(70, 334, 18, 6, 30), ell(88, 340, 18, 6, 50)])]
     elif trait == 'spikes':    # K: short shoulder plates turning into tall rounded spikes over hips and tail
         nearg = (acc['spikes'], [rpoly([(x - 14, 274), (x, 248), (x + 14, 274)], 5) for x in (350, 380)] +
                  [ell(x, 240, 7, 34, r) for x, r in [(250, -12), (282, -4), (316, 4)]])

@@ -23,6 +23,9 @@ is replaced by the shared drawing rules (S-1 to S-9) and each item's outline tra
   **(320, 410)**, side view, **facing right**, standing on y 410. The figure fills **≥ 60% of the artboard in height
   (≥ 264 units) or width (≥ 384 units)**. The one exception: the in-flight flyer (P) hovers, with its body around
   y 200–330. Cast Rendering draws the ground shadow at the anchor; the SVG has no shadow.
+  **Proposed default (2026-11-20, TASK-137; Luan can overturn):** the **Numbers 1–3** are exempt from the 60% fill.
+  The baby master keeps **one fixed size across every number**, so the count reads (art bible §5). Scaling 1–3 up to
+  fill would make "1" a big baby and "3" smaller ones. 4–9 meet the rule by width (4 babies span 408 units).
 - **S-2 Structure** (art bible §8; ADR-0003 D4; K-37).
   - **Parts:** every figure has a `root` part (`data-pivot="320 410"`); other parts nest in it. A part a family's idle
     moves carries its `data-pivot` (artboard units, at the joint). Child parts sit inside their parent's group (`head`
