@@ -114,3 +114,9 @@ Review mode: lean · Workflow: standard
 Change: K-52 (Luan): baked audio is uncompressed 16-bit LPCM in .caf. The sfx field example, the built voice path pattern and its examples, the asset-formats line, the naming list and the example item now read .caf instead of .m4a. No rule changes otherwise. Lands together with key-table-schema-v2 (TASK-146) and the KidCore validator change (game-dev-android).
 fixture: key-table-schema-v2 (TASK-146)
 Reviewed-Content-Hash: design/gdd/key-table-theme-data.md aba644515606fd8112a0ed552ce8019f0b9bba10
+
+## Update — 2026-11-20 — TASK-147 word-line limit 1.5 s, K-53 (no re-review)
+Review mode: lean · Workflow: standard
+Change: K-53: V15 word lines ≤ 1.5 s (was 1.25). V15's duration rule now reads the LPCM .caf sample count on the trimmed file (K-52: no AAC priming to remove). The missing-entry edge case uses T + 1.75. Review: game-dev-android.
+fixture: key-table-schema-v3 (TASK-147, game-qc-android; v2's V15-fail-word-line-over-1.25 pins 1.25)
+Reviewed-Content-Hash: design/gdd/key-table-theme-data.md e8876c6fc0c0f8bab302b45138f802a310a764ab

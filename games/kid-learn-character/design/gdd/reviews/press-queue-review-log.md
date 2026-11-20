@@ -54,3 +54,9 @@ Reviewed-Content-Hash: design/gdd/press-queue.md d8d2ac774eeff254e1e18f65d9ab9b7
 Review mode: lean · Workflow: standard
 Change: answers to press-queue-v1 PQ-Q1–Q4 (TASK-080) written as rules: R3 compares p.time converted to play-clock time (R8a); R5 comparisons inclusive and presses and ticks handled in delivery order, a press never jumping a queued key; R8 and R9 settle set formedAt to the settle time, with restingSince published under the panel. Review: game-qc-android, from the diff.
 Reviewed-Content-Hash: design/gdd/press-queue.md d29da5f89c7d76ed6cc0fdb1d4c6fca5b435a4b6
+
+## Update — 2026-11-20 — TASK-147 word-line limit 1.5 s, K-53 (no re-review)
+Review mode: lean · Workflow: standard
+Change: K-53 re-check of F1: the hold still never cuts a word at 1.5 s (build check 1: hold_s ≥ 2.70, shipped 3.0). F1 changes: the missing-entry bound is formedS + word_offset_s + word_len_max_s = formedS + 1.75 (was + 1.5); the table gains five baby dinosaurs (4.17) and the missing-entry row is 4.20; word_len ≤ 1.5; Edge Cases and AC-7 follow. Review: game-dev-android.
+fixture: press-queue-v2 (F1-no-voiceDurations-entry expects formedS + 1.5; its F1-…-1.25 word cases stay valid)
+Reviewed-Content-Hash: design/gdd/press-queue.md 12cc4f7ebc2cf8f1f4bd3926cb697a7b03d09916

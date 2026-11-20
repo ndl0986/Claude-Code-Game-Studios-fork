@@ -76,8 +76,9 @@ time, never a reward for doing something right, so it never asks the child to do
    t_start = armedAt + parade_delay_s          (play clock; parade_delay_s 1.5 s)
    ```
    **No rest is needed** (K-45): presses, new reveals and queued keys neither delay nor cancel it. By then the 6th
-   creature's fade-in has finished (`form_s` 0.5 s, 0.3 s reduced) and its word has ended (Audio & Voice F6 caps the
-   word's end at `formedS + 1.5`), so the tune follows the name (F2). The walkers' art is prefetched from Armed (R8.1).
+   creature's fade-in has finished (`form_s` 0.5 s, 0.3 s reduced) and its word has ended, or is in its last ≤ 0.25 s (Audio & Voice F6 caps the
+   word's end at `formedS + 1.75` since K-53), so the tune follows the name for words up to 1.25 s and overlaps a
+   longer word's last ≤ 0.25 s, ducked (F2). The walkers' art is prefetched from Armed (R8.1).
    *Why:* the old rule needed about 4 s without a press; Luan's child kept pressing, met more than 8 keys and never
    saw a parade (K-45). **K-45 removed the rest, not the beat** (Luan, K-46, MT-Q5): the 1.5 s after the 6th
    creature has formed stays, so the tune follows the 6th name.
@@ -359,8 +360,11 @@ t_start = armedAt + parade_delay_s
 | `t_start` | the parade's start (Waiting for art) | **r0 + 3.95 s** | **r0 + 2.7 s** |
 
 - **Finished forming:** the fade-in ends at `r0 + T + form_s` (2.95 s; 1.5 s reduced), before `t_start` in both sets.
-- **The tune never meets the word:** Audio & Voice F6 caps the 6th word's end at `r0 + T + 1.5` = `armedAt + 1.5`
-  = `t_start` (margin ≥ 0, inclusive; a typical word ends earlier).
+- **The tune and the 6th word:** Audio & Voice F6 caps the 6th word's end at `armedAt + word_offset_s +
+  word_len_max_s` = `armedAt + 1.75` (K-53: word lines up to 1.5 s). A 6th word of **1.25 s or less** ends by
+  `t_start`, so the tune follows the name. A longer one (a counted number phrase, up to 1.47 s, or quetzalcoatlus,
+  1.26 s) **overlaps the tune's first ≤ 0.25 s**, with the tune ducked under the voice (Audio F2). *(K-53 note,
+  2026-11-20: before K-53 the tune never met the word.)*
 - **Pressing does not delay it:** a child pressing a new key every 3 s (each reveal queued behind the last) still gets
   the parade at `armedAt + 1.5`. Before K-45 the start was `restingSince + (revealLen − formedS) + parade_delay_s`
   (r0 + 4.45 s, and only after about 4 s with no press).

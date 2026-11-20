@@ -153,3 +153,9 @@ Review mode: lean · Workflow: standard
 Change: A dated note in R8 after the trim note (leader-approved D5 detail): trim → gain to −16 LUFS → lookahead true-peak limiter (ceiling −1 dBTP, 4× oversampled) → clip guard → write .caf; each line must still meet A7 after limiting; the limiter values and the 6 dB warning are voice-script data; each line's maximum gain reduction is in the voice provenance, and over 6 dB is flagged. F4 and A1 unchanged. Requested by game-dev-android for story 004.
 fixture: none (audio-plan-v1 names no audio file and models no bake step)
 Reviewed-Content-Hash: design/gdd/audio-voice.md e5877d020c3c66f38493912aac9552e67f7c19a8
+
+## Update — 2026-11-20 — TASK-147 word-line limit 1.5 s, K-53 (no re-review)
+Review mode: lean · Workflow: standard
+Change: K-53: word_len_max_s 1.25 → 1.5 s. F6: the real constraint (T + word_offset + word_len_max ≤ hold + hold_ext_max: 4.20 ≤ 4.50) replaces the stricter stand-in; the missing-entry bound is T + 1.75; the table gains the trimmed quetzalcoatlus (1.26) and five baby dinosaurs (1.47); the cost is up to +1.2 s per queued reveal (about 3.6 s for 3); the knob (safe range 0.8–1.8), AC-6 and R8's respelled-line sentence follow. Review: game-dev-android.
+fixture: none (audio-plan-v1 has no word-length limit; its 1.25 values are event times)
+Reviewed-Content-Hash: design/gdd/audio-voice.md 03d9c11f6f94b7d261c9d0e3a35c0249ae0da55a
