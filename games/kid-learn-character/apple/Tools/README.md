@@ -54,7 +54,7 @@ for its missing layer groups.) The bake tool enforces this rule and names the el
 
 `kidtools bake-voice <content-dir> [--python <path>] [--helper <path>]` renders every voice line of each theme that
 has a `theme.json` (a `src/`-only theme is skipped) for every locale in `voiceLocales`, and writes
-`themes/<id>/voice/<locale>/vo_<locale>_<kind>_<id>.caf` (`VoiceBake.filePath`: `KeyTable.voicePath` with `.caf`, interim until KidCore switches after key-table-schema-v2) plus
+`themes/<id>/voice/<locale>/vo_<locale>_<kind>_<id>.caf` (`KeyTable.voicePath`) plus
 `voice/<locale>/provenance.json` (engine settings, versions the helper reported, espeak-ng as a build-time tool, encode
 settings, bake tool, line ids; byte-stable). Line text is the item's `word` (kind `word`) or `say` (other kinds);
 `respell["<kind>_<id>"]` in `src/voice-scripts/<locale>.json` replaces it for the TTS only (K-35).

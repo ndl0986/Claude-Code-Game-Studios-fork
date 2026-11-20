@@ -72,7 +72,7 @@ final class VoiceBakeTests: XCTestCase {
             XCTAssertGreaterThan(buf.floatChannelData![0].withMemoryRebound(to: Float.self, capacity: Int(buf.frameLength)) { p in (0..<Int(buf.frameLength)).map { abs(p[$0]) }.max()! }, 0.05, rel)
         }
         // Every path of KeyTable.voicePath for the theme is among them.
-        for it in theme.keys.values.flatMap({ $0 }) { for (k, id) in it.voice { XCTAssertTrue(written.contains(VoiceBake.filePath("en-us", k, id))) } }
+        for it in theme.keys.values.flatMap({ $0 }) { for (k, id) in it.voice { XCTAssertTrue(written.contains(KeyTable.voicePath("en-us", k, id))) } }
     }
 
     // AC-2

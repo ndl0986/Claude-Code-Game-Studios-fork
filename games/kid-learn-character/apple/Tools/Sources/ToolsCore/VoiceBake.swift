@@ -159,7 +159,7 @@ public final class KokoroProcessEngine: TTSEngine {
 /// The build-time voice bake (TR-keytable-004 pre-rendered TTS, mono; TR-audio-006 no run-time TTS; ADR-0003 D5/D6).
 ///
 /// Per theme and per locale in `voiceLocales`: every voice line of every item (Key Table `voice` kind → id) is
-/// rendered by the adapter and written to `voice/<locale>/vo_<locale>_<kind>_<id>.caf` (`VoiceBake.filePath`). The text
+/// rendered by the adapter and written to `voice/<locale>/vo_<locale>_<kind>_<id>.caf` (`KeyTable.voicePath`). The text
 /// of a line is the item's `word` for kind `word`, else its `say` (letter, number); `respell["<kind>_<id>"]` replaces it
 /// for the TTS only (K-35). One line id used by several items is rendered once; if its text differs between items the
 /// bake fails. Also writes `voice/<locale>/provenance.json` (byte-stable: sorted keys, no timestamps).
@@ -178,12 +178,6 @@ public enum VoiceBake {
     /// output rate, ADR-0010 D3).
     public static let sampleRate = 48_000.0, channels = 1, bitDepth = 16
 
-    /// The baked file of one line: `KeyTable.voicePath` with the `.caf` extension of K-52. Interim: KidCore's
-    /// `voicePath` still builds `.m4a` until key-table-schema-v2 (TASK-146) lands and it switches (TASK-144); then this
-    /// becomes `KeyTable.voicePath` itself.
-    public static func filePath(_ locale: String, _ kind: String, _ id: String) -> String {
-        (KeyTable.voicePath(locale, kind, id) as NSString).deletingPathExtension + ".caf"
-    }
 
     /// One voice line.
     public struct Line: Equatable, Sendable {
@@ -206,10 +200,10 @@ public enum VoiceBake {
                     let respell = script.respell[lineId]
                     let line = Line(kind: kind, id: id, text: respell ?? base, respelled: respell != nil)
                     if base.trimmingCharacters(in: .whitespaces).isEmpty {
-                        throw VoiceBakeError(file: filePath(script.locale, kind, id), reason: "empty script text (\(it.castId))")
+                        throw VoiceBakeError(file: KeyTable.voicePath(script.locale, kind, id), reason: "empty script text (\(it.castId))")
                     }
                     if let old = byId[lineId], old.text != line.text {
-                        throw VoiceBakeError(file: filePath(script.locale, kind, id),
+                        throw VoiceBakeError(file: KeyTable.voicePath(script.locale, kind, id),
                                              reason: "line id used with two texts: \"\(old.text)\" and \"\(line.text)\"")
                     }
                     byId[lineId] = line
@@ -298,7 +292,7 @@ public enum VoiceBake {
             let lines = try Self.lines(theme: theme, script: script)
             try fm.createDirectory(at: stage.appendingPathComponent("voice/\(loc)"), withIntermediateDirectories: true)
             for line in lines {
-                let rel = filePath(loc, line.kind, line.id)
+                let rel = KeyTable.voicePath(loc, line.kind, line.id)
                 do { try encode(try engine.render(text: line.text), to: stage.appendingPathComponent(rel)) }
                 catch let e as VoiceBakeError { throw e }
                 catch { throw VoiceBakeError(file: rel, reason: "\(error)") }
