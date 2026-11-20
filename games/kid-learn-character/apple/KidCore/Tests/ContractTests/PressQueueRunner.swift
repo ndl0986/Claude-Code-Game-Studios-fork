@@ -3,10 +3,10 @@ import Foundation
 import KidCore
 import XCTest
 
-/// press-queue-v2, KidCore layer (ADR-0004 D3; story press-queue/001). Covers the start / queue / formed-guard /
-/// ignore rules only. Not registered in `ContractHarness.runners`: the registry row stays `not-started` until
-/// press-queue/005 (ContractKit fails a registered runner on a not-started row), so `PressQueueContractTests`
-/// below runs the explicit `inScope` list itself and reports every other case id as NOT ASSESSED.
+/// press-queue-v2, KidCore layer (ADR-0004 D3; stories press-queue/001-005). Registered in `ContractHarness.runners`
+/// and in the registry (`runner: PressQueueRunner`, press-queue/005): every case runs. The fake Stage stands in for
+/// the Reveal Stage and Key Table, and the runner plays the Reveal Stage's part for freeze, panel and background
+/// (pausing the play clock and telling the queue, architecture §3).
 struct PressQueueRunner: ContractRunner {
     static let contract = "press-queue-v2"
     static let declaration = ContractDeclaration(
@@ -36,17 +36,28 @@ struct PressQueueRunner: ContractRunner {
         /// can't pass on default lengths.
         var missing: String?
         init(table: [String: JSONValue]) { self.table = table }
+        /// Reduce Motion as the stage reads it (Reveal Stage R9): `given.accessibility`, then `accessibilityChanged`.
+        var reduceMotion = false
         func startReveal(revealId: Int, key: String, source: PressSource, origin: PressOrigin?, r0: Double) -> RevealStart {
             calls.append(.object(["out": .string("startReveal"), "revealId": .int(Int64(revealId)), "key": .string(key),
                                   "source": .string(PressQueueRunner.sourceText(source)),
                                   "origin": origin.map { .array([.double($0.x), .double($0.y)]) } ?? .null,
                                   "r0": .double(r0)]))
-            guard let e = table[key], let f = e["formedS"]?.number, let l = e["revealLen"]?.number, let c = e["castId"]?.string else {
+            // With Reduce Motion the entry's `reduced` lengths are used (spec.md `given`); a missing `reduced` is a missing key.
+            let set = reduceMotion ? table[key]?["reduced"] : table[key]
+            guard let e = table[key], let f = set?["formedS"]?.number, let l = set?["revealLen"]?.number, let c = e["castId"]?.string else {
                 if missing == nil { missing = key }
                 return RevealStart(formedS: 0, revealLen: 0, hasWord: false, wordLen: nil, castId: "")
             }
             return RevealStart(formedS: f, revealLen: l, hasWord: e["hasWord"] == .bool(true), wordLen: e["wordLen"]?.number, castId: c)
         }
+    }
+
+    /// Every debug line is the output `{out: log}`, in the stage's call order (spec.md Outputs).
+    final class Log: DebugLog {
+        let stage: Stage
+        init(stage: Stage) { self.stage = stage }
+        func log(_ line: String) { stage.calls.append(.object(["out": .string("log")])) }
     }
 
     final class Clock: UptimeClock {
@@ -71,6 +82,8 @@ struct PressQueueRunner: ContractRunner {
 
     let stage: Stage
     let clock = Clock()
+    /// The play clock over the case's uptime (R8a): paused by freeze and background.
+    let play: PlayClock
     var queue: PressQueue
 
     init(given: [String: JSONValue], draws: DrawQueues) throws {
@@ -85,7 +98,9 @@ struct PressQueueRunner: ContractRunner {
         var table: [String: JSONValue] = [:]
         if case .object(let r)? = given["reveal"] { table = r }
         stage = Stage(table: table)
-        queue = PressQueue(knobs: k, stage: stage, clock: clock)
+        stage.reduceMotion = given["accessibility"]?["reduceMotion"] == .bool(true)
+        play = PlayClock(uptime: clock)
+        queue = PressQueue(knobs: k, stage: stage, clock: play, log: Log(stage: stage))
     }
 
     mutating func step(uptime: Double, event e: [String: JSONValue]) throws -> Outputs {
@@ -106,14 +121,40 @@ struct PressQueueRunner: ContractRunner {
             case .ignored: return [.object(["out": .string("ignored")])]
             }
         case "tick":
-            queue.tick(now: uptime)
+            queue.tick(now: play.play(uptime))
             try checkStage()
             return stage.calls
+        case "accessibilityChanged":
+            stage.reduceMotion = e["reduceMotion"] == .bool(true)
+            return []
         case "formed":
             queue.formed(revealId: Int(e["revealId"]?.number ?? 0))
             return []
+        // The Reveal Stage's part (architecture §3): it pauses and resumes the play clock and tells the queue.
+        case "freeze":
+            play.pause(.freeze, at: uptime)
+            queue.freeze()
+            return []
+        case "resume":
+            play.resume(.freeze, at: uptime)
+            queue.resume()
+            return []
+        case "panelOpen":
+            // A correct answer opens the panel: the settle is at the (frozen) play time, then the freeze ends.
+            queue.settle()
+            play.resume(.freeze, at: uptime)
+            return []
+        case "panelClose":
+            return []
+        case "background":
+            queue.settle()
+            play.pause(.background, at: uptime)
+            return []
+        case "foreground":
+            play.resume(.background, at: uptime)
+            return []
         default:
-            throw ContractError("event \(e["type"]?.string ?? "?") is not in press-queue/001's scope")
+            throw ContractError("event \(e["type"]?.string ?? "?") is not a press-queue-v2 event")
         }
     }
 
@@ -131,50 +172,24 @@ struct PressQueueRunner: ContractRunner {
         return PressOrigin(x: x, y: y)
     }
 
-    /// spec.md State. `restingSince` is story 004's (R10) and throws here rather than pass unchecked.
+    /// spec.md State: `current` (a record), `queueKeys`, `restingSince` (R10), `nextRevealId`.
     func state(_ name: String) throws -> JSONValue {
         switch name {
         case "queueKeys": return .array(queue.queue.map { .string($0.key) })
         case "nextRevealId": return .int(Int64(queue.nextRevealId))
+        case "restingSince": return queue.restingSince.map { .double($0) } ?? .null
         case "current":
             guard let c = queue.current else { return .null }
             return .object(["revealId": .int(Int64(c.revealId)), "key": .string(c.key), "holdEff": .double(c.holdEff),
                             "formed": .bool(c.formed), "formedAt": c.formedAt.map { .double($0) } ?? .null])
-        default: throw ContractError("expectState.\(name) is not in press-queue/001's scope")
+        default: throw ContractError("expectState.\(name) is not press-queue-v2 state (spec.md State)")
         }
     }
 }
 
-/// Runs press-queue-v2's in-scope cases (all must pass) and names every other case NOT ASSESSED by id.
+/// press-queue-v2's runner self-tests (ADR-0004 V2): planted cases the real file can't hold. The real file runs in
+/// `ContractHarnessTests` through the registry row (`runner: PressQueueRunner`, story press-queue/005).
 final class PressQueueContractTests: XCTestCase {
-    /// The cases that test nothing beyond story 001: AC-1..AC-4 and the two R3.1 conjuncts (hold passed but not
-    /// formed, formed but hold not passed). Each uses only press, tick and formed on the default knobs.
-    static let inScope = [
-        "AC1-start-at-once", "AC2-queue-during-hold-then-advance", "AC3-formed-guard", "AC4-ignore-when-full",
-        "R3-hold-passed-but-not-formed-queues", "R3-formed-but-hold-not-passed-queues",
-    ]
-
-    func test_press_queue_v2_cases_in_story_001_scope() throws {
-        let file = try ContractHarness.contractsRoot().appendingPathComponent("press-queue-v2/cases.json")
-        let root = try Fixture.load(file)
-        var fixtures: [String: JSONValue] = [:]
-        if case .object(let f)? = root["fixtures"] { fixtures = f }
-        var tolerances: [String: Double] = [:]
-        if case .object(let t)? = root["tolerance"] { for (k, v) in t { tolerances[k] = v.number } }
-        let all = root["cases"]?.array ?? []
-        let ids = all.compactMap { $0["id"]?.string }
-        var pass = 0, fail = 0
-        for id in Self.inScope {
-            guard let c = all.first(where: { $0["id"]?.string == id }) else { XCTFail("press-queue-v2/\(id): no such case"); fail += 1; continue }
-            if let msg = ContractHarness.runCase(c, contract: "press-queue-v2", runner: PressQueueRunner.self,
-                                                 fixtures: fixtures, tolerances: tolerances) {
-                XCTFail(msg); fail += 1
-            } else { pass += 1 }
-        }
-        let notAssessed = ids.filter { !Self.inScope.contains($0) }
-        print("CONTRACT press-queue-v2: \(pass) pass, \(fail) fail; \(notAssessed.count) NOT ASSESSED (outside story press-queue/001): \(notAssessed.joined(separator: ", "))")
-    }
-
     /// One planted case through the harness: a press of `key` from a hint at `origin`, with `D` the only reveal.
     func planted(key: String, origin: String, expectOrigin: String) throws -> String? {
         let text = """

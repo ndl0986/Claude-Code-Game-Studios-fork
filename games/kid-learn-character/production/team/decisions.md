@@ -103,6 +103,12 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-55 Workers close stories with /story-done themselves (Luan, 2026-11-20)
+
+- Like K-50 for `/dev-story`: `disable-model-invocation: false` in the shared `.claude/skills/story-done/SKILL.md`, so
+  worker sessions close their merged stories themselves. Shared `.claude`, so it applies to every game in this fork.
+  The skill's own evidence gates still run.
+
 ### K-54 Build first, measure later; a Mac playable build first (Luan, 2026-11-20)
 
 - Luan: "đẩy nhanh tiến độ … các bước đo lường có thể để sau" (speed up; the measurement steps can wait). This is
@@ -115,6 +121,15 @@ that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per
   voice and sound). Order: input (classifier, Mac key adapter), key-table theme load, MorphCore, Reveal Stage, Cast
   Rendering draw adapter, Press Queue, Audio engine adapter, Title → Play. Scene, Hint Letters, Parade and the
   keyboard row follow.
+- **macOS complete first** (Luan, same day: "tập trung build cho hoàn chỉnh bản macos trước"): the whole Demo 1
+  scope on the Mac (Scene, Hint Letters, Parade and meter included) comes before iPad-only work. iPad-only stories
+  (input/004 iPad key adapter, input/006 keyboard presence, the keyboard-row epic, which the Mac never shows, and
+  iPad device rows) wait until the Mac build is complete. Shared code still compiles for iPadOS, and verify stays green.
+- **Platform order** (Luan, same day: "tạm dừng bản android, tập trung bản macos -> ipados -> ios trước"): macOS, then
+  iPadOS, then iPhone (iOS), then Android. This keeps K-03's "Apple first, Android after", with the Mac now ahead of
+  the iPad. No Android code exists yet. The sessions named game-dev-android and game-qc-android are Apple-stack
+  workers and stay on the Apple lanes. The app targets the iPad only (TARGETED_DEVICE_FAMILY 2); iPhone support
+  comes after iPadOS.
 - **Leader default (Proposed):** until all 36 creatures are drawn, development builds may show a temporary
   placeholder for a key whose art is missing. Demo 1 exit criterion 3 (no missing art) is unchanged.
 

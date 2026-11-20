@@ -1,12 +1,12 @@
 # Story 003: F1 holdEff, the formed rules and the fallback lengths
 
 > **Epic**: Press Queue (`production/epics/press-queue/EPIC.md`)
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Core
 > **Type**: Logic
 > **Estimate**: M
 > **Manifest Version**: 2026-11-20
-> **Last Updated**: —
+> **Last Updated**: 2026-11-20
 > **Milestone**: Demo 1 (K-48)
 
 ## Context
@@ -35,6 +35,8 @@
 
 - [ ] AC-7 For each F1 row holdEff equals the table within 1e-9; a missing `voiceDurations` entry gives `formedS + 1.5` and one log line.
 - [ ] AC-11 A `formed` for a non-current id or a second `formed` is ignored; with none, formed at `r0 + revealLen + 1.0` with one log line.
+  *Note 2026-11-20 (K-53, TASK-147):* the missing-entry bound is now `formedS + word_offset_s + word_len_max_s`
+  (1.75 s with the shipped knobs, was 1.5); press-queue-v2's `F1-no-voiceDurations-entry` expects 4.20.
 - [ ] AC-12 Fallback `{formedS, revealLen}` are used for holdEff; AC-24 `hasWord` false gives `holdEff = max(hold_s, revealLen)`.
 
 ---
@@ -55,12 +57,10 @@ The whole state machine is KidCore (Module Ownership). Tests use an injected clo
 
 ## Files
 
-*Planned; `/dev-story` replaces this list. Roots are ADR-0001 D3 / ADR-0002 D1 (`apple/`); `engine.name` is unset by design.*
-
 - `apple/KidCore/Sources/KidCore/PressQueue.swift`
 - `apple/KidCore/Tests/KidCoreTests/PressQueueTests.swift`
-
----
+- `apple/KidCore/Tests/ContractTests/PressQueueRunner.swift`
+- `contracts/kidcore-api.md`
 
 ## QA Test Cases
 

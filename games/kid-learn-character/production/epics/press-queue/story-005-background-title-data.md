@@ -1,12 +1,12 @@
 # Story 005: Background, panel and gate logic, the first press after the Title, the theme switch, and the data checks
 
 > **Epic**: Press Queue (`production/epics/press-queue/EPIC.md`)
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Core
 > **Type**: Logic
 > **Estimate**: S
 > **Manifest Version**: 2026-11-20
-> **Last Updated**: —
+> **Last Updated**: 2026-11-20
 > **Milestone**: Demo 1 (K-48)
 
 ## Context
@@ -38,6 +38,10 @@
 - [ ] AC-15 / AC-14 (logic) Background or panel open mid-morph with 3 queued: queue empty, current formed (settle once), no outcome or sound for the dropped presses, the next press after return or close starts at once.
 - [ ] AC-17 Play entered by a key: the first press starts at once with revealId 1; AC-16 (logic) after a theme switch the next started item comes from the new theme.
 - [ ] AC-23 (logic) A reveal at s 1.0 with 2 queued, the gate challenge for 20 s then a timeout: still 2 queued, play clock advanced 0 s, the first starts at play time `r0 + holdEff`; a correct answer clears the queue and settles. The press-queue-v1 cases all pass and its row flips to `runner:`.
+  *Note 2026-11-20 (TASK-147):* the contract is **press-queue-v2** (v1 is superseded). All 50 v2 cases pass and its
+  row is `runner: PressQueueRunner`. The play clock (`PlayClock`, KidCore, ADR-0002 D3) and the queue's `freeze()`,
+  `resume()` and `settle()` are this story's; the Reveal Stage will own pausing the clock (architecture §3), which the
+  runner plays for now.
 - [ ] AC-21 The build fails for `hold_s`, `queue_max` or `formed_timeout_s` missing, non-numeric or out of range, and when the F1 build check fails; no timing literal in the queue's code.
 
 ---
@@ -58,13 +62,13 @@ The whole state machine is KidCore (Module Ownership). Tests use an injected clo
 
 ## Files
 
-*Planned; `/dev-story` replaces this list. Roots are ADR-0001 D3 / ADR-0002 D1 (`apple/`); `engine.name` is unset by design.*
-
+- `apple/KidCore/Sources/KidCore/PlayClock.swift`
 - `apple/KidCore/Sources/KidCore/PressQueue.swift`
-- `apple/KidCore/Tests/ContractTests/PressQueueRunner.swift`
 - `apple/KidCore/Tests/KidCoreTests/PressQueueTests.swift`
-
----
+- `apple/KidCore/Tests/ContractTests/PressQueueRunner.swift`
+- `apple/KidCore/Tests/ContractTests/ContractHarness.swift`
+- `contracts/README.md`
+- `contracts/kidcore-api.md`
 
 ## QA Test Cases
 
