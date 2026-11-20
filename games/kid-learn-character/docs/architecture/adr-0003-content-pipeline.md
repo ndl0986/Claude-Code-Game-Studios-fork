@@ -213,6 +213,16 @@ pivots, layers, paths, fills and strokes, in artboard units).
 - A build check re-bakes in memory and **fails if any committed baked file differs** from its source's bake. It
   also **re-measures `voiceDurations`**, the one tool-written field in `theme.json` (never edited by hand; D5),
   and fails if any committed value differs from the measured one.
+  - *Note 2026-11-20 — **Accepted by Luan 2026-11-20 (K-53)** (content-pipeline/004; status unchanged,
+    Accepted):* for **voice lines**, the build check does not re-bake in memory. The voice engine (Kokoro, K-41) runs
+    out of process on a build-machine-only venv and takes about 4 s a line, so it can't run on every push. Instead each
+    line's entry in `voice/<locale>/provenance.json` records a SHA-256 of the render **inputs** (the script text after
+    respelling, the engine pins, voice, speed, the trim values and the bake tool version) and of the written PCM. The
+    check recomputes the input hash from the current theme and voice script, fails naming the line when it differs,
+    and re-measures `voiceDurations` from the committed files as above. **Sfx, art, silhouettes and glyphs are still
+    re-baked in memory and byte-compared** (their bakes are in-process and deterministic). If Luan declines, the
+    alternative is an optional `kidtools validate --voice-rerender` run outside verify that re-renders every line with
+    the venv and byte-compares the `.caf` files.
 - Android, which cannot run Swift Tools, uses the same committed files (D9).
 
 ### D5. Voice durations and loudness (Audio A7, F4; Key Table V15)
