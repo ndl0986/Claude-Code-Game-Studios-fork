@@ -24,6 +24,8 @@ Rules for every locked row:
 - **One shell kept ready**: the session that launched DeviceSpike holds the exact R3 commands; no other tool is used
   during a locked row, so no new permission prompt can block it.
 - After every unlock or kill, Luan confirms "Dock and menu bar back" before the next row.
+- After every unlock or kill, `pgrep -x DeviceSpike` must print nothing, logged, before any relaunch (game-qc-ios).
+- **If D1 fails at any step, the session stops and no locked row runs** (leader).
 - While locked, stay on the **Lock** screen (never ◀ Menu): the lock state lives in that screen's object, so leaving
   it could leave the options applied without the overlay; if it happens, R2 or R3.
 
@@ -32,7 +34,7 @@ Rules for every locked row:
 1. Save and **close** your work apps (M-5 kills DeviceSpike; M-3 blocks shortcuts; R4 would lose unsaved work).
 2. Turn on **Do Not Disturb** (Control Center › Focus): screenshots are of DeviceSpike's own window only, but
    banners would cover it.
-3. Keep the **external display** connected (M-4) and the **trackpad** usable; set the speaker volume to about half
+3. Keep the Mac **on power** and have the **login password** ready (M-6). Keep the **external display** connected (M-4) and the **trackpad** usable; set the speaker volume to about half
    (M-14); be ready to **close the lid and log in** (M-6).
 4. The child is out of view (DeviceSpike's screens are adult test screens).
 
@@ -40,7 +42,7 @@ Rules for every locked row:
 
 | # | Row | Locked? | Time | What it needs from Luan |
 |---|---|---|---|---|
-| D1 | **Dry run** (required first): Lock (borderless) → I run R3 → Luan confirms the desktop is back. Relaunch with `-deadman 30`, Lock, wait → auto-unlock seen. Lock again, and at about 25 s tap **Hang main 10 s (dead-man test)** → the app ends by itself about 2 s after the 30 s mark (the `_exit` path) and the desktop comes back. Lock again → ⌃⌥⌘Q → overlay → Close → Unlock | yes, 3 × < 1 min | 10 min | taps, say what you see |
+| D1 | **Dry run** (required first; the executable is run directly, `…/DeviceSpike.app/Contents/MacOS/DeviceSpike -screen lock -deadman <s>`, so its stderr line and exit status 3 are captured): Lock (borderless) → I run R3 → Luan confirms the desktop is back. Relaunch with `-deadman 30`, Lock, wait → auto-unlock seen. Lock again, and at about 25 s tap **Hang main 10 s (dead-man test)** → the app ends by itself about 2 s after the 30 s mark (the `_exit` path) and the desktop comes back. Lock again → ⌃⌥⌘Q → overlay → Close → Unlock | yes, 3 × < 1 min | 10 min | taps, say what you see |
 | 1 | **M-5** crash with the lock on: lock (each mode), I run `kill -9`; the Dock, menu bar and a usable desktop come back | yes | 6 min | describe the desktop (no capture) |
 | 2 | **M-7** ways out: chord → overlay → Quit (hold 1.5 s) ends the app with the desktop usable; ⌘Q in the open overlay does nothing; the overlay is in the main window. The wrong-code and panel-OFF parts need the real gate: NOT ASSESSED | yes | 8 min | chord, hold Quit |
 | 3 | **M-3** keyboard and trackpad with the lock on, **both modes** (borderless, then native full screen), in ≤ 3-min locks: ⌘H, ⌘Q, ⌘Space, ⌘Tab, ⌥⌘Esc, Mission Control / Spaces (F3, ⌃↑, ⌃←/→), 3- and 4-finger swipes, Notification Center, hot corners, Globe/fn, Touch ID, a short power-key press; keyboard part on the **Keys** screen (unlocked): every key's normalized event and whether key-ups arrive under ⌘ | yes | 25 min | press each key/gesture; say "blocked" or what happened |
