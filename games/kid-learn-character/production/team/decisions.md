@@ -103,6 +103,12 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-55 Workers close stories with /story-done themselves (Luan, 2026-11-20)
+
+- Like K-50 for `/dev-story`: `disable-model-invocation: false` in the shared `.claude/skills/story-done/SKILL.md`, so
+  worker sessions close their merged stories themselves. Shared `.claude`, so it applies to every game in this fork.
+  The skill's own evidence gates still run.
+
 ### K-54 Build first, measure later; a Mac playable build first (Luan, 2026-11-20)
 
 - Luan: "đẩy nhanh tiến độ … các bước đo lường có thể để sau" (speed up; the measurement steps can wait). This is

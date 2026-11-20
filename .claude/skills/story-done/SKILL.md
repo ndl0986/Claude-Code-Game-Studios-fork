@@ -3,7 +3,7 @@ name: story-done
 description: "Closes a finished story: verifies each acceptance criterion, checks for design or ADR deviations and updates its status. Use when the user says a story is done, finished or ready to close."
 argument-hint: "[story-file-path] [--review full|lean|solo]"
 user-invocable: true
-disable-model-invocation: true
+disable-model-invocation: false
 allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, Agent, Bash(bash "*/.claude/skills/story-done/../../hooks/yaml-helper.sh" resolve_config *), Bash(bash .claude/scripts/story-facts.sh *), Bash(bash .claude/scripts/story-status.sh*), Bash(bash .claude/scripts/adr-status.sh *), Bash(bash .claude/scripts/md-section.sh *), Bash(bash .claude/scripts/review-receipts.sh check *), Bash(bash .claude/scripts/session-state.sh *), Bash(bash tools/ci/contract-rows.sh *), Bash(git status --porcelain*), Bash(git add -- *), Bash(git commit -m *)
 model: sonnet
 ---
