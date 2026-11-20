@@ -214,7 +214,18 @@ candidates of TASK-108): `word_ankylosaurus` "ankie low saurus", `word_juravenat
 `word_quetzalcoatlus` "kets all ko at lus", `word_tapejara` "tah pay jar ah", `word_wuerhosaurus` "wur hoe saurus",
 `word_xenoceratops` "zen oh sair uh tops", `word_zuniceratops` "zoo nee serra tops". Triceratops stays as spelled. The
 displayed name and the Key Table `name` / `word` are unchanged. A respelled line must still pass V15 (≤ 1.25 s,
-measured on the rendered file).
+measured on the trimmed file, below).
+**Trimming the rendered lines** *(dated note 2026-11-20, content-pipeline/004; an ADR-0003 D5 implementation detail
+approved by the leader, no rule change)*. Kokoro's renders carry about 0.3–0.5 s of silence at each end, which would
+delay every word after its cue (E8, E9) and fail V15 and AC-6. So, before loudness normalisation:
+- the bake **trims each rendered line's leading and trailing audio below −50 dBFS**, measured on the K-weighted
+  signal's 10 ms envelope (the same weighting as the ADR-0003 D5 meter);
+- it **keeps 20 ms** before the first and after the last sample above that threshold, with a **5 ms linear fade** in
+  and out, so a trim never clicks;
+- then it normalises to the voice target (F4) and writes the `.caf`.
+The threshold (−50 dBFS), the pad (20 ms) and the fade (5 ms) are **tuning values in the voice-script data**
+(`src/voice-scripts/<locale>.json`), not code. **V15's durations and AC-6's length limits** (`word_len_max_s`,
+`letter_len_max_s`) **measure the trimmed file.**
 
 ### States and Transitions
 

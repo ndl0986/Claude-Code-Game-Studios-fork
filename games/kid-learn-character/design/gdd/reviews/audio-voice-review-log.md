@@ -141,3 +141,9 @@ Review mode: lean · Workflow: standard
 Change: K-52 (Luan): baked audio is uncompressed 16-bit linear PCM in .caf (AAC is not byte-stable; ADR-0003 D4). R4.1 reads the .caf files into the players' PCM at theme load; R8 names the .caf pipeline and vo_<locale>_<kind>_<id>.caf; the art bible §8 reference reads LPCM .caf. R4.1 says the audio is "read in" (LPCM), not decoded. No rule, timing or loudness target changes. Review: game-dev-android.
 fixture: none (audio-plan-v1 names no file path or format in any case; 0 occurrences of .m4a)
 Reviewed-Content-Hash: design/gdd/audio-voice.md 9538c82cb168ce8556d39928028bfeb27cc30ec7
+
+## Update — 2026-11-20 — content-pipeline/004 voice trim note (no re-review)
+Review mode: lean · Workflow: standard
+Change: A dated note in R8, the bake step story 004 implements (leader-approved D5 detail): each rendered voice line is trimmed of leading and trailing audio below −50 dBFS on the K-weighted 10 ms envelope, keeping 20 ms with a 5 ms linear fade at each end, before loudness normalisation; the three values are voice-script data; V15 durations and AC-6 limits measure the trimmed file. R8's respelled-line sentence now says "measured on the trimmed file". No rule, target or timing changes. Requested by game-dev-android for story 004.
+fixture: none (audio-plan-v1 names no audio file and has no durations; its "trims" are gain trims, AU-Q6)
+Reviewed-Content-Hash: design/gdd/audio-voice.md b9e4a3e1db1d78549afda9d6606733d00888ac58
