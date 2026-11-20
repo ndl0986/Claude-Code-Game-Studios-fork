@@ -5,7 +5,7 @@
 > **Architecture Module**: apple/MorphCore (pure; no app part)
 > **Milestone**: Demo 1 (`production/milestones/demo-1.md`, K-48)
 > **Status**: Ready
-> **Stories**: Not yet created — after TASK-131's control manifest lands, run `/create-stories morphcore`
+> **Stories**: 3 stories (TASK-137)
 
 ## Overview
 
@@ -42,6 +42,14 @@ The morph math every reveal uses: the morph-contract-v1 parser, sampler, `positi
 (`contracts/README.md` registry; `story:<x>` is the story stem that starts the runner.)
 
 - morph-contract-v1 (Accepted; `docs/architecture/morph-contract-v1.md`, `content/fixtures/morph-contract-v1.json`)
+
+## Stories
+
+| # | Story | Type | Status | ADR |
+|---|-------|------|--------|-----|
+| 001 | [Load and validate the morph timing data; Reduce Motion picks the reduced set for new morphs](story-001-timing-data-loader.md) | Logic | Ready | ADR-0002, ADR-0004, ADR-0003 |
+| 002 | [No morph for empty paths, the per-press seed policy, and the purity checks](story-002-empty-paths-seed-purity.md) | Logic | Ready | ADR-0002, ADR-0004 |
+| 003 | [Frame time p99 within one refresh with 240 specks on the device](story-003-device-frame-budget.md) | Integration | Blocked | ADR-0009, ADR-0006 |
 
 ## Definition of Done
 

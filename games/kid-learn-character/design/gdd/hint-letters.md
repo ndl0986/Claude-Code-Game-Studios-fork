@@ -100,8 +100,8 @@ the safe stage**.
   - the moon (66, 62), radius 50: ≥ 148 (rounded for reading; the check uses F4's exact 147.8);
   - each queue token (1214, 58), (1148, 58), (1082, 58), glow radius 40: ≥ 138 (rounded; F4's exact 137.8);
   - **the parade meter's box** (Parade R12; art bible §7: placed from `queue_max`; x 846–1022, y 40–76 with its glow
-    at the default 3): ≥ 97.8 from the box, like the cast and glyph boxes. Every slot passes at any jitter and every
-    `queue_max` in 0–5: the nearest slot (R2, or R1 when `queue_max` ≤ 1) is ≥ 124 from it at zero jitter and ≥ 114
+    at the default 3): ≥ 97.8 from the box, like the cast and glyph boxes. **At `k` = 1**, every slot passes at any
+    jitter and every `queue_max` in 0–5: the nearest slot (R2, or R1 when `queue_max` ≤ 1) is ≥ 124 from it at zero jitter and ≥ 114
     at any jitter (127.6 and 115.7 at `queue_max` 5, box x 714–890) *(TASK-120, K-44)*;
   - the current cast member's box (from the Reveal Stage): ≥ 97.8 from the box;
   - the glyph's box (x 475–805, y 155–485, the 330-unit glyph at 640, 320): ≥ 97.8 (every slot passes statically);
@@ -348,9 +348,17 @@ to phones, which are out of scope (R11) *(TASK-054 H1)*.
 i.e. `k > 1.044`, and R1 the token clearance once `97.8k + 40 > 142.0`, `k > 1.043`. Between about 1.044 and 1.18 they
 pass only with a favourable jitter (L1 at (+10, +10) is 165.5 from the moon). So with the widest creature on stage,
 from `k ≈ 1.044` the screen may show 2 hints rather than 3 (again, not reachable on the MVP's iPads and Macs).
-The parade meter's box (TASK-120) moves no threshold: its nearest slot would fail it at zero jitter only above
-`k ≈ 1.27` (124 / 97.8), above every threshold here (at the default `queue_max` 3 the nearest is R2, which the
-creature already blocks there).
+The parade meter's box (TASK-120) adds **no new limit in practice**, though it does bind above `k` = 1. Its clearance
+is `R + 10k = 97.8k`:
+- **At zero jitter** the nearest slot, 124 away, fails it only above `k ≈ 1.27` (124 / 97.8).
+- **With jitter** the nearest slot can come to 114, so for some jitters the box binds from `k ≈ 1.17` (114 / 97.8).
+  There a failing jitter is redrawn, and zero jitter still passes (R5).
+- Both lie above the moon and token thresholds (`k ≈ 1.043–1.044`), where the 2-hint case already starts. At the
+  default `queue_max` 3 the nearest slot is R2, which the widest creature already blocks.
+- Like every `k > 1` case, none of this is reachable on the MVP's iPads and Macs (`k` = 1). hint-letters-v1's 58 cases
+  all pass with the box added (game-qc-android's model, TASK-139).
+
+*(Corrected 2026-11-20, TASK-142: it said the box "moves no threshold", which held only at zero jitter.)*
 
 ## Edge Cases
 

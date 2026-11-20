@@ -5,7 +5,7 @@
 > **Architecture Module**: apple/Tools (ToolsCore + `kidtools`: bake tool, voice bake, validator; build-time only, nothing in the bundle)
 > **Milestone**: Demo 1 (`production/milestones/demo-1.md`, K-48)
 > **Status**: Ready
-> **Stories**: Not yet created — after TASK-131's control manifest lands, run `/create-stories content-pipeline`
+> **Stories**: 6 stories (TASK-137)
 
 ## Overview
 
@@ -49,6 +49,17 @@ The build-time tools that turn the 36 Dinosaurs items into shipped content: the 
 
 - Shares its TR-IDs with the systems that own them (key-table, cast-rendering, morphcore, audio-voice, hint-letters): this epic builds their Tools side.
 - Its inputs are TASK-133's 36 asset specs and the art.
+
+## Stories
+
+| # | Story | Type | Status | ADR |
+|---|-------|------|--------|-----|
+| 001 | [Bake cast and silhouette SVG (D4 subset) to the shipped path files](story-001-cast-svg-bake.md) | Logic | Ready | ADR-0003, ADR-0002 |
+| 002 | [Bake the 36 glyphs (A–Z, 0–9) from the OFL font into the v1 SVG subset](story-002-glyph-bake.md) | Logic | Ready | ADR-0003, ADR-0001 |
+| 003 | [Voice bake: render every Dinosaurs line with Kokoro (K-41) and encode AAC mono](story-003-voice-render-encode.md) | Integration | Ready | ADR-0003 |
+| 004 | [Loudness to target, `voiceDurations` from the files, and the staleness check](story-004-loudness-durations-staleness.md) | Logic | Ready | ADR-0003 |
+| 005 | [The validator on the real Dinosaurs content: verify.sh fails naming theme, rule and item](story-005-validator-on-real-content.md) | Integration | Ready | ADR-0003, ADR-0011, ADR-0004 |
+| 006 | [`tools/contracts/source-drift.sh`: report contracts whose cited GDD section changed (observations only)](story-006-source-drift.md) | Logic | Ready | ADR-0004, ADR-0011 |
 
 ## Definition of Done
 
