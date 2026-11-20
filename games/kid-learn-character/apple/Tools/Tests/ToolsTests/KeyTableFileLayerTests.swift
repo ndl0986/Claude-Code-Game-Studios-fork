@@ -41,7 +41,13 @@ final class KeyTableFileLayerTests: XCTestCase {
             let head = "\(contract)/\(c["id"]?.string ?? "?") [\(c["source"]?.string ?? "?")]"
             let bytes = Array((c["given"]?["themeBytes"]?.string ?? "").utf8)
             var msg: String?
-            for (j, s) in (c["steps"]?.array ?? []).enumerated() {
+            // Checks this layer does not implement FAIL rather than pass unchecked (TASK-148): it has no
+            // case-level expect, permute or tolerance, and the file layer exposes no state.
+            for k in ["expect", "permute", "tolerance"] where c[k] != nil && msg == nil {
+                msg = "\(head) \(k): case-level \(k) is not supported by the file layer; the case would pass unchecked (TASK-148)"
+            }
+            for (j, s) in (c["steps"]?.array ?? []).enumerated() where msg == nil {
+                if s["expectState"] != nil { msg = "\(head) steps[\(j)].expectState: the file layer exposes no state (TASK-148)"; break }
                 guard s["event"]?["type"]?.string == "decodeTheme" else { msg = "\(head) steps[\(j)]: not a file-layer event"; break }
                 let got: JSONValue
                 do {
@@ -93,6 +99,26 @@ final class KeyTableFileLayerTests: XCTestCase {
         // The structural check needs the directory name, so check the decode path directly.
         let r = Self.run(file: tmp)
         XCTAssertTrue(r.failures.contains { $0.contains("expected \"planted\", got \"extraField\"") }, "\(r.failures)")
+    }
+
+    func test_expect_state_and_case_level_checks_fail_rather_than_pass_unchecked() throws {
+        // TASK-148: a file case with expectState, or with case-level expect / permute / tolerance, FAILs.
+        let src = try Fixture.contractsRoot(from: #filePath).appendingPathComponent("\(Self.contract)/cases.json")
+        var root = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: src)) as? [String: Any])
+        var cases = try XCTUnwrap(root["cases"] as? [[String: Any]])
+        let file = cases.indices.filter { cases[$0]["layer"] as? String == "file" }
+        XCTAssertGreaterThanOrEqual(file.count, 2)
+        var steps = try XCTUnwrap(cases[file[0]]["steps"] as? [[String: Any]])
+        steps[0]["expectState"] = ["lastShown": [String: Any]()]
+        cases[file[0]]["steps"] = steps
+        cases[file[1]]["permute"] = [String]()
+        root["cases"] = cases
+        let tmp = FileManager.default.temporaryDirectory.appendingPathComponent("kt-\(UUID().uuidString).json")
+        try JSONSerialization.data(withJSONObject: root).write(to: tmp)
+        defer { try? FileManager.default.removeItem(at: tmp) }
+        let r = Self.run(file: tmp)
+        XCTAssertTrue(r.failures.contains { $0.contains("steps[0].expectState: the file layer exposes no state") }, "\(r.failures)")
+        XCTAssertTrue(r.failures.contains { $0.contains("permute: case-level permute is not supported") }, "\(r.failures)")
     }
 
     func test_decoder_rejects_unknown_and_missing_and_wrong_type() {
