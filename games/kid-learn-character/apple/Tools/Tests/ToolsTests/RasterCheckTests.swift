@@ -68,11 +68,13 @@ final class RasterCheckTests: XCTestCase {
         XCTAssertTrue(na[0].hasPrefix("NOT ASSESSED raster s.json vs c.json"), na[0])
     }
 
-    /// The six batch-1 Dinosaurs pairs, baked from `src/` in memory, against their silhouettes.
-    func test_batch_1_baked_pairs_pass_the_raster_check() throws {
+    /// Every Dinosaurs pair drawn so far (batch 1 at least; the art batches add more), baked from `src/` in memory,
+    /// against its silhouette.
+    func test_every_drawn_dinosaurs_pair_passes_the_raster_check() throws {
         let src = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../../../../content/themes/dinosaurs/src").standardized
         let art = try FileManager.default.contentsOfDirectory(atPath: src.appendingPathComponent("art").path).filter { $0.hasSuffix(".svg") }.sorted()
-        XCTAssertEqual(art.count, 6)
+        let batch1 = ["t_trex", "d_diplodocus", "r_raptor", "p_tapejara", "a_ankylosaurus", "9_babies"].map { "cast_dino_\($0)_01.svg" }
+        XCTAssertTrue(Set(batch1).isSubset(of: Set(art)), "batch 1 missing from \(art)")
         var report: [String] = []
         for a in art {
             let stem = String(a.dropFirst("cast_".count).dropLast(".svg".count))
