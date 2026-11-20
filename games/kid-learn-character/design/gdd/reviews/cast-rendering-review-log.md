@@ -77,3 +77,9 @@ Review mode: lean · Workflow: standard
 Task: TASK-104
 Change: game-qc-android's CR-Q1 (scene-look-v1). F8's edge switch states its state rules: at launch the edge is the one for the current value with no dissolve (amber if skyMidL ≥ L_x 0.308, else cream); a return from the background keeps the state (hysteresis on the published skyMidL through the Scene's 3 s jump fade); thresholds inclusive (≥ 0.313, ≤ 0.303); the dissolve starts on the crossing frame; the mix moves at 1 per second, and a reverse crossing during a dissolve turns it around from the current mix at the same rate (ends after mix × 1 s; game-qc-android's REVISE). Consistent with K-25. Review: game-qc-android, from the diff.
 Reviewed-Content-Hash: design/gdd/cast-rendering.md 1155ee3e93b073dfc4e8d5e3cf34b0354935bc9e
+
+## Update — 2026-11-20 — TASK-139b contract fixture lines for earlier changes (no GDD change)
+Review mode: lean · Workflow: standard
+Change: none to this GDD. ADR-0004 D6 line, found by TASK-139's drift check (game-qc-android): Formulas changed by TASK-104 (F8's edge-switch state rules) after reveal-timing-v1 was cut.
+fixture: none (reveal-timing-v1: F8 is scene-look-v1's)
+Reviewed-Content-Hash: design/gdd/cast-rendering.md 1155ee3e93b073dfc4e8d5e3cf34b0354935bc9e

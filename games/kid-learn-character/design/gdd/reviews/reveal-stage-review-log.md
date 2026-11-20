@@ -95,3 +95,9 @@ Reviewed-Content-Hash: design/gdd/reveal-stage.md ad91cda2866a9354d3735736201377
 Review mode: lean · Workflow: standard
 Change: The previous entry's R6 line (the meter light drawn from the snapshot's flight, above the meter) was logged but not applied in c983b43e; it is applied here. That entry's hash is of the unchanged file.
 Reviewed-Content-Hash: design/gdd/reveal-stage.md 9c8150ac467d10a46af70d8e43d733aabac6b40d
+
+## Update — 2026-11-20 — TASK-139b contract fixture lines for earlier changes (no GDD change)
+Review mode: lean · Workflow: standard
+Change: none to this GDD. ADR-0004 D6 line, found by TASK-139's drift check (game-qc-android): Detailed Design changed by TASK-120 (drawing the meter and its light, the draw order) after reveal-timing-v1 was cut.
+fixture: none (reveal-timing-v1: drawing and layer order only)
+Reviewed-Content-Hash: design/gdd/reveal-stage.md 9c8150ac467d10a46af70d8e43d733aabac6b40d
