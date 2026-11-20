@@ -40,6 +40,10 @@
 
 ---
 
+> **The meter is built in story 007** (leader, 2026-11-20): `apple/Tools/Sources/ToolsCore/Loudness.swift`, the
+> ADR-0003 D5 BS.1770 meter with its EBU Tech 3341 self-check. This story's loudness AC reuses it for the gate on every
+> voice and sfx file; it doesn't build a second meter.
+
 ## Implementation Notes
 
 *Derived from the governing ADRs (ADR-0003 first):*
