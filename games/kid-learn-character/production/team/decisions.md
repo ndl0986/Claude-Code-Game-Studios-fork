@@ -125,6 +125,11 @@ that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per
   scope on the Mac (Scene, Hint Letters, Parade and meter included) comes before iPad-only work. iPad-only stories
   (input/004 iPad key adapter, input/006 keyboard presence, the keyboard-row epic, which the Mac never shows, and
   iPad device rows) wait until the Mac build is complete. Shared code still compiles for iPadOS, and verify stays green.
+- **Platform order** (Luan, same day: "tạm dừng bản android, tập trung bản macos -> ipados -> ios trước"): macOS, then
+  iPadOS, then iPhone (iOS), then Android. This keeps K-03's "Apple first, Android after", with the Mac now ahead of
+  the iPad. No Android code exists yet. The sessions named game-dev-android and game-qc-android are Apple-stack
+  workers and stay on the Apple lanes. The app targets the iPad only (TARGETED_DEVICE_FAMILY 2); iPhone support
+  comes after iPadOS.
 - **Leader default (Proposed):** until all 36 creatures are drawn, development builds may show a temporary
   placeholder for a key whose art is missing. Demo 1 exit criterion 3 (no missing art) is unchanged.
 
