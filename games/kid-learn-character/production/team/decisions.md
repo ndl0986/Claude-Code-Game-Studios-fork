@@ -103,6 +103,21 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-54 Build first, measure later; a Mac playable build first (Luan, 2026-11-20)
+
+- Luan: "đẩy nhanh tiến độ … các bước đo lường có thể để sau" (speed up; the measurement steps can wait). This is
+  the OK that demo-1.md's critical path asks for: **stories Blocked only because ADR-0007, ADR-0009 or ADR-0010 is
+  Proposed now proceed on the Proposed design** (the measured candidate). The ADRs stay Proposed; the device rows
+  (P-1, P-2, P-7, P-8, P-9, P-15, P-4, M-1…M-16) and the device-measurement stories (audio-voice/006,
+  cast-rendering/006, morphcore/003, reveal-stage/006, scene/006, keyboard-row/006, accessibility/005, app-shell/005)
+  are deferred, not dropped. Risk accepted: a later measurement that contradicts a Proposed ADR means rework.
+- **First target: a native macOS build Luan can play a few rounds on** (hardware keys → letter → morph → creature,
+  voice and sound). Order: input (classifier, Mac key adapter), key-table theme load, MorphCore, Reveal Stage, Cast
+  Rendering draw adapter, Press Queue, Audio engine adapter, Title → Play. Scene, Hint Letters, Parade and the
+  keyboard row follow.
+- **Leader default (Proposed):** until all 36 creatures are drawn, development builds may show a temporary
+  placeholder for a key whose art is missing. Demo 1 exit criterion 3 (no missing art) is unchanged.
+
 ### K-53 Word-line length limit 1.5 s; voice staleness by input hash (Luan, 2026-11-20)
 
 - **V15 / Audio AC-6 word-line limit: 1.25 s → 1.5 s.** Measured on the trimmed Kokoro renders, 9 of 10 counted
