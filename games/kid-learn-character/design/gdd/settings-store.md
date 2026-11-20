@@ -49,7 +49,7 @@ about, and "Start over" really does return the app to how it was on day one.
 | `themeId` | string, non-empty | `"dinosaurs"` | Key Table & Theme Data |
 | `weather` | one of `clear`, `cloudy`, `lightRain`, `snow` | `clear` | Scene: Time of Day & Weather |
 | `windy` | boolean; takes effect only with `lightRain` or `snow` (art bible §2) | `false` | Scene: Time of Day & Weather |
-| `keyboardRow` | boolean | `false` (art bible §7: off by default) | On-screen Keyboard Row, Input & Key Filter |
+| `keyboardRow` | boolean | `false` (unchanged) | On-screen Keyboard Row, Input & Key Filter. **Meaning** *(K-49, TASK-135)*: `false` = **automatic**, the row shows in Play exactly when no hardware keyboard is attached; `true` = **always**, forced on by the panel. The keyboard's presence is read live (Keyboard Row R8) and **never stored**. |
 | `childLock` | boolean; **macOS only** (the key does not exist on iPadOS or Android) | `false` | Child Lock-in. **Stored only as ON** (K-21, R8): turning it OFF in the panel lasts for this run only; the run value is `childLockActive` (R8) |
 
 - **Reserved, not in v1:** `voiceLocale` (Alpha, K-02 Vietnamese voice). It arrives with a schema bump (R7).
@@ -132,7 +132,7 @@ only the record:
    key (`startPlay`, Input & Key Filter, Title state) do not enter Play until Key Table reports the theme ready.
    The Press Queue never sees a press before then.
 4. **Stage:** Audio applies `volume`/`muted`, the Scene applies `weather`/`windy`, the keyboard row appears if
-   `keyboardRow` is on.
+   `keyboardRow` is `true` or no hardware keyboard is attached (K-49; Keyboard Row R8).
 5. **Mac child lock (R8)**, only after the app is ready.
 
 - **First launch, or no record:** every field takes its R1 default; **nothing is written** until the grown-up
@@ -350,7 +350,7 @@ never changes a stored value.
 | Volume steps | 11 (0–10) | fixed by the schema | a change needs a schema bump |
 | Default `themeId` | `"dinosaurs"` | any bundled theme that passes the build gate | the first theme a child sees |
 | Default `weather` | `clear` | any R1 weather | the first sky; clear keeps the glyph easiest to read |
-| Default `keyboardRow` | `false` | fixed by art bible §7 | — |
+| Default `keyboardRow` | `false` (automatic, K-49) | fixed | the stored value is unchanged; K-49 changed what `false` means (Keyboard Row R8), so no schema bump |
 | Default `childLock` | `false` | fixed: the kiosk must be turned on by a grown-up | — |
 
 ## Acceptance Criteria

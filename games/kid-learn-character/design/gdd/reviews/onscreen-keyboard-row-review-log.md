@@ -45,3 +45,9 @@ Reviewed-Content-Hash: design/gdd/onscreen-keyboard-row.md 27f3e276eeb4d2979b975
 Review mode: lean · Workflow: standard
 Change: from game-qc-android's REVISE: the pressed set starts empty only when a newly drawn word fades in (a change, a Play entry, a turn-on); a short-background return keeps the word and its pressed set, consistent with R7 and AC-14.
 Reviewed-Content-Hash: design/gdd/onscreen-keyboard-row.md 078055581428800bf231136040abdac28dc0a038
+
+## Update — 2026-11-20 — TASK-135 keyboard row shows without a keyboard (no re-review)
+Review mode: lean · Workflow: standard
+Change: K-49: R8 rewritten as shown = keyboardRow OR NOT keyboardPresent in Play (keyboardRow false = automatic, true = always; stored value and default unchanged, presence never stored; no forced off, OQ-1), with a 0.5 s settle (row_presence_settle_s) and the timing under the panel, the gate, the background and the Title; R9 for iPadOS and the Mac (keyboardPresent constant true, so never shown unless forced; Demo 1 never); a new Interface for keyboardPresent from the platform adapter (iPadOS GCKeyboard, Mac constant), outside Input's KidCore filter; States, Interactions, Edge Cases, Dependencies, the settle knob; AC-1 and AC-15 revised, AC-20 to AC-25 added; contract notes: keyboard-row-v1 stands with a missing keyboardPresent read as true, keyboard-row-v2 adds the presence cases; settings-record-v2 stands. Review fixes (game-dev-ios, game-qc-android): fixture line; AC-15 off clause per presence; GCKeyboard.coalesced re-read on foreground; pending unsettled changes dropped at background, Play entry and panel close/resume (latest value applies); settle floor = row_fade_s, a reversal fades from the current alpha. Review: game-dev-ios and game-qc-android from the diff.
+fixture: keyboard-row-v2 (supersedes keyboard-row-v1; cut by game-qc-android after this merges)
+Reviewed-Content-Hash: design/gdd/onscreen-keyboard-row.md 5b110deb146777390e726177bd5e07461b45b09c
