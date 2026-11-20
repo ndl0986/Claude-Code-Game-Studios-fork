@@ -1,5 +1,5 @@
-# sources.lock for keyboard-row-v2 (cut 2026-11-20, TASK-141, on TASK-135's merge 5647a15f): the ## sections the cases cite.
-Reviewed-Section-Hash: games/kid-learn-character/design/gdd/onscreen-keyboard-row.md#Detailed Design 64d189bd42ebad3573805eba7331c3d5a7497aee
+# sources.lock for keyboard-row-v2 (cut 2026-11-20, TASK-141, on TASK-135's merge 5647a15f; re-cut on the TASK-141 answers, 4d6ddf9f): the ## sections the cases cite.
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/onscreen-keyboard-row.md#Detailed Design 07ef7e531d76abe88baf91695553d452c1fe3d5b
 Reviewed-Section-Hash: games/kid-learn-character/design/gdd/onscreen-keyboard-row.md#Formulas e03da150433461f4a88af3dfb73abd0063a77a7f
 Reviewed-Section-Hash: games/kid-learn-character/design/gdd/onscreen-keyboard-row.md#Edge Cases 670fd53adebfb010ae2502013d1d20ec763c9ffd
 Reviewed-Section-Hash: games/kid-learn-character/design/gdd/onscreen-keyboard-row.md#Tuning Knobs 44cc8dff1c94ff166e760e599f2c0f7419860e79

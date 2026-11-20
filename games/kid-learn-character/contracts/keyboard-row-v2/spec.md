@@ -41,14 +41,14 @@ Everything in v1 (F1–F4, R2, R3, R5, R7, the gate freeze, the fallback), plus:
 - **AC-24 forced on:** `keyboardRow` true ignores the keyboard.
 - **AC-15 off with no keyboard:** `shown` is unchanged, so the word, the pressed set and the hit rects stay.
 - **Fading out → shown again → Fading in with a new word** (a setting change during a presence fade-out).
+- **A keyboard hiding the row during a word change** (KR2-Q1, answered in R8, TASK-141): `last` is the word drawn at
+  the change's start, even if its keys never faded in. The case hides the row before the new keys appear, so the
+  two possible answers give different next words.
 - **The knob floor** `row_presence_settle_s ≥ row_fade_s`, inclusive, through `knobCheck`.
 
 **Not covered here, and why:**
 - **The fade's start alpha after a reversal** ("from the current alpha", R8): v2 tests state and touchability, as
   v1 did, not alpha values. The knob floor means a presence reversal can't meet a fade on its own.
-- **A keyboard hiding the row during a word change (Changing):** R8 says it takes effect at once, but which word
-  becomes `last` (the old one, or the one drawn at the change's start) isn't stated. No case pins it until the GDD
-  answers.
 - **AC-25 (the device) and AC-18 (the look):** screenshots on a real iPad.
 - **The platform read itself** (`GCKeyboard`, the Mac constant): the adapter's story (input/006). Here, presence
   arrives as events.
@@ -84,4 +84,5 @@ the play clock. Settle boundaries are dyadic; the 0.3 s fade boundaries are chec
 ## Source
 
 Keyboard Row R7–R9, States and Transitions, the Interface, Edge Cases, Tuning Knobs and AC-1, AC-15, AC-20 to AC-24,
-as merged by TASK-135 (5647a15f), with v1's sources (KR-Q1–Q11, TASK-089a). sources.lock is cut on that text.
+as merged by TASK-135 (5647a15f), with the TASK-141 answers (KR2-Q1 and the two settle readings, 4d6ddf9f) and v1's
+sources (KR-Q1–Q11, TASK-089a). sources.lock is cut on that text.

@@ -5094,6 +5094,243 @@
       ]
     },
     {
+      "id": "KR2-Q1-hidden-during-change-last-is-new-word",
+      "source": "gdd: onscreen-keyboard-row.md R8 (TASK-135, K-49) (during a word change, last is the word drawn at the change's start; KR2-Q1)",
+      "given": {
+        "knobs": {
+          "key_w": 128,
+          "key_h": 118,
+          "gap": 16,
+          "hit_pad": 8,
+          "key_top_y": 590,
+          "key_flash_s": 0.35,
+          "press_scale": 1.08,
+          "row_fade_s": 0.3,
+          "word_fade_s": 0.3,
+          "hit_floor_mm": 18,
+          "row_presence_settle_s": 0.5
+        },
+        "accessibility": {
+          "reduceMotion": false
+        },
+        "keyboardPresent": false,
+        "rowWords": [
+          "REX",
+          "EGG",
+          "NEST",
+          "ROAR",
+          "DINO",
+          "BABY",
+          "MOM",
+          "DAD",
+          "SUN",
+          "MOON",
+          "STAR",
+          "CAT",
+          "DOG",
+          "BALL",
+          "HAT",
+          "BUS"
+        ],
+        "castNames": [
+          "T-Rex",
+          "Fossil"
+        ],
+        "keyboardRow": false
+      },
+      "draws": {
+        "keyboard-row": [
+          "0",
+          "2305843009213693952",
+          "2305843009213693952"
+        ]
+      },
+      "steps": [
+        {
+          "t": {
+            "uptime": 0.0
+          },
+          "event": {
+            "type": "enterPlay"
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 0,
+              "word": "REX"
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.1875
+          },
+          "event": {
+            "type": "keyboard",
+            "present": true
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.25
+          },
+          "event": {
+            "type": "queueState",
+            "quiet": true
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "press",
+            "key": "R",
+            "source": "hardwareKey",
+            "outcome": "started"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "press",
+            "key": "E",
+            "source": "hardwareKey",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "press",
+            "key": "X",
+            "source": "hardwareKey",
+            "outcome": "queued"
+          },
+          "expect": [
+            {
+              "out": "light",
+              "indices": [
+                2
+              ]
+            }
+          ],
+          "expectState": {
+            "due": true
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.5
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 2,
+              "word": "NEST"
+            }
+          ],
+          "expectState": {
+            "state": "Changing",
+            "word": "REX"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.625
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Changing",
+            "word": "REX"
+          }
+        },
+        {
+          "t": {
+            "uptime": 0.6875
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "FadingOut",
+            "shown": false
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.0
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [],
+          "expectState": {
+            "state": "Hidden",
+            "word": null
+          }
+        },
+        {
+          "t": {
+            "uptime": 1.5
+          },
+          "event": {
+            "type": "keyboard",
+            "present": false
+          },
+          "expect": []
+        },
+        {
+          "t": {
+            "uptime": 2.0
+          },
+          "event": {
+            "type": "frame"
+          },
+          "expect": [
+            {
+              "out": "word",
+              "index": 1,
+              "word": "EGG"
+            }
+          ],
+          "expectState": {
+            "state": "FadingIn"
+          }
+        }
+      ],
+      "note": "REX Due and quiet: the change at 0.5 draws NEST (last REX, u 0.125). A keyboard reported at 0.1875 settles at 0.6875, mid-change and before NEST's keys fade in (0.8): the row fades out with REX's keys still drawn. NEST, drawn at the change's start, is last, so the next draw (u 0.125 over the 15 words other than NEST) is EGG; with REX as last it would have been NEST again."
+    },
+    {
       "id": "AC24-forced-on",
       "source": "gdd: onscreen-keyboard-row.md R8 (TASK-135, K-49) (keyboardRow true = always); AC-24",
       "given": {
