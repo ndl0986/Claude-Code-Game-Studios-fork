@@ -310,20 +310,21 @@ public enum SfxBake {
         let rel = recipe.path
         let duration = Double(pcm.samples.count) / pcm.sampleRate
         if duration > maxSeconds { throw VoiceBakeError(file: rel, reason: "\(duration) s is over \(maxSeconds) s (V12)") }
-        let before = LoudnessMeter.measure(pcm.samples, sampleRate: pcm.sampleRate)
+        let before = LoudnessMeter.measure(pcm.samples, sampleRate: pcm.sampleRate, truePeak: false)
         guard before.classLUFS.isFinite else { throw VoiceBakeError(file: rel, reason: "silent or fully gated: no loudness to normalise") }
         let gainDB = targetLUFS - before.classLUFS, g = pow(10, gainDB / 20)
         let out = PCMAudio(samples: pcm.samples.map { Float(Double($0) * g) }, sampleRate: pcm.sampleRate)
-        let after = LoudnessMeter.measure(out.samples, sampleRate: out.sampleRate)
+        let after = LoudnessMeter.measure(out.samples, sampleRate: out.sampleRate, truePeak: false)
+        let truePeak = LoudnessMeter.truePeak(out.samples)
         guard abs(after.classLUFS - targetLUFS) <= toleranceLU else {
             throw VoiceBakeError(file: rel, reason: "\(after.classLUFS) LUFS after normalising, outside \(targetLUFS) ±\(toleranceLU) LU")
         }
-        guard after.truePeakDBTP <= truePeakCeilingDBTP else {
-            throw VoiceBakeError(file: rel, reason: "true peak \(after.truePeakDBTP) dBTP is over \(truePeakCeilingDBTP) dBTP at \(targetLUFS) LUFS")
+        guard truePeak <= truePeakCeilingDBTP else {
+            throw VoiceBakeError(file: rel, reason: "true peak \(truePeak) dBTP is over \(truePeakCeilingDBTP) dBTP at \(targetLUFS) LUFS")
         }
         return (out, SfxFileReport(castId: recipe.castId, path: rel, duration: duration, momentaryOnly: after.momentaryOnly,
                                    loudnessBefore: before.classLUFS, loudnessAfter: after.classLUFS, gainDB: gainDB,
-                                   truePeakDBTP: after.truePeakDBTP, onsets: onsets(in: out.samples, sampleRate: out.sampleRate)))
+                                   truePeakDBTP: truePeak, onsets: onsets(in: out.samples, sampleRate: out.sampleRate)))
     }
 
     /// Counts sound onsets by an envelope threshold: the RMS of consecutive 5 ms blocks; an onset is a block at or above

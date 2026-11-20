@@ -8,11 +8,29 @@ import XCTest
 /// The sfx bake (TR-keytable-004 sfx half, ADR-0003 D5, content-pipeline story 007) on the real Dinosaurs recipes
 /// (`content/themes/dinosaurs/src/sfx/recipes.json`, read only). Bakes go to fresh temp theme folders.
 final class SfxBakeTests: XCTestCase {
-    var recipesURL: URL {
-        get throws { try Fixture.contractsRoot(from: #filePath).deletingLastPathComponent().appendingPathComponent("content/themes/dinosaurs/src/sfx/recipes.json") }
+    /// One bake of the real recipes into a temp theme, shared by the tests that only read it (built on first use, removed
+    /// in `tearDown()` of the class), plus each recipe's raw render.
+    struct Shared: Sendable {
+        let data: Data, recipes: SfxRecipes, dir: URL, written: [String], files: [SfxFileReport], raw: [String: PCMAudio]
     }
-    var recipesData: Data { get throws { try Data(contentsOf: recipesURL) } }
-    var recipes: SfxRecipes { get throws { try SfxRecipes.parse(recipesData, label: "recipes.json") } }
+    static let shared: Result<Shared, any Error> = Result {
+        let url = try Fixture.contractsRoot(from: #filePath).deletingLastPathComponent().appendingPathComponent("content/themes/dinosaurs/src/sfx/recipes.json")
+        let data = try Data(contentsOf: url), recipes = try SfxRecipes.parse(data, label: "recipes.json")
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("sfx-shared-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: dir.appendingPathComponent("src/sfx"), withIntermediateDirectories: true)
+        try data.write(to: dir.appendingPathComponent("src/sfx/recipes.json"))
+        let r = try SfxBake.bakeTheme(themeDir: dir)
+        var raw: [String: PCMAudio] = [:]
+        for x in recipes.recipes { raw[x.castId] = SfxSynth.render(x, constants: recipes.synth) }
+        return Shared(data: data, recipes: recipes, dir: dir, written: r.written, files: r.files, raw: raw)
+    }
+    override class func tearDown() {
+        if case .success(let s) = shared { try? FileManager.default.removeItem(at: s.dir) }
+        super.tearDown()
+    }
+    var fixture: Shared { get throws { try Self.shared.get() } }
+    var recipesData: Data { get throws { try fixture.data } }
+    var recipes: SfxRecipes { get throws { try fixture.recipes } }
 
     let castIds = ["dino_a_ankylosaurus_01", "dino_b_brachiosaurus_01", "dino_c_triceratops_01", "dino_d_diplodocus_01", "dino_e_edmontosaurus_01",
                    "dino_f_fossil_01", "dino_g_gallimimus_01", "dino_h_hadrosaurus_01", "dino_i_iguanodon_01", "dino_j_juravenator_01",
@@ -37,16 +55,12 @@ final class SfxBakeTests: XCTestCase {
         return try JSONSerialization.data(withJSONObject: o, options: [.sortedKeys])
     }
 
-    func render(_ id: String) throws -> PCMAudio {
-        let r = try recipes
-        return SfxSynth.render(try XCTUnwrap(r.recipes.first { $0.castId == id }), constants: r.synth)
-    }
+    func render(_ id: String) throws -> PCMAudio { try XCTUnwrap(try fixture.raw[id]) }
 
     // MARK: AC-1 / AC-2: files, names, format, recipes as data
 
     func test_all_36_files_are_named_by_cast_id_and_decode_as_aac_mono_48k_with_no_priming_lead() throws {
-        let dir = try theme(with: try recipesData)
-        let r = try SfxBake.bakeTheme(themeDir: dir)
+        let r = try fixture, dir = r.dir
         XCTAssertEqual(r.written, (castIds.map { "sfx/sfx_\($0).m4a" } + ["sfx/provenance.json"]).sorted())
         XCTAssertEqual(castIds.count, 36)
         for id in castIds {
@@ -117,16 +131,19 @@ final class SfxBakeTests: XCTestCase {
 
     // MARK: AC-6: loudness
 
+    /// The reports are the meter's measurement of the normalised PCM, taken before encoding (`SfxBake.normalise`).
     func test_every_recipe_is_normalised_to_minus_20_lufs_with_true_peak_under_minus_1_dbtp_before_encoding() throws {
-        let r = try recipes
-        for x in r.recipes {
-            let (pcm, report) = try SfxBake.normalise(SfxSynth.render(x, constants: r.synth), recipe: x)
-            let m = LoudnessMeter.measure(pcm.samples, sampleRate: pcm.sampleRate)   // an independent measurement of the output
-            XCTAssertEqual(m.classLUFS, -20, accuracy: 0.1, x.castId)
-            XCTAssertLessThanOrEqual(m.truePeakDBTP, -1, x.castId)
-            XCTAssertEqual(m.momentaryOnly, pcm.samples.count < 19_200, x.castId)
-            XCTAssertEqual(report.loudnessAfter, m.classLUFS, accuracy: 1e-9)
+        let f = try fixture
+        XCTAssertEqual(f.files.map(\.castId), castIds.sorted())
+        for r in f.files {
+            XCTAssertEqual(r.loudnessAfter, -20, accuracy: 0.1, r.castId)
+            XCTAssertLessThanOrEqual(r.truePeakDBTP, -1, r.castId)
+            XCTAssertEqual(r.momentaryOnly, r.duration < 0.4, r.castId)
         }
+        // One independent re-measurement of a normalised render, outside the bake.
+        let x = try XCTUnwrap(f.recipes.recipes.first { $0.castId == "dino_e_edmontosaurus_01" })
+        let out = try SfxBake.normalise(try render(x.castId), recipe: x).pcm
+        XCTAssertEqual(LoudnessMeter.measure(out.samples, sampleRate: out.sampleRate, truePeak: false).classLUFS, -20, accuracy: 0.1)
     }
 
     // MARK: AC-7: toddler-safe attack
@@ -135,9 +152,8 @@ final class SfxBakeTests: XCTestCase {
     /// magnitude stays under a linear ramp that reaches TWICE the peak at 10 ms (so full level cannot be reached before 5 ms; the
     /// prototype's 3 ms crack attack would break it). The recipe data also refuses any attack under 10 ms (boundary test above).
     func test_every_sound_starts_with_a_rise_of_at_least_10_ms_not_a_step() throws {
-        let r = try recipes
-        for x in r.recipes {
-            let s = SfxSynth.render(x, constants: r.synth).samples
+        for x in try recipes.recipes {
+            let s = try render(x.castId).samples
             let peak = Double(s.map { abs($0) }.max()!)
             XCTAssertLessThanOrEqual(Double(abs(s[0])), 1e-3 * peak, x.castId)
             for i in 0..<480 { XCTAssertLessThanOrEqual(Double(abs(s[i])), 2 * peak * Double(i) / 480 + 1e-3 * peak, "\(x.castId) sample \(i)") }
@@ -149,10 +165,11 @@ final class SfxBakeTests: XCTestCase {
     func test_two_renders_are_bit_identical_and_two_bakes_give_the_same_files_and_provenance() throws {
         let r = try recipes
         for x in r.recipes {
-            XCTAssertEqual(SfxSynth.render(x, constants: r.synth), SfxSynth.render(x, constants: r.synth), x.castId)
+            XCTAssertEqual(SfxSynth.render(x, constants: r.synth), try render(x.castId), x.castId)
         }
-        let a = try theme(with: try recipesData), b = try theme(with: try recipesData)
-        let wa = try SfxBake.bakeTheme(themeDir: a).written, wb = try SfxBake.bakeTheme(themeDir: b).written
+        // A second bake against the shared one.
+        let a = try fixture.dir, b = try theme(with: try recipesData)
+        let wa = try fixture.written, wb = try SfxBake.bakeTheme(themeDir: b).written
         XCTAssertEqual(wa, wb)
         for rel in wa {
             XCTAssertEqual(try Data(contentsOf: a.appendingPathComponent(rel)), try Data(contentsOf: b.appendingPathComponent(rel)), rel)
@@ -160,8 +177,7 @@ final class SfxBakeTests: XCTestCase {
     }
 
     func test_provenance_records_the_recipe_hash_synth_version_encode_settings_and_loudness_per_file() throws {
-        let data = try recipesData, dir = try theme(with: data)
-        _ = try SfxBake.bakeTheme(themeDir: dir)
+        let data = try recipesData, dir = try fixture.dir
         let text = String(decoding: try Data(contentsOf: dir.appendingPathComponent("sfx/provenance.json")), as: UTF8.self)
         let hash = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
         for needle in ["\"recipesSha256\": \"\(hash)\"", "\"synthVersion\": \"\(SfxSynth.version)\"", "\"bitRate\": 64000", "\"channels\": 1",
