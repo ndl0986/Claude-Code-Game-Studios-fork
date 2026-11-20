@@ -92,7 +92,7 @@
           "hueSlot": "blue",
           "art": "cast/cast_dino_a_ankylosaurus_01.json",
           "silhouette": "sil/sil_dino_a_ankylosaurus_01.json",
-          "sfx": "sfx/sfx_dino_a_ankylosaurus_01.m4a",
+          "sfx": "sfx/sfx_dino_a_ankylosaurus_01.caf",
           "voice": {
             "letter": "a",
             "word": "ankylosaurus"
@@ -113,7 +113,7 @@
           "hueSlot": "leaf",
           "art": "cast/cast_dino_b_brachiosaurus_01.json",
           "silhouette": "sil/sil_dino_b_brachiosaurus_01.json",
-          "sfx": "sfx/sfx_dino_b_brachiosaurus_01.m4a",
+          "sfx": "sfx/sfx_dino_b_brachiosaurus_01.caf",
           "voice": {
             "letter": "b",
             "word": "brachiosaurus"
@@ -134,7 +134,7 @@
           "hueSlot": "coral",
           "art": "cast/cast_dino_c_triceratops_01.json",
           "silhouette": "sil/sil_dino_c_triceratops_01.json",
-          "sfx": "sfx/sfx_dino_c_triceratops_01.m4a",
+          "sfx": "sfx/sfx_dino_c_triceratops_01.caf",
           "voice": {
             "letter": "c",
             "word": "triceratops"
@@ -155,7 +155,7 @@
           "hueSlot": "teal",
           "art": "cast/cast_dino_d_diplodocus_01.json",
           "silhouette": "sil/sil_dino_d_diplodocus_01.json",
-          "sfx": "sfx/sfx_dino_d_diplodocus_01.m4a",
+          "sfx": "sfx/sfx_dino_d_diplodocus_01.caf",
           "voice": {
             "letter": "d",
             "word": "diplodocus"
@@ -176,7 +176,7 @@
           "hueSlot": "blue",
           "art": "cast/cast_dino_e_edmontosaurus_01.json",
           "silhouette": "sil/sil_dino_e_edmontosaurus_01.json",
-          "sfx": "sfx/sfx_dino_e_edmontosaurus_01.m4a",
+          "sfx": "sfx/sfx_dino_e_edmontosaurus_01.caf",
           "voice": {
             "letter": "e",
             "word": "edmontosaurus"
@@ -197,7 +197,7 @@
           "hueSlot": "shared",
           "art": "cast/cast_dino_f_fossil_01.json",
           "silhouette": "sil/sil_dino_f_fossil_01.json",
-          "sfx": "sfx/sfx_dino_f_fossil_01.m4a",
+          "sfx": "sfx/sfx_dino_f_fossil_01.caf",
           "voice": {
             "letter": "f",
             "word": "fossil"
@@ -218,7 +218,7 @@
           "hueSlot": "ochre",
           "art": "cast/cast_dino_g_gallimimus_01.json",
           "silhouette": "sil/sil_dino_g_gallimimus_01.json",
-          "sfx": "sfx/sfx_dino_g_gallimimus_01.m4a",
+          "sfx": "sfx/sfx_dino_g_gallimimus_01.caf",
           "voice": {
             "letter": "g",
             "word": "gallimimus"
@@ -239,7 +239,7 @@
           "hueSlot": "mint",
           "art": "cast/cast_dino_h_hadrosaurus_01.json",
           "silhouette": "sil/sil_dino_h_hadrosaurus_01.json",
-          "sfx": "sfx/sfx_dino_h_hadrosaurus_01.m4a",
+          "sfx": "sfx/sfx_dino_h_hadrosaurus_01.caf",
           "voice": {
             "letter": "h",
             "word": "hadrosaurus"
@@ -260,7 +260,7 @@
           "hueSlot": "ochre",
           "art": "cast/cast_dino_i_iguanodon_01.json",
           "silhouette": "sil/sil_dino_i_iguanodon_01.json",
-          "sfx": "sfx/sfx_dino_i_iguanodon_01.m4a",
+          "sfx": "sfx/sfx_dino_i_iguanodon_01.caf",
           "voice": {
             "letter": "i",
             "word": "iguanodon"
@@ -281,7 +281,7 @@
           "hueSlot": "blue",
           "art": "cast/cast_dino_j_juravenator_01.json",
           "silhouette": "sil/sil_dino_j_juravenator_01.json",
-          "sfx": "sfx/sfx_dino_j_juravenator_01.m4a",
+          "sfx": "sfx/sfx_dino_j_juravenator_01.caf",
           "voice": {
             "letter": "j",
             "word": "juravenator"
@@ -302,7 +302,7 @@
           "hueSlot": "ochre",
           "art": "cast/cast_dino_k_kentrosaurus_01.json",
           "silhouette": "sil/sil_dino_k_kentrosaurus_01.json",
-          "sfx": "sfx/sfx_dino_k_kentrosaurus_01.m4a",
+          "sfx": "sfx/sfx_dino_k_kentrosaurus_01.caf",
           "voice": {
             "letter": "k",
             "word": "kentrosaurus"
@@ -323,7 +323,7 @@
           "hueSlot": "rose",
           "art": "cast/cast_dino_l_lambeosaurus_01.json",
           "silhouette": "sil/sil_dino_l_lambeosaurus_01.json",
-          "sfx": "sfx/sfx_dino_l_lambeosaurus_01.m4a",
+          "sfx": "sfx/sfx_dino_l_lambeosaurus_01.caf",
           "voice": {
             "letter": "l",
             "word": "lambeosaurus"
@@ -344,7 +344,7 @@
           "hueSlot": "violet",
           "art": "cast/cast_dino_m_maiasaura_01.json",
           "silhouette": "sil/sil_dino_m_maiasaura_01.json",
-          "sfx": "sfx/sfx_dino_m_maiasaura_01.m4a",
+          "sfx": "sfx/sfx_dino_m_maiasaura_01.caf",
           "voice": {
             "letter": "m",
             "word": "maiasaura"
@@ -365,7 +365,7 @@
           "hueSlot": "shared",
           "art": "cast/cast_dino_n_nest_01.json",
           "silhouette": "sil/sil_dino_n_nest_01.json",
-          "sfx": "sfx/sfx_dino_n_nest_01.m4a",
+          "sfx": "sfx/sfx_dino_n_nest_01.caf",
           "voice": {
             "letter": "n",
             "word": "nest"
@@ -386,7 +386,7 @@
           "hueSlot": "rose",
           "art": "cast/cast_dino_o_oviraptor_01.json",
           "silhouette": "sil/sil_dino_o_oviraptor_01.json",
-          "sfx": "sfx/sfx_dino_o_oviraptor_01.m4a",
+          "sfx": "sfx/sfx_dino_o_oviraptor_01.caf",
           "voice": {
             "letter": "o",
             "word": "oviraptor"
@@ -407,7 +407,7 @@
           "hueSlot": "teal",
           "art": "cast/cast_dino_p_tapejara_01.json",
           "silhouette": "sil/sil_dino_p_tapejara_01.json",
-          "sfx": "sfx/sfx_dino_p_tapejara_01.m4a",
+          "sfx": "sfx/sfx_dino_p_tapejara_01.caf",
           "voice": {
             "letter": "p",
             "word": "tapejara"
@@ -428,7 +428,7 @@
           "hueSlot": "coral",
           "art": "cast/cast_dino_q_quetzalcoatlus_01.json",
           "silhouette": "sil/sil_dino_q_quetzalcoatlus_01.json",
-          "sfx": "sfx/sfx_dino_q_quetzalcoatlus_01.m4a",
+          "sfx": "sfx/sfx_dino_q_quetzalcoatlus_01.caf",
           "voice": {
             "letter": "q",
             "word": "quetzalcoatlus"
@@ -449,7 +449,7 @@
           "hueSlot": "leaf",
           "art": "cast/cast_dino_r_raptor_01.json",
           "silhouette": "sil/sil_dino_r_raptor_01.json",
-          "sfx": "sfx/sfx_dino_r_raptor_01.m4a",
+          "sfx": "sfx/sfx_dino_r_raptor_01.caf",
           "voice": {
             "letter": "r",
             "word": "raptor"
@@ -470,7 +470,7 @@
           "hueSlot": "leaf",
           "art": "cast/cast_dino_s_stegosaurus_01.json",
           "silhouette": "sil/sil_dino_s_stegosaurus_01.json",
-          "sfx": "sfx/sfx_dino_s_stegosaurus_01.m4a",
+          "sfx": "sfx/sfx_dino_s_stegosaurus_01.caf",
           "voice": {
             "letter": "s",
             "word": "stegosaurus"
@@ -491,7 +491,7 @@
           "hueSlot": "violet",
           "art": "cast/cast_dino_t_trex_01.json",
           "silhouette": "sil/sil_dino_t_trex_01.json",
-          "sfx": "sfx/sfx_dino_t_trex_01.m4a",
+          "sfx": "sfx/sfx_dino_t_trex_01.caf",
           "voice": {
             "letter": "t",
             "word": "tee_rex"
@@ -512,7 +512,7 @@
           "hueSlot": "coral",
           "art": "cast/cast_dino_u_utahraptor_01.json",
           "silhouette": "sil/sil_dino_u_utahraptor_01.json",
-          "sfx": "sfx/sfx_dino_u_utahraptor_01.m4a",
+          "sfx": "sfx/sfx_dino_u_utahraptor_01.caf",
           "voice": {
             "letter": "u",
             "word": "utahraptor"
@@ -533,7 +533,7 @@
           "hueSlot": "ochre",
           "art": "cast/cast_dino_v_velociraptor_01.json",
           "silhouette": "sil/sil_dino_v_velociraptor_01.json",
-          "sfx": "sfx/sfx_dino_v_velociraptor_01.m4a",
+          "sfx": "sfx/sfx_dino_v_velociraptor_01.caf",
           "voice": {
             "letter": "v",
             "word": "velociraptor"
@@ -554,7 +554,7 @@
           "hueSlot": "teal",
           "art": "cast/cast_dino_w_wuerhosaurus_01.json",
           "silhouette": "sil/sil_dino_w_wuerhosaurus_01.json",
-          "sfx": "sfx/sfx_dino_w_wuerhosaurus_01.m4a",
+          "sfx": "sfx/sfx_dino_w_wuerhosaurus_01.caf",
           "voice": {
             "letter": "w",
             "word": "wuerhosaurus"
@@ -575,7 +575,7 @@
           "hueSlot": "blue",
           "art": "cast/cast_dino_x_xenoceratops_01.json",
           "silhouette": "sil/sil_dino_x_xenoceratops_01.json",
-          "sfx": "sfx/sfx_dino_x_xenoceratops_01.m4a",
+          "sfx": "sfx/sfx_dino_x_xenoceratops_01.caf",
           "voice": {
             "letter": "x",
             "word": "xenoceratops"
@@ -596,7 +596,7 @@
           "hueSlot": "coral",
           "art": "cast/cast_dino_y_yutyrannus_01.json",
           "silhouette": "sil/sil_dino_y_yutyrannus_01.json",
-          "sfx": "sfx/sfx_dino_y_yutyrannus_01.m4a",
+          "sfx": "sfx/sfx_dino_y_yutyrannus_01.caf",
           "voice": {
             "letter": "y",
             "word": "yutyrannus"
@@ -617,7 +617,7 @@
           "hueSlot": "leaf",
           "art": "cast/cast_dino_z_zuniceratops_01.json",
           "silhouette": "sil/sil_dino_z_zuniceratops_01.json",
-          "sfx": "sfx/sfx_dino_z_zuniceratops_01.m4a",
+          "sfx": "sfx/sfx_dino_z_zuniceratops_01.caf",
           "voice": {
             "letter": "z",
             "word": "zuniceratops"
@@ -637,7 +637,7 @@
           "hueSlot": "shared",
           "art": "cast/cast_dino_0_nest_01.json",
           "silhouette": "sil/sil_dino_0_nest_01.json",
-          "sfx": "sfx/sfx_dino_0_nest_01.m4a",
+          "sfx": "sfx/sfx_dino_0_nest_01.caf",
           "voice": {
             "number": "0",
             "word": "an_empty_nest"
@@ -657,7 +657,7 @@
           "hueSlot": "shared",
           "art": "cast/cast_dino_1_babies_01.json",
           "silhouette": "sil/sil_dino_1_babies_01.json",
-          "sfx": "sfx/sfx_dino_1_babies_01.m4a",
+          "sfx": "sfx/sfx_dino_1_babies_01.caf",
           "voice": {
             "number": "1",
             "word": "one_baby_dinosaur"
@@ -677,7 +677,7 @@
           "hueSlot": "shared",
           "art": "cast/cast_dino_2_babies_01.json",
           "silhouette": "sil/sil_dino_2_babies_01.json",
-          "sfx": "sfx/sfx_dino_2_babies_01.m4a",
+          "sfx": "sfx/sfx_dino_2_babies_01.caf",
           "voice": {
             "number": "2",
             "word": "two_baby_dinosaurs"
@@ -697,7 +697,7 @@
           "hueSlot": "shared",
           "art": "cast/cast_dino_3_babies_01.json",
           "silhouette": "sil/sil_dino_3_babies_01.json",
-          "sfx": "sfx/sfx_dino_3_babies_01.m4a",
+          "sfx": "sfx/sfx_dino_3_babies_01.caf",
           "voice": {
             "number": "3",
             "word": "three_baby_dinosaurs"
@@ -717,7 +717,7 @@
           "hueSlot": "shared",
           "art": "cast/cast_dino_4_babies_01.json",
           "silhouette": "sil/sil_dino_4_babies_01.json",
-          "sfx": "sfx/sfx_dino_4_babies_01.m4a",
+          "sfx": "sfx/sfx_dino_4_babies_01.caf",
           "voice": {
             "number": "4",
             "word": "four_baby_dinosaurs"
@@ -737,7 +737,7 @@
           "hueSlot": "shared",
           "art": "cast/cast_dino_5_babies_01.json",
           "silhouette": "sil/sil_dino_5_babies_01.json",
-          "sfx": "sfx/sfx_dino_5_babies_01.m4a",
+          "sfx": "sfx/sfx_dino_5_babies_01.caf",
           "voice": {
             "number": "5",
             "word": "five_baby_dinosaurs"
@@ -757,7 +757,7 @@
           "hueSlot": "shared",
           "art": "cast/cast_dino_6_babies_01.json",
           "silhouette": "sil/sil_dino_6_babies_01.json",
-          "sfx": "sfx/sfx_dino_6_babies_01.m4a",
+          "sfx": "sfx/sfx_dino_6_babies_01.caf",
           "voice": {
             "number": "6",
             "word": "six_baby_dinosaurs"
@@ -777,7 +777,7 @@
           "hueSlot": "shared",
           "art": "cast/cast_dino_7_babies_01.json",
           "silhouette": "sil/sil_dino_7_babies_01.json",
-          "sfx": "sfx/sfx_dino_7_babies_01.m4a",
+          "sfx": "sfx/sfx_dino_7_babies_01.caf",
           "voice": {
             "number": "7",
             "word": "seven_baby_dinosaurs"
@@ -797,7 +797,7 @@
           "hueSlot": "shared",
           "art": "cast/cast_dino_8_babies_01.json",
           "silhouette": "sil/sil_dino_8_babies_01.json",
-          "sfx": "sfx/sfx_dino_8_babies_01.m4a",
+          "sfx": "sfx/sfx_dino_8_babies_01.caf",
           "voice": {
             "number": "8",
             "word": "eight_baby_dinosaurs"
@@ -817,7 +817,7 @@
           "hueSlot": "shared",
           "art": "cast/cast_dino_9_babies_01.json",
           "silhouette": "sil/sil_dino_9_babies_01.json",
-          "sfx": "sfx/sfx_dino_9_babies_01.m4a",
+          "sfx": "sfx/sfx_dino_9_babies_01.caf",
           "voice": {
             "number": "9",
             "word": "nine_baby_dinosaurs"
