@@ -98,6 +98,12 @@ Review mode: lean · Workflow: standard
 Change: The meter box is placed from queue_max (art bible §7); the clearance holds for every queue_max in 0–5 (nearest slot ≥ 124 at zero jitter, ≥ 114 at any jitter); the capacity note restated.
 Reviewed-Content-Hash: design/gdd/hint-letters.md 2dedd30359e3c318c287457b75553160fa73beb5
 
+## Update — 2026-11-20 — TASK-142 meter-box threshold wording (no re-review)
+Review mode: lean · Workflow: standard
+Change: From game-qc-android (TASK-139). The capacity note said the parade meter box "moves no threshold", true only at zero jitter. Restated: its clearance is 97.8k; at zero jitter the nearest slot (124) fails it above k ≈ 1.27, with jitter (114) for some jitters from k ≈ 1.17, where a failing jitter is redrawn and zero jitter passes; both above the moon and token thresholds (1.043–1.044); unreachable on the MVP (k = 1). R5 meter bullet now says "at k = 1". No rule or value changes.
+fixture: none (wording only; the meter-box clearance rule and values are unchanged, so hint-letters-v1's 58 cases stand)
+Reviewed-Content-Hash: design/gdd/hint-letters.md 40f017d7f5cebebea439db0ddfc23a32771d2a55
+
 ## Update — 2026-11-20 — TASK-139b contract fixture lines for earlier changes (no GDD change)
 Review mode: lean · Workflow: standard
 Change: none to this GDD. ADR-0004 D6 line, found by TASK-139's drift check (game-qc-android): Detailed Design and Formulas changed by TASK-120 (the parade meter box) after hint-letters-v1 was cut.

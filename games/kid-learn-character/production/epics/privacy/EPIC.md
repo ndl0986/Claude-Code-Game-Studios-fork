@@ -5,7 +5,7 @@
 > **Architecture Module**: no runtime module: build scans and checks (tools/ci, ADR-0011)
 > **Milestone**: Demo 1 (`production/milestones/demo-1.md`, K-48)
 > **Status**: Ready
-> **Stories**: Not yet created — after TASK-131's control manifest lands, run `/create-stories privacy`
+> **Stories**: 4 stories (TASK-137)
 
 ## Overview
 
@@ -42,6 +42,15 @@ The kids-category guarantees as build gates: no network, SDKs, identifiers or lo
 (`contracts/README.md` registry; `story:<x>` is the story stem that starts the runner.)
 
 - none (the PKC rules are scans, not a contract)
+
+## Stories
+
+| # | Story | Type | Status | ADR |
+|---|-------|------|--------|-----|
+| 001 | [Demo 1 signed Release builds pass the static PKC checks: entitlements, Info.plist, privacy manifest](story-001-release-static-checks.md) | Integration | Ready | ADR-0011, ADR-0005, ADR-0001 |
+| 002 | [Demo 1 Release builds pass the API, third-party and log scans](story-002-release-code-scans.md) | Integration | Ready | ADR-0011, ADR-0001 |
+| 003 | [Scripted session on the device: zero network bytes and one app-written key](story-003-runtime-network-and-storage.md) | Integration | Ready | ADR-0011, ADR-0005 |
+| 004 | [Demo 1 PKC results.md for the signed Release builds](story-004-demo1-results.md) | Integration | Ready | ADR-0011 |
 
 ## Definition of Done
 

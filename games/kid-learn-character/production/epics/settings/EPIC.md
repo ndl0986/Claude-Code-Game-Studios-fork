@@ -5,7 +5,7 @@
 > **Architecture Module**: KidCore (record v1, validation, migration, F1/F2, notifications, behind `SettingsBackend`) + app (`UserDefaults` backend, one JSON key)
 > **Milestone**: Demo 1 (`production/milestones/demo-1.md`, K-48)
 > **Status**: Ready
-> **Stories**: Not yet created — after TASK-131's control manifest lands, run `/create-stories settings`
+> **Stories**: 3 stories (TASK-137)
 
 ## Overview
 
@@ -48,6 +48,14 @@ The one settings record, read before the first frame and written atomically. Dem
 ## Depends on
 
 - **TASK-135** (K-49): the `keyboardRow` default changes with the row's auto-on rule.
+
+## Stories
+
+| # | Story | Type | Status | ADR |
+|---|-------|------|--------|-----|
+| 001 | [The `UserDefaults` backend: one value under one key, nil writes, no autosave or restoration](story-001-userdefaults-backend.md) | Integration | Ready | ADR-0005, ADR-0002, ADR-0011 |
+| 002 | [Store behaviours: theme kept on failure, migration, reset, one notification per change](story-002-store-behaviours.md) | Logic | Ready | ADR-0005, ADR-0004 |
+| 003 | [Settings read before the first frame; play waits until the theme is ready](story-003-launch-read-holds-play.md) | Integration | Ready | ADR-0005, ADR-0004 |
 
 ## Definition of Done
 

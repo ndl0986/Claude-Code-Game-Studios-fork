@@ -182,6 +182,9 @@ TASK-135)*.
 - **Presence changes settle first:** a connect or disconnect changes `shown` only once the presence has held for
   `row_presence_settle_s` (0.5 s) of uptime, so a keyboard cover that flaps or a Bluetooth reconnect doesn't make the
   row blink. The settled value is the last one reported.
+  - *(keyboard-row-v2 readings, TASK-141.)* The settle is **inclusive**: a change that has held exactly
+    `row_presence_settle_s` applies on that tick. A repeated report of the **same** value doesn't restart the hold;
+    only a report of the other value does.
   - **A pending, unsettled change** is dropped at the moments when nothing is being shown or the row is about to be
     drawn afresh: **going to the background** (the return re-reads presence, below), a **Title → Play entry**, and
     the **panel's close or the gate's `resume()`**. At each of these, the **latest reported** presence applies at once,
@@ -207,6 +210,9 @@ TASK-135)*.
   (Reveal Stage R10), so nothing on stage jumps mid-reveal.
 - **Off** (becoming hidden): the hit rects go at once, and the row fades out over `row_fade_s`; the lift is removed
   from the next reveal. The pressed set is dropped, and the word is kept only as `last` for the next draw (KR-Q10).
+  **During a word change** (Changing), `last` is the word **drawn at the change's start** (the newest drawn word,
+  even if its keys hadn't faded in yet), so the next draw can't repeat a word the child just saw arriving
+  *(KR2-Q1, keyboard-row-v2, TASK-141)*.
 - **Either way, nothing on stage jumps:** a reveal or a parade in progress keeps its ground line and lane until the
   next reveal (Reveal Stage R10). A touch that went down on a key before the hit rects were removed has already made
   its press (Input R7: a press is on touch-down).
