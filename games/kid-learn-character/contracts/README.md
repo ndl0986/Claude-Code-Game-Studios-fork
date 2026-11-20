@@ -22,7 +22,8 @@ Cross-platform behaviour contracts for Kid Learn Character (ADR-0004). Each cont
 | settings-record-v2 | v2 | settings-store.md | KidCore | TASK-091: v1's slider case fixed; the non-finite slider cases added (F1, TASK-082) |
 | input-filter-v1 | v1 | input-key-filter.md | KidCore | superseded-by: input-filter-v2 (K-40; TASK-098 added `gateDigitUp`) |
 | input-filter-v2 | v2 | input-key-filter.md | KidCore | TASK-099: v1 + `gateDigitUp` (3 cases updated, 8 AC-1t cases) |
-| press-queue-v1 | v1 | press-queue.md | KidCore | batch 2 (TASK-081) |
+| press-queue-v1 | v1 | press-queue.md | KidCore | batch 2 (TASK-081); superseded by press-queue-v2 (K-53, TASK-147) |
+| press-queue-v2 | v2 | press-queue.md (TASK-147) | KidCore | TASK-147: K-53 missing-entry bound `formedS + 1.75`; 1.5 s word cases |
 | reveal-timing-v1 | v1 | reveal-stage.md; cast-rendering.md F1, F2, F4, F5, F7 | KidCore | batch 3 (TASK-086) |
 | audio-plan-v1 | v1 | audio-voice.md | KidCore | batch 3 (TASK-086) |
 | hint-letters-v1 | v1 | hint-letters.md | KidCore | batch 4 (TASK-089) |
@@ -69,7 +70,8 @@ it is never Done.
 | keyboard-row-v2 | not-started: story:keyboard-row | 58 |
 | parade-v1 | superseded-by: parade-v2 | 30 |
 | parade-v2 | not-started: story:parade | 46 |
-| press-queue-v1 | not-started: story:press-queue | 46 |
+| press-queue-v1 | superseded-by: press-queue-v2 | 46 |
+| press-queue-v2 | not-started: story:press-queue | 50 |
 | reveal-timing-v1 | not-started: story:reveal-stage | 60 |
 | scene-look-v1 | not-started: story:scene | 42 |
 | settings-record-v1 | superseded-by: settings-record-v2 | 73 |

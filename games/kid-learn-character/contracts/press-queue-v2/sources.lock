@@ -1,0 +1,7 @@
+# sources.lock for press-queue-v2 (cut 2026-11-20, TASK-147, on design/TASK-147-word-limit 5a6451c5): the ## sections the cases cite.
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/press-queue.md#Detailed Design 2e280db96d65ef721b5e9eee5f53611218aee21f
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/press-queue.md#Formulas 48972ba275583e5c9f950f8bee1d7c4296d1e7c5
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/press-queue.md#Edge Cases 4db89a3502c49bfca0880f086d30fa23e00075ce
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/press-queue.md#Acceptance Criteria ed2d41cd8a5bfdc803bd0aad632306b8a7e40411
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/audio-voice.md#Formulas 1853011c24377245eb188123646a0c13925fb00b
+Reviewed-Section-Hash: games/kid-learn-character/docs/architecture/adr-0002-modules-seams-types.md#Decision 20f4dafde70f9e0fe915e9154aff0c640178fb82
