@@ -1,7 +1,7 @@
 # Story 001: Start at once, queue during the hold, the formed guard, ignore when full
 
 > **Epic**: Press Queue (`production/epics/press-queue/EPIC.md`)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Core
 > **Type**: Logic
 > **Estimate**: M
@@ -87,3 +87,21 @@ The whole state machine is KidCore (Module Ownership). Tests use an injected clo
 
 - Depends on: None
 - Unlocks: `production/epics/press-queue/story-002-rest-jumping-mash.md`, `production/epics/press-queue/story-003-hold-and-formed-rules.md`, `production/epics/reveal-stage/story-001-start-reveal-timeline.md`, `production/epics/hint-letters/story-001-spawn-and-exclusions.md`
+
+## Completion Notes
+**Completed**: 2026-11-20
+**Criteria**: 4/4 passing (no deferred items)
+**Deviations**: ADVISORY: the story named press-queue-v1; v1 is superseded by press-queue-v2 (TASK-147, K-53), noted in
+the story; the runner targets v2, registered by press-queue/005 and passing 50/50 in verify.
+**Test Evidence**: `apple/KidCore/Tests/KidCoreTests/PressQueueTests.swift` (AC-1 `test_press_with_nothing_on_stage_starts_at_once`,
+AC-2 `test_press_during_hold_queues_then_starts_at_hold_end`, AC-3 `test_queued_press_waits_for_formed_even_after_hold_passed`,
+AC-4 `test_fourth_press_while_holding_is_ignored_and_uses_no_reveal_id`) and press-queue-v2's AC1–AC4 cases
+(`apple/KidCore/Tests/ContractTests/PressQueueRunner.swift`)
+**Run result**: N/A — pure KidCore logic with no app surface yet; the queue becomes player-visible with the Reveal Stage and app shell stories
+**Reviewed by**: game-qc-android (APPROVE a99454fa, 60cdc3d9; K-14 peer review)
+
+## Calls beyond the design
+- The knobs are an injected `PressQueueKnobs` with no defaults in KidCore; loaded from `content/data/press-queue.json` since press-queue/005 (`PressQueue.swift`) · kept 2026-11-20
+- `Press`, `PressSource` and `PressOrigin` are defined in `PressQueue.swift` until Input's ADR-0002 D5 `KeyEvent` lands; they move there in input/001 · kept 2026-11-20
+- No state enum: Empty / Revealing / Holding / Resting follow from the data (`PressQueue.swift`) · kept 2026-11-20
+- F1's holdEff is computed once in the queue from the stage's answer at start (`PressQueue.holdEff`) · kept 2026-11-20

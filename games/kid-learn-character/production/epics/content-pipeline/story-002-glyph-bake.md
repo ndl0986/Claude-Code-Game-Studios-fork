@@ -1,7 +1,7 @@
 # Story 002: Bake the 36 glyphs (A–Z, 0–9) from the OFL font into the v1 SVG subset
 
 > **Epic**: Content Pipeline (Tools) (`production/epics/content-pipeline/EPIC.md`)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Foundation
 > **Type**: Logic
 > **Estimate**: M
@@ -85,3 +85,18 @@ The font and its OFL licence file live in `content/fonts/` (shipped, ADR-0003 D1
 
 - Depends on: None
 - Unlocks: `production/epics/key-table/story-001-dinosaurs-theme-data.md`
+
+## Completion Notes
+**Completed**: 2026-11-20
+**Criteria**: 3/3 passing (no deferred items)
+**Deviations**: None
+**Test Evidence**: `apple/Tools/Tests/ToolsTests/GlyphBakeTests.swift` (`test_the_bake_writes_36_glyphs_and_a_glyph_set_byte_identical_across_two_runs`,
+`test_every_baked_glyph_parses_under_the_morph_v1_parser_with_a_non_zero_length`,
+`test_a_key_with_no_glyph_fails_naming_the_key_and_the_font_file_and_writes_nothing`); evidence in
+`production/qa/evidence/story-002-glyph-bake/`
+**Run result**: N/A — a build-time tool; the glyphs are seen when MorphCore morphs them in the app
+**Reviewed by**: game-dev-ios (APPROVE; K-14 peer review)
+
+## Calls beyond the design
+- Each `glyph_fredoka_<c>.json` carries a `font` record (name, version, weight, licence); `glyphs.json` holds the font metrics (unitsPerEm 1000, capHeight 700, ascender 974) (`GlyphBake.swift`) · kept 2026-11-20
+- The output folder is `content/glyphs/fredoka600/` (`GlyphBake.swift`) · kept 2026-11-20
