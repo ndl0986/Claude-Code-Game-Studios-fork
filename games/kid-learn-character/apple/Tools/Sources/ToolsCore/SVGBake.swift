@@ -84,12 +84,10 @@ public enum SVGBake {
         try b.silhouetteShapes(of: root, ctm: art.matrix, into: &w)
         let d = w.text
         guard !d.isEmpty else { throw b.err(root, nil, "no shape found") }
-        let lines: [[Pt]]
-        do { lines = try SVGPath.polylines(d) } catch { throw b.err(root, "d", "baked path does not parse under morph-v1: \(error)") }
-        var total = 0.0
-        for l in lines { for j in l.indices.dropFirst() { total += ((l[j].x - l[j - 1].x) * (l[j].x - l[j - 1].x) + (l[j].y - l[j - 1].y) * (l[j].y - l[j - 1].y)).squareRoot() } }
-        guard lines.contains(where: { $0.count >= 2 }), total > 0 else {
-            throw b.err(root, "d", "silhouette needs a subpath of 2+ points and a total length above 0")
+        switch MorphPathCheck.problem(d) {
+        case nil: break
+        case .unparsable(let e)?: throw b.err(root, "d", "baked path does not parse under morph-v1: \(e)")
+        case .notDrawable?: throw b.err(root, "d", "silhouette needs a subpath of 2+ points and a total length above 0")
         }
         return JSONValue.object(["d": .string(d), "tool": .string(toolName), "version": .string(toolVersion)]).render()
     }

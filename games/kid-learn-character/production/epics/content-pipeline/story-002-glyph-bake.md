@@ -1,12 +1,12 @@
 # Story 002: Bake the 36 glyphs (A–Z, 0–9) from the OFL font into the v1 SVG subset
 
 > **Epic**: Content Pipeline (Tools) (`production/epics/content-pipeline/EPIC.md`)
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Foundation
 > **Type**: Logic
 > **Estimate**: M
 > **Manifest Version**: 2026-11-20
-> **Last Updated**: —
+> **Last Updated**: 2026-11-20
 > **Milestone**: Demo 1 (K-48)
 
 ## Context
@@ -43,7 +43,7 @@
 
 *Derived from the governing ADRs (ADR-0003 first):*
 
-The font and its OFL licence file are inputs under `content/glyphs/<set>/src/` (build-only, ADR-0003 D1); only the baked glyph JSON ships.
+The font and its OFL licence file live in `content/fonts/` (shipped, ADR-0003 D1: also used for panel text, hint letters, row keys and tokens), copied from the TASK-033 prototype's `third_party/fredoka/` (Google Fonts, OFL 1.1). *(Corrected 2026-11-20 at implementation: this note first said `content/glyphs/<set>/src/`, which D1 does not list.)*
 
 ---
 
@@ -57,12 +57,14 @@ The font and its OFL licence file are inputs under `content/glyphs/<set>/src/` (
 
 ## Files
 
-*Planned; `/dev-story` replaces this list with the files it changed. Roots are ADR-0001 D3 / ADR-0002 D1 (`apple/`); `engine.name` is unset by design.*
-
-- `apple/Tools/Sources/ToolsCore/GlyphBake.swift`
-- `apple/Tools/Tests/ToolsTests/GlyphBakeTests.swift`
-
----
+- `apple/Tools/Sources/ToolsCore/GlyphBake.swift` (new: CoreText bake at wght 600, morph-v1 subset, glyph set writer)
+- `apple/Tools/Sources/ToolsCore/SVGGeometry.swift` (shared `MorphPathCheck` drawable check)
+- `apple/Tools/Sources/ToolsCore/SVGBake.swift` (silhouettes use the shared check; messages unchanged)
+- `apple/Tools/Sources/kidtools/main.swift` (`kidtools bake-glyphs <content-dir>`)
+- `apple/Tools/README.md`
+- `apple/Tools/Tests/ToolsTests/GlyphBakeTests.swift` (5 test functions)
+- `content/fonts/Fredoka-wdth-wght.ttf`, `content/fonts/OFL.txt` (copies of the TASK-033 prototype's third_party files, byte-identical)
+- `content/glyphs/fredoka600/glyphs.json` + 36 `glyph_fredoka_<char>.json`
 
 ## QA Test Cases
 

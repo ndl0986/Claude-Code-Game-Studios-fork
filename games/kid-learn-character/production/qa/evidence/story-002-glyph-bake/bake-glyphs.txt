@@ -1,0 +1,3 @@
+kidtools bake-glyphs content: 37 file(s) baked; a second run is byte-identical (diff -r empty).
+Font read: Fredoka, Version 2.001, units per em 1000, wght read back = 600.
+ToolsTests: Executed 66 tests, with 0 failures (load 15).

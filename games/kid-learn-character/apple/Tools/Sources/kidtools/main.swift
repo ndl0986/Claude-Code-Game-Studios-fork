@@ -8,6 +8,9 @@
 //   kidtools bake <content-dir>   bake every theme's src/art/*.svg to cast/*.json and src/sil/*.svg to sil/*.json (the D4 SVG
 //        subset, byte-stable output, ADR-0003 D4); a rejected SVG names element, attribute and line, writes nothing, and
 //        makes the command exit 1. Skipped for now: the check that the family's idle part names exist (no idle data yet).
+//   kidtools bake-glyphs <content-dir>   bake content/fonts/Fredoka-wdth-wght.ttf at wght 600 (CoreText) into
+//        content/glyphs/fredoka600/: glyph_fredoka_<char>.json for the 36 keys A–Z, 0–9 plus glyphs.json (morph-v1 path
+//        subset, byte-stable, ADR-0003 D4). A key with no glyph names the key and the font file, writes nothing, exit 1.
 import Foundation
 import ToolsCore
 
@@ -51,6 +54,15 @@ case "bake":
     for f in r.failures { print("REJECTED \(f)") }
     print("bake: \(r.baked.count) file(s) baked, \(r.failures.count) rejected; skipped: the check that every part the family's idle names exists (no idle data yet)")
     exit(r.failures.isEmpty ? 0 : 1)
+case "bake-glyphs":
+    guard args.count == 2 else { fail("usage: kidtools bake-glyphs <content-dir>") }
+    do {
+        let written = try GlyphBake.bakeContent(contentDir: URL(fileURLWithPath: args[1]))
+        for f in written { print("baked \(f)") }
+        print("bake-glyphs: \(written.count) file(s) baked")
+    } catch {
+        print("REJECTED \(error)"); exit(1)
+    }
 default:
     fail("unknown command \(cmd)")
 }

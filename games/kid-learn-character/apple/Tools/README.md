@@ -8,6 +8,14 @@
   3 decimals, LF, tool name and version in each file). A rejected SVG names element, attribute and line, writes nothing
   and makes the command exit 1. Not done yet: the check that every part the family's idle names exists (no idle data),
   and the silhouette raster check (silhouette vs body+outline within 1 px). Layout and choices: see `SVGBake.swift`.
+- `kidtools bake-glyphs <content-dir>`: the glyph bake (ADR-0003 D4, TR-morph-002). CoreText's
+  `CTFontCreatePathForGlyph` turns `content/fonts/Fredoka-wdth-wght.ttf` (OFL 1.1, licence `content/fonts/OFL.txt`) at
+  `wght` 600 into `content/glyphs/fredoka600/glyph_fredoka_<char>.json` for the 36 keys A–Z, 0–9, each
+  `{"d", "tool", "version"}`, plus `glyphs.json` (Key Table §2c; font name and version read from the font). Paths are
+  morph-v1 (`M L C Q Z`, the SVG bake's number format), in font units with y flipped to y down and the baseline at 0,
+  like the morph contract's `glyph-D.json`/`glyph-3.json`. Byte-stable; a key with no glyph names the key and the font
+  file and writes nothing. CoreText outlines may change between macOS versions: the output is committed and records the
+  tool version. Layout and choices: see `GlyphBake.swift`.
 - `kidtools validate <content-dir> [--load]`: KidCore's V1–V18 over every `content/themes/*/theme.json`, run with a
   file-system `ContentProbe` (exact case on every path component), plus the **staleness stub**. `verify.sh` runs it on
   `content/`; with no theme yet it reports `0 theme(s)` and passes. `ContentValidatorTests` proves it on a test theme
