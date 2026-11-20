@@ -31,11 +31,40 @@
 
 ## What the stub does not do yet (the bake tool story, ADR-0003 D4)
 
-- **Staleness** checks only that each baked `cast/…json` and `sil/…json` has its source by the stem rule
-  (`src/art/<stem>.svg`, `src/sil/<stem>.svg`). Re-baking in memory and comparing bytes waits for the bake tool.
+- **Trim, loudness, durations (story 004 part A):** each line goes render → resample → silence trim → one gain to
+  −16 LUFS → lookahead true-peak limiter → clip guard → true peak ≤ −1 dBTP → ±1 LU → CAF → the A7 gate again on the
+  decoded written file (Audio R8). Trim: audio below `trim.thresholdDBFS` on the K-weighted 10 ms envelope is cut at both
+  ends, keeping `padSeconds` and fading `fadeSeconds` linearly. Normalise: one gain per file to −16 LUFS (Audio F4;
+  integrated, or the momentary max under 0.4 s), same meter as the sfx bake. Limiter (ADR-0003 D5 detail): deterministic,
+  sample by sample; the gain comes from the 4× oversampled true-peak envelope and aims 0.1 dB under
+  `limiter.ceilingDBTP`; a min filter and box average over `lookaheadSeconds` make the gain fall before a peak and never
+  step; release is exponential (`releaseSeconds`); the gain is ≤ 1 and exactly 1 where no peak needs reducing. If
+  limiting leaves the line under −17 LUFS, one make-up gain is applied and it is limited again. A line reduced by more
+  than `limiter.warnReductionDB` prints `WARNING <file>: limiter reduced N dB (> W, not transparent)` (a warning, not a
+  failure). The clip guard (any |x| > 1.0) stays as a backstop. The `trim` and `limiter` objects in
+  `src/voice-scripts/<locale>.json` are required data and part of each line's input hash. The decoded length of each
+  written `.caf` (3 decimals) is written into `theme.json`'s `voiceDurations` (only that object is replaced; every other
+  byte is kept; never hand-edit it, ADR-0003 D4). V15's limits stay in KidCore; `validate` adds the voice file name to a
+  V15 finding. Provenance records per line the trim, the gain, `maxGainReductionDB`, and the loudness and true peak
+  measured on the written file.
+- **Staleness** (`validate`, build only): each baked `cast/…json` and `sil/…json` has its source by the stem rule
+  (`src/art/<stem>.svg`, `src/sil/<stem>.svg`). Sfx: every recipe is re-rendered in memory and compared byte for byte with
+  the committed `.caf`. Voice: Kokoro cannot run in `validate`, so `voice/<locale>/provenance.json` records per line a
+  SHA-256 of the render inputs (text after respelling, engine pins, trim, target, tool version) and of the written file;
+  `validate` recomputes the input hash from the current theme and script, compares the file hash and re-measures
+  `voiceDurations` against the files. A change to what the tool outputs for the same inputs must bump `SVGBake.toolVersion`.
 - **Baked path format:** V8 reads a baked silhouette or glyph file's top-level `"d"` string. This is **provisional**;
   the bake tool story fixes the baked format and updates `FileProbe.pathText`.
-- The SVG subset and structure, the silhouette raster check, loudness and true peak (ADR-0003 D4, D5) are not run.
+- **Silhouette raster check** (`validate`, build only; ADR-0003 D4, story 004 part B, `RasterCheck`): each item's baked
+  silhouette is compared with its baked cast file at rest, at artboard scale (1 px = 1 unit), aliased Core Graphics
+  bitmaps. Art mask = body fills ∪ outline fills ∪ the outer half of each outline stroke (the stroke minus its own fill),
+  non-zero rule; silhouette mask = its `d`, non-zero. It passes when every differing pixel lies within 1 px of the art
+  mask's edge (8-neighbour band); else a `raster` finding names the `sil/` file. A cast file that isn't the baked layout
+  prints NOT ASSESSED. Batch 1's six Dinosaurs pairs pass (`RasterCheckTests`).
+- **Idle-part check** (`kidtools bake --idle <file>`; `IdlePartCheck`): every part a family's idle moves must be a part
+  with a pivot in each of that family's cast files, else the bake fails naming the part and the file. The idle data
+  shape `{ "<idleId>": { "parts": [...] } }` is **provisional** until Cast Rendering's idle data exists (Luan's OQ-1);
+  without `--idle` the bake prints `NOT ASSESSED idle-part check: no idle data (OQ-1)`.
 - Durations come from `AVAudioFile` (decoded length; CAF LPCM has no priming, K-52); V15's ±0.01 s rule is unproven on real
   files until the TTS render story (ADR-0003 D5).
 

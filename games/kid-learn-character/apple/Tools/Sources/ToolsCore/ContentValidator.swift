@@ -4,7 +4,8 @@ import KidCore
 
 /// `kidtools validate` (ADR-0003 D3, TASK-079 S2 stub): runs KidCore's V1–V18 over every theme in a content folder
 /// with a file-system probe, plus the build-only **staleness stub** (each baked art and silhouette has its SVG source
-/// by the stem rule, ADR-0003 D1). Byte-for-byte re-bake, the SVG checks and loudness wait for the bake tool story.
+/// by the stem rule, ADR-0003 D1) and the audio staleness check (`Staleness`: sfx re-rendered and compared byte for byte,
+/// voice by hashed render inputs and re-measured `voiceDurations`). The SVG checks wait for the bake tool story.
 public enum ContentValidator {
     public struct Finding: Equatable, Sendable, CustomStringConvertible {
         public let theme: String
@@ -19,6 +20,8 @@ public enum ContentValidator {
         /// Theme folders that hold only build inputs under `src/` (ADR-0003 D1: B files) and no `theme.json` yet: a
         /// theme in progress. Reported NOT ASSESSED, never PASS; `--release` FAILs on any (TASK-125).
         public var inProgress: [String] = []
+        /// Checks that could not be made, one line each (e.g. a cast file that is not the baked layout): never a pass.
+        public var notAssessed: [String] = []
         public var pass: Bool { findings.isEmpty }
         /// The exit decision: a merge needs no finding; a release also needs no theme in progress (TASK-125).
         public func passes(release: Bool) -> Bool { pass && !(release && !inProgress.isEmpty) }
@@ -32,6 +35,21 @@ public enum ContentValidator {
         var isDir: ObjCBool = false
         return entries == ["src"]
             && FileManager.default.fileExists(atPath: folder.appendingPathComponent("src").path, isDirectory: &isDir) && isDir.boolValue
+    }
+
+    /// The voice file a V15 message (`"<locale> <kind>_<id>: …"`) is about, relative to the theme folder, or nil.
+    ///
+    /// Example:
+    /// ```swift
+    /// voiceFile(forV15Message: "en-us word_x: too long", locales: ["en-us"])   // "voice/en-us/vo_en-us_word_x.caf"
+    /// ```
+    public static func voiceFile(forV15Message m: String, locales: [String]) -> String? {
+        for loc in locales where m.hasPrefix(loc + " ") {
+            let rest = m.dropFirst(loc.count + 1)
+            guard let colon = rest.firstIndex(of: ":"), let us = rest.firstIndex(of: "_"), us < colon else { return nil }
+            return KeyTable.voicePath(loc, String(rest[..<us]), String(rest[rest.index(after: us)..<colon]))
+        }
+        return nil
     }
 
     /// Validates `content/themes/*/theme.json` under `contentDir`. `singleItemPerKey` is the MVP build setting (V2).
@@ -67,8 +85,18 @@ public enum ContentValidator {
                                         glyphPath: { k in glyphs.glyphs[k].flatMap { glyphProbe.pathText($0) } })
             let v = KeyTable.validate(model, glyphs: glyphs, assets: facts, singleItemPerKey: singleItemPerKey)
             for (rule, msgs) in v.failed.sorted(by: { $0.key < $1.key }) {
-                for m in msgs { report.findings.append(Finding(theme: folder, rule: "V\(rule)", message: m)) }
+                for m in msgs {
+                    let named = rule == 15 ? (voiceFile(forV15Message: m, locales: model.voiceLocales).map { "\(m) [\($0)]" } ?? m) : m
+                    report.findings.append(Finding(theme: folder, rule: "V\(rule)", message: named))
+                }
             }
+            for m in Staleness.check(themeDir: root, theme: model) { report.findings.append(Finding(theme: folder, rule: "stale", message: m)) }
+            // Silhouette raster check (build only, ADR-0003 D4): each item's silhouette vs its art at rest.
+            var pairs: [(art: String, silhouette: String)] = []
+            for k in KeyTable.keys { for it in model.keys[k] ?? [] { pairs.append((it.art, it.silhouette)) } }
+            let raster = RasterCheck.check(themeDir: root, pairs: pairs)
+            for m in raster.failures { report.findings.append(Finding(theme: folder, rule: "raster", message: m)) }
+            report.notAssessed += raster.notAssessed.map { "\(folder): \($0)" }
             // Staleness stub (build only): every baked art and silhouette has its source by the stem rule.
             for k in KeyTable.keys {
                 for it in model.keys[k] ?? [] {

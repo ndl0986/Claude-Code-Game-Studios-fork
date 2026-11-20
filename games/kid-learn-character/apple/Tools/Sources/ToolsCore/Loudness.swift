@@ -110,27 +110,43 @@ public enum LoudnessMeter {
     /// True peak in dBTP of `samples` (mono): the larger of the sample peak and the 4x-oversampled peak; `-infinity` for
     /// silence.
     public static func truePeak(_ samples: [Float]) -> Double {
+        let peak = truePeakEnvelope(samples).max() ?? 0
+        return peak > 0 ? 20 * log10(peak) : -.infinity
+    }
+
+    /// The per-sample true-peak envelope (linear, ≥ 0): for sample `i`, the larger of `|x[i]|` and the 4x-oversampled
+    /// values between samples `i-1` and `i+1` (the interpolated points on both sides of it). Its maximum is `truePeak`.
+    /// A limiter that keeps `g[i] * env[i]` under a ceiling, with `g` slowly varying, keeps the true peak under it.
+    ///
+    /// Example:
+    /// ```swift
+    /// let env = LoudnessMeter.truePeakEnvelope(samples)   // env.count == samples.count
+    /// ```
+    public static func truePeakEnvelope(_ samples: [Float]) -> [Double] {
         let n = samples.count
         // Zero-padded by 6 on each side so every tap is in range; the 48 taps flattened phase-major.
         var x = [Double](repeating: 0, count: n + 12)
-        var peak = 0.0
-        for i in 0..<n { x[i + 6] = Double(samples[i]); peak = max(peak, abs(x[i + 6])) }
+        var env = [Double](repeating: 0, count: n)
+        for i in 0..<n { x[i + 6] = Double(samples[i]); env[i] = abs(x[i + 6]) }
         let taps = truePeakPhases.flatMap { $0 }
         x.withUnsafeBufferPointer { xp in
             taps.withUnsafeBufferPointer { h in
                 let xb = xp.baseAddress!, hb = h.baseAddress!
                 for i in 0..<n {
                     let c = xb + i + 12   // x[n + 6 - k] is c[-k]
+                    var between = 0.0     // the interpolated points between sample i and i + 1
                     for p in 0..<4 {
                         let hp = hb + 12 * p
                         var acc = 0.0
                         for k in 0..<12 { acc += hp[k] * c[-k] }
-                        if abs(acc) > peak { peak = abs(acc) }
+                        if abs(acc) > between { between = abs(acc) }
                     }
+                    if between > env[i] { env[i] = between }
+                    if i + 1 < n, between > env[i + 1] { env[i + 1] = between }
                 }
             }
         }
-        return peak > 0 ? 20 * log10(peak) : -.infinity
+        return env
     }
 
     /// Measures `samples` (mono, Float, -1…1) at `sampleRate`. `truePeak: false` skips the (slower) true-peak pass and
