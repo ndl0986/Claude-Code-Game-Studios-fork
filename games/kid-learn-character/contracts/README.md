@@ -24,7 +24,8 @@ Cross-platform behaviour contracts for Kid Learn Character (ADR-0004). Each cont
 | reveal-timing-v1 | v1 | reveal-stage.md; cast-rendering.md F1, F2, F4, F5, F7 | KidCore | batch 3 (TASK-086) |
 | audio-plan-v1 | v1 | audio-voice.md | KidCore | batch 3 (TASK-086) |
 | hint-letters-v1 | v1 | hint-letters.md | KidCore | batch 4 (TASK-089) |
-| keyboard-row-v1 | v1 | onscreen-keyboard-row.md | KidCore | batch 4 (TASK-089) |
+| keyboard-row-v1 | v1 | onscreen-keyboard-row.md | KidCore | superseded-by: keyboard-row-v2 (K-40; TASK-135 K-49 changed what `keyboardRow` false means) |
+| keyboard-row-v2 | v2 | onscreen-keyboard-row.md (TASK-135) | KidCore | TASK-141: v1 + `keyboardPresent`, the 0.5 s settle, AC-1, AC-15, AC-20 to AC-24, KR2-Q1 |
 | gate-logic-v1 | v1 | parent-gate-panel.md (G13) | KidCore | batch 5 (TASK-094) |
 | app-shell-v1 | v1 | app-shell-title.md | KidCore | batch 5 (TASK-094) |
 | parade-v1 | v1 | parade.md | KidCore | superseded-by: parade-v2 (K-40; K-45 removed the rest) |
@@ -60,7 +61,8 @@ it is never Done.
 | input-filter-v1 | superseded-by: input-filter-v2 | 86 |
 | input-filter-v2 | not-started: story:input | 95 |
 | key-table-schema-v1 | runner: KeyTableModelRunner + Tools.KeyTableFileLayer | 93 |
-| keyboard-row-v1 | not-started: story:keyboard-row | 36 |
+| keyboard-row-v1 | superseded-by: keyboard-row-v2 | 36 |
+| keyboard-row-v2 | not-started: story:keyboard-row | 58 |
 | parade-v1 | superseded-by: parade-v2 | 30 |
 | parade-v2 | not-started: story:parade | 46 |
 | press-queue-v1 | not-started: story:press-queue | 46 |
@@ -76,3 +78,10 @@ cited `##` sections only. To see which contracts cite a section that has changed
 `.claude/scripts/review-receipts.sh sections-check <contract>/sources.lock <gdd>` from the repo root (ADR-0004 D6's
 `tools/contracts/source-drift.sh` will wrap this). The output is observations only. A PR that changes a cited
 section says in that GDD's review log `fixture: <contract>-v(N+1)` or `fixture: none (<reason>)`.
+
+ADRs have no review log, so a cited ADR section's line goes here:
+
+- **2026-11-20, ADR-0002 Decision** (changed by TASK-079 S1 92908cd2 and S2 807a52ce: the test-only ContractKit module and its
+  ban-grep scope; no seam or type changed), for app-shell-v1, audio-plan-v1, gate-logic-v1, hint-letters-v1,
+  input-filter-v2, key-table-schema-v1, keyboard-row-v1, press-queue-v1, reveal-timing-v1 and settings-record-v2:
+  `fixture: none (ContractKit is test-only; no seam or type the cases use changed)` (TASK-139b, game-qc-android).

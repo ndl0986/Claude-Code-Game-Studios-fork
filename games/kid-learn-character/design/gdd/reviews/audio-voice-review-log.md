@@ -128,3 +128,10 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md 434d426d4bdf9e67e25a23e31b922bb
 Review mode: lean · Workflow: standard
 Change: R8 defines the build-only voice script, content/themes/<id>/src/voice-scripts/<locale>.json (ADR-0003 D1, D6): the engine settings plus a respell map from line id to the TTS input; every other line uses the Key Table say/word. Dinosaurs en-us gets Luan's seven r2 picks (K-35, K-41); triceratops stays as spelled; displayed and Key Table names unchanged. A respelled line must still pass V15. Review: game-qc-android.
 Reviewed-Content-Hash: design/gdd/audio-voice.md 9692a7ca8ace023623279458e75921c096f21f66
+
+## Update — 2026-11-20 — TASK-139b contract fixture lines for earlier changes (no GDD change)
+Review mode: lean · Workflow: standard
+Change: none to this GDD. ADR-0004 D6 lines, found by TASK-139's drift check (game-qc-android), for the contract-cited sections changed after their contracts were cut: Detailed Design and Acceptance Criteria by TASK-090b, TASK-093, TASK-100, TASK-108, TASK-110 (after audio-plan-v1); Formulas by TASK-086 and TASK-088a (after press-queue-v1).
+fixture: none (audio-plan-v1: cut_settle_s and the resume frame are the adapter's, ADR-0010 D4/D5/D7; Kokoro and the voice script are the pipeline's; the plan's outputs are unchanged)
+fixture: none (press-queue-v1: no case cites Audio Formulas)
+Reviewed-Content-Hash: design/gdd/audio-voice.md 9692a7ca8ace023623279458e75921c096f21f66
