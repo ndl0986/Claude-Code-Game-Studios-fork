@@ -46,7 +46,7 @@
 
 *Derived from the governing ADRs (ADR-0002 first):*
 
-Only the Demo 1 states: Title and Play. The gate states (AC-1 j, k3–k5, p–r, t) and kiosk-on mode (k) are the next milestone with the Parent Gate and Child Lock-in.
+Only the Demo 1 states: Title and Play. **Out of Demo 1:** the gate states (AC-1 j, k3–k5, p–r, t), kiosk-on mode (k) and AC-6 (Mac kiosk on, physical keyboard) are the next milestone with the Parent Gate and Child Lock-in; AC-1 n (Android ids) waits for the Android build (K-03).
 
 ---
 

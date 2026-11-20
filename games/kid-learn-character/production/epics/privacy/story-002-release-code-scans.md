@@ -3,7 +3,7 @@
 > **Epic**: Privacy & Kids Compliance (`production/epics/privacy/EPIC.md`)
 > **Status**: Ready
 > **Layer**: Foundation
-> **Type**: Config/Data
+> **Type**: Integration
 > **Estimate**: S
 > **Manifest Version**: 2026-11-20
 > **Last Updated**: —
@@ -70,8 +70,8 @@ Run on the same candidate as story 001.
 
 ## Test Evidence
 
-**Story Type**: Config/Data
-**Required evidence**: Config/Data: smoke check pass (`production/qa/smoke-*.md`); here also `kidtools validate content` PASS on the shipped data
+**Story Type**: Integration
+**Required evidence**: Integration: an integration test (path under Files) OR a documented run in `production/qa/evidence/`
 
 **Status**: [ ] Not yet created
 
@@ -80,4 +80,4 @@ Run on the same candidate as story 001.
 ## Dependencies
 
 - Depends on: `production/epics/privacy/story-001-release-static-checks.md`
-- Unlocks: None
+- Unlocks: `production/epics/privacy/story-004-demo1-results.md`

@@ -42,7 +42,7 @@
 
 *Derived from the governing ADRs (ADR-0005 first):*
 
-Check first which of these the existing `SettingsStore` and settings-record-v2 cases already prove; write only the missing tests and code. **TASK-135 (K-49):** the `keyboardRow` default in AC-1 may change; re-read AC-1 after TASK-135 merges.
+**Credited to settings-record-v2** (already `runner:`): AC-1, AC-2, AC-4, AC-5, AC-6, AC-7 and AC-9. Write only the missing tests and code for the four ACs here. **TASK-135 (K-49, merged):** the `keyboardRow` default stays `false`; only its meaning changed (false = automatic: the row shows when no hardware keyboard is attached).
 
 ---
 

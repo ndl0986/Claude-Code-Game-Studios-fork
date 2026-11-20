@@ -1,4 +1,4 @@
-# Story 005: `kidtools validate` runs all of V1–V18 on the real bundle and fails the build naming theme, rule and item
+# Story 005: The validator on the real Dinosaurs content: verify.sh fails naming theme, rule and item
 
 > **Epic**: Content Pipeline (Tools) (`production/epics/content-pipeline/EPIC.md`)
 > **Status**: Ready
@@ -11,12 +11,12 @@
 
 ## Context
 
-**GDD**: `design/gdd/key-table-theme-data.md` — (AC-4, AC-17, AC-18)
-**Requirement**: `TR-keytable-001`, `TR-keytable-005`
+**GDD**: `design/gdd/key-table-theme-data.md` — (AC-4)
+**Requirement**: `TR-keytable-001`
 *(Requirement text lives in `docs/architecture/tr-registry.yaml` — read fresh at review time)*
 
 **ADR Governing Implementation**: ADR-0003: Content pipeline; ADR-0011: Build, verify and PKC gates; ADR-0004: Contracts, fixtures and harness
-**ADR Decision Summary**: ADR-0003 D3: one validator, the V-rules written once in KidCore over decoded models and the `ContentProbe` seam; Tools runs it at build with a file-system probe, the app at load with a bundle probe. ADR-0011: verify.sh runs it before every push.
+**ADR Decision Summary**: ADR-0003 D3: one validator, the V-rules written once in KidCore over the `ContentProbe` seam; Tools runs it at build with a file-system probe. ADR-0011: verify.sh runs it before every push.
 **ADR Version**: ADR-0003 2026-11-18; ADR-0011 2026-11-18; ADR-0004 2026-11-18
 
 **Engine**: Native Apple, no studio engine (ADR-0001 D7): Swift 6.4, SwiftUI + SpriteKit + AVFoundation, Xcode 27.1 | **Risk**: LOW
@@ -35,9 +35,8 @@
 
 *From GDD `design/gdd/key-table-theme-data.md`, scoped to this story:*
 
-- [ ] Removing one shipped file makes `kidtools validate` (and so verify.sh) fail naming the file (Key Table AC-4).
-- [ ] Test themes with 7 rowWords, a duplicate, a 9-letter word, a digit or lowercase word, and a schema-2 theme without rowWords each fail naming theme and rule (Key Table AC-17).
-- [ ] Test themes with prefix "Dino", folder ≠ id, two themes sharing a prefix, and a case-only file match each fail naming the rule, in both the Tools and the model runner (Key Table AC-18).
+- [ ] On the real Dinosaurs content (key-table/001), removing one shipped file makes `kidtools validate` and verify.sh fail naming theme, rule and file (Key Table AC-4).
+- [ ] The staleness stub is replaced by content-pipeline/004's re-bake comparison in the same run, and a theme in progress (TASK-125) still reports NOT ASSESSED, never PASS.
 
 ---
 
@@ -45,7 +44,7 @@
 
 *Derived from the governing ADRs (ADR-0003 first):*
 
-KidCore's `KeyTable.validate` already implements V1–V18 and key-table-schema-v1 runs (`runner:` KeyTableModelRunner + Tools.KeyTableFileLayer). This story replaces the TASK-079 stub path in `ContentValidator` (V1/V9/stale only) with the full call over a file-system `ContentProbe`, keeping TASK-125's theme-in-progress rule.
+**Already proved, credited:** `ContentValidator.run` calls `KeyTable.validate` (V1–V18) with a file-system `FileProbe` (ContentValidator.swift:68), and key-table-schema-v1 runs in both runners (KeyTableModelRunner + Tools.KeyTableFileLayer), which covers Key Table AC-17 and AC-18 and the V-rule verdicts. This story only proves the validator on the real shipped content.
 
 ---
 
@@ -83,5 +82,5 @@ KidCore's `KeyTable.validate` already implements V1–V18 and key-table-schema-v
 
 ## Dependencies
 
-- Depends on: `production/epics/content-pipeline/story-001-cast-svg-bake.md`, `production/epics/content-pipeline/story-002-glyph-bake.md`
+- Depends on: `production/epics/content-pipeline/story-004-loudness-durations-staleness.md`, `production/epics/key-table/story-001-dinosaurs-theme-data.md`
 - Unlocks: `production/epics/key-table/story-001-dinosaurs-theme-data.md`, `production/epics/key-table/story-002-app-theme-load.md`

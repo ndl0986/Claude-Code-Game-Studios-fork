@@ -82,5 +82,5 @@ Needs TASK-133's 36 asset specs and the art, baked by content-pipeline 001–002
 
 ## Dependencies
 
-- Depends on: `production/epics/content-pipeline/story-001-cast-svg-bake.md`, `production/epics/content-pipeline/story-002-glyph-bake.md`, `production/epics/content-pipeline/story-003-voice-render-encode.md`, `production/epics/content-pipeline/story-004-loudness-durations-staleness.md`, `production/epics/content-pipeline/story-005-validator-full-build.md`
-- Unlocks: None
+- Depends on: `production/epics/content-pipeline/story-001-cast-svg-bake.md`, `production/epics/content-pipeline/story-002-glyph-bake.md`, `production/epics/content-pipeline/story-003-voice-render-encode.md`, `production/epics/content-pipeline/story-004-loudness-durations-staleness.md`, `production/epics/content-pipeline/story-005-validator-on-real-content.md`
+- Unlocks: `production/epics/content-pipeline/story-005-validator-on-real-content.md`

@@ -81,4 +81,4 @@ Device rows M-11 (Mac) and P-5 (iPad).
 ## Dependencies
 
 - Depends on: `production/epics/privacy/story-001-release-static-checks.md`
-- Unlocks: None
+- Unlocks: `production/epics/privacy/story-004-demo1-results.md`

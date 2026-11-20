@@ -62,7 +62,7 @@ Every press, from a hardware key or a touch, becomes one normalized event; only 
 | 003 | [Classify touches on the stage: hints within their radius, sparkle on empty stage](story-003-touch-classification.md) | Logic | Ready | ADR-0002, ADR-0006, ADR-0004 |
 | 004 | [iPad hardware-keyboard adapter: `presses…` → `KeyEvent`, system keys passed on, touch batches sorted](story-004-ipad-key-adapter.md) | Integration | Blocked | ADR-0007, ADR-0002 |
 | 005 | [Mac key monitor adapter: one local monitor → `KeyEvent`, no Input Monitoring prompt](story-005-mac-key-adapter.md) | Integration | Blocked | ADR-0007, ADR-0002 |
-| 006 | [Keyboard-presence signal that shows the on-screen row when no hardware keyboard is attached](story-006-keyboard-presence-signal.md) | Logic | Blocked | ADR-0007, ADR-0002 |
+| 006 | [Keyboard presence from the platform adapter: `GCKeyboard` on iPad, constant true on the Mac](story-006-keyboard-presence-signal.md) | Integration | Blocked | ADR-0007, ADR-0002 |
 | 007 | [All 36 keys and the same letters as hints give the same reveal; other keys and empty taps do nothing visible](story-007-keys-and-touch-same-reveal.md) | Integration | Blocked | ADR-0007, ADR-0002 |
 
 ## Definition of Done

@@ -81,5 +81,5 @@ A `ThemeSource` adapter in the app (ADR-0002 D6 seam) decodes with the existing 
 
 ## Dependencies
 
-- Depends on: `production/epics/content-pipeline/story-005-validator-full-build.md`
+- Depends on: `production/epics/content-pipeline/story-005-validator-on-real-content.md`
 - Unlocks: `production/epics/key-table/story-003-launch-and-title-fallback.md`, `production/epics/settings/story-003-launch-read-holds-play.md`

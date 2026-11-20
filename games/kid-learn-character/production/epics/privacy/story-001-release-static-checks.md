@@ -3,7 +3,7 @@
 > **Epic**: Privacy & Kids Compliance (`production/epics/privacy/EPIC.md`)
 > **Status**: Ready
 > **Layer**: Foundation
-> **Type**: Config/Data
+> **Type**: Integration
 > **Estimate**: S
 > **Manifest Version**: 2026-11-20
 > **Last Updated**: —
@@ -72,8 +72,8 @@ The scans exist (TASK-079). This story runs them on the Demo 1 candidate (Letter
 
 ## Test Evidence
 
-**Story Type**: Config/Data
-**Required evidence**: Config/Data: smoke check pass (`production/qa/smoke-*.md`); here also `kidtools validate content` PASS on the shipped data
+**Story Type**: Integration
+**Required evidence**: Integration: an integration test (path under Files) OR a documented run in `production/qa/evidence/`
 
 **Status**: [ ] Not yet created
 
@@ -82,4 +82,4 @@ The scans exist (TASK-079). This story runs them on the Demo 1 candidate (Letter
 ## Dependencies
 
 - Depends on: `production/epics/settings/story-001-userdefaults-backend.md`
-- Unlocks: `production/epics/privacy/story-002-release-code-scans.md`, `production/epics/privacy/story-003-runtime-network-and-storage.md`
+- Unlocks: `production/epics/privacy/story-002-release-code-scans.md`, `production/epics/privacy/story-003-runtime-network-and-storage.md`, `production/epics/privacy/story-004-demo1-results.md`

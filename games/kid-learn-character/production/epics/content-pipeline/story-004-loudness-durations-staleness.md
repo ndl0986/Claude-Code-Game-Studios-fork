@@ -84,4 +84,4 @@ The loudness meter is our own Swift (K-31). The existing staleness stub in `Cont
 ## Dependencies
 
 - Depends on: `production/epics/content-pipeline/story-003-voice-render-encode.md`
-- Unlocks: `production/epics/key-table/story-001-dinosaurs-theme-data.md`
+- Unlocks: `production/epics/content-pipeline/story-005-validator-on-real-content.md`, `production/epics/key-table/story-001-dinosaurs-theme-data.md`

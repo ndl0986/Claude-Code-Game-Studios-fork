@@ -85,4 +85,4 @@ Input is the team-authored layered SVG of art bible §8 (TASK-133 specs). The ba
 ## Dependencies
 
 - Depends on: None
-- Unlocks: `production/epics/content-pipeline/story-005-validator-full-build.md`, `production/epics/key-table/story-001-dinosaurs-theme-data.md`
+- Unlocks: `production/epics/key-table/story-001-dinosaurs-theme-data.md`
