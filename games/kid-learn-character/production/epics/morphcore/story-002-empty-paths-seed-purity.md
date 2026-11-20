@@ -1,12 +1,12 @@
 # Story 002: No morph for empty paths, the per-press seed policy, and the purity checks
 
 > **Epic**: MorphCore (`production/epics/morphcore/EPIC.md`)
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Foundation
 > **Type**: Logic
 > **Estimate**: S
 > **Manifest Version**: 2026-11-20
-> **Last Updated**: —
+> **Last Updated**: 2026-11-20
 > **Milestone**: Demo 1 (K-48)
 
 ## Context
@@ -56,12 +56,9 @@ The ban grep already covers the import half of AC-4; the determinism half is a u
 
 ## Files
 
-*Planned; `/dev-story` replaces this list with the files it changed. Roots are ADR-0001 D3 / ADR-0002 D1 (`apple/`); `engine.name` is unset by design.*
-
-- `apple/MorphCore/Sources/MorphCore/Morph.swift`
-- `apple/MorphCore/Tests/MorphCoreTests/MorphCoreTests.swift`
-
----
+- `apple/MorphCore/Sources/MorphCore/Morph.swift` — modified (`Morph.build` non-throwing with `MissingSide`; `morphContractID` "morph-v1"; `morphSeed(key:pressCount:)`)
+- `apple/MorphCore/Tests/MorphCoreTests/MorphCoreTests.swift` — 7 new test functions (AC-9, AC-3, AC-4, AC-12 ×4)
+- `contracts/morphcore-api.md` — regenerated (12 added lines; ADR-0002 V4)
 
 ## QA Test Cases
 
