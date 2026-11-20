@@ -49,6 +49,11 @@
   unit-tested, but on the real content they print **NOT ASSESSED** until MorphCore's timing data
   (`content/data/morph-timing.json`, morphcore/001) and Audio & Voice's data exist. `PressQueue.swift` has no timing
   literal.
+  *Follow-up 2026-11-20 (game-dev-ios, morphcore/001 review; MorphCore R9 "reports a reveal longer than the hold;
+  the Press Queue GDD decides"):* Press Queue F1 build check 2 (`hold_s ≥ revealLen`) is that decision, and
+  `PressQueueData.f1BuildCheck` makes it an error. **Open:** when `content/data/morph-timing.json` lands, wire
+  `DataValidator` to read its normal and reduced sets (and Audio & Voice's `word_offset_s` / `hold_ext_max_s`) and run
+  the check, so the NOT ASSESSED line becomes PASS or FAIL. Owner: game-dev-android, after morphcore/001 merges.
 
 ---
 
