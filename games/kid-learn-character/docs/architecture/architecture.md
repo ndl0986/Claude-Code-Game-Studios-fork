@@ -167,7 +167,7 @@ formed; Parade fades; hints freeze from the panel signal). Background → `settl
 background time.
 
 **4. Content build (Tools).** SVG (subset, Cast Rendering R2) → bake tool → `cast_….json`, `sil_….json`;
-glyphs from the OFL font → `glyph_….json`; TTS pre-render → `.m4a`; decoded lengths → `voiceDurations`;
+glyphs from the OFL font → `glyph_….json`; TTS pre-render → `.m4a` (*`.caf` LPCM since K-52, 2026-11-20; ADR-0003 D5 note*); decoded lengths → `voiceDurations`;
 loudness check; validator (Key Table V-rules, MorphCore v1 parse, Scene caps, Cast Rendering bake rejections)
 gates the build.
 

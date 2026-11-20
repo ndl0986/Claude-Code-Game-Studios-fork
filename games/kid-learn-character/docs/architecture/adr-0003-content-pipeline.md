@@ -4,6 +4,17 @@
 
 Accepted (Luan, 2026-11-18; recorded by game-leader on Luan's explicit acceptance)
 
+*Note 2026-11-20 (K-52, Luan; TASK-144 / TASK-146; status unchanged, Accepted; decision text not rewritten):* two names in
+this ADR are superseded, and every place that states them is read through this note:
+- **The baked audio format.** "mono AAC `.m4a`" (D5 Encoding), "AAC" and "`voice/*.m4a`" in the pipeline line and the
+  Architecture Diagram, and the AAC priming/padding wording (the `decodedDuration` comment, D5 Durations, the Knowledge
+  Risk row, Risks, Validation 7) are superseded by **CAF linear PCM, 16-bit, mono, 48 kHz (`.caf`)** (K-52): byte-stable
+  across processes and CPU core classes, where AudioToolbox AAC was not; no priming or padding to remove. Evidence:
+  `production/qa/evidence/story-003-voice-render-encode/aac-determinism/`.
+- **The contract.** `key-table-schema-v1` (the Contracts line, D3's case set, D9's Android mirror, Validation 1, the
+  traceability table) is superseded by **`key-table-schema-v2`** (TASK-146): v1's cases with `.m4a` → `.caf` and the
+  same verdicts, plus two cases for the old extension.
+
 > **Who may move this to `Accepted`: the user, or `technical-director` on the
 > user's explicit confirmation. No other agent, and no skill on its own.**
 
@@ -39,6 +50,8 @@ an engine-agnostic text-to-speech step whose engine and licence stay open (L-09)
 | **Domain** | Content pipeline (Tools) and data (`KidCore`) |
 | **Layer** | Foundation (data, validator); build time (Tools) |
 | **Knowledge Risk** | LOW for the data model and validator (plain Swift, ADR-0002 types). HIGH for three Tools APIs: `CTFontCreatePathForGlyph`, the AAC priming/padding values from `AVAudioFile` / `AVAudioConverter`, and `AVAudioConverter` AAC encoding settings (NOT SOURCEABLE until a build proves them; Risks) |
+
+*Note 2026-11-20 (K-52; TASK-144; status unchanged):* the AAC priming/padding and AAC encoding-settings risks in the row above are **moot under K-52**: the baked audio is CAF linear PCM, which has no priming or padding; its decoded length equals its frame count (test `test_the_caf_file_decodes_to_the_exact_frame_count_and_the_16_bit_samples`).
 | **References Consulted** | `docs/engine-reference-local/native-apple/` (`VERSION.md`, `modules/avfaudio.md`); morph-contract-v1; ITU-R BS.1770; EBU Tech 3341 |
 | **Post-Cutoff APIs Used** | Only in Tools (CoreText, AVFoundation, Foundation XMLParser); none in `KidCore` |
 | **Verification Required** | Validation Criteria 1–10 |
@@ -213,6 +226,7 @@ pivots, layers, paths, fills and strokes, in artboard units).
     build fails;
   - the meter itself is checked against the **EBU Tech 3341** reference signals within **±0.1 LU**.
 - **Encoding:** mono AAC `.m4a` via AVFoundation in Tools (K-31). Every `sfx` is checked ≤ 2.0 s (V12).
+  - *Note 2026-11-20 (K-52, Luan; TASK-144; status unchanged, Accepted):* baked voice and sfx are **CAF linear PCM, 16-bit, mono, 48 kHz** (`.caf`), not AAC `.m4a`. AudioToolbox's AAC encoder gave two bitstreams for identical PCM depending on the CPU core class, so `.m4a` bytes could not be byte-stable (D4); CAF LPCM is byte-identical across processes and core classes (40 of 40, resample included). Evidence: `production/qa/evidence/story-003-voice-render-encode/aac-determinism/` (TASK-144; harness and results at a9063e34).
 
 ### D6. TTS pre-render (K-13): engine-agnostic
 - The pipeline: script (Key Table `say` / `word`) → engine adapter → WAV → normalise (D5 target) → AAC (D5) →
@@ -238,6 +252,7 @@ pivots, layers, paths, fills and strokes, in artboard units).
 ### D8. What ships, and what stays build-only (PKC-03)
 - Only D1's S files ship: data, baked JSON, audio, the font and its licence.
 - `src/`, SVGs, scripts, WAV intermediates, reports, fixtures and every tool never ship.
+- *Note 2026-11-20 (K-52; TASK-144; status unchanged):* the shipped audio is `.caf` LPCM (D5 note).
 - The bundle holds no third-party runtime code. The PKC-03 bundle scan checks all of this.
 
 ### D9. Android (for ADR-0012)
@@ -303,6 +318,7 @@ scripts ──TTS adapter (open, L-09)──▶ WAV ──normalise/AAC──▶
 - **AAC priming and padding values are NOT SOURCEABLE.** If `AVAudioFile` does not report them as expected, V15's
   durations are off by ~44 ms. Mitigation: Validation 7 with a file of known priming; a build proves it before any
   voice ships.
+  - *Note 2026-11-20 (K-52; TASK-144):* moot under K-52 (CAF LPCM has no priming or padding).
 - **CoreText glyph outlines** may differ between macOS versions. Mitigation: the baked files are committed (D4), so
   a different macOS only shows up as a staleness diff, never as a silent change.
 - **SVG exports vary by tool.** Mitigation: the ignored-noise list (D4) and named rejections; the artist re-exports
