@@ -1,7 +1,7 @@
 # Story 002: Start from rest, no jumping, the mash batch and one advance per tick
 
 > **Epic**: Press Queue (`production/epics/press-queue/EPIC.md`)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Core
 > **Type**: Logic
 > **Estimate**: S
@@ -78,3 +78,18 @@ The whole state machine is KidCore (Module Ownership). Tests use an injected clo
 
 - Depends on: `production/epics/press-queue/story-001-start-queue-ignore.md`
 - Unlocks: `production/epics/press-queue/story-004-ids-sources-resting.md`
+
+## Completion Notes
+**Completed**: 2026-11-20
+**Criteria**: 4/4 passing (no deferred items)
+**Deviations**: None
+**Test Evidence**: `apple/KidCore/Tests/KidCoreTests/PressQueueTests.swift` (AC-5 `test_press_at_rest_starts_at_its_own_time_not_the_next_tick`,
+AC-6 `test_press_after_hold_with_one_queued_queues_behind_it_and_the_tick_starts_the_first`, AC-8
+`test_ten_presses_at_rest_in_one_batch_start_one_queue_three_and_ignore_six_in_order`, AC-22
+`test_a_tick_far_past_two_holds_starts_only_one_reveal`) and press-queue-v2's AC5, AC6, AC8, AC22, F3, PQ-Q2 and R5-hitch cases
+(`apple/KidCore/Tests/ContractTests/PressQueueRunner.swift`, 50/50 in verify)
+**Run result**: N/A — pure KidCore logic with no app surface yet; the queue becomes player-visible with the Reveal Stage and app shell stories
+**Reviewed by**: game-qc-android (APPROVE 4574824c; K-14 peer review)
+
+## Calls beyond the design
+- none beyond the design
