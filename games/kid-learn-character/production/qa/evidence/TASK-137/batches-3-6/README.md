@@ -39,6 +39,9 @@ items now use 4 pairs per row, so they fit Quick Look's square.
 - **K:** the tall hip spikes sit on the back, not just above it.
 - **I:** the thumb spike points forward out of the chest, where it reads.
 - **J (batch 2's branch already holds it):** the smile is kept inside the short head.
+- **After game-dev-ios's batch-2 render note** (body shapes no thinner than about 12 units, since the parade keeps
+  `body`): S's four tail spikes, C's nose horn, X's short brow horns and the duckbills' front toe went from 10 units
+  to 12. The counts are unchanged.
 
 ## My calls to review
 
