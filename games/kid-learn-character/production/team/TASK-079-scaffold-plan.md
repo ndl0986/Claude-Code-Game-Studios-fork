@@ -58,7 +58,10 @@ Each piece lists **what lands**, **the headless proof** (K-34: `swift test`, `xc
   deployment **26**), the local package references (KidCore, MorphCore; no remote package, PKC-03(a)),
   `LetterMorphTests` and `LetterMorphUITests`. **Bundle ids (K-37 Q2, the previous game's pattern):**
   `com.galaxyandsun.lettermorph`, `.tests`, `.uitests`, and `.preview` for a preview configuration. LetterMorph is a
-  working name until K-04 and may change before the first store upload. The
+  working name until K-04 and may change before the first store upload. *(2026-11-20, TASK-130: K-04 named the
+  game **Letterlings**; the bundle ids are now `com.galaxyandsun.letterlings`, `.tests`, `.uitests`, `.preview`, and
+  `CFBundleDisplayName` is "Letterlings". The target, scheme and folder names stay `LetterMorph`. The TASK-079
+  evidence logs keep the old id as recorded.)* The
   app shows the **blank Title** (ADR-0006 D1: one `SKView` per window, the stage root with the fixed layers, an empty
   render plan; the Dusk launch colour `#46558f`). macOS: App Sandbox on, no network entitlement; the
   `CODE_SIGN_ENTITLEMENTS` file equals the PKC-01 allowlist. `UIRequiresFullScreen` not set (ADR-0006 D4).

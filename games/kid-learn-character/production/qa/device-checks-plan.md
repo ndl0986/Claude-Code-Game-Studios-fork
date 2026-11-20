@@ -30,7 +30,7 @@
 | F-2 | **Developer Mode on the iPad** (needed to run a Personal Team build); the iPad restarts | Luan | iPad Settings › Privacy & Security › Developer Mode | yes |
 | F-3 | **Trust the developer certificate** on the iPad | Luan | iPad Settings › General › VPN & Device Management | yes |
 | F-4 | **Guided Access** set up with a passcode on the child's iPad | Luan | iPad Settings › Accessibility › Guided Access | yes |
-| F-5 | `tccutil reset ListenEvent <bundle id>` on the Mac (resets Input Monitoring for **this app's bundle only**) | worker, with Luan's OK | Terminal | yes (no other app affected) |
+| F-5 | `tccutil reset ListenEvent <bundle id>` on the Mac (resets Input Monitoring for **this app's bundle only**; the production app is `com.galaxyandsun.letterlings`, K-04, TASK-130) | worker, with Luan's OK | Terminal | yes (no other app affected) |
 | F-6 | A **second display** connected to the Mac (AC-14) | Luan | — | yes |
 | F-7 | The Mac **sleeps** (lid closed or display sleep) and needs **Luan's login** on wake (AC-16) | Luan | — | yes |
 | F-8 | A phone that records **240 fps slow motion** (TASK-033 procedure) | Luan | — | — |
