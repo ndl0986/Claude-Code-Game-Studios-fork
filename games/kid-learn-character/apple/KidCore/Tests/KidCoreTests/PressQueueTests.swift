@@ -442,4 +442,28 @@ final class PressQueueTests: XCTestCase {
         XCTAssertEqual(p.now(), 15.0, "25 s of uptime minus the 10 s paused (10 to 20) once")
         XCTAssertEqual(p.play(21.0), 11.0)
     }
+
+    // R8 dated note (2026-11-20): only a reveal not yet formed settles; one already formed keeps its formedAt
+    func test_a_settle_keeps_the_formed_time_of_a_reveal_already_formed() {
+        var (q, _, clock) = makeQueue()
+        _ = q.press(press("D", at: 10.0))
+        clock.t = 12.5
+        q.formed(revealId: 1)
+        clock.t = 13.0
+        q.settle()
+        XCTAssertEqual(q.current?.formedAt, 12.5)
+        XCTAssertEqual(q.restingSince, 12.5)
+        XCTAssertEqual(q.current?.settled, true)
+    }
+
+    // The play clock never steps back: a stamp older than the last resume maps to the play time at that resume
+    func test_play_clock_clamps_a_stamp_from_before_the_last_resume() {
+        let p = PlayClock(uptime: FakeClock())
+        p.pause(.freeze, at: 10.0)
+        XCTAssertEqual(p.play(9.0), 9.0, "before the pause")
+        XCTAssertEqual(p.play(15.0), 10.0, "during the pause: the paused play time")
+        p.resume(.freeze, at: 20.0)
+        XCTAssertEqual(p.play(9.0), 10.0, "older than the resume: clamped, never 9 - 10 = -1")
+        XCTAssertEqual(p.play(21.0), 11.0)
+    }
 }

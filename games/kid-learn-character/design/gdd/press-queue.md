@@ -150,6 +150,9 @@ Stage R8; whether the Parade may start then is the Parade's rule, its R6) *(TASK
 settled creature counts as passed, so after the panel closes the next press starts at once (same rule as R9; author's
 choice, consistent with K-15). A theme can only be changed in the panel, so the queue is already empty when a new
 theme takes effect; the next reveal uses it (Key Table §4). The theme change itself never clears anything.
+*(Dated note 2026-11-20, press-queue/005; author's reading, agreed with game-qc-android:)* only a reveal **not yet
+formed** settles: it takes `formedAt` = the play time of the settle. A reveal **already formed** keeps its own
+`formedAt` (and so its `restingSince`); its hold still counts as passed. The same holds for R9.
 
 **R8a. Parent-gate challenge: freeze and resume** (K-20; TASK-050). While the gate's number challenge shows (after
 the moon hold or the Mac chord), the queue **freezes**: no tick advances it, the hold and the formed timeout do not

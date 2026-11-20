@@ -60,3 +60,9 @@ Review mode: lean · Workflow: standard
 Change: K-53 re-check of F1: the hold still never cuts a word at 1.5 s (build check 1: hold_s ≥ 2.70, shipped 3.0). F1 changes: the missing-entry bound is formedS + word_offset_s + word_len_max_s = formedS + 1.75 (was + 1.5); the table gains five baby dinosaurs (4.17) and the missing-entry row is 4.20; word_len ≤ 1.5; Edge Cases and AC-7 follow. Review: game-dev-android.
 fixture: press-queue-v2 (F1-no-voiceDurations-entry expects formedS + 1.5; its F1-…-1.25 word cases stay valid)
 Reviewed-Content-Hash: design/gdd/press-queue.md 12cc4f7ebc2cf8f1f4bd3926cb697a7b03d09916
+
+## Update — 2026-11-20 — press-queue/005 settle of an already-formed reveal (no re-review)
+Review mode: lean · Workflow: standard
+Change: a dated note in R8 (and so R9): only a reveal not yet formed settles at the settle's play time; one already formed keeps its formedAt and restingSince, and its hold counts as passed. The author's reading of "the settled reveal", agreed with game-qc-android at the press-queue/005 review; no rule changes.
+fixture: none (press-queue-v2 has no case that settles an already-formed reveal)
+Reviewed-Content-Hash: design/gdd/press-queue.md 8693e58729215e20ad889dce35b468624b9d2175

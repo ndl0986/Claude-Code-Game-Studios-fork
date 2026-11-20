@@ -18,6 +18,8 @@ public final class PlayClock: UptimeClock {
     private let uptime: UptimeClock
     private var pausedTotal = 0.0
     private var pausedSince: Double?
+    /// The uptime of the last resume: an older stamp is clamped to the play time at that resume.
+    private var lastResume: Double?
     private var reasons: Set<Pause> = []
 
     /// A play clock that starts equal to `uptime`.
@@ -26,12 +28,14 @@ public final class PlayClock: UptimeClock {
     /// The play time now.
     public func now() -> Double { play(uptime.now()) }
 
-    /// The play time of an uptime stamp (a press's `time`, Input R8, or a frame's target time). It maps stamps from
-    /// the current running stretch: every pause so far is subtracted, so a stamp from before an earlier pause is not
-    /// mapped back. No press arrives during a freeze (Input R6) and a background clears the queue (R9), so a queued
-    /// stamp never straddles a pause.
+    /// The play time of an uptime stamp (a press's `time`, Input R8, or a frame's target time). While paused, a stamp
+    /// at or after the pause maps to the paused play time. A stamp from before the last resume is clamped to the play
+    /// time at that resume, so play time never steps back (no press arrives during a freeze, Input R6, and a
+    /// background clears the queue, R9, so this is a guard, not a path the queue relies on).
     public func play(_ u: Double) -> Double {
-        u - pausedTotal - (pausedSince.map { max(0, u - $0) } ?? 0)
+        if let since = pausedSince { return min(u, since) - pausedTotal }
+        if let r = lastResume, u < r { return r - pausedTotal }
+        return u - pausedTotal
     }
 
     /// True while any pause reason holds.
@@ -48,5 +52,6 @@ public final class PlayClock: UptimeClock {
         guard reasons.remove(reason) != nil, reasons.isEmpty, let since = pausedSince else { return }
         pausedTotal += max(0, u - since)
         pausedSince = nil
+        lastResume = u
     }
 }
