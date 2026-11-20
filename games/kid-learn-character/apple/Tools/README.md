@@ -3,6 +3,11 @@
 `kidtools` (ADR-0002 V4, ADR-0003):
 
 - `kidtools api-surface [--check] <symbol-graph-dir> <module> <file.md>`: the public API surface of a core.
+- `kidtools bake <content-dir>`: the SVG-subset bake (ADR-0003 D4, TR-cast-001). Every theme's `src/art/<stem>.svg`
+  becomes `cast/<stem>.json` and `src/sil/<stem>.svg` becomes `sil/<stem>.json`. Output is byte-stable (sorted keys, up to
+  3 decimals, LF, tool name and version in each file). A rejected SVG names element, attribute and line, writes nothing
+  and makes the command exit 1. Not done yet: the check that every part the family's idle names exists (no idle data),
+  and the silhouette raster check (silhouette vs body+outline within 1 px). Layout and choices: see `SVGBake.swift`.
 - `kidtools validate <content-dir> [--load]`: KidCore's V1–V18 over every `content/themes/*/theme.json`, run with a
   file-system `ContentProbe` (exact case on every path component), plus the **staleness stub**. `verify.sh` runs it on
   `content/`; with no theme yet it reports `0 theme(s)` and passes. `ContentValidatorTests` proves it on a test theme
@@ -34,5 +39,5 @@ Every layer group in a cast SVG has `id="<part>_<layer>"`:
   reserved and never appear inside a part name.
 
 Examples: `head_body`, `left_arm_outline`, `tail_tip_detail`. Rejected: `head` (no layer), `Head_body` (case),
-`body_detail_outline` (reserved word in the part), `head_shadow` (unknown layer). The stub does not parse SVG yet;
-the bake tool enforces this rule and names the element and line on a rejection.
+`body_detail_outline` (reserved word in the part). (`head_shadow` reads as a part named `head_shadow`, which then fails
+for its missing layer groups.) The bake tool enforces this rule and names the element and line on a rejection.

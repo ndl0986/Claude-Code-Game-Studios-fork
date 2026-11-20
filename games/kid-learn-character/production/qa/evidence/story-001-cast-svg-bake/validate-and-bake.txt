@@ -1,0 +1,6 @@
+kidtools validate content (baked cast/ and sil/ moved aside, code at this branch):
+NOT ASSESSED theme dinosaurs: in progress (src/ only, no theme.json yet)
+validate: 0 theme(s), 1 in progress, 0 finding(s): PASS
+
+kidtools bake content (re-run; output byte-identical to the first run):
+bake: 12 file(s) baked, 0 rejected; skipped: the check that every part the family's idle names exists (no idle data yet)
