@@ -10,8 +10,10 @@
 
 The core loop, native on **macOS and iPadOS**, with the **full Dinosaurs set: A–Z and 0–9** (36 keys):
 
-- Title → Play (App Shell & Title), with a **simple grown-up exit** (Q2 below).
-- Hardware keys on both platforms (Input & Key Filter) and the **On-screen Keyboard Row** (Q1 below).
+- Title → Play (App Shell & Title). **No in-app grown-up exit** (K-49): Demo 1 relies on the OS ways out, ⌘Q on the
+  Mac and the iPad home gesture.
+- Hardware keys on both platforms (Input & Key Filter) and the **On-screen Keyboard Row**, which turns on by
+  itself when no hardware keyboard is attached and hides when one is (K-49; depends on TASK-135).
 - The **morph reveal** (MorphCore, Press Queue, Reveal Stage, Cast Rendering).
 - **Voice** (Kokoro, K-41) and **creature sound** (Audio & Voice).
 - The **Scene** (time of day and weather).
@@ -60,15 +62,16 @@ The core loop, native on **macOS and iPadOS**, with the **full Dinosaurs set: A�
    theme data.
 4. **TASK-131's control manifest**, then the stories per epic.
 
-## Open questions (for the leader / Luan; not decided here)
+## Decided (K-49, Luan, 2026-11-20)
 
-- **Q1. The keyboard row's default.** The row is off by default and turned on only in the grown-up panel (Keyboard
-  Row R8, AC-1), and the panel is out of Demo 1. Options: a Demo 1 build setting that seeds `keyboardRow` on; keep it
-  off on the Mac and on the iPad only when no hardware keyboard is attached (a design change); or move the panel's row
-  toggle into Demo 1.
-- **Q2. The "simple grown-up exit".** No GDD defines it. Without Child Lock-in the OS ways out already work (⌘Q on the
-  Mac; the home gesture on the iPad without Guided Access). Options: those alone; or a minimal in-app exit to the
-  Title. A new rule needs a GDD change.
-- **Q3. Partial requirements** that no Accepted ADR decides yet: TR-shell-004 (status bar, home indicator, edge
+- **Q1. The keyboard row** turns on by itself when no hardware keyboard is attached and hides when one is. It is a
+  design change, done in **TASK-135** (game-art-content: Keyboard Row R8 and its ACs, the Settings Store
+  `keyboardRow` default, Input's keyboard-presence signal); the keyboard-row stories depend on it.
+- **Q2. No in-app grown-up exit** in Demo 1: the OS ways out, ⌘Q on the Mac and the iPad home gesture (Guided
+  Access off), stand in until the Parent Gate (next milestone).
+
+## Open
+
+- **Partial requirements** that no Accepted ADR decides yet: TR-shell-004 (status bar, home indicator, edge
   deferral), TR-hints-003 (hint knob validator rule), TR-scene-002 (weather device cost), TR-a11y-004 (A5 contrast
   for hints). Each epic lists its own.

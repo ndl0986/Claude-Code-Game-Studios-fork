@@ -9,7 +9,7 @@
 
 ## Overview
 
-Launch, the Title with its play button, Title → Play, background and the away rule, memory shedding, and on both platforms a window that keeps the stage safe. Demo 1 adds a simple grown-up exit in place of the Parent Gate.
+Launch, the Title with its play button, Title → Play, background and the away rule, memory shedding, and on both platforms a window that keeps the stage safe. Demo 1 has no in-app grown-up exit (K-49): the OS ways out (⌘Q on the Mac, the iPad home gesture without Guided Access) stand in until the Parent Gate.
 
 ## Governing ADRs
 
@@ -53,7 +53,7 @@ Launch, the Title with its play button, Title → Play, background and the away 
 ## Notes
 
 - TR-shell-004 is Partial (status bar, home indicator, edge deferral: no ADR names them).
-- Open (milestone Q2): what the "simple grown-up exit" is; no GDD defines it.
+- K-49: no in-app grown-up exit in Demo 1 (Luan).
 
 ## Definition of Done
 

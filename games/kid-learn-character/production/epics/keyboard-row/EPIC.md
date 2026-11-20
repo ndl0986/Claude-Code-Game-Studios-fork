@@ -47,7 +47,7 @@ A row of letter keys on the stage for a child without a hardware keyboard, feedi
 
 ## Notes
 
-- Open (milestone Q1): the row is off by default (R8, AC-1) and turned on only in the panel, which is out of Demo 1.
+- Demo 1 behaviour (K-49, Luan): the row turns on by itself when no hardware keyboard is attached and hides when one is. That is a design change in TASK-135 (game-art-content: Keyboard Row R8 and its ACs, the Settings Store `keyboardRow` default, Input's keyboard-presence signal); this epic's stories depend on TASK-135 merging, and TR-kbrow-004 ("off by default") is re-read against it.
 
 ## Definition of Done
 
