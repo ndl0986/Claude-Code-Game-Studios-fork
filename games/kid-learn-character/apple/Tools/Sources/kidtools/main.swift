@@ -5,6 +5,9 @@
 //   kidtools validate <content-dir> [--load] [--release]   V1–V18 over every theme plus the staleness stub (ADR-0003
 //        D3); exit 1 on any finding. --load drops the build-only singleItemPerKey check (V2). A theme folder holding
 //        only src/ is a theme in progress: NOT ASSESSED, not a finding; --release exits 1 on any (TASK-125).
+//   kidtools bake <content-dir>   bake every theme's src/art/*.svg to cast/*.json and src/sil/*.svg to sil/*.json (the D4 SVG
+//        subset, byte-stable output, ADR-0003 D4); a rejected SVG names element, attribute and line, writes nothing, and
+//        makes the command exit 1. Skipped for now: the check that the family's idle part names exist (no idle data yet).
 import Foundation
 import ToolsCore
 
@@ -41,6 +44,13 @@ case "validate":
     let verdict = !r.pass ? "FAIL" : (releaseBlocked ? "FAIL (release: \(r.inProgress.count) theme(s) in progress)" : "PASS")
     print("validate: \(r.themes.count) theme(s)\(r.themes.isEmpty ? "" : " (" + r.themes.joined(separator: ", ") + ")"), \(r.inProgress.count) in progress, \(r.findings.count) finding(s): \(verdict)")
     exit(r.passes(release: release) ? 0 : 1)
+case "bake":
+    guard args.count == 2 else { fail("usage: kidtools bake <content-dir>") }
+    let r = SVGBake.bakeContent(contentDir: URL(fileURLWithPath: args[1]))
+    for f in r.baked { print("baked \(f)") }
+    for f in r.failures { print("REJECTED \(f)") }
+    print("bake: \(r.baked.count) file(s) baked, \(r.failures.count) rejected; skipped: the check that every part the family's idle names exists (no idle data yet)")
+    exit(r.failures.isEmpty ? 0 : 1)
 default:
     fail("unknown command \(cmd)")
 }
