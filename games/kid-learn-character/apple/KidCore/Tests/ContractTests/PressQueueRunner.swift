@@ -21,6 +21,9 @@ struct PressQueueRunner: ContractRunner {
 
     static func kind(out: String, field: String) -> String? { field == "r0" ? "time" : nil }
     /// spec.md Field kinds: `holdEff`, `formedAt` and `restingSince` are `time`.
+    /// spec.md State: `current` has named members (`revealId`, `key`, `holdEff`, `formed`, `formedAt`), so a case
+    /// checks only the members it writes (case-schema-v1 §4 note, TASK-149).
+    static func stateIsRecord(_ name: String) -> Bool { name == "current" }
     static func stateKind(name: String, field: String) -> String? {
         ["holdEff", "formedAt", "restingSince"].contains(field) ? "time" : nil
     }
