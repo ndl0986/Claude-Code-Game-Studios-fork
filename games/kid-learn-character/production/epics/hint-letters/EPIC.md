@@ -5,7 +5,7 @@
 > **Architecture Module**: KidCore (spawn, slots, jitter, clearances, life, drift, originFor) + app (bubble drawing)
 > **Milestone**: Demo 1 (`production/milestones/demo-1.md`, K-48)
 > **Status**: Ready
-> **Stories**: Not yet created — after TASK-131's control manifest lands, run `/create-stories hint-letters`
+> **Stories**: 6 stories (TASK-140)
 
 ## Overview
 
@@ -45,6 +45,17 @@ Floating letter bubbles that invite a press or a tap, kept clear of the creature
 ## Notes
 
 - TR-hints-003 is Partial: no validator rule decides the hint knobs and slots yet (Known Gaps).
+
+## Stories
+
+| # | Story | Type | Status | ADR |
+|---|-------|------|--------|-----|
+| 001 | [Spawn sequence, gap from the attempt, and the key exclusions](story-001-spawn-and-exclusions.md) | Logic | Ready | ADR-0002, ADR-0004 |
+| 002 | [Life and fades, drift, press outcomes and `originFor`](story-002-life-drift-outcomes.md) | Logic | Ready | ADR-0002, ADR-0004 |
+| 003 | [Jittered clearances, static slots, the widest creature, never empty](story-003-clearances-slots.md) | Logic | Ready | ADR-0002, ADR-0003 |
+| 004 | [The first-press pulse, background return, and no hints on the Title](story-004-pulse-background-title.md) | Logic | Ready | ADR-0002 |
+| 005 | [Dim during the parade, Reduce Motion, and fading hints still count](story-005-parade-dim-reduce-motion.md) | Logic | Ready | ADR-0002, ADR-0006 |
+| 006 | [Hit size from ppi, the knob checks, and the look on Day and Night](story-006-size-data-look.md) | UI | Ready | ADR-0006, ADR-0003 |
 
 ## Definition of Done
 

@@ -5,7 +5,7 @@
 > **Architecture Module**: KidCore (launch order, Title/Play/Background, pending start, away clock, memory escalation) + app (scene/window lifecycle, launch screen, Title drawing)
 > **Milestone**: Demo 1 (`production/milestones/demo-1.md`, K-48)
 > **Status**: Ready
-> **Stories**: Not yet created — after TASK-131's control manifest lands, run `/create-stories app-shell`
+> **Stories**: 5 stories (TASK-140)
 
 ## Overview
 
@@ -54,6 +54,16 @@ Launch, the Title with its play button, Title → Play, background and the away 
 
 - TR-shell-004 is Partial (status bar, home indicator, edge deferral: no ADR names them).
 - K-49: no in-app grown-up exit in Demo 1 (Luan).
+
+## Stories
+
+| # | Story | Type | Status | ADR |
+|---|-------|------|--------|-----|
+| 001 | [Launch order, the first frame's look, and the pending start](story-001-launch-order-first-frame.md) | Integration | Ready | ADR-0004, ADR-0005, ADR-0002 |
+| 002 | [Title starts, the first reveal, the away rule and cold launch](story-002-title-start-return.md) | Logic | Ready | ADR-0002, ADR-0004 |
+| 003 | [Windows on iPad and Mac, and the iPad status bar and home indicator](story-003-windows-and-overlays.md) | UI | Ready | ADR-0006 |
+| 004 | [Memory-warning shedding order](story-004-memory-warnings.md) | Logic | Ready | ADR-0002, ADR-0004 |
+| 005 | [Launch times on the child's iPad and the Mac](story-005-launch-times-device.md) | Integration | Ready | ADR-0006 |
 
 ## Definition of Done
 

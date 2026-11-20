@@ -5,7 +5,7 @@
 > **Architecture Module**: KidCore (F1–F5 looks, weather, build-check data) + app (sky, hills, ground, weather drawing)
 > **Milestone**: Demo 1 (`production/milestones/demo-1.md`, K-48)
 > **Status**: Ready
-> **Stories**: Not yet created — after TASK-131's control manifest lands, run `/create-stories scene`
+> **Stories**: 6 stories (TASK-140)
 
 ## Overview
 
@@ -46,6 +46,17 @@ The stage's sky follows the wall clock (dawn to night) with light weather, under
 (`contracts/README.md` registry; `story:<x>` is the story stem that starts the runner.)
 
 - scene-look-v1 (`not-started: story:scene`)
+
+## Stories
+
+| # | Story | Type | Status | ADR |
+|---|-------|------|--------|-----|
+| 001 | [Wall-clock looks: F1 boundaries, the first frame, clock jumps and the two clocks](story-001-looks-and-clocks.md) | Logic | Ready | ADR-0002, ADR-0004 |
+| 002 | [Weather within caps: windy, mashing and the halo clearing](story-002-weather-model.md) | Logic | Ready | ADR-0002, ADR-0004 |
+| 003 | [The 160-case contrast build check, and no network or sound from the Scene](story-003-contrast-check-privacy.md) | Logic | Ready | ADR-0004, ADR-0001, ADR-0011 |
+| 004 | [Draw the sky, hills and ground: extension, sun and no moon disc, the Title](story-004-scene-drawing.md) | Visual/Feel | Ready | ADR-0006, ADR-0002 |
+| 005 | [The row lift, the horizon lift during a parade, and Reduce Motion](story-005-ground-lift-reduce-motion.md) | Visual/Feel | Ready | ADR-0006, ADR-0002 |
+| 006 | [The F6 worst-case weather inside the device run](story-006-weather-device-cost.md) | Integration | Blocked | ADR-0009 |
 
 ## Definition of Done
 

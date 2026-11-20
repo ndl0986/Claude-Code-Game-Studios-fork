@@ -5,7 +5,7 @@
 > **Architecture Module**: cross-cutting: KidCore (Reduce Motion flag) + app (Smart Invert opt-out) + Tools (ADR-0013 gates)
 > **Milestone**: Demo 1 (`production/milestones/demo-1.md`, K-48)
 > **Status**: Ready
-> **Stories**: Not yet created — after TASK-131's control manifest lands, run `/create-stories accessibility`
+> **Stories**: 6 stories (TASK-140)
 
 ## Overview
 
@@ -52,6 +52,17 @@ Reduce Motion, Smart Invert, the 18 mm child touch floor and flash safety for th
 ## Notes
 
 - TR-android-001 (Android port) is out of Demo 1.
+
+## Stories
+
+| # | Story | Type | Status | ADR |
+|---|-------|------|--------|-----|
+| 001 | [One Reduce Motion flag: injected, never stored, applied at the right moment, re-read on return](story-001-reduce-motion-flag.md) | Integration | Ready | ADR-0002, ADR-0006, ADR-0005 |
+| 002 | [ADR-0013 G1 idle-rate lint and G2 red-flash palette check (buildable now)](story-002-flash-g1-g2.md) | Logic | Ready | ADR-0013, ADR-0011 |
+| 003 | [ADR-0013 G3: the F2 detector and its field math (buildable now)](story-003-flash-g3-detector.md) | Logic | Ready | ADR-0013 |
+| 004 | [ADR-0013 G4: the busy scenario rendered headless on every merge candidate](story-004-flash-g4-offline.md) | Integration | Blocked | ADR-0013, ADR-0006 |
+| 005 | [ADR-0013 G5: the Debug frame dump and the device flash gate](story-005-flash-g5-device.md) | Integration | Blocked | ADR-0013, ADR-0006 |
+| 006 | [Smart Invert, the child touch floor, sound off and no colour-only meaning](story-006-invert-touch-sound-colour.md) | UI | Ready | ADR-0006 |
 
 ## Definition of Done
 
