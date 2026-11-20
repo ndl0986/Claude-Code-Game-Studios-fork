@@ -78,7 +78,11 @@ is replaced by the shared drawing rules (S-1 to S-9) and each item's outline tra
   - **Elements:** only `svg`, `g`, `path`, `circle`, `ellipse`, `rect`, `line`, `polyline`, `polygon`.
   - **Attributes:** `fill`, `fill-opacity`, `stroke`, `stroke-width`, round `stroke-linejoin` / `stroke-linecap`,
     `opacity` on `g`, and `translate` / `rotate` / `scale` transforms only.
-  - **Values:** hex colours only.
+  - **Also allowed (needed):** `d`, each shape's geometry (`cx`, `cy`, `r`, `rx`, `ry`, `x`, `y`, `width`,
+    `height`, `x1`, `y1`, `x2`, `y2`, `points`), `id` (part and layer names), `data-pivot` and `transform`, plus the
+    root's `xmlns`, `version`, `width`, `height` and `viewBox` (ADR-0003 D4).
+  - **Values:** hex colours only. This is a house rule, stricter than the bake: ADR-0003 D4 also accepts
+    `rgb(r, g, b)`. *(TASK-133 render read.)*
   - **Not allowed:** gradients, masks, clips, filters, `use`, text, CSS, `style` or `class`. A `<title>` is allowed (it
     is ignored).
 - **S-9 Not in the SVG:** the ground shadow, the per-look colour, the idles (data: Cast Rendering R7), the tap hop,
@@ -104,17 +108,24 @@ measure the **TASK-077 test art**. So the real set must stay inside what P-2 mea
 
   | Number | Parts | Stage nodes | Parade nodes | Within caps (≤ 5 parts, 23, 15)? |
   |---|---|---|---|---|
-  | 1 · 2 · 3 | 1 · 2 · 3 | 5 · 10 · 15 | 4 · 8 · 12 | yes |
-  | 4 | 4 | 20 | 16 | parade over |
-  | 5 | 5 | 25 | 20 | over |
-  | 6 · 7 · 8 · 9 | 6–9 | 30–45 | 24–36 | over (parts too) |
+  | 1 · 2 · 3 | 1 · 2 · 3 | 6 · 12 · 18 | 4 · 8 · 12 | yes |
+  | 4 | 4 | 24 | 16 | over (stage and parade) |
+  | 5 | 5 | 30 | 20 | over |
+  | 6 · 7 · 8 · 9 | 6–9 | 36–54 | 24–36 | over (parts too) |
+
+  Per baby: 3 body fills, 2 detail elements (the eye highlight and the smile, S-4) and 1 outline node. The parade
+  drops the detail. The babies' `root` holds no shapes, so its empty outline group creates **no** effect node (a rule
+  for the renderer, confirmed by game-dev-ios).
 
   - **Why:** the test art has no group figure, so P-2 does not measure one.
-  - **Recommendation (for game-dev-ios):** add **the 9 babies** (the worst real figure: 9 parts, 45 stage / 36 parade
-    nodes) to the P-2 and M-13 runs, as a fourth figure in DeviceSpike's parade, and judge it under D1's rule.
+  - **Agreed with game-dev-ios (OQ-2):** **the 9 babies** (the worst real figure: 9 parts, 54 stage / 36 parade
+    nodes) become a fourth figure in DeviceSpike's Render screen, on the stage and in the parade, for the decisive
+    P-2 on the oldest supported iPad and for M-13, judged under D1's rule. It's built from ASSET-006 once drawn, or
+    from a stand-in made from the Numbers master if the device session comes first. Footprint is recorded too.
   - **Until then:** draw the baby master and 1–3. Numbers 4–9 are drawn but marked **budget pending**.
-  - **Fallbacks if 9 fails:** babies 6–9 bob in two groups (the back row as one part), or the parade role draws a
-    number as one texture (D1's mix, per role).
+  - **Fallbacks if 9 fails, in order:** (1) D1's per-role mix: the parade draws numbers as textures, which keeps
+    every baby's own bob (Cast Rendering R7); (2) the back row as one part, which changes the motion, so that one is
+    a design call for game-art-content and Luan.
   - The 9 is in batch 1 so it can be measured early (OQ-2).
 - **R-4 Sizes on screen:** a stage figure is about 280–360 units tall on the 1280×720 stage (art bible §5), about 775
   physical px on the largest iPad, so ≤ 1024 px per part texture under B. Parade figures are about 85 units tall.
@@ -124,8 +135,9 @@ measure the **TASK-077 test art**. So the real set must stay inside what P-2 mea
 **One shared, simpler drawing** (art bible §5: round body, big head; the count is what reads), placed n times.
 - **Shape** at scale 1: about **90 units tall and 84 wide**. The head and body are one rounded path, the head about
   half the height. There are two stubby feet with cream toes, a short tail stub on the left, and it faces right.
-- **Shapes per baby:** `body` holds 3 shapes: the body path (pastel), the eye white and the pupil. `detail` holds 1,
-  the eye highlight. The blush is dropped at this size (6 px rule). `outline` holds 1 group: Ink, 6 units, 0.8.
+- **Shapes per baby:** `body` holds 3 shapes: the body path (pastel), the eye white and the pupil. `detail` holds 2,
+  the eye highlight and a small closed smile (Ink, 4 units). The blush is dropped at this size (6 px rule). `outline`
+  holds 1 group: Ink, 6 units, 0.8.
 - **Pastels, fixed order** (art bible §4: one per slot plus a second coral, apricot), as played:
   1 `#7fcf8f`, 2 `#f2a37a`, 3 `#8fb4ea`, 4 `#d8b87a` (ochre baby), 5 `#c39af0`, 6 `#f29ab0`, 7 `#6fc9c0`,
   8 `#e48a5a`, 9 `#a5d46a`. The front row takes 1–5 and the back row 6–9, so neighbours always differ.
@@ -169,7 +181,9 @@ inside R-2.
 
 ## Per-item specs
 
-The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Pivots are the family's starting points
+The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Every `detail` element is its own
+node, a stroke or a fill: the item's markings, plus the mouth and eye highlight S-4 puts there, plus T's and Y's
+teeth nubs, drawn as one path of non-overlapping subpaths (TASK-133 render read). Pivots are the family's starting points
 (the TASK-077 values where they exist); an artist may move a pivot to the drawn joint and must record it in
 `data-pivot`.
 
@@ -186,7 +200,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | jaw nod (`jaw`, rotate) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `neck_body`, `neck_outline`, `neck_detail`, `head_body`, `head_outline`, `head_detail`, `jaw_body`, `jaw_outline`, `jaw_detail` |
 | `detail` (second cues) | back ridge bumps ×3, blush |
-| Node plan (A-candidate) | 5 parts, ~9 body fills, ~4 detail fills → stage 18 (cap 23), parade 14 (cap 15) |
+| Node plan (A-candidate) | 5 parts, ~9 body fills, ~7 detail elements (back ridge bumps ×3, blush, mouth, eye highlight, teeth nubs) → stage 21 (cap 23), parade 14 (cap 15) |
 
 ### ASSET-002 — D Diplodocus (`dino_d_diplodocus_01`) · batch 1
 
@@ -201,7 +215,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | neck sway (`neck`, rotate, 0.22 Hz as played) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `neck_body`, `neck_outline`, `neck_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | 3 back spots, blush |
-| Node plan (A-candidate) | 4 parts, ~9 body fills, ~4 detail fills → stage 17 (cap 23), parade 13 (cap 15) |
+| Node plan (A-candidate) | 4 parts, ~9 body fills, ~6 detail elements (3 back spots, blush, mouth, eye highlight) → stage 19 (cap 23), parade 13 (cap 15) |
 
 ### ASSET-003 — R Raptor (`dino_r_raptor_01`) · batch 1
 
@@ -216,7 +230,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | head look (`head`, rotate about the neck base) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | 3 back stripes, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~6 detail elements (3 back stripes, blush, mouth, eye highlight) → stage 18 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-004 — P Tapejara (`dino_p_tapejara_01`) · batch 1
 
@@ -231,7 +245,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | wing flap (`wing_far`, `wing_near`, rotate, opposite phase); hovers: the body sits at y ~200–330, the ground shadow stays at the anchor (art bible §5) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `wing_far_body`, `wing_far_outline`, `wing_far_detail`, `wing_near_body`, `wing_near_outline`, `wing_near_detail` |
 | `detail` (second cues) | wing finger lines ×2, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~5 detail elements (wing finger lines ×2, blush, mouth, eye highlight) → stage 17 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-005 — A Ankylosaurus (`dino_a_ankylosaurus_01`) · batch 1
 
@@ -246,7 +260,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | tail wag (`tail`, rotate); `head` prepared (no idle in data yet) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | 3 armour studs, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~6 detail elements (3 armour studs, blush, mouth, eye highlight) → stage 18 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-006 — 9 · nine baby dinosaurs (`dino_9_babies_01`) · batch 1
 
@@ -260,7 +274,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Parts (`data-pivot`) | `root` (320 410) holding `baby_1` · `baby_2` · `baby_3` · `baby_4` · `baby_5` · `baby_6` · `baby_7` · `baby_8` · `baby_9`, each with its pivot at that baby's feet |
 | Idle | each baby bobs on its own phase (Cast Rendering R7: `abs(sin(3t + ph))`, 0.95 Hz) |
 | Layer ids | `root_*` (empty but present), and `baby_<i>_body`, `baby_<i>_outline`, `baby_<i>_detail` |
-| Node plan (A-candidate) | 9 baby parts (root holds no shapes), per baby 3 body + 1 detail + 1 outline → stage 45, parade 36 **Over the single-figure caps: see Render limits, R-3.** |
+| Node plan (A-candidate) | 9 baby parts (root holds no shapes), per baby 3 body + 2 detail (eye highlight, smile) + 1 outline → stage 54, parade 36 **Over the single-figure caps: see Render limits, R-3.** |
 
 ### ASSET-007 — B Brachiosaurus (`dino_b_brachiosaurus_01`) · batch 2
 
@@ -275,7 +289,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | neck sway (`neck`, rotate, 0.22 Hz as played) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `neck_body`, `neck_outline`, `neck_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | 3 back spots, blush |
-| Node plan (A-candidate) | 4 parts, ~9 body fills, ~4 detail fills → stage 17 (cap 23), parade 13 (cap 15) |
+| Node plan (A-candidate) | 4 parts, ~9 body fills, ~6 detail elements (3 back spots, blush, mouth, eye highlight) → stage 19 (cap 23), parade 13 (cap 15) |
 
 ### ASSET-008 — Y Yutyrannus (`dino_y_yutyrannus_01`) · batch 2
 
@@ -290,7 +304,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | jaw nod (`jaw`, rotate) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `neck_body`, `neck_outline`, `neck_detail`, `head_body`, `head_outline`, `head_detail`, `jaw_body`, `jaw_outline`, `jaw_detail` |
 | `detail` (second cues) | feather tips ×3, blush |
-| Node plan (A-candidate) | 5 parts, ~9 body fills, ~4 detail fills → stage 18 (cap 23), parade 14 (cap 15) |
+| Node plan (A-candidate) | 5 parts, ~9 body fills, ~7 detail elements (feather tips ×3, blush, mouth, eye highlight, teeth nubs) → stage 21 (cap 23), parade 14 (cap 15) |
 
 ### ASSET-009 — J Juravenator (`dino_j_juravenator_01`) · batch 2
 
@@ -305,7 +319,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | head look (`head`, rotate about the neck base) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | fuzz tufts ×3, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~6 detail elements (fuzz tufts ×3, blush, mouth, eye highlight) → stage 18 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-010 — U Utahraptor (`dino_u_utahraptor_01`) · batch 2
 
@@ -320,7 +334,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | head look (`head`, rotate about the neck base) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | arm feather tips ×2, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~5 detail elements (arm feather tips ×2, blush, mouth, eye highlight) → stage 17 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-011 — V Velociraptor (`dino_v_velociraptor_01`) · batch 2
 
@@ -335,7 +349,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | head look (`head`, rotate about the neck base) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | 4 speckles, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~7 detail elements (4 speckles, blush, mouth, eye highlight) → stage 19 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-012 — Q Quetzalcoatlus (`dino_q_quetzalcoatlus_01`) · batch 2
 
@@ -350,7 +364,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | wing flap (`wing_near`, a small folded-wing lift); `head` prepared |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `wing_near_body`, `wing_near_outline`, `wing_near_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | wing fold line, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail elements (wing fold line, blush, mouth, eye highlight) → stage 16 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-013 — E Edmontosaurus (`dino_e_edmontosaurus_01`) · batch 3
 
@@ -365,7 +379,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | none in Cast Rendering data yet (breathe only); `tail`, `head` prepared (OQ-1) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | 2 back stripes, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~5 detail elements (2 back stripes, blush, mouth, eye highlight) → stage 17 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-014 — H Hadrosaurus (`dino_h_hadrosaurus_01`) · batch 3
 
@@ -380,7 +394,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | none in Cast Rendering data yet (breathe only); `tail`, `head` prepared (OQ-1) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | 2 back stripes, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~5 detail elements (2 back stripes, blush, mouth, eye highlight) → stage 17 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-015 — I Iguanodon (`dino_i_iguanodon_01`) · batch 3
 
@@ -395,7 +409,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | none in Cast Rendering data yet (breathe only); `tail`, `head` prepared (OQ-1) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | 3 back spots, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~6 detail elements (3 back spots, blush, mouth, eye highlight) → stage 18 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-016 — L Lambeosaurus (`dino_l_lambeosaurus_01`) · batch 3
 
@@ -410,7 +424,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | none in Cast Rendering data yet (breathe only); `tail`, `head` prepared (OQ-1) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | 2 back stripes, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~5 detail elements (2 back stripes, blush, mouth, eye highlight) → stage 17 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-017 — M Maiasaura (`dino_m_maiasaura_01`) · batch 3
 
@@ -425,7 +439,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | none in Cast Rendering data yet (breathe only); `tail`, `head` prepared (OQ-1) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | baby eye, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail elements (baby eye, blush, mouth, eye highlight) → stage 16 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-018 — C Triceratops (`dino_c_triceratops_01`) · batch 4
 
@@ -440,7 +454,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | none in Cast Rendering data yet (breathe only); `tail`, `head` (frill and horns) prepared (OQ-1) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | frill rim dots ×2, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~5 detail elements (frill rim dots ×2, blush, mouth, eye highlight) → stage 17 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-019 — X Xenoceratops (`dino_x_xenoceratops_01`) · batch 4
 
@@ -455,7 +469,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | none in Cast Rendering data yet (breathe only); `tail`, `head` (frill and horns) prepared (OQ-1) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | frill rim dots ×2, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~5 detail elements (frill rim dots ×2, blush, mouth, eye highlight) → stage 17 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-020 — Z Zuniceratops (`dino_z_zuniceratops_01`) · batch 4
 
@@ -470,7 +484,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | none in Cast Rendering data yet (breathe only); `tail`, `head` (frill and horns) prepared (OQ-1) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | frill rim dots ×2, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~5 detail elements (frill rim dots ×2, blush, mouth, eye highlight) → stage 17 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-021 — S Stegosaurus (`dino_s_stegosaurus_01`) · batch 4
 
@@ -485,7 +499,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | none in Cast Rendering data yet (breathe only); `tail`, `head` prepared (OQ-1) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | 2 flank spots, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~5 detail elements (2 flank spots, blush, mouth, eye highlight) → stage 17 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-022 — K Kentrosaurus (`dino_k_kentrosaurus_01`) · batch 4
 
@@ -500,7 +514,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | none in Cast Rendering data yet (breathe only); `tail`, `head` prepared (OQ-1) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | 2 flank stripes, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~5 detail elements (2 flank stripes, blush, mouth, eye highlight) → stage 17 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-023 — W Wuerhosaurus (`dino_w_wuerhosaurus_01`) · batch 4
 
@@ -515,7 +529,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | none in Cast Rendering data yet (breathe only); `tail`, `head` prepared (OQ-1) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | 2 flank stripes, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~5 detail elements (2 flank stripes, blush, mouth, eye highlight) → stage 17 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-024 — G Gallimimus (`dino_g_gallimimus_01`) · batch 5
 
@@ -530,7 +544,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | none in Cast Rendering data yet (breathe only); `tail`, `head` prepared (OQ-1) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | tail fluff tufts ×2, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~5 detail elements (tail fluff tufts ×2, blush, mouth, eye highlight) → stage 17 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-025 — O Oviraptor (`dino_o_oviraptor_01`) · batch 5
 
@@ -545,7 +559,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | none in Cast Rendering data yet (breathe only); `tail`, `head` prepared (OQ-1) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `tail_body`, `tail_outline`, `tail_detail`, `head_body`, `head_outline`, `head_detail` |
 | `detail` (second cues) | arm feather tips ×2, blush |
-| Node plan (A-candidate) | 3 parts, ~9 body fills, ~4 detail fills → stage 16 (cap 23), parade 12 (cap 15) |
+| Node plan (A-candidate) | 3 parts, ~9 body fills, ~5 detail elements (arm feather tips ×2, blush, mouth, eye highlight) → stage 17 (cap 23), parade 12 (cap 15) |
 
 ### ASSET-026 — F Fossil (`dino_f_fossil_01`) · batch 5
 
@@ -560,7 +574,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | none (breathe only) |
 | Layer ids | `root_body`, `root_outline`, `root_detail` |
 | `detail` (second cues) | 2 small pebble flecks |
-| Node plan (A-candidate) | 1 parts, ~4 body fills, ~2 detail fills → stage 7 (cap 23), parade 5 (cap 15) |
+| Node plan (A-candidate) | 1 parts, ~4 body fills, ~2 detail elements (2 small pebble flecks) → stage 7 (cap 23), parade 5 (cap 15) |
 
 ### ASSET-027 — N Nest (`dino_n_nest_01`) · batch 5
 
@@ -575,7 +589,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | egg wobble with a peek (`egg`, rotate) |
 | Layer ids | `root_body`, `root_outline`, `root_detail`, `egg_body`, `egg_outline`, `egg_detail` |
 | `detail` (second cues) | weave lines ×3, the peek eye |
-| Node plan (A-candidate) | 2 parts, ~5 body fills, ~4 detail fills → stage 11 (cap 23), parade 7 (cap 15) |
+| Node plan (A-candidate) | 2 parts, ~5 body fills, ~4 detail elements (weave lines ×3, the peek eye) → stage 11 (cap 23), parade 7 (cap 15) |
 
 ### ASSET-028 — 0 · an empty nest (`dino_0_nest_01`) · batch 5
 
@@ -589,7 +603,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Idle | none (breathe only) |
 | Layer ids | `root_body`, `root_outline`, `root_detail` |
 | `detail` | weave lines ×3 |
-| Node plan (A-candidate) | 1 part, ~4 body, ~3 detail → stage 8, parade 5 |
+| Node plan (A-candidate) | 1 part, ~4 body, ~3 detail (weave lines) → stage 8, parade 5 |
 
 ### ASSET-029 — 1 · one baby dinosaur (`dino_1_babies_01`) · batch 5
 
@@ -603,7 +617,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Parts (`data-pivot`) | `root` (320 410) holding `baby_1`, each with its pivot at that baby's feet |
 | Idle | each baby bobs on its own phase (Cast Rendering R7: `abs(sin(3t + ph))`, 0.95 Hz) |
 | Layer ids | `root_*` (empty but present), and `baby_<i>_body`, `baby_<i>_outline`, `baby_<i>_detail` |
-| Node plan (A-candidate) | 1 baby parts (root holds no shapes), per baby 3 body + 1 detail + 1 outline → stage 5, parade 4 |
+| Node plan (A-candidate) | 1 baby parts (root holds no shapes), per baby 3 body + 2 detail (eye highlight, smile) + 1 outline → stage 6, parade 4 |
 
 ### ASSET-030 — 2 · two baby dinosaurs (`dino_2_babies_01`) · batch 6
 
@@ -617,7 +631,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Parts (`data-pivot`) | `root` (320 410) holding `baby_1` · `baby_2`, each with its pivot at that baby's feet |
 | Idle | each baby bobs on its own phase (Cast Rendering R7: `abs(sin(3t + ph))`, 0.95 Hz) |
 | Layer ids | `root_*` (empty but present), and `baby_<i>_body`, `baby_<i>_outline`, `baby_<i>_detail` |
-| Node plan (A-candidate) | 2 baby parts (root holds no shapes), per baby 3 body + 1 detail + 1 outline → stage 10, parade 8 |
+| Node plan (A-candidate) | 2 baby parts (root holds no shapes), per baby 3 body + 2 detail (eye highlight, smile) + 1 outline → stage 12, parade 8 |
 
 ### ASSET-031 — 3 · three baby dinosaurs (`dino_3_babies_01`) · batch 6
 
@@ -631,7 +645,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Parts (`data-pivot`) | `root` (320 410) holding `baby_1` · `baby_2` · `baby_3`, each with its pivot at that baby's feet |
 | Idle | each baby bobs on its own phase (Cast Rendering R7: `abs(sin(3t + ph))`, 0.95 Hz) |
 | Layer ids | `root_*` (empty but present), and `baby_<i>_body`, `baby_<i>_outline`, `baby_<i>_detail` |
-| Node plan (A-candidate) | 3 baby parts (root holds no shapes), per baby 3 body + 1 detail + 1 outline → stage 15, parade 12 |
+| Node plan (A-candidate) | 3 baby parts (root holds no shapes), per baby 3 body + 2 detail (eye highlight, smile) + 1 outline → stage 18, parade 12 |
 
 ### ASSET-032 — 4 · four baby dinosaurs (`dino_4_babies_01`) · batch 6
 
@@ -645,7 +659,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Parts (`data-pivot`) | `root` (320 410) holding `baby_1` · `baby_2` · `baby_3` · `baby_4`, each with its pivot at that baby's feet |
 | Idle | each baby bobs on its own phase (Cast Rendering R7: `abs(sin(3t + ph))`, 0.95 Hz) |
 | Layer ids | `root_*` (empty but present), and `baby_<i>_body`, `baby_<i>_outline`, `baby_<i>_detail` |
-| Node plan (A-candidate) | 4 baby parts (root holds no shapes), per baby 3 body + 1 detail + 1 outline → stage 20, parade 16 **Over the single-figure caps: see Render limits, R-3.** |
+| Node plan (A-candidate) | 4 baby parts (root holds no shapes), per baby 3 body + 2 detail (eye highlight, smile) + 1 outline → stage 24, parade 16 **Over the single-figure caps: see Render limits, R-3.** |
 
 ### ASSET-033 — 5 · five baby dinosaurs (`dino_5_babies_01`) · batch 6
 
@@ -659,7 +673,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Parts (`data-pivot`) | `root` (320 410) holding `baby_1` · `baby_2` · `baby_3` · `baby_4` · `baby_5`, each with its pivot at that baby's feet |
 | Idle | each baby bobs on its own phase (Cast Rendering R7: `abs(sin(3t + ph))`, 0.95 Hz) |
 | Layer ids | `root_*` (empty but present), and `baby_<i>_body`, `baby_<i>_outline`, `baby_<i>_detail` |
-| Node plan (A-candidate) | 5 baby parts (root holds no shapes), per baby 3 body + 1 detail + 1 outline → stage 25, parade 20 **Over the single-figure caps: see Render limits, R-3.** |
+| Node plan (A-candidate) | 5 baby parts (root holds no shapes), per baby 3 body + 2 detail (eye highlight, smile) + 1 outline → stage 30, parade 20 **Over the single-figure caps: see Render limits, R-3.** |
 
 ### ASSET-034 — 6 · six baby dinosaurs (`dino_6_babies_01`) · batch 6
 
@@ -673,7 +687,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Parts (`data-pivot`) | `root` (320 410) holding `baby_1` · `baby_2` · `baby_3` · `baby_4` · `baby_5` · `baby_6`, each with its pivot at that baby's feet |
 | Idle | each baby bobs on its own phase (Cast Rendering R7: `abs(sin(3t + ph))`, 0.95 Hz) |
 | Layer ids | `root_*` (empty but present), and `baby_<i>_body`, `baby_<i>_outline`, `baby_<i>_detail` |
-| Node plan (A-candidate) | 6 baby parts (root holds no shapes), per baby 3 body + 1 detail + 1 outline → stage 30, parade 24 **Over the single-figure caps: see Render limits, R-3.** |
+| Node plan (A-candidate) | 6 baby parts (root holds no shapes), per baby 3 body + 2 detail (eye highlight, smile) + 1 outline → stage 36, parade 24 **Over the single-figure caps: see Render limits, R-3.** |
 
 ### ASSET-035 — 7 · seven baby dinosaurs (`dino_7_babies_01`) · batch 6
 
@@ -687,7 +701,7 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Parts (`data-pivot`) | `root` (320 410) holding `baby_1` · `baby_2` · `baby_3` · `baby_4` · `baby_5` · `baby_6` · `baby_7`, each with its pivot at that baby's feet |
 | Idle | each baby bobs on its own phase (Cast Rendering R7: `abs(sin(3t + ph))`, 0.95 Hz) |
 | Layer ids | `root_*` (empty but present), and `baby_<i>_body`, `baby_<i>_outline`, `baby_<i>_detail` |
-| Node plan (A-candidate) | 7 baby parts (root holds no shapes), per baby 3 body + 1 detail + 1 outline → stage 35, parade 28 **Over the single-figure caps: see Render limits, R-3.** |
+| Node plan (A-candidate) | 7 baby parts (root holds no shapes), per baby 3 body + 2 detail (eye highlight, smile) + 1 outline → stage 42, parade 28 **Over the single-figure caps: see Render limits, R-3.** |
 
 ### ASSET-036 — 8 · eight baby dinosaurs (`dino_8_babies_01`) · batch 6
 
@@ -701,14 +715,14 @@ The node plan counts the A-candidate nodes the drawing is budgeted to (R-2). Piv
 | Parts (`data-pivot`) | `root` (320 410) holding `baby_1` · `baby_2` · `baby_3` · `baby_4` · `baby_5` · `baby_6` · `baby_7` · `baby_8`, each with its pivot at that baby's feet |
 | Idle | each baby bobs on its own phase (Cast Rendering R7: `abs(sin(3t + ph))`, 0.95 Hz) |
 | Layer ids | `root_*` (empty but present), and `baby_<i>_body`, `baby_<i>_outline`, `baby_<i>_detail` |
-| Node plan (A-candidate) | 8 baby parts (root holds no shapes), per baby 3 body + 1 detail + 1 outline → stage 40, parade 32 **Over the single-figure caps: see Render limits, R-3.** |
+| Node plan (A-candidate) | 8 baby parts (root holds no shapes), per baby 3 body + 2 detail (eye highlight, smile) + 1 outline → stage 48, parade 32 **Over the single-figure caps: see Render limits, R-3.** |
 
 ## Open questions
 
 | # | Question | Owner | Recommendation |
 |---|---|---|---|
 | OQ-1 | Duckbills, horned, plated and ornithomimids have **no family idle** in Cast Rendering's data (art bible §5 lists sauropod, raptor, ankylosaur, rex, nest and flyer idles only), so 13 letters (E H I L M, C X Z, S K W, G O) only breathe. Add idles? | Cast Rendering owner; Luan (it changes the feel) | Yes, in data later: a slow `head` nod (≤ 0.3 Hz) and a small `tail` sway. These specs already give them `head` and `tail` parts with pivots, so no redraw is needed. |
-| OQ-2 | Numbers 4–9 exceed the single-figure caps (R-3). Measure the 9 babies in P-2 / M-13, or pick a fallback now? | game-dev-ios (ADR-0009) | Measure: add the 9 babies to DeviceSpike's parade for P-2 and M-13. Draw 4–9, but mark them budget pending until then. |
+| OQ-2 | Numbers 4–9 exceed the single-figure caps (R-3). Measure the 9 babies in P-2 / M-13, or pick a fallback now? | game-dev-ios (ADR-0009) | **Agreed (game-dev-ios, TASK-133 review):** the 9 babies are measured as a fourth figure in P-2 and M-13. 4–9 stay budget pending until then; if 9 fails, the per-role mix comes first (R-3). |
 | OQ-3 | The far-side shade is the body −10 lightness points; for the darkest bodies (T 0.228, U 0.229, A 0.269) it drops to about 0.14. Fine on the stage? | game-art-content, at batch 1 | Check on T in batch 1 against the Night dim. If the far legs vanish, use −6 instead. |
 
 ## Not covered here
