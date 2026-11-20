@@ -5,7 +5,7 @@
 > **Architecture Module**: KidCore (theme model, V-rules, pick rule, peek) + app (bundle load, off-main-thread decode); the validator also runs in Tools
 > **Milestone**: Demo 1 (`production/milestones/demo-1.md`, K-48)
 > **Status**: Ready
-> **Stories**: Not yet created — after TASK-131's control manifest lands, run `/create-stories key-table`
+> **Stories**: 4 stories (TASK-137)
 
 ## Overview
 
@@ -48,6 +48,15 @@ The Dinosaurs theme as data: 36 keys (A–Z, 0–9) with their items, art, voice
 ## Notes
 
 - Demo 1 needs the full Dinosaurs `theme.json`; today `content/themes/dinosaurs/` holds only `src/` (TASK-125, in progress).
+
+## Stories
+
+| # | Story | Type | Status | ADR |
+|---|-------|------|--------|-----|
+| 001 | [Author the Dinosaurs theme: 36 keys, items, words, sounds, hue slots, rowWords, titleCastId](story-001-dinosaurs-theme-data.md) | Config/Data | Ready | ADR-0003, ADR-0001 |
+| 002 | [Load a theme in the app off the main thread; a failing or unknown-version theme is never made active](story-002-app-theme-load.md) | Integration | Ready | ADR-0003, ADR-0002 |
+| 003 | [Launch falls back to Dinosaurs for a broken stored theme; a bad titleCastId falls back to key A](story-003-launch-and-title-fallback.md) | Logic | Ready | ADR-0003, ADR-0005 |
+| 004 | [Per-platform pick distribution, peek purity and no saved progress](story-004-pick-and-peek-tests.md) | Logic | Ready | ADR-0002, ADR-0004 |
 
 ## Definition of Done
 

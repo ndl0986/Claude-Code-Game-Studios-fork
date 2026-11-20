@@ -42,7 +42,11 @@ The core loop, native on **macOS and iPadOS**, with the **full Dinosaurs set: Aâ
 3. **No visible glitch on the demo path**: no missing art, frame hitch, audio click or pop, stuck state or debug UI,
    judged on the recorded run and on the device rows below.
 4. Every Demo 1 epic's stories are closed with `/story-done` (each epic's Definition of Done), `verify.sh` is green,
-   and the signed Release builds for iPadOS and macOS pass the PKC scans and ADR-0013's gates.
+   and the signed Release builds for iPadOS and macOS pass the PKC scans and ADR-0013's gates, with QC's Demo 1
+   `results.md` (privacy/004). **Demo 1 is not a release** (leader, TASK-137): it is a demo build we install on the
+   child's iPad and the Mac, not distributed through a store. The gate and panel PKC rows (AC-08, AC-12) and the store
+   forms (AC-10) read "out of Demo 1 scope (next milestone)", not NOT ASSESSED; the release rule "any NOT ASSESSED row
+   is not a release" belongs to the release milestone.
 
 ## Critical path
 
