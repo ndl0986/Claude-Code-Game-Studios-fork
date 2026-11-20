@@ -5,7 +5,7 @@
 > **Architecture Module**: KidCore (batches, arming F2, walk F3, meter, art wait, freeze) + app (walkers through Cast Rendering)
 > **Milestone**: Demo 1 (`production/milestones/demo-1.md`, K-48)
 > **Status**: Ready
-> **Stories**: Not yet created — after TASK-131's control manifest lands, run `/create-stories parade`
+> **Stories**: 8 stories (TASK-140)
 
 ## Overview
 
@@ -39,6 +39,19 @@ The parade meter beside the queue tokens fills once per new creature; the 6th st
 (`contracts/README.md` registry; `story:<x>` is the story stem that starts the runner.)
 
 - parade-v2 (`not-started: story:parade`)
+
+## Stories
+
+| # | Story | Type | Status | ADR |
+|---|-------|------|--------|-----|
+| 001 | [The batch of 6 distinct keys and the K-45 start rule](story-001-batch-and-start.md) | Logic | Ready | ADR-0004, ADR-0002 |
+| 002 | [Walk order and positions on its own clock; no rest needed](story-002-walk-positions-clock.md) | Logic | Ready | ADR-0004, ADR-0002 |
+| 003 | [The next batch, art not ready, the tune once per walk, no cap](story-003-next-batch-art-tune.md) | Logic | Ready | ADR-0004, ADR-0009 |
+| 004 | [Background, Reduce Motion, walker taps and the debug start](story-004-states-taps-debug.md) | Logic | Ready | ADR-0004, ADR-0002 |
+| 005 | [The parade meter: fill, full, handover, launch, Reduce Motion, flash data](story-005-meter-fill-full.md) | Logic | Ready | ADR-0004, ADR-0013 |
+| 006 | [The light from each new creature to its cell](story-006-meter-light.md) | Logic | Ready | ADR-0004, ADR-0002 |
+| 007 | [The parade and the meter on the iPad: walkers on the hill band, meter states](story-007-parade-and-meter-look.md) | Visual/Feel | Blocked | ADR-0009, ADR-0006 |
+| 008 | [Parade and meter under the gate freeze, the panel and a theme switch (logic)](story-008-freeze-panel-theme.md) | Logic | Ready | ADR-0004, ADR-0002 |
 
 ## Definition of Done
 

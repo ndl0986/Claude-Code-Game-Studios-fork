@@ -5,7 +5,7 @@
 > **Architecture Module**: KidCore (F1–F8 math, residency policy, late-art wait) + app (draw adapters for the ADR-0009 path; texture residency)
 > **Milestone**: Demo 1 (`production/milestones/demo-1.md`, K-48)
 > **Status**: Ready
-> **Stories**: Not yet created — after TASK-131's control manifest lands, run `/create-stories cast-rendering`
+> **Stories**: 6 stories (TASK-140)
 
 ## Overview
 
@@ -53,6 +53,17 @@ The 36 creatures drawn from their baked layered SVG (art bible §8, TASK-133): r
 ## Notes
 
 - ADR-0009 is Proposed: stories that depend on the render path are Blocked until it is Accepted, or proceed on the A-candidate with Luan's OK.
+
+## Stories
+
+| # | Story | Type | Status | ADR |
+|---|-------|------|--------|-----|
+| 001 | [Cast math: the 6 px rule, halo, specks and hop as pure functions](story-001-cast-math.md) | Logic | Ready | ADR-0004, ADR-0002 |
+| 002 | [Parts and pivots, idles at rest, `willForm`, and a platform-free draw interface](story-002-parts-idles-willform.md) | Logic | Ready | ADR-0002, ADR-0013 |
+| 003 | [Residency cap and the late-art wait that never moves the queue](story-003-residency-late-art.md) | Logic | Blocked | ADR-0009, ADR-0002 |
+| 004 | [Per-look edge, halo colour and creature factor (F8, K-25)](story-004-per-look-edge.md) | Logic | Ready | ADR-0004, ADR-0002 |
+| 005 | [Draw the 36 creatures through the render path: sizes, silhouettes, outline colour, glyph swap, dust cap](story-005-draw-adapter.md) | Visual/Feel | Blocked | ADR-0009, ADR-0006 |
+| 006 | [The R11 measurement on the device for both options](story-006-device-measurement.md) | Integration | Blocked | ADR-0009 |
 
 ## Definition of Done
 

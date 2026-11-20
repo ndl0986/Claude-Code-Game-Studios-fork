@@ -11,7 +11,7 @@
 
 ## Context
 
-**GDD**: `design/gdd/ADR-0004` — D6 (no GDD system: the contract harness)
+**GDD**: none (no GDD system: the contract harness). **Source**: `docs/architecture/adr-0004-contracts-fixtures-harness.md` D6
 **Requirement**: `TR-contracts-??? (no registry entry: ADR-0004 D6 tooling, no GDD requirement)`
 *(Requirement text lives in `docs/architecture/tr-registry.yaml` — read fresh at review time)*
 
@@ -30,7 +30,7 @@
 
 ## Acceptance Criteria
 
-*From GDD `design/gdd/ADR-0004`, scoped to this story:*
+*From `docs/architecture/adr-0004-contracts-fixtures-harness.md` D6 and QC's traps, scoped to this story:*
 
 - [ ] For every `contracts/*/sources.lock`, each `Reviewed-Section-Hash: <gdd>#<section> <hash>` line is checked; a changed section prints `OBSERVED drift <contract>: <gdd>#<section>`, an unchanged one nothing, a missing GDD or section `OBSERVED missing …` — never PASS or FAIL.
 - [ ] **Section names contain spaces** (`#Detailed Design`, `#Acceptance Criteria`): the line is split on the last space only, and a test lock with a spaced name is read correctly.
@@ -43,7 +43,7 @@
 
 *Derived from the governing ADRs (ADR-0004 first):*
 
-game-qc-android's scratch reference: `drift139.sh` (TASK-139; ask QC for it). The receipt format is `review-receipts.sh sections-hash`. A drift line is a prompt for the review rule (the GDD's review log must say the contract was re-checked), not a failure.
+Reference script: `production/qa/evidence/TASK-139/drift139.sh` (game-qc-android, committed on qa/TASK-139b-fixture-lines). The receipt format is `review-receipts.sh sections-hash`. A drift line is a prompt for the review rule (the GDD's review log must say the contract was re-checked), not a failure.
 
 ---
 

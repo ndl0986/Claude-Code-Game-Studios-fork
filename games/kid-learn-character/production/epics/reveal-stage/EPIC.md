@@ -5,7 +5,7 @@
 > **Architecture Module**: KidCore (router, startReveal, timeline, play clock, stage fit, cooldown, boxes) + app (SpriteKit scene graph, draw order, frame driver)
 > **Milestone**: Demo 1 (`production/milestones/demo-1.md`, K-48)
 > **Status**: Ready
-> **Stories**: Not yet created — after TASK-131's control manifest lands, run `/create-stories reveal-stage`
+> **Stories**: 6 stories (TASK-140)
 
 ## Overview
 
@@ -46,6 +46,17 @@ The morph reveal: a press becomes a letter that morphs into its creature on the 
 (`contracts/README.md` registry; `story:<x>` is the story stem that starts the runner.)
 
 - reveal-timing-v1 (`not-started: story:reveal-stage`)
+
+## Stories
+
+| # | Story | Type | Status | ADR |
+|---|-------|------|--------|-----|
+| 001 | [`startReveal` lengths, `formed`/`shown` once, and the E6–E9 times](story-001-start-reveal-timeline.md) | Logic | Ready | ADR-0004, ADR-0002 |
+| 002 | [Glyph origins, the same-callback rule, and prefetch by peek](story-002-origins-callback-prefetch.md) | Logic | Ready | ADR-0002, ADR-0004 |
+| 003 | [Creature taps and cooldown, settle on background, Reduce Motion, and the Scene flags](story-003-taps-settle-flags.md) | Logic | Ready | ADR-0002, ADR-0006, ADR-0004 |
+| 004 | [The SpriteKit stage: fixed layers, frame driver and the contain-and-extend fit](story-004-stage-view-layers-fit.md) | UI | Ready | ADR-0006, ADR-0002 |
+| 005 | [The morph drawn on the stage: no jump at the swap, the leaving creature, late art](story-005-morph-on-stage.md) | Visual/Feel | Blocked | ADR-0006, ADR-0009 |
+| 006 | [The reveal and its sounds on a real iPad](story-006-reveal-feel-device.md) | Visual/Feel | Blocked | ADR-0010, ADR-0009 |
 
 ## Definition of Done
 

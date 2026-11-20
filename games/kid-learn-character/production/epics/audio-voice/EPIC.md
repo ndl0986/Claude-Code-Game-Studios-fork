@@ -5,7 +5,7 @@
 > **Architecture Module**: KidCore (audio plan: E1–E12 schedule, gain chain, duck, mash, word_end, player policy) + app (`AVAudioEngine` adapter)
 > **Milestone**: Demo 1 (`production/milestones/demo-1.md`, K-48)
 > **Status**: Ready
-> **Stories**: Not yet created — after TASK-131's control manifest lands, run `/create-stories audio-voice`
+> **Stories**: 8 stories (TASK-140)
 
 ## Overview
 
@@ -48,6 +48,19 @@ Voice (Kokoro, K-41) and creature sound for every reveal: a fixed set of primed 
 (`contracts/README.md` registry; `story:<x>` is the story stem that starts the runner.)
 
 - audio-plan-v1 (`not-started: story:audio-voice`)
+
+## Stories
+
+| # | Story | Type | Status | ADR |
+|---|-------|------|--------|-----|
+| 001 | [Audio plan: the E1–E9 event schedule, press sounds and the Title](story-001-event-schedule.md) | Logic | Ready | ADR-0002, ADR-0004 |
+| 002 | [Audio plan: speech never stacks, the 7-player cap and the mash ceiling](story-002-stacking-cap-mash.md) | Logic | Ready | ADR-0002, ADR-0004 |
+| 003 | [The word never cut by the queue, and the missing-sound fallbacks](story-003-hold-and-fallbacks.md) | Integration | Ready | ADR-0002, ADR-0004 |
+| 004 | [AVAudioEngine adapter: primed players, graph built once, decode before Active, limiter](story-004-engine-adapter.md) | Integration | Blocked | ADR-0010, ADR-0002 |
+| 005 | [No click on a cut; mute and volume follow the gain chain](story-005-cuts-mute-volume.md) | Integration | Blocked | ADR-0010 |
+| 006 | [Session behaviour on the device: interruptions, silent mode, latency](story-006-session-device.md) | Integration | Blocked | ADR-0010 |
+| 007 | [Sound off from the stored mute: every answer is still visual](story-007-sound-off-from-stored-mute.md) | UI | Ready | ADR-0002, ADR-0005 |
+| 008 | [Number chirps: digits 1–9 chirp that many times, 0 one soft chirp](story-008-number-chirps.md) | Config/Data | Ready | ADR-0003 |
 
 ## Definition of Done
 

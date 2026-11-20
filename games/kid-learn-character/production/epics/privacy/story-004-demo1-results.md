@@ -79,5 +79,5 @@ Leader's call (TASK-137): Demo 1 is installed by us, not distributed through a s
 
 ## Dependencies
 
-- Depends on: `production/epics/privacy/story-001-release-static-checks.md`, `production/epics/privacy/story-002-release-code-scans.md`, `production/epics/privacy/story-003-runtime-network-and-storage.md`
+- Depends on: `production/epics/privacy/story-001-release-static-checks.md`, `production/epics/privacy/story-002-release-code-scans.md`, `production/epics/privacy/story-003-runtime-network-and-storage.md`, `production/epics/privacy/story-005-child-area-no-exit.md`
 - Unlocks: None
