@@ -71,7 +71,7 @@ public enum SVGBake {
         return JSONValue.object(out).render()
     }
 
-    /// Bakes one silhouette SVG to `{"d": "<path>", "tool": …, "version": …}` (the format key-table-schema-v1's `sil/…json`
+    /// Bakes one silhouette SVG to `{"d": "<path>", "tool": …, "version": …}` (the format key-table-schema-v2's `sil/…json`
     /// uses; the validator reads only `d`). Every shape of the file becomes a subpath of one compound path, in the morph-v1
     /// subset `M L C Q Z` (arcs and `S`/`T` converted, transforms applied, an `M` after every `Z`). Baked as authored
     /// (the idle rest pose is not known yet). Throws unless the result parses under `SVGPath.polylines` with a subpath of

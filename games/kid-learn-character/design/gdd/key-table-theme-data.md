@@ -98,18 +98,19 @@ A key entry is `{ "items": [ item, … ] }`. The demo and MVP have exactly 1 ite
 | `hueSlot` | string | One of `rose coral ochre leaf mint teal blue violet`, or `shared` for objects that use the shared constants (art bible §4). |
 | `art` | string | Relative path of the **baked cast file**, the only art the app reads: `cast/cast_dino_c_triceratops_01.json` (ADR-0003 D1, D4; Cast Rendering R2). Its **source** is found by rule, not stored: `src/art/` + the same stem + `.svg` (`src/art/cast_dino_c_triceratops_01.svg`, build-only, the layered SVG of art bible §8). |
 | `silhouette` | string | Relative path of the baked silhouette path file: `sil/sil_dino_c_triceratops_01.json`. It holds one compound path in the morph-v1 subset (contract §2, §8). Its source is `src/sil/` + the same stem + `.svg` (the artist's export, build-only; ADR-0003 D1, D4). |
-| `sfx` | string \| null | Relative path of the cast member's own sound: `sfx/sfx_dino_c_triceratops_01.m4a`; `null` means none. |
+| `sfx` | string \| null | Relative path of the cast member's own sound: `sfx/sfx_dino_c_triceratops_01.caf`; `null` means none. |
 | `voice` | object | Voice **line ids**, not paths: `{ "letter": "c", "word": "triceratops" }`. For digits: `{ "number": "3", "word": "three_baby_dinosaurs" }`. |
 | `weight` | number | Optional, production only; default `1` (Formulas). |
 
 **Voice paths are built, not stored** (game-dev-ios point 10):
-`voice/<locale>/vo_<locale>_<kind>_<id>.m4a`, e.g. `voice/en-us/vo_en-us_letter_c.m4a` or
-`voice/en-us/vo_en-us_word_triceratops.m4a`. Letter and number lines (`letter_c`, `number_3`) are the
+`voice/<locale>/vo_<locale>_<kind>_<id>.caf`, e.g. `voice/en-us/vo_en-us_letter_c.caf` or
+`voice/en-us/vo_en-us_word_triceratops.caf`. Letter and number lines (`letter_c`, `number_3`) are the
 same in every theme. Word lines belong to the theme. Adding a locale (K-02, Localization) adds files
 and one `voiceLocales` entry, without editing any item.
 
-**Asset formats:** SVG for the art **sources** (build-only), baked JSON for art and path data (shipped), mono AAC
-`.m4a` for sound and voice (ADR-0003 D1, D8). These are
+**Asset formats:** SVG for the art **sources** (build-only), baked JSON for art and path data (shipped), **uncompressed
+16-bit linear PCM, mono, in `.caf`** for sound and voice (ADR-0003 D1, D8; K-52, 2026-11-20: AAC `.m4a` isn't
+byte-stable). These are
 platform-neutral: the same files serve iOS, macOS and later Android (game-dev-ios point 11).
 
 **c. Glyph set** (`content/glyphs/<glyph_set_id>/glyphs.json`)
@@ -129,9 +130,9 @@ MorphCore / tools (contract §8).
 lowercase with underscores; `[theme]` is the theme's **`assetPrefix`** (`dino`), not its `id`:
 - letters: `cast_dino_c_triceratops_01.json` (baked; source `src/art/cast_dino_c_triceratops_01.svg`),
   `sil_dino_c_triceratops_01.json` (baked; source `src/sil/sil_dino_c_triceratops_01.svg`),
-  `sfx_dino_c_triceratops_01.m4a`;
+  `sfx_dino_c_triceratops_01.caf`;
 - digits, under the same pattern: `sil_dino_3_babies_01.json` is **three babies as one compound path**, and `sil_dino_0_nest_01.json` is the empty nest (game-dev-ios point 5);
-- voice: `vo_en-us_letter_c.m4a`, `vo_en-us_number_3.m4a`, `vo_en-us_word_triceratops.m4a`.
+- voice: `vo_en-us_letter_c.caf`, `vo_en-us_number_3.caf`, `vo_en-us_word_triceratops.caf`.
 
 **Example item (C, Dinosaurs):**
 
@@ -141,7 +142,7 @@ lowercase with underscores; `[theme]` is the theme's **`assetPrefix`** (`dino`),
   "say": "see", "sound": "inside", "family": "horned", "variant": "tri-horn", "hueSlot": "coral",
   "art": "cast/cast_dino_c_triceratops_01.json",
   "silhouette": "sil/sil_dino_c_triceratops_01.json",
-  "sfx": "sfx/sfx_dino_c_triceratops_01.m4a",
+  "sfx": "sfx/sfx_dino_c_triceratops_01.caf",
   "voice": { "letter": "c", "word": "triceratops" }
 } ] }
 ```

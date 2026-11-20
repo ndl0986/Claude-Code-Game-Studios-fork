@@ -103,6 +103,26 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-52 Baked audio is uncompressed CAF, not AAC (Luan, 2026-11-20)
+
+- TASK content-pipeline/003 and /007 found that AudioToolbox's AAC encoder is not byte-stable: the same PCM gives one
+  of two bitstreams depending on core type (P vs E cores; decoded difference ≤ −101 dBFS). ADR-0003 D4 requires
+  byte-stable bake output. Options shown: a sameness rule for .m4a (PCM hash + decoded match), or uncompressed audio.
+- **Luan chose CAF:** voice lines and sfx are baked as **uncompressed linear PCM in .caf** (16-bit, mono, 48 kHz
+  unless the audio owner shows a reason otherwise), byte-stable like every other bake. Size: the decision was made on a
+  figure of "7–8 MB vs ~0.8 MB", which was wrong; corrected 2026-11-20 by game-dev-android from the rendered lines:
+  **≈ 12–18 MB** for the Dinosaurs set as CAF (voice ≈ 11.5 MB, sfx ≤ 6.9 MB) vs ≈ 5.3 MB+ as AAC. Luan told the
+  corrected figure. ADR-0003 D4 (byte-stable) stands unchanged; **ADR-0003 D8's "mono AAC" gets a dated note**
+  (Accepted ADR, Luan's decision), and the Audio & Voice GDD, the stories (content-pipeline/003, 004, 007) and any
+  `.m4a` paths in theme data change to `.caf`. The AAC priming proof becomes moot.
+
+### K-51 Link GameController on iPadOS only (Luan, 2026-11-20, PKC-13)
+
+- Luan approved linking Apple's **GameController** framework **on iPadOS only**, solely to read whether a hardware
+  keyboard is connected (`GCKeyboard.coalesced` + connect/disconnect notifications) for K-49's auto-on keyboard row.
+  It is a system framework (PKC-03 b), not on PKC-02's deny list, no required-reason API (PKC-09 unchanged), no
+  `GCKeyboardInput` handler (keys stay on `pressesBegan`). Not linked on macOS. Recorded in ADR-0007 D6 (TASK-138).
+
 ### K-50 Workers start /dev-story themselves (Luan, 2026-11-20)
 
 - The shared studio skill `/dev-story` was user-invoked only. Luan chose to let the team's worker sessions invoke it

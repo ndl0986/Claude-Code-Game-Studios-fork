@@ -108,3 +108,9 @@ Reviewed-Content-Hash: design/gdd/key-table-theme-data.md ba50e4e2980d09c4be947a
 Review mode: lean · Workflow: standard
 Change: answers to game-qc-android's key-table-schema-v1 questions, written into the rules: KT-Q1 seeding is per platform and the fixture feeds raw draws (F1 text, AC 8); KT-Q2 a draw is consumed only when |C| ≥ 2 (n = 2 with last set draws nothing); KT-Q3 a missing key is V2 only, V3 is extra or malformed keys; KT-Q4 exactly-one-item is a build setting `singleItemPerKey`, not a theme field; KT-Q5 V5 digit words are exact `<number word> <singular|plural>`; KT-Q6 V6 castId pattern `^<prefix>_<key>_<name>_<nn>$` with nn the two-digit edition index (not the variant field), prefix = assetPrefix or, for v1, id; KT-Q7 `shared` is outside V10's cap and sibling rule; KT-Q8 V17's letter clause is a deliberate guard; KT-Q9 unknown and missing required fields are decode errors (= V1), schema-dependent fields (rowWords, assetPrefix) decode as absent and are checked by V17/V18. game-dev-android's nits: V18 runs over the full theme list at build and launch before any load; v1 themes use id for V6.
 Reviewed-Content-Hash: design/gdd/key-table-theme-data.md b8570e7474720983d1fec2e2db878edc77b75712
+
+## Update — 2026-11-20 — TASK-145b sound and voice files are .caf, K-52 (no re-review)
+Review mode: lean · Workflow: standard
+Change: K-52 (Luan): baked audio is uncompressed 16-bit LPCM in .caf. The sfx field example, the built voice path pattern and its examples, the asset-formats line, the naming list and the example item now read .caf instead of .m4a. No rule changes otherwise. Lands together with key-table-schema-v2 (TASK-146) and the KidCore validator change (game-dev-android).
+fixture: key-table-schema-v2 (TASK-146)
+Reviewed-Content-Hash: design/gdd/key-table-theme-data.md aba644515606fd8112a0ed552ce8019f0b9bba10
