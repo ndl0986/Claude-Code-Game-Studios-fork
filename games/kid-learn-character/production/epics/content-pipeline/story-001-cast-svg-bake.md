@@ -44,7 +44,7 @@
 
 *Derived from the governing ADRs (ADR-0003 first):*
 
-Input is the team-authored layered SVG of art bible §8 (TASK-133 specs). The baked file is the one draw interface for both ADR-0009 options, so it must not encode a render choice. `kidtools bake` is the entry point; the staleness check (story 004) re-bakes in memory and compares bytes.
+Input is the team-authored layered SVG of art bible §8 (TASK-133 specs). Baked batch-1 output is not committed here (leader, option A): key-table/001 commits the bake together with `theme.json`. The baked file is the one draw interface for both ADR-0009 options, so it must not encode a render choice. `kidtools bake` is the entry point; the staleness check (story 004) re-bakes in memory and compares bytes.
 
 ---
 

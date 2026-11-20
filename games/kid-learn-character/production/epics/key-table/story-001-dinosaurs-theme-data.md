@@ -43,7 +43,7 @@
 
 *Derived from the governing ADRs (ADR-0003 first):*
 
-Needs TASK-133's 36 asset specs and the art, baked by content-pipeline 001–002, and the voice by 003–004. Turns `content/themes/dinosaurs/` from "theme in progress" (TASK-125) into a validated theme.
+Needs TASK-133's 36 asset specs and the art, baked by content-pipeline 001–002, and the voice by 003–004. Turns `content/themes/dinosaurs/` from "theme in progress" (TASK-125) into a validated theme. **Commit the baked `cast/` and `sil/` files (run `kidtools bake content`) in the same commit as `theme.json`** — they are kept out of git until then (leader, option A, content-pipeline/001), since shipped files without a `theme.json` fail V1.
 
 ---
 
