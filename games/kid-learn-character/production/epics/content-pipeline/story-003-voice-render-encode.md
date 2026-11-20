@@ -1,12 +1,12 @@
 # Story 003: Voice bake: render every Dinosaurs line with Kokoro (K-41) and encode AAC mono
 
 > **Epic**: Content Pipeline (Tools) (`production/epics/content-pipeline/EPIC.md`)
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Foundation
 > **Type**: Integration
 > **Estimate**: M
 > **Manifest Version**: 2026-11-20
-> **Last Updated**: —
+> **Last Updated**: 2026-11-20
 > **Milestone**: Demo 1 (K-48)
 
 ## Context
@@ -57,13 +57,12 @@ Voice scripts already exist in `content/themes/dinosaurs/src/voice-scripts/en-us
 
 ## Files
 
-*Planned; `/dev-story` replaces this list with the files it changed. Roots are ADR-0001 D3 / ADR-0002 D1 (`apple/`); `engine.name` is unset by design.*
-
-- `apple/Tools/Sources/ToolsCore/VoiceBake.swift (adapter + AAC encode)`
-- `apple/Tools/Tests/ToolsTests/VoiceBakeTests.swift`
-- `content/themes/dinosaurs/voice/ (generated, committed)`
-
----
+- `apple/Tools/Sources/ToolsCore/VoiceBake.swift` (new: TTSEngine adapter, KokoroProcessEngine, AAC mono encode, provenance, SpeechAPIScan)
+- `apple/Tools/tts/kokoro_render.py` (new: build-machine helper; **not yet run**)
+- `apple/Tools/Sources/kidtools/main.swift` (`kidtools bake-voice <content-dir> [--python] [--helper]`)
+- `apple/Tools/README.md` (voice bake + the venv recipe from game-art-content's TASK-073/108/110 runs, not yet reproduced)
+- `apple/Tools/Tests/ToolsTests/VoiceBakeTests.swift` (7 test functions, fake engine)
+- **Pending:** the real Dinosaurs render into `content/themes/dinosaurs/voice/en-us/` — after key-table/001's theme.json draft (leader, option A) and the venv
 
 ## QA Test Cases
 
