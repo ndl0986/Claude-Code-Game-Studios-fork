@@ -1,0 +1,620 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project apple/LetterMorph.xcodeproj -scheme LetterMorph -configuration Release -destination generic/platform=iOS -derivedDataPath <tmp>/t130-dd DEVELOPMENT_TEAM=<TEAM> -allowProvisioningUpdates build
+
+Build settings from command line:
+    DEVELOPMENT_TEAM = <TEAM>
+
+Resolve Package Graph
+
+
+Resolved source packages:
+  MorphCore: <worktree>/games/kid-learn-character/apple/MorphCore @ local
+  KidCore: <worktree>/games/kid-learn-character/apple/KidCore @ local
+
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (5 targets)
+    Target 'LetterMorph' in project 'LetterMorph'
+        ➜ Explicit dependency on target 'KidCore-product' in project 'KidCore'
+        ➜ Explicit dependency on target 'MorphCore-product' in project 'MorphCore'
+    Target 'KidCore-product' in project 'KidCore'
+        ➜ Explicit dependency on target 'KidCore' in project 'KidCore'
+        ➜ Explicit dependency on target 'MorphCore-product' in project 'MorphCore'
+    Target 'KidCore' in project 'KidCore'
+        ➜ Explicit dependency on target 'MorphCore-product' in project 'MorphCore'
+    Target 'MorphCore-product' in project 'MorphCore'
+        ➜ Explicit dependency on target 'MorphCore' in project 'MorphCore'
+    Target 'MorphCore' in project 'MorphCore' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 <worktree>/games/kid-learn-character/apple/LetterMorph/Assets.xcassets
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+Build description signature: 1cab1a925baf7af48f95d29f374dcbf0
+Build description path: <tmp>/t130-dd/Build/Intermediates.noindex/XCBuildData/1cab1a925baf7af48f95d29f374dcbf0.xcbuilddata
+CreateBuildDirectory <tmp>/t130-dd/SDKExplicitPrecompiledModules
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <tmp>/t130-dd/SDKExplicitPrecompiledModules
+
+CreateBuildDirectory <tmp>/t130-dd/ModuleCache.noindex
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <tmp>/t130-dd/ModuleCache.noindex
+
+CreateBuildDirectory <tmp>/t130-dd/CompilationCache.noindex
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <tmp>/t130-dd/CompilationCache.noindex
+
+CreateBuildDirectory <tmp>/t130-dd/Build/Products
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <tmp>/t130-dd/Build/Products
+
+CreateBuildDirectory <tmp>/t130-dd/Build/Intermediates.noindex
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <tmp>/t130-dd/Build/Intermediates.noindex
+
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk <tmp>/t130-dd/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -o <tmp>/t130-dd/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache
+
+CreateBuildDirectory <tmp>/t130-dd/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <tmp>/t130-dd/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph-c3c46f8647b70d5b2b13aacbf80fbbd2-VFS-iphoneos/all-product-headers.yaml
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph-c3c46f8647b70d5b2b13aacbf80fbbd2-VFS-iphoneos/all-product-headers.yaml
+
+CreateBuildDirectory <tmp>/t130-dd/Build/Intermediates.noindex/PrecompiledHeaders
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <tmp>/t130-dd/Build/Intermediates.noindex/PrecompiledHeaders
+
+CreateBuildDirectory <tmp>/t130-dd/Build/Intermediates.noindex/ExplicitPrecompiledModules
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <tmp>/t130-dd/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+CreateBuildDirectory <tmp>/t130-dd/Build/Intermediates.noindex/EagerLinkingTBDs/Release-iphoneos
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <tmp>/t130-dd/Build/Intermediates.noindex/EagerLinkingTBDs/Release-iphoneos
+
+CreateBuildDirectory <tmp>/t130-dd/Build/Products/Release-iphoneos
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <tmp>/t130-dd/Build/Products/Release-iphoneos
+
+CreateBuildDirectory <tmp>/t130-dd/Build/Products/Release-iphoneos/PackageFrameworks
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-create-build-directory <tmp>/t130-dd/Build/Products/Release-iphoneos/PackageFrameworks
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore_const_extract_protocols.json (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/apple/MorphCore
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore_const_extract_protocols.json
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftFileList (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/apple/MorphCore
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftFileList
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftConstValuesFileList (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/apple/MorphCore
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftConstValuesFileList
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.LinkFileList (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/apple/MorphCore
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.LinkFileList
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-OutputFileMap.json (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/apple/MorphCore
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-OutputFileMap.json
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/MorphCore.modulemap (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/apple/MorphCore
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/MorphCore.modulemap
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/MorphCore.DependencyStaticMetadataFileList (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/apple/MorphCore
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/MorphCore.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/MorphCore.DependencyMetadataFileList (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/apple/MorphCore
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/MorphCore.DependencyMetadataFileList
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/Letterlings.SwiftFileList (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/Letterlings.SwiftFileList
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/Letterlings.SwiftConstValuesFileList (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/Letterlings.SwiftConstValuesFileList
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/Letterlings.LinkFileList (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/Letterlings.LinkFileList
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph_const_extract_protocols.json (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph_const_extract_protocols.json
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph-OutputFileMap.json (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph-OutputFileMap.json
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings.hmap (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings.hmap
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings.DependencyStaticMetadataFileList (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings.DependencyMetadataFileList (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings.DependencyMetadataFileList
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-generated-files.hmap (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-generated-files.hmap
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-own-target-headers.hmap (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-own-target-headers.hmap
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-project-headers.hmap (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-project-headers.hmap
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-all-target-headers.hmap (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-all-target-headers.hmap
+
+Copy <tmp>/t130-dd/Build/Intermediates.noindex/GeneratedModuleMaps-iphoneos/MorphCore.modulemap <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/MorphCore.modulemap (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/apple/MorphCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/MorphCore.modulemap <tmp>/t130-dd/Build/Intermediates.noindex/GeneratedModuleMaps-iphoneos
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-all-non-framework-target-headers.hmap (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-all-non-framework-target-headers.hmap
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources/Entitlements.plist (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources/Entitlements.plist
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.SwiftFileList (in target 'KidCore' from project 'KidCore')
+    cd <worktree>/games/kid-learn-character/apple/KidCore
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.SwiftFileList
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.SwiftConstValuesFileList (in target 'KidCore' from project 'KidCore')
+    cd <worktree>/games/kid-learn-character/apple/KidCore
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.SwiftConstValuesFileList
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore_const_extract_protocols.json (in target 'KidCore' from project 'KidCore')
+    cd <worktree>/games/kid-learn-character/apple/KidCore
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore_const_extract_protocols.json
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.LinkFileList (in target 'KidCore' from project 'KidCore')
+    cd <worktree>/games/kid-learn-character/apple/KidCore
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.LinkFileList
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore-OutputFileMap.json (in target 'KidCore' from project 'KidCore')
+    cd <worktree>/games/kid-learn-character/apple/KidCore
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore-OutputFileMap.json
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/KidCore.modulemap (in target 'KidCore' from project 'KidCore')
+    cd <worktree>/games/kid-learn-character/apple/KidCore
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/KidCore.modulemap
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/KidCore.DependencyStaticMetadataFileList (in target 'KidCore' from project 'KidCore')
+    cd <worktree>/games/kid-learn-character/apple/KidCore
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/KidCore.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/KidCore.DependencyMetadataFileList (in target 'KidCore' from project 'KidCore')
+    cd <worktree>/games/kid-learn-character/apple/KidCore
+    write-file <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/KidCore.DependencyMetadataFileList
+
+MkDir <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    /bin/mkdir -p <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app
+
+Copy <tmp>/t130-dd/Build/Intermediates.noindex/GeneratedModuleMaps-iphoneos/KidCore.modulemap <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/KidCore.modulemap (in target 'KidCore' from project 'KidCore')
+    cd <worktree>/games/kid-learn-character/apple/KidCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/KidCore.modulemap <tmp>/t130-dd/Build/Intermediates.noindex/GeneratedModuleMaps-iphoneos
+
+SwiftDriver MorphCore normal arm64 com.apple.xcode.tools.swift.compiler (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -parse-as-library -module-name MorphCore -O -whole-module-optimization @<tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftFileList -DSWIFT_PACKAGE -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -DXcode -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios26.0 -g -module-cache-path <tmp>/t130-dd/ModuleCache.noindex -Xfrontend -serialize-debugging-options -swift-version 6 -I <tmp>/t130-dd/Build/Products/Release-iphoneos -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib -F <tmp>/t130-dd/Build/Products/Release-iphoneos -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk/Developer/Library/Frameworks -c -num-threads 12 -Xcc -ivfsstatcache -Xcc <tmp>/t130-dd/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache -output-file-map <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <tmp>/t130-dd/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <tmp>/t130-dd/ModuleCache.noindex -sdk-module-cache-path <tmp>/t130-dd/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <tmp>/t130-dd/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -package-name morphcore -emit-const-values -const-gather-protocols-list <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore_const_extract_protocols.json -Xcc -I<tmp>/t130-dd/Build/Products/Release-iphoneos/include -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/DerivedSources-normal/arm64 -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/DerivedSources/arm64 -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/DerivedSources -Xcc -DSWIFT_PACKAGE -emit-objc-header -emit-objc-header-path <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-Swift.h -working-directory <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj -no-emit-module-separately-wmo
+
+SwiftDriver\ Compilation MorphCore normal arm64 com.apple.xcode.tools.swift.compiler (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -parse-as-library -module-name MorphCore -O -whole-module-optimization @<tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftFileList -DSWIFT_PACKAGE -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -DXcode -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios26.0 -g -module-cache-path <tmp>/t130-dd/ModuleCache.noindex -Xfrontend -serialize-debugging-options -swift-version 6 -I <tmp>/t130-dd/Build/Products/Release-iphoneos -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib -F <tmp>/t130-dd/Build/Products/Release-iphoneos -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk/Developer/Library/Frameworks -c -num-threads 12 -Xcc -ivfsstatcache -Xcc <tmp>/t130-dd/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache -output-file-map <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <tmp>/t130-dd/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <tmp>/t130-dd/ModuleCache.noindex -sdk-module-cache-path <tmp>/t130-dd/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <tmp>/t130-dd/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -package-name morphcore -emit-const-values -const-gather-protocols-list <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore_const_extract_protocols.json -Xcc -I<tmp>/t130-dd/Build/Products/Release-iphoneos/include -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/DerivedSources-normal/arm64 -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/DerivedSources/arm64 -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/DerivedSources -Xcc -DSWIFT_PACKAGE -emit-objc-header -emit-objc-header-path <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-Swift.h -working-directory <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj -no-emit-module-separately-wmo
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/SwiftShims-1UKED1EVRET0DDILPDVXARSQM.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/_SwiftConcurrencyShims-CRALN4PVDQI39CRMVH729G26H.pcm
+
+SwiftCompile normal arm64 Compiling\ Morph.swift,\ SVGPath.swift,\ SplitMix64.swift <worktree>/games/kid-learn-character/apple/MorphCore/Sources/MorphCore/Morph.swift <worktree>/games/kid-learn-character/apple/MorphCore/Sources/MorphCore/SVGPath.swift <worktree>/games/kid-learn-character/apple/MorphCore/Sources/MorphCore/SplitMix64.swift /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/_StringProcessing.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/Swift.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/_Concurrency.swiftmodule/arm64e-apple-ios.swiftmodule <tmp>/t130-dd/SDKExplicitPrecompiledModules/_SwiftConcurrencyShims-CRALN4PVDQI39CRMVH729G26H.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/SwiftShims-1UKED1EVRET0DDILPDVXARSQM.pcm <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-dependencies-1.json (in target 'MorphCore' from project 'MorphCore')
+
+SwiftCompile normal arm64 (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling Morph.swift, SVGPath.swift, SplitMix64.swift (in target 'MorphCore' from project 'MorphCore')
+
+SwiftDriver\ Compilation\ Requirements MorphCore normal arm64 com.apple.xcode.tools.swift.compiler (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -parse-as-library -module-name MorphCore -O -whole-module-optimization @<tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftFileList -DSWIFT_PACKAGE -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -DXcode -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios26.0 -g -module-cache-path <tmp>/t130-dd/ModuleCache.noindex -Xfrontend -serialize-debugging-options -swift-version 6 -I <tmp>/t130-dd/Build/Products/Release-iphoneos -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib -F <tmp>/t130-dd/Build/Products/Release-iphoneos -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk/Developer/Library/Frameworks -c -num-threads 12 -Xcc -ivfsstatcache -Xcc <tmp>/t130-dd/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache -output-file-map <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <tmp>/t130-dd/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <tmp>/t130-dd/ModuleCache.noindex -sdk-module-cache-path <tmp>/t130-dd/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <tmp>/t130-dd/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -package-name morphcore -emit-const-values -const-gather-protocols-list <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore_const_extract_protocols.json -Xcc -I<tmp>/t130-dd/Build/Products/Release-iphoneos/include -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/DerivedSources-normal/arm64 -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/DerivedSources/arm64 -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/DerivedSources -Xcc -DSWIFT_PACKAGE -emit-objc-header -emit-objc-header-path <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-Swift.h -working-directory <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj -no-emit-module-separately-wmo
+
+SwiftMergeGeneratedHeaders <tmp>/t130-dd/Build/Intermediates.noindex/GeneratedModuleMaps-iphoneos/MorphCore-Swift.h <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-Swift.h (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/apple/MorphCore
+    builtin-swiftHeaderTool -arch arm64 <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore-Swift.h -o <tmp>/t130-dd/Build/Intermediates.noindex/GeneratedModuleMaps-iphoneos/MorphCore-Swift.h
+
+Copy <tmp>/t130-dd/Build/Products/Release-iphoneos/MorphCore.swiftmodule/arm64-apple-ios.swiftdoc <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftdoc (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/apple/MorphCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftdoc <tmp>/t130-dd/Build/Products/Release-iphoneos/MorphCore.swiftmodule/arm64-apple-ios.swiftdoc
+
+Copy <tmp>/t130-dd/Build/Products/Release-iphoneos/MorphCore.swiftmodule/arm64-apple-ios.abi.json <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.abi.json (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/apple/MorphCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.abi.json <tmp>/t130-dd/Build/Products/Release-iphoneos/MorphCore.swiftmodule/arm64-apple-ios.abi.json
+
+Copy <tmp>/t130-dd/Build/Products/Release-iphoneos/MorphCore.swiftmodule/arm64-apple-ios.swiftmodule <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftmodule (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/apple/MorphCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftmodule <tmp>/t130-dd/Build/Products/Release-iphoneos/MorphCore.swiftmodule/arm64-apple-ios.swiftmodule
+
+Ld <tmp>/t130-dd/Build/Products/Release-iphoneos/MorphCore.o normal (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/apple/MorphCore
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios26.0 -r -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -Os -Xlinker -no_warn_duplicate_libraries -F<tmp>/t130-dd/Build/Intermediates.noindex/EagerLinkingTBDs/Release-iphoneos -F<tmp>/t130-dd/Build/Products/Release-iphoneos -iframework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks -iframework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk/Developer/Library/Frameworks -filelist <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.LinkFileList -nostdlib -Xlinker -object_path_lto -Xlinker <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore_lto.o -Xlinker -dependency_info -Xlinker <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.swiftmodule -o <tmp>/t130-dd/Build/Products/Release-iphoneos/MorphCore.o
+
+SwiftDriver KidCore normal arm64 com.apple.xcode.tools.swift.compiler (in target 'KidCore' from project 'KidCore')
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -parse-as-library -module-name KidCore -O -whole-module-optimization @<tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.SwiftFileList -DSWIFT_PACKAGE -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -DXcode -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios26.0 -g -module-cache-path <tmp>/t130-dd/ModuleCache.noindex -Xfrontend -serialize-debugging-options -swift-version 6 -I <tmp>/t130-dd/Build/Products/Release-iphoneos -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib -F <tmp>/t130-dd/Build/Products/Release-iphoneos/PackageFrameworks -F <tmp>/t130-dd/Build/Products/Release-iphoneos -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk/Developer/Library/Frameworks -c -num-threads 12 -Xcc -ivfsstatcache -Xcc <tmp>/t130-dd/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache -output-file-map <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <tmp>/t130-dd/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <tmp>/t130-dd/ModuleCache.noindex -sdk-module-cache-path <tmp>/t130-dd/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <tmp>/t130-dd/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -package-name kidcore -emit-const-values -const-gather-protocols-list <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore_const_extract_protocols.json -Xcc -I<tmp>/t130-dd/Build/Products/Release-iphoneos/include -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/DerivedSources-normal/arm64 -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/DerivedSources/arm64 -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/DerivedSources -Xcc -DSWIFT_PACKAGE -emit-objc-header -emit-objc-header-path <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore-Swift.h -working-directory <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj -no-emit-module-separately-wmo
+
+ExtractAppIntentsMetadata (in target 'MorphCore' from project 'MorphCore')
+    cd <worktree>/games/kid-learn-character/apple/MorphCore
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name MorphCore --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk --xcode-version 27A9275 --platform-family iOS --deployment-target 26.0 --bundle-identifier morphcore.MorphCore --output <tmp>/t130-dd/Build/Products/Release-iphoneos/MorphCore.appintents --target-triple arm64-apple-ios26.0 --binary-file <tmp>/t130-dd/Build/Products/Release-iphoneos/MorphCore.o --dependency-file <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore_dependency_info.dat --stringsdata-file <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftFileList --metadata-file-list <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/MorphCore.DependencyMetadataFileList --static-metadata-file-list <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/MorphCore.DependencyStaticMetadataFileList --swift-const-vals-list <tmp>/t130-dd/Build/Intermediates.noindex/MorphCore.build/Release-iphoneos/MorphCore-t.build/Objects-normal/arm64/MorphCore.SwiftConstValuesFileList --force --compile-time-extraction --deployment-aware-processing --no-app-shortcuts-localization
+2026-11-20 08:55:22.030 appintentsmetadataprocessor[10113:24143347] Starting appintentsmetadataprocessor export
+2026-11-20 08:55:22.071 appintentsmetadataprocessor[10113:24143347] Extracted no relevant App Intents symbols, skipping writing output
+
+SwiftDriver\ Compilation KidCore normal arm64 com.apple.xcode.tools.swift.compiler (in target 'KidCore' from project 'KidCore')
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -parse-as-library -module-name KidCore -O -whole-module-optimization @<tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.SwiftFileList -DSWIFT_PACKAGE -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -DXcode -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios26.0 -g -module-cache-path <tmp>/t130-dd/ModuleCache.noindex -Xfrontend -serialize-debugging-options -swift-version 6 -I <tmp>/t130-dd/Build/Products/Release-iphoneos -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib -F <tmp>/t130-dd/Build/Products/Release-iphoneos/PackageFrameworks -F <tmp>/t130-dd/Build/Products/Release-iphoneos -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk/Developer/Library/Frameworks -c -num-threads 12 -Xcc -ivfsstatcache -Xcc <tmp>/t130-dd/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache -output-file-map <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <tmp>/t130-dd/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <tmp>/t130-dd/ModuleCache.noindex -sdk-module-cache-path <tmp>/t130-dd/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <tmp>/t130-dd/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -package-name kidcore -emit-const-values -const-gather-protocols-list <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore_const_extract_protocols.json -Xcc -I<tmp>/t130-dd/Build/Products/Release-iphoneos/include -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/DerivedSources-normal/arm64 -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/DerivedSources/arm64 -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/DerivedSources -Xcc -DSWIFT_PACKAGE -emit-objc-header -emit-objc-header-path <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore-Swift.h -working-directory <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj -no-emit-module-separately-wmo
+
+SwiftCompile normal arm64 Compiling\ CanonicalJSON.swift,\ Helpers.swift,\ KeyTable.swift,\ Seams.swift,\ SettingsStore.swift,\ StageFit.swift <worktree>/games/kid-learn-character/apple/KidCore/Sources/KidCore/CanonicalJSON.swift <worktree>/games/kid-learn-character/apple/KidCore/Sources/KidCore/Helpers.swift <worktree>/games/kid-learn-character/apple/KidCore/Sources/KidCore/KeyTable.swift <worktree>/games/kid-learn-character/apple/KidCore/Sources/KidCore/Seams.swift <worktree>/games/kid-learn-character/apple/KidCore/Sources/KidCore/SettingsStore.swift <worktree>/games/kid-learn-character/apple/KidCore/Sources/KidCore/StageFit.swift /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/_StringProcessing.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/_Concurrency.swiftmodule/arm64e-apple-ios.swiftmodule <tmp>/t130-dd/Build/Products/Release-iphoneos/MorphCore.swiftmodule/arm64-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/Swift.swiftmodule/arm64e-apple-ios.swiftmodule <tmp>/t130-dd/SDKExplicitPrecompiledModules/SwiftShims-1UKED1EVRET0DDILPDVXARSQM.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/_SwiftConcurrencyShims-CRALN4PVDQI39CRMVH729G26H.pcm <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore-dependencies-1.json (in target 'KidCore' from project 'KidCore')
+
+SwiftCompile normal arm64 (in target 'KidCore' from project 'KidCore')
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling CanonicalJSON.swift, Helpers.swift, KeyTable.swift, Seams.swift, SettingsStore.swift, StageFit.swift (in target 'KidCore' from project 'KidCore')
+
+SwiftDriver\ Compilation\ Requirements KidCore normal arm64 com.apple.xcode.tools.swift.compiler (in target 'KidCore' from project 'KidCore')
+    cd <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -parse-as-library -module-name KidCore -O -whole-module-optimization @<tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.SwiftFileList -DSWIFT_PACKAGE -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -DXcode -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios26.0 -g -module-cache-path <tmp>/t130-dd/ModuleCache.noindex -Xfrontend -serialize-debugging-options -swift-version 6 -I <tmp>/t130-dd/Build/Products/Release-iphoneos -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib -F <tmp>/t130-dd/Build/Products/Release-iphoneos/PackageFrameworks -F <tmp>/t130-dd/Build/Products/Release-iphoneos -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk/Developer/Library/Frameworks -c -num-threads 12 -Xcc -ivfsstatcache -Xcc <tmp>/t130-dd/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache -output-file-map <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <tmp>/t130-dd/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <tmp>/t130-dd/ModuleCache.noindex -sdk-module-cache-path <tmp>/t130-dd/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <tmp>/t130-dd/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -package-name kidcore -emit-const-values -const-gather-protocols-list <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore_const_extract_protocols.json -Xcc -I<tmp>/t130-dd/Build/Products/Release-iphoneos/include -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/DerivedSources-normal/arm64 -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/DerivedSources/arm64 -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/DerivedSources -Xcc -DSWIFT_PACKAGE -emit-objc-header -emit-objc-header-path <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore-Swift.h -working-directory <worktree>/games/kid-learn-character/apple/LetterMorph.xcodeproj -no-emit-module-separately-wmo
+
+SwiftMergeGeneratedHeaders <tmp>/t130-dd/Build/Intermediates.noindex/GeneratedModuleMaps-iphoneos/KidCore-Swift.h <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore-Swift.h (in target 'KidCore' from project 'KidCore')
+    cd <worktree>/games/kid-learn-character/apple/KidCore
+    builtin-swiftHeaderTool -arch arm64 <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore-Swift.h -o <tmp>/t130-dd/Build/Intermediates.noindex/GeneratedModuleMaps-iphoneos/KidCore-Swift.h
+
+Copy <tmp>/t130-dd/Build/Products/Release-iphoneos/KidCore.swiftmodule/arm64-apple-ios.swiftmodule <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.swiftmodule (in target 'KidCore' from project 'KidCore')
+    cd <worktree>/games/kid-learn-character/apple/KidCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.swiftmodule <tmp>/t130-dd/Build/Products/Release-iphoneos/KidCore.swiftmodule/arm64-apple-ios.swiftmodule
+
+Copy <tmp>/t130-dd/Build/Products/Release-iphoneos/KidCore.swiftmodule/arm64-apple-ios.abi.json <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.abi.json (in target 'KidCore' from project 'KidCore')
+    cd <worktree>/games/kid-learn-character/apple/KidCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.abi.json <tmp>/t130-dd/Build/Products/Release-iphoneos/KidCore.swiftmodule/arm64-apple-ios.abi.json
+
+Copy <tmp>/t130-dd/Build/Products/Release-iphoneos/KidCore.swiftmodule/arm64-apple-ios.swiftdoc <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.swiftdoc (in target 'KidCore' from project 'KidCore')
+    cd <worktree>/games/kid-learn-character/apple/KidCore
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.swiftdoc <tmp>/t130-dd/Build/Products/Release-iphoneos/KidCore.swiftmodule/arm64-apple-ios.swiftdoc
+
+Ld <tmp>/t130-dd/Build/Products/Release-iphoneos/KidCore.o normal (in target 'KidCore' from project 'KidCore')
+    cd <worktree>/games/kid-learn-character/apple/KidCore
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios26.0 -r -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -Os -Xlinker -no_warn_duplicate_libraries -F<tmp>/t130-dd/Build/Intermediates.noindex/EagerLinkingTBDs/Release-iphoneos -F<tmp>/t130-dd/Build/Products/Release-iphoneos/PackageFrameworks -F<tmp>/t130-dd/Build/Products/Release-iphoneos -iframework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks -iframework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk/Developer/Library/Frameworks -filelist <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.LinkFileList -nostdlib -Xlinker -object_path_lto -Xlinker <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore_lto.o -Xlinker -dependency_info -Xlinker <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.swiftmodule -o <tmp>/t130-dd/Build/Products/Release-iphoneos/KidCore.o
+
+ProcessProductPackaging ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/b44b1f3e-d42c-4f1d-a402-84181346a026.mobileprovision <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/embedded.mobileprovision (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    builtin-productPackagingUtility ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/b44b1f3e-d42c-4f1d-a402-84181346a026.mobileprovision -o <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/embedded.mobileprovision
+
+ProcessProductPackaging "" <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings.app.xcent (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    
+    Entitlements:
+    
+    {
+    "application-identifier" = "<TEAM>.com.galaxyandsun.letterlings";
+    "com.apple.developer.team-identifier" = <TEAM>;
+    "get-task-allow" = 1;
+}
+    
+    builtin-productPackagingUtility -entitlements -format xml -o <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings.app.xcent
+
+ProcessProductPackagingDER <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings.app.xcent <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings.app.xcent.der (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    /usr/bin/derq query -f xml -i <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings.app.xcent -o <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings.app.xcent.der --raw
+
+GenerateAssetSymbols <worktree>/games/kid-learn-character/apple/LetterMorph/Assets.xcassets (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    /Applications/Xcode.app/Contents/Developer/usr/bin/actool <worktree>/games/kid-learn-character/apple/LetterMorph/Assets.xcassets --compile <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app --output-format human-readable-text --notices --warnings --export-dependency-info <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/assetcatalog_dependencies --output-partial-info-plist <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/assetcatalog_generated_info.plist --compress-pngs --enable-on-demand-resources YES --development-region en --target-device ipad --minimum-deployment-target 26.0 --platform iphoneos --bundle-identifier com.galaxyandsun.letterlings --generate-swift-asset-symbol-extensions NO --generate-swift-asset-symbols <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources/GeneratedAssetSymbols.swift --generate-objc-asset-symbols <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources/GeneratedAssetSymbols.h --generate-asset-symbol-index <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources/GeneratedAssetSymbols-Index.plist
+/* com.apple.actool.compilation-results */
+<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources/GeneratedAssetSymbols-Index.plist
+<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources/GeneratedAssetSymbols.h
+<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources/GeneratedAssetSymbols.swift
+
+
+MkDir <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/assetcatalog_output/thinned (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    /bin/mkdir -p <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/assetcatalog_output/thinned
+
+MkDir <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/assetcatalog_output/unthinned (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    /bin/mkdir -p <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/assetcatalog_output/unthinned
+
+CompileAssetCatalogVariant thinned <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app <worktree>/games/kid-learn-character/apple/LetterMorph/Assets.xcassets (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    /Applications/Xcode.app/Contents/Developer/usr/bin/actool <worktree>/games/kid-learn-character/apple/LetterMorph/Assets.xcassets --compile <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/assetcatalog_output/thinned --output-format human-readable-text --notices --warnings --export-dependency-info <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/assetcatalog_dependencies_thinned --output-partial-info-plist <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/assetcatalog_generated_info.plist_thinned --compress-pngs --enable-on-demand-resources YES --development-region en --target-device ipad --minimum-deployment-target 26.0 --platform iphoneos
+/* com.apple.actool.compilation-results */
+<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/assetcatalog_generated_info.plist_thinned
+<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/assetcatalog_output/thinned/Assets.car
+
+
+SwiftDriver LetterMorph normal arm64 com.apple.xcode.tools.swift.compiler (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name LetterMorph -O -whole-module-optimization @<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/Letterlings.SwiftFileList -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios26.0 -g -module-cache-path <tmp>/t130-dd/ModuleCache.noindex -Xfrontend -serialize-debugging-options -swift-version 6 -I <tmp>/t130-dd/Build/Products/Release-iphoneos -F <tmp>/t130-dd/Build/Products/Release-iphoneos/PackageFrameworks -F <tmp>/t130-dd/Build/Products/Release-iphoneos -c -num-threads 12 -Xcc -ivfsstatcache -Xcc <tmp>/t130-dd/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache -output-file-map <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <tmp>/t130-dd/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <tmp>/t130-dd/ModuleCache.noindex -sdk-module-cache-path <tmp>/t130-dd/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <tmp>/t130-dd/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph_const_extract_protocols.json -Xcc -iquote -Xcc <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-generated-files.hmap -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-own-target-headers.hmap -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph-c3c46f8647b70d5b2b13aacbf80fbbd2-VFS-iphoneos/all-product-headers.yaml -Xcc -iquote -Xcc <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-project-headers.hmap -Xcc -I<tmp>/t130-dd/Build/Products/Release-iphoneos/include -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources-normal/arm64 -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources/arm64 -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources -emit-objc-header -emit-objc-header-path <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph-Swift.h -working-directory <worktree>/games/kid-learn-character/apple -no-emit-module-separately-wmo
+
+ExtractAppIntentsMetadata (in target 'KidCore' from project 'KidCore')
+    cd <worktree>/games/kid-learn-character/apple/KidCore
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name KidCore --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk --xcode-version 27A9275 --platform-family iOS --deployment-target 26.0 --bundle-identifier kidcore.KidCore --output <tmp>/t130-dd/Build/Products/Release-iphoneos/KidCore.appintents --target-triple arm64-apple-ios26.0 --binary-file <tmp>/t130-dd/Build/Products/Release-iphoneos/KidCore.o --dependency-file <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore_dependency_info.dat --stringsdata-file <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.SwiftFileList --metadata-file-list <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/KidCore.DependencyMetadataFileList --static-metadata-file-list <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/KidCore.DependencyStaticMetadataFileList --swift-const-vals-list <tmp>/t130-dd/Build/Intermediates.noindex/KidCore.build/Release-iphoneos/KidCore-t.build/Objects-normal/arm64/KidCore.SwiftConstValuesFileList --force --compile-time-extraction --deployment-aware-processing --no-app-shortcuts-localization
+2026-11-20 08:55:25.192 appintentsmetadataprocessor[10265:24143808] Starting appintentsmetadataprocessor export
+2026-11-20 08:55:25.230 appintentsmetadataprocessor[10265:24143808] Extracted no relevant App Intents symbols, skipping writing output
+
+CpResource <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/PrivacyInfo.xcprivacy <worktree>/games/kid-learn-character/apple/LetterMorph/PrivacyInfo.xcprivacy (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks <worktree>/games/kid-learn-character/apple/LetterMorph/PrivacyInfo.xcprivacy <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app
+
+SwiftDriver\ Compilation LetterMorph normal arm64 com.apple.xcode.tools.swift.compiler (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name LetterMorph -O -whole-module-optimization @<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/Letterlings.SwiftFileList -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios26.0 -g -module-cache-path <tmp>/t130-dd/ModuleCache.noindex -Xfrontend -serialize-debugging-options -swift-version 6 -I <tmp>/t130-dd/Build/Products/Release-iphoneos -F <tmp>/t130-dd/Build/Products/Release-iphoneos/PackageFrameworks -F <tmp>/t130-dd/Build/Products/Release-iphoneos -c -num-threads 12 -Xcc -ivfsstatcache -Xcc <tmp>/t130-dd/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache -output-file-map <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <tmp>/t130-dd/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <tmp>/t130-dd/ModuleCache.noindex -sdk-module-cache-path <tmp>/t130-dd/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <tmp>/t130-dd/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph_const_extract_protocols.json -Xcc -iquote -Xcc <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-generated-files.hmap -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-own-target-headers.hmap -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph-c3c46f8647b70d5b2b13aacbf80fbbd2-VFS-iphoneos/all-product-headers.yaml -Xcc -iquote -Xcc <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-project-headers.hmap -Xcc -I<tmp>/t130-dd/Build/Products/Release-iphoneos/include -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources-normal/arm64 -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources/arm64 -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources -emit-objc-header -emit-objc-header-path <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph-Swift.h -working-directory <worktree>/games/kid-learn-character/apple -no-emit-module-separately-wmo
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_stdarg-9UEYQBYVQA7OBBSEP2OAN6W83.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/SwiftShims-CRYSN54YY5E2FDETYB00UQQ2K.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_stdbool-6T5AS4KZTNIK21DOU8FLBSBL8.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/ptrcheck-98RIWWV8PWI2FI5SB9NE303GU.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/ptrauth-77IAK9A5UNGQ45DM08FJN8B70.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/_AvailabilityInternal-7ZYJP076NUWXZ1TFSY992F4JY.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_float-9L7BKWFPFI37T900DL0ES91W.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/_SwiftConcurrencyShims-6H2EGTZ5MSNEOSN24XVJJFM06.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/DeveloperToolsSupport-DPZCL1DOWH9BTVO809DR4ELIL.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_stddef-B7SCQHPHS79177XE8BUQ6B8TB.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/_DarwinFoundation1-AD3FV9FDR6J15JLLMMANJT07O.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_limits-4MXUDLLKDWHJVTC1IITYRZ34A.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/_DarwinFoundation2-9AHLXDQW5R4JZLP6QV0TN5QAF.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/string_h-8A8VK7TP5YI5XXSF7DWU61MW4.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_tgmath-DYB0NJOMHS0W243T927M72CE0.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_stdint-BEYWRMPFNFX82UZ7K5IPSTLI3.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/sys_types-ABROBC2QY3Q6JU56Q5GA9HGFQ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_stdatomic-3DRJ9OHEEGLJQJXNS52NTLVF6.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/_DarwinFoundation3-4L8V571HEN9QXH76ET10LQRIE.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_intrinsics-20KE0S3WJ43HSWBWRKZ8Z4Y2Q.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_inttypes-5M8437G34TJTQY1FY1L9F1MV9.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/Darwin-5V6N8BT2ASS2O6BP9SYB209WL.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/simd-DIU0T3PKBVB4NKLIQ6B6IC34T.pcm
+
+LinkAssetCatalog <worktree>/games/kid-learn-character/apple/LetterMorph/Assets.xcassets (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    builtin-linkAssetCatalog --thinned <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/assetcatalog_output/thinned --thinned-dependencies <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/assetcatalog_dependencies_thinned --thinned-info-plist-content <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/assetcatalog_generated_info.plist_thinned --unthinned <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/assetcatalog_output/unthinned --unthinned-dependencies <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/assetcatalog_dependencies_unthinned --unthinned-info-plist-content <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/assetcatalog_generated_info.plist_unthinned --output <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app --plist-output <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/assetcatalog_generated_info.plist
+note: Emplaced <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/Assets.car (in target 'LetterMorph' from project 'LetterMorph')
+
+ProcessInfoPlistFile <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/Info.plist <worktree>/games/kid-learn-character/apple/Config/Info.plist (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    builtin-infoPlistUtility <worktree>/games/kid-learn-character/apple/Config/Info.plist -producttype com.apple.product-type.application -genpkginfo <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/PkgInfo -expandbuildsettings -format binary -platform iphoneos -additionalcontentfile <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/assetcatalog_generated_info.plist -requiredArchitecture arm64 -o <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/Info.plist
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/MachO-A68HJW2H0KGT8XIE0IKOL6B2V.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/ObjectiveC-8CB9X9LES53S6ZY3BE7YNA79C.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/os_object-7MHU70CYLJJ993FK0PCQGHU9T.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/Spatial-72G8248772Y5QBFFYJMYF1ONO.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/os_workgroup-8CYDJZQXL2U02JFI88W0OB5D2.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/Dispatch-E9I80J3VIGJF74ZCMWDWL9879.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreFoundation-CGYUMR1BE4K6AQ73NVSXROHBF.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/XPC-6G56KQXI4NOZ7GCQERMU903W0.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/os-9LOJEJOEFKUV7SFCFODVP9K6J.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreAudioTypes-AH4L9N233TS5CY3A1B56RBZJX.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreGraphics-9Y0D7Z5WNN0V1YGTHEE281YOT.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/Security-52N2G7EGFTC07JWSSB7QNZZ41.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/CFNetwork-3M4GN86S57B5B6UAN3CXZXWH7.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreAudio-DIHYQ88VQ05JC2OC4PING48SB.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/Foundation-BF9REAF0SLGIA2QCFTNEZSFOL.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/ImageIO-8GARF319T3RB0Q9WYQC5WV9ZR.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreText-3HSDLCF5E2U8LC0RIVCRBUJFR.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreData-6EJT56Q6Y259K9MMUTJPU1Y2N.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/ModelIO-3RG772P2P2HETG7F23Y3KDQFF.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/FileProvider-1JW00BFR8LUAZASNFCQ82JXVV.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/Symbols-KHWNAVL6G1PE88Y56ZZGB2Q.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/Accessibility-F5CKP5SV2C5AWDAHYCJRHHSG8.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/OSLog-2053ZCMWDCSV63ILFCSFY2P7X.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/UniformTypeIdentifiers-5UWQJSNU8T0XCBDVWQ0TQ6H5M.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/IOSurface-DM1LCWNNYFSLOSJ7G54ZMPN5M.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/DataDetection-PR2S3I11388Z6EQK9STXX0P8.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/UIUtilities-81O2WQ4YC9R1QD7YDY19H3M.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/UserNotifications-5TKWIVFU745J2FUBJK8PMH3T1.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreTransferable-97HSQBWOKN9OXQWSTUGD5GJOI.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/_LocationEssentials-TSY33IF65ME9ZFB3SBG82I44.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/Metal-29G7A6GTKTRRTQKHQ4ISFBI0F.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/OpenGLES-9OMJVQPFX48Z752ZLXBXVAL32.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreLocation-O07J1X75SK1DF6W1ECAOSCIS.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreMotion-79YNGRP3SWFA72LBBHE8K5TV8.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreVideo-C75C60Z0C86VZZOHY2KWK0Y37.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreImage-7RER2J59PW1SM4C08KKJ8DQU4.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/QuartzCore-5JPNJPPZ9Z03SH29N8TGH75F1.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreMedia-9ERGQWJEZC994GEPZDMIGJZJE.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/SwiftUICore-BHVU3A2QNGJ4ANIGZVX4G2OHG.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/UIKit-B67OFQ7RV8G1Y34JD7UQZFU88.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/SwiftUI-6ANDUQTKBNEUB1VQ88CU19QW5.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/GLKit-5DFQQ63ZQJSJ6YBZ3XWE9WWX6.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <tmp>/t130-dd/SDKExplicitPrecompiledModules/SpriteKit-32BMRVAJVB7MQ7C90V0O198ZR.pcm
+
+SwiftCompile normal arm64 Compiling\ Clocks.swift,\ LetterMorphApp.swift,\ StageView.swift,\ GeneratedAssetSymbols.swift <worktree>/games/kid-learn-character/apple/LetterMorph/Clocks.swift <worktree>/games/kid-learn-character/apple/LetterMorph/LetterMorphApp.swift <worktree>/games/kid-learn-character/apple/LetterMorph/StageView.swift <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources/GeneratedAssetSymbols.swift /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/Observation.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/_DarwinFoundation1.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/simd.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/SwiftUICore.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/_Builtin_float.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/CoreData.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/_SpriteKit_SwiftUI.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/_DarwinFoundation3.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/UniformTypeIdentifiers.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/QuartzCore.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/CoreMedia.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/_DarwinFoundation2.swiftmodule/arm64e-apple-ios.swiftmodule <tmp>/t130-dd/Build/Products/Release-iphoneos/MorphCore.swiftmodule/arm64-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/_Concurrency.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/FileProvider.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/Combine.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/XPC.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/CoreVideo.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/UIKit.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/GLKit.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/Foundation.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/CoreMotion.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/Accessibility.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/CoreFoundation.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/DataDetection.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/_StringProcessing.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/ImageIO.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/Darwin.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/Dispatch.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/DeveloperToolsSupport.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/CoreTransferable.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/ObjectiveC.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/Spatial.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/CoreLocation.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/ModelIO.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/SpriteKit.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/System.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/Metal.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/CoreGraphics.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/os.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/Symbols.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/CoreAudio.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/SwiftUI.swiftmodule/arm64e-apple-ios.swiftmodule <tmp>/t130-dd/Build/Products/Release-iphoneos/KidCore.swiftmodule/arm64-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/CoreText.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/OSLog.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/CoreImage.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.1/Swift.swiftmodule/arm64e-apple-ios.swiftmodule <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_stdbool-6T5AS4KZTNIK21DOU8FLBSBL8.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreGraphics-9Y0D7Z5WNN0V1YGTHEE281YOT.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/Accessibility-F5CKP5SV2C5AWDAHYCJRHHSG8.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/OSLog-2053ZCMWDCSV63ILFCSFY2P7X.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/UniformTypeIdentifiers-5UWQJSNU8T0XCBDVWQ0TQ6H5M.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/IOSurface-DM1LCWNNYFSLOSJ7G54ZMPN5M.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/Symbols-KHWNAVL6G1PE88Y56ZZGB2Q.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_tgmath-DYB0NJOMHS0W243T927M72CE0.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/os_object-7MHU70CYLJJ993FK0PCQGHU9T.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/SwiftUI-6ANDUQTKBNEUB1VQ88CU19QW5.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_stdint-BEYWRMPFNFX82UZ7K5IPSTLI3.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreAudio-DIHYQ88VQ05JC2OC4PING48SB.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_intrinsics-20KE0S3WJ43HSWBWRKZ8Z4Y2Q.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreVideo-C75C60Z0C86VZZOHY2KWK0Y37.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/_DarwinFoundation1-AD3FV9FDR6J15JLLMMANJT07O.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/os-9LOJEJOEFKUV7SFCFODVP9K6J.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreImage-7RER2J59PW1SM4C08KKJ8DQU4.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreFoundation-CGYUMR1BE4K6AQ73NVSXROHBF.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/DataDetection-PR2S3I11388Z6EQK9STXX0P8.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreTransferable-97HSQBWOKN9OXQWSTUGD5GJOI.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/UserNotifications-5TKWIVFU745J2FUBJK8PMH3T1.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/QuartzCore-5JPNJPPZ9Z03SH29N8TGH75F1.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/SpriteKit-32BMRVAJVB7MQ7C90V0O198ZR.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_limits-4MXUDLLKDWHJVTC1IITYRZ34A.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/ObjectiveC-8CB9X9LES53S6ZY3BE7YNA79C.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_float-9L7BKWFPFI37T900DL0ES91W.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/_DarwinFoundation3-4L8V571HEN9QXH76ET10LQRIE.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreAudioTypes-AH4L9N233TS5CY3A1B56RBZJX.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_stdarg-9UEYQBYVQA7OBBSEP2OAN6W83.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreMotion-79YNGRP3SWFA72LBBHE8K5TV8.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/GLKit-5DFQQ63ZQJSJ6YBZ3XWE9WWX6.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/CFNetwork-3M4GN86S57B5B6UAN3CXZXWH7.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/_LocationEssentials-TSY33IF65ME9ZFB3SBG82I44.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/_SwiftConcurrencyShims-6H2EGTZ5MSNEOSN24XVJJFM06.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/ptrcheck-98RIWWV8PWI2FI5SB9NE303GU.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/OpenGLES-9OMJVQPFX48Z752ZLXBXVAL32.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/XPC-6G56KQXI4NOZ7GCQERMU903W0.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/_DarwinFoundation2-9AHLXDQW5R4JZLP6QV0TN5QAF.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/os_workgroup-8CYDJZQXL2U02JFI88W0OB5D2.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_stddef-B7SCQHPHS79177XE8BUQ6B8TB.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/Security-52N2G7EGFTC07JWSSB7QNZZ41.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/Foundation-BF9REAF0SLGIA2QCFTNEZSFOL.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/Darwin-5V6N8BT2ASS2O6BP9SYB209WL.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/MachO-A68HJW2H0KGT8XIE0IKOL6B2V.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/sys_types-ABROBC2QY3Q6JU56Q5GA9HGFQ.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreLocation-O07J1X75SK1DF6W1ECAOSCIS.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_inttypes-5M8437G34TJTQY1FY1L9F1MV9.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreMedia-9ERGQWJEZC994GEPZDMIGJZJE.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/_Builtin_stdatomic-3DRJ9OHEEGLJQJXNS52NTLVF6.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreData-6EJT56Q6Y259K9MMUTJPU1Y2N.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/ImageIO-8GARF319T3RB0Q9WYQC5WV9ZR.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/CoreText-3HSDLCF5E2U8LC0RIVCRBUJFR.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/_AvailabilityInternal-7ZYJP076NUWXZ1TFSY992F4JY.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/Metal-29G7A6GTKTRRTQKHQ4ISFBI0F.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/Spatial-72G8248772Y5QBFFYJMYF1ONO.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/simd-DIU0T3PKBVB4NKLIQ6B6IC34T.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/string_h-8A8VK7TP5YI5XXSF7DWU61MW4.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/Dispatch-E9I80J3VIGJF74ZCMWDWL9879.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/SwiftShims-CRYSN54YY5E2FDETYB00UQQ2K.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/ModelIO-3RG772P2P2HETG7F23Y3KDQFF.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/UIUtilities-81O2WQ4YC9R1QD7YDY19H3M.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/UIKit-B67OFQ7RV8G1Y34JD7UQZFU88.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/SwiftUICore-BHVU3A2QNGJ4ANIGZVX4G2OHG.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/ptrauth-77IAK9A5UNGQ45DM08FJN8B70.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/FileProvider-1JW00BFR8LUAZASNFCQ82JXVV.pcm <tmp>/t130-dd/SDKExplicitPrecompiledModules/DeveloperToolsSupport-DPZCL1DOWH9BTVO809DR4ELIL.pcm <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph-dependencies-1.json (in target 'LetterMorph' from project 'LetterMorph')
+
+SwiftCompile normal arm64 (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling Clocks.swift, LetterMorphApp.swift, StageView.swift, GeneratedAssetSymbols.swift (in target 'LetterMorph' from project 'LetterMorph')
+
+SwiftDriver\ Compilation\ Requirements LetterMorph normal arm64 com.apple.xcode.tools.swift.compiler (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name LetterMorph -O -whole-module-optimization @<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/Letterlings.SwiftFileList -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios26.0 -g -module-cache-path <tmp>/t130-dd/ModuleCache.noindex -Xfrontend -serialize-debugging-options -swift-version 6 -I <tmp>/t130-dd/Build/Products/Release-iphoneos -F <tmp>/t130-dd/Build/Products/Release-iphoneos/PackageFrameworks -F <tmp>/t130-dd/Build/Products/Release-iphoneos -c -num-threads 12 -Xcc -ivfsstatcache -Xcc <tmp>/t130-dd/SDKStatCaches.noindex/iphoneos27.1-24A94232-7568eff67e6f40c5a98ca4ef40d9005c.sdkstatcache -output-file-map <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <tmp>/t130-dd/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <tmp>/t130-dd/ModuleCache.noindex -sdk-module-cache-path <tmp>/t130-dd/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <tmp>/t130-dd/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph_const_extract_protocols.json -Xcc -iquote -Xcc <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-generated-files.hmap -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-own-target-headers.hmap -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph-c3c46f8647b70d5b2b13aacbf80fbbd2-VFS-iphoneos/all-product-headers.yaml -Xcc -iquote -Xcc <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings-project-headers.hmap -Xcc -I<tmp>/t130-dd/Build/Products/Release-iphoneos/include -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources-normal/arm64 -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources/arm64 -Xcc -I<tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources -emit-objc-header -emit-objc-header-path <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph-Swift.h -working-directory <worktree>/games/kid-learn-character/apple -no-emit-module-separately-wmo
+
+SwiftMergeGeneratedHeaders <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources/LetterMorph-Swift.h <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph-Swift.h (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    builtin-swiftHeaderTool -arch arm64 <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph-Swift.h -o <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/DerivedSources/LetterMorph-Swift.h
+
+Copy <tmp>/t130-dd/Build/Products/Release-iphoneos/LetterMorph.swiftmodule/arm64-apple-ios.swiftdoc <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftdoc (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftdoc <tmp>/t130-dd/Build/Products/Release-iphoneos/LetterMorph.swiftmodule/arm64-apple-ios.swiftdoc
+
+Copy <tmp>/t130-dd/Build/Products/Release-iphoneos/LetterMorph.swiftmodule/arm64-apple-ios.abi.json <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph.abi.json (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph.abi.json <tmp>/t130-dd/Build/Products/Release-iphoneos/LetterMorph.swiftmodule/arm64-apple-ios.abi.json
+
+Copy <tmp>/t130-dd/Build/Products/Release-iphoneos/LetterMorph.swiftmodule/arm64-apple-ios.swiftmodule <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftmodule (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftmodule <tmp>/t130-dd/Build/Products/Release-iphoneos/LetterMorph.swiftmodule/arm64-apple-ios.swiftmodule
+
+Copy <tmp>/t130-dd/Build/Products/Release-iphoneos/LetterMorph.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftsourceinfo (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftsourceinfo <tmp>/t130-dd/Build/Products/Release-iphoneos/LetterMorph.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo
+
+Ld <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/Letterlings normal (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios26.0 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -Os -Xlinker -no_warn_duplicate_libraries -L<tmp>/t130-dd/Build/Intermediates.noindex/EagerLinkingTBDs/Release-iphoneos -L<tmp>/t130-dd/Build/Products/Release-iphoneos -F<tmp>/t130-dd/Build/Intermediates.noindex/EagerLinkingTBDs/Release-iphoneos -F<tmp>/t130-dd/Build/Products/Release-iphoneos/PackageFrameworks -F<tmp>/t130-dd/Build/Products/Release-iphoneos -filelist <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/Letterlings.LinkFileList -Xlinker -rpath -Xlinker @executable_path/Frameworks -Xlinker -dead_strip -Xlinker -object_path_lto -Xlinker <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/Letterlings_lto.o -Xlinker -dependency_info -Xlinker <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/Letterlings_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/LetterMorph.swiftmodule -Xlinker -no_adhoc_codesign -o <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/Letterlings
+
+CopySwiftLibs <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    builtin-swiftStdLibTool --copy --verbose --sign 0F78FB03BF1127421B5D9DA53FD38AC3A8DB9CF2 --scan-executable <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/Letterlings --scan-folder <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/Frameworks --scan-folder <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/PlugIns --scan-folder <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/SystemExtensions --scan-folder <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/Extensions --platform iphoneos --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+ExtractAppIntentsMetadata (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name LetterMorph --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk --xcode-version 27A9275 --platform-family iOS --deployment-target 26.0 --bundle-identifier com.galaxyandsun.letterlings --output <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app --target-triple arm64-apple-ios26.0 --binary-file <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/Letterlings --dependency-file <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/Letterlings_dependency_info.dat --stringsdata-file <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/Letterlings.SwiftFileList --metadata-file-list <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings.DependencyMetadataFileList --static-metadata-file-list <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings.DependencyStaticMetadataFileList --swift-const-vals-list <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Objects-normal/arm64/Letterlings.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --no-app-shortcuts-localization
+2026-11-20 08:55:28.626 appintentsmetadataprocessor[10384:24144414] Starting appintentsmetadataprocessor export
+2026-11-20 08:55:28.628 appintentsmetadataprocessor[10384:24144414] warning: Metadata extraction skipped, no AppIntents.framework dependency found
+
+GenerateDSYMFile <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app.dSYM <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/Letterlings (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    export PATH\=/Applications/Xcode.app/Contents/SharedFrameworks/SwiftBuild.framework/Versions/A/PlugIns/SWBBuildService.bundle/Contents/PlugIns/SWBUniversalPlatformPlugin.bundle/Contents/Frameworks/SWBUniversalPlatform.framework/Resources:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/local/bin:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/libexec:/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/usr/bin:/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/usr/local/bin:/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/local/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/local/bin:/Applications/Orca.app/Contents/Resources/bin:/opt/homebrew/bin:/opt/homebrew/sbin:~/.bun/bin:~/.antigravity-ide/antigravity-ide/bin:~/.local/bin:~/.nvm/versions/node/v20.19.4/bin:/usr/local/opt/mysql-client/bin:/usr/local/opt/openjdk/bin:/usr/local/share/dotnet:/Library/Frameworks/Python.framework/Versions/3.10/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:~/projects/ps1:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin:~/.cargo/bin:~/.dotnet/tools:~/.volta/bin:~/.asdf/shims:~/.fnm/aliases/default/bin:~/.local/share/mise/shims:~/Library/pnpm:~/.yarn/bin:/usr/local/sbin:/nix/var/nix/profiles/default/bin:~/bin:~/.nix-profile/bin:~/.opencode/bin:~/.vite-plus/bin:~/.grok/bin
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/dsymutil <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/Letterlings -o <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app.dSYM
+
+AppIntentsSSUTraining (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsnltrainingprocessor --infoplist-path <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/Info.plist --temp-dir-path <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/ssu --bundle-id com.galaxyandsun.letterlings --product-path <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app --extracted-metadata-path <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/Metadata.appintents --metadata-file-list <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings.DependencyMetadataFileList --source-file <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app/Info.plist --archive-ssu-assets
+2026-11-20 08:55:28.660 appintentsnltrainingprocessor[10386:24144418] Parsing options for appintentsnltrainingprocessor
+2026-11-20 08:55:28.660 appintentsnltrainingprocessor[10386:24144418] Starting AppIntents SSU YAML Generation
+2026-11-20 08:55:28.663 appintentsnltrainingprocessor[10386:24144418] No AppShortcuts found - Skipping.
+
+CodeSign <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    
+    Signing Identity:     "Apple Development: <apple-id> (<cert-id>)"
+    Provisioning Profile: "iOS Team Provisioning Profile: com.galaxyandsun.letterlings"
+                          (b44b1f3e-d42c-4f1d-a402-84181346a026)
+    
+    /usr/bin/codesign --force --sign 0F78FB03BF1127421B5D9DA53FD38AC3A8DB9CF2 -o runtime --entitlements <tmp>/t130-dd/Build/Intermediates.noindex/LetterMorph.build/Release-iphoneos/LetterMorph.build/Letterlings.app.xcent --timestamp\=none --generate-entitlement-der <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app
+
+RegisterExecutionPolicyException <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    builtin-RegisterExecutionPolicyException <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app
+
+Validate <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    builtin-validationUtility <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app -shallow-bundle -infoplist-subpath Info.plist
+
+Touch <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app (in target 'LetterMorph' from project 'LetterMorph')
+    cd <worktree>/games/kid-learn-character/apple
+    /usr/bin/touch -c <tmp>/t130-dd/Build/Products/Release-iphoneos/Letterlings.app
+
+PruneExplicitPrecompiledModules <tmp>/t130-dd/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules <tmp>/t130-dd/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules <tmp>/t130-dd/SDKExplicitPrecompiledModules
+
+** BUILD SUCCEEDED **
+
