@@ -103,6 +103,13 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-50 Workers start /dev-story themselves (Luan, 2026-11-20)
+
+- The shared studio skill `/dev-story` was user-invoked only. Luan chose to let the team's worker sessions invoke it
+  for the Demo 1 stories: `disable-model-invocation: false` in `.claude/skills/dev-story/SKILL.md` (5c0f6442). It is
+  the shared `.claude`, so it applies to every game in this studio fork. The skill's own gates (story readiness,
+  ADR status, evidence) still run; review and merge stay as before (K-14).
+
 ### K-49 Demo 1: keyboard row on without a keyboard; OS ways out (Luan, 2026-11-20, TASK-132 Q1/Q2)
 
 - **Q1 (design change):** the On-screen Keyboard Row **turns on by itself when no hardware keyboard is attached**
