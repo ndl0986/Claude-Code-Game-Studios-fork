@@ -62,9 +62,9 @@ it is never Done.
 | hint-letters-v1 | not-started: story:hint-letters | 58 |
 | input-filter-v1 | superseded-by: input-filter-v2 | 86 |
 | input-filter-v2 | not-started: story:input | 95 |
-| key-table-schema-v1 | superseded-by: key-table-schema-v2 | 93 |
-| key-table-schema-v2 | runner: KeyTableModelRunner + Tools.KeyTableFileLayer | 95 |
-| key-table-schema-v3 | not-started: story:key-table | 99 |
+| key-table-schema-v1 | superseded-by: key-table-schema-v3 | 93 |
+| key-table-schema-v2 | superseded-by: key-table-schema-v3 | 95 |
+| key-table-schema-v3 | runner: KeyTableModelRunner + Tools.KeyTableFileLayer | 99 |
 | keyboard-row-v1 | superseded-by: keyboard-row-v2 | 36 |
 | keyboard-row-v2 | not-started: story:keyboard-row | 58 |
 | parade-v1 | superseded-by: parade-v2 | 30 |

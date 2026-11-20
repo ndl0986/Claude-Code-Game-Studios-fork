@@ -16,7 +16,7 @@ let package = Package(
             .product(name: "KidCore", package: "KidCore"), .product(name: "MorphCore", package: "MorphCore"),
         ]),
         .executableTarget(name: "kidtools", dependencies: ["ToolsCore"]),
-        // ToolsTests: the key-table-schema-v2 "file" layer (ADR-0004 D3, D5). ContractKit is test-only (K-38).
+        // ToolsTests: the key-table-schema-v3 "file" layer (ADR-0004 D3, D5). ContractKit is test-only (K-38).
         .testTarget(name: "ToolsTests", dependencies: ["ToolsCore", .product(name: "ContractKit", package: "ContractKit")]),
     ]
 )

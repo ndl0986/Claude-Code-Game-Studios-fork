@@ -19,7 +19,7 @@
 - `kidtools validate <content-dir> [--load]`: KidCore's V1–V18 over every `content/themes/*/theme.json`, run with a
   file-system `ContentProbe` (exact case on every path component), plus the **staleness stub**. `verify.sh` runs it on
   `content/`; with no theme yet it reports `0 theme(s)` and passes. `ContentValidatorTests` proves it on a test theme
-  built from key-table-schema-v2's fixtures: the theme passes, a wrong-case file fails V7, a missing SVG source fails
+  built from key-table-schema-v3's fixtures: the theme passes, a wrong-case file fails V7, a missing SVG source fails
   the staleness stub.
 
 - **A theme in progress** (TASK-125): a `content/themes/<id>/` folder holding **only** `src/` (build inputs, ADR-0003

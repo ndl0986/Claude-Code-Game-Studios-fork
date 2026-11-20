@@ -53,9 +53,9 @@ struct FixtureProbe: ContentProbe {
     func decodedDuration(_ path: String) -> Double? { durations[path] }
 }
 
-/// key-table-schema-v2, `model` layer (ADR-0004 D3: the KidCore harness).
+/// key-table-schema-v3, `model` layer (ADR-0004 D3: the KidCore harness).
 struct KeyTableModelRunner: ContractRunner {
-    static let contract = "key-table-schema-v2"
+    static let contract = "key-table-schema-v3"
     static let layer: String? = "model"
     static let declaration = ContractDeclaration(
         givenFields: ["theme", "assets", "glyphSet", "buildSettings", "state", "themeBytes"],
