@@ -20,7 +20,7 @@ Milestone: Demo 1 (`production/milestones/demo-1.md`, K-48). One epic per system
 | [Scene: Time of Day & Weather](scene/EPIC.md) | Feature | scene | scene-time-weather.md | 4 / 5 | ADR-0009 | Not yet created | Ready |
 | [On-screen Keyboard Row](keyboard-row/EPIC.md) | Feature | keyboard-row | onscreen-keyboard-row.md | 4 / 4 | — | Not yet created | Ready |
 | [App Shell & Title](app-shell/EPIC.md) | Presentation | app-shell | app-shell-title.md | 5 / 6 | — | Not yet created | Ready |
-| [Accessibility](accessibility/EPIC.md) | Polish | accessibility | accessibility.md | 5 / 6 | — | Not yet created | Ready |
+| [Accessibility](accessibility/EPIC.md) | Presentation | accessibility | accessibility.md | 5 / 6 | — | Not yet created | Ready |
 | [Content Pipeline (Tools)](content-pipeline/EPIC.md) | Foundation | content-pipeline | key-table-theme-data.md | 5 / 6 | — | Not yet created | Ready |
 
 **Not in Demo 1 (next milestone):** Parent Gate & Grown-up Panel (`parent-gate-panel.md`, TR-gate-001..007, ADR-0007/0008 Proposed) and Child Lock-in (`child-lock-in.md`, TR-lock-001..005, ADR-0008 Proposed). Alpha and later: Theme Packs, Localization, Mash World (no GDD yet).

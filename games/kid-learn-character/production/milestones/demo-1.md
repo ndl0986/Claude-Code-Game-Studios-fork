@@ -26,7 +26,8 @@ The core loop, native on **macOS and iPadOS**, with the **full Dinosaurs set: Aâ
 - **Parent Gate & Grown-up Panel** (`parent-gate-panel.md`, TR-gate-001..007).
 - **Child Lock-in** (`child-lock-in.md`, TR-lock-001..005, ADR-0008).
 - Their parts of in-scope systems: TR-input-003 (kiosk chord), TR-settings-004 (childLock), TR-queue-003's gate and panel
-  freeze; the device rows that only they need (M-2 to M-7, M-9, M-16, P-4, P-12, P-14).
+  freeze; the device rows that only they need (M-2, M-3's lock-on half, M-4 to M-7, M-9, M-16, P-4's Guided Access
+  half, P-12, P-14).
 - Android (TR-android-001, K-03); Theme Packs, Localization, Mash World.
 
 ## Exit criteria
@@ -47,7 +48,10 @@ The core loop, native on **macOS and iPadOS**, with the **full Dinosaurs set: Aâ
    - ADR-0010 audio: P-1, P-7 (open: the pop heard in TASK-127, TASK-128), P-8, P-9, M-14;
    - ADR-0009 render path: P-2 decisive and M-13 (the decisive iPad is chosen at release prep, K-47; Demo 1 runs
      on the child's iPad);
-   - ADR-0007 input adapters: M-1, P-15 for Demo 1 (M-2, M-3 decide it for the next milestone).
+   - ADR-0007 input adapters, its keyboard part decided in Demo 1: M-1; **M-3's Keys half with the lock off** (Mac
+     normalization, key-ups under âŒ˜, system keys left alone; runs in TASK-134's Mac session 1 on DeviceSpike);
+     P-15 and **P-4's media-keys half** (both need an iPad hardware keyboard, which Luan doesn't have yet: NOT ASSESSED
+     until one is available). M-2 and M-3's lock-on half stay with the next milestone.
    Until each is Accepted, the stories that depend on it are Blocked (or proceed on the measured candidate with
    Luan's OK).
 2. **The 36 assets** (TASK-133 asset specs, then the layered SVG creatures per art bible Â§8), baked by the content

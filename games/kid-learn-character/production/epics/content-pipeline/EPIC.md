@@ -23,12 +23,12 @@ The build-time tools that turn the 36 Dinosaurs items into shipped content: the 
 
 | TR-ID | Requirement | ADR Coverage | Demo 1 |
 |-------|-------------|--------------|--------|
-| TR-keytable-001 | Bundled themes validated at build and at load; unknown versions refused (V1-V17, sections 5-6) | ADR-0003 D2/D3; ADR-0004 key-table-schema-v1 ✅ | in |
-| TR-keytable-004 | Voice and sfx pipeline: pre-rendered TTS, AAC mono, loudness target, voiceDurations from data (V12, V15) | ADR-0003 D5/D6 ✅ | in |
-| TR-cast-001 | SVG subset bake tool; one baked file and one draw interface for both render options (R2, R7, R11) | ADR-0003 D1/D4 ✅ | in |
-| TR-morph-002 | UI-free math; glyph and silhouette paths in the v1 SVG subset, glyphs baked from the OFL font | ADR-0001 D6; ADR-0003 D4 ✅ | in |
-| TR-audio-006 | Voice source, licence and no run-time TTS (R8, Q8, L-09) | ADR-0003 D5/D6; ADR-0010 D10 ✅ | in |
-| TR-hints-003 | Hint knobs data-validated at build, slots pass F4 (AC-21) | ⚠️ Partial: ADR-0003 D1 (data/ knob files) | in |
+| TR-keytable-001 | Bundled themes validated at build and at load; unknown versions refused (V1-V17, sections 5-6) | ADR-0003 D2/D3; ADR-0004 key-table-schema-v1 ✅ | in (Tools side); closed by key-table |
+| TR-keytable-004 | Voice and sfx pipeline: pre-rendered TTS, AAC mono, loudness target, voiceDurations from data (V12, V15) | ADR-0003 D5/D6 ✅ | in (voice bake); closed by key-table |
+| TR-cast-001 | SVG subset bake tool; one baked file and one draw interface for both render options (R2, R7, R11) | ADR-0003 D1/D4 ✅ | in (SVG bake); closed by cast-rendering |
+| TR-morph-002 | UI-free math; glyph and silhouette paths in the v1 SVG subset, glyphs baked from the OFL font | ADR-0001 D6; ADR-0003 D4 ✅ | in (glyph bake); closed by morphcore |
+| TR-audio-006 | Voice source, licence and no run-time TTS (R8, Q8, L-09) | ADR-0003 D5/D6; ADR-0010 D10 ✅ | in (no run-time TTS, licence); closed by audio-voice |
+| TR-hints-003 | Hint knobs data-validated at build, slots pass F4 (AC-21) | ⚠️ Partial: ADR-0003 D1 (data/ knob files) | in (validator rule); closed by hint-letters |
 
 **Requirements covered by Accepted ADRs**: 5 / 6
 **Untraced Requirements**: TR-hints-003 (Proposed-only or Partial; see the coverage column)

@@ -38,8 +38,10 @@ Every press, from a hardware key or a touch, becomes one normalized event; only 
 (`production/qa/device-checks-plan.md`; a spike run is ADR evidence, never AC evidence.)
 
 - **M-1**: Input AC-1k6: no Input Monitoring prompt on the Mac (release-blocking); ADR-0007
-- **P-15**: Input R1–R4 on a real iPad hardware keyboard; ADR-0007
-- **M-2, M-3**: ADR-0007 acceptance (chord and keyboard ways out with the lock on): they gate the next milestone, not a Demo 1 story
+- **M-3, Keys half only (lock off)**: Mac hardware keys: every key normalizes, key-ups under ⌘, system keys left alone (ADR-0007's keyboard part; TR-input-004/005). Pulled into Demo 1 (leader, TASK-132); runs in TASK-134 Mac session 1 on DeviceSpike. The lock-on half stays with Child Lock-in
+- **P-15**: Input R1–R4 on a real iPad hardware keyboard; ADR-0007. NOT ASSESSED until Luan has an iPad hardware keyboard
+- **P-4, media-keys half only**: iPad media keys swallowed (ADR-0007's keyboard part). In Demo 1 (leader, TASK-132); NOT ASSESSED until an iPad hardware keyboard is available. The Guided Access half stays with Child Lock-in
+- **M-2; M-3 lock-on half**: ADR-0007 acceptance with the lock on (chord, ⌘ window): next milestone, not a Demo 1 story
 
 ## Contracts
 
