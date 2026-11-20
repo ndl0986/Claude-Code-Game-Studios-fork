@@ -17,6 +17,7 @@ Cross-platform behaviour contracts for Kid Learn Character (ADR-0004). Each cont
 | morph-contract-v1 | v1 | morphcore.md | MorphCore | Accepted. It lives at `docs/architecture/morph-contract-v1.md` and `content/fixtures/morph-contract-v1.json` and moves here only with a v2 |
 | key-table-schema-v1 | v1 | key-table-theme-data.md | model (KidCore), file (apple/Tools) | first cases (TASK-068); superseded by key-table-schema-v2 (K-52 `.caf`, TASK-146) |
 | key-table-schema-v2 | v2 | key-table-theme-data.md (TASK-145b) | model (KidCore), file (apple/Tools) | TASK-146: K-52 `.m4a` → `.caf` (878 places, same verdicts); V6 and V7 extension cases |
+| key-table-schema-v3 | v3 | key-table-theme-data.md (TASK-147) | model (KidCore), file (apple/Tools) | TASK-147: K-53 word lines ≤ 1.5 s (V15 boundary cases) |
 | settings-record-v1 | v1 | settings-store.md | KidCore | superseded by settings-record-v2 (see Registry; TASK-091: `F1-slider-release-7.5` contradicted R6a) |
 | settings-record-v2 | v2 | settings-store.md | KidCore | TASK-091: v1's slider case fixed; the non-finite slider cases added (F1, TASK-082) |
 | input-filter-v1 | v1 | input-key-filter.md | KidCore | superseded-by: input-filter-v2 (K-40; TASK-098 added `gateDigitUp`) |
@@ -63,6 +64,7 @@ it is never Done.
 | input-filter-v2 | not-started: story:input | 95 |
 | key-table-schema-v1 | superseded-by: key-table-schema-v2 | 93 |
 | key-table-schema-v2 | runner: KeyTableModelRunner + Tools.KeyTableFileLayer | 95 |
+| key-table-schema-v3 | not-started: story:key-table | 99 |
 | keyboard-row-v1 | superseded-by: keyboard-row-v2 | 36 |
 | keyboard-row-v2 | not-started: story:keyboard-row | 58 |
 | parade-v1 | superseded-by: parade-v2 | 30 |
