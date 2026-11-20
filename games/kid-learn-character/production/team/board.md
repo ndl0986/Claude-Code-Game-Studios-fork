@@ -136,7 +136,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | content-pipeline/001 | Cast SVG bake tool | story | game-dev-android (review: game-dev-ios) | MERGED (e9c1f7d2; plan verify PASS b22d664a, leader-run) | `feat/content-pipeline-001-svg-bake` | 2026-11-20 |
 | content-pipeline/002 | Glyph bake (Fredoka 600) | story | game-dev-android (review: game-dev-ios) | MERGED (dc32a75d; plan verify PASS b22d664a) | `feat/content-pipeline-002-glyph-bake` | 2026-11-20 |
 | TASK-145 | K-52 text: `.m4a`/AAC → `.caf`/LPCM in the Key Table GDD, Audio & Voice GDD, art bible §8 (dated entries + fixture lines) | design | game-art-content (review: game-dev-android) | MERGED (87172f5a; game-dev-android APPROVE); 145b with TASK-146 | `design/TASK-145-caf-text` | 2026-11-20 |
-| TASK-146 | key-table-schema-v2 (`.m4a` → `.caf`, v1 superseded) + KidCore KeyTable.swift V6/voicePath change in the same merge | contracts | game-qc-android (cases) + game-dev-android (KidCore) | ASSIGNED | `contracts/TASK-146-key-table-schema-v2` | 2026-11-20 |
+| TASK-146 | key-table-schema-v2 (`.m4a` → `.caf`, v1 superseded) + KidCore KeyTable.swift V6/voicePath change in the same merge | contracts | game-qc-android (cases) + game-dev-android (KidCore) | MERGED (6a368cc1 + 145b 71438637; plan verify PASS 445dfdea, leader-run) | `contracts/TASK-146-key-table-schema-v2` | 2026-11-20 |
 
 ## Leader log
 
