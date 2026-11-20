@@ -7,6 +7,8 @@ it) · **Decided** (Luan's call, with the date). The leader owns this file.
 
 ## Open
 
+- None. (Release prep still holds L-01…L-09, the "oldest supported iPad" (K-47) and the English-locale subtitle (K-04).)
+
 ## Decided
 
 ### K-01 2D or 3D pictures (Luan, 2026-11-17, /brainstorm)
