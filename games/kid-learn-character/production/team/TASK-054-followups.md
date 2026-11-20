@@ -93,3 +93,4 @@ TASK-048, TASK-051 and TASK-052 are merged. Each GDD gets a dated "no re-review"
 - Hint Letters (TASK-139, game-qc-android): the parade meter box "moves no threshold" holds at zero jitter (k < 1.27) only; with jitter the slot can come within 114 and the box threshold binds at k ≥ ~1.17. No hint-letters-v1 case hits it; reword at the next touch — game-art-content.
 - content-pipeline/006 (source-drift.sh): write work files to a temp/build folder, not next to the script; the reference drift139.sh writes `drift-work/` inside production/qa/evidence/TASK-139/ (game-art-content advisory).
 - ~~Accessibility AC-10 hints half closer~~ done (accessibility/006, 2f50f37b).
+- Press Queue F1 table and press-queue-v2's `F1-quetzalcoatlus-1.15-normal` still use 1.15 s for quetzalcoatlus; Audio F6 now says 1.26 s (trimmed Kokoro render, K-53). Still valid as a stub value; align the GDD table at the next Press Queue touch — game-art-content (TASK-147 advisory, game-qc-android).

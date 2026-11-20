@@ -43,6 +43,8 @@ final class VoiceBakeTests: XCTestCase {
         let json = """
         {"schemaVersion": 1, "locale": "en-us",
          "engine": {"name": "Kokoro-82M", "package": "kokoro==0.9.4", "weightsRevision": "rev123", "voice": "af_heart", "langCode": "a", "speed": 0.88},
+         "trim": {"thresholdDBFS": -50, "padSeconds": 0.02, "fadeSeconds": 0.005},
+         "limiter": {"ceilingDBTP": -1.0, "lookaheadSeconds": 0.005, "releaseSeconds": 0.05, "warnReductionDB": 6.0},
          "respell": {"word_ankylosaurus": "ankie low saurus"}}
         """
         try Data(json.utf8).write(to: scripts.appendingPathComponent("en-us.json"))
