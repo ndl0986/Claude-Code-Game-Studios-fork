@@ -1,0 +1,15 @@
+TASK-130 signed macOS Release build at 7b36e8a2 (headless; not installed, not launched, K-34)
+Identifier=com.galaxyandsun.letterlings
+Format=app bundle with Mach-O universal (x86_64 arm64)
+TeamIdentifier=<team>
+verify --strict: OK
+Info.plist CFBundleIdentifier = com.galaxyandsun.letterlings
+Info.plist CFBundleDisplayName = Letterlings
+Info.plist CFBundleName = LetterMorph
+entitlements:
+{
+  "com.apple.security.app-sandbox" => true
+  "com.apple.security.get-task-allow" => true
+}
+
+iOS: BUILD FAILED before signing: 'No Accounts' / 'No profiles for com.galaxyandsun.letterlings were found' (build-signed-ios.txt). Xcode has no Apple account signed in on this Mac, so -allowProvisioningUpdates cannot create the new App ID and profile.
