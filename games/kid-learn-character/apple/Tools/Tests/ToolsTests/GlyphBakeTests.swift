@@ -45,6 +45,21 @@ final class GlyphBakeTests: XCTestCase {
         XCTAssertEqual(set.fontVersion, "2.001")
         XCTAssertEqual(set.fontLicence, "OFL-1.1")
         XCTAssertEqual(set.baker, "\(SVGBake.toolName) \(SVGBake.toolVersion)")
+        // Every glyph file carries the font's name, version and licence (ADR-0001 D6, ADR-0003 D4).
+        for rel in first where rel.hasSuffix(".json") && !rel.hasSuffix("glyphs.json") {
+            let o = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(try bytes(a, rel))) as? [String: Any], rel)
+            let font = try XCTUnwrap(o["font"] as? [String: Any], "\(rel) has no font record")
+            XCTAssertEqual(font["name"] as? String, "Fredoka", rel)
+            XCTAssertEqual(font["version"] as? String, "2.001", rel)
+            XCTAssertEqual(font["licence"] as? String, "OFL-1.1", rel)
+            XCTAssertEqual(font["licenceFile"] as? String, "OFL.txt", rel)
+        }
+        // The set's font record also carries the metrics for one cap height.
+        let setJSON = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(try bytes(a, "glyphs/fredoka600/glyphs.json"))) as? [String: Any])
+        let setFont = try XCTUnwrap(setJSON["font"] as? [String: Any])
+        XCTAssertEqual(setFont["unitsPerEm"] as? Double, 1000)
+        let cap = try XCTUnwrap(setFont["capHeight"] as? Double), asc = try XCTUnwrap(setFont["ascender"] as? Double)
+        XCTAssertTrue(cap > 0 && cap < asc && asc <= 1000, "capHeight \(cap), ascender \(asc)")
         XCTAssertEqual(set.glyphs.keys.sorted(), KeyTable.keys.sorted())
         XCTAssertEqual(set.glyphs["A"], "glyph_fredoka_a.json")
         XCTAssertEqual(set.glyphs["3"], "glyph_fredoka_3.json")
@@ -59,7 +74,7 @@ final class GlyphBakeTests: XCTestCase {
         for key in KeyTable.keys {
             let name = GlyphSetSpec.fredoka600.glyphFileName(key)
             let o = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(try XCTUnwrap(files[name]))) as? [String: Any])
-            XCTAssertEqual(Set(o.keys), ["d", "tool", "version"])
+            XCTAssertEqual(Set(o.keys), ["d", "font", "tool", "version"])
             let d = try XCTUnwrap(o["d"] as? String)
             XCTAssertTrue(d.unicodeScalars.allSatisfy { "MLCQZ0123456789.- ".unicodeScalars.contains($0) }, "\(key): only M L C Q Z and plain decimals")
             XCTAssertNil(d.range(of: "Z[^M]", options: .regularExpression), "\(key): an M after every Z that is followed by drawing")

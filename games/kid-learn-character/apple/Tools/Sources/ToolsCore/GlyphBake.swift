@@ -50,7 +50,7 @@ public struct GlyphSetSpec: Equatable, Sendable {
 
 /// The build-time glyph bake (ADR-0003 D4, TR-morph-002): CoreText's `CTFontCreatePathForGlyph` turns each key's
 /// glyph into a morph-v1 path (`M L C Q Z`, at most 3 decimals, an `M` after every `Z`), written as
-/// `{"d": …, "tool": …, "version": …}` like a baked silhouette, plus the set's `glyphs.json`. Apple frameworks and own
+/// `{"d": …, "font": {name, version, weight, licence, licenceFile}, "tool": …, "version": …}` like a baked silhouette plus the font record, plus the set's `glyphs.json`. Apple frameworks and own
 /// code only (K-31); nothing is rasterised.
 ///
 /// Coordinates match the morph contract's committed glyph inputs (`glyph-D.json`, `glyph-3.json` of TASK-033): font
@@ -145,16 +145,24 @@ public enum GlyphBake {
         let label = label ?? fontURL.lastPathComponent
         let (font, facts) = try openFont(fontURL, weight: spec.weight, label: label)
         var files: [String: [UInt8]] = [:], index: [String: JSONValue] = [:]
+        // ADR-0001 D6 / ADR-0003 D4: every glyph file records the font's name, version and licence (game-dev-ios review).
+        let fontRecord: [String: JSONValue] = ["name": .string(facts.name), "version": .string(facts.version), "weight": .number(spec.weight),
+                                               "licence": .string(spec.licence), "licenceFile": .string(spec.licenceFile)]
         for key in keys {
             let d = try path(font: font, key: key, label: label)
             let name = spec.glyphFileName(key)
-            files[name] = JSONValue.object(["d": .string(d), "tool": .string(SVGBake.toolName), "version": .string(SVGBake.toolVersion)]).render()
+            files[name] = JSONValue.object(["d": .string(d), "font": .object(fontRecord), "tool": .string(SVGBake.toolName), "version": .string(SVGBake.toolVersion)]).render()
             index[key] = .string(name)
         }
         files["glyphs.json"] = JSONValue.object([
             "id": .string(spec.id),
-            "font": .object(["name": .string(facts.name), "version": .string(facts.version), "weight": .number(spec.weight),
-                             "licence": .string(spec.licence), "licenceFile": .string(spec.licenceFile)]),
+            // The metrics (font units, at the baked size of units per em) let the glyph renderer (Cast Rendering R4) draw
+            // every letter at one cap height (game-dev-ios advisory).
+            "font": .object(fontRecord.merging([
+                "unitsPerEm": .number(Double(facts.unitsPerEm)),
+                "capHeight": .number(Double(CTFontGetCapHeight(font))),
+                "ascender": .number(Double(CTFontGetAscent(font))),
+            ]) { a, _ in a }),
             "baker": .string("\(SVGBake.toolName) \(SVGBake.toolVersion)"),
             "glyphs": .object(index),
         ]).render()
