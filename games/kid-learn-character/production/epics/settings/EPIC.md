@@ -45,6 +45,10 @@ The one settings record, read before the first frame and written atomically. Dem
 
 - settings-record-v2 (`runner:` SettingsRecordRunner)
 
+## Depends on
+
+- **TASK-135** (K-49): the `keyboardRow` default changes with the row's auto-on rule.
+
 ## Definition of Done
 
 - Every story implemented, reviewed and closed with `/story-done`
