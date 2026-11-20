@@ -7,10 +7,6 @@ it) · **Decided** (Luan's call, with the date). The leader owns this file.
 
 ## Open
 
-### K-04 Name of the game
-
-- **Status:** Open. The working title is "Kid Learn Character" (folder `kid-learn-character`).
-
 ## Decided
 
 ### K-01 2D or 3D pictures (Luan, 2026-11-17, /brainstorm)
@@ -104,6 +100,21 @@ A **theme** (Dinosaurs first) covers **every key**: any letter A–Z or digit 0�
 thing from that theme, and the letter may sit anywhere in its name (C = triceratops). Numbers show
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
+
+### K-04 Name of the game (Luan, 2026-11-19)
+
+- **Brand name: Letterlings** (letters become little creatures). Luan proposed "Letterlings: Bé làm quen tiếng Anh";
+  at 34 characters it is over the App Store name limit (30), so it is split:
+  - **App Store name: "Letterlings: ABC & 123"** (22);
+  - **Vietnamese subtitle: "Bé làm quen tiếng Anh"** (21/30); the English-locale subtitle is set at release prep;
+  - **Name under the icon (CFBundleDisplayName): "Letterlings"** (11, fits without truncation).
+- **Bundle ID changes to `com.galaxyandsun.letterlings`** (replaces K-37's working `com.galaxyandsun.lettermorph`,
+  allowed before the first store upload). Internal target and folder names (`LetterMorph`, `kid-learn-character`)
+  stay. Historical evidence logs keep the old ID as recorded.
+- **Checks so far (web search, 2026-11-19):** no App Store app named "Letterlings" found; no "Letterlings" trademark
+  found (nearest: "LETTERLYS", abandoned 2016). **Letterland** (Letterland International, a children's phonics brand
+  with App Store apps) sounds close in the same field: low risk in the leader's view, an IP lawyer's call if wanted.
+  The definitive check is reserving the name in App Store Connect (release prep, Luan).
 
 ### K-47 The child's iPad and the "oldest supported iPad" (Luan, 2026-11-19)
 
