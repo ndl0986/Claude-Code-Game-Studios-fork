@@ -100,6 +100,19 @@ final class VoiceBakeTests: XCTestCase {
         }
     }
 
+    func test_encoding_the_same_audio_twice_gives_identical_bytes() throws {
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("stable-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let pcm = PCMAudio(samples: (0..<24_000).map { Float(0.3 * sin(Double($0) * 0.05)) }, sampleRate: 24_000)
+        let a = dir.appendingPathComponent("a.m4a"), b = dir.appendingPathComponent("b.m4a")
+        try VoiceBake.encode(pcm, to: a)
+        Thread.sleep(forTimeInterval: 1.1)   // cross a second boundary, so an encode-time stamp would differ
+        try VoiceBake.encode(pcm, to: b)
+        XCTAssertEqual(try Data(contentsOf: a), try Data(contentsOf: b), "the MP4 header timestamps are zeroed")
+        XCTAssertNoThrow(try AVAudioFile(forReading: b), "the patched file still decodes")
+    }
+
     func test_two_different_engines_produce_the_same_file_paths() throws {
         let a = try themeDir(), b = try themeDir()
         let pa = try VoiceBake.bakeTheme(themeDir: a, theme: theme) { _ in FakeEngine(name: "fake-a", rate: 24000) }

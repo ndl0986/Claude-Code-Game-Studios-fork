@@ -69,21 +69,28 @@ settings, bake tool, line ids; byte-stable). Line text is the item's `word` (kin
 
 ### Recreating the build venv (build Mac only; never in git, K-36)
 
-Source: game-art-content's TASK-073/108/110 runs; **not yet reproduced by this bake, and the helper has never been run
-end to end** (the real Dinosaurs `theme.json` does not exist yet). Unconfirmed items are marked.
+Source: game-art-content's TASK-073/108/110 runs, **reproduced on 2026-11-20 for content-pipeline/003**: the helper ran
+end to end and baked all 72 Dinosaurs lines from the key-table/001 draft (pip resolved the versions below).
 
-1. Python 3.11 venv in a short path outside the repo. Run everything under `nice -n 10`.
-2. `pip install kokoro==0.9.4 soundfile`. misaki 0.9.4 and its English extras come in with it (confirm `misaki[en]==0.9.4`);
-   install `en_core_web_sm==3.8.0` explicitly from the spacy-models release (never fetched at run time). torch is
-   whatever kokoro pulls: record what pip resolves (TASK-073 used 2.15.0).
-3. espeak-ng 1.52.0 (GPL-3.0, build machine only) built from source: CMake Release, `BUILD_SHARED_LIBS=ON`, mbrola,
-   libsonic, libpcaudio, speechplayer and async off, Klatt on. Install to a SHORT path (the home-path buffer is 160
-   chars). The pip `espeakng-loader` wheel cannot load on macOS (compiled-in data path), so the helper monkeypatches it.
+1. Python 3.11 venv outside the repo (the scratchpad). Run everything under `nice -n 10`.
+2. `pip install 'kokoro==0.9.4' 'misaki[en]==0.9.4' soundfile cmake ninja` (quote the brackets in zsh; cmake and ninja
+   only build espeak-ng, inside the venv, nothing global), and `en_core_web_sm` 3.8.0 explicitly from the spacy-models
+   GitHub release wheel (never fetched at run time). Resolved: torch 2.15.0, spacy 3.8.18, espeakng-loader 0.2.4
+   (TASK-073 had 0.2.1), huggingface_hub 2.4.0, transformers 5.23.0.
+3. espeak-ng 1.52.0 (GPL-3.0, build machine only), tag 1.52.0 = commit 4870adfa25b1a32b4361592f1be8a40337c58d6c:
+   CMake + Ninja Release, `BUILD_SHARED_LIBS=ON`, mbrola, libsonic, libpcaudio, speechplayer and async off, Klatt on,
+   tests off. Raise `N_PATH_HOME_DEF` to 1024 in `src/libespeak-ng/speech.h` (both definitions; the 160/230 buffer
+   traps on a long path). The pip `espeakng-loader` wheel cannot load on macOS (compiled-in data path), so the helper
+   monkeypatches it.
 4. Environment: `ESPEAK_LIB` (the dylib), `ESPEAK_REL_DATA` (data dir relative to `ESPEAK_CWD`), `ESPEAK_CWD`,
    `HF_HOME`, and `HF_HUB_OFFLINE=1` at bake time.
 5. One-off weights fetch (network): `python tts/kokoro_render.py --fetch --revision f3ff3571791e39611d31c381e3a41a3af07b4987`
-   (`config.json`, `kokoro-v1_0.pth`, `voices/af_heart.pt`). Never at bake time.
-6. Not yet confirmed: the helper checks the weights' SHA-256 by the 16-digit PREFIXES in
-   `production/qa/evidence/TASK-073/README.md` (full digests are not recorded there); `KModel(config=, model=)` /
-   `KPipeline(model=)` local loading is unverified against the kokoro 0.9.4 source; the espeak-ng version read via
-   `espeak_Info` is unverified (provenance says "not reported" if it fails).
+   (`config.json`, `kokoro-v1_0.pth`, `voices/af_heart.pt`). Never at bake time. The helper checks the full SHA-256:
+   `kokoro-v1_0.pth` 496dba118d1a58f5f3db2efc88dbdc216e0483fc89fe6e47ee1f2c53f18ad1e4, `voices/af_heart.pt`
+   0ab5709b8ffab19bfd849cd11d98f75b60af7733253ad0d67b12382a102cb4ff (their 16-digit prefixes match TASK-073's record).
+6. **Seeded renders.** Kokoro's vocoder draws noise from torch's RNG: unseeded, the same line renders to the same length
+   but a different waveform every run (measured: RMS difference about −23 dBFS). The helper seeds torch, `random` and
+   numpy with `RENDER_SEED` (0) and runs torch on one thread with deterministic algorithms (seeded alone, 7 of 72
+   lines still differed by float noise, −66 to −116 dBFS RMS); the seed and thread count are in the provenance. `encode`
+   also zeroes the MP4 `mvhd`/`tkhd`/`mdhd` timestamps, so two bakes of all 72 lines are byte-identical. Still unverified: `KModel(config=, model=)` / `KPipeline(model=)` against the kokoro 0.9.4 source (it
+   runs and renders, but the API was not read), and the `espeak_Info` version read (it reported 1.52.0).

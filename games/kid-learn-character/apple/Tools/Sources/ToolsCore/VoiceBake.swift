@@ -243,6 +243,42 @@ public enum VoiceBake {
             let file = try AVAudioFile(forWriting: url, settings: settings, commonFormat: .pcmFormatFloat32, interleaved: false)
             try file.write(from: buf)   // the file is finalised when `file` goes out of scope at the end of this block
         } catch { throw VoiceBakeError(file: url.lastPathComponent, reason: "AAC encode failed: \(error)") }
+        try zeroMP4Timestamps(url)
+    }
+
+    /// AVAudioFile stamps the MP4 movie, track and media headers (`mvhd`, `tkhd`, `mdhd`) with the encode time, so two
+    /// bakes of the same audio differed in 12 header bytes while the decoded samples were identical. Zeroing the
+    /// creation and modification times makes the voice files byte-stable like the other baked outputs (ADR-0003 D4).
+    static func zeroMP4Timestamps(_ url: URL) throws {
+        var bytes = [UInt8](try Data(contentsOf: url))
+        // Only inside the top-level `moov` box (the headers), never in the audio payload (`mdat`).
+        func u32(_ o: Int) -> Int { bytes[o..<o + 4].reduce(0) { $0 << 8 | Int($1) } }
+        var top = 0, moov: Range<Int>? = nil
+        while top + 8 <= bytes.count {
+            let size = u32(top), type = String(decoding: bytes[top + 4..<top + 8], as: UTF8.self)
+            guard size >= 8, top + size <= bytes.count else { break }
+            if type == "moov" { moov = top + 8..<top + size }
+            top += size
+        }
+        guard let moov else { throw VoiceBakeError(file: url.lastPathComponent, reason: "no moov box in the encoded file") }
+        var found = 0
+        for tag in ["mvhd", "tkhd", "mdhd"] {
+            let t = Array(tag.utf8)
+            var i = moov.lowerBound
+            while i + 4 <= moov.upperBound {
+                if Array(bytes[i..<i + 4]) == t, i + 5 < bytes.count {
+                    // A full box: 4-byte type, then version (1) and flags (3), then creation and modification time
+                    // (4 bytes each in version 0, 8 in version 1).
+                    let version = bytes[i + 4], width = version == 1 ? 8 : 4, start = i + 8
+                    guard start + 2 * width <= moov.upperBound else { break }
+                    for k in start..<(start + 2 * width) { bytes[k] = 0 }
+                    found += 1
+                }
+                i += 1
+            }
+        }
+        guard found >= 3 else { throw VoiceBakeError(file: url.lastPathComponent, reason: "expected mvhd, tkhd and mdhd headers, found \(found)") }
+        try Data(bytes).write(to: url)
     }
 
     /// The provenance file bytes (K-41): engine settings, versions the engine reported, the espeak-ng fallback as a
