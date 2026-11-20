@@ -77,6 +77,11 @@ pad) can show fast changes. Run every row with the child out of view of the scre
   replays every Audio button offline with these fixtures (`--resume-fade` for the D7 variant).
 - **Headless capture:** the log box follows its newest line, and `-option a|candidate|b` opens Render on that option,
   so `devicectl device capture screenshot` can read results and take the crispness still without a tap.
+- **Mac lock dead-man (TASK-134):** every Lock auto-unlocks after 240 s (`-deadman <s>`, 30–600), logged
+  `[lock] dead-man: auto-unlock after … s locked`. It runs on its own queue; if the main thread does not answer within
+  2 s it ends the process, which gives the Dock, menu bar, Force Quit and process switching back to macOS. The ⌃⌥⌘Q
+  chord is a local monitor, so it only works while the app is active with a key window; the dead-man and an external
+  `pkill -x DeviceSpike` do not depend on that.
 
 ## Findings
 None yet: no device run. Headless: both platforms build; SpikeKit tests pass; the check works (headless proof in
