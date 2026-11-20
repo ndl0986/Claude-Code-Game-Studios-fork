@@ -1,12 +1,12 @@
 # Story 001: Author the Dinosaurs theme: 36 keys, items, words, sounds, hue slots, rowWords, titleCastId
 
 > **Epic**: Key Table & Theme Data (`production/epics/key-table/EPIC.md`)
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Foundation
 > **Type**: Config/Data
 > **Estimate**: M
 > **Manifest Version**: 2026-11-20
-> **Last Updated**: —
+> **Last Updated**: 2026-11-20
 > **Milestone**: Demo 1 (K-48)
 
 ## Context
@@ -82,5 +82,5 @@ Needs TASK-133's 36 asset specs and the art, baked by content-pipeline 001–002
 
 ## Dependencies
 
-- Depends on: `production/epics/content-pipeline/story-001-cast-svg-bake.md`, `production/epics/content-pipeline/story-002-glyph-bake.md`, `production/epics/content-pipeline/story-003-voice-render-encode.md`, `production/epics/content-pipeline/story-004-loudness-durations-staleness.md`, `production/epics/content-pipeline/story-005-validator-on-real-content.md`
+- Depends on: none to start. **Finishes after** content-pipeline/003 (voice render from this draft), 004 (loudness, `voiceDurations`) and 005 (validator on the real content), and after the art batches and the sfx — leader, option A (2026-11-20): the draft is authored first from the GDD tables, kept as `src/theme.draft.json` until everything ships together
 - Unlocks: `production/epics/content-pipeline/story-005-validator-on-real-content.md`

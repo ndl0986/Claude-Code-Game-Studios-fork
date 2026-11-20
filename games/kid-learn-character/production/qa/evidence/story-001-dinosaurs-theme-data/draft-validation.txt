@@ -1,0 +1,10 @@
+Draft theme validated in a scratch copy of content/ (draft as theme.json + batch 1's 12 baked files), kidtools validate:
+validate: 1 theme(s) (dinosaurs), 0 in progress, 330 finding(s): FAIL
+
+Findings by rule (all from art, sfx and voice not made yet, and no voiceDurations):
+  60 stale:
+  72 V15:
+ 168 V7:
+  30 V8:
+
+No finding for V1-V6, V9-V14, V16-V18: the data rules pass on the draft.
