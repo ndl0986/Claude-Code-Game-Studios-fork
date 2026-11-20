@@ -75,6 +75,31 @@ final class VoiceBakeTests: XCTestCase {
     }
 
     // AC-2
+    /// ADR-0003 marks the AAC priming and padding values NOT SOURCEABLE until a build proves them (game-dev-ios review):
+    /// a sharp onset at frame 0 must decode with no priming lead and the same length, or every voice line would shift
+    /// under ADR-0010 and bias V15. Checked for a 48 kHz source and for Kokoro's 24 kHz (resampled) source.
+    func test_the_aac_encode_strips_priming_and_padding_so_onset_and_length_survive() throws {
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("priming-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: dir) }
+        for sourceRate in [48_000.0, 24_000.0] {
+            let n = Int(sourceRate)  // 1 s, a 1 kHz tone at half scale starting at frame 0
+            let samples = (0..<n).map { Float(0.5 * sin(2 * Double.pi * 1000 * Double($0) / sourceRate)) }
+            let url = dir.appendingPathComponent("onset-\(Int(sourceRate)).m4a")
+            try VoiceBake.encode(PCMAudio(samples: samples, sampleRate: sourceRate), to: url)
+            let f = try AVAudioFile(forReading: url)
+            let rate = f.processingFormat.sampleRate
+            let expected = Double(n) * rate / sourceRate
+            XCTAssertLessThanOrEqual(abs(Double(f.length) - expected), 1024, "\(Int(sourceRate)) Hz: decoded \(f.length) frames vs \(expected)")
+            let buf = try XCTUnwrap(AVAudioPCMBuffer(pcmFormat: f.processingFormat, frameCapacity: AVAudioFrameCount(f.length)))
+            try f.read(into: buf)
+            let ch = try XCTUnwrap(buf.floatChannelData)[0]
+            let first = (0..<Int(buf.frameLength)).first { abs(ch[$0]) > 0.001 }  // −60 dBFS
+            let onset = try XCTUnwrap(first, "\(Int(sourceRate)) Hz: no sample above −60 dBFS")
+            XCTAssertLessThanOrEqual(Double(onset) / rate, 0.005, "\(Int(sourceRate)) Hz: onset at \(onset) frames (\(Double(onset) / rate * 1000) ms), a priming lead")
+        }
+    }
+
     func test_two_different_engines_produce_the_same_file_paths() throws {
         let a = try themeDir(), b = try themeDir()
         let pa = try VoiceBake.bakeTheme(themeDir: a, theme: theme) { _ in FakeEngine(name: "fake-a", rate: 24000) }
