@@ -20,7 +20,7 @@
 **ADR Version**: ADR-0003 2026-11-18
 
 **Engine**: Native Apple, no studio engine (ADR-0001 D7): Swift 6.4, SwiftUI + SpriteKit + AVFoundation, Xcode 27.1 | **Risk**: HIGH (AVAudioFile priming/padding)
-**Engine Notes**: Duration must account for AAC priming/padding (ADR-0003 Knowledge Risk).
+**Engine Notes**: *(K-52, 2026-11-20)* the baked audio is CAF LPCM: a decoded duration is its frame count ÷ 48 000, with no AAC priming or padding to remove; the staleness check may compare `.caf` bytes (byte-stable, TASK-144 evidence).
 
 **Control Manifest Rules** (`docs/architecture/control-manifest.md`, v2026-11-20):
 - Required: loudness by ITU-R BS.1770 within ±1 LU of the class target; sfx ≤ 2.0 s (ADR-0003 D5)

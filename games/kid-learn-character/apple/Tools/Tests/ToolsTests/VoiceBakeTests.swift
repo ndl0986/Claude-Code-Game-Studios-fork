@@ -50,19 +50,20 @@ final class VoiceBakeTests: XCTestCase {
         return dir
     }
 
-    let expected = ["voice/en-us/provenance.json", "voice/en-us/vo_en-us_letter_a.m4a", "voice/en-us/vo_en-us_letter_c.m4a",
-                    "voice/en-us/vo_en-us_number_3.m4a", "voice/en-us/vo_en-us_word_ankylosaurus.m4a",
-                    "voice/en-us/vo_en-us_word_three_baby_dinosaurs.m4a", "voice/en-us/vo_en-us_word_triceratops.m4a"]
+    let expected = ["voice/en-us/provenance.json", "voice/en-us/vo_en-us_letter_a.caf", "voice/en-us/vo_en-us_letter_c.caf",
+                    "voice/en-us/vo_en-us_number_3.caf", "voice/en-us/vo_en-us_word_ankylosaurus.caf",
+                    "voice/en-us/vo_en-us_word_three_baby_dinosaurs.caf", "voice/en-us/vo_en-us_word_triceratops.caf"]
 
     // AC-1
-    func test_every_named_voice_line_is_rendered_as_aac_mono_under_voice_locale_and_decodes() throws {
+    func test_every_named_voice_line_is_rendered_as_caf_lpcm_mono_under_voice_locale_and_decodes() throws {
         let dir = try themeDir()
         let written = try VoiceBake.bakeTheme(themeDir: dir, theme: theme) { _ in FakeEngine() }
         XCTAssertEqual(written, expected)
-        for rel in expected where rel.hasSuffix(".m4a") {
+        for rel in expected where rel.hasSuffix(".caf") {
             XCTAssertTrue(FileManager.default.fileExists(atPath: dir.appendingPathComponent(rel).path), rel)
             let f = try AVAudioFile(forReading: dir.appendingPathComponent(rel))
-            XCTAssertEqual(f.fileFormat.settings[AVFormatIDKey] as? UInt32, kAudioFormatMPEG4AAC, rel)
+            XCTAssertEqual(f.fileFormat.settings[AVFormatIDKey] as? UInt32, kAudioFormatLinearPCM, rel)
+            XCTAssertEqual(f.fileFormat.settings[AVLinearPCMBitDepthKey] as? Int, 16, rel)
             XCTAssertEqual(f.fileFormat.channelCount, 1, rel)
             XCTAssertEqual(f.fileFormat.sampleRate, VoiceBake.sampleRate, rel)
             XCTAssertGreaterThan(f.length, 1000, "decodes to audio: \(rel)")
@@ -75,29 +76,47 @@ final class VoiceBakeTests: XCTestCase {
     }
 
     // AC-2
-    /// ADR-0003 marks the AAC priming and padding values NOT SOURCEABLE until a build proves them (game-dev-ios review):
-    /// a sharp onset at frame 0 must decode with no priming lead and the same length, or every voice line would shift
-    /// under ADR-0010 and bias V15. Checked for a 48 kHz source and for Kokoro's 24 kHz (resampled) source.
-    func test_the_aac_encode_strips_priming_and_padding_so_onset_and_length_survive() throws {
-        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("priming-\(UUID().uuidString)")
+    /// K-52: CAF linear PCM is exact. The file decodes to the source's frame count (the resampled count for a 24 kHz
+    /// Kokoro source) and, at 48 kHz, to the 16-bit-quantised source samples within one LSB, with the onset at frame 0.
+    func test_the_caf_file_decodes_to_the_exact_frame_count_and_the_16_bit_samples() throws {
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("caf-\(UUID().uuidString)")
         try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: dir) }
         for sourceRate in [48_000.0, 24_000.0] {
-            let n = Int(sourceRate)  // 1 s, a 1 kHz tone at half scale starting at frame 0
+            let n = Int(sourceRate)
             let samples = (0..<n).map { Float(0.5 * sin(2 * Double.pi * 1000 * Double($0) / sourceRate)) }
-            let url = dir.appendingPathComponent("onset-\(Int(sourceRate)).m4a")
+            let url = dir.appendingPathComponent("tone-\(Int(sourceRate)).caf")
             try VoiceBake.encode(PCMAudio(samples: samples, sampleRate: sourceRate), to: url)
             let f = try AVAudioFile(forReading: url)
-            let rate = f.processingFormat.sampleRate
-            let expected = Double(n) * rate / sourceRate
-            XCTAssertLessThanOrEqual(abs(Double(f.length) - expected), 1024, "\(Int(sourceRate)) Hz: decoded \(f.length) frames vs \(expected)")
             let buf = try XCTUnwrap(AVAudioPCMBuffer(pcmFormat: f.processingFormat, frameCapacity: AVAudioFrameCount(f.length)))
             try f.read(into: buf)
-            let ch = try XCTUnwrap(buf.floatChannelData)[0]
-            let first = (0..<Int(buf.frameLength)).first { abs(ch[$0]) > 0.001 }  // −60 dBFS
-            let onset = try XCTUnwrap(first, "\(Int(sourceRate)) Hz: no sample above −60 dBFS")
-            XCTAssertLessThanOrEqual(Double(onset) / rate, 0.005, "\(Int(sourceRate)) Hz: onset at \(onset) frames (\(Double(onset) / rate * 1000) ms), a priming lead")
+            let got = Array(UnsafeBufferPointer(start: try XCTUnwrap(buf.floatChannelData)[0], count: Int(buf.frameLength)))
+            if sourceRate == VoiceBake.sampleRate {
+                XCTAssertEqual(got.count, n, "48 kHz: same frame count")
+                let worst = zip(got, samples).map { abs($0 - $1) }.max() ?? 1
+                XCTAssertLessThanOrEqual(worst, 1.0 / 32_768, "48 kHz: the 16-bit samples, within one LSB")
+                XCTAssertGreaterThan(abs(got[1]), 0, "onset at frame 0, no lead")
+            } else {
+                XCTAssertLessThanOrEqual(abs(Double(got.count) - Double(n) * VoiceBake.sampleRate / sourceRate), 1, "24 kHz: resampled frame count")
+            }
         }
+    }
+
+    func test_encoding_the_same_audio_twice_gives_identical_bytes() throws {
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("stable-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let pcm = PCMAudio(samples: (0..<24_000).map { Float(0.3 * sin(Double($0) * 0.05)) }, sampleRate: 24_000)
+        let a = dir.appendingPathComponent("a.caf"), b = dir.appendingPathComponent("b.caf")
+        try VoiceBake.encode(pcm, to: a)
+        Thread.sleep(forTimeInterval: 1.1)   // cross a second boundary, so any time stamp would differ
+        try VoiceBake.encode(pcm, to: b)
+        XCTAssertEqual(try Data(contentsOf: a), try Data(contentsOf: b))
+    }
+
+    func test_a_non_caf_path_is_refused() {
+        XCTAssertThrowsError(try VoiceBake.encode(PCMAudio(samples: [0.1, 0.2], sampleRate: 48_000),
+                                                  to: FileManager.default.temporaryDirectory.appendingPathComponent("x.m4a")))
     }
 
     func test_two_different_engines_produce_the_same_file_paths() throws {
@@ -116,7 +135,7 @@ final class VoiceBakeTests: XCTestCase {
         XCTAssertFalse(engine.texts.contains("ankylosaurus"))
         XCTAssertTrue(engine.texts.contains("see"), "letter lines use say")
         XCTAssertTrue(engine.texts.contains("three baby dinosaurs"), "word lines use word")
-        XCTAssertTrue(written.contains("voice/en-us/vo_en-us_word_ankylosaurus.m4a"))
+        XCTAssertTrue(written.contains("voice/en-us/vo_en-us_word_ankylosaurus.caf"))
     }
 
     func test_provenance_is_written_and_byte_stable_across_two_runs() throws {

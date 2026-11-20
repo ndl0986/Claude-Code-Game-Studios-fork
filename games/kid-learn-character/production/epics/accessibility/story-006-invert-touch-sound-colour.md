@@ -38,6 +38,7 @@
 - [ ] AC-15 (stage half) With Smart Invert on, the stage's pixels are unchanged (screenshot pair; the panel half is next milestone).
 - [ ] AC-12 On every MVP device class a hint's hit diameter and a row key's hit rect are ≥ 18 mm.
 - [ ] AC-14 With the device muted, a 2-minute seeded session's screenshots show a visual answer for every Audio R1 event (also Audio AC-18).
+- [ ] AC-10 (hints half) The hint letters meet A5 contrast against every look (build check on the palette, alongside the Scene's 160-case check); the panel-controls half is next milestone.
 - [ ] AC-11 A greyscale screenshot still shows the backup cue for hint vs queued token (the moon ring is next milestone).
 
 ---

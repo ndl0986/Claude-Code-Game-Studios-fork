@@ -26,12 +26,16 @@ import wave
 from importlib import metadata
 
 REPO = "hexgrad/Kokoro-82M"
-# SHA-256 prefixes recorded in production/qa/evidence/TASK-073/README.md. That README holds only the first 16 hex
-# digits, not the full hashes, so the check is by prefix. Replace with the full digests once they are recorded.
-WEIGHT_SHA256_PREFIX = {
-    "kokoro-v1_0.pth": "496dba118d1a58f5",
-    "voices/af_heart.pt": "0ab5709b8ffab19b",
+# Full SHA-256 of the weights at revision f3ff3571…, measured on 2026-11-20 after --fetch (content-pipeline/003);
+# their first 16 hex digits match production/qa/evidence/TASK-073/README.md's record of game-art-content's files.
+WEIGHT_SHA256 = {
+    "kokoro-v1_0.pth": "496dba118d1a58f5f3db2efc88dbdc216e0483fc89fe6e47ee1f2c53f18ad1e4",
+    "voices/af_heart.pt": "0ab5709b8ffab19bfd849cd11d98f75b60af7733253ad0d67b12382a102cb4ff",
 }
+# Kokoro's vocoder draws noise from torch's RNG, so an unseeded render differs every run (same length, a different
+# waveform). Every render is seeded with this constant and run on one torch thread with deterministic algorithms,
+# which makes the bake reproducible (content-pipeline/003).
+RENDER_SEED = 0
 SAMPLE_RATE = 24000
 
 
@@ -64,12 +68,12 @@ def snapshot(revision, offline):
 
 
 def check_weights(folder):
-    for rel, prefix in WEIGHT_SHA256_PREFIX.items():
+    for rel, digest in WEIGHT_SHA256.items():
         p = os.path.join(folder, rel)
         if not os.path.isfile(p):
             fail(4, "missing weight file %s (run --fetch first)" % p)
-        if not sha256(p).startswith(prefix):
-            fail(4, "SHA-256 of %s does not start with %s" % (rel, prefix))
+        if sha256(p) != digest:
+            fail(4, "SHA-256 of %s is not %s" % (rel, digest))
 
 
 def patch_espeak():
@@ -126,8 +130,14 @@ def main():
     check_weights(folder)
     patch_espeak()
 
+    import random
     import numpy as np
     import soundfile
+    import torch
+    # Seeded and single-threaded: the seed fixes the vocoder noise, and one thread plus deterministic algorithms removes
+    # the multi-threaded float differences (seeded alone, 7 of 72 lines still differed at -66..-116 dBFS RMS).
+    torch.set_num_threads(1); torch.use_deterministic_algorithms(True)
+    torch.manual_seed(RENDER_SEED); random.seed(RENDER_SEED); np.random.seed(RENDER_SEED)
     # UNVERIFIED against kokoro 0.9.4 source: local-path loading of KModel / KPipeline / the voice .pt.
     from kokoro import KModel, KPipeline
     model = KModel(config=os.path.join(folder, "config.json"), model=os.path.join(folder, "kokoro-v1_0.pth"))
@@ -144,7 +154,8 @@ def main():
 
     facts = {"kokoro": version("kokoro"), "misaki": version("misaki"), "torch": version("torch"),
              "spacy": version("spacy"), "en_core_web_sm": version("en_core_web_sm"),
-             "espeakng-loader": version("espeakng-loader"), "espeak-ng": espeak_version()}
+             "espeakng-loader": version("espeakng-loader"), "espeak-ng": espeak_version(),
+             "renderSeed": str(RENDER_SEED), "torchThreads": "1"}
     print(json.dumps({k: v for k, v in facts.items() if v is not None}, sort_keys=True))
 
 

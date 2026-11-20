@@ -12,8 +12,8 @@
 //        content/glyphs/fredoka600/: glyph_fredoka_<char>.json for the 36 keys A–Z, 0–9 plus glyphs.json (morph-v1 path
 //        subset, byte-stable, ADR-0003 D4). A key with no glyph names the key and the font file, writes nothing, exit 1.
 //   kidtools bake-voice <content-dir> [--python <path>] [--helper <path>]   render every voice line of each theme that has a
-//        theme.json with Kokoro (K-41, out of process via tts/kokoro_render.py, build Mac only) and encode AAC mono 48 kHz
-//        64 kbit/s to themes/<id>/voice/<locale>/vo_<locale>_<kind>_<id>.m4a, plus voice/<locale>/provenance.json
+//        theme.json with Kokoro (K-41, out of process via tts/kokoro_render.py, build Mac only) and write CAF LPCM 16-bit mono 48 kHz (K-52)
+//        to themes/<id>/voice/<locale>/vo_<locale>_<kind>_<id>.caf, plus voice/<locale>/provenance.json
 //        (ADR-0003 D5/D6). The interpreter is --python or $KIDTOOLS_PYTHON; --helper overrides the helper script.
 //        Nothing is written unless every line renders. Loudness and voiceDurations are story 004.
 //   kidtools bake-sfx <theme-dir>   render src/sfx/recipes.json (the prototype's synth recipes as data) to

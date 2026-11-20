@@ -156,26 +156,28 @@ public final class KokoroProcessEngine: TTSEngine {
 
 // MARK: Bake
 
-/// The build-time voice bake (TR-keytable-004 pre-rendered TTS + AAC mono, TR-audio-006 no run-time TTS; ADR-0003 D5/D6).
+/// The build-time voice bake (TR-keytable-004 pre-rendered TTS, mono; TR-audio-006 no run-time TTS; ADR-0003 D5/D6).
 ///
 /// Per theme and per locale in `voiceLocales`: every voice line of every item (Key Table `voice` kind → id) is
-/// rendered by the adapter and encoded to `voice/<locale>/vo_<locale>_<kind>_<id>.m4a` (`KeyTable.voicePath`). The text
+/// rendered by the adapter and written to `voice/<locale>/vo_<locale>_<kind>_<id>.caf` (`KeyTable.voicePath`). The text
 /// of a line is the item's `word` for kind `word`, else its `say` (letter, number); `respell["<kind>_<id>"]` replaces it
 /// for the TTS only (K-35). One line id used by several items is rendered once; if its text differs between items the
 /// bake fails. Also writes `voice/<locale>/provenance.json` (byte-stable: sorted keys, no timestamps).
 ///
-/// Encoding: AAC-LC, **mono, 48 000 Hz, 64 000 bit/s**, via `AVAudioFile` (Apple frameworks only, K-31). Engine audio
+/// Encoding (K-52, Luan 2026-11-20): **CAF linear PCM, 16-bit, mono, 48 000 Hz**, via `AVAudioFile` (Apple frameworks only,
 /// at another rate is resampled with `AVAudioConverter`. No trim, no loudness change (story 004).
 /// Output is staged in a temp folder; nothing is written to the theme unless every line renders and encodes.
 ///
 /// Example:
 /// ```swift
 /// let written = try VoiceBake.bakeTheme(themeDir: dir, theme: model) { script in KokoroProcessEngine(python: py, settings: script.engine) }
-/// // ["voice/en-us/provenance.json", "voice/en-us/vo_en-us_letter_c.m4a", …]
+/// // ["voice/en-us/provenance.json", "voice/en-us/vo_en-us_letter_c.caf", …]
 /// ```
 public enum VoiceBake {
-    /// Output AAC sample rate (Hz), channel count and bit rate (bit/s): chosen here, not in the story or ADR.
-    public static let sampleRate = 48_000.0, channels = 1, bitRate = 64_000
+    /// Output sample rate (Hz), channel count and bit depth (K-52: linear PCM in CAF; 48 kHz matches the devices'
+    /// output rate, ADR-0010 D3).
+    public static let sampleRate = 48_000.0, channels = 1, bitDepth = 16
+
 
     /// One voice line.
     public struct Line: Equatable, Sendable {
@@ -234,15 +236,20 @@ public enum VoiceBake {
         return dst
     }
 
-    /// Encodes `pcm` to an AAC mono `.m4a` at `url`.
+    /// Writes `pcm` at `url` as CAF linear PCM, 16-bit little-endian, mono, `sampleRate` (K-52). Byte-stable: the same
+    /// samples give the same file in any process on either core class (AudioToolbox AAC did not:
+    /// production/qa/evidence/story-003-voice-render-encode/aac-determinism/).
     public static func encode(_ pcm: PCMAudio, to url: URL) throws {
+        guard url.pathExtension == "caf" else { throw VoiceBakeError(file: url.lastPathComponent, reason: "baked audio is .caf (K-52)") }
         let buf = try resampled(pcm, file: url.lastPathComponent)
-        let settings: [String: Any] = [AVFormatIDKey: kAudioFormatMPEG4AAC, AVSampleRateKey: sampleRate,
-                                       AVNumberOfChannelsKey: channels, AVEncoderBitRateKey: bitRate]
+        let settings: [String: Any] = [AVFormatIDKey: kAudioFormatLinearPCM, AVSampleRateKey: sampleRate,
+                                       AVNumberOfChannelsKey: channels, AVLinearPCMBitDepthKey: bitDepth,
+                                       AVLinearPCMIsFloatKey: false, AVLinearPCMIsBigEndianKey: false,
+                                       AVLinearPCMIsNonInterleaved: false]
         do {
             let file = try AVAudioFile(forWriting: url, settings: settings, commonFormat: .pcmFormatFloat32, interleaved: false)
             try file.write(from: buf)   // the file is finalised when `file` goes out of scope at the end of this block
-        } catch { throw VoiceBakeError(file: url.lastPathComponent, reason: "AAC encode failed: \(error)") }
+        } catch { throw VoiceBakeError(file: url.lastPathComponent, reason: "CAF write failed: \(error)") }
     }
 
     /// The provenance file bytes (K-41): engine settings, versions the engine reported, the espeak-ng fallback as a
@@ -252,8 +259,8 @@ public enum VoiceBake {
         let e = script.engine
         return JSONValue.object([
             "baker": .string("\(SVGBake.toolName) \(SVGBake.toolVersion)"),
-            "encode": .object(["bitRate": .number(Double(bitRate)), "channels": .number(Double(channels)),
-                               "codec": .string("aac-lc"), "sampleRate": .number(sampleRate)]),
+            "encode": .object(["bitDepth": .number(Double(bitDepth)), "channels": .number(Double(channels)),
+                               "codec": .string("lpcm"), "container": .string("caf"), "sampleRate": .number(sampleRate)]),
             "engine": .object(["langCode": .string(e.langCode), "name": .string(e.name), "package": .string(e.package),
                                "speed": .number(e.speed), "voice": .string(e.voice), "weightsRevision": .string(e.weightsRevision)]),
             "espeakNg": .object(["role": .string("build-time tool only, never shipped (misaki G2P fallback)"),
