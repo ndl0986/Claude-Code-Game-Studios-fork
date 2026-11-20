@@ -22,6 +22,9 @@ protocol ContractRunner {
     /// The field kind of a state field (`<name>` or a member `field` inside it), for the tolerance (§6); nil compares
     /// a double exactly.
     static func stateKind(name: String, field: String) -> String?
+    /// True for a state name `spec.md` lists with named members (a record): a case's `expectState` is checked only on
+    /// the members it writes, and each must exist in the runner's value (case-schema-v1 §4 note, TASK-149).
+    static func stateIsRecord(_ name: String) -> Bool
 }
 
 extension ContractRunner {
@@ -30,6 +33,7 @@ extension ContractRunner {
         throw ContractError("this runner exposes no state named \(name) (case-schema-v1 §4)")
     }
     static func stateKind(name: String, field: String) -> String? { nil }
+    static func stateIsRecord(_ name: String) -> Bool { false }
 }
 
 /// The case's `draws`, one queue per stream (case-schema-v1 §5). A draw past the end throws; the harness FAILs a
@@ -191,11 +195,23 @@ enum ContractHarness {
                         let path = "steps[\(j)].expectState.\(name)"
                         let got: JSONValue
                         do { got = try r.state(name) } catch { return "\(head) \(path): \(error)" }
-                        if let d = Compare.diff(names[name]!, got, path: path, kindOf: { p in
+                        let kindOf: (String) -> String? = { p in
                             let rest = p.dropFirst(path.count)
                             let field = rest.split(separator: ".").last.map { String($0.split(separator: "[").first ?? "") } ?? ""
                             return runner.stateKind(name: name, field: field.isEmpty ? name : field)
-                        }, tolerances: tolerances) {
+                        }
+                        var want = names[name]!, have = got
+                        // A record written as an object is checked on the members the case writes (TASK-149).
+                        if runner.stateIsRecord(name), case .object(let w) = want {
+                            guard case .object(let g) = got else {
+                                return "\(head) \(path): expected a record, got \(Compare.render(got)) (case-schema-v1 §4 note)"
+                            }
+                            for m in w.keys.sorted() where g[m] == nil {
+                                return "\(head) \(path).\(m): expected \(Compare.render(w[m]!)), got absent (the runner's record has no \(m))"
+                            }
+                            want = .object(w); have = .object(g.filter { w[$0.key] != nil })
+                        }
+                        if let d = Compare.diff(want, have, path: path, kindOf: kindOf, tolerances: tolerances) {
                             return "\(head) \(d.path): expected \(d.expected), got \(d.actual) (tol \(d.tolerance))"
                         }
                     }

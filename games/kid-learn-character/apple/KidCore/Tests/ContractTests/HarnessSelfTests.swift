@@ -201,6 +201,27 @@ final class HarnessSelfTests: XCTestCase {
         XCTAssertTrue(f.first?.contains("steps[0].expectState.nope: ") ?? false, "\(f)")
     }
 
+    func test_a_record_written_with_a_subset_of_members_passes() throws {
+        XCTAssertEqual(try stubFailures(stubFile(set: 1.0, expectState: ["rec": ["n": 3]])), [])
+        XCTAssertEqual(try stubFailures(stubFile(set: 1.0, expectState: ["rec": ["at": 1.0 + 5e-10, "tag": "t"]])), [])
+    }
+
+    func test_a_record_member_with_a_wrong_value_fails_with_its_path() throws {
+        let f = try stubFailures(stubFile(set: 1.0, expectState: ["rec": ["n": 4]]))
+        XCTAssertTrue(f.first?.contains("steps[0].expectState.rec.n: expected 4, got 3") ?? false, "\(f)")
+    }
+
+    func test_a_record_member_the_runner_lacks_fails() throws {
+        let f = try stubFailures(stubFile(set: 1.0, expectState: ["rec": ["n": 3, "missing": 1]]))
+        XCTAssertTrue(f.first?.contains("steps[0].expectState.rec.missing: expected 1, got absent") ?? false, "\(f)")
+    }
+
+    func test_a_non_record_object_still_compares_whole() throws {
+        // `obj` is not a record: a case that omits a member the runner has fails (exact, §6).
+        let f = try stubFailures(stubFile(set: 1.0, expectState: ["obj": [String: Any]()]))
+        XCTAssertTrue(f.first?.contains("steps[0].expectState.obj.at: expected absent") ?? false, "\(f)")
+    }
+
     func test_a_runner_with_no_state_fails_a_case_that_checks_state() throws {
         let record: [String: Any] = ["childLock": false, "keyboardRow": false, "muted": false, "schemaVersion": 1,
                                      "themeId": "dinosaurs", "volume": 8, "weather": "clear", "windy": false]
@@ -228,6 +249,8 @@ struct StubStateRunner: ContractRunner {
     static let declaration = ContractDeclaration(givenFields: [], events: ["set": ["value"]])
     static func kind(out: String, field: String) -> String? { nil }
     static func stateKind(name: String, field: String) -> String? { ["value", "at"].contains(field) ? "time" : nil }
+    /// `rec` is a record (`{at, n, tag}`); `obj` is not.
+    static func stateIsRecord(_ name: String) -> Bool { name == "rec" }
     var v = 0.0
     init(given: [String: JSONValue], draws: DrawQueues) throws {}
     mutating func step(uptime: Double, event e: [String: JSONValue]) throws -> Outputs { v = e["value"]?.number ?? 0; return [] }
@@ -235,6 +258,7 @@ struct StubStateRunner: ContractRunner {
         switch name {
         case "value": return .double(v)
         case "obj": return .object(["at": .double(v)])
+        case "rec": return .object(["at": .double(v), "n": .int(3), "tag": .string("t")])
         default: throw ContractError("stub-state-v1 exposes no state named \(name)")
         }
     }
