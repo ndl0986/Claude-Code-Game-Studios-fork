@@ -2,7 +2,8 @@ import KidCore
 import XCTest
 
 /// Press Queue stories 001 (start at once, queue during the hold, the formed guard, ignore when full; AC-1..AC-4)
-/// and 002 (rest, no jumping, mash; AC-5, AC-6, AC-8, AC-22) of design/gdd/press-queue.md. An injected clock, a fake Reveal Stage and fixed lengths; no wall clock.
+/// 002 (rest, no jumping, mash; AC-5, AC-6, AC-8, AC-22) and 003 (hold and formed rules; AC-7, AC-11, AC-12, AC-24)
+/// of design/gdd/press-queue.md. An injected clock, a fake Reveal Stage and fixed lengths; no wall clock.
 final class PressQueueTests: XCTestCase {
     /// A clock the test sets; `formed(revealId:)` reads it.
     final class FakeClock: UptimeClock {
@@ -14,7 +15,7 @@ final class PressQueueTests: XCTestCase {
     final class FakeStage: PressQueueStage {
         struct Call: Equatable { var revealId: Int; var key: String; var source: PressSource; var origin: PressOrigin?; var r0: Double }
         var calls: [Call] = []
-        let answer: RevealStart
+        var answer: RevealStart
         init(formedS: Double, revealLen: Double, wordLen: Double) {
             answer = RevealStart(formedS: formedS, revealLen: revealLen, hasWord: true, wordLen: wordLen, castId: "")
         }
@@ -26,6 +27,13 @@ final class PressQueueTests: XCTestCase {
         }
     }
 
+    /// The debug log; the queue writes one line for a missing word length (F1) and one for a formed timeout (R5).
+    final class FakeLog: DebugLog {
+        var lines: [String] = []
+        func log(_ line: String) { lines.append(line) }
+    }
+    let log = FakeLog()
+
     // Fixture values, named once. holdEff = max(3.0, 3.0, min(2.5 + 0.25 + 0.5, 3.0 + 1.5)) = 3.25.
     let knobs = PressQueueKnobs(holdS: 3.0, queueMax: 3, formedTimeoutS: 1.0, wordOffsetS: 0.25, holdExtMaxS: 1.5,
                                 wordLenMaxS: 1.5)
@@ -34,7 +42,7 @@ final class PressQueueTests: XCTestCase {
     func makeQueue() -> (PressQueue, FakeStage, FakeClock) {
         let stage = FakeStage(formedS: 2.5, revealLen: 3.0, wordLen: 0.5)
         let clock = FakeClock()
-        return (PressQueue(knobs: knobs, stage: stage, clock: clock), stage, clock)
+        return (PressQueue(knobs: knobs, stage: stage, clock: clock, log: log), stage, clock)
     }
 
     func press(_ key: String, at t: Double) -> Press { Press(key: key, source: .hardwareKey, time: t) }
@@ -178,5 +186,70 @@ final class PressQueueTests: XCTestCase {
         q.tick(now: 10.0 + 4 * holdEff)
         XCTAssertEqual(stage.calls.map(\.key), ["D", "B"])
         XCTAssertEqual(q.queue.map(\.key), ["C"])
+    }
+
+    // MARK: story 003
+
+    /// The holdEff a reveal with this answer gets (F1), read from the queue after one press at rest.
+    func holdEff(formedS: Double, revealLen: Double, hasWord: Bool = true, wordLen: Double?) -> Double? {
+        var (q, stage, _) = makeQueue()
+        stage.answer = RevealStart(formedS: formedS, revealLen: revealLen, hasWord: hasWord, wordLen: wordLen, castId: "")
+        _ = q.press(press("D", at: 10.0))
+        return q.current?.holdEff
+    }
+
+    // AC-7 (the F1 table rows, normal set: formedS 2.45, revealLen 2.95)
+    func test_hold_follows_the_F1_table_rows() throws {
+        let rows: [(word: Double?, hold: Double)] = [(0.5, 3.2), (0.904, 3.604), (1.15, 3.85), (1.47, 4.17), (1.5, 4.2)]
+        for r in rows {
+            XCTAssertEqual(try XCTUnwrap(holdEff(formedS: 2.45, revealLen: 2.95, wordLen: r.word)), r.hold, accuracy: 1e-9, "word \(r.word!)")
+        }
+        XCTAssertEqual(log.lines, [])
+    }
+
+    // AC-7 (K-53: the missing-entry bound is formedS + word_offset_s + word_len_max_s, 1.75 with the shipped knobs)
+    func test_a_missing_word_length_uses_the_bound_and_writes_one_log_line() throws {
+        XCTAssertEqual(try XCTUnwrap(holdEff(formedS: 2.45, revealLen: 2.95, wordLen: nil)), 2.45 + 1.75, accuracy: 1e-9)
+        XCTAssertEqual(log.lines.count, 1)
+    }
+
+    // AC-11 (the timeout, inclusive) and R7 (a later formed is ignored)
+    func test_a_reveal_never_formed_is_formed_by_the_timeout_at_exactly_its_bound() {
+        var (q, _, clock) = makeQueue()
+        _ = q.press(press("D", at: 10.0))
+        let bound = 10.0 + 3.0 + knobs.formedTimeoutS
+        q.tick(now: bound - 0.0009765625)
+        XCTAssertEqual(q.current?.formed, false)
+        XCTAssertEqual(log.lines, [])
+        q.tick(now: bound)
+        XCTAssertEqual(q.current?.formed, true)
+        XCTAssertEqual(q.current?.formedAt, bound)
+        XCTAssertEqual(log.lines.count, 1)
+        clock.t = bound + 0.125
+        q.formed(revealId: 1)
+        XCTAssertEqual(q.current?.formedAt, bound)
+    }
+
+    // R5: the timeout and an advance can happen in the same tick
+    func test_the_timeout_and_the_advance_happen_in_one_tick() {
+        var (q, stage, _) = makeQueue()
+        _ = q.press(press("D", at: 10.0))
+        _ = q.press(press("B", at: 10.5))
+        q.tick(now: 14.0)
+        XCTAssertEqual(stage.calls.map(\.key), ["D", "B"])
+        XCTAssertEqual(stage.calls.last?.r0, 14.0)
+    }
+
+    // AC-12: the stage's fallback lengths are what holdEff uses
+    func test_fallback_lengths_from_the_stage_set_the_hold() throws {
+        // A long fallback revealLen dominates: max(3.0, 4.5, min(2.0 + 0.25 + 0.5, 4.5)) = 4.5.
+        XCTAssertEqual(try XCTUnwrap(holdEff(formedS: 2.0, revealLen: 4.5, wordLen: 0.5)), 4.5, accuracy: 1e-9)
+    }
+
+    // AC-24
+    func test_no_word_gives_the_longer_of_hold_and_reveal() throws {
+        XCTAssertEqual(try XCTUnwrap(holdEff(formedS: 2.45, revealLen: 3.5, hasWord: false, wordLen: nil)), 3.5, accuracy: 1e-9)
+        XCTAssertEqual(try XCTUnwrap(holdEff(formedS: 2.45, revealLen: 2.95, hasWord: false, wordLen: nil)), 3.0, accuracy: 1e-9)
+        XCTAssertEqual(log.lines, [], "no word: no missing-entry line")
     }
 }

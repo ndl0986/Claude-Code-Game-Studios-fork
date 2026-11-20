@@ -117,10 +117,12 @@ public struct PressQueue {
     private let knobs: PressQueueKnobs
     private let stage: PressQueueStage
     private let clock: UptimeClock
+    private let log: DebugLog
 
-    /// A queue with no reveal on stage. `clock` stamps `formed(revealId:)` arrivals (R7).
-    public init(knobs: PressQueueKnobs, stage: PressQueueStage, clock: UptimeClock) {
-        self.knobs = knobs; self.stage = stage; self.clock = clock
+    /// A queue with no reveal on stage. `clock` stamps `formed(revealId:)` arrivals (R7); `log` takes the debug lines
+    /// for a missing `voiceDurations` entry (F1) and a formed timeout (R5).
+    public init(knobs: PressQueueKnobs, stage: PressQueueStage, clock: UptimeClock, log: DebugLog) {
+        self.knobs = knobs; self.stage = stage; self.clock = clock; self.log = log
     }
 
     /// F1: the hold of a reveal, from the Reveal Stage's answer. A missing word length uses
@@ -147,9 +149,16 @@ public struct PressQueue {
         return .ignored
     }
 
-    /// R5.2: once per frame, before drawing. Starts the front press when the reveal is formed and its hold has
-    /// passed (inclusive); at most one reveal starts per tick.
+    /// R5: once per frame, before drawing. 1. The formed timeout: a reveal not formed by `r0 + revealLen +
+    /// formed_timeout_s` (inclusive) is marked formed at `now`, with one debug line; a later `formed` is ignored (R7).
+    /// 2. Starts the front press when the reveal is formed and its hold has passed (inclusive); at most one per tick.
     public mutating func tick(now: Double) {
+        if var c = current, !c.formed, now >= c.r0 + c.revealLen + knobs.formedTimeoutS {
+            c.formed = true
+            c.formedAt = now
+            current = c
+            log.log("press-queue: reveal \(c.revealId) (\(c.key)) formed timeout at \(now)")
+        }
         guard let c = current, c.formed, !queue.isEmpty, now >= c.r0 + c.holdEff else { return }
         _ = start(queue.removeFirst(), r0: now)
     }
@@ -173,6 +182,9 @@ public struct PressQueue {
     private mutating func start(_ p: Press, r0: Double) -> (revealId: Int, castId: String) {
         let id = nextRevealId
         let answer = stage.startReveal(revealId: id, key: p.key, source: p.source, origin: p.origin, r0: r0)
+        if answer.hasWord && answer.wordLen == nil {
+            log.log("press-queue: reveal \(id) (\(p.key)) has no voiceDurations entry; word end bound formedS + word_offset_s + word_len_max_s")
+        }
         current = CurrentReveal(revealId: id, key: p.key, source: p.source, origin: p.origin, r0: r0,
                                 formedS: answer.formedS, revealLen: answer.revealLen,
                                 holdEff: Self.holdEff(answer, knobs: knobs), formed: false, formedAt: nil)

@@ -131,7 +131,7 @@ The Kotlin port diffs its names and shapes against this file (ADR-0002).
 - `PressOutcome` (enum): `enum PressOutcome`
 - `PressQueue.current` (property): `var current: CurrentReveal? { get }`
 - `PressQueue.formed(revealId:)` (method): `mutating func formed(revealId: Int)`
-- `PressQueue.init(knobs:stage:clock:)` (init): `init(knobs: PressQueueKnobs, stage: PressQueueStage, clock: UptimeClock)`
+- `PressQueue.init(knobs:stage:clock:log:)` (init): `init(knobs: PressQueueKnobs, stage: PressQueueStage, clock: UptimeClock, log: DebugLog)`
 - `PressQueue.nextRevealId` (property): `var nextRevealId: Int { get }`
 - `PressQueue.press(_:)` (method): `mutating func press(_ p: Press) -> PressOutcome`
 - `PressQueue.queue` (property): `var queue: [Press] { get }`
