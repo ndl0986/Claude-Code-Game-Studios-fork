@@ -43,11 +43,13 @@ this stack, so there is no deprecated-API table; deprecations are listed per ADR
 **Types inside `KidCore` / `MorphCore`** (ADR-0002 D2)
 - Import only the Swift standard library and `Foundation`.
 - Time is `Double` seconds. `Int` only for values that fit in 32 bits; `Int64` where a value may not fit; `UInt64`
-  only in `RandomSource`, `MorphCore` contract types and the morph-seed derivation.
+  only in `RandomSource`, `MorphCore` contract types and the morph-seed derivation; `UInt8` only for byte arrays
+  (`SettingsBackend`'s `[UInt8]`, ADR-0005 D2; on the ban grep's allowlist).
 - Keys and characters are `String`; case folding only through the one ASCII helper `asciiUppercased`; inspect
   strings only via `unicodeScalars` / `utf8` helpers (`asciiLetters(_:)`, `scalarCount(_:)`).
-- Data are plain value types (`struct`, raw-value `enum`, arrays, `Int`, `Double`, `String`, `Bool`); JSON is
-  decoded at the edge (app or Tools).
+- Data are plain value types (`struct`, raw-value `enum`, arrays, `Int`, `Double`, `String`, `Bool`); theme and
+  content JSON is decoded at the edge (app or Tools) (ADR-0002 D2, ADR-0003 D7). The one JSON code in `KidCore` is
+  the settings record's hand-written canonical reader and writer (ADR-0004 D3, ADR-0005 D1).
 - Ordered state is an array or explicitly sorted; all rounding goes through one `roundHalfAwayFromZero(_:)` per core.
 - No concurrency inside the cores; the app calls them on the main thread.
 
@@ -112,17 +114,20 @@ this stack, so there is no deprecated-API table; deprecations are listed per ADR
 ### Forbidden approaches
 - **Never write code under `src/`, never import `prototypes/` code** — the app is built fresh (ADR-0001 D3).
 - **Never put a UI or platform import in `KidCore`/`MorphCore`** (ADR-0002 D1).
-- **Never use in the cores**: `Date`, `Calendar`, `Decimal`, `Duration`, `DispatchTime`; `Float`, `CGFloat`,
-  `Int32`, `Int8` or other sized integers (except the allowed `UInt64`/`Int64`); `Character`; `uppercased(with:)`,
-  `localizedUppercase`, Unicode-aware `uppercased()`/`lowercased()`; `UUID`; `JSONDecoder`, `JSONEncoder` or JSON
-  `Codable`; `.rounded(...)` outside the helper, `round`, `lround`, `rint`; `.count`/`.first`/`.last`/`for … in`
-  directly on a `String` (ADR-0002 D2; enforced by the V1 ban grep, ADR-0011 D4).
-- **Never let output depend on `Set` or `Dictionary` iteration order** (ADR-0002 D2).
+- **Never use in the cores** (ADR-0002 D2; enforced by the ban grep, ADR-0011 D4 step 1): `Date`, `Calendar`,
+  `Decimal`, `Duration`, `DispatchTime`; `Float`, `CGFloat`, `Int32`, `Int8` or other sized integers (except
+  `UInt64`/`Int64` where allowed and `UInt8` for byte arrays); `Character`; `uppercased(with:)`,
+  `localizedUppercase`, Unicode-aware `uppercased()`/`lowercased()`; `UUID`; `JSONDecoder`, `JSONEncoder`, a JSON
+  library or JSON `Codable`; `.rounded(...)` outside the helper, `round`, `lround`, `rint`.
+- **Never, by review** (ADR-0002 D2; not grep-enforced): `.count`, `.first`, `.last` or `for … in` directly on a
+  `String` in the cores.
+- **Never let output depend on `Set` or `Dictionary` iteration order** — a review rule (ADR-0002 D2).
 - **Never use one global random generator** — one system's draws would shift another's (ADR-0002 Alt 3).
 - **Never use `hypot`** for segment length (`sqrt(dx²+dy²)` written out) (ADR-0001 D4).
 - **Never hard-code keys, pictures, sounds, lines, theme packs or tuning values** (ADR-0001 D6); never rasterise a
   font at run time (ADR-0001 D6).
-- **Never decode JSON in `KidCore`; never read `src/` from the app** (ADR-0003 Impl.); never ship `src/`, SVGs,
+- **Never decode theme or content JSON in `KidCore`** (it receives decoded models; the settings record's
+  hand-written reader/writer is the exception above); **never read `src/` from the app** (ADR-0003 D7, Impl.); never ship `src/`, SVGs,
   scripts, WAV intermediates, reports, fixtures or tools (ADR-0003 D8).
 - **Never keep separate validators for build and load** (ADR-0003 Alt 3).
 - **Never put a seed, an event `time`, a `play` field or a precomputed `u` in a contract case** (morph-contract-v1
@@ -343,5 +348,8 @@ tests (T1–T5), and pointers for content ids (Key Table V6, ADR-0003 D1). `proj
 - Every number a GDD states is a hand-written contract case (ADR-0004 Impl.); the GDD decides when results disagree
   (ADR-0004 D5).
 - Platform code stays in `<App>` or `Tools`; a new seam only by an ADR (ADR-0002 Impl.).
+- Android mirror (later, ADR-0012): Gradle `kidcore` and `morphcore` are pure JVM with no `android.*` imports and the
+  same seam names; `RandomSource` returns `ULong`; `settings-record-v1` is the same bytes on both platforms
+  (ADR-0002 D8).
 - Evidence for every player-observable change is a retained screenshot (coding-standards.md); device sessions follow
   `production/qa/device-checks-plan.md`.

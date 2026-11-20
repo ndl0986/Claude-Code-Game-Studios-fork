@@ -47,8 +47,8 @@ code (the convention already in use, recorded here so new code follows it).
 |---|---|---|---|
 | T1 | A test target is `<Module>Tests` (UI tests: `<App>UITests`); contract tests live in `ContractTests` | `KidCoreTests`, `MorphCoreTests`, `LetterMorphUITests` | existing code; ADR-0004 |
 | T2 | A test file is `<Subject>Tests.swift` | `StageFitTests.swift`, `ContentValidatorTests.swift` | existing code |
-| T3 | XCTest method names are **`test_` + a lower-case snake_case sentence** stating the behaviour, so a failure reads as a claim | `test_a_wrong_case_file_fails_V`, `test_app_launches_to_the_title` | existing code |
-| T4 | A rule or acceptance-criterion id in a test name keeps its own case | `…_fails_V` (validator rule), `…_AC_9` | existing code |
+| T3 | XCTest method names are **`test_` + a lower-case snake_case sentence** stating the behaviour, so a failure reads as a claim | `test_a_wrong_case_file_fails_V7`, `test_app_launches_to_the_title` | existing code |
+| T4 | A rule or acceptance-criterion id in a test name keeps its own case | `…_fails_V7` (validator rule V7) | existing code |
 | T5 | Tests are deterministic: no wall clock, no unseeded randomness; inject the seams (`UptimeClock`, `RandomSource`) | `DrawList: RandomSource` | coding-standards.md; ADR-0002 (seams) |
 
 ## 5. Assets and content ids (pointers, not restated)
