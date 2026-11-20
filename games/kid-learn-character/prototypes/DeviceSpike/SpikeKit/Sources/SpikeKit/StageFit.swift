@@ -26,6 +26,7 @@ public enum PPI {
         "iPad15,3": 264, "iPad15,4": 264, "iPad15,5": 264, "iPad15,6": 264,     // iPad Air M2
         "iPad15,7": 264, "iPad15,8": 264,                                       // iPad (A16)
         "iPad16,1": 326, "iPad16,2": 326,                                       // iPad mini (A17 Pro)
+        "iPad13,4": 264, "iPad13,5": 264, "iPad13,6": 264, "iPad13,7": 264,     // iPad Pro 11-inch (3rd gen, M1): TASK-127 device
     ]
     public static let iPadClassMax = 326.0
     public static let macClassMax = 254.0

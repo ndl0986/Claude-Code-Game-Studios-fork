@@ -121,6 +121,9 @@ final class AudioSpike: @unchecked Sendable {
         let notes = [523.25, 659.25, 783.99, 1046.5, 783.99, 659.25, 523.25, 659.25]
         buffers["music"] = make(2.0) { t in let k = min(notes.count - 1, Int(t / 0.25)); return 0.4 * sin(2 * .pi * notes[k] * t) * exp(-(t - Double(k) * 0.25) * 4) }
         buffers["tone100"] = make(2.0) { t in 0.891 * sin(2 * .pi * 100 * t) }   // ADR-0010 P-7/M-14 test tone, −1 dBFS
+        // TASK-128: the same test at 1 kHz, which the iPad's built-in speaker reproduces (100 Hz is near-silent there,
+        // so the ear and the detector were not judging the same sound in TASK-127's P-7)
+        buffers["tone1k"] = make(2.0) { t in 0.891 * sin(2 * .pi * 1000 * t) }
         // ADR-0010 P-7/M-14 continuity: a linear chirp 200 → 2000 Hz over 2 s; aperiodic, so the content frame at any
         // output sample is found unambiguously by correlation
         buffers["chirp"] = make(2.0) { t in 0.891 * sin(2 * .pi * (200 * t + 450 * t * t)) }
@@ -283,6 +286,7 @@ final class AudioSpike: @unchecked Sendable {
             let reason = (n.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt).flatMap(AVAudioSession.RouteChangeReason.init)
             let outs = AVAudioSession.sharedInstance().currentRoute.outputs.map { $0.portType.rawValue }.joined(separator: ",")
             self?.log("route change reason=\(reason.map { "\($0.rawValue)" } ?? "?") outputs=\(outs)")
+            self?.mark("route")
             if reason == .oldDeviceUnavailable { self?.cut(.voice); self?.cut(.cast) }
         }
         nc.addObserver(forName: AVAudioSession.mediaServicesWereResetNotification, object: nil, queue: .main) { [weak self] _ in
@@ -296,6 +300,16 @@ final class AudioSpike: @unchecked Sendable {
     // installTap. Only meaningful on the 100 Hz test tone (program sounds have large second differences of their own).
     private let tapLock = NSLock()
     private var tapOn = false, tapMax: Float = 0, tapA: Float = 0, tapB: Float = 0
+    /// The test tone the Tone buttons play (100 Hz or 1000 Hz; the Audio screen's picker).
+    var toneHz: Double = 100
+    var toneName: String { toneHz >= 1000 ? "tone1k" : "tone100" }
+    // TASK-128 whole-sound detector: the sine-predictor residual r[n] = x[n] − 2cos ω x[n−1] + x[n−2] for the test
+    // tone's ω (0 for a clean sine of any amplitude and phase; the d2x above reads a 1 kHz sine at −36 dBFS by itself),
+    // kept per 5 ms bin from arming until the report, with the event marks, so the start, the event, the resume and
+    // the natural end are each measured (TASK-127: a pop was heard at a phase the old 0.45–1.0 s window never saw).
+    private var tlOn = false, tlC: Float = 2, tlBins: [Float] = [], tlLoud: [Bool] = [], tlFrames = 0
+    private var tlMarks: [(String, Int)] = []
+    private let tlBin = 240
     private var tapInstalled = false
     private var captureOn = false, capture: [Float] = [], captureStart: AVAudioFramePosition?
     private var captureAnchor: (host: UInt64, sample: AVAudioFramePosition)?
@@ -315,6 +329,13 @@ final class AudioSpike: @unchecked Sendable {
             for i in 0..<Int(buf.frameLength) {
                 let x = d[i]
                 if self.tapOn { self.tapMax = max(self.tapMax, abs(x - 2 * b + a)) }
+                if self.tlOn {
+                    let k = self.tlFrames / self.tlBin
+                    if k == self.tlBins.count { self.tlBins.append(0); self.tlLoud.append(false) }
+                    self.tlBins[k] = max(self.tlBins[k], abs(x - self.tlC * b + a))
+                    if abs(x) > 1e-4 { self.tlLoud[k] = true }
+                    self.tlFrames += 1
+                }
                 a = b; b = x
             }
             self.tapA = a; self.tapB = b
@@ -327,26 +348,57 @@ final class AudioSpike: @unchecked Sendable {
         log(String(format: "detector %@: max|d2x| %.1f dBFS → %@ (AC-9 threshold −60)", what, db, db <= -60 ? "PASS" : "FAIL"))
     }
 
-    enum ToneTest: String { case cut, mute, freeze }
+    private func armTimeline() {
+        tapLock.lock()
+        tlC = Float(2 * cos(2 * .pi * toneHz / format.sampleRate)); tlBins = []; tlLoud = []; tlFrames = 0; tlMarks = []
+        tlOn = true; tapLock.unlock()
+    }
+    /// Marks an event at the tap's frame count now. The tap is delivered in 1024-frame blocks, so the event lands up
+    /// to ~25 ms after the mark: the event window (−10…+90 ms) allows for it.
+    private func mark(_ name: String) { tapLock.lock(); if tlOn { tlMarks.append((name, tlFrames)) }; tapLock.unlock() }
+    private func reportTimeline(_ what: String) {
+        tapLock.lock(); tlOn = false; let bins = tlBins, loud = tlLoud, marks = tlMarks; tapLock.unlock()
+        let ms = { (bin: Int) in Double(bin * self.tlBin) / self.format.sampleRate * 1000 }
+        let binOf = { (frames: Int) in frames / self.tlBin }, per = { (msec: Double) in Int(msec / 1000 * self.format.sampleRate) / self.tlBin }
+        guard let first = loud.firstIndex(of: true), let last = loud.lastIndex(of: true) else { log("detector \(what): no sound reached the output"); return }
+        var phases: [(String, ClosedRange<Int>)] = [("start", first...(first + per(30)))]
+        for (n, f) in marks { phases.append((n, max(0, binOf(f) - per(10))...(binOf(f) + per(90)))) }
+        phases.append(("end", max(0, last - per(20))...(last + per(60))))
+        func maxIn(_ r: ClosedRange<Int>) -> Float { r.filter { $0 < bins.count }.map { bins[$0] }.max() ?? 0 }
+        let covered = Set(phases.flatMap { Array($0.1) })
+        let body = bins.indices.filter { !covered.contains($0) }.map { bins[$0] }.max() ?? 0
+        let db = { (x: Float) in x > 0 ? 20 * log10(x) : -200 }
+        let cells = (phases.map { String(format: "%@ %.1f", $0.0, db(maxIn($0.1))) } + [String(format: "body %.1f", db(body))]).joined(separator: " | ")
+        let worstBin = bins.indices.max { bins[$0] < bins[$1] } ?? 0
+        let worst = bins[worstBin]
+        log(String(format: "detector %@ (%.0f Hz, whole sound): %@ dBFS → %@ (AC-9 −60); worst at +%.0f ms from the sound's start",
+                   what, toneHz, cells, db(worst) <= -60 ? "PASS" : "FAIL", ms(worstBin) - ms(first)))
+    }
+
+    enum ToneTest: String { case none = "no event", cut, mute, freeze }   // none: the control (start and natural end only; game-dev-android, TASK-128)
     /// Plays the 100 Hz tone on a bus, then at 0.5 s cuts / mutes / freezes (resume 0.3 s later), with the detector
     /// armed over the whole event; logs the result. P-7 (iPad) and M-14 (Mac) run it per bus; the ear checks the
     /// program sounds with the normal Play / Cut buttons.
     func toneTest(_ test: ToneTest, on bus: Bus) {
         ensureTap()
-        play("tone100", on: bus)
+        armTimeline()                                   // TASK-128: from before the press to after the natural end
+        play(toneName, on: bus)
         let q = DispatchQueue.main
         q.asyncAfter(deadline: .now() + 0.45) { self.arm(true) }
         q.asyncAfter(deadline: .now() + 0.5) {
             switch test {
-            case .cut: self.cut(bus)
-            case .mute: self.setMuted(true)
-            case .freeze: self.freeze(); q.asyncAfter(deadline: .now() + 0.3) { self.resume() }
+            case .cut: self.mark("cut"); self.cut(bus)
+            case .mute: self.mark("mute"); self.setMuted(true)
+            case .freeze: self.mark("freeze"); self.freeze(); q.asyncAfter(deadline: .now() + 0.3) { self.mark("resume"); self.resume() }
+            case .none: break
             }
         }
         q.asyncAfter(deadline: .now() + 1.0) {
             self.arm(false); self.report("\(test.rawValue) \(bus.rawValue)")
-            if test == .mute { self.setMuted(false) }
+            if test == .mute { self.mark("unmute"); self.setMuted(false) }
         }
+        // the tone is 2 s: a cut ends it at 0.5 s; mute and freeze let it play to its end (freeze: ~0.3 s later)
+        q.asyncAfter(deadline: .now() + (test == .cut ? 1.0 : 2.7)) { self.reportTimeline("\(test.rawValue) \(bus.rawValue)") }
     }
     /// ADR-0010 D7 on the device (P-7 / M-14 measure, game-qc-ios): plays the chirp on a bus, freezes at 0.8 s and resumes
     /// at 1.1 s, with the main mixer tapped. From the tap: the content frame actually audible at the freeze instant
@@ -401,8 +453,10 @@ final class AudioSpike: @unchecked Sendable {
 
     /// Plays the tone on the voice bus and arms the detector for 5 s, for the headphones-out case (unplug meanwhile).
     func toneArmed5s() {
-        ensureTap(); play("tone100", on: .voice); arm(true)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) { self.arm(false); self.report("armed 5 s (headphones out)") }
+        ensureTap(); armTimeline(); play(toneName, on: .voice); arm(true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            self.arm(false); self.report("armed 5 s (headphones out)"); self.reportTimeline("armed 5 s (output disconnected)")
+        }
     }
 
     #if os(iOS)

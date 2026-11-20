@@ -45,6 +45,7 @@ import Testing
 
 @Test func ppiUnknownTakesClassMaximum() {
     #expect(PPI.iPad(model: "iPad16,3") == (264, .table))
+    #expect(PPI.iPad(model: "iPad13,4") == (264, .table))   // TASK-127 session iPad (logged 326 unknownClassMax before)
     #expect(PPI.iPad(model: "iPad99,9") == (PPI.iPadClassMax, .unknownClassMax))
     #expect(PPI.mac(pixelsW: 3456, mmW: 0).1 == .unknownClassMax)
     #expect(PPI.mac(pixelsW: 1000, mmW: 1000 / (72.0 / 25.4)).1 == .unknownClassMax)   // the no-EDID 72 dpi estimate

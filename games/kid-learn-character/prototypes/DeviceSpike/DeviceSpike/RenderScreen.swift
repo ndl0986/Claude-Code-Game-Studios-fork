@@ -22,7 +22,10 @@ final class RenderModel: ObservableObject {
     @Published var readout = ""
     init() {
         scene.onLog = { s in SpikeLog.shared.line("[render] \(s)") }
-        if UserDefaults.standard.string(forKey: "option") == "b" { option = .b; scene.option = .b }   // `-option b` for headless smoke runs
+        // `-option a|candidate|b`: open Render on that option (headless smoke runs, and the TASK-127 crispness still
+        // taken with `devicectl device capture screenshot`, which cannot tap)
+        let arg: [String: RenderOption] = ["a": .a, "candidate": .aCandidate, "b": .b]
+        if let o = UserDefaults.standard.string(forKey: "option").flatMap({ arg[$0] }) { option = o; scene.option = o }
     }
 
     func refresh() {
