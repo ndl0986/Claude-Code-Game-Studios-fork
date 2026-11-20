@@ -249,35 +249,53 @@ public enum VoiceBake {
     /// AVAudioFile stamps the MP4 movie, track and media headers (`mvhd`, `tkhd`, `mdhd`) with the encode time, so two
     /// bakes of the same audio differed in 12 header bytes while the decoded samples were identical. Zeroing the
     /// creation and modification times makes the voice files byte-stable like the other baked outputs (ADR-0003 D4).
-    static func zeroMP4Timestamps(_ url: URL) throws {
+    public static func zeroMP4Timestamps(_ url: URL) throws {
         var bytes = [UInt8](try Data(contentsOf: url))
-        // Only inside the top-level `moov` box (the headers), never in the audio payload (`mdat`).
+        let file = url.lastPathComponent
         func u32(_ o: Int) -> Int { bytes[o..<o + 4].reduce(0) { $0 << 8 | Int($1) } }
-        var top = 0, moov: Range<Int>? = nil
-        while top + 8 <= bytes.count {
-            let size = u32(top), type = String(decoding: bytes[top + 4..<top + 8], as: UTF8.self)
-            guard size >= 8, top + size <= bytes.count else { break }
-            if type == "moov" { moov = top + 8..<top + size }
-            top += size
-        }
-        guard let moov else { throw VoiceBakeError(file: url.lastPathComponent, reason: "no moov box in the encoded file") }
-        var found = 0
-        for tag in ["mvhd", "tkhd", "mdhd"] {
-            let t = Array(tag.utf8)
-            var i = moov.lowerBound
-            while i + 4 <= moov.upperBound {
-                if Array(bytes[i..<i + 4]) == t, i + 5 < bytes.count {
-                    // A full box: 4-byte type, then version (1) and flags (3), then creation and modification time
-                    // (4 bytes each in version 0, 8 in version 1).
-                    let version = bytes[i + 4], width = version == 1 ? 8 : 4, start = i + 8
-                    guard start + 2 * width <= moov.upperBound else { break }
-                    for k in start..<(start + 2 * width) { bytes[k] = 0 }
-                    found += 1
+        /// The child boxes of the payload `range`, walked by their size headers: (type, payload range, box start).
+        /// Types match only at box boundaries, never at an arbitrary offset (game-dev-ios review).
+        func children(_ range: Range<Int>) throws -> [(type: String, payload: Range<Int>, start: Int)] {
+            var out: [(String, Range<Int>, Int)] = [], o = range.lowerBound
+            while o + 8 <= range.upperBound {
+                var size = u32(o), header = 8
+                if size == 1 {   // a 64-bit size follows the type
+                    guard o + 16 <= range.upperBound else { break }
+                    size = bytes[o + 8..<o + 16].reduce(0) { $0 << 8 | Int($1) }; header = 16
+                } else if size == 0 { size = range.upperBound - o }   // to the end of the parent
+                guard size >= header, o + size <= range.upperBound else {
+                    throw VoiceBakeError(file: file, reason: "malformed MP4 box at byte \(o)")
                 }
-                i += 1
+                out.append((String(decoding: bytes[o + 4..<o + 8], as: UTF8.self), (o + header)..<(o + size), o))
+                o += size
             }
+            return out
         }
-        guard found >= 3 else { throw VoiceBakeError(file: url.lastPathComponent, reason: "expected mvhd, tkhd and mdhd headers, found \(found)") }
+        /// A full box's version byte opens its payload; then creation and modification time, 4 bytes each in version 0
+        /// and 8 in version 1.
+        func zeroTimes(_ payload: Range<Int>, _ type: String) throws {
+            let version = bytes[payload.lowerBound], width = version == 1 ? 8 : 4, start = payload.lowerBound + 4
+            guard start + 2 * width <= payload.upperBound else { throw VoiceBakeError(file: file, reason: "\(type) too short") }
+            for k in start..<(start + 2 * width) { bytes[k] = 0 }
+        }
+        guard let moov = try children(0..<bytes.count).first(where: { $0.type == "moov" }) else {
+            throw VoiceBakeError(file: file, reason: "no moov box in the encoded file")
+        }
+        let inMoov = try children(moov.payload)
+        guard let mvhd = inMoov.first(where: { $0.type == "mvhd" }) else { throw VoiceBakeError(file: file, reason: "no moov/mvhd") }
+        try zeroTimes(mvhd.payload, "mvhd")
+        let traks = inMoov.filter { $0.type == "trak" }
+        guard !traks.isEmpty else { throw VoiceBakeError(file: file, reason: "no moov/trak") }
+        for trak in traks {
+            let inTrak = try children(trak.payload)
+            guard let tkhd = inTrak.first(where: { $0.type == "tkhd" }) else { throw VoiceBakeError(file: file, reason: "no trak/tkhd") }
+            try zeroTimes(tkhd.payload, "tkhd")
+            guard let mdia = inTrak.first(where: { $0.type == "mdia" }),
+                  let mdhd = try children(mdia.payload).first(where: { $0.type == "mdhd" }) else {
+                throw VoiceBakeError(file: file, reason: "no trak/mdia/mdhd")
+            }
+            try zeroTimes(mdhd.payload, "mdhd")
+        }
         try Data(bytes).write(to: url)
     }
 

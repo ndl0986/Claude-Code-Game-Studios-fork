@@ -113,6 +113,41 @@ final class VoiceBakeTests: XCTestCase {
         XCTAssertNoThrow(try AVAudioFile(forReading: b), "the patched file still decodes")
     }
 
+    /// Zeroing the header timestamps must change no audio: the patched file decodes to exactly the samples of the same
+    /// file before the patch (game-dev-ios review).
+    func test_zeroing_the_header_timestamps_leaves_the_decoded_samples_unchanged() throws {
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("zero-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: dir) }
+        // A raw AVAudioFile encode with the bake's settings, NOT yet patched (as AVAudioFile wrote it).
+        let raw = dir.appendingPathComponent("raw.m4a"), patched = dir.appendingPathComponent("patched.m4a")
+        let format = try XCTUnwrap(AVAudioFormat(standardFormatWithSampleRate: VoiceBake.sampleRate, channels: 1))
+        let n = 48_000
+        let pcm = try XCTUnwrap(AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(n)))
+        pcm.frameLength = AVAudioFrameCount(n)
+        for k in 0..<n { pcm.floatChannelData![0][k] = Float(0.4 * sin(Double(k) * 0.031)) }
+        do {
+            let w = try AVAudioFile(forWriting: raw, settings: [AVFormatIDKey: kAudioFormatMPEG4AAC, AVSampleRateKey: VoiceBake.sampleRate,
+                                                                AVNumberOfChannelsKey: 1, AVEncoderBitRateKey: VoiceBake.bitRate],
+                                    commonFormat: .pcmFormatFloat32, interleaved: false)
+            try w.write(from: pcm)
+        }
+        try FileManager.default.copyItem(at: raw, to: patched)
+        try VoiceBake.zeroMP4Timestamps(patched)
+        func decode(_ u: URL) throws -> [Float] {
+            let f = try AVAudioFile(forReading: u)
+            let buf = try XCTUnwrap(AVAudioPCMBuffer(pcmFormat: f.processingFormat, frameCapacity: AVAudioFrameCount(f.length)))
+            try f.read(into: buf)
+            return Array(UnsafeBufferPointer(start: try XCTUnwrap(buf.floatChannelData)[0], count: Int(buf.frameLength)))
+        }
+        XCTAssertEqual(try decode(patched), try decode(raw), "the patched file decodes to exactly the same samples")
+        let a = [UInt8](try Data(contentsOf: raw)), b = [UInt8](try Data(contentsOf: patched))
+        XCTAssertEqual(a.count, b.count)
+        let changed = zip(a, b).filter { $0 != $1 }.count
+        XCTAssertLessThanOrEqual(changed, 3 * 2 * 8, "only the mvhd/tkhd/mdhd creation and modification times may change")
+        XCTAssertTrue(zip(a, b).allSatisfy { $0 == $1 || $1 == 0 }, "every changed byte was set to zero")
+    }
+
     func test_two_different_engines_produce_the_same_file_paths() throws {
         let a = try themeDir(), b = try themeDir()
         let pa = try VoiceBake.bakeTheme(themeDir: a, theme: theme) { _ in FakeEngine(name: "fake-a", rate: 24000) }
