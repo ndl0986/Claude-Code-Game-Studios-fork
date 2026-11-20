@@ -169,6 +169,49 @@ ascending, exact equality, and delivered one at a time (Input R7, IF-Q10).
 touch (Input R1): the primary as pointer 0, the secondary (`rightMouseDown`) as pointer 1, others (`otherMouseDown`)
 as 2 + `buttonNumber`; down / dragged / up, in window pixels (backing scale).
 
+### D6. Hardware keyboard presence (note 2026-11-20, TASK-138; K-49, TASK-135)
+**Rule.** The Onscreen Keyboard Row shows in Play when no hardware keyboard is attached (its R8: `shown = keyboardRow
+OR NOT keyboardPresent`, with its own 0.5 s settle). The adapter **reports presence only**; the row owns the rule, the
+settle and every timing (R8). Presence is never stored (Settings Store, TASK-135).
+- **Delivery.** One value, `keyboardPresent: Bool`, passed into `KidCore` through the keyboard row's own declared
+  entry point (contracts/case-schema-v1 allows a contract to add one; keyboard-row-v2 declares it as the `keyboard
+  {present}` event and a `given` field). It is delivered synchronously on the main thread, like D3's events:
+  - **at launch, before the first frame** (after the settings read, before App Shell's `ready`; ADR-0002 D7's launch
+    order is otherwise unchanged);
+  - **on every return to the foreground** (the row's background rule relies on this read);
+  - **on every change** while the app runs.
+- **No new seam.** Presence is a value the adapter pushes into one `KidCore` entry point, as `accessibilityChanged`
+  and `displayMetricsChanged` are; `KidCore` never queries the platform for it. So ADR-0002 D6's seam table is not
+  changed (leader, TASK-138). The entry point's exact name is the keyboard-row story's, in `contracts/kidcore-api.md`.
+- **Separate from key input.** Presence never changes how keys are read or filtered (D1–D3): the reader and Input &
+  Key Filter neither read nor depend on it.
+
+**Apple.**
+- **iPadOS:** `GCKeyboard.coalesced != nil` (Game Controller framework), read at launch and on each foreground
+  return, then `GCKeyboardDidConnect` / `GCKeyboardDidDisconnect`. Sourced from the 27.1 SDK header `GCKeyboard.h`:
+  `coalescedKeyboard` and both notifications are `ios(14.0)` / `macos(11.0)`, and "all connected keyboards are
+  coalesced into one keyboard object, so notification about connection/disconnection will only be delivered once
+  until last keyboard disconnects", which is exactly "present while any is attached". The header does not say which
+  queue posts the notifications, so the adapter hops to the main thread before calling `KidCore`. The adapter installs **no** `GCKeyboardInput` handler
+  (keys stay on D3's `pressesBegan` path) and sets no game-controller Info.plist keys. At launch `coalesced` may be
+  nil for a moment with a keyboard attached and the connect may follow; the row's settle and Play-only display cover
+  it (TASK-135 review). Not sourced: the exact launch timing of the first connect; AC-25 (attach and detach on a real
+  iPad) measures it.
+- **macOS:** the constant `true`, delivered once at launch; no detection (the row's R9: every Mac has a keyboard).
+- **iPadOS only, by construction:** the one `import GameController` sits inside `#if os(iOS)` in the iPad presence
+  reader, and the target adds no `GameController.framework` to its link phase (Swift links an imported module
+  automatically, so the import is the only link). The Mac binary therefore never links it.
+- **Privacy and build (PKC).** `GameController.framework` is an Apple system framework (`/System/Library/…`), so
+  PKC-03 (b) holds, and it is not on PKC-02's list (`GameKit` is; `GameController` is not). It reads no network,
+  location or identifier and has no required-reason API (PKC-09 unchanged). **But it is a new linked framework, so
+  PKC-13's review gate applies:** the PR that links it is flagged by QC and needs this ADR note and Luan's
+  decision. **Decided: Luan approved linking GameController on iPadOS only (K-51, 2026-11-20).**
+- **The `otool -L` expectation is two-sided** (QC's PKC-02/03 observation): `GameController.framework` **present**
+  in the iPadOS app binary and **absent** from the macOS one. Either way round is a finding.
+- **Fallback if Luan declines the framework:** no public UIKit signal is known that reports a keyboard before its
+  first key press (not sourced: none found in the 27.1 SDK headers' UIKit key and press APIs), so the row would fall back to K-49's predecessor (shown only when `keyboardRow` is on) on the iPad; that
+  is a design change for Luan, not an adapter choice.
+
 ### Decision rule (fixed before the rows run)
 | Row | Pass (decides this ADR) | If it fails |
 |---|---|---|
@@ -193,6 +236,7 @@ AppKit monitor / mouse ──┼─ reader ─ mapper (D2) ──┼─▶ KidCo
 ### Key Interfaces
 - `KeyEvent`, `TouchEvent` (ADR-0002 D5); `KeyStateQuery` (D6, optional, D4 here); the disposition is the return
   value of `KidCore`'s key entry point (consume / pass).
+- `keyboardPresent: Bool` into the keyboard row's entry point (this ADR's D6, note 2026-11-20; not ADR-0002 D6).
 
 ### Implementation Guidelines
 - One reader per platform, nothing else in the app reads keys; the gate's keypad and the panel use Input's outputs
@@ -270,6 +314,13 @@ build (TASK-102).
   flags) maps to the case's `KeyEvent`, for the iPad and Mac tables.
 - **H-4** Mac host test: synthesized `NSEvent.keyEvent(...)` and `flagsChanged` events through the local monitor reach
   the mapper and honour the disposition (nil swallows).
+
+**With the D6 presence read (note 2026-11-20):**
+- **H-5** On the iPadOS Release product, `otool -L` lists `GameController.framework`; on the macOS product it does not
+  (D6, K-51).
+- **P-15 and the Keyboard Row's AC-25 run on a build that includes D6's presence read.** P-15's key comparison
+  against input-filter-v2 then also proves the presence read leaves presses unchanged. AC-25 (attach and detach a
+  hardware keyboard on a real iPad) measures the launch timing of the first connect that D6 leaves unsourced.
 
 **Device rows (pending; the decision rule above):** M-1 (`mac-1/M-1/`), M-2 (`mac-1/M-2/`), M-3 (`mac-1/M-3/`, the
 keyboard part), P-15 (`ipad-1/P-15/`), P-4 (`ipad-1/P-4/`, the keyboard part), as in
