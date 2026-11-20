@@ -24,7 +24,8 @@ Cross-platform behaviour contracts for Kid Learn Character (ADR-0004). Each cont
 | reveal-timing-v1 | v1 | reveal-stage.md; cast-rendering.md F1, F2, F4, F5, F7 | KidCore | batch 3 (TASK-086) |
 | audio-plan-v1 | v1 | audio-voice.md | KidCore | batch 3 (TASK-086) |
 | hint-letters-v1 | v1 | hint-letters.md | KidCore | batch 4 (TASK-089) |
-| keyboard-row-v1 | v1 | onscreen-keyboard-row.md | KidCore | batch 4 (TASK-089) |
+| keyboard-row-v1 | v1 | onscreen-keyboard-row.md | KidCore | superseded-by: keyboard-row-v2 (K-40; TASK-135 K-49 changed what `keyboardRow` false means) |
+| keyboard-row-v2 | v2 | onscreen-keyboard-row.md (TASK-135) | KidCore | TASK-141: v1 + `keyboardPresent`, the 0.5 s settle, AC-1, AC-15, AC-20 to AC-24 |
 | gate-logic-v1 | v1 | parent-gate-panel.md (G13) | KidCore | batch 5 (TASK-094) |
 | app-shell-v1 | v1 | app-shell-title.md | KidCore | batch 5 (TASK-094) |
 | parade-v1 | v1 | parade.md | KidCore | superseded-by: parade-v2 (K-40; K-45 removed the rest) |
@@ -60,7 +61,8 @@ it is never Done.
 | input-filter-v1 | superseded-by: input-filter-v2 | 86 |
 | input-filter-v2 | not-started: story:input | 95 |
 | key-table-schema-v1 | runner: KeyTableModelRunner + Tools.KeyTableFileLayer | 93 |
-| keyboard-row-v1 | not-started: story:keyboard-row | 36 |
+| keyboard-row-v1 | superseded-by: keyboard-row-v2 | 36 |
+| keyboard-row-v2 | not-started: story:keyboard-row | 57 |
 | parade-v1 | superseded-by: parade-v2 | 30 |
 | parade-v2 | not-started: story:parade | 46 |
 | press-queue-v1 | not-started: story:press-queue | 46 |
