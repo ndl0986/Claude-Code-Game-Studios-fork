@@ -2,7 +2,7 @@
 
 > **Status**: Approved (all 9 sections approved one by one by Luan, 2026-11-17)
 > **Owned By**: art-director
-> **Last Updated**: 2026-11-18 (TASK-120, K-44: §7 "Parade meter", the one HUD exception, with §3, §4 rows; in review by
+> **Last Updated**: 2026-11-20 (TASK-145, K-52: §8 audio is uncompressed `.caf`, not AAC `.m4a`; earlier TASK-120, K-44: §7 "Parade meter", the one HUD exception, with §3, §4 rows; in review by
 > game-qc-android and game-dev-ios; earlier TASK-117, no re-review: §3 "starlight" and "sparkle burst" terms, §7 hint size figure, §7 play button size and drawing; earlier TASK-069: §8 SVG subset per ADR-0003 D4, `data-pivot`, baked names; K-25 glyph edge and crossfade contrast in §2, §4; K-16 amendments in §2, §4, §5, §7, §8; earlier the same day: §8 says where silhouette path data lives)
 > **Art Director Sign-Off (AD-ART-BIBLE)**: SKIPPED 2026-11-17 — lean mode
 
@@ -541,8 +541,9 @@ the glyph rises from where it was pressed with an ease-out.
   - `cast_dino_c_triceratops_01.svg`, `sil_dino_c_triceratops_01.svg` (sources in `src/art/`, `src/sil/`; baked
     to `cast/…json` and `sil/…json`, ADR-0003 D1; the `[theme]` part is the theme's `assetPrefix`, `dino`)
   - `glyph_<font>_<char>.json`
-  - `sfx_dino_c_triceratops_01.m4a`
-  - `vo_en-us_letter_c.m4a`, `vo_en-us_word_triceratops.m4a`
+  - `sfx_dino_c_triceratops_01.caf`
+  - `vo_en-us_letter_c.caf`, `vo_en-us_word_triceratops.caf`
+  *(Amendment 2026-11-20, K-52, TASK-145: audio is `.caf`, not `.m4a`.)*
 - **Animation:** idles are **parameters in data** (sway amplitude and rate per family), not frame
   sequences. No sprite sheets in the MVP.
 - **Audio:** creature sounds ≤ 2 s; every sound and voice line loudness-matched (the level is set
@@ -562,7 +563,9 @@ the glyph rises from where it was pressed with an ease-out.
   TASK-033 measured; it is raised only after the real-iPad measurement)*; TASK-033 measured the SpriteKit morph
   fine on the iPad Simulator and the Mac. **On a real device: NOT ASSESSED** until Luan runs TASK-033's iPad
   procedure.
-- **Audio:** AAC `.m4a` mono for storage, decoded to PCM at load so a press plays at once
+- **Audio:** **uncompressed 16-bit linear PCM, mono, 48 kHz, in `.caf`** for storage *(amendment 2026-11-20, Luan K-52:
+  was AAC `.m4a`; AAC encoding isn't byte-stable, and ADR-0003 D4 needs byte-stable bakes; about 7–8 MB for the
+  Dinosaurs set instead of about 0.8 MB)*, loaded to PCM at theme load so a press plays at once
   (TASK-033: stop + schedule + play costs 3–10 ms on the main thread).
 
 ### Conflict: how the SVG art reaches the screen (Luan, 2026-11-17: record both, decide in architecture)
