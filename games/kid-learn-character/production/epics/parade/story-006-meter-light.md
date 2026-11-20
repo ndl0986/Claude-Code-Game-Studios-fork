@@ -79,4 +79,4 @@ The system's numbers are hand-written contract cases from the GDD, run by a runn
 ## Dependencies
 
 - Depends on: `production/epics/parade/story-005-meter-fill-full.md`
-- Unlocks: `production/epics/parade/story-007-parade-and-meter-look.md`
+- Unlocks: `production/epics/parade/story-007-parade-and-meter-look.md`, `production/epics/parade/story-008-freeze-panel-theme.md`

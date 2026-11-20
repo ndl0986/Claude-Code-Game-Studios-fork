@@ -26,7 +26,7 @@
 - Required: every KidCore type needing time or chance takes it injected from a D3 clock or D4 stream (ADR-0002 Impl.)
 - Required: every runner calls only the core's public API; hand-written cases from the GDD; never edit a merged `cases.json` (ADR-0004 D4–D6)
 
-**Contracts**: scene-look-v1 (`not-started: story:scene` → `runner:` with this story; includes Cast Rendering F8)
+**Contracts**: scene-look-v1 (this story adds the runner file, reporting the cases not yet passing as NOT ASSESSED — it is not registered while the row is `not-started`, since ContractKit fails a registered runner on a not-started row; the row flips to `runner:` in scene/002)
 
 ---
 
@@ -61,7 +61,6 @@ KidCore holds the pure rules with injected clocks (D3) and seeded streams (D4); 
 
 - `apple/KidCore/Sources/KidCore/Scene.swift`
 - `apple/KidCore/Tests/KidCoreTests/SceneTests.swift`
-- `apple/KidCore/Tests/ContractTests/SceneLookRunner.swift`
 
 ---
 

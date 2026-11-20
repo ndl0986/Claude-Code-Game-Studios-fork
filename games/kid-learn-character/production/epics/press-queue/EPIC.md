@@ -5,7 +5,7 @@
 > **Architecture Module**: KidCore (the whole state machine; no app part)
 > **Milestone**: Demo 1 (`production/milestones/demo-1.md`, K-48)
 > **Status**: Ready
-> **Stories**: 5 stories (TASK-140)
+> **Stories**: 6 stories (TASK-140)
 
 ## Overview
 
@@ -49,7 +49,8 @@ Accept, queue (up to 3) or ignore each press; report `formed` exactly once per r
 | 002 | [Start from rest, no jumping, the mash batch and one advance per tick](story-002-rest-jumping-mash.md) | Logic | Ready | ADR-0002, ADR-0004 |
 | 003 | [F1 holdEff, the formed rules and the fallback lengths](story-003-hold-and-formed-rules.md) | Logic | Ready | ADR-0002, ADR-0004 |
 | 004 | [Synchronous outcomes, gap-free revealIds, locked lengths, equal sources, the resting signal](story-004-ids-sources-resting.md) | Logic | Ready | ADR-0002, ADR-0004 |
-| 005 | [Background clear and settle, the first press after the Title, and the data checks](story-005-background-title-data.md) | Logic | Ready | ADR-0002, ADR-0004 |
+| 005 | [Background, panel and gate logic, the first press after the Title, the theme switch, and the data checks](story-005-background-title-data.md) | Logic | Ready | ADR-0002, ADR-0004 |
+| 006 | [A touched hint on a full queue sparkles, pings and stays](story-006-hint-on-overflow.md) | Integration | Ready | ADR-0002, ADR-0004 |
 
 ## Definition of Done
 

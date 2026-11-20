@@ -79,4 +79,4 @@ KidCore holds the pure rules with injected clocks (D3) and seeded streams (D4); 
 ## Dependencies
 
 - Depends on: `production/epics/reveal-stage/story-001-start-reveal-timeline.md`, `production/epics/key-table/story-004-pick-and-peek-tests.md`
-- Unlocks: None
+- Unlocks: `production/epics/reveal-stage/story-003-taps-settle-flags.md`

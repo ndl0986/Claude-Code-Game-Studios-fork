@@ -1,4 +1,4 @@
-# Story 004: Memory-warning shedding order
+# Story 004: Memory-warning shedding order, and the gate and panel states of the shell (logic)
 
 > **Epic**: App Shell & Title (`production/epics/app-shell/EPIC.md`)
 > **Status**: Ready
@@ -25,6 +25,8 @@
 **Control Manifest Rules** (`docs/architecture/control-manifest.md`, v2026-11-20):
 - Required: every KidCore type needing time or chance takes it injected from a D3 clock or D4 stream (ADR-0002 Impl.)
 
+**Contracts**: app-shell-v1 (`not-started: story:app-shell` → `runner:` with this story, the epic's last logic story)
+
 ---
 
 ## Acceptance Criteria
@@ -32,6 +34,7 @@
 *From GDD `design/gdd/app-shell-title.md`, scoped to this story (AC numbers are the GDD's):*
 
 - [ ] AC-11 A warning sheds prefetched, leaving and list textures in that order, never the current creature or the decoded audio; a second within 30 s also ends a walking parade, counted as played.
+- [ ] The app-shell-v1 cases driven by gate and panel events (Title / Play / Gate / Panel / Background transitions) pass on the KidCore state machine; with them all the cases pass and its row flips to `runner:`.
 
 ---
 
@@ -39,7 +42,7 @@
 
 *Derived from ADR-0002 and the epic:*
 
-KidCore holds the pure rules with injected clocks (D3) and seeded streams (D4); the app reaches it only through the D6 seams and `tick(now:)`, in D7's call orders.
+(Freeze/resume, panel and theme-switch **logic** is in Demo 1 so the contract runner passes every case; only their UI and device checks are next milestone — game-qc-android, TASK-140.) **Out:** AC-3 and AC-4 (the Mac kiosk order and K-21 relaunch) are Child Lock-in's, next milestone; if app-shell-v1 holds kiosk-only cases they need the Child Lock-in logic, so record them in the registry note rather than leave them silently unrun.
 
 ---
 
@@ -54,6 +57,7 @@ KidCore holds the pure rules with injected clocks (D3) and seeded streams (D4); 
 *Planned; `/dev-story` replaces this list. Roots are ADR-0001 D3 / ADR-0002 D1 (`apple/`); `engine.name` is unset by design.*
 
 - `apple/KidCore/Sources/KidCore/AppShell.swift`
+- `apple/KidCore/Tests/ContractTests/AppShellRunner.swift`
 - `apple/KidCore/Tests/KidCoreTests/AppShellTests.swift`
 
 ---

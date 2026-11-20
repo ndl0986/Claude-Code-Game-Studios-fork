@@ -27,7 +27,7 @@
 - Forbidden: never let output depend on `Set` or `Dictionary` iteration order — a review rule (ADR-0002 D2)
 - Required: every runner calls only the core's public API; hand-written cases from the GDD; never edit a merged `cases.json` (ADR-0004 D4–D6)
 
-**Contracts**: hint-letters-v1 (`not-started: story:hint-letters` → `runner:` with this story)
+**Contracts**: hint-letters-v1 (this story adds the runner file, reporting the cases not yet passing as NOT ASSESSED — it is not registered while the row is `not-started`, since ContractKit fails a registered runner on a not-started row; the row flips to `runner:` in hint-letters/005)
 
 ---
 
@@ -62,7 +62,6 @@ KidCore holds the pure rules with injected clocks (D3) and seeded streams (D4); 
 
 - `apple/KidCore/Sources/KidCore/HintLetters.swift`
 - `apple/KidCore/Tests/KidCoreTests/HintLettersTests.swift`
-- `apple/KidCore/Tests/ContractTests/HintLettersRunner.swift`
 
 ---
 

@@ -27,7 +27,7 @@
 - Required: every runner calls only the core's public API; hand-written cases from the GDD; never edit a merged `cases.json` (ADR-0004 D4–D6)
 - Required: every KidCore type needing time or chance takes it injected from a D3 clock or D4 stream (ADR-0002 Impl.)
 
-**Contracts**: app-shell-v1 (`not-started: story:app-shell` → `runner:` with this story; the kiosk cases stay NOT ASSESSED)
+**Contracts**: app-shell-v1 (this story adds the runner file, reporting the cases not yet passing as NOT ASSESSED — it is not registered while the row is `not-started`, since ContractKit fails a registered runner on a not-started row; the row flips to `runner:` in app-shell/004)
 
 ---
 
@@ -60,7 +60,6 @@ settings/003 provides the read-before-first-frame and the theme-ready gate.
 *Planned; `/dev-story` replaces this list. Roots are ADR-0001 D3 / ADR-0002 D1 (`apple/`); `engine.name` is unset by design.*
 
 - `apple/KidCore/Sources/KidCore/AppShell.swift`
-- `apple/KidCore/Tests/ContractTests/AppShellRunner.swift`
 - `apple/LetterMorph/LetterMorphApp.swift`
 - `apple/LetterMorphTests/LaunchOrderTests.swift`
 

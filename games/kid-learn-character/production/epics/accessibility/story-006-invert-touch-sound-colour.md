@@ -46,7 +46,7 @@
 
 *Derived from ADR-0006 and the epic:*
 
-One `SKView` per window with D1's fixed layers and zPositions; the stage root carries Reveal Stage F1's fit; the display-link frame driver calls `tick(now:)`; Reduce Motion read live (D6); ppi for hit sizes (D7).
+**Out:** AC-13 (grown-up panel targets) is next milestone; AC-17 (Android) waits for the Android build (K-03); AC-16 is privacy/002's scan.
 
 ---
 

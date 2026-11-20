@@ -44,7 +44,7 @@
 
 *Derived from ADR-0006 and the epic:*
 
-TASK-135 (K-49) is **merged at 5647a15f**; the ACs here are the merged GDD's (identical to 180228bf, checked). TASK-141 cuts **keyboard-row-v2** to supersede v1 with the K-49 cases. AC-25 needs an iPad hardware keyboard: NOT ASSESSED until one is available.
+TASK-135 (K-49) is **merged at 5647a15f**; the ACs here are the merged GDD's (identical to 180228bf, checked). AC-25 needs an iPad hardware keyboard: NOT ASSESSED until one is available.
 
 ---
 
@@ -80,5 +80,5 @@ TASK-135 (K-49) is **merged at 5647a15f**; the ACs here are the merged GDD's (id
 
 ## Dependencies
 
-- Depends on: `production/epics/keyboard-row/story-005-auto-on-keyboard-presence.md`, `production/epics/reveal-stage/story-004-stage-view-layers-fit.md`
+- Depends on: `production/epics/keyboard-row/story-005-auto-on-keyboard-presence.md`, `production/epics/reveal-stage/story-004-stage-view-layers-fit.md`, `production/epics/input/story-006-keyboard-presence-signal.md`
 - Unlocks: None

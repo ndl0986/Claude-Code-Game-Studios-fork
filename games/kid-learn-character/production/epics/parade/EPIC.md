@@ -5,7 +5,7 @@
 > **Architecture Module**: KidCore (batches, arming F2, walk F3, meter, art wait, freeze) + app (walkers through Cast Rendering)
 > **Milestone**: Demo 1 (`production/milestones/demo-1.md`, K-48)
 > **Status**: Ready
-> **Stories**: 7 stories (TASK-140)
+> **Stories**: 8 stories (TASK-140)
 
 ## Overview
 
@@ -51,6 +51,7 @@ The parade meter beside the queue tokens fills once per new creature; the 6th st
 | 005 | [The parade meter: fill, full, handover, launch, Reduce Motion, flash data](story-005-meter-fill-full.md) | Logic | Ready | ADR-0004, ADR-0013 |
 | 006 | [The light from each new creature to its cell](story-006-meter-light.md) | Logic | Ready | ADR-0004, ADR-0002 |
 | 007 | [The parade and the meter on the iPad: walkers on the hill band, meter states](story-007-parade-and-meter-look.md) | Visual/Feel | Blocked | ADR-0009, ADR-0006 |
+| 008 | [Parade and meter under the gate freeze, the panel and a theme switch (logic)](story-008-freeze-panel-theme.md) | Logic | Ready | ADR-0004, ADR-0002 |
 
 ## Definition of Done
 

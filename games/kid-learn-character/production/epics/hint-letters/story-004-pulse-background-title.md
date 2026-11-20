@@ -41,7 +41,7 @@
 
 *Derived from ADR-0002 and the epic:*
 
-Gate and panel freezes (AC-14, AC-15) are the next milestone.
+Gate and panel freezes (AC-14, AC-15) are hint-letters/005.
 
 ---
 
@@ -78,4 +78,4 @@ Gate and panel freezes (AC-14, AC-15) are the next milestone.
 ## Dependencies
 
 - Depends on: `production/epics/hint-letters/story-002-life-drift-outcomes.md`
-- Unlocks: None
+- Unlocks: `production/epics/hint-letters/story-005-parade-dim-reduce-motion.md`

@@ -27,7 +27,7 @@
 - Required: every runner calls only the core's public API; hand-written cases from the GDD; never edit a merged `cases.json` (ADR-0004 D4–D6)
 - Required: ppi from the bundled model table (iPad) or `CGDisplayScreenSize` (Mac); unknown → the class's highest ppi (ADR-0006 D7)
 
-**Contracts**: keyboard-row-v1 (`not-started: story:keyboard-row`); TASK-141's keyboard-row-v2 supersedes it (K-49 cases), and this story's runner targets v2 once it is registered
+**Contracts**: keyboard-row-v2 (TASK-141; supersedes v1 with the K-49 cases): this story adds the runner file, reporting unfinished cases as NOT ASSESSED, unregistered; the row flips to `runner:` in keyboard-row/007
 
 ---
 
@@ -46,7 +46,7 @@
 
 *Derived from ADR-0004 and the epic:*
 
-TASK-135 (K-49) is **merged at 5647a15f**; the ACs here are the merged GDD's (identical to 180228bf, checked). TASK-141 cuts **keyboard-row-v2** to supersede v1 with the K-49 cases.
+TASK-135 (K-49) is **merged at 5647a15f**; the ACs here are the merged GDD's (identical to 180228bf, checked).
 
 ---
 
@@ -62,7 +62,6 @@ TASK-135 (K-49) is **merged at 5647a15f**; the ACs here are the merged GDD's (id
 
 - `apple/KidCore/Sources/KidCore/KeyboardRow.swift`
 - `apple/KidCore/Tests/KidCoreTests/KeyboardRowTests.swift`
-- `apple/KidCore/Tests/ContractTests/KeyboardRowRunner.swift`
 
 ---
 

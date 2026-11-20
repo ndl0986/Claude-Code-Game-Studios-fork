@@ -27,7 +27,7 @@
 - Required: every runner calls only the core's public API; hand-written cases from the GDD; never edit a merged `cases.json` (ADR-0004 D4–D6)
 - Forbidden: never hard-code tuning values; timing and knobs are bundled data (ADR-0001 D6)
 
-**Contracts**: press-queue-v1 (`not-started: story:press-queue` → `runner:` with story 001)
+**Contracts**: press-queue-v1 (this story adds the runner file, reporting the cases not yet passing as NOT ASSESSED — it is not registered while the row is `not-started`, since ContractKit fails a registered runner on a not-started row; the row flips to `runner:` in press-queue/005)
 
 ---
 
@@ -61,7 +61,6 @@ The whole state machine is KidCore (Module Ownership). Tests use an injected clo
 *Planned; `/dev-story` replaces this list. Roots are ADR-0001 D3 / ADR-0002 D1 (`apple/`); `engine.name` is unset by design.*
 
 - `apple/KidCore/Sources/KidCore/PressQueue.swift`
-- `apple/KidCore/Tests/ContractTests/PressQueueRunner.swift`
 - `apple/KidCore/Tests/KidCoreTests/PressQueueTests.swift`
 
 ---

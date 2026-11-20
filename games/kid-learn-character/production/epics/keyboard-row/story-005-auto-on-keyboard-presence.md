@@ -1,7 +1,7 @@
 # Story 005: Automatic row: shown without a hardware keyboard, hidden with one (K-49)
 
 > **Epic**: On-screen Keyboard Row (`production/epics/keyboard-row/EPIC.md`)
-> **Status**: Blocked — BLOCKED: depends on input/006 (keyboard presence), which is Blocked on ADR-0007 (Proposed; device row P-15)
+> **Status**: Ready
 > **Layer**: Feature
 > **Type**: Logic
 > **Estimate**: M
@@ -42,7 +42,7 @@
 
 *Derived from ADR-0004 and the epic:*
 
-TASK-135 (K-49) is **merged at 5647a15f**; the ACs here are the merged GDD's (identical to 180228bf, checked). TASK-141 cuts **keyboard-row-v2** to supersede v1 with the K-49 cases. The `keyboardPresent` signal is input/006.
+TASK-135 (K-49) is **merged at 5647a15f**; the ACs here are the merged GDD's (identical to 180228bf, checked). Pure logic with `keyboardPresent` **injected**, so it does not wait for input/006's platform read (which stays Blocked on ADR-0007); the device check is story 006.
 
 ---
 
@@ -78,5 +78,5 @@ TASK-135 (K-49) is **merged at 5647a15f**; the ACs here are the merged GDD's (id
 
 ## Dependencies
 
-- Depends on: `production/epics/keyboard-row/story-004-words-draw-fallback.md`, `production/epics/input/story-006-keyboard-presence-signal.md`
-- Unlocks: `production/epics/keyboard-row/story-006-row-look-device.md`
+- Depends on: `production/epics/keyboard-row/story-004-words-draw-fallback.md`
+- Unlocks: `production/epics/keyboard-row/story-006-row-look-device.md`, `production/epics/keyboard-row/story-007-freeze-panel-logic.md`

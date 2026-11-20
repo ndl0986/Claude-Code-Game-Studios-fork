@@ -1,6 +1,6 @@
 # On-screen Keyboard Row
 
-> **Status**: Approved (independent read by game-dev-android, merged 2026-11-18)
+> **Status**: Approved (independent read by game-dev-android, merged 2026-11-18); **TASK-135 revision in review** (K-49: the row shows by itself without a hardware keyboard)
 > **Author**: game-art-content for Luan (TASK-060); plan reviewed by game-dev-android
 > **Last Updated**: 2026-11-18
 > **Last Verified**: 2026-11-18
@@ -163,37 +163,106 @@ who wants to pick their own letters, and nothing ever moves under the child's fi
   kept, since they are fades, not motion. A mid-session toggle applies on the next frame (K-29: ambient UI).
 - **Mac child lock** (Child Lock-in): unchanged; a mouse click on a key is a press (Input R7).
 
-**R8. Turning it on and off** (Settings Store `keyboardRow`, default off; Parent Gate panel row).
-- **On:** the row fades in over `row_fade_s` once the panel closes (it is set under the dim). Its hit rects are live
+**R8. When the row shows** *(decided, Luan K-49, 2026-11-20; replaces "default off, only the panel turns it on";
+TASK-135)*.
+- **The rule, in Play** (never on the Title, R7):
+  ```
+  shown = keyboardRow  OR  NOT keyboardPresent
+  ```
+  - **`keyboardPresent`** is whether a hardware keyboard is attached, from the platform (Interface below). On the Mac
+    it is always true (R9).
+  - **`keyboardRow`** is the stored setting (Settings Store), and **its stored value and default do not change**: a
+    boolean, default `false`. Only its meaning changes. **`false` = automatic:** the row shows exactly when no hardware
+    keyboard is attached. **`true` = always:** the panel's switch (next milestone) forces the row on even with a
+    keyboard. Visibility is derived at run time; nothing new is stored, and the presence is never saved.
+  - **There is no forced off:** a boolean can't say "never, even without a keyboard". Whether the panel needs one is
+    OQ-1, for the panel milestone.
+  - **Demo 1** has no panel (K-48), so `keyboardRow` is always `false` there: the row shows on an iPad with no
+    keyboard, and never on the Mac.
+- **Presence changes settle first:** a connect or disconnect changes `shown` only once the presence has held for
+  `row_presence_settle_s` (0.5 s) of uptime, so a keyboard cover that flaps or a Bluetooth reconnect doesn't make the
+  row blink. The settled value is the last one reported.
+  - *(keyboard-row-v2 readings, TASK-141.)* The settle is **inclusive**: a change that has held exactly
+    `row_presence_settle_s` applies on that tick. A repeated report of the **same** value doesn't restart the hold;
+    only a report of the other value does.
+  - **A pending, unsettled change** is dropped at the moments when nothing is being shown or the row is about to be
+    drawn afresh: **going to the background** (the return re-reads presence, below), a **Title → Play entry**, and
+    the **panel's close or the gate's `resume()`**. At each of these, the **latest reported** presence applies at once,
+    with no settle, because there is no visible row to blink.
+  - **The settle is never shorter than a fade:** `row_presence_settle_s ≥ row_fade_s`, a knob floor. So a reversal
+    reported during a fade settles only after that fade has ended. If one still meets a fade (a setting change and a
+    presence change together), the new fade **starts from the row's current alpha**, never with a jump. *(TASK-135,
+    game-qc-android's (a) and (b).)*
+- **When `shown` changes:**
+  - **In Play, touchable** (Showing, Due, Changing, Fading in or out): it takes effect at once by the On and Off rules
+    below.
+  - **Under the panel or frozen by the gate:** it takes effect when the overlay closes (at the panel's close, or at
+    `resume()`), as a setting change does.
+  - **In the background:** the platform reports the current presence on return, and the settle doesn't apply to it.
+    If the row was shown before and still is, the return follows R7 (the same word). If it is newly shown, it follows
+    the On rule at the return (a new word). If it is no longer shown, it is simply Hidden, with no fade-out since
+    nothing was drawn, and its word becomes `last`.
+  - **On the Title:** nothing shows; Play entry uses the current `shown`.
+- **On** (becoming shown): the row fades in over `row_fade_s` once the panel closes (it is set under the dim). Its hit rects are live
   from the start of the fade-in, and a word is drawn **at that moment, the panel's close** (not when the switch
   flips; KR-Q2), with `last` = the last word shown this run. The play clock runs under the panel (only the gate
   challenge stops it, Reveal Stage R8), but nothing about the row happens there while it is untouchable. The ground lift applies from the next reveal
   (Reveal Stage R10), so nothing on stage jumps mid-reveal.
-- **Off:** the hit rects go at once, and the row fades out over `row_fade_s`; the lift is removed from the next
-  reveal. The pressed set is dropped, and the word is kept only as `last` for the next draw (KR-Q10).
+- **Off** (becoming hidden): the hit rects go at once, and the row fades out over `row_fade_s`; the lift is removed
+  from the next reveal. The pressed set is dropped, and the word is kept only as `last` for the next draw (KR-Q10).
+  **During a word change** (Changing), `last` is the word **drawn at the change's start** (the newest drawn word,
+  even if its keys hadn't faded in yet), so the next draw can't repeat a word the child just saw arriving
+  *(KR2-Q1, keyboard-row-v2, TASK-141)*.
+- **Either way, nothing on stage jumps:** a reveal or a parade in progress keeps its ground line and lane until the
+  next reveal (Reveal Stage R10). A touch that went down on a key before the hit rects were removed has already made
+  its press (Input R7: a press is on touch-down).
 - The current word and its pressed letters are **in memory only** (Settings Store R2: nothing else is stored).
 
-**R9. Mac and hardware keyboards** (K-29). The row shows **whenever the grown-up turned it on**, even with a hardware
-keyboard (every Mac, an iPad with a keyboard). Detecting a keyboard is unreliable, and the choice is the grown-up's.
+**R9. Mac and hardware keyboards** *(K-29; revised for K-49, TASK-135)*.
+- **iPadOS:** the row hides while a hardware keyboard is attached and shows while none is (R8), unless `keyboardRow`
+  is `true`, in which case it shows either way (as before, K-29). The presence comes from the Game Controller
+  framework's keyboard (Interface).
+- **macOS: a keyboard is always present** (`keyboardPresent` = true, not detected). Every Mac the app runs on is
+  operated with a keyboard (a laptop's built-in one, or the one a desktop needs to log in), and the child presses keys
+  on it. So **the row never shows on the Mac unless `keyboardRow` is `true`** (the panel, next milestone). In Demo 1 it
+  never shows on the Mac. Detecting a detachable keyboard on the Mac would add a signal no child needs.
+- *Was (K-29):* "Detecting a keyboard is unreliable, and the choice is the grown-up's." K-49 makes the default
+  automatic on iPadOS, where the signal is reliable enough with the settle time; the grown-up's choice is still the
+  forced on.
 
 ### States and Transitions
 
 | State | Entered when | Touchable | Left when |
 |---|---|---|---|
-| **Hidden** | `keyboardRow` off; the Title; background | no | turned on in Play, or a Title → Play entry → Fading in with a **new** word; a return from a short background (App Shell's window, K-22) → Fading in with the **same** word and its pressed letters |
-| **Fading in** | Play entry or turned on (a new word is drawn); return from a short background (the word is kept) | yes | 0.3 s → Showing (or Due, if the kept word was Due) |
-| **Showing** | — | yes | every letter pressed → Due; off → Fading out; Title or background → Hidden (background **keeps** the word and its pressed letters) |
-| **Due** | the word's letters have all been pressed | yes | a quiet moment → Changing; off → Fading out |
+| **Hidden** | not `shown` (R8); the Title; background | no | `shown` in Play, or a Title → Play entry while `shown` → Fading in with a **new** word; a return from a short background (App Shell's window, K-22) while still `shown` → Fading in with the **same** word and its pressed letters |
+| **Fading in** | Play entry while `shown`, or becoming `shown` (a new word is drawn); return from a short background (the word is kept) | yes | 0.3 s → Showing (or Due, if the kept word was Due); no longer `shown` → Fading out |
+| **Showing** | — | yes | every letter pressed → Due; no longer `shown` → Fading out; Title or background → Hidden (background **keeps** the word and its pressed letters) |
+| **Due** | the word's letters have all been pressed | yes | a quiet moment → Changing; no longer `shown` → Fading out |
 | **Changing** | quiet moment | the old keys until their fade-out ends, then the new ones | 0.6 s → Showing (new word) |
-| **Fading out** | turned off | no | 0.3 s → Hidden |
+| **Fading out** | no longer `shown` (R8) | no | 0.3 s → Hidden; `shown` again → Fading in with a new word |
 | **Frozen** | gate challenge (play clock stopped) | no (Input sends to the challenge) | `resume()` → the state it froze in; correct answer → Under the panel |
-| **Under the panel** | panel open | no | panel closed → the state it was in, or Fading in / out if the switch changed |
+| **Under the panel** | panel open | no | panel closed → the state it was in, or Fading in / out if `shown` changed (the switch or the keyboard) |
+
+### Interface needed: keyboard presence (TASK-135, K-49)
+
+- **`keyboardPresent: Bool`**, with a change notification, delivered to the row by **the platform adapter**, the Apple
+  adapter that also delivers key events to Input & Key Filter. Input & Key Filter's KidCore filter neither reads nor
+  changes it (its key rules R2–R6 are untouched), so **input-filter's contract is unaffected**. The Input GDD should
+  list the adapter's new output in its Interactions (a follow-up, not edited here).
+  - **iPadOS:** `GCKeyboard.coalesced != nil` read before the first frame **and again on every return to the
+    foreground** (R8's background rule relies on that read), then `GCKeyboardDidConnect` and
+    `GCKeyboardDidDisconnect` notifications (Game Controller framework). A keyboard is "present" while any is
+    connected.
+  - **macOS:** constant `true` (R9).
+  - **Android** (later): `Configuration.keyboard == KEYBOARD_QWERTY` and its changes: NOT ASSESSED.
+- The row owns the settle (R8) and the rule; the adapter only reports.
 
 ### Interactions with Other Systems
 
 | System | Direction | What passes |
 |---|---|---|
-| Settings Store | in | `keyboardRow` and its change notification |
+| Settings Store | in | `keyboardRow` (`false` = automatic, `true` = always; K-49) and its change notification |
+| Platform adapter | in | `keyboardPresent` and its changes (Interface above; TASK-135) |
 | Input & Key Filter | out / in | out: the key hit rects (layer 2); in: row presses become press events, `source = keyboardRow`, `origin` = key centre (R7, R8) |
 | Press Queue | in | Empty / `restingSince` for the quiet moment (R10, R2c); outcomes through the Play router |
 | Reveal Stage | in / out | in: `row_lift` and the layout (R10), the play clock and freeze (R8), press notifications (R2); out: the row band and key rects next to its boxes |
@@ -275,6 +344,14 @@ unless it lists a separate keyboard-row-v1): pool of 4, `last` = 1, injected `u`
 | **The panel opens while Due** | Nothing changes under the dim; after close, the next quiet moment changes it. |
 | **The gate challenge opens mid-change** | The fades freeze; on resume they continue (play clock). |
 | **Turned on while a reveal is mid-morph** | The row fades in after the panel closes; the ground lifts from the next reveal. |
+| **iPad: a keyboard is connected mid-play** *(K-49)* | After 0.5 s settled, the hit rects go and the row fades out; the word is kept as `last`; the ground drops from the next reveal (R8). |
+| **iPad: the keyboard is disconnected mid-play** | After 0.5 s settled, a new word is drawn (not `last`) and the row fades in; the ground lifts from the next reveal. |
+| **A keyboard is connected during a reveal or a parade** | The row fades out now; the reveal keeps its ground line and the walk its lane until the next reveal (R8). |
+| **A keyboard cover flaps (connect, disconnect, connect within 0.5 s)** | Nothing happens until the presence holds 0.5 s; the row never blinks (R8). |
+| **A keyboard is connected or disconnected under the panel or during the gate challenge** | Applied at the close or the resume (R8). |
+| **A keyboard is attached while the app is in the background** | On return the row stays hidden (or hides at once, with no fade, since nothing was drawn) and its word is dropped to `last` (R8). |
+| **The Mac** | `keyboardPresent` is always true: the row never shows unless `keyboardRow` is `true` (R9). Demo 1: never. |
+| **A keyboard the platform doesn't report** (rare) | The row shows next to it, which is harmless: it did so before K-49 whenever it was on (R9). |
 | **Turned off while Due** | The row fades out; on the next turn-on a new word is drawn. |
 | **A v1 theme or a broken pool** | The fallback word (FOSSIL in Dinosaurs, else ABC), no changes; one debug line. |
 | **Theme switched in the panel** | The next word is drawn from the new theme's pool when the panel closes. |
@@ -285,7 +362,9 @@ unless it lists a separate keyboard-row-v1): pool of 4, `last` = 1, injected `u`
 ## Dependencies
 
 **Upstream (the row reads):**
-- **Settings Store** (`design/gdd/settings-store.md`): `keyboardRow`.
+- **Settings Store** (`design/gdd/settings-store.md`): `keyboardRow` (meaning revised for K-49, TASK-135).
+- **The platform adapter** (Apple; with Input & Key Filter's adapter): `keyboardPresent` (Interface; TASK-135).
+  **Follow-up:** Input & Key Filter lists it in its Interactions.
 - **Input & Key Filter** (`design/gdd/input-key-filter.md`): R7 layer 2, R8 press event and origin.
 - **Press Queue** (`design/gdd/press-queue.md`): Empty / `restingSince` (R10), outcomes (R4), sources equal (R12).
 - **Reveal Stage** (`design/gdd/reveal-stage.md`): `row_lift`, the layout and boxes (R10), the play clock and freeze
@@ -314,6 +393,7 @@ unless it lists a separate keyboard-row-v1): pool of 4, `last` = 1, injected `u`
 | `key_flash_s` | 0.35 s | 0.2–0.6 | one-shot | light length |
 | `press_scale` | 1.08 | 1–1.12 (1 under Reduce Motion) | proposed | press bounce |
 | `row_fade_s` / `word_fade_s` | 0.3 / 0.3 s | 0.2–0.6 | K-29 (word), proposed (row) | fades |
+| `row_presence_settle_s` | 0.5 s (uptime) | `row_fade_s` (0.3)–1.5 | TASK-135 | how long a keyboard connect or disconnect must hold before the row follows it; longer is steadier, shorter answers sooner |
 | letter size | 80 u | 70–90 | art bible §7 (hint size) | legibility |
 
 `row_lift` (110) is the Reveal Stage's knob; the pool is Key Table data.
@@ -343,7 +423,9 @@ Grown-up Panel), stored as `keyboardRow`.
 Logic criteria use an injected play clock, `RandomSource`, settings and press notifications; screenshots are
 retained in `production/qa/evidence/`.
 
-1. **AC-1 Off by default.** With `keyboardRow` false, no key is drawn and Input's layer 2 has no rects.
+1. **AC-1 Automatic by default** *(K-49; was "Off by default")*. With `keyboardRow` false: **with** a keyboard
+   present, no key is drawn and Input's layer 2 has no rects; **with none**, Play entry fades the row in with a new
+   word. On the Mac (`keyboardPresent` constant true) it is never drawn.
 2. **AC-2 Layout.** For REX, NEST and an 8-letter test word, the key centres and hit spans equal F1's table; every hit
    rect lies inside x 64 … 1216 and y 582 … 716.
 3. **AC-3 Size (F2).** The hit rect is 144 × 134 units; on the smallest Mac window (stage_to_px 1.5, 254 ppi) it is
@@ -372,7 +454,21 @@ retained in `production/qa/evidence/`.
     showing and R pressed, a short background and return shows REX again with R still counted; a Title entry
     draws a new word.
 15. **AC-15 On and off.** Turning it on in the panel shows the row with a 0.3 s fade after close and lifts the ground
-    from the next reveal; turning it off removes the hit rects at once.
+    from the next reveal. Turning it off **with a keyboard present** removes the hit rects at once and fades the row
+    out; **with none**, `shown` is unchanged (off means automatic, R8) and the row stays as it is.
+20. **AC-20 Keyboard connected (K-49).** In Play with the row Showing and `keyboardRow` false, `keyboardPresent`
+    turns true at t: the row is unchanged at t + 0.49, its hit rects are gone at t + 0.5 and it is Hidden at t + 0.8;
+    the next draw uses the old word as `last`. A reveal in progress keeps its ground line.
+21. **AC-21 Keyboard disconnected.** With the row Hidden, `keyboardPresent` turns false at t: at t + 0.5 a word is
+    drawn and the row starts Fading in (touchable); it is Showing at t + 0.8.
+22. **AC-22 Flapping.** true at t, false at t + 0.2, true at t + 0.4: nothing changes until t + 0.9, when the row
+    hides (the last value, held 0.5 s).
+23. **AC-23 Under the panel and the gate.** A disconnect while the panel is open (or during the gate challenge) shows
+    nothing under the dim; at the close (or `resume()`) the row fades in with a newly drawn word.
+24. **AC-24 Forced on.** With `keyboardRow` true, connecting and disconnecting a keyboard changes nothing: the row
+    stays Showing.
+25. **AC-25 Device (iPad, screenshots).** On a real iPad with no keyboard, Play shows the row; attaching a hardware
+    keyboard hides it within about a second; detaching shows it again. On the Mac it never shows (Demo 1).
 16. **AC-16 Fallback.** With a v1 test theme (no `rowWords`), the row shows FOSSIL (or ABC when no name fits), never
     changes, and logs one debug line.
 17. **AC-17 Band.** The row band (y ≥ 582) and key rects are published while the row is on, and withdrawn when off.
@@ -382,7 +478,21 @@ retained in `production/qa/evidence/`.
 
 ## Open Questions
 
-None for Luan; K-29 answered them. Follow-ups (queued by the leader):
+| # | Question | Owner | Recommendation |
+|---|---|---|---|
+| OQ-1 *(TASK-135)* | The panel (next milestone) has only "always" and "automatic" (`keyboardRow` true / false). Should a grown-up be able to force the row **off** even with no keyboard? That needs a third stored value (a settings record v3). | Luan, at the panel milestone | **No:** a grown-up who doesn't want the row can attach a keyboard. Label the panel switch "Keyboard row: Always / Automatic" so "off" isn't misread. |
+
+Follow-ups (queued by the leader):
+- **Input & Key Filter:** list the platform adapter's `keyboardPresent` output in its Interactions (TASK-135; its
+  KidCore rules don't change).
+- **keyboard-row contract** (TASK-135; ADR-0004 D6): **keyboard-row-v1 is superseded by a keyboard-row-v2**, cut by
+  game-qc-android after this merges. v1's cases use `keyboardRow` with the old meaning (false = hidden), and its
+  sources.lock pins Detailed Design, Edge Cases and Acceptance Criteria, all three of which changed here. v2 adds
+  `keyboardPresent` to `given` and a `keyboard {present}` event with the 0.5 s settle, and covers AC-1 and AC-20 to
+  AC-24; v1's other cases carry over with a keyboard present. When v2 lands, v1 is marked `superseded-by`. The
+  review-log entry carries `fixture: keyboard-row-v2`.
+- **settings-record-v2 stands:** the stored type, default and decoding of `keyboardRow` are unchanged (only its meaning
+  is, in the Settings Store's text).
 - **Hint Letters:** the row band in F4; the parade-lane note.
 - **Reveal Stage:** list the row band next to its boxes.
 - **TASK-059:** the row fixture set.

@@ -79,4 +79,4 @@ KidCore holds the pure rules with injected clocks (D3) and seeded streams (D4); 
 ## Dependencies
 
 - Depends on: `production/epics/hint-letters/story-001-spawn-and-exclusions.md`
-- Unlocks: `production/epics/hint-letters/story-004-pulse-background-title.md`, `production/epics/hint-letters/story-005-parade-dim-reduce-motion.md`
+- Unlocks: `production/epics/press-queue/story-006-hint-on-overflow.md`, `production/epics/hint-letters/story-004-pulse-background-title.md`, `production/epics/hint-letters/story-005-parade-dim-reduce-motion.md`

@@ -26,7 +26,12 @@ is replaced by the shared drawing rules (S-1 to S-9) and each item's outline tra
 - **S-2 Structure** (art bible §8; ADR-0003 D4; K-37).
   - **Parts:** every figure has a `root` part (`data-pivot="320 410"`); other parts nest in it. A part a family's idle
     moves carries its `data-pivot` (artboard units, at the joint). Child parts sit inside their parent's group (`head`
-    inside `neck`, `jaw` inside `head`), **after** the parent's own layer groups.
+    inside `neck`, `jaw` inside `head`). Parts are drawn in **document order** (Cast Rendering R2), so a child that
+    sits **behind** its parent (a tail, a neck joining the torso, a far wing) comes **before** the parent's layer
+    groups, and one in **front** (a head on its neck, a near wing) comes after them, as in the TASK-077 art.
+    *(Corrected in TASK-136: it said every child comes after.)*
+  - **Part names** match `[a-z]+(_[a-z]+)*` (ADR-0003 D4): **no digits**. The babies are `baby_one` … `baby_nine`.
+    *(Corrected in TASK-136: the spec had `baby_1`, which the bake would reject.)*
   - **Layers:** inside each part, three groups in this order, named after the part: `<part>_body`, `<part>_outline`,
     `<part>_detail`, all present even when empty. Part names are lowercase words joined by `_`, never `body`,
     `outline` or `detail`.
@@ -134,7 +139,8 @@ measure the **TASK-077 test art**. So the real set must stay inside what P-2 mea
 
 **One shared, simpler drawing** (art bible §5: round body, big head; the count is what reads), placed n times.
 - **Shape** at scale 1: about **90 units tall and 84 wide**. The head and body are one rounded path, the head about
-  half the height. There are two stubby feet with cream toes, a short tail stub on the left, and it faces right.
+  half the height. There are two stubby feet in the body colour (no cream toes at this size, so the baby stays at 3
+  body shapes; TASK-136), a short tail stub on the left, and it faces right.
 - **Shapes per baby:** `body` holds 3 shapes: the body path (pastel), the eye white and the pupil. `detail` holds 2,
   the eye highlight and a small closed smile (Ink, 4 units). The blush is dropped at this size (6 px rule). `outline`
   holds 1 group: Ink, 6 units, 0.8.
@@ -143,7 +149,7 @@ measure the **TASK-077 test art**. So the real set must stay inside what P-2 mea
   8 `#e48a5a`, 9 `#a5d46a`. The front row takes 1–5 and the back row 6–9, so neighbours always differ.
 - **Contrast:** pastels sit above the body band by design (art bible §4 names them apart). The 80% outline carries the
   greyscale stage test.
-- **Part per baby:** `baby_1` … `baby_n` inside `root`, each with `data-pivot` at its feet: x from the layout formula,
+- **Part per baby:** `baby_one` … `baby_n` inside `root`, each with `data-pivot` at its feet: x from the layout formula,
   y 410 (front row) or 292 (back row). `root` holds no shapes.
 - **The empty nest (0)** is N's nest without its `egg` part (Key Table numbers: "the same art as N, shown empty"), as
   its own file.
@@ -162,7 +168,7 @@ measure the **TASK-077 test art**. So the real set must stay inside what P-2 mea
 | plated | S plates · K spikes · W low-plates | root, tail, head (prepared) | **none yet: OQ-1** | tall rounded plates vs spikes vs long low plates |
 | ornithomimid | G gallimimus · O oviraptor | root, tail, head (prepared) | **none yet: OQ-1** | G's long neck and legs vs O's tall head crest |
 | object | F fossil · N nest · 0 empty nest | F, 0: root · N: root, egg | N: egg wobble with a peek | F slab with a bone; N bowl with an egg; 0 the bowl alone |
-| babies | 1–9 | baby_1 … baby_n | per-baby bob, 0.95 Hz | the count |
+| babies | 1–9 | baby_one … baby_nine | per-baby bob, 0.95 Hz | the count |
 
 **Prepared parts:** families with no idle in Cast Rendering's data yet still get `tail` and `head` as parts with
 pivots, so an idle can be added in data later without redrawing (OQ-1). They cost one outline node each and are
@@ -271,9 +277,9 @@ teeth nubs, drawn as one path of non-overlapping subpaths (TASK-133 render read)
 | Family / variant | babies / 9: the one shared **baby** drawing (Numbers master, below) placed 9× |
 | Layout | front row 5 at x = 320 + 104·(i − 2), feet on y 410, scale 1.05; back row 4 at x = 320 + 104·(j − 1.5), feet on y 292, scale 0.95, drawn first (as played) |
 | Colours | baby `i` takes pastel `i` in the fixed order (Numbers master): `#7fcf8f`, `#f2a37a`, `#8fb4ea`, `#d8b87a`, `#c39af0`, `#f29ab0`, `#6fc9c0`, `#e48a5a`, `#a5d46a` |
-| Parts (`data-pivot`) | `root` (320 410) holding `baby_1` · `baby_2` · `baby_3` · `baby_4` · `baby_5` · `baby_6` · `baby_7` · `baby_8` · `baby_9`, each with its pivot at that baby's feet |
+| Parts (`data-pivot`) | `root` (320 410) holding `baby_one` · `baby_two` · `baby_three` · `baby_four` · `baby_five` · `baby_six` · `baby_seven` · `baby_eight` · `baby_nine`, each with its pivot at that baby's feet |
 | Idle | each baby bobs on its own phase (Cast Rendering R7: `abs(sin(3t + ph))`, 0.95 Hz) |
-| Layer ids | `root_*` (empty but present), and `baby_<i>_body`, `baby_<i>_outline`, `baby_<i>_detail` |
+| Layer ids | `root_*` (empty but present), and `baby_<word>_body`, `baby_<word>_outline`, `baby_<word>_detail` |
 | Node plan (A-candidate) | 9 baby parts (root holds no shapes), per baby 3 body + 2 detail (eye highlight, smile) + 1 outline → stage 54, parade 36 **Over the single-figure caps: see Render limits, R-3.** |
 
 ### ASSET-007 — B Brachiosaurus (`dino_b_brachiosaurus_01`) · batch 2
@@ -614,9 +620,9 @@ teeth nubs, drawn as one path of non-overlapping subpaths (TASK-133 render read)
 | Family / variant | babies / 1: the one shared **baby** drawing (Numbers master, below) placed 1× |
 | Layout | front row 1 at x = 320 + 104·(i − 0), feet on y 410, scale 1.05 (as played) |
 | Colours | baby `i` takes pastel `i` in the fixed order (Numbers master): `#7fcf8f` |
-| Parts (`data-pivot`) | `root` (320 410) holding `baby_1`, each with its pivot at that baby's feet |
+| Parts (`data-pivot`) | `root` (320 410) holding `baby_one`, each with its pivot at that baby's feet |
 | Idle | each baby bobs on its own phase (Cast Rendering R7: `abs(sin(3t + ph))`, 0.95 Hz) |
-| Layer ids | `root_*` (empty but present), and `baby_<i>_body`, `baby_<i>_outline`, `baby_<i>_detail` |
+| Layer ids | `root_*` (empty but present), and `baby_<word>_body`, `baby_<word>_outline`, `baby_<word>_detail` |
 | Node plan (A-candidate) | 1 baby parts (root holds no shapes), per baby 3 body + 2 detail (eye highlight, smile) + 1 outline → stage 6, parade 4 |
 
 ### ASSET-030 — 2 · two baby dinosaurs (`dino_2_babies_01`) · batch 6
@@ -628,9 +634,9 @@ teeth nubs, drawn as one path of non-overlapping subpaths (TASK-133 render read)
 | Family / variant | babies / 2: the one shared **baby** drawing (Numbers master, below) placed 2× |
 | Layout | front row 2 at x = 320 + 104·(i − 0.5), feet on y 410, scale 1.05 (as played) |
 | Colours | baby `i` takes pastel `i` in the fixed order (Numbers master): `#7fcf8f`, `#f2a37a` |
-| Parts (`data-pivot`) | `root` (320 410) holding `baby_1` · `baby_2`, each with its pivot at that baby's feet |
+| Parts (`data-pivot`) | `root` (320 410) holding `baby_one` · `baby_two`, each with its pivot at that baby's feet |
 | Idle | each baby bobs on its own phase (Cast Rendering R7: `abs(sin(3t + ph))`, 0.95 Hz) |
-| Layer ids | `root_*` (empty but present), and `baby_<i>_body`, `baby_<i>_outline`, `baby_<i>_detail` |
+| Layer ids | `root_*` (empty but present), and `baby_<word>_body`, `baby_<word>_outline`, `baby_<word>_detail` |
 | Node plan (A-candidate) | 2 baby parts (root holds no shapes), per baby 3 body + 2 detail (eye highlight, smile) + 1 outline → stage 12, parade 8 |
 
 ### ASSET-031 — 3 · three baby dinosaurs (`dino_3_babies_01`) · batch 6
@@ -642,9 +648,9 @@ teeth nubs, drawn as one path of non-overlapping subpaths (TASK-133 render read)
 | Family / variant | babies / 3: the one shared **baby** drawing (Numbers master, below) placed 3× |
 | Layout | front row 3 at x = 320 + 104·(i − 1), feet on y 410, scale 1.05 (as played) |
 | Colours | baby `i` takes pastel `i` in the fixed order (Numbers master): `#7fcf8f`, `#f2a37a`, `#8fb4ea` |
-| Parts (`data-pivot`) | `root` (320 410) holding `baby_1` · `baby_2` · `baby_3`, each with its pivot at that baby's feet |
+| Parts (`data-pivot`) | `root` (320 410) holding `baby_one` · `baby_two` · `baby_three`, each with its pivot at that baby's feet |
 | Idle | each baby bobs on its own phase (Cast Rendering R7: `abs(sin(3t + ph))`, 0.95 Hz) |
-| Layer ids | `root_*` (empty but present), and `baby_<i>_body`, `baby_<i>_outline`, `baby_<i>_detail` |
+| Layer ids | `root_*` (empty but present), and `baby_<word>_body`, `baby_<word>_outline`, `baby_<word>_detail` |
 | Node plan (A-candidate) | 3 baby parts (root holds no shapes), per baby 3 body + 2 detail (eye highlight, smile) + 1 outline → stage 18, parade 12 |
 
 ### ASSET-032 — 4 · four baby dinosaurs (`dino_4_babies_01`) · batch 6
@@ -656,9 +662,9 @@ teeth nubs, drawn as one path of non-overlapping subpaths (TASK-133 render read)
 | Family / variant | babies / 4: the one shared **baby** drawing (Numbers master, below) placed 4× |
 | Layout | front row 4 at x = 320 + 104·(i − 1.5), feet on y 410, scale 1.05 (as played) |
 | Colours | baby `i` takes pastel `i` in the fixed order (Numbers master): `#7fcf8f`, `#f2a37a`, `#8fb4ea`, `#d8b87a` |
-| Parts (`data-pivot`) | `root` (320 410) holding `baby_1` · `baby_2` · `baby_3` · `baby_4`, each with its pivot at that baby's feet |
+| Parts (`data-pivot`) | `root` (320 410) holding `baby_one` · `baby_two` · `baby_three` · `baby_four`, each with its pivot at that baby's feet |
 | Idle | each baby bobs on its own phase (Cast Rendering R7: `abs(sin(3t + ph))`, 0.95 Hz) |
-| Layer ids | `root_*` (empty but present), and `baby_<i>_body`, `baby_<i>_outline`, `baby_<i>_detail` |
+| Layer ids | `root_*` (empty but present), and `baby_<word>_body`, `baby_<word>_outline`, `baby_<word>_detail` |
 | Node plan (A-candidate) | 4 baby parts (root holds no shapes), per baby 3 body + 2 detail (eye highlight, smile) + 1 outline → stage 24, parade 16 **Over the single-figure caps: see Render limits, R-3.** |
 
 ### ASSET-033 — 5 · five baby dinosaurs (`dino_5_babies_01`) · batch 6
@@ -670,9 +676,9 @@ teeth nubs, drawn as one path of non-overlapping subpaths (TASK-133 render read)
 | Family / variant | babies / 5: the one shared **baby** drawing (Numbers master, below) placed 5× |
 | Layout | front row 5 at x = 320 + 104·(i − 2), feet on y 410, scale 1.05 (as played) |
 | Colours | baby `i` takes pastel `i` in the fixed order (Numbers master): `#7fcf8f`, `#f2a37a`, `#8fb4ea`, `#d8b87a`, `#c39af0` |
-| Parts (`data-pivot`) | `root` (320 410) holding `baby_1` · `baby_2` · `baby_3` · `baby_4` · `baby_5`, each with its pivot at that baby's feet |
+| Parts (`data-pivot`) | `root` (320 410) holding `baby_one` · `baby_two` · `baby_three` · `baby_four` · `baby_five`, each with its pivot at that baby's feet |
 | Idle | each baby bobs on its own phase (Cast Rendering R7: `abs(sin(3t + ph))`, 0.95 Hz) |
-| Layer ids | `root_*` (empty but present), and `baby_<i>_body`, `baby_<i>_outline`, `baby_<i>_detail` |
+| Layer ids | `root_*` (empty but present), and `baby_<word>_body`, `baby_<word>_outline`, `baby_<word>_detail` |
 | Node plan (A-candidate) | 5 baby parts (root holds no shapes), per baby 3 body + 2 detail (eye highlight, smile) + 1 outline → stage 30, parade 20 **Over the single-figure caps: see Render limits, R-3.** |
 
 ### ASSET-034 — 6 · six baby dinosaurs (`dino_6_babies_01`) · batch 6
@@ -684,9 +690,9 @@ teeth nubs, drawn as one path of non-overlapping subpaths (TASK-133 render read)
 | Family / variant | babies / 6: the one shared **baby** drawing (Numbers master, below) placed 6× |
 | Layout | front row 5 at x = 320 + 104·(i − 2), feet on y 410, scale 1.05; back row 1 at x = 320 + 104·(j − 0), feet on y 292, scale 0.95, drawn first (as played) |
 | Colours | baby `i` takes pastel `i` in the fixed order (Numbers master): `#7fcf8f`, `#f2a37a`, `#8fb4ea`, `#d8b87a`, `#c39af0`, `#f29ab0` |
-| Parts (`data-pivot`) | `root` (320 410) holding `baby_1` · `baby_2` · `baby_3` · `baby_4` · `baby_5` · `baby_6`, each with its pivot at that baby's feet |
+| Parts (`data-pivot`) | `root` (320 410) holding `baby_one` · `baby_two` · `baby_three` · `baby_four` · `baby_five` · `baby_six`, each with its pivot at that baby's feet |
 | Idle | each baby bobs on its own phase (Cast Rendering R7: `abs(sin(3t + ph))`, 0.95 Hz) |
-| Layer ids | `root_*` (empty but present), and `baby_<i>_body`, `baby_<i>_outline`, `baby_<i>_detail` |
+| Layer ids | `root_*` (empty but present), and `baby_<word>_body`, `baby_<word>_outline`, `baby_<word>_detail` |
 | Node plan (A-candidate) | 6 baby parts (root holds no shapes), per baby 3 body + 2 detail (eye highlight, smile) + 1 outline → stage 36, parade 24 **Over the single-figure caps: see Render limits, R-3.** |
 
 ### ASSET-035 — 7 · seven baby dinosaurs (`dino_7_babies_01`) · batch 6
@@ -698,9 +704,9 @@ teeth nubs, drawn as one path of non-overlapping subpaths (TASK-133 render read)
 | Family / variant | babies / 7: the one shared **baby** drawing (Numbers master, below) placed 7× |
 | Layout | front row 5 at x = 320 + 104·(i − 2), feet on y 410, scale 1.05; back row 2 at x = 320 + 104·(j − 0.5), feet on y 292, scale 0.95, drawn first (as played) |
 | Colours | baby `i` takes pastel `i` in the fixed order (Numbers master): `#7fcf8f`, `#f2a37a`, `#8fb4ea`, `#d8b87a`, `#c39af0`, `#f29ab0`, `#6fc9c0` |
-| Parts (`data-pivot`) | `root` (320 410) holding `baby_1` · `baby_2` · `baby_3` · `baby_4` · `baby_5` · `baby_6` · `baby_7`, each with its pivot at that baby's feet |
+| Parts (`data-pivot`) | `root` (320 410) holding `baby_one` · `baby_two` · `baby_three` · `baby_four` · `baby_five` · `baby_six` · `baby_seven`, each with its pivot at that baby's feet |
 | Idle | each baby bobs on its own phase (Cast Rendering R7: `abs(sin(3t + ph))`, 0.95 Hz) |
-| Layer ids | `root_*` (empty but present), and `baby_<i>_body`, `baby_<i>_outline`, `baby_<i>_detail` |
+| Layer ids | `root_*` (empty but present), and `baby_<word>_body`, `baby_<word>_outline`, `baby_<word>_detail` |
 | Node plan (A-candidate) | 7 baby parts (root holds no shapes), per baby 3 body + 2 detail (eye highlight, smile) + 1 outline → stage 42, parade 28 **Over the single-figure caps: see Render limits, R-3.** |
 
 ### ASSET-036 — 8 · eight baby dinosaurs (`dino_8_babies_01`) · batch 6
@@ -712,9 +718,9 @@ teeth nubs, drawn as one path of non-overlapping subpaths (TASK-133 render read)
 | Family / variant | babies / 8: the one shared **baby** drawing (Numbers master, below) placed 8× |
 | Layout | front row 5 at x = 320 + 104·(i − 2), feet on y 410, scale 1.05; back row 3 at x = 320 + 104·(j − 1), feet on y 292, scale 0.95, drawn first (as played) |
 | Colours | baby `i` takes pastel `i` in the fixed order (Numbers master): `#7fcf8f`, `#f2a37a`, `#8fb4ea`, `#d8b87a`, `#c39af0`, `#f29ab0`, `#6fc9c0`, `#e48a5a` |
-| Parts (`data-pivot`) | `root` (320 410) holding `baby_1` · `baby_2` · `baby_3` · `baby_4` · `baby_5` · `baby_6` · `baby_7` · `baby_8`, each with its pivot at that baby's feet |
+| Parts (`data-pivot`) | `root` (320 410) holding `baby_one` · `baby_two` · `baby_three` · `baby_four` · `baby_five` · `baby_six` · `baby_seven` · `baby_eight`, each with its pivot at that baby's feet |
 | Idle | each baby bobs on its own phase (Cast Rendering R7: `abs(sin(3t + ph))`, 0.95 Hz) |
-| Layer ids | `root_*` (empty but present), and `baby_<i>_body`, `baby_<i>_outline`, `baby_<i>_detail` |
+| Layer ids | `root_*` (empty but present), and `baby_<word>_body`, `baby_<word>_outline`, `baby_<word>_detail` |
 | Node plan (A-candidate) | 8 baby parts (root holds no shapes), per baby 3 body + 2 detail (eye highlight, smile) + 1 outline → stage 48, parade 32 **Over the single-figure caps: see Render limits, R-3.** |
 
 ## Open questions

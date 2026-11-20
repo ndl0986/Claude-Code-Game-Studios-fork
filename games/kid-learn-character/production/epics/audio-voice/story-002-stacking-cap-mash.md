@@ -79,4 +79,4 @@ Pure policy in the plan; TR-audio-003's "nothing decoded on a press" is the engi
 ## Dependencies
 
 - Depends on: `production/epics/audio-voice/story-001-event-schedule.md`
-- Unlocks: `production/epics/audio-voice/story-004-engine-adapter.md`
+- Unlocks: `production/epics/audio-voice/story-003-hold-and-fallbacks.md`, `production/epics/audio-voice/story-004-engine-adapter.md`

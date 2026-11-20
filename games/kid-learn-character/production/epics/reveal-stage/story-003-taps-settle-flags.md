@@ -26,6 +26,8 @@
 - Required: every KidCore type needing time or chance takes it injected from a D3 clock or D4 stream (ADR-0002 Impl.)
 - Required: Reduce Motion is read live and applied at the next reveal (ADR-0006 D6)
 
+**Contracts**: reveal-timing-v1 (`not-started: story:reveal-stage` → `runner:` with this story, the epic's last logic story)
+
 ---
 
 ## Acceptance Criteria
@@ -33,7 +35,7 @@
 *From GDD `design/gdd/reveal-stage.md`, scoped to this story (AC numbers are the GDD's):*
 
 - [ ] AC-9 Taps at 10.0, 10.5, 11.0: hop + E10 at 10.0 and 11.0, sparkle only at 10.5; a tap on the leaving creature or a walker sparkles only.
-- [ ] AC-11 Background mid-morph: drawn formed at rest, specks and halo gone, the queue cleared, the next press after return starts at once (the panel half is next milestone).
+- [ ] AC-11 / AC-10 (logic) Background or panel open mid-morph: formed at rest, specks and halo gone, the queue cleared, the next press after return starts at once; freeze at s 1.0 for 20 s then resume continues from 1.0 with the hold and cooldown unchanged, and freeze then a correct answer settles.
 - [ ] AC-14 Reduce Motion: no glyph-rise scale above 1, pop ≤ 1.0, the leaving creature does not move, reduced times for E6–E9.
 - [ ] AC-17 `haloOn` exactly for `letter_in < s ≤ glow`; `mashing` on a `queued` outcome, while non-empty, off 1 s after the last `ignored` with an empty queue; both false after a settle.
 
@@ -43,7 +45,7 @@
 
 *Derived from ADR-0002 and the epic:*
 
-The gate freeze (AC-10) is the next milestone.
+(Freeze/resume, panel and theme-switch **logic** is in Demo 1 so the contract runner passes every case; only their UI and device checks are next milestone — game-qc-android, TASK-140.) All reveal-timing-v1 cases pass here and its row flips to `runner:`.
 
 ---
 
@@ -58,6 +60,7 @@ The gate freeze (AC-10) is the next milestone.
 *Planned; `/dev-story` replaces this list. Roots are ADR-0001 D3 / ADR-0002 D1 (`apple/`); `engine.name` is unset by design.*
 
 - `apple/KidCore/Sources/KidCore/RevealStage.swift`
+- `apple/KidCore/Tests/ContractTests/RevealTimingRunner.swift`
 - `apple/KidCore/Tests/KidCoreTests/RevealStageTests.swift`
 
 ---
@@ -79,5 +82,5 @@ The gate freeze (AC-10) is the next milestone.
 
 ## Dependencies
 
-- Depends on: `production/epics/reveal-stage/story-001-start-reveal-timeline.md`
+- Depends on: `production/epics/reveal-stage/story-002-origins-callback-prefetch.md`
 - Unlocks: `production/epics/accessibility/story-001-reduce-motion-flag.md`

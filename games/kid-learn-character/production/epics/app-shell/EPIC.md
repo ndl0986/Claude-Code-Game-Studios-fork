@@ -62,7 +62,7 @@ Launch, the Title with its play button, Title → Play, background and the away 
 | 001 | [Launch order, the first frame's look, and the pending start](story-001-launch-order-first-frame.md) | Integration | Ready | ADR-0004, ADR-0005, ADR-0002 |
 | 002 | [Title starts, the first reveal, the away rule and cold launch](story-002-title-start-return.md) | Logic | Ready | ADR-0002, ADR-0004 |
 | 003 | [Windows on iPad and Mac, and the iPad status bar and home indicator](story-003-windows-and-overlays.md) | UI | Ready | ADR-0006 |
-| 004 | [Memory-warning shedding order](story-004-memory-warnings.md) | Logic | Ready | ADR-0002, ADR-0004 |
+| 004 | [Memory-warning shedding order, and the gate and panel states of the shell (logic)](story-004-memory-warnings.md) | Logic | Ready | ADR-0002, ADR-0004 |
 | 005 | [Launch times on the child's iPad and the Mac](story-005-launch-times-device.md) | Integration | Ready | ADR-0006 |
 
 ## Definition of Done

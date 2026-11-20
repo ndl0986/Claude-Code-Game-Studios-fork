@@ -27,7 +27,7 @@
 - Required: every runner calls only the core's public API; hand-written cases from the GDD; never edit a merged `cases.json` (ADR-0004 D4–D6)
 - Forbidden: never hard-code tuning values; timing and knobs are bundled data (ADR-0001 D6)
 
-**Contracts**: parade-v2 (`not-started: story:parade` → `runner:` with this story)
+**Contracts**: parade-v2 (this story adds the runner file, reporting the cases not yet passing as NOT ASSESSED — it is not registered while the row is `not-started`, since ContractKit fails a registered runner on a not-started row; the row flips to `runner:` in parade/008)
 
 ---
 
@@ -62,7 +62,6 @@ The system's numbers are hand-written contract cases from the GDD, run by a runn
 
 - `apple/KidCore/Sources/KidCore/Parade.swift`
 - `apple/KidCore/Tests/KidCoreTests/ParadeTests.swift`
-- `apple/KidCore/Tests/ContractTests/ParadeRunner.swift`
 
 ---
 

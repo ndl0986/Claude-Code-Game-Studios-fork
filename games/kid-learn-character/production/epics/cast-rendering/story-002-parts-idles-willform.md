@@ -43,7 +43,7 @@
 
 *Derived from ADR-0002 and the epic:*
 
-The draw list is KidCore's; the adapter (story 005) maps it to nodes.
+The draw list is KidCore's; the adapter (story 005) maps it to nodes. **Credited:** AC-4 (bake tool rejections) to content-pipeline/001.
 
 ---
 

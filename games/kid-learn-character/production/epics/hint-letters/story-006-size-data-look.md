@@ -84,4 +84,4 @@ Demo 1 has no moon, so the moon in AC-22's worst case is absent; the screenshot 
 ## Dependencies
 
 - Depends on: `production/epics/hint-letters/story-003-clearances-slots.md`, `production/epics/reveal-stage/story-004-stage-view-layers-fit.md`
-- Unlocks: `production/epics/accessibility/story-006-invert-touch-sound-colour.md`
+- Unlocks: `production/epics/press-queue/story-006-hint-on-overflow.md`, `production/epics/accessibility/story-006-invert-touch-sound-colour.md`

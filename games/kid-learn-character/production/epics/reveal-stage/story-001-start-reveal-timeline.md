@@ -27,7 +27,7 @@
 - Required: every runner calls only the core's public API; hand-written cases from the GDD; never edit a merged `cases.json` (ADR-0004 D4–D6)
 - Forbidden: never hard-code tuning values; timing and knobs are bundled data (ADR-0001 D6)
 
-**Contracts**: reveal-timing-v1 (`not-started: story:reveal-stage` → `runner:` with this story)
+**Contracts**: reveal-timing-v1 (this story adds the runner file, reporting the cases not yet passing as NOT ASSESSED — it is not registered while the row is `not-started`, since ContractKit fails a registered runner on a not-started row; the row flips to `runner:` in reveal-stage/003)
 
 ---
 
@@ -45,7 +45,7 @@
 
 *Derived from ADR-0004 and the epic:*
 
-Runs the reveal-timing-v1 cases, including Cast Rendering's F1/F2/F4/F5/F7.
+Starts the reveal-timing-v1 cases, including Cast Rendering's F1/F2/F4/F5/F7.
 
 ---
 
@@ -60,7 +60,6 @@ Runs the reveal-timing-v1 cases, including Cast Rendering's F1/F2/F4/F5/F7.
 *Planned; `/dev-story` replaces this list. Roots are ADR-0001 D3 / ADR-0002 D1 (`apple/`); `engine.name` is unset by design.*
 
 - `apple/KidCore/Sources/KidCore/RevealStage.swift`
-- `apple/KidCore/Tests/ContractTests/RevealTimingRunner.swift`
 - `apple/KidCore/Tests/KidCoreTests/RevealStageTests.swift`
 
 ---
@@ -83,4 +82,4 @@ Runs the reveal-timing-v1 cases, including Cast Rendering's F1/F2/F4/F5/F7.
 ## Dependencies
 
 - Depends on: `production/epics/press-queue/story-001-start-queue-ignore.md`, `production/epics/cast-rendering/story-001-cast-math.md`
-- Unlocks: `production/epics/reveal-stage/story-002-origins-callback-prefetch.md`, `production/epics/reveal-stage/story-003-taps-settle-flags.md`, `production/epics/reveal-stage/story-004-stage-view-layers-fit.md`, `production/epics/parade/story-001-batch-and-start.md`
+- Unlocks: `production/epics/reveal-stage/story-002-origins-callback-prefetch.md`, `production/epics/reveal-stage/story-004-stage-view-layers-fit.md`, `production/epics/parade/story-001-batch-and-start.md`

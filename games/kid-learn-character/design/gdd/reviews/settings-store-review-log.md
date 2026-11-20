@@ -65,3 +65,9 @@ Review mode: lean · Workflow: standard
 Change: none to the GDD. settings-record-v2 supersedes settings-record-v1 (K-40): v1's `F1-slider-release-7.5` contradicted R6a's no-op rule (stored 8, release 7.5 → 8 expected a write); v2 starts it at 5. v2 also adds the non-finite slider cases that F1 has stated since TASK-082. Cases: game-qc-android; review: game-dev-android.
 fixture: settings-record-v2 (supersedes settings-record-v1; TASK-091)
 Reviewed-Content-Hash: design/gdd/settings-store.md 7c7b51ce297ced5efcd22c21f5f012f4aef0f4f1
+
+## Update — 2026-11-20 — TASK-135 keyboard row shows without a keyboard (no re-review)
+Review mode: lean · Workflow: standard
+Change: K-49: keyboardRow keeps its type and default false; its meaning is now false = automatic (shown when no hardware keyboard is attached) and true = always (forced on); presence is read live, never stored; Stage step 4 and the default row updated. No schema bump; settings-record-v2 stands. Review: game-dev-ios and game-qc-android from the diff.
+fixture: none (settings-record-v2: keyboardRow type, default and decoding unchanged; only the meaning changed)
+Reviewed-Content-Hash: design/gdd/settings-store.md b8739d84d376b746c516c1f5733c6d2632e58a37

@@ -43,7 +43,7 @@
 
 *Derived from ADR-0004 and the epic:*
 
-Panel and gate cases (AC-9, AC-19, AC-21, AC-25, AC-33) and the theme switch (AC-11, AC-26 switch half) are the next milestone.
+Panel, gate and theme-switch logic is parade/008.
 
 ---
 
@@ -80,4 +80,4 @@ Panel and gate cases (AC-9, AC-19, AC-21, AC-25, AC-33) and the theme switch (AC
 ## Dependencies
 
 - Depends on: `production/epics/parade/story-002-walk-positions-clock.md`
-- Unlocks: None
+- Unlocks: `production/epics/parade/story-008-freeze-panel-theme.md`

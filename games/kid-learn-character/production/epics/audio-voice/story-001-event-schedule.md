@@ -27,7 +27,7 @@
 - Required: one per-frame entry `tick(now:)` on the uptime clock; keep D7's call orders (ADR-0002 D6, D7)
 - Forbidden: never hard-code tuning values; timing and knobs are bundled data (ADR-0001 D6)
 
-**Contracts**: audio-plan-v1 (`not-started: story:audio-voice` → `runner:` with this story)
+**Contracts**: audio-plan-v1 (this story adds the runner file, reporting unfinished cases as NOT ASSESSED, unregistered; the row flips to `runner:` in audio-voice/003, the epic's last logic story)
 
 ---
 
@@ -60,7 +60,6 @@ The plan is KidCore (Module Ownership: E1–E12 schedule) over a fake player lay
 *Planned; `/dev-story` replaces this list. Roots are ADR-0001 D3 / ADR-0002 D1 (`apple/`); `engine.name` is unset by design.*
 
 - `apple/KidCore/Sources/KidCore/AudioPlan.swift`
-- `apple/KidCore/Tests/ContractTests/AudioPlanRunner.swift`
 - `apple/KidCore/Tests/KidCoreTests/AudioPlanTests.swift`
 
 ---
@@ -83,4 +82,4 @@ The plan is KidCore (Module Ownership: E1–E12 schedule) over a fake player lay
 ## Dependencies
 
 - Depends on: None
-- Unlocks: `production/epics/audio-voice/story-002-stacking-cap-mash.md`, `production/epics/audio-voice/story-003-hold-and-fallbacks.md`
+- Unlocks: `production/epics/audio-voice/story-002-stacking-cap-mash.md`

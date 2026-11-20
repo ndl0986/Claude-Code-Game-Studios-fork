@@ -83,4 +83,4 @@ StageFit already exists in KidCore (TASK-079); this wires the `SKView`, layers, 
 ## Dependencies
 
 - Depends on: `production/epics/reveal-stage/story-001-start-reveal-timeline.md`
-- Unlocks: `production/epics/reveal-stage/story-005-morph-on-stage.md`, `production/epics/hint-letters/story-006-size-data-look.md`, `production/epics/parade/story-007-parade-and-meter-look.md`, `production/epics/scene/story-004-scene-drawing.md`, `production/epics/keyboard-row/story-006-row-look-device.md`, `production/epics/app-shell/story-003-windows-and-overlays.md`, `production/epics/accessibility/story-006-invert-touch-sound-colour.md`
+- Unlocks: `production/epics/audio-voice/story-007-sound-off-from-stored-mute.md`, `production/epics/reveal-stage/story-005-morph-on-stage.md`, `production/epics/hint-letters/story-006-size-data-look.md`, `production/epics/parade/story-007-parade-and-meter-look.md`, `production/epics/scene/story-004-scene-drawing.md`, `production/epics/keyboard-row/story-006-row-look-device.md`, `production/epics/app-shell/story-003-windows-and-overlays.md`, `production/epics/accessibility/story-006-invert-touch-sound-colour.md`

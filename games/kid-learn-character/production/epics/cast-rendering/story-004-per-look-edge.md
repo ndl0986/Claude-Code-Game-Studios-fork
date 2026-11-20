@@ -80,4 +80,4 @@ scene-look-v1's F8 cases run under the scene runner (scene/001).
 ## Dependencies
 
 - Depends on: `production/epics/cast-rendering/story-001-cast-math.md`
-- Unlocks: `production/epics/scene/story-003-contrast-check-privacy.md`
+- Unlocks: `production/epics/scene/story-002-weather-model.md`, `production/epics/scene/story-003-contrast-check-privacy.md`

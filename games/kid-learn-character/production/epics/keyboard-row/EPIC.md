@@ -5,7 +5,7 @@
 > **Architecture Module**: KidCore (layout, hit rect, light, words, Due) + app (the z 35 layer)
 > **Milestone**: Demo 1 (`production/milestones/demo-1.md`, K-48)
 > **Status**: Ready
-> **Stories**: 6 stories (TASK-140)
+> **Stories**: 7 stories (TASK-140)
 
 ## Overview
 
@@ -57,8 +57,9 @@ A row of letter keys on the stage for a child without a hardware keyboard, feedi
 | 002 | [Key lights: any press, an ignored press, and hardware keys](story-002-lights.md) | Logic | Ready | ADR-0004, ADR-0006 |
 | 003 | [When a word is Due, the quiet moment, and the change](story-003-due-quiet-change.md) | Logic | Ready | ADR-0004, ADR-0002 |
 | 004 | [Word draws: no repeat, Play entry, and the v1 fallback](story-004-words-draw-fallback.md) | Logic | Ready | ADR-0004, ADR-0003 |
-| 005 | [Automatic row: shown without a hardware keyboard, hidden with one (K-49)](story-005-auto-on-keyboard-presence.md) | Logic | Blocked | ADR-0004, ADR-0005, ADR-0007 |
+| 005 | [Automatic row: shown without a hardware keyboard, hidden with one (K-49)](story-005-auto-on-keyboard-presence.md) | Logic | Ready | ADR-0004, ADR-0005, ADR-0007 |
 | 006 | [The row on the iPad and the Mac: look, Title and background, attach and detach](story-006-row-look-device.md) | UI | Blocked | ADR-0006, ADR-0007 |
+| 007 | [The row under the gate freeze and the panel, and on/off from settings (logic)](story-007-freeze-panel-logic.md) | Logic | Ready | ADR-0004, ADR-0005 |
 
 ## Definition of Done
 

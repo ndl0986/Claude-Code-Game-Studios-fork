@@ -26,6 +26,8 @@
 - Required: every KidCore type needing time or chance takes it injected from a D3 clock or D4 stream (ADR-0002 Impl.)
 - Forbidden: never `SKEmitterNode` or unseeded SpriteKit/GameplayKit randomness on the stage (ADR-0013 Impl.)
 
+**Contracts**: scene-look-v1 (`not-started: story:scene` → `runner:` with this story; includes Cast Rendering F8)
+
 ---
 
 ## Acceptance Criteria
@@ -36,6 +38,7 @@
 - [ ] AC-6 Windy: rain and snow tilt 15° and their clouds drift ×2; cloudy and clear unchanged.
 - [ ] AC-9 Snow with a queue of 1: half the flakes within 0.5 s; full again 1 s after the queue empties; with Reduce Motion a quarter.
 - [ ] AC-10 An element at the glyph box centre has alpha 0, at 0.2 × r ≤ 0.11 × base, at r or beyond full alpha.
+- [ ] AC-7 (logic) A weather change to snow reaches full count within 2 s ± 0.1 s (the panel UI that picks it is next milestone). All scene-look-v1 cases pass (with Cast Rendering F8) and its row flips to `runner:`.
 
 ---
 
@@ -43,7 +46,7 @@
 
 *Derived from ADR-0002 and the epic:*
 
-Demo 1 runs on the settings defaults (clear, not windy) since the panel is next milestone; the model still covers every weather. TR-scene-002's device cost is story 006.
+Demo 1 runs on the settings defaults (clear, not windy); the model covers every weather. (Freeze/resume, panel and theme-switch **logic** is in Demo 1 so the contract runner passes every case; only their UI and device checks are next milestone — game-qc-android, TASK-140.) **Out:** AC-8 (snow kept across a relaunch) needs the panel to pick it — next milestone. TR-scene-002's device cost is story 006.
 
 ---
 
@@ -59,6 +62,7 @@ Demo 1 runs on the settings defaults (clear, not windy) since the panel is next 
 
 - `apple/KidCore/Sources/KidCore/Scene.swift`
 - `apple/KidCore/Tests/KidCoreTests/SceneTests.swift`
+- `apple/KidCore/Tests/ContractTests/SceneLookRunner.swift`
 
 ---
 
@@ -79,5 +83,5 @@ Demo 1 runs on the settings defaults (clear, not windy) since the panel is next 
 
 ## Dependencies
 
-- Depends on: `production/epics/scene/story-001-looks-and-clocks.md`
+- Depends on: `production/epics/scene/story-001-looks-and-clocks.md`, `production/epics/cast-rendering/story-004-per-look-edge.md`
 - Unlocks: `production/epics/scene/story-004-scene-drawing.md`

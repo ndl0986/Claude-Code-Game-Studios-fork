@@ -26,6 +26,8 @@
 - Required: every KidCore type needing time or chance takes it injected from a D3 clock or D4 stream (ADR-0002 Impl.)
 - Required: every runner calls only the core's public API; hand-written cases from the GDD; never edit a merged `cases.json` (ADR-0004 D4–D6)
 
+**Contracts**: audio-plan-v1 (`not-started: story:audio-voice` → `runner:` with this story)
+
 ---
 
 ## Acceptance Criteria
@@ -34,6 +36,8 @@
 
 - [ ] AC-7 With the Press Queue in the loop, a key queued during "quetzalcoatlus" (1.15 s) starts no earlier than s 3.85 and no later than 4.5; the word is never cut.
 - [ ] AC-17 A test theme missing an sfx, a word line, and both voice lines for one key: the reveals skip, play the letter only, or the chime only, each with one debug log line and no crash.
+- [ ] AC-21 (plan half) Under `freeze()` for 10 s with a word half played and the tune running, the plan starts nothing new, an E8 due during it is scheduled after `resume()` at its play-clock time, and both lines resume from where they paused (the click-free resume point is story 005's device half).
+- [ ] The audio-plan-v1 cases all pass, including those driven by freeze, panel and theme events; its registry row flips to `runner:`.
 
 ---
 
@@ -41,7 +45,7 @@
 
 *Derived from ADR-0002 and the epic:*
 
-Integration of the audio plan with the Press Queue (press-queue/003's F1 hold).
+Integration of the audio plan with the Press Queue (press-queue/003's F1 hold). (Freeze/resume, panel and theme-switch **logic** is in Demo 1 so the contract runner passes every case; only their UI and device checks are next milestone — game-qc-android, TASK-140.) **Credited:** AC-6 (line lengths) and AC-12 (loudness) to content-pipeline/004. AC-18 and AC-19 are audio-voice/007 and 008.
 
 ---
 
@@ -56,6 +60,7 @@ Integration of the audio plan with the Press Queue (press-queue/003's F1 hold).
 *Planned; `/dev-story` replaces this list. Roots are ADR-0001 D3 / ADR-0002 D1 (`apple/`); `engine.name` is unset by design.*
 
 - `apple/KidCore/Tests/KidCoreTests/AudioQueueIntegrationTests.swift`
+- `apple/KidCore/Tests/ContractTests/AudioPlanRunner.swift`
 
 ---
 
@@ -76,5 +81,5 @@ Integration of the audio plan with the Press Queue (press-queue/003's F1 hold).
 
 ## Dependencies
 
-- Depends on: `production/epics/audio-voice/story-001-event-schedule.md`, `production/epics/press-queue/story-003-hold-and-formed-rules.md`
-- Unlocks: None
+- Depends on: `production/epics/audio-voice/story-002-stacking-cap-mash.md`, `production/epics/press-queue/story-003-hold-and-formed-rules.md`
+- Unlocks: `production/epics/audio-voice/story-007-sound-off-from-stored-mute.md`
