@@ -60,6 +60,7 @@ The build-time tools that turn the 36 Dinosaurs items into shipped content: the 
 | 004 | [Loudness to target, `voiceDurations` from the files, and the staleness check](story-004-loudness-durations-staleness.md) | Logic | Ready | ADR-0003 |
 | 005 | [The validator on the real Dinosaurs content: verify.sh fails naming theme, rule and item](story-005-validator-on-real-content.md) | Integration | Ready | ADR-0003, ADR-0011, ADR-0004 |
 | 006 | [`tools/contracts/source-drift.sh`: report contracts whose cited GDD section changed (observations only)](story-006-source-drift.md) | Logic | Ready | ADR-0004, ADR-0011 |
+| 007 | [Sfx bake: the 36 creature sounds from the prototype's synth recipes, AAC mono, cast loudness](story-007-sfx-render.md) | Integration | Ready (blocked on 003, 004) | ADR-0003 |
 
 ## Definition of Done
 
