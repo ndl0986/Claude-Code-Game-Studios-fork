@@ -115,6 +115,10 @@ that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per
   voice and sound). Order: input (classifier, Mac key adapter), key-table theme load, MorphCore, Reveal Stage, Cast
   Rendering draw adapter, Press Queue, Audio engine adapter, Title → Play. Scene, Hint Letters, Parade and the
   keyboard row follow.
+- **macOS complete first** (Luan, same day: "tập trung build cho hoàn chỉnh bản macos trước"): the whole Demo 1
+  scope on the Mac (Scene, Hint Letters, Parade and meter included) comes before iPad-only work. iPad-only stories
+  (input/004 iPad key adapter, input/006 keyboard presence, the keyboard-row epic, which the Mac never shows, and
+  iPad device rows) wait until the Mac build is complete. Shared code still compiles for iPadOS, and verify stays green.
 - **Leader default (Proposed):** until all 36 creatures are drawn, development builds may show a temporary
   placeholder for a key whose art is missing. Demo 1 exit criterion 3 (no missing art) is unchanged.
 
