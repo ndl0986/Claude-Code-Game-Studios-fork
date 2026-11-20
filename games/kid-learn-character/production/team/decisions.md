@@ -103,6 +103,18 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-53 Word-line length limit 1.5 s; voice staleness by input hash (Luan, 2026-11-20)
+
+- **V15 / Audio AC-6 word-line limit: 1.25 s → 1.5 s.** Measured on the trimmed Kokoro renders, 9 of 10 counted
+  number phrases ("five baby dinosaurs" 1.47 s) and quetzalcoatlus (1.26 s) were over 1.25 s. Letter and number
+  name lines keep the 1.0 s limit (longest 0.78 s). Wording and voice speed are unchanged. The limits leave KidCore's
+  literals for data (Audio's `word_len_max_s` / `letter_len_max_s` knobs) where the owners agree; the Press Queue F1
+  hold is re-checked against 1.5 s. TASK-147.
+- **ADR-0003 D4 dated note approved:** voice-line staleness compares a SHA-256 of the render inputs (script after
+  respelling, engine pins, voice, speed, trim and limiter values, tool version) and of the written PCM, and re-measures
+  `voiceDurations`; sfx, art, silhouettes and glyphs are still re-baked in memory and byte-compared
+  (content-pipeline/004, 829b61a2).
+
 ### K-52 Baked audio is uncompressed CAF, not AAC (Luan, 2026-11-20)
 
 - TASK content-pipeline/003 and /007 found that AudioToolbox's AAC encoder is not byte-stable: the same PCM gives one

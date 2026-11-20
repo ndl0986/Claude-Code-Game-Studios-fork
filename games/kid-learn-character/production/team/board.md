@@ -138,6 +138,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | content-pipeline/007 | Sfx render (36 CAF, synth recipes) + ADR-0003 D5 meter | story | game-art-content (review: game-dev-android) | MERGED (1de524b3; plan verify PASS 10eacf4c, leader-run); by-ear A1/A2 with Luan pending | `content/cp-007-sfx-on-003` | 2026-11-20 |
 | TASK-145 | K-52 text: `.m4a`/AAC → `.caf`/LPCM in the Key Table GDD, Audio & Voice GDD, art bible §8 (dated entries + fixture lines) | design | game-art-content (review: game-dev-android) | MERGED (87172f5a; game-dev-android APPROVE); 145b with TASK-146 | `design/TASK-145-caf-text` | 2026-11-20 |
 | TASK-146 | key-table-schema-v2 (`.m4a` → `.caf`, v1 superseded) + KidCore KeyTable.swift V6/voicePath change in the same merge | contracts | game-qc-android (cases) + game-dev-android (KidCore) | MERGED (6a368cc1 + 145b 71438637; plan verify PASS 445dfdea, leader-run) | `contracts/TASK-146-key-table-schema-v2` | 2026-11-20 |
+| TASK-147 | K-53 word-line limit 1.5 s: Audio & Voice knob + AC-6, Key Table V15 text, Press Queue F1 hold re-check (game-art-content); contract key-table-schema-v3 if V15 cases pin 1.25 (game-qc-android); KidCore V15 limits from data (game-dev-android) — one merge window | design+contracts | game-art-content, game-qc-android, game-dev-android | ASSIGNED | `design/TASK-147-word-limit` | 2026-11-20 |
 
 ## Leader log
 
