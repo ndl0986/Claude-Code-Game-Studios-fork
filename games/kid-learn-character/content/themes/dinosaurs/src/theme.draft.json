@@ -24,8 +24,11 @@
     "horned": {
       "idle": "none"
     },
-    "object": {
+    "nest": {
       "idle": "egg_wobble"
+    },
+    "object": {
+      "idle": "none"
     },
     "ornithomimid": {
       "idle": "none"
@@ -357,7 +360,7 @@
           "word": "nest",
           "say": "en",
           "sound": "start",
-          "family": "object",
+          "family": "nest",
           "variant": "nest",
           "hueSlot": "shared",
           "art": "cast/cast_dino_n_nest_01.json",
