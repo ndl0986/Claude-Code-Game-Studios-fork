@@ -23,6 +23,8 @@ struct LockScreen: View {
                     Button(kiosk.locked ? "Locked" : "Lock now") { kiosk.lock() }.disabled(kiosk.locked)
                     Button("Unlock") { kiosk.unlock() }.disabled(!kiosk.locked)
                     Button("Open gate overlay") { kiosk.overlay = true }
+                    // TASK-134 dry run: blocks the main thread 10 s so the dead-man's _exit path can be seen
+                    Button("Hang main 10 s (dead-man test)") { SpikeLog.shared.line("[lock] hanging main 10 s"); Thread.sleep(forTimeInterval: 10) }
                 }.buttonStyle(.bordered)
                 Text("While locked: ⌃⌥⌘Q opens the overlay; the overlay's Quit (hold 1.5 s) unlocks and quits.").font(.callout)
                 LogView()
@@ -118,6 +120,7 @@ final class Kiosk: ObservableObject {
 
     func lock() {
         guard let w = window, let screen = w.screen ?? NSScreen.main else { return }
+        armDeadMan()          // first, before any option is applied: a hang during setup is covered too (review)
         let t0 = ProcessInfo.processInfo.systemUptime
         savedFrame = w.frame; savedStyle = w.styleMask
         switch mode {
@@ -134,7 +137,6 @@ final class Kiosk: ObservableObject {
             c.ignoresMouseEvents = false; c.orderFront(nil); covers.append(c)
         }
         locked = true
-        armDeadMan()
         let covers = w.frame == screen.frame
         SpikeLog.shared.line("[lock] locked mode=\(mode == .borderless ? "borderless" : "native") applied in \(String(format: "%.1f", (ProcessInfo.processInfo.systemUptime - t0) * 1000)) ms windowCoversDisplay=\(covers) covers=\(self.covers.count)")
     }
@@ -142,6 +144,7 @@ final class Kiosk: ObservableObject {
     private func armDeadMan() {
         lockGeneration += 1
         let gen = lockGeneration, after = Self.deadManS
+        let hungMessage = Array("[lock] dead-man: main thread did not answer in 2 s; exiting to restore the desktop\n".utf8)
         deadMan?.cancel()
         let q = DispatchQueue(label: "spike.deadman", qos: .userInitiated)
         let t = DispatchSource.makeTimerSource(queue: q)
@@ -158,7 +161,9 @@ final class Kiosk: ObservableObject {
                 answered.signal()
             }
             if answered.wait(timeout: .now() + 2) == .timedOut {
-                NSLog("[lock] dead-man: main thread did not answer in 2 s after %d s locked; exiting to restore the desktop", Int(after))
+                // no NSLog / print here: a hung main thread may hold a log or stdio lock (game-dev-android review);
+                // a preformatted buffer and write(2) take no lock
+                hungMessage.withUnsafeBufferPointer { b in _ = write(STDERR_FILENO, b.baseAddress, b.count) }
                 _exit(3)
             }
         }

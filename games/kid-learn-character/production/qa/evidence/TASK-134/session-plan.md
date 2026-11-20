@@ -40,7 +40,7 @@ Rules for every locked row:
 
 | # | Row | Locked? | Time | What it needs from Luan |
 |---|---|---|---|---|
-| D1 | **Dry run** (required first): Lock (borderless) → I run R3 → Luan confirms the desktop is back. Relaunch with `-deadman 30`, Lock, wait → auto-unlock seen. Lock again → ⌃⌥⌘Q → overlay → Close → Unlock | yes, 3 × < 1 min | 8 min | taps, say what you see |
+| D1 | **Dry run** (required first): Lock (borderless) → I run R3 → Luan confirms the desktop is back. Relaunch with `-deadman 30`, Lock, wait → auto-unlock seen. Lock again, and at about 25 s tap **Hang main 10 s (dead-man test)** → the app ends by itself about 2 s after the 30 s mark (the `_exit` path) and the desktop comes back. Lock again → ⌃⌥⌘Q → overlay → Close → Unlock | yes, 3 × < 1 min | 10 min | taps, say what you see |
 | 1 | **M-5** crash with the lock on: lock (each mode), I run `kill -9`; the Dock, menu bar and a usable desktop come back | yes | 6 min | describe the desktop (no capture) |
 | 2 | **M-7** ways out: chord → overlay → Quit (hold 1.5 s) ends the app with the desktop usable; ⌘Q in the open overlay does nothing; the overlay is in the main window. The wrong-code and panel-OFF parts need the real gate: NOT ASSESSED | yes | 8 min | chord, hold Quit |
 | 3 | **M-3** keyboard and trackpad with the lock on, **both modes** (borderless, then native full screen), in ≤ 3-min locks: ⌘H, ⌘Q, ⌘Space, ⌘Tab, ⌥⌘Esc, Mission Control / Spaces (F3, ⌃↑, ⌃←/→), 3- and 4-finger swipes, Notification Center, hot corners, Globe/fn, Touch ID, a short power-key press; keyboard part on the **Keys** screen (unlocked): every key's normalized event and whether key-ups arrive under ⌘ | yes | 25 min | press each key/gesture; say "blocked" or what happened |

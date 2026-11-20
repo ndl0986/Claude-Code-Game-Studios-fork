@@ -79,7 +79,9 @@ pad) can show fast changes. Run every row with the child out of view of the scre
   so `devicectl device capture screenshot` can read results and take the crispness still without a tap.
 - **Mac lock dead-man (TASK-134):** every Lock auto-unlocks after 240 s (`-deadman <s>`, 30–600), logged
   `[lock] dead-man: auto-unlock after … s locked`. It runs on its own queue; if the main thread does not answer within
-  2 s it ends the process, which gives the Dock, menu bar, Force Quit and process switching back to macOS. The ⌃⌥⌘Q
+  2 s it ends the process (`_exit`, after a lock-free `write(2)`), which gives the Dock, menu bar, Force Quit and
+  process switching back to macOS. It is armed first in `lock()`, before any option is applied. "Hang main 10 s
+  (dead-man test)" on the Lock screen proves the `_exit` path. The ⌃⌥⌘Q
   chord is a local monitor, so it only works while the app is active with a key window; the dead-man and an external
   `pkill -x DeviceSpike` do not depend on that.
 
