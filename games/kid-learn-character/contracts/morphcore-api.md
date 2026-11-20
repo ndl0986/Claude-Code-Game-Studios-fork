@@ -52,3 +52,55 @@ The Kotlin port diffs its names and shapes against this file (ADR-0002).
 - `SplitMix64.nextUnit()` (method): `mutating func nextUnit() -> Double`
 - `SplitMix64.state` (property): `var state: UInt64 { get }`
 - `SplitMix64` (struct): `struct SplitMix64`
+- `TimingData.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `TimingData.load(normal:reduced:)` (type.method): `static func load(normal: [String : TimingValue], reduced: [String : TimingValue]) -> Result<TimingData, TimingRejection>`
+- `TimingData.morphSpec(reducedMotion:seed:)` (method): `func morphSpec(reducedMotion: Bool, seed: UInt64) -> MorphSpec`
+- `TimingData.normal` (property): `let normal: TimingSpec`
+- `TimingData.reduced` (property): `let reduced: TimingSpec`
+- `TimingData.timing(reducedMotion:)` (method): `func timing(reducedMotion: Bool) -> TimingSpec`
+- `TimingData` (struct): `struct TimingData`
+- `TimingKnob.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `TimingKnob.dissolve` (enum.case): `case dissolve`
+- `TimingKnob.drift` (enum.case): `case drift`
+- `TimingKnob.flow` (enum.case): `case flow`
+- `TimingKnob.glow` (enum.case): `case glow`
+- `TimingKnob.hash(into:)` (method): `func hash(into hasher: inout Hasher)`
+- `TimingKnob.hashValue` (property): `var hashValue: Int { get }`
+- `TimingKnob.init(rawValue:)` (init): `init?(rawValue: String)`
+- `TimingKnob.letterIn` (enum.case): `case letterIn`
+- `TimingKnob.morphSpeed` (enum.case): `case morphSpeed`
+- `TimingKnob.particles` (enum.case): `case particles`
+- `TimingKnob.range` (property): `var range: ClosedRange<Double> { get }`
+- `TimingKnob.spread` (enum.case): `case spread`
+- `TimingKnob.swirl` (enum.case): `case swirl`
+- `TimingKnob` (enum): `enum TimingKnob`
+- `TimingRejection.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `TimingRejection.init(set:knob:reason:)` (init): `init(set: String, knob: TimingKnob, reason: TimingRejectionReason)`
+- `TimingRejection.knob` (property): `let knob: TimingKnob`
+- `TimingRejection.message` (property): `var message: String { get }`
+- `TimingRejection.reason` (property): `let reason: TimingRejectionReason`
+- `TimingRejection.set` (property): `let set: String`
+- `TimingRejectionReason.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `TimingRejectionReason.aboveMaximum(_:)` (enum.case): `case aboveMaximum(Double)`
+- `TimingRejectionReason.belowMinimum(_:)` (enum.case): `case belowMinimum(Double)`
+- `TimingRejectionReason.missing` (enum.case): `case missing`
+- `TimingRejectionReason.notANumber` (enum.case): `case notANumber`
+- `TimingRejectionReason.notWholeNumber(_:)` (enum.case): `case notWholeNumber(Double)`
+- `TimingRejectionReason` (enum): `enum TimingRejectionReason`
+- `TimingRejection` (struct): `struct TimingRejection`
+- `TimingSpec.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `TimingSpec.dissolve` (property): `let dissolve: Double`
+- `TimingSpec.drift` (property): `let drift: Double`
+- `TimingSpec.flow` (property): `let flow: Double`
+- `TimingSpec.glow` (property): `let glow: Double`
+- `TimingSpec.letterIn` (property): `let letterIn: Double`
+- `TimingSpec.morphSpec(seed:)` (method): `func morphSpec(seed: UInt64) -> MorphSpec`
+- `TimingSpec.morphSpeed` (property): `let morphSpeed: Double`
+- `TimingSpec.particles` (property): `let particles: Int`
+- `TimingSpec.spread` (property): `let spread: Double`
+- `TimingSpec.swirl` (property): `let swirl: Double`
+- `TimingSpec` (struct): `struct TimingSpec`
+- `TimingValue.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `TimingValue.notNumber` (enum.case): `case notNumber`
+- `TimingValue.number(_:)` (enum.case): `case number(Double)`
+- `TimingValue` (enum): `enum TimingValue`

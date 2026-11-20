@@ -1,12 +1,12 @@
 # Story 001: Load and validate the morph timing data; Reduce Motion picks the reduced set for new morphs
 
 > **Epic**: MorphCore (`production/epics/morphcore/EPIC.md`)
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Foundation
 > **Type**: Logic
 > **Estimate**: M
 > **Manifest Version**: 2026-11-20
-> **Last Updated**: —
+> **Last Updated**: 2026-11-20
 > **Milestone**: Demo 1 (K-48)
 
 ## Context
@@ -59,13 +59,11 @@ The loader takes already-decoded numbers (JSON is decoded at the edge). The ship
 
 ## Files
 
-*Planned; `/dev-story` replaces this list with the files it changed. Roots are ADR-0001 D3 / ADR-0002 D1 (`apple/`); `engine.name` is unset by design.*
-
-- `apple/MorphCore/Sources/MorphCore/TimingSpec.swift`
-- `apple/MorphCore/Tests/MorphCoreTests/TimingSpecTests.swift`
-- `content/data/morph-timing.json`
-
----
+- `apple/MorphCore/Sources/MorphCore/TimingSpec.swift` — created (timing loader and validator, reduced-motion selection)
+- `apple/MorphCore/Tests/MorphCoreTests/TimingSpecTests.swift` — created (14 tests: AC-6, AC-7, AC-8)
+- `apple/Tools/Tests/ToolsTests/MorphTimingDataTests.swift` — created (3 tests: the shipped sets are valid, a broken copy fails, the file is byte-stable)
+- `content/data/morph-timing.json` — created (shipped normal and reduced sets, from the GDD Tuning Knobs)
+- `contracts/morphcore-api.md` — regenerated (52 added lines for the new public types; ADR-0002 V4)
 
 ## QA Test Cases
 

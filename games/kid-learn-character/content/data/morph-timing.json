@@ -1,0 +1,24 @@
+{
+  "normal": {
+    "dissolve_s": 0.4,
+    "drift": 0.06,
+    "flow_s": 0.9,
+    "glow_s": 0.35,
+    "letter_in_s": 0.45,
+    "morph_speed": 1,
+    "particles": 240,
+    "spread_s": 0.35,
+    "swirl": 0.35
+  },
+  "reduced": {
+    "dissolve_s": 0.2,
+    "drift": 0.02,
+    "flow_s": 0.5,
+    "glow_s": 0.15,
+    "letter_in_s": 0.25,
+    "morph_speed": 1,
+    "particles": 240,
+    "spread_s": 0.1,
+    "swirl": 0
+  }
+}
