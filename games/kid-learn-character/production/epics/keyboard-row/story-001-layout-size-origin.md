@@ -11,7 +11,7 @@
 
 ## Context
 
-**GDD**: `design/gdd/onscreen-keyboard-row.md` (TASK-135 revision 180228bf, pending merge)
+**GDD**: `design/gdd/onscreen-keyboard-row.md` (as merged by TASK-135, 5647a15f)
 **Requirement**: `TR-kbrow-001`, `TR-kbrow-003`
 *(Requirement text lives in `docs/architecture/tr-registry.yaml` — read fresh at review time)*
 
@@ -27,7 +27,7 @@
 - Required: every runner calls only the core's public API; hand-written cases from the GDD; never edit a merged `cases.json` (ADR-0004 D4–D6)
 - Required: ppi from the bundled model table (iPad) or `CGDisplayScreenSize` (Mac); unknown → the class's highest ppi (ADR-0006 D7)
 
-**Contracts**: keyboard-row-v1 (`not-started: story:keyboard-row` → `runner:` with this story)
+**Contracts**: keyboard-row-v1 (`not-started: story:keyboard-row`); TASK-141's keyboard-row-v2 supersedes it (K-49 cases), and this story's runner targets v2 once it is registered
 
 ---
 
@@ -46,7 +46,7 @@
 
 *Derived from ADR-0004 and the epic:*
 
-TASK-135 at 180228bf (K-49) is **pending merge** (approved by game-dev-ios, waiting on game-qc-android): the ACs here are copied from that revision of the GDD; re-check them against the merged text before `/story-readiness`.
+TASK-135 (K-49) is **merged at 5647a15f**; the ACs here are the merged GDD's (identical to 180228bf, checked). TASK-141 cuts **keyboard-row-v2** to supersede v1 with the K-49 cases.
 
 ---
 

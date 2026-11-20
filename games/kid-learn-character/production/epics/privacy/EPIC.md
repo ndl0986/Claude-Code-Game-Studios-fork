@@ -5,7 +5,7 @@
 > **Architecture Module**: no runtime module: build scans and checks (tools/ci, ADR-0011)
 > **Milestone**: Demo 1 (`production/milestones/demo-1.md`, K-48)
 > **Status**: Ready
-> **Stories**: 4 stories (TASK-137)
+> **Stories**: 5 stories (TASK-137)
 
 ## Overview
 
@@ -51,6 +51,7 @@ The kids-category guarantees as build gates: no network, SDKs, identifiers or lo
 | 002 | [Demo 1 Release builds pass the API, third-party and log scans](story-002-release-code-scans.md) | Integration | Ready | ADR-0011, ADR-0001 |
 | 003 | [Scripted session on the device: zero network bytes and one app-written key](story-003-runtime-network-and-storage.md) | Integration | Ready | ADR-0011, ADR-0005 |
 | 004 | [Demo 1 PKC results.md for the signed Release builds](story-004-demo1-results.md) | Integration | Ready | ADR-0011 |
+| 005 | [Every key and touch target in the child area stays in the app](story-005-child-area-no-exit.md) | Integration | Blocked | ADR-0011, ADR-0001 |
 
 ## Definition of Done
 

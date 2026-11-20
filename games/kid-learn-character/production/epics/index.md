@@ -10,7 +10,7 @@ Milestone: Demo 1 (`production/milestones/demo-1.md`, K-48). One epic per system
 | [Key Table & Theme Data](key-table/EPIC.md) | Foundation | key-table | key-table-theme-data.md | 5 / 5 | — | 4 stories | Ready |
 | [Input & Key Filter](input/EPIC.md) | Foundation | input | input-key-filter.md | 3 / 5 | ADR-0007 | 7 stories | Ready |
 | [Settings Store](settings/EPIC.md) | Foundation | settings | settings-store.md | 5 / 5 | — | 3 stories | Ready |
-| [Privacy & Kids Compliance](privacy/EPIC.md) | Foundation | privacy | privacy-kids-compliance.md | 4 / 4 | — | 4 stories | Ready |
+| [Privacy & Kids Compliance](privacy/EPIC.md) | Foundation | privacy | privacy-kids-compliance.md | 4 / 4 | — | 5 stories | Ready |
 | [Audio & Voice](audio-voice/EPIC.md) | Core | audio-voice | audio-voice.md | 2 / 6 | ADR-0010 | 6 stories | Ready |
 | [Press Queue](press-queue/EPIC.md) | Core | press-queue | press-queue.md | 3 / 3 | — | 5 stories | Ready |
 | [Cast Rendering](cast-rendering/EPIC.md) | Core | cast-rendering | cast-rendering.md | 5 / 7 | ADR-0009 | 6 stories | Ready |

@@ -1,7 +1,7 @@
 # Story 006: The row on the iPad and the Mac: look, Title and background, attach and detach
 
 > **Epic**: On-screen Keyboard Row (`production/epics/keyboard-row/EPIC.md`)
-> **Status**: Blocked — BLOCKED: ADR-0007 is Proposed — accept it with `/architecture-decision accept ADR-0007` once decided (device rows P-15; AC-25 needs an iPad hardware keyboard); also blocked-by TASK-135 (pending merge)
+> **Status**: Blocked — BLOCKED: ADR-0007 is Proposed — accept it with `/architecture-decision accept ADR-0007` once decided (device rows P-15; AC-25 needs an iPad hardware keyboard)
 > **Layer**: Feature
 > **Type**: UI
 > **Estimate**: M
@@ -11,7 +11,7 @@
 
 ## Context
 
-**GDD**: `design/gdd/onscreen-keyboard-row.md` (TASK-135 revision 180228bf, pending merge)
+**GDD**: `design/gdd/onscreen-keyboard-row.md` (as merged by TASK-135, 5647a15f)
 **Requirement**: `TR-kbrow-003`, `TR-kbrow-004`
 *(Requirement text lives in `docs/architecture/tr-registry.yaml` — read fresh at review time)*
 
@@ -44,7 +44,7 @@
 
 *Derived from ADR-0006 and the epic:*
 
-TASK-135 at 180228bf (K-49) is **pending merge** (approved by game-dev-ios, waiting on game-qc-android): the ACs here are copied from that revision of the GDD; re-check them against the merged text before `/story-readiness`. AC-25 needs an iPad hardware keyboard: NOT ASSESSED until one is available.
+TASK-135 (K-49) is **merged at 5647a15f**; the ACs here are the merged GDD's (identical to 180228bf, checked). TASK-141 cuts **keyboard-row-v2** to supersede v1 with the K-49 cases. AC-25 needs an iPad hardware keyboard: NOT ASSESSED until one is available.
 
 ---
 

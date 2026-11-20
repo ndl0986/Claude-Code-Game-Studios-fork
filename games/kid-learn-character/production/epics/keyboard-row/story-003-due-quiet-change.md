@@ -11,7 +11,7 @@
 
 ## Context
 
-**GDD**: `design/gdd/onscreen-keyboard-row.md` (TASK-135 revision 180228bf, pending merge)
+**GDD**: `design/gdd/onscreen-keyboard-row.md` (as merged by TASK-135, 5647a15f)
 **Requirement**: `TR-kbrow-001`
 *(Requirement text lives in `docs/architecture/tr-registry.yaml` — read fresh at review time)*
 
@@ -41,7 +41,7 @@
 
 *Derived from ADR-0004 and the epic:*
 
-TASK-135 at 180228bf (K-49) is **pending merge** (approved by game-dev-ios, waiting on game-qc-android): the ACs here are copied from that revision of the GDD; re-check them against the merged text before `/story-readiness`.
+TASK-135 (K-49) is **merged at 5647a15f**; the ACs here are the merged GDD's (identical to 180228bf, checked). TASK-141 cuts **keyboard-row-v2** to supersede v1 with the K-49 cases.
 
 ---
 
