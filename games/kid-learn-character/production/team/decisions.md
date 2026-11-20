@@ -103,6 +103,13 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-51 Link GameController on iPadOS only (Luan, 2026-11-20, PKC-13)
+
+- Luan approved linking Apple's **GameController** framework **on iPadOS only**, solely to read whether a hardware
+  keyboard is connected (`GCKeyboard.coalesced` + connect/disconnect notifications) for K-49's auto-on keyboard row.
+  It is a system framework (PKC-03 b), not on PKC-02's deny list, no required-reason API (PKC-09 unchanged), no
+  `GCKeyboardInput` handler (keys stay on `pressesBegan`). Not linked on macOS. Recorded in ADR-0007 D6 (TASK-138).
+
 ### K-50 Workers start /dev-story themselves (Luan, 2026-11-20)
 
 - The shared studio skill `/dev-story` was user-invoked only. Luan chose to let the team's worker sessions invoke it
