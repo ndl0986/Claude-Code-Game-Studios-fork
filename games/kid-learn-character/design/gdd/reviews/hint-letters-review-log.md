@@ -108,4 +108,4 @@ Reviewed-Content-Hash: design/gdd/hint-letters.md 40f017d7f5cebebea439db0ddfc23a
 Review mode: lean · Workflow: standard
 Change: none to this GDD. ADR-0004 D6 line, found by TASK-139's drift check (game-qc-android): Detailed Design and Formulas changed by TASK-120 (the parade meter box) after hint-letters-v1 was cut.
 fixture: none (hint-letters-v1: all 58 cases re-run with the meter box, 0 mismatches)
-Reviewed-Content-Hash: design/gdd/hint-letters.md 2dedd30359e3c318c287457b75553160fa73beb5
+Reviewed-Content-Hash: design/gdd/hint-letters.md 40f017d7f5cebebea439db0ddfc23a32771d2a55
