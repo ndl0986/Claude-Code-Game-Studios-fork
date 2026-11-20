@@ -1,7 +1,7 @@
 # Story 004: Synchronous outcomes, gap-free revealIds, locked lengths, equal sources, the resting signal
 
 > **Epic**: Press Queue (`production/epics/press-queue/EPIC.md`)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Core
 > **Type**: Logic
 > **Estimate**: M
@@ -84,3 +84,21 @@ The whole state machine is KidCore (Module Ownership). Tests use an injected clo
 
 - Depends on: `production/epics/press-queue/story-002-rest-jumping-mash.md`
 - Unlocks: `production/epics/keyboard-row/story-003-due-quiet-change.md`
+
+## Completion Notes
+**Completed**: 2026-11-20
+**Criteria**: 4/4 passing (no deferred items)
+**Deviations**: ADVISORY: AC-10 says ids equal "the press count handed to the seed". The seed handoff is MorphCore's and isn't
+wired yet; the ids are tested and pass press-queue-v2's `AC10-revealId-no-gaps`. It gets checked when reveal-stage wires
+`revealId` to the seed.
+**Test Evidence**: `apple/KidCore/Tests/KidCoreTests/PressQueueTests.swift` (AC-9 `test_every_press_returns_its_outcome_at_once_in_order`,
+AC-10 `test_started_reveals_number_one_two_three_with_no_gaps`, AC-13
+`test_reduce_motion_mid_reveal_keeps_its_hold_and_the_next_reveal_uses_the_reduced_set`, AC-18
+`test_hardware_key_hint_and_keyboard_row_give_the_same_outcomes_and_times`, AC-20
+`test_resting_since_is_none_until_formed_with_an_empty_queue_then_the_formed_time`) and press-queue-v2's AC10, AC13, AC18, AC20, R7
+and R11 cases (`apple/KidCore/Tests/ContractTests/PressQueueRunner.swift`, 50/50 in verify)
+**Run result**: N/A — pure KidCore logic with no app surface yet; the queue becomes player-visible with the Reveal Stage and app shell stories
+**Reviewed by**: game-qc-android (APPROVE f103f0fe; K-14 peer review)
+
+## Calls beyond the design
+- Reduce Motion is read by the Reveal Stage at each reveal's start (Reveal Stage R9), not by the queue: the queue's lock is `holdEff` computed once from the lengths the stage answers, so `PressQueueStage.startReveal` has no reduced input and reveal-stage/001 must read Reduce Motion itself (`PressQueue.swift`) · kept 2026-11-20

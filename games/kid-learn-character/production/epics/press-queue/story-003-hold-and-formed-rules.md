@@ -1,7 +1,7 @@
 # Story 003: F1 holdEff, the formed rules and the fallback lengths
 
 > **Epic**: Press Queue (`production/epics/press-queue/EPIC.md`)
-> **Status**: In Progress
+> **Status**: Complete
 > **Layer**: Core
 > **Type**: Logic
 > **Estimate**: M
@@ -81,3 +81,21 @@ The whole state machine is KidCore (Module Ownership). Tests use an injected clo
 
 - Depends on: `production/epics/press-queue/story-001-start-queue-ignore.md`
 - Unlocks: `production/epics/audio-voice/story-003-hold-and-fallbacks.md`, `production/epics/press-queue/story-005-background-title-data.md`
+
+## Completion Notes
+**Completed**: 2026-11-20
+**Criteria**: 3/3 passing (no deferred items)
+**Deviations**: ADVISORY: AC-7's text says `formedS + 1.5`; K-53 (TASK-147) made the missing-entry bound
+`formedS + word_offset_s + word_len_max_s` (1.75 with the shipped knobs). The code and press-queue-v2 follow K-53; a dated note
+in the story says so.
+**Test Evidence**: `apple/KidCore/Tests/KidCoreTests/PressQueueTests.swift` (AC-7 `test_hold_follows_the_F1_table_rows`,
+`test_a_missing_word_length_uses_the_bound_and_writes_one_log_line`; AC-11
+`test_a_reveal_never_formed_is_formed_by_the_timeout_at_exactly_its_bound`, `test_the_timeout_and_the_advance_happen_in_one_tick`,
+`test_formed_for_another_reveal_or_twice_changes_nothing`; AC-12 `test_fallback_lengths_from_the_stage_set_the_hold`; AC-24
+`test_no_word_gives_the_longer_of_hold_and_reveal`) and press-queue-v2's F1 (11), AC11, AC12, AC24, R5 and F4 cases
+(`apple/KidCore/Tests/ContractTests/PressQueueRunner.swift`, 50/50 in verify)
+**Run result**: N/A — pure KidCore logic with no app surface yet; the queue becomes player-visible with the Reveal Stage and app shell stories
+**Reviewed by**: game-qc-android (APPROVE fd045607; K-14 peer review)
+
+## Calls beyond the design
+- A reveal with no word line (`hasWord` false) writes no missing-`voiceDurations` log line: no word plays, so no entry is needed (`PressQueue.swift`, start) · kept 2026-11-20

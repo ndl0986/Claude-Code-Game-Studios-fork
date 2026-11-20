@@ -46,9 +46,9 @@ Accept, queue (up to 3) or ignore each press; report `formed` exactly once per r
 | # | Story | Type | Status | ADR |
 |---|-------|------|--------|-----|
 | 001 | [Start at once, queue during the hold, the formed guard, ignore when full](story-001-start-queue-ignore.md) | Logic | Complete | ADR-0002, ADR-0004 |
-| 002 | [Start from rest, no jumping, the mash batch and one advance per tick](story-002-rest-jumping-mash.md) | Logic | Ready | ADR-0002, ADR-0004 |
-| 003 | [F1 holdEff, the formed rules and the fallback lengths](story-003-hold-and-formed-rules.md) | Logic | Ready | ADR-0002, ADR-0004 |
-| 004 | [Synchronous outcomes, gap-free revealIds, locked lengths, equal sources, the resting signal](story-004-ids-sources-resting.md) | Logic | Ready | ADR-0002, ADR-0004 |
+| 002 | [Start from rest, no jumping, the mash batch and one advance per tick](story-002-rest-jumping-mash.md) | Logic | Complete | ADR-0002, ADR-0004 |
+| 003 | [F1 holdEff, the formed rules and the fallback lengths](story-003-hold-and-formed-rules.md) | Logic | Complete | ADR-0002, ADR-0004 |
+| 004 | [Synchronous outcomes, gap-free revealIds, locked lengths, equal sources, the resting signal](story-004-ids-sources-resting.md) | Logic | Complete | ADR-0002, ADR-0004 |
 | 005 | [Background, panel and gate logic, the first press after the Title, the theme switch, and the data checks](story-005-background-title-data.md) | Logic | Ready | ADR-0002, ADR-0004 |
 | 006 | [A touched hint on a full queue sparkles, pings and stays](story-006-hint-on-overflow.md) | Integration | Ready | ADR-0002, ADR-0004 |
 
