@@ -6,5 +6,5 @@
   KidCore `.caf` change to pass; on v1 code they would report the opposite, which is why they are there.
 - **sources.lock:** cut from the repo root on TASK-145b 71438637. Detailed Design changed (the `.caf` text); ADR-0002
   Decision changed since v1's cut (TASK-079 ContractKit, see the README Drift check note); the rest is v1's hashes.
-- **verify-dev-no-xcode.log:** PASS, v2 `not-started` (structure OK, 95 cases). Its runner lands in game-dev-android's
+- **verify --dev --no-xcode** (log kept locally; `*.log` is gitignored): PASS at 5887cfa2 + this change, v2 `not-started` (structure OK, 95 cases). Its runner lands in game-dev-android's
   KidCore commit on this branch, which also flips the registry rows.
