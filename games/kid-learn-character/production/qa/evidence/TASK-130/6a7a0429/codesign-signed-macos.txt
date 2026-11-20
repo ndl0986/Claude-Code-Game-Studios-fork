@@ -1,0 +1,17 @@
+TASK-130 signed macOS Release build at 6a7a0429 (headless; not installed, not launched, K-34)
+products: Letterlings.app 
+Identifier=com.galaxyandsun.letterlings
+Format=app bundle with Mach-O universal (x86_64 arm64)
+TeamIdentifier=<team>
+verify --strict: OK
+Info.plist CFBundleIdentifier = com.galaxyandsun.letterlings
+Info.plist CFBundleDisplayName = Letterlings
+Info.plist CFBundleName = Letterlings
+Info.plist CFBundleExecutable = Letterlings
+entitlements:
+{
+  "com.apple.security.app-sandbox" => true
+  "com.apple.security.get-task-allow" => true
+}
+
+iOS signed build: game-dev-ios's build-signed-ios.txt / codesign-signed-ios.txt in this folder. (At 7b36e8a2 and first at 6a7a0429 it failed 'No Accounts': Xcode's account list was empty until Luan signed in at Xcode > Settings > Accounts on 2026-11-20.)

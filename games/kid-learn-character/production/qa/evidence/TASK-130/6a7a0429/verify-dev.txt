@@ -1,0 +1,32 @@
+verify: Xcode 27.1, Swift 6.4
+PASS ban-grep (ADR-0002 V1)
+PASS api-surface (ADR-0002 V4)
+PASS kidtools validate content (ADR-0003 D3)
+OBSERVED NOT ASSESSED theme dinosaurs: in progress (src/ only, no theme.json yet)
+PASS swift test MorphCore
+PASS swift test KidCore
+OBSERVED structure: 15/15 contracts OK (845 cases well-formed)
+OBSERVED key-table-schema-v1 [model]: 86 pass, 0 fail
+OBSERVED settings-record-v2: 76 pass, 0 fail
+OBSERVED NOT ASSESSED app-shell-v1: not started (story story:app-shell); structure OK, 0 of 26 cases run
+OBSERVED NOT ASSESSED audio-plan-v1: not started (story story:audio-voice); structure OK, 0 of 30 cases run
+OBSERVED NOT ASSESSED gate-logic-v1: not started (story story:parent-gate); structure OK, 0 of 48 cases run
+OBSERVED NOT ASSESSED hint-letters-v1: not started (story story:hint-letters); structure OK, 0 of 58 cases run
+OBSERVED SUPERSEDED input-filter-v1 → input-filter-v2: not run (86 cases)
+OBSERVED NOT ASSESSED input-filter-v2: not started (story story:input); structure OK, 0 of 95 cases run
+OBSERVED NOT ASSESSED keyboard-row-v1: not started (story story:keyboard-row); structure OK, 0 of 36 cases run
+OBSERVED SUPERSEDED parade-v1 → parade-v2: not run (30 cases)
+OBSERVED NOT ASSESSED parade-v2: not started (story story:parade); structure OK, 0 of 46 cases run
+OBSERVED NOT ASSESSED press-queue-v1: not started (story story:press-queue); structure OK, 0 of 46 cases run
+OBSERVED NOT ASSESSED reveal-timing-v1: not started (story story:reveal-stage); structure OK, 0 of 60 cases run
+OBSERVED NOT ASSESSED scene-look-v1: not started (story story:scene); structure OK, 0 of 42 cases run
+OBSERVED SUPERSEDED settings-record-v1 → settings-record-v2: not run (73 cases)
+OBSERVED contracts: 2 run PASS (key-table-schema-v1, settings-record-v2), 10 NOT ASSESSED (not-started: app-shell-v1, audio-plan-v1, gate-logic-v1, hint-letters-v1, input-filter-v2, keyboard-row-v1, parade-v2, press-queue-v1, reveal-timing-v1, scene-look-v1), 3 SUPERSEDED, 0 FAIL
+PASS swift test ContractKit
+PASS swift test Tools
+OBSERVED key-table-schema-v1 [file]: 7 pass, 0 fail
+PASS xcodebuild build macOS
+PASS xcodebuild test macOS (hostless unit tests)
+PASS xcodebuild test iPad simulator (--dev, headless)
+SKIP bundle-content scan: no --app given (QC runs it on both Release .apps)
+verify: PASS at 6a7a0429
