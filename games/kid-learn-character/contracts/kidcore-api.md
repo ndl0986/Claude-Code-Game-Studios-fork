@@ -51,6 +51,18 @@ The Kotlin port diffs its names and shapes against this file (ADR-0002).
 - `CountedItem.plural` (property): `var plural: String`
 - `CountedItem.singular` (property): `var singular: String`
 - `CountedItem` (struct): `struct CountedItem`
+- `CurrentReveal.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `CurrentReveal.formedAt` (property): `var formedAt: Double?`
+- `CurrentReveal.formedS` (property): `var formedS: Double`
+- `CurrentReveal.formed` (property): `var formed: Bool`
+- `CurrentReveal.holdEff` (property): `var holdEff: Double`
+- `CurrentReveal.key` (property): `var key: String`
+- `CurrentReveal.origin` (property): `var origin: PressOrigin?`
+- `CurrentReveal.r0` (property): `var r0: Double`
+- `CurrentReveal.revealId` (property): `var revealId: Int`
+- `CurrentReveal.revealLen` (property): `var revealLen: Double`
+- `CurrentReveal.source` (property): `var source: PressSource`
+- `CurrentReveal` (struct): `struct CurrentReveal`
 - `DebugLog.log(_:)` (method): `func log(_ line: String)`
 - `DebugLog` (protocol): `protocol DebugLog`
 - `DisplayMetrics.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
@@ -101,8 +113,57 @@ The Kotlin port diffs its names and shapes against this file (ADR-0002).
 - `KioskEffects.remove()` (method): `func remove()`
 - `KioskEffects.windowCoversDisplay` (property): `var windowCoversDisplay: Bool { get }`
 - `KioskEffects` (protocol): `protocol KioskEffects`
+- `Press.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `Press.init(key:source:time:origin:)` (init): `init(key: String, source: PressSource, time: Double, origin: PressOrigin? = nil)`
+- `Press.key` (property): `var key: String`
+- `Press.origin` (property): `var origin: PressOrigin?`
+- `Press.source` (property): `var source: PressSource`
+- `Press.time` (property): `var time: Double`
+- `PressOrigin.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `PressOrigin.init(x:y:)` (init): `init(x: Double, y: Double)`
+- `PressOrigin.x` (property): `var x: Double`
+- `PressOrigin.y` (property): `var y: Double`
+- `PressOrigin` (struct): `struct PressOrigin`
+- `PressOutcome.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `PressOutcome.ignored` (enum.case): `case ignored`
+- `PressOutcome.queued(index:)` (enum.case): `case queued(index: Int)`
+- `PressOutcome.started(revealId:r0:castId:)` (enum.case): `case started(revealId: Int, r0: Double, castId: String)`
+- `PressOutcome` (enum): `enum PressOutcome`
+- `PressQueue.current` (property): `var current: CurrentReveal? { get }`
+- `PressQueue.formed(revealId:)` (method): `mutating func formed(revealId: Int)`
+- `PressQueue.init(knobs:stage:clock:)` (init): `init(knobs: PressQueueKnobs, stage: PressQueueStage, clock: UptimeClock)`
+- `PressQueue.nextRevealId` (property): `var nextRevealId: Int { get }`
+- `PressQueue.press(_:)` (method): `mutating func press(_ p: Press) -> PressOutcome`
+- `PressQueue.queue` (property): `var queue: [Press] { get }`
+- `PressQueue.tick(now:)` (method): `mutating func tick(now: Double)`
+- `PressQueueKnobs.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `PressQueueKnobs.formedTimeoutS` (property): `var formedTimeoutS: Double`
+- `PressQueueKnobs.holdExtMaxS` (property): `var holdExtMaxS: Double`
+- `PressQueueKnobs.holdS` (property): `var holdS: Double`
+- `PressQueueKnobs.init(holdS:queueMax:formedTimeoutS:wordOffsetS:holdExtMaxS:wordLenMaxS:)` (init): `init(holdS: Double, queueMax: Int, formedTimeoutS: Double, wordOffsetS: Double, holdExtMaxS: Double, wordLenMaxS: Double)`
+- `PressQueueKnobs.queueMax` (property): `var queueMax: Int`
+- `PressQueueKnobs.wordLenMaxS` (property): `var wordLenMaxS: Double`
+- `PressQueueKnobs.wordOffsetS` (property): `var wordOffsetS: Double`
+- `PressQueueKnobs` (struct): `struct PressQueueKnobs`
+- `PressQueueStage.startReveal(revealId:key:source:origin:r0:)` (method): `func startReveal(revealId: Int, key: String, source: PressSource, origin: PressOrigin?, r0: Double) -> RevealStart`
+- `PressQueueStage` (protocol): `protocol PressQueueStage`
+- `PressQueue` (struct): `struct PressQueue`
+- `PressSource.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `PressSource.hardwareKey` (enum.case): `case hardwareKey`
+- `PressSource.hint(_:)` (enum.case): `case hint(String)`
+- `PressSource.keyboardRow` (enum.case): `case keyboardRow`
+- `PressSource` (enum): `enum PressSource`
+- `Press` (struct): `struct Press`
 - `RandomSource.next()` (method): `mutating func next() -> UInt64`
 - `RandomSource` (protocol): `protocol RandomSource`
+- `RevealStart.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `RevealStart.castId` (property): `var castId: String`
+- `RevealStart.formedS` (property): `var formedS: Double`
+- `RevealStart.hasWord` (property): `var hasWord: Bool`
+- `RevealStart.init(formedS:revealLen:hasWord:wordLen:castId:)` (init): `init(formedS: Double, revealLen: Double, hasWord: Bool, wordLen: Double?, castId: String)`
+- `RevealStart.revealLen` (property): `var revealLen: Double`
+- `RevealStart.wordLen` (property): `var wordLen: Double?`
+- `RevealStart` (struct): `struct RevealStart`
 - `SettingsBackend.read()` (method): `func read() -> [UInt8]?`
 - `SettingsBackend.remove()` (method): `func remove()`
 - `SettingsBackend.write(_:)` (method): `func write(_ bytes: [UInt8]) -> Bool?`
