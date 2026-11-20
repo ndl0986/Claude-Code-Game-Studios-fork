@@ -1,0 +1,41 @@
+$ cd apple/Tools && nice -n 10 swift build && nice -n 10 .build/debug/kidtools bake-sfx ../../content/themes/dinosaurs
+(run 2026-11-20T04:09Z, Swift 6.4)
+baked sfx/sfx_dino_0_nest_01.m4a  0.160 s  momentary max -20.00 LUFS (gain +6.57 dB)  -6.59 dBTP  onsets 1
+baked sfx/sfx_dino_1_babies_01.m4a  0.160 s  momentary max -20.00 LUFS (gain +4.93 dB)  -8.22 dBTP  onsets 1
+baked sfx/sfx_dino_2_babies_01.m4a  0.330 s  momentary max -20.00 LUFS (gain +1.92 dB)  -11.23 dBTP  onsets 2
+baked sfx/sfx_dino_3_babies_01.m4a  0.500 s  integrated -20.00 LUFS (gain +1.09 dB)  -12.06 dBTP  onsets 3
+baked sfx/sfx_dino_4_babies_01.m4a  0.670 s  integrated -20.00 LUFS (gain +0.93 dB)  -12.22 dBTP  onsets 4
+baked sfx/sfx_dino_5_babies_01.m4a  0.840 s  integrated -20.00 LUFS (gain +1.19 dB)  -11.96 dBTP  onsets 5
+baked sfx/sfx_dino_6_babies_01.m4a  1.010 s  integrated -20.00 LUFS (gain +1.21 dB)  -11.94 dBTP  onsets 6
+baked sfx/sfx_dino_7_babies_01.m4a  1.180 s  integrated -20.00 LUFS (gain +1.10 dB)  -12.05 dBTP  onsets 7
+baked sfx/sfx_dino_8_babies_01.m4a  1.350 s  integrated -20.00 LUFS (gain +1.19 dB)  -11.97 dBTP  onsets 8
+baked sfx/sfx_dino_9_babies_01.m4a  1.520 s  integrated -20.00 LUFS (gain +1.22 dB)  -11.93 dBTP  onsets 9
+baked sfx/sfx_dino_a_ankylosaurus_01.m4a  0.850 s  integrated -20.00 LUFS (gain -3.14 dB)  -9.01 dBTP  onsets 1
+baked sfx/sfx_dino_b_brachiosaurus_01.m4a  1.350 s  integrated -20.00 LUFS (gain +3.77 dB)  -7.76 dBTP  onsets 1
+baked sfx/sfx_dino_c_triceratops_01.m4a  0.950 s  integrated -20.00 LUFS (gain +6.50 dB)  -7.15 dBTP  onsets 1
+baked sfx/sfx_dino_d_diplodocus_01.m4a  1.350 s  integrated -20.00 LUFS (gain +3.77 dB)  -7.76 dBTP  onsets 1
+baked sfx/sfx_dino_e_edmontosaurus_01.m4a  0.330 s  momentary max -20.00 LUFS (gain +3.68 dB)  -7.71 dBTP  onsets 2
+baked sfx/sfx_dino_f_fossil_01.m4a  0.780 s  integrated -20.00 LUFS (gain +0.70 dB)  -6.96 dBTP  onsets 5
+baked sfx/sfx_dino_g_gallimimus_01.m4a  0.500 s  integrated -20.00 LUFS (gain +1.89 dB)  -11.27 dBTP  onsets 3
+baked sfx/sfx_dino_h_hadrosaurus_01.m4a  0.330 s  momentary max -20.00 LUFS (gain +3.68 dB)  -7.71 dBTP  onsets 2
+baked sfx/sfx_dino_i_iguanodon_01.m4a  0.330 s  momentary max -20.00 LUFS (gain +3.68 dB)  -7.71 dBTP  onsets 2
+baked sfx/sfx_dino_j_juravenator_01.m4a  0.330 s  momentary max -20.00 LUFS (gain +2.04 dB)  -11.12 dBTP  onsets 2
+baked sfx/sfx_dino_k_kentrosaurus_01.m4a  0.950 s  integrated -20.00 LUFS (gain +6.50 dB)  -7.15 dBTP  onsets 1
+baked sfx/sfx_dino_l_lambeosaurus_01.m4a  0.330 s  momentary max -20.00 LUFS (gain +3.68 dB)  -7.71 dBTP  onsets 2
+baked sfx/sfx_dino_m_maiasaura_01.m4a  0.330 s  momentary max -20.00 LUFS (gain +3.68 dB)  -7.71 dBTP  onsets 2
+baked sfx/sfx_dino_n_nest_01.m4a  0.780 s  integrated -20.00 LUFS (gain +0.70 dB)  -6.96 dBTP  onsets 5
+baked sfx/sfx_dino_o_oviraptor_01.m4a  0.500 s  integrated -20.00 LUFS (gain +1.89 dB)  -11.27 dBTP  onsets 3
+baked sfx/sfx_dino_p_tapejara_01.m4a  0.330 s  momentary max -20.00 LUFS (gain +2.04 dB)  -11.12 dBTP  onsets 2
+baked sfx/sfx_dino_q_quetzalcoatlus_01.m4a  0.330 s  momentary max -20.00 LUFS (gain +2.04 dB)  -11.12 dBTP  onsets 2
+baked sfx/sfx_dino_r_raptor_01.m4a  0.330 s  momentary max -20.00 LUFS (gain +3.43 dB)  -9.73 dBTP  onsets 2
+baked sfx/sfx_dino_s_stegosaurus_01.m4a  0.950 s  integrated -20.00 LUFS (gain +6.50 dB)  -7.15 dBTP  onsets 1
+baked sfx/sfx_dino_t_trex_01.m4a  1.650 s  integrated -20.00 LUFS (gain +2.20 dB)  -7.79 dBTP  onsets 1
+baked sfx/sfx_dino_u_utahraptor_01.m4a  0.330 s  momentary max -20.00 LUFS (gain +3.43 dB)  -9.73 dBTP  onsets 2
+baked sfx/sfx_dino_v_velociraptor_01.m4a  0.330 s  momentary max -20.00 LUFS (gain +3.43 dB)  -9.73 dBTP  onsets 2
+baked sfx/sfx_dino_w_wuerhosaurus_01.m4a  0.950 s  integrated -20.00 LUFS (gain +6.50 dB)  -7.15 dBTP  onsets 1
+baked sfx/sfx_dino_x_xenoceratops_01.m4a  0.950 s  integrated -20.00 LUFS (gain +6.50 dB)  -7.15 dBTP  onsets 1
+baked sfx/sfx_dino_y_yutyrannus_01.m4a  1.650 s  integrated -20.00 LUFS (gain +2.20 dB)  -7.79 dBTP  onsets 1
+baked sfx/sfx_dino_z_zuniceratops_01.m4a  0.950 s  integrated -20.00 LUFS (gain +6.50 dB)  -7.15 dBTP  onsets 1
+baked sfx/provenance.json
+bake-sfx: 36 sound(s) baked
+exit 0

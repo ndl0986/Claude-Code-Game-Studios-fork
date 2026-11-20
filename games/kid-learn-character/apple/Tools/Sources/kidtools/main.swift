@@ -16,6 +16,10 @@
 //        64 kbit/s to themes/<id>/voice/<locale>/vo_<locale>_<kind>_<id>.m4a, plus voice/<locale>/provenance.json
 //        (ADR-0003 D5/D6). The interpreter is --python or $KIDTOOLS_PYTHON; --helper overrides the helper script.
 //        Nothing is written unless every line renders. Loudness and voiceDurations are story 004.
+//   kidtools bake-sfx <theme-dir>   render src/sfx/recipes.json (the prototype's synth recipes as data) to
+//        <theme-dir>/sfx/sfx_<castId>.m4a (AAC mono 48 kHz 64 kbit/s via the voice bake's encoder), each normalised to
+//        -20 LUFS (momentary max under 0.4 s) with true peak <= -1 dBTP by the D5 meter, plus sfx/provenance.json
+//        (ADR-0003 D5, story 007). A file over 2.0 s or over the true-peak ceiling names itself and nothing is written.
 import Foundation
 import ToolsCore
 
@@ -86,6 +90,19 @@ case "bake-voice":
         for f in r.written { print("baked \(f)") }
         for t in r.skipped { print("skipped theme \(t): no theme.json (in progress)") }
         print("bake-voice: \(r.written.count) file(s) baked, \(r.skipped.count) theme(s) skipped")
+    } catch {
+        print("REJECTED \(error)"); exit(1)
+    }
+case "bake-sfx":
+    guard args.count == 2 else { fail("usage: kidtools bake-sfx <theme-dir>") }
+    do {
+        let r = try SfxBake.bakeTheme(themeDir: URL(fileURLWithPath: args[1]))
+        for f in r.files {
+            print(String(format: "baked %@  %.3f s  %@ %.2f LUFS (gain %+.2f dB)  %.2f dBTP  onsets %d", f.path, f.duration,
+                         f.momentaryOnly ? "momentary max" : "integrated", f.loudnessAfter, f.gainDB, f.truePeakDBTP, f.onsets))
+        }
+        print("baked sfx/provenance.json")
+        print("bake-sfx: \(r.files.count) sound(s) baked")
     } catch {
         print("REJECTED \(error)"); exit(1)
     }

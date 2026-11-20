@@ -1,0 +1,341 @@
+{
+  "schemaVersion": 1,
+  "note": "Sfx recipes for the Dinosaurs theme (ADR-0003 D5, content-pipeline story 007), ported from prototypes/letter-morph-dinosaur (config.js KEY_TABLE sound fields and the named recipes; index.html roar/chirps/crack/thump). Output level is never set here: the bake normalises every file to -20 LUFS. Values in synth are the prototype's graph constants at roar_volume 0.35 (chirp level 0.22 = 0.22*roar_volume/0.35, tone level 0.5 = 0.5*roar_volume/0.35). Deviations from the prototype: the crack tick attack is 0.010 s (prototype 0.003 s; Audio R7 A1 needs >= 10 ms) and digits 6-9 chirp n times (prototype capped at 5; Audio E11, AC-19). Key Table SFX names are in label.",
+  "synth": {
+    "noise": {
+      "seed": 12345,
+      "seconds": 2
+    },
+    "roarVolume": 0.35,
+    "envelope": {
+      "floor": 0.0001,
+      "holdFraction": 0.45
+    },
+    "defaultQdB": 1,
+    "roar": {
+      "noiseQdB": 3,
+      "noiseCutStart": 0.6,
+      "noiseCutPeak": 1,
+      "noiseCutEnd": 0.4,
+      "cutPeakAt": 0.3,
+      "noiseGain": 0.8,
+      "noiseAttack": 0.12,
+      "sawStart": 1,
+      "sawPeak": 1.25,
+      "sawEnd": 0.8,
+      "lfoDepth": 0.08,
+      "sawCut": 0.8,
+      "sawGain": 0.5,
+      "sawAttack": 0.12,
+      "tail": 0.05
+    },
+    "chirp": {
+      "spacing": 0.17,
+      "rise": 0.06,
+      "fall": 0.13,
+      "fallRatio": 0.9,
+      "envDur": 0.14,
+      "attack": 0.015,
+      "stop": 0.16,
+      "level": 0.22,
+      "honkCut": 1200
+    },
+    "crack": {
+      "ticks": 3,
+      "spacing": 0.13,
+      "highpass": 1800,
+      "envDur": 0.06,
+      "level": 0.25,
+      "attack": 0.01,
+      "noiseStep": 0.3,
+      "stop": 0.08,
+      "peepAt": 0.45,
+      "peepF0": 1300,
+      "peepF1": 1900,
+      "peepN": 2
+    },
+    "thump": {
+      "tone1Freq": 70,
+      "tone1Dur": 0.35,
+      "tone1Level": 0.5,
+      "tone1At": 0,
+      "tone2Freq": 48,
+      "tone2Dur": 0.45,
+      "tone2Level": 0.4,
+      "tone2At": 0.18,
+      "toneAttack": 0.01,
+      "toneTail": 0.02,
+      "roarScale": 0.6
+    }
+  },
+  "recipes": {
+    "dino_a_ankylosaurus_01": {
+      "label": "thump",
+      "kind": "thump",
+      "f0": 60,
+      "cut": 380,
+      "dur": 0.8,
+      "vol": 0.7,
+      "vib": 4
+    },
+    "dino_b_brachiosaurus_01": {
+      "label": "deep roar",
+      "kind": "roar",
+      "f0": 70,
+      "cut": 600,
+      "dur": 1.3,
+      "vol": 0.9,
+      "vib": 5
+    },
+    "dino_c_triceratops_01": {
+      "label": "grumble",
+      "kind": "roar",
+      "f0": 85,
+      "cut": 450,
+      "dur": 0.9,
+      "vol": 0.7,
+      "vib": 3
+    },
+    "dino_d_diplodocus_01": {
+      "label": "deep roar",
+      "kind": "roar",
+      "f0": 70,
+      "cut": 600,
+      "dur": 1.3,
+      "vol": 0.9,
+      "vib": 5
+    },
+    "dino_e_edmontosaurus_01": {
+      "label": "honk",
+      "kind": "honk",
+      "f0": 260,
+      "f1": 380,
+      "n": 2
+    },
+    "dino_f_fossil_01": {
+      "label": "crack",
+      "kind": "crack"
+    },
+    "dino_g_gallimimus_01": {
+      "label": "chirp",
+      "kind": "chirp",
+      "f0": 900,
+      "f1": 1400,
+      "n": 3
+    },
+    "dino_h_hadrosaurus_01": {
+      "label": "honk",
+      "kind": "honk",
+      "f0": 260,
+      "f1": 380,
+      "n": 2
+    },
+    "dino_i_iguanodon_01": {
+      "label": "honk",
+      "kind": "honk",
+      "f0": 260,
+      "f1": 380,
+      "n": 2
+    },
+    "dino_j_juravenator_01": {
+      "label": "screech",
+      "kind": "chirp",
+      "f0": 1100,
+      "f1": 1700,
+      "n": 2
+    },
+    "dino_k_kentrosaurus_01": {
+      "label": "grumble",
+      "kind": "roar",
+      "f0": 85,
+      "cut": 450,
+      "dur": 0.9,
+      "vol": 0.7,
+      "vib": 3
+    },
+    "dino_l_lambeosaurus_01": {
+      "label": "honk",
+      "kind": "honk",
+      "f0": 260,
+      "f1": 380,
+      "n": 2
+    },
+    "dino_m_maiasaura_01": {
+      "label": "honk",
+      "kind": "honk",
+      "f0": 260,
+      "f1": 380,
+      "n": 2
+    },
+    "dino_n_nest_01": {
+      "label": "crack",
+      "kind": "crack"
+    },
+    "dino_o_oviraptor_01": {
+      "label": "chirp",
+      "kind": "chirp",
+      "f0": 900,
+      "f1": 1400,
+      "n": 3
+    },
+    "dino_p_tapejara_01": {
+      "label": "screech",
+      "kind": "chirp",
+      "f0": 1100,
+      "f1": 1700,
+      "n": 2
+    },
+    "dino_q_quetzalcoatlus_01": {
+      "label": "screech",
+      "kind": "chirp",
+      "f0": 1100,
+      "f1": 1700,
+      "n": 2
+    },
+    "dino_r_raptor_01": {
+      "label": "raptor chirp",
+      "kind": "chirp",
+      "f0": 650,
+      "f1": 1050,
+      "n": 2
+    },
+    "dino_s_stegosaurus_01": {
+      "label": "grumble",
+      "kind": "roar",
+      "f0": 85,
+      "cut": 450,
+      "dur": 0.9,
+      "vol": 0.7,
+      "vib": 3
+    },
+    "dino_t_trex_01": {
+      "label": "big roar",
+      "kind": "roar",
+      "f0": 58,
+      "cut": 900,
+      "dur": 1.6,
+      "vol": 1,
+      "vib": 6
+    },
+    "dino_u_utahraptor_01": {
+      "label": "raptor chirp",
+      "kind": "chirp",
+      "f0": 650,
+      "f1": 1050,
+      "n": 2
+    },
+    "dino_v_velociraptor_01": {
+      "label": "raptor chirp",
+      "kind": "chirp",
+      "f0": 650,
+      "f1": 1050,
+      "n": 2
+    },
+    "dino_w_wuerhosaurus_01": {
+      "label": "grumble",
+      "kind": "roar",
+      "f0": 85,
+      "cut": 450,
+      "dur": 0.9,
+      "vol": 0.7,
+      "vib": 3
+    },
+    "dino_x_xenoceratops_01": {
+      "label": "grumble",
+      "kind": "roar",
+      "f0": 85,
+      "cut": 450,
+      "dur": 0.9,
+      "vol": 0.7,
+      "vib": 3
+    },
+    "dino_y_yutyrannus_01": {
+      "label": "big roar",
+      "kind": "roar",
+      "f0": 58,
+      "cut": 900,
+      "dur": 1.6,
+      "vol": 1,
+      "vib": 6
+    },
+    "dino_z_zuniceratops_01": {
+      "label": "grumble",
+      "kind": "roar",
+      "f0": 85,
+      "cut": 450,
+      "dur": 0.9,
+      "vol": 0.7,
+      "vib": 3
+    },
+    "dino_0_nest_01": {
+      "label": "one soft chirp",
+      "kind": "chirp",
+      "f0": 700,
+      "f1": 900,
+      "n": 1
+    },
+    "dino_1_babies_01": {
+      "label": "chirp x1",
+      "kind": "chirp",
+      "f0": 1200,
+      "f1": 1700,
+      "n": 1
+    },
+    "dino_2_babies_01": {
+      "label": "chirp x2",
+      "kind": "chirp",
+      "f0": 1200,
+      "f1": 1700,
+      "n": 2
+    },
+    "dino_3_babies_01": {
+      "label": "chirp x3",
+      "kind": "chirp",
+      "f0": 1200,
+      "f1": 1700,
+      "n": 3
+    },
+    "dino_4_babies_01": {
+      "label": "chirp x4",
+      "kind": "chirp",
+      "f0": 1200,
+      "f1": 1700,
+      "n": 4
+    },
+    "dino_5_babies_01": {
+      "label": "chirp x5",
+      "kind": "chirp",
+      "f0": 1200,
+      "f1": 1700,
+      "n": 5
+    },
+    "dino_6_babies_01": {
+      "label": "chirp x6",
+      "kind": "chirp",
+      "f0": 1200,
+      "f1": 1700,
+      "n": 6
+    },
+    "dino_7_babies_01": {
+      "label": "chirp x7",
+      "kind": "chirp",
+      "f0": 1200,
+      "f1": 1700,
+      "n": 7
+    },
+    "dino_8_babies_01": {
+      "label": "chirp x8",
+      "kind": "chirp",
+      "f0": 1200,
+      "f1": 1700,
+      "n": 8
+    },
+    "dino_9_babies_01": {
+      "label": "chirp x9",
+      "kind": "chirp",
+      "f0": 1200,
+      "f1": 1700,
+      "n": 9
+    }
+  }
+}

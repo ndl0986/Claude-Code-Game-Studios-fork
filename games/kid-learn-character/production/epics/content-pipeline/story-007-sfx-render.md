@@ -102,19 +102,14 @@ story **reuses story 003's encoder and its priming proof** rather than a second 
 
 ## Files
 
-*Planned; `/dev-story` replaces this list with the files it changed. Roots are ADR-0001 D3 / ADR-0002 D1 (`apple/`);
-`engine.name` is unset by design.*
-
-- `apple/Tools/Sources/ToolsCore/SfxBake.swift` (the synth, recipes and bake)
-- `apple/Tools/Sources/ToolsCore/Loudness.swift` (the ADR-0003 D5 meter)
-- `apple/Tools/Tests/ToolsTests/LoudnessTests.swift`
-- `apple/Tools/Tests/ToolsTests/SfxBakeTests.swift`
-- `apple/Tools/Sources/kidtools/main.swift` (the `bake sfx` command)
-- `content/themes/dinosaurs/src/sfx/recipes.json` (the 36 recipes as data)
-- `content/themes/dinosaurs/sfx/` (generated, committed: 36 `.m4a` and `provenance.json`)
-- `production/qa/evidence/story-007-sfx-render/` (the bake log, onset counts, loudness table, by-ear notes)
-
----
+- `apple/Tools/Sources/ToolsCore/Loudness.swift` (new: the ADR-0003 D5 BS.1770-4 meter, integrated, momentary max and true peak)
+- `apple/Tools/Sources/ToolsCore/SfxBake.swift` (new: recipe parser, synth, normalise, bake, onset counter, container-timestamp zeroing)
+- `apple/Tools/Sources/kidtools/main.swift` (modified: the `bake-sfx <theme-dir>` command)
+- `apple/Tools/Tests/ToolsTests/LoudnessTests.swift` (new: 8 tests, EBU Tech 3341 mono cases)
+- `apple/Tools/Tests/ToolsTests/SfxBakeTests.swift` (new: 9 tests)
+- `content/themes/dinosaurs/src/sfx/recipes.json` (new: the 36 recipes and the synth constants, as data)
+- `production/qa/evidence/story-007-sfx-render/` (bake log, loudness table, verify run, README)
+- `content/themes/dinosaurs/sfx/` (generated: 36 `.m4a` + `provenance.json`; held out until `theme.json` lands, see the evidence README)
 
 ## QA Test Cases
 
