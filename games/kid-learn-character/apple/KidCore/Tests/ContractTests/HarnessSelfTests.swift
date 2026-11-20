@@ -160,4 +160,82 @@ final class HarnessSelfTests: XCTestCase {
                                                    ["out": "write", "bytes": bytes]]]]))
         XCTAssertTrue(failures().first?.contains("steps[1].expect[0]") ?? false, "\(failures())")
     }
+
+    // MARK: expectState and case-level fields (TASK-148)
+
+    /// A one-case stub-state-v1 file: `set` stores `value` as the state `value` and `obj.at`.
+    func stubFile(set: Double, expectState: [String: Any], tolerance: Double = 1e-9) -> [String: Any] {
+        let c: [String: Any] = ["id": "s1", "source": "gdd: test.md R1", "given": [String: Any](), "draws": [String: Any](),
+                                "steps": [["t": ["uptime": 0.0], "event": ["type": "set", "value": set], "expect": [Any](),
+                                           "expectState": expectState]]]
+        return ["contract": "stub-state-v1", "schema": 1, "uint64AsString": true, "units": ["time": "s"],
+                "tolerance": ["time": tolerance], "streams": [String](), "cases": [c]]
+    }
+
+    func stubFailures(_ file: [String: Any]) throws -> [String] {
+        try write(file, dir: "stub-state-v1")
+        try registry([("stub-state-v1", "runner: StubStateRunner", 1)])
+        return ContractHarness.runAll(root: root, runners: [StubStateRunner.self]).failures
+    }
+
+    func test_expect_state_that_matches_passes() throws {
+        XCTAssertEqual(try stubFailures(stubFile(set: 1.0, expectState: ["value": 1.0, "obj": ["at": 1.0]])), [])
+    }
+
+    func test_expect_state_with_a_wrong_value_fails_with_its_path() throws {
+        let f = try stubFailures(stubFile(set: 1.0, expectState: ["value": 2.0]))
+        XCTAssertEqual(f.count, 1, "\(f)")
+        XCTAssertTrue(f[0].hasPrefix("stub-state-v1/s1 [gdd: test.md R1] steps[0].expectState.value: expected 2"), f[0])
+    }
+
+    func test_expect_state_doubles_compare_within_their_field_kind() throws {
+        // `value` and `obj.at` are kind `time` (1e-9 here): inside passes, outside fails, at either depth.
+        XCTAssertEqual(try stubFailures(stubFile(set: 1.0, expectState: ["value": 1.0 + 5e-10, "obj": ["at": 1.0 + 5e-10]])), [])
+        let f = try stubFailures(stubFile(set: 1.0, expectState: ["obj": ["at": 1.0 + 1e-6]]))
+        XCTAssertTrue(f.first?.contains("steps[0].expectState.obj.at: expected") ?? false, "\(f)")
+        XCTAssertTrue(f.first?.contains("(tol 1e-09)") ?? false, "\(f)")
+    }
+
+    func test_expect_state_naming_unknown_state_fails() throws {
+        let f = try stubFailures(stubFile(set: 1.0, expectState: ["nope": 1]))
+        XCTAssertTrue(f.first?.contains("steps[0].expectState.nope: ") ?? false, "\(f)")
+    }
+
+    func test_a_runner_with_no_state_fails_a_case_that_checks_state() throws {
+        let record: [String: Any] = ["childLock": false, "keyboardRow": false, "muted": false, "schemaVersion": 1,
+                                     "themeId": "dinosaurs", "volume": 8, "weather": "clear", "windy": false]
+        try write(settingsFile(steps: [["t": ["uptime": 1.0], "event": ["type": "read"],
+                                        "expect": [["out": "record", "record": record, "childLockActive": false]],
+                                        "expectState": ["record": record]]]))
+        XCTAssertTrue(failures().first?.contains("steps[1].expectState.record: this runner exposes no state") ?? false, "\(failures())")
+    }
+
+    func test_case_level_expect_permute_and_tolerance_fail_as_unsupported() throws {
+        let extras: [(String, [String: Any])] = [
+            ("expect", ["expect": ["x": 1]]),
+            ("permute", ["permute": ["/platform"]]),
+            ("tolerance", ["tolerance": ["steps[0].expect[0].record.volume": 0.5], "toleranceReason": "gdd: settings-store.md R5"])]
+        for (k, extra) in extras {
+            try write(settingsFile(caseExtra: extra))
+            XCTAssertTrue(failures().contains { $0.contains("\(k): case-level \(k) is not supported") }, "\(k): \(failures())")
+        }
+    }
+}
+
+/// A test-only runner with state (TASK-148): `set` stores `value`; state `value` and `obj` (`{at}`) are kind `time`.
+struct StubStateRunner: ContractRunner {
+    static let contract = "stub-state-v1"
+    static let declaration = ContractDeclaration(givenFields: [], events: ["set": ["value"]])
+    static func kind(out: String, field: String) -> String? { nil }
+    static func stateKind(name: String, field: String) -> String? { ["value", "at"].contains(field) ? "time" : nil }
+    var v = 0.0
+    init(given: [String: JSONValue], draws: DrawQueues) throws {}
+    mutating func step(uptime: Double, event e: [String: JSONValue]) throws -> Outputs { v = e["value"]?.number ?? 0; return [] }
+    func state(_ name: String) throws -> JSONValue {
+        switch name {
+        case "value": return .double(v)
+        case "obj": return .object(["at": .double(v)])
+        default: throw ContractError("stub-state-v1 exposes no state named \(name)")
+        }
+    }
 }

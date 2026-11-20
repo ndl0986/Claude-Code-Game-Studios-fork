@@ -80,6 +80,12 @@ struct KeyTableModelRunner: ContractRunner {
 
     func needDraw() throws -> UInt64 { try draws.next("key-variety") }
 
+    /// spec.md State: `lastShown` (key → index; no field kinds).
+    func state(_ name: String) throws -> JSONValue {
+        guard name == "lastShown" else { throw ContractError("key-table-schema-v3 exposes no state named \(name) (spec.md State)") }
+        return .object(variety.lastShown.mapValues { .int(Int64($0)) })
+    }
+
     mutating func step(uptime: Double, event e: [String: JSONValue]) throws -> Outputs {
         switch e["type"]?.string {
         case "validate":
