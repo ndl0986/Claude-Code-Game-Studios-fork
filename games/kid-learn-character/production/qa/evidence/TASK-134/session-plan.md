@@ -1,6 +1,6 @@
 # TASK-134 Mac session 1: recovery plan and run order
 
-Build: DeviceSpike macOS, source **a19e8c85** (gate `a19e8c85/spike-check-mac.txt`: every item PASS, exit 0; ad-hoc
+Build: DeviceSpike macOS, source **4a51386d** (gate `4a51386d/spike-check-mac.txt`: every item PASS, exit 0; ad-hoc
 signed, sandbox only). Mac: macOS 27.2.1, built-in 3024 × 1964 Retina (main) + an external 1920 × 1080 display.
 Driver: game-dev-ios (launches, logs, window-only screenshots). Results: game-qc-ios (`results.md`). Luan talks to the
 leader only. Nothing is launched before Luan's "go".
@@ -14,7 +14,7 @@ The lock (`Kiosk.lock()`) sets `[.hideDock, .hideMenuBar, .disableProcessSwitchi
 | # | Way out | Who | Works when |
 |---|---|---|---|
 | R1 | ⌃⌥⌘Q → the overlay → **Close**, then **Unlock**; or hold **Quit (1.5 s)** (unlocks and quits) | Luan | the app is active and its window is key (the chord is a local monitor; it does **not** work after a focus loss, e.g. M-4 clicks on a cover, M-6 sleep) |
-| R2 | **Dead-man** (new in a19e8c85): every lock auto-unlocks after `-deadman` seconds (tonight **180 s = the 3-min row limit**), log line `[lock] dead-man: auto-unlock after 180 s locked`; if the main thread is hung it ends the process after 2 s more | automatic | always, including a hung main thread or a lost key window |
+| R2 | **Dead-man** (new in a19e8c85, reviewed at 4a51386d): every lock auto-unlocks after `-deadman` seconds (tonight **180 s = the 3-min row limit**), log line `[lock] dead-man: auto-unlock after 180 s locked`; if the main thread is hung it ends the process after 2 s more | automatic | always, including a hung main thread or a lost key window |
 | R3 | `pkill -x DeviceSpike` (SIGTERM), then `pkill -9 -x DeviceSpike` 3 s later if still running; macOS restores the Dock, menu bar and Force Quit when the process ends (proved in the dry run D1 before any other row) | game-dev-ios, from the session shell (tested: runs with no permission prompt) | always, independent of focus or the app's state |
 | R4 | Hold the **power button ~10 s** (forced restart) | Luan, told by the leader | only if R1–R3 all failed; unsaved work is lost, hence the prep below |
 
