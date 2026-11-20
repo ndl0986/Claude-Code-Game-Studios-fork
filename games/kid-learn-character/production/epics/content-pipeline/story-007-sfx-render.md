@@ -1,7 +1,7 @@
 # Story 007: Sfx bake: render the 36 Dinosaurs creature sounds from the prototype's synth recipes, AAC mono
 
 > **Epic**: Content Pipeline (Tools) (`production/epics/content-pipeline/EPIC.md`)
-> **Status**: Ready (blocked on story 003's encoder and story 004's loudness meter, see Dependencies)
+> **Status**: In Progress (on story 003's branch; this story builds the D5 meter, leader 2026-11-20)
 > **Layer**: Foundation
 > **Type**: Integration
 > **Estimate**: M
@@ -51,8 +51,11 @@ story **reuses story 003's encoder and its priming proof** rather than a second 
   one soft chirp. A test counts the onsets in the rendered PCM.
 - [ ] **Length (V12, A3):** every file is ≤ 2.0 s decoded, including 9 chirps; the build fails naming the file
   otherwise.
+- [ ] **The D5 meter (built here; story 004 reuses it):** `Loudness.swift` measures ITU-R BS.1770-4 integrated loudness
+  (K-weighting, 400 ms blocks, absolute and relative gating), the momentary maximum (400 ms), and true peak (4×
+  oversampled), and passes the **EBU Tech 3341** reference signals it can express in mono within **±0.1 LU** (a test).
 - [ ] **Loudness (F4, A7):** every file is normalised to the cast class, **−20 LUFS ±1 LU** (the momentary maximum for
-  sounds under 0.4 s), with true peak ≤ −1 dBTP, by the ADR-0003 D5 meter.
+  sounds under 0.4 s), with true peak ≤ −1 dBTP, by that meter.
 - [ ] **Toddler-safe (A1, A2):** every sound starts with an attack of ≥ 10 ms (no click at the start); roars stay
   "a grumble, not a scream": a by-ear check in the content review, retained as evidence.
 - [ ] **Deterministic:** two runs give byte-identical PCM and the same files. The noise comes from the prototype's
@@ -77,7 +80,7 @@ story **reuses story 003's encoder and its priming proof** rather than a second 
   The output gain is set by the loudness step, never by the prototype's `roar_volume`.
 - **Numbers:** the prototype capped the chirps at 5 (`Math.min(d, 5)`). Audio Q6 (Luan) counts up to 9, so the recipe
   is `chirp {f0 1200, f1 1700, n: d}`. 9 chirps at 0.17 s spacing end at 8 × 0.17 + 0.16 = 1.52 s, within 2.0 s.
-- **The pipeline:** recipe → PCM (48 kHz) → **normalise** (story 004's meter: integrated LUFS, or the momentary
+- **The pipeline:** recipe → PCM (48 kHz) → **normalise** (the D5 meter built here: integrated LUFS, or the momentary
   maximum under 0.4 s, then true peak) → **encode** (story 003's `encode`, the same settings and priming handling) →
   `sfx/`. Stage to a temp folder and copy only on success (story 003's pattern), so a failure writes nothing.
 - **Commands:** `kidtools bake sfx` (or the name story 003 settles on), run by hand on the build Mac. `verify.sh`
@@ -90,8 +93,8 @@ story **reuses story 003's encoder and its priming proof** rather than a second 
 *Handled by neighbouring stories; do not implement here:*
 
 - story-003: the AAC encoder and its priming proof (reused).
-- story-004: the BS.1770 meter, its EBU Tech 3341 self-check and the loudness gate on every file (reused for the
-  normalise step), and the staleness check.
+- story-004: the loudness **gate** on every voice and sfx file, `voiceDurations` and the staleness check. They reuse
+  this story's meter (leader, 2026-11-20).
 - Real recorded or sourced creature sounds: later. The prototype recipes stand in, as the Key Table says.
 - UI sounds (chime, ping, twinkle, parade tune): a separate story.
 
@@ -103,6 +106,8 @@ story **reuses story 003's encoder and its priming proof** rather than a second 
 `engine.name` is unset by design.*
 
 - `apple/Tools/Sources/ToolsCore/SfxBake.swift` (the synth, recipes and bake)
+- `apple/Tools/Sources/ToolsCore/Loudness.swift` (the ADR-0003 D5 meter)
+- `apple/Tools/Tests/ToolsTests/LoudnessTests.swift`
 - `apple/Tools/Tests/ToolsTests/SfxBakeTests.swift`
 - `apple/Tools/Sources/kidtools/main.swift` (the `bake sfx` command)
 - `content/themes/dinosaurs/src/sfx/recipes.json` (the 36 recipes as data)
@@ -133,8 +138,7 @@ mode).
 - **Depends on:**
   - `story-003-voice-render-encode.md`: the AAC encoder and its priming proof, to be reused. In progress, on
     feat/key-table-001-dinosaurs-theme, not merged yet.
-  - `story-004-loudness-durations-staleness.md`: the BS.1770 meter used to normalise. Ready, not started.
-  - **Open for the leader:** if story 004 hasn't started, this story can **build the D5 meter** (`Loudness.swift`, with
-    its EBU Tech 3341 check), and 004 then reuses it for its gates, so there's one meter, not two. Decide before
-    `/dev-story` begins.
+  - **Decided (leader, 2026-11-20, option a):** this story **builds the D5 meter**; story 004 reuses it for its gates.
+    Branched on story 003's branch (feat/content-pipeline-003-voice-bake @ 6721257a); merge order 001 → 002 → 003 →
+    007.
 - **Unlocks:** `production/epics/key-table/story-001-dinosaurs-theme-data.md` (every item's `sfx` resolves).
