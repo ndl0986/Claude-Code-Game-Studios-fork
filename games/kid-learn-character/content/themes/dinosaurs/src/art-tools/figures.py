@@ -183,20 +183,25 @@ def quetzal():
 # ================================================================================================ duckbills (E, H, I, L, M)
 def duckbill(k, trait):
     B, F, BL, acc = C[k]
-    hb, hd = face(448, 182, 11, (468, 200, 9, 6), (456, 208, 470, 213, 484, 205))
+    # S-7 (64 px white silhouettes, TASK-137 review): each duckbill's head line differs from its siblings'.
+    # M lowers her head toward her baby (offset ox, oy), a pose no sibling has.
+    ox, oy = (16, 40) if trait == 'brow-baby' else (0, 0)
+    hb, hd = face(448 + ox, 182 + oy, 11, (468 + ox, 200 + oy, 9, 6), (456 + ox, 208 + oy, 470 + ox, 213 + oy, 484 + ox, 205 + oy))
     hgroups = []
-    hshapes = [ell(440, 192, 50, 26, -12)]
+    hshapes = [ell(440 + ox, 192 + oy, 50, 26, -12)]
     if trait == 'duck-bill':
-        hgroups.append((acc['bill'], [ell(494, 204, 30, 12, -6)]))
+        hgroups.append((acc['bill'], [ell(504, 206, 42, 11, -4)]))   # E: a long, flat duck bill
+    elif trait == 'bump':
+        hshapes.append(ell(486, 200, 26, 16, -2))                     # H: a deep snout under ...
+        hgroups.append((acc['bump'], [ell(476, 180, 30, 14, -6)]))    # ... a broad arched nose
     else:
-        hshapes.append(ell(488, 204, 22, 11, -6))
-    if trait == 'bump':
-        hgroups.append((acc['bump'], [circ(470, 178, 13)]))
+        hshapes.append(ell(488 + ox, 204 + oy, 22, 11, -6))
     if trait == 'hatchet-crest':
         hgroups.append((acc['crest'], [rpoly([(410, 176), (432, 110), (468, 108), (452, 178)], 8)]))
     if trait == 'brow-baby':
-        hgroups.append((acc['brow'], [ell(446, 166, 18, 7, -12)]))
-    head = Part('head', (430, 170), body=[(B, hshapes)] + hgroups + hb, detail=hd)
+        hshapes.append(ell(426, 250, 36, 18, 32))                    # the neck bends down to the lowered head
+        hgroups.append((acc['brow'], [ell(446 + ox, 166 + oy, 18, 7, -12)]))
+    head = Part('head', (430 + ox, 170 + oy), body=[(B, hshapes)] + hgroups + hb, detail=hd)
     tail = Part('tail', (190, 300), body=[(B, [ell(150, 300, 110, 24, -8)])])
     # the front leg comes down from under the chest (TASK-137 review: a leg in front of the body read as a post)
     rootb = [(F, [rrect(250, 330, 42, 80, 20), rrect(334, 320, 26, 90, 12)]),
@@ -204,7 +209,7 @@ def duckbill(k, trait):
              (BL, [ell(312, 310, 56, 32, -8)]), (BONE, [ell(312, 404, 13, 6), ell(378, 404, 10, 6)])]
     extra_det = []
     if trait == 'thumb-spike':   # I: a cream thumb spike pointing up from the front hand
-        rootb[3] = (BONE, rootb[3][1] + [rpoly([(372, 336), (410, 300), (384, 346)], 4)])
+        rootb[3] = (BONE, rootb[3][1] + [rpoly([(370, 334), (426, 290), (386, 348)], 4)])
     if trait == 'brow-baby':     # M: a tiny baby beside the front foot, part of the outline
         rootb.insert(3, (acc['baby'], [ell(470, 392, 20, 16), circ(486, 374, 14)]))
         extra_det = [('fill', INK, [circ(490, 372, 3)])]
@@ -252,7 +257,8 @@ def plated(k, trait):
         nearg = (acc['plates'], [ell(x, 262, 26, 14, 0) for x in (210, 258, 306, 354)])
         tailx = []
     hb, hd = face(466, 340, 9, (480, 356, 7, 4), (470, 362, 480, 366, 490, 360))
-    head = Part('head', (470, 330), body=[(B, [ell(458, 350, 34, 24, 10)])] + hb, detail=hd)
+    # a short neck joins head and torso, so the body is one shape (game-dev-ios, TASK-137 review); the pivot sits at its base
+    head = Part('head', (420, 334), body=[(B, [ell(458, 350, 34, 24, 10), ell(428, 338, 34, 17, 18)])] + hb, detail=hd)
     tail = Part('tail', (180, 320), body=[(B, [ell(140, 324, 100, 20, 12)])] + tailx)
     return Part('root', (320, 410), back=[tail], front=[head],
                 body=groups + [(F, [rrect(222, 345, 38, 65, 17), rrect(352, 345, 38, 65, 17)]),
@@ -340,5 +346,7 @@ if __name__ == '__main__':
         # R-3: the babies are one fixed size across every number so the count reads (art bible §5), so S-1's
         # 60 % fill is not checked for them; their node caps are per baby (6 stage / 4 parade).
         caps = (6 * 9, 4 * 9, None) if isbaby else (23, 15, 5)
-        ok &= write(f'dino_{k}_{name}_01', f'Letterlings Dinosaurs: {title}', fn(), caps, out, skipfill=isbaby)
+        # islands: each baby stands apart (the count reads); M's baby stands beside her; every other figure is one shape
+        isl = int(k) if isbaby else (2 if k == 'm' else 1)
+        ok &= write(f'dino_{k}_{name}_01', f'Letterlings Dinosaurs: {title}', fn(), caps, out, skipfill=isbaby, islands=isl)
     print('ALL OK' if ok else 'PROBLEM')

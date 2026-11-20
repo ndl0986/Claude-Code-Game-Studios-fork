@@ -11,6 +11,7 @@ SVGs, or the next run will overwrite your change.
 | `figures.py` | One parametric template per family (rex, flyer, sauropod, raptor, ankylosaur, duckbill, horned, plated, ornithomimid, objects, babies), the spec's colours per item, and the `FIG` table mapping each key to its template. |
 | `contact_sheet.py` | Builds a square review sheet: each cast SVG beside its grey silhouette, at half size. |
 | `lint.py` | A local check of the ADR-0003 D4 SVG subset and structure. |
+| `idle_check.py` | OQ-1: turns each proposed `head` and `tail` idle to its full amplitude around its pivot, and checks the body stays one shape (no gap opens at a joint). |
 
 ## Regenerating
 
@@ -25,7 +26,9 @@ python3 -m venv <scratch>/geovenv && <scratch>/geovenv/bin/pip install shapely
 
 - **Keys:** `figures.py` takes a comma list of keys: letters, and `0`–`9`.
 - **What it prints:** for each figure, its part count, its stage and parade node counts against the spec's caps
-  (R-2: stage ≤ 23, parade ≤ 15, ≤ 5 parts), its bounding box and the S-1 fill check. It ends with `ALL OK` or
+  (R-2: stage ≤ 23, parade ≤ 15, ≤ 5 parts), its bounding box, the S-1 fill check and its **islands** (how many
+  separate shapes the silhouette has: 1 for every figure, so the stardust lands on one animal; n for n babies; 2 for M,
+  whose baby stands apart). It ends with `ALL OK` or
   `PROBLEM`.
 - **Same input, same bytes:** the output depends only on the templates, so a re-run writes byte-identical files.
 - **Review sheet:** `contact_sheet.py <theme-dir> <out.svg> <stem>…` writes the sheet. Render it headless, with no

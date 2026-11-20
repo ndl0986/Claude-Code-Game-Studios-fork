@@ -63,7 +63,7 @@ def counts(root):
     outl=sum(1 for p in parts if p.body)
     return len(parts),body,det,outl
 def smile(x0,y0,cx,cy,x1,y1): return f'M{fmt(x0)} {fmt(y0)}Q{fmt(cx)} {fmt(cy)} {fmt(x1)} {fmt(y1)}'
-def write(stem,title,root,caps,outdir,skipfill=False):
+def write(stem,title,root,caps,outdir,skipfill=False,islands=1):
     n,b,dd,ol=counts(root); stage=b+dd+ol; parade=b+ol
     parts_nonroot=n
     svg=['<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="640" height="440" viewBox="0 0 640 440">',f'  <title>{title}</title>']+emit(root)+['</svg>','']
@@ -75,5 +75,7 @@ def write(stem,title,root,caps,outdir,skipfill=False):
     fills=(maxy-miny)>=264 or (maxx-minx)>=384
     fill_ok=skipfill or fills
     inside=minx>=0 and miny>=0 and maxx<=640 and maxy<=440
-    print(f'{stem}: parts {n}, body {b}, detail {dd}, outline {ol} -> stage {stage}, parade {parade} {"OK" if ok else "OVER"}; box {minx:.0f}-{maxx:.0f} x {miny:.0f}-{maxy:.0f} fill {"OK" if fills else ("exempt (S-1 proposed default, Numbers 1-3)" if skipfill else "LOW")} {"inside" if inside else "OUTSIDE"}')
-    return ok and fill_ok and inside
+    nisl=len(getattr(sil,'geoms',[sil]))   # one animal reads as one silhouette (stardust lands on one shape)
+    isl_ok=nisl==islands
+    print(f'{stem}: parts {n}, body {b}, detail {dd}, outline {ol} -> stage {stage}, parade {parade} {"OK" if ok else "OVER"}; box {minx:.0f}-{maxx:.0f} x {miny:.0f}-{maxy:.0f} fill {"OK" if fills else ("exempt (S-1 proposed default, Numbers 1-3)" if skipfill else "LOW")} {"inside" if inside else "OUTSIDE"}; islands {nisl}{"" if isl_ok else f" (expected {islands})"}')
+    return ok and fill_ok and inside and isl_ok
