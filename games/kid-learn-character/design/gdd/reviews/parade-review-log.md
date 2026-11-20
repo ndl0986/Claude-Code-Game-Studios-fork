@@ -89,3 +89,9 @@ Reviewed-Content-Hash: design/gdd/parade.md 16a839ee8bf58c44b04bee7228237e422339
 Review mode: lean · Workflow: standard
 Change: Two readings from game-qc-android's parade-v2 written as rules. R8.1: prefetch once per batch, at its first Armed entry, including Ended with a full next batch (a new set of walkers); re-anchors of the same batch (panel close, return, Waiting → Armed, the try after a skip) do not request it again. AC-27: the Reduce Motion glow keeps F4's 0.4 s ramp from fullAt (= armedAt), 0.20 at +0.2 s, steady 0.40 after; only the breathe is gone.
 Reviewed-Content-Hash: design/gdd/parade.md dd39cc72370a664cd37113896715e303b645ab4e
+
+## Update — 2026-11-20 — TASK-147 word-line limit 1.5 s, K-53 (no re-review)
+Review mode: lean · Workflow: standard
+Change: K-53: R2 and F2 restate the tune and the 6th word: words up to 1.25 s end by t_start; a longer 6th word (up to 1.47 s) overlaps the tune's first ≤ 0.25 s, ducked (Audio F2). parade_delay_s and every rule unchanged. Review: game-dev-android.
+fixture: none (parade-v2 doesn't model the voice; its 1.25 values are event times)
+Reviewed-Content-Hash: design/gdd/parade.md 65a56ed03e433104f65c41ddfad8b708f44e2997
