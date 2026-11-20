@@ -2,8 +2,8 @@ import KidCore
 import XCTest
 
 /// Press Queue stories 001 (start at once, queue during the hold, the formed guard, ignore when full; AC-1..AC-4)
-/// 002 (rest, no jumping, mash; AC-5, AC-6, AC-8, AC-22) and 003 (hold and formed rules; AC-7, AC-11, AC-12, AC-24)
-/// of design/gdd/press-queue.md. An injected clock, a fake Reveal Stage and fixed lengths; no wall clock.
+/// 002 (rest, no jumping, mash; AC-5, AC-6, AC-8, AC-22), 003 (hold and formed rules; AC-7, AC-11, AC-12, AC-24)
+/// and 004 (ids, sources, resting; AC-9, AC-10, AC-13, AC-18, AC-20) of design/gdd/press-queue.md. An injected clock, a fake Reveal Stage and fixed lengths; no wall clock.
 final class PressQueueTests: XCTestCase {
     /// A clock the test sets; `formed(revealId:)` reads it.
     final class FakeClock: UptimeClock {
@@ -13,15 +13,19 @@ final class PressQueueTests: XCTestCase {
 
     /// A fake Reveal Stage: the same lengths for every key (dyadic, so the sums are exact), every call recorded.
     final class FakeStage: PressQueueStage {
-        struct Call: Equatable { var revealId: Int; var key: String; var source: PressSource; var origin: PressOrigin?; var r0: Double }
+        struct Call: Equatable { var revealId: Int; var key: String; var source: PressSource; var origin: PressOrigin?; var r0: Double
+                                 var reduced = false }
         var calls: [Call] = []
         var answer: RevealStart
+        /// The Reduce Motion set (F5: formedS 1.25, revealLen 1.5 here, dyadic).
+        var reducedAnswer = RevealStart(formedS: 1.25, revealLen: 1.5, hasWord: true, wordLen: 0.5, castId: "")
         init(formedS: Double, revealLen: Double, wordLen: Double) {
             answer = RevealStart(formedS: formedS, revealLen: revealLen, hasWord: true, wordLen: wordLen, castId: "")
         }
-        func startReveal(revealId: Int, key: String, source: PressSource, origin: PressOrigin?, r0: Double) -> RevealStart {
-            calls.append(Call(revealId: revealId, key: key, source: source, origin: origin, r0: r0))
-            var a = answer
+        func startReveal(revealId: Int, key: String, source: PressSource, origin: PressOrigin?, r0: Double,
+                         reduced: Bool) -> RevealStart {
+            calls.append(Call(revealId: revealId, key: key, source: source, origin: origin, r0: r0, reduced: reduced))
+            var a = reduced ? reducedAnswer : answer
             a.castId = "cast_\(key)"
             return a
         }
@@ -42,7 +46,7 @@ final class PressQueueTests: XCTestCase {
     func makeQueue() -> (PressQueue, FakeStage, FakeClock) {
         let stage = FakeStage(formedS: 2.5, revealLen: 3.0, wordLen: 0.5)
         let clock = FakeClock()
-        return (PressQueue(knobs: knobs, stage: stage, clock: clock, log: log), stage, clock)
+        return (PressQueue(knobs: knobs, stage: stage, clock: clock, log: log, reduceMotion: false), stage, clock)
     }
 
     func press(_ key: String, at t: Double) -> Press { Press(key: key, source: .hardwareKey, time: t) }
@@ -251,5 +255,84 @@ final class PressQueueTests: XCTestCase {
         XCTAssertEqual(try XCTUnwrap(holdEff(formedS: 2.45, revealLen: 3.5, hasWord: false, wordLen: nil)), 3.5, accuracy: 1e-9)
         XCTAssertEqual(try XCTUnwrap(holdEff(formedS: 2.45, revealLen: 2.95, hasWord: false, wordLen: nil)), 3.0, accuracy: 1e-9)
         XCTAssertEqual(log.lines, [], "no word: no missing-entry line")
+    }
+
+    // MARK: story 004
+
+    // AC-9
+    func test_every_press_returns_its_outcome_at_once_in_order() {
+        var (q, _, _) = makeQueue()
+        let outcomes = ["A", "B", "C", "D", "E"].map { q.press(press($0, at: 10.0)) }
+        XCTAssertEqual(outcomes.count, 5)
+        XCTAssertEqual(outcomes, [.started(revealId: 1, r0: 10.0, castId: "cast_A"), .queued(index: 0), .queued(index: 1),
+                                  .queued(index: 2), .ignored])
+    }
+
+    // AC-10
+    func test_started_reveals_number_one_two_three_with_no_gaps() {
+        var (q, stage, clock) = makeQueue()
+        _ = q.press(press("A", at: 10.0))
+        _ = q.press(press("B", at: 10.5))
+        _ = q.press(press("C", at: 10.5))
+        _ = q.press(press("X", at: 10.5))
+        _ = q.press(press("Y", at: 10.5))   // ignored: takes no id
+        for n in 1...3 {
+            clock.t = 10.0 + Double(n) * 4
+            q.formed(revealId: n)
+            q.tick(now: clock.t)
+        }
+        XCTAssertEqual(stage.calls.map(\.revealId), [1, 2, 3, 4])
+        XCTAssertEqual(stage.calls.map(\.key), ["A", "B", "C", "X"])
+        XCTAssertEqual(q.nextRevealId, 5)
+    }
+
+    // AC-13 (F5: the set is read at the start and locked; hold_s stays 3.0)
+    func test_reduce_motion_mid_reveal_keeps_its_hold_and_the_next_reveal_uses_the_reduced_set() {
+        var (q, stage, clock) = makeQueue()
+        _ = q.press(press("D", at: 10.0))
+        q.accessibilityChanged(reduceMotion: true)
+        XCTAssertEqual(q.current?.holdEff, holdEff)
+        clock.t = 12.5
+        q.formed(revealId: 1)
+        _ = q.press(press("B", at: 10.0 + holdEff + 0.25))
+        XCTAssertEqual(stage.calls.map(\.reduced), [false, true])
+        // max(3.0, 1.5, min(1.25 + 0.25 + 0.5, 4.5)) = 3.0: the pace of the queue is unchanged.
+        XCTAssertEqual(q.current?.holdEff, 3.0)
+        XCTAssertEqual(q.current?.revealLen, 1.5)
+    }
+
+    // AC-18 (R12: every source follows the same rules; only origin differs)
+    func test_hardware_key_hint_and_keyboard_row_give_the_same_outcomes_and_times() {
+        func run(_ source: PressSource, _ origin: PressOrigin?) -> ([PressOutcome], [Double]) {
+            var (q, stage, clock) = makeQueue()
+            var out = [q.press(Press(key: "D", source: source, time: 10.0, origin: origin)),
+                       q.press(Press(key: "B", source: source, time: 10.5, origin: origin))]
+            clock.t = 12.5
+            q.formed(revealId: 1)
+            q.tick(now: 10.0 + holdEff)
+            out.append(q.press(Press(key: "C", source: source, time: 14.0, origin: origin)))
+            return (out, stage.calls.map(\.r0))
+        }
+        let key = run(.hardwareKey, nil)
+        XCTAssertEqual(run(.hint("3"), PressOrigin(x: 400, y: 200)).0, key.0)
+        XCTAssertEqual(run(.hint("3"), PressOrigin(x: 400, y: 200)).1, key.1)
+        XCTAssertEqual(run(.keyboardRow, PressOrigin(x: 120, y: 700)).0, key.0)
+        XCTAssertEqual(run(.keyboardRow, PressOrigin(x: 120, y: 700)).1, key.1)
+    }
+
+    // AC-20 (R10)
+    func test_resting_since_is_none_until_formed_with_an_empty_queue_then_the_formed_time() {
+        var (q, _, clock) = makeQueue()
+        _ = q.press(press("D", at: 10.0))
+        XCTAssertNil(q.restingSince, "not formed")
+        _ = q.press(press("B", at: 10.5))
+        clock.t = 12.5
+        q.formed(revealId: 1)
+        XCTAssertNil(q.restingSince, "formed but B is queued")
+        q.tick(now: 10.0 + holdEff)
+        XCTAssertNil(q.restingSince, "B started, not formed")
+        clock.t = 15.75
+        q.formed(revealId: 2)
+        XCTAssertEqual(q.restingSince, 15.75)
     }
 }

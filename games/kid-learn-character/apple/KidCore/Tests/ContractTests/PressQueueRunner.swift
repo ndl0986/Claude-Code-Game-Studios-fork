@@ -3,7 +3,7 @@ import Foundation
 import KidCore
 import XCTest
 
-/// press-queue-v2, KidCore layer (ADR-0004 D3; stories press-queue/001-003). Covers the start / queue / formed-guard /
+/// press-queue-v2, KidCore layer (ADR-0004 D3; stories press-queue/001-004). Covers the start / queue / formed-guard /
 /// ignore rules only. Not registered in `ContractHarness.runners`: the registry row stays `not-started` until
 /// press-queue/005 (ContractKit fails a registered runner on a not-started row), so `PressQueueContractTests`
 /// below runs the explicit `inScope` list itself and reports every other case id as NOT ASSESSED.
@@ -36,12 +36,15 @@ struct PressQueueRunner: ContractRunner {
         /// can't pass on default lengths.
         var missing: String?
         init(table: [String: JSONValue]) { self.table = table }
-        func startReveal(revealId: Int, key: String, source: PressSource, origin: PressOrigin?, r0: Double) -> RevealStart {
+        func startReveal(revealId: Int, key: String, source: PressSource, origin: PressOrigin?, r0: Double,
+                         reduced: Bool) -> RevealStart {
             calls.append(.object(["out": .string("startReveal"), "revealId": .int(Int64(revealId)), "key": .string(key),
                                   "source": .string(PressQueueRunner.sourceText(source)),
                                   "origin": origin.map { .array([.double($0.x), .double($0.y)]) } ?? .null,
                                   "r0": .double(r0)]))
-            guard let e = table[key], let f = e["formedS"]?.number, let l = e["revealLen"]?.number, let c = e["castId"]?.string else {
+            // With Reduce Motion the entry's `reduced` lengths are used (spec.md `given`); a missing `reduced` is a missing key.
+            let set = reduced ? table[key]?["reduced"] : table[key]
+            guard let e = table[key], let f = set?["formedS"]?.number, let l = set?["revealLen"]?.number, let c = e["castId"]?.string else {
                 if missing == nil { missing = key }
                 return RevealStart(formedS: 0, revealLen: 0, hasWord: false, wordLen: nil, castId: "")
             }
@@ -92,7 +95,8 @@ struct PressQueueRunner: ContractRunner {
         var table: [String: JSONValue] = [:]
         if case .object(let r)? = given["reveal"] { table = r }
         stage = Stage(table: table)
-        queue = PressQueue(knobs: k, stage: stage, clock: clock, log: Log(stage: stage))
+        let rm = given["accessibility"]?["reduceMotion"] == .bool(true)
+        queue = PressQueue(knobs: k, stage: stage, clock: clock, log: Log(stage: stage), reduceMotion: rm)
     }
 
     mutating func step(uptime: Double, event e: [String: JSONValue]) throws -> Outputs {
@@ -116,11 +120,14 @@ struct PressQueueRunner: ContractRunner {
             queue.tick(now: uptime)
             try checkStage()
             return stage.calls
+        case "accessibilityChanged":
+            queue.accessibilityChanged(reduceMotion: e["reduceMotion"] == .bool(true))
+            return []
         case "formed":
             queue.formed(revealId: Int(e["revealId"]?.number ?? 0))
             return []
         default:
-            throw ContractError("event \(e["type"]?.string ?? "?") is not in press-queue/001-003's scope")
+            throw ContractError("event \(e["type"]?.string ?? "?") is not in press-queue/001-004's scope")
         }
     }
 
@@ -138,16 +145,17 @@ struct PressQueueRunner: ContractRunner {
         return PressOrigin(x: x, y: y)
     }
 
-    /// spec.md State. `restingSince` is story 004's (R10) and throws here rather than pass unchecked.
+    /// spec.md State: `current` (a record), `queueKeys`, `restingSince` (R10), `nextRevealId`.
     func state(_ name: String) throws -> JSONValue {
         switch name {
         case "queueKeys": return .array(queue.queue.map { .string($0.key) })
         case "nextRevealId": return .int(Int64(queue.nextRevealId))
+        case "restingSince": return queue.restingSince.map { .double($0) } ?? .null
         case "current":
             guard let c = queue.current else { return .null }
             return .object(["revealId": .int(Int64(c.revealId)), "key": .string(c.key), "holdEff": .double(c.holdEff),
                             "formed": .bool(c.formed), "formedAt": c.formedAt.map { .double($0) } ?? .null])
-        default: throw ContractError("expectState.\(name) is not in press-queue/001-003's scope")
+        default: throw ContractError("expectState.\(name) is not in press-queue/001-004's scope")
         }
     }
 }
@@ -171,9 +179,14 @@ final class PressQueueContractTests: XCTestCase {
         "F1-reduced-word-1.25", "F1-hold-1.0-tuning-nest", "F1-word-1.25-normal-cap-not-reached", "AC24-hasWord-false",
         "AC12-fallback-long-revealLen", "AC11-formed-for-old-reveal-ignored", "AC11-second-formed-ignored",
         "AC11-formed-timeout-inclusive", "R5-timeout-then-advance-same-tick", "F4-worst-wait-11.55",
+        // Story 004: Reduce Motion locked at start (AC-13, F5), equal sources (AC-18, R12), restingSince (AC-20, R10)
+        // with formedAt the arrival time (R7), and the snapshot's queue keys in order (R11).
+        "AC13-reduce-motion-locked-at-start", "R5-timeout-uses-reduced-revealLen", "AC18-sources-equal-hardwareKey",
+        "AC18-sources-equal-hint", "AC18-sources-equal-keyboardRow", "AC20-restingSince", "R7-formedAt-is-arrival-time",
+        "R11-snapshot-queue-keys-in-order",
     ]
 
-    func test_press_queue_v2_cases_in_scope_of_stories_001_003() throws {
+    func test_press_queue_v2_cases_in_scope_of_stories_001_004() throws {
         let file = try ContractHarness.contractsRoot().appendingPathComponent("press-queue-v2/cases.json")
         let root = try Fixture.load(file)
         var fixtures: [String: JSONValue] = [:]
@@ -191,7 +204,7 @@ final class PressQueueContractTests: XCTestCase {
             } else { pass += 1 }
         }
         let notAssessed = ids.filter { !Self.inScope.contains($0) }
-        print("CONTRACT press-queue-v2: \(pass) pass, \(fail) fail; \(notAssessed.count) NOT ASSESSED (outside stories press-queue/001-003): \(notAssessed.joined(separator: ", "))")
+        print("CONTRACT press-queue-v2: \(pass) pass, \(fail) fail; \(notAssessed.count) NOT ASSESSED (outside stories press-queue/001-004): \(notAssessed.joined(separator: ", "))")
     }
 
     /// One planted case through the harness: a press of `key` from a hint at `origin`, with `D` the only reveal.

@@ -129,12 +129,15 @@ The Kotlin port diffs its names and shapes against this file (ADR-0002).
 - `PressOutcome.queued(index:)` (enum.case): `case queued(index: Int)`
 - `PressOutcome.started(revealId:r0:castId:)` (enum.case): `case started(revealId: Int, r0: Double, castId: String)`
 - `PressOutcome` (enum): `enum PressOutcome`
+- `PressQueue.accessibilityChanged(reduceMotion:)` (method): `mutating func accessibilityChanged(reduceMotion: Bool)`
 - `PressQueue.current` (property): `var current: CurrentReveal? { get }`
 - `PressQueue.formed(revealId:)` (method): `mutating func formed(revealId: Int)`
-- `PressQueue.init(knobs:stage:clock:log:)` (init): `init(knobs: PressQueueKnobs, stage: PressQueueStage, clock: UptimeClock, log: DebugLog)`
+- `PressQueue.init(knobs:stage:clock:log:reduceMotion:)` (init): `init(knobs: PressQueueKnobs, stage: PressQueueStage, clock: UptimeClock, log: DebugLog, reduceMotion: Bool)`
 - `PressQueue.nextRevealId` (property): `var nextRevealId: Int { get }`
 - `PressQueue.press(_:)` (method): `mutating func press(_ p: Press) -> PressOutcome`
 - `PressQueue.queue` (property): `var queue: [Press] { get }`
+- `PressQueue.reduceMotion` (property): `var reduceMotion: Bool { get }`
+- `PressQueue.restingSince` (property): `var restingSince: Double? { get }`
 - `PressQueue.tick(now:)` (method): `mutating func tick(now: Double)`
 - `PressQueueKnobs.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
 - `PressQueueKnobs.formedTimeoutS` (property): `var formedTimeoutS: Double`
@@ -145,7 +148,7 @@ The Kotlin port diffs its names and shapes against this file (ADR-0002).
 - `PressQueueKnobs.wordLenMaxS` (property): `var wordLenMaxS: Double`
 - `PressQueueKnobs.wordOffsetS` (property): `var wordOffsetS: Double`
 - `PressQueueKnobs` (struct): `struct PressQueueKnobs`
-- `PressQueueStage.startReveal(revealId:key:source:origin:r0:)` (method): `func startReveal(revealId: Int, key: String, source: PressSource, origin: PressOrigin?, r0: Double) -> RevealStart`
+- `PressQueueStage.startReveal(revealId:key:source:origin:r0:reduced:)` (method): `func startReveal(revealId: Int, key: String, source: PressSource, origin: PressOrigin?, r0: Double, reduced: Bool) -> RevealStart`
 - `PressQueueStage` (protocol): `protocol PressQueueStage`
 - `PressQueue` (struct): `struct PressQueue`
 - `PressSource.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`

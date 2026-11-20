@@ -84,8 +84,10 @@ public struct RevealStart: Equatable, Sendable {
 
 /// The Reveal Stage and Key Table as the queue calls them (R6): starts a reveal and answers with its lengths.
 public protocol PressQueueStage {
-    /// Starts the reveal `revealId` for `key` at `r0`; the stage reports `formed(revealId:)` later.
-    func startReveal(revealId: Int, key: String, source: PressSource, origin: PressOrigin?, r0: Double) -> RevealStart
+    /// Starts the reveal `revealId` for `key` at `r0`; the stage reports `formed(revealId:)` later. `reduced` is the
+    /// Reduce Motion setting the queue read at this start (F5): the stage answers that timing set's lengths.
+    func startReveal(revealId: Int, key: String, source: PressSource, origin: PressOrigin?, r0: Double,
+                     reduced: Bool) -> RevealStart
 }
 
 /// The reveal on stage (R2). `holdEff` is locked at start.
@@ -113,6 +115,16 @@ public struct PressQueue {
     public private(set) var queue: [Press] = []
     /// The revealId the next started reveal takes; counts from 1 with no gaps (R2).
     public private(set) var nextRevealId = 1
+    /// Reduce Motion as last reported (F5). Read when a reveal starts and locked with it; a change affects only the
+    /// reveals that start afterwards.
+    public private(set) var reduceMotion: Bool
+
+    /// R10: the formed time of `current` while the queue is empty and `current` is formed; nil otherwise. The Parade
+    /// reads it.
+    public var restingSince: Double? {
+        guard let c = current, c.formed, queue.isEmpty else { return nil }
+        return c.formedAt
+    }
 
     private let knobs: PressQueueKnobs
     private let stage: PressQueueStage
@@ -121,9 +133,13 @@ public struct PressQueue {
 
     /// A queue with no reveal on stage. `clock` stamps `formed(revealId:)` arrivals (R7); `log` takes the debug lines
     /// for a missing `voiceDurations` entry (F1) and a formed timeout (R5).
-    public init(knobs: PressQueueKnobs, stage: PressQueueStage, clock: UptimeClock, log: DebugLog) {
-        self.knobs = knobs; self.stage = stage; self.clock = clock; self.log = log
+    /// `reduceMotion` is the setting at the start of play.
+    public init(knobs: PressQueueKnobs, stage: PressQueueStage, clock: UptimeClock, log: DebugLog, reduceMotion: Bool) {
+        self.knobs = knobs; self.stage = stage; self.clock = clock; self.log = log; self.reduceMotion = reduceMotion
     }
+
+    /// The accessibility setting changed (F5): only reveals that start afterwards use the new timing set.
+    public mutating func accessibilityChanged(reduceMotion: Bool) { self.reduceMotion = reduceMotion }
 
     /// F1: the hold of a reveal, from the Reveal Stage's answer. A missing word length uses
     /// `formedS + word_offset_s + word_len_max_s`; `hasWord` false drops the word term.
@@ -181,7 +197,8 @@ public struct PressQueue {
     /// R6: calls the Reveal Stage, locks `holdEff`, takes the next revealId.
     private mutating func start(_ p: Press, r0: Double) -> (revealId: Int, castId: String) {
         let id = nextRevealId
-        let answer = stage.startReveal(revealId: id, key: p.key, source: p.source, origin: p.origin, r0: r0)
+        let answer = stage.startReveal(revealId: id, key: p.key, source: p.source, origin: p.origin, r0: r0,
+                                       reduced: reduceMotion)
         if answer.hasWord && answer.wordLen == nil {
             log.log("press-queue: reveal \(id) (\(p.key)) has no voiceDurations entry; word end bound formedS + word_offset_s + word_len_max_s")
         }
