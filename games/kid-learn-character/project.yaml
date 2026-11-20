@@ -8,7 +8,7 @@ framework:
   last_upgraded: 2026-11-09
 
 project:
-  stage: Technical Setup
+  stage: Pre-Production
   goal: mobile
 
 # NOTE: this template ships with no `modes:` block, and the six knobs below must
@@ -34,7 +34,7 @@ modes:
   rigor: standard
   automation: guided
 
-# Engine: native Apple stack (ADR-0001, Proposed). NOT SOURCEABLE in this template:
+# Engine: native Apple stack (ADR-0001, Accepted). NOT SOURCEABLE in this template:
 # engine.name accepts only Godot | Unity | Unreal | Web, engines.tsv has no Swift row, and
 # docs/engine-reference/ has no SpriteKit or SwiftUI folder. engine.name and engine.code_root
 # therefore stay UNSET on purpose; engine-dependent checks report NOT ASSESSED.
