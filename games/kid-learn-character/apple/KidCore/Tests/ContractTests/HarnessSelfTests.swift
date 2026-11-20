@@ -222,6 +222,22 @@ final class HarnessSelfTests: XCTestCase {
         XCTAssertTrue(f.first?.contains("steps[0].expectState.obj.at: expected absent") ?? false, "\(f)")
     }
 
+    func test_a_set_with_the_same_elements_in_another_order_passes() throws {
+        XCTAssertEqual(try stubFailures(stubFile(set: 1.0, expectState: ["set": ["c", "a", "b"]])), [])
+    }
+
+    func test_a_set_with_a_missing_or_extra_element_fails() throws {
+        let missing = try stubFailures(stubFile(set: 1.0, expectState: ["set": ["a", "b"]]))
+        XCTAssertTrue(missing.first?.contains("steps[0].expectState.set.count: expected 2, got 3") ?? false, "\(missing)")
+        let other = try stubFailures(stubFile(set: 1.0, expectState: ["set": ["a", "b", "d"]]))
+        XCTAssertTrue(other.first?.contains("steps[0].expectState.set[") ?? false, "\(other)")
+    }
+
+    func test_an_ordered_list_still_compares_in_order() throws {
+        let f = try stubFailures(stubFile(set: 1.0, expectState: ["list": ["a", "b", "c"]]))
+        XCTAssertTrue(f.first?.contains("steps[0].expectState.list[0]: expected \"a\", got \"b\"") ?? false, "\(f)")
+    }
+
     func test_a_runner_with_no_state_fails_a_case_that_checks_state() throws {
         let record: [String: Any] = ["childLock": false, "keyboardRow": false, "muted": false, "schemaVersion": 1,
                                      "themeId": "dinosaurs", "volume": 8, "weather": "clear", "windy": false]
@@ -251,6 +267,8 @@ struct StubStateRunner: ContractRunner {
     static func stateKind(name: String, field: String) -> String? { ["value", "at"].contains(field) ? "time" : nil }
     /// `rec` is a record (`{at, n, tag}`); `obj` is not.
     static func stateIsRecord(_ name: String) -> Bool { name == "rec" }
+    /// `set` is a set; `list` (the same elements) is an ordered list.
+    static func stateIsSet(_ name: String) -> Bool { name == "set" }
     var v = 0.0
     init(given: [String: JSONValue], draws: DrawQueues) throws {}
     mutating func step(uptime: Double, event e: [String: JSONValue]) throws -> Outputs { v = e["value"]?.number ?? 0; return [] }
@@ -259,6 +277,7 @@ struct StubStateRunner: ContractRunner {
         case "value": return .double(v)
         case "obj": return .object(["at": .double(v)])
         case "rec": return .object(["at": .double(v), "n": .int(3), "tag": .string("t")])
+        case "set", "list": return .array([.string("b"), .string("a"), .string("c")])
         default: throw ContractError("stub-state-v1 exposes no state named \(name)")
         }
     }
