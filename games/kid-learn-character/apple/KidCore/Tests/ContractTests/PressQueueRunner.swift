@@ -36,14 +36,15 @@ struct PressQueueRunner: ContractRunner {
         /// can't pass on default lengths.
         var missing: String?
         init(table: [String: JSONValue]) { self.table = table }
-        func startReveal(revealId: Int, key: String, source: PressSource, origin: PressOrigin?, r0: Double,
-                         reduced: Bool) -> RevealStart {
+        /// Reduce Motion as the stage reads it (Reveal Stage R9): `given.accessibility`, then `accessibilityChanged`.
+        var reduceMotion = false
+        func startReveal(revealId: Int, key: String, source: PressSource, origin: PressOrigin?, r0: Double) -> RevealStart {
             calls.append(.object(["out": .string("startReveal"), "revealId": .int(Int64(revealId)), "key": .string(key),
                                   "source": .string(PressQueueRunner.sourceText(source)),
                                   "origin": origin.map { .array([.double($0.x), .double($0.y)]) } ?? .null,
                                   "r0": .double(r0)]))
             // With Reduce Motion the entry's `reduced` lengths are used (spec.md `given`); a missing `reduced` is a missing key.
-            let set = reduced ? table[key]?["reduced"] : table[key]
+            let set = reduceMotion ? table[key]?["reduced"] : table[key]
             guard let e = table[key], let f = set?["formedS"]?.number, let l = set?["revealLen"]?.number, let c = e["castId"]?.string else {
                 if missing == nil { missing = key }
                 return RevealStart(formedS: 0, revealLen: 0, hasWord: false, wordLen: nil, castId: "")
@@ -95,8 +96,8 @@ struct PressQueueRunner: ContractRunner {
         var table: [String: JSONValue] = [:]
         if case .object(let r)? = given["reveal"] { table = r }
         stage = Stage(table: table)
-        let rm = given["accessibility"]?["reduceMotion"] == .bool(true)
-        queue = PressQueue(knobs: k, stage: stage, clock: clock, log: Log(stage: stage), reduceMotion: rm)
+        stage.reduceMotion = given["accessibility"]?["reduceMotion"] == .bool(true)
+        queue = PressQueue(knobs: k, stage: stage, clock: clock, log: Log(stage: stage))
     }
 
     mutating func step(uptime: Double, event e: [String: JSONValue]) throws -> Outputs {
@@ -121,7 +122,7 @@ struct PressQueueRunner: ContractRunner {
             try checkStage()
             return stage.calls
         case "accessibilityChanged":
-            queue.accessibilityChanged(reduceMotion: e["reduceMotion"] == .bool(true))
+            stage.reduceMotion = e["reduceMotion"] == .bool(true)
             return []
         case "formed":
             queue.formed(revealId: Int(e["revealId"]?.number ?? 0))

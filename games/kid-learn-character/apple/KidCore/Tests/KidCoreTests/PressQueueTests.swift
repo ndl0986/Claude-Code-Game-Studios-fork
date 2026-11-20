@@ -13,19 +13,19 @@ final class PressQueueTests: XCTestCase {
 
     /// A fake Reveal Stage: the same lengths for every key (dyadic, so the sums are exact), every call recorded.
     final class FakeStage: PressQueueStage {
-        struct Call: Equatable { var revealId: Int; var key: String; var source: PressSource; var origin: PressOrigin?; var r0: Double
-                                 var reduced = false }
+        struct Call: Equatable { var revealId: Int; var key: String; var source: PressSource; var origin: PressOrigin?; var r0: Double }
         var calls: [Call] = []
         var answer: RevealStart
-        /// The Reduce Motion set (F5: formedS 1.25, revealLen 1.5 here, dyadic).
+        /// Reduce Motion as the stage reads it at each start (Reveal Stage R9), and its set (F5: formedS 1.25,
+        /// revealLen 1.5 here, dyadic).
+        var reduceMotion = false
         var reducedAnswer = RevealStart(formedS: 1.25, revealLen: 1.5, hasWord: true, wordLen: 0.5, castId: "")
         init(formedS: Double, revealLen: Double, wordLen: Double) {
             answer = RevealStart(formedS: formedS, revealLen: revealLen, hasWord: true, wordLen: wordLen, castId: "")
         }
-        func startReveal(revealId: Int, key: String, source: PressSource, origin: PressOrigin?, r0: Double,
-                         reduced: Bool) -> RevealStart {
-            calls.append(Call(revealId: revealId, key: key, source: source, origin: origin, r0: r0, reduced: reduced))
-            var a = reduced ? reducedAnswer : answer
+        func startReveal(revealId: Int, key: String, source: PressSource, origin: PressOrigin?, r0: Double) -> RevealStart {
+            calls.append(Call(revealId: revealId, key: key, source: source, origin: origin, r0: r0))
+            var a = reduceMotion ? reducedAnswer : answer
             a.castId = "cast_\(key)"
             return a
         }
@@ -46,7 +46,7 @@ final class PressQueueTests: XCTestCase {
     func makeQueue() -> (PressQueue, FakeStage, FakeClock) {
         let stage = FakeStage(formedS: 2.5, revealLen: 3.0, wordLen: 0.5)
         let clock = FakeClock()
-        return (PressQueue(knobs: knobs, stage: stage, clock: clock, log: log, reduceMotion: false), stage, clock)
+        return (PressQueue(knobs: knobs, stage: stage, clock: clock, log: log), stage, clock)
     }
 
     func press(_ key: String, at t: Double) -> Press { Press(key: key, source: .hardwareKey, time: t) }
@@ -290,12 +290,11 @@ final class PressQueueTests: XCTestCase {
     func test_reduce_motion_mid_reveal_keeps_its_hold_and_the_next_reveal_uses_the_reduced_set() {
         var (q, stage, clock) = makeQueue()
         _ = q.press(press("D", at: 10.0))
-        q.accessibilityChanged(reduceMotion: true)
+        stage.reduceMotion = true   // turned on mid-reveal: D keeps the hold it started with
         XCTAssertEqual(q.current?.holdEff, holdEff)
         clock.t = 12.5
         q.formed(revealId: 1)
         _ = q.press(press("B", at: 10.0 + holdEff + 0.25))
-        XCTAssertEqual(stage.calls.map(\.reduced), [false, true])
         // max(3.0, 1.5, min(1.25 + 0.25 + 0.5, 4.5)) = 3.0: the pace of the queue is unchanged.
         XCTAssertEqual(q.current?.holdEff, 3.0)
         XCTAssertEqual(q.current?.revealLen, 1.5)
