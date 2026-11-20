@@ -226,6 +226,18 @@ delay every word after its cue (E8, E9) and fail V15 and AC-6. So, before loudne
 The threshold (−50 dBFS), the pad (20 ms) and the fade (5 ms) are **tuning values in the voice-script data**
 (`src/voice-scripts/<locale>.json`), not code. **V15's durations and AC-6's length limits** (`word_len_max_s`,
 `letter_len_max_s`) **measure the trimmed file.**
+**A true-peak limiter after the gain** *(dated note 2026-11-20, content-pipeline/004; an ADR-0003 D5 implementation
+detail approved by the leader; F4's targets and A1 are unchanged)*. Kokoro's speech peaks about 16 dB above its
+loudness (19 dB at most), so at −16 LUFS 51 of the 72 lines would pass −1 dBTP by gain alone, and 30 would clip.
+- **The order:** trim → gain to the voice target (−16 LUFS) → a **lookahead true-peak limiter** (ceiling −1 dBTP,
+  measured 4× oversampled like the D5 meter) that reduces gain on the peaks only → a **clip guard** (no sample above
+  full scale; the bake fails naming the line) → write the `.caf`.
+- **After limiting, each line must still meet A7:** within ±1 LU of −16 LUFS and at or below −1 dBTP, measured on the
+  written file.
+- **Data, not code:** the limiter's values (ceiling, lookahead, release, and the 6 dB warning threshold) are tuning
+  data in the voice script.
+- **Recorded:** each line's maximum gain reduction is recorded in the voice provenance. A line that needs **more than
+  6 dB** is flagged as no longer transparent, for an ear check or a re-render.
 
 ### States and Transitions
 
