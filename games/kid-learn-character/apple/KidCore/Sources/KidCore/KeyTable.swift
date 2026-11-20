@@ -213,7 +213,7 @@ extension KeyTable {
                 guard let d = have[line] else { continue }
                 let id = String(line.utf8.dropFirst(kind.utf8.count + 1)) ?? ""
                 if let m = a.probe.decodedDuration(voicePath(loc, kind, id)), abs(d - m) > 0.01 + 1e-9 { v.fail(15, "\(loc) \(line): \(d) vs measured \(m)") }
-                if kind == "word" ? d > 1.25 : d > 1.0 { v.fail(15, "\(loc) \(line): too long") }
+                if kind == "word" ? d > wordLenMaxSeconds : d > letterLenMaxSeconds { v.fail(15, "\(loc) \(line): too long") }
             }
         }
         // V16
@@ -241,6 +241,12 @@ extension KeyTable {
         if t.id != a.folder { v.fail(18, "id differs from folder") }
         return v
     }
+
+    /// V15's longest word line, in seconds: Audio & Voice's `word_len_max_s` (AC-6), 1.5 s under K-53 (Luan,
+    /// 2026-11-20; it was 1.25 s). A change here is a contract change (key-table-schema-v3 pins it).
+    public static let wordLenMaxSeconds = 1.5
+    /// V15's longest letter or number line, in seconds: Audio & Voice's `letter_len_max_s` (AC-6), 1.0 s.
+    public static let letterLenMaxSeconds = 1.0
 
     /// `voice/<locale>/vo_<locale>_<kind>_<id>.caf` (§2b: voice paths are built, not stored; CAF linear PCM, K-52).
     public static func voicePath(_ locale: String, _ kind: String, _ id: String) -> String {

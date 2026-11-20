@@ -4,14 +4,14 @@ import KidCore
 import ToolsCore
 import XCTest
 
-/// `kidtools validate` (TASK-079 S2, P7): a test theme built on disk from key-table-schema-v2's fixtures passes; a
+/// `kidtools validate` (TASK-079 S2, P7): a test theme built on disk from key-table-schema-v3's fixtures passes; a
 /// wrong-case file (V7) and a missing SVG source (staleness stub) each fail; an empty content folder is "0 themes".
 final class ContentValidatorTests: XCTestCase {
     var content: URL!
 
     override func setUpWithError() throws {
         content = FileManager.default.temporaryDirectory.appendingPathComponent("content-\(UUID().uuidString)")
-        let cases = try Fixture.contractsRoot(from: #filePath).appendingPathComponent("key-table-schema-v2/cases.json")
+        let cases = try Fixture.contractsRoot(from: #filePath).appendingPathComponent("key-table-schema-v3/cases.json")
         let fx = try JSONSerialization.jsonObject(with: Data(contentsOf: cases)) as! [String: Any]
         let fixtures = fx["fixtures"] as! [String: Any]
         let theme = fixtures["theme"] as! [String: Any], assets = fixtures["assets"] as! [String: Any]

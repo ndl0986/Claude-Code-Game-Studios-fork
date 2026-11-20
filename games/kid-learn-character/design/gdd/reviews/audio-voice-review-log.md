@@ -141,3 +141,21 @@ Review mode: lean · Workflow: standard
 Change: K-52 (Luan): baked audio is uncompressed 16-bit linear PCM in .caf (AAC is not byte-stable; ADR-0003 D4). R4.1 reads the .caf files into the players' PCM at theme load; R8 names the .caf pipeline and vo_<locale>_<kind>_<id>.caf; the art bible §8 reference reads LPCM .caf. R4.1 says the audio is "read in" (LPCM), not decoded. No rule, timing or loudness target changes. Review: game-dev-android.
 fixture: none (audio-plan-v1 names no file path or format in any case; 0 occurrences of .m4a)
 Reviewed-Content-Hash: design/gdd/audio-voice.md 9538c82cb168ce8556d39928028bfeb27cc30ec7
+
+## Update — 2026-11-20 — content-pipeline/004 voice trim note (no re-review)
+Review mode: lean · Workflow: standard
+Change: A dated note in R8, the bake step story 004 implements (leader-approved D5 detail): each rendered voice line is trimmed of leading and trailing audio below −50 dBFS on the K-weighted 10 ms envelope, keeping 20 ms with a 5 ms linear fade at each end, before loudness normalisation; the three values are voice-script data; V15 durations and AC-6 limits measure the trimmed file. R8's respelled-line sentence now says "measured on the trimmed file". No rule, target or timing changes. Requested by game-dev-android for story 004.
+fixture: none (audio-plan-v1 names no audio file and has no durations; its "trims" are gain trims, AU-Q6)
+Reviewed-Content-Hash: design/gdd/audio-voice.md b9e4a3e1db1d78549afda9d6606733d00888ac58
+
+## Update — 2026-11-20 — content-pipeline/004 voice limiter note (no re-review)
+Review mode: lean · Workflow: standard
+Change: A dated note in R8 after the trim note (leader-approved D5 detail): trim → gain to −16 LUFS → lookahead true-peak limiter (ceiling −1 dBTP, 4× oversampled) → clip guard → write .caf; each line must still meet A7 after limiting; the limiter values and the 6 dB warning are voice-script data; each line's maximum gain reduction is in the voice provenance, and over 6 dB is flagged. F4 and A1 unchanged. Requested by game-dev-android for story 004.
+fixture: none (audio-plan-v1 names no audio file and models no bake step)
+Reviewed-Content-Hash: design/gdd/audio-voice.md e5877d020c3c66f38493912aac9552e67f7c19a8
+
+## Update — 2026-11-20 — TASK-147 word-line limit 1.5 s, K-53 (no re-review)
+Review mode: lean · Workflow: standard
+Change: K-53: word_len_max_s 1.25 → 1.5 s. F6: the real constraint (T + word_offset + word_len_max ≤ hold + hold_ext_max: 4.20 ≤ 4.50) replaces the stricter stand-in; the missing-entry bound is T + 1.75; the table gains the trimmed quetzalcoatlus (1.26) and five baby dinosaurs (1.47); the cost is up to +1.2 s per queued reveal (about 3.6 s for 3); the knob (safe range 0.8–1.8), AC-6 and R8's respelled-line sentence follow. Review: game-dev-android.
+fixture: none (audio-plan-v1 has no word-length limit; its 1.25 values are event times)
+Reviewed-Content-Hash: design/gdd/audio-voice.md 03d9c11f6f94b7d261c9d0e3a35c0249ae0da55a

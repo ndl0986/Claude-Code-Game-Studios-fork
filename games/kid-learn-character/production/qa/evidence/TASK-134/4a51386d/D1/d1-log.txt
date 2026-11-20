@@ -1,0 +1,11 @@
+TASK-134 Mac session 1, D1 (dry run) — 2026-11-20. Mac16,8, macOS 27.2.1. DeviceSpike source 4a51386d (gated, 4a51386d/spike-check-mac.txt).
+Launched directly from the session shell: <app>/Contents/MacOS/DeviceSpike -screen lock -deadman 180
+
+13:28:54 pgrep -x DeviceSpike: none (before launch)
+          13:29:02 D1a launch
+          exit=0 at 14:17:01
+          (stdout/stderr empty: no dead-man line; exit 0 = a normal app quit, not the dead-man _exit(3))
+14:17:41 pgrep -x DeviceSpike: none
+
+No report from Luan reached the driver between launch and exit (no "locked"); the external-kill step (pkill) was never run.
+Session paused by Luan (relayed by game-leader). D1: NOT PASSED. Every M row: NOT ASSESSED. No relaunch.

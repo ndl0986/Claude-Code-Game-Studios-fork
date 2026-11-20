@@ -81,11 +81,13 @@ The Kotlin port diffs its names and shapes against this file (ADR-0002).
 - `KeyTable.hueSlots` (type.property): `static let hueSlots: Set<String>`
 - `KeyTable.keys` (type.property): `static let keys: [String]`
 - `KeyTable.knownSchemaVersions` (type.property): `static let knownSchemaVersions: Set<Int>`
+- `KeyTable.letterLenMaxSeconds` (type.property): `static let letterLenMaxSeconds: Double`
 - `KeyTable.pick(n:weights:last:u:)` (type.method): `static func pick(n: Int, weights: [Double]? = nil, last: Int?, u: Double) -> Int`
 - `KeyTable.pickNeedsDraw(n:last:)` (type.method): `static func pickNeedsDraw(n: Int, last: Int?) -> Bool`
 - `KeyTable.titleCast(_:)` (type.method): `static func titleCast(_ t: ThemeModel) -> (item: ThemeItem?, fellBack: Bool)`
 - `KeyTable.validate(_:glyphs:assets:singleItemPerKey:)` (type.method): `static func validate(_ t: ThemeModel, glyphs g: GlyphSetModel, assets a: ThemeAssetFacts, singleItemPerKey: Bool? = nil) -> ThemeVerdict`
 - `KeyTable.voicePath(_:_:_:)` (type.method): `static func voicePath(_ locale: String, _ kind: String, _ id: String) -> String`
+- `KeyTable.wordLenMaxSeconds` (type.property): `static let wordLenMaxSeconds: Double`
 - `KeyTable` (enum): `enum KeyTable`
 - `KeyVariety.init(lastShown:)` (init): `init(lastShown: [String : Int] = [:])`
 - `KeyVariety.lastShown` (property): `var lastShown: [String : Int] { get }`

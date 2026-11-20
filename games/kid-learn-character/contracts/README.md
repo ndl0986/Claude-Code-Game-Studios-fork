@@ -17,11 +17,13 @@ Cross-platform behaviour contracts for Kid Learn Character (ADR-0004). Each cont
 | morph-contract-v1 | v1 | morphcore.md | MorphCore | Accepted. It lives at `docs/architecture/morph-contract-v1.md` and `content/fixtures/morph-contract-v1.json` and moves here only with a v2 |
 | key-table-schema-v1 | v1 | key-table-theme-data.md | model (KidCore), file (apple/Tools) | first cases (TASK-068); superseded by key-table-schema-v2 (K-52 `.caf`, TASK-146) |
 | key-table-schema-v2 | v2 | key-table-theme-data.md (TASK-145b) | model (KidCore), file (apple/Tools) | TASK-146: K-52 `.m4a` → `.caf` (878 places, same verdicts); V6 and V7 extension cases |
+| key-table-schema-v3 | v3 | key-table-theme-data.md (TASK-147) | model (KidCore), file (apple/Tools) | TASK-147: K-53 word lines ≤ 1.5 s (V15 boundary cases) |
 | settings-record-v1 | v1 | settings-store.md | KidCore | superseded by settings-record-v2 (see Registry; TASK-091: `F1-slider-release-7.5` contradicted R6a) |
 | settings-record-v2 | v2 | settings-store.md | KidCore | TASK-091: v1's slider case fixed; the non-finite slider cases added (F1, TASK-082) |
 | input-filter-v1 | v1 | input-key-filter.md | KidCore | superseded-by: input-filter-v2 (K-40; TASK-098 added `gateDigitUp`) |
 | input-filter-v2 | v2 | input-key-filter.md | KidCore | TASK-099: v1 + `gateDigitUp` (3 cases updated, 8 AC-1t cases) |
-| press-queue-v1 | v1 | press-queue.md | KidCore | batch 2 (TASK-081) |
+| press-queue-v1 | v1 | press-queue.md | KidCore | batch 2 (TASK-081); superseded by press-queue-v2 (K-53, TASK-147) |
+| press-queue-v2 | v2 | press-queue.md (TASK-147) | KidCore | TASK-147: K-53 missing-entry bound `formedS + 1.75`; 1.5 s word cases |
 | reveal-timing-v1 | v1 | reveal-stage.md; cast-rendering.md F1, F2, F4, F5, F7 | KidCore | batch 3 (TASK-086) |
 | audio-plan-v1 | v1 | audio-voice.md | KidCore | batch 3 (TASK-086) |
 | hint-letters-v1 | v1 | hint-letters.md | KidCore | batch 4 (TASK-089) |
@@ -61,13 +63,15 @@ it is never Done.
 | hint-letters-v1 | not-started: story:hint-letters | 58 |
 | input-filter-v1 | superseded-by: input-filter-v2 | 86 |
 | input-filter-v2 | not-started: story:input | 95 |
-| key-table-schema-v1 | superseded-by: key-table-schema-v2 | 93 |
-| key-table-schema-v2 | runner: KeyTableModelRunner + Tools.KeyTableFileLayer | 95 |
+| key-table-schema-v1 | superseded-by: key-table-schema-v3 | 93 |
+| key-table-schema-v2 | superseded-by: key-table-schema-v3 | 95 |
+| key-table-schema-v3 | runner: KeyTableModelRunner + Tools.KeyTableFileLayer | 99 |
 | keyboard-row-v1 | superseded-by: keyboard-row-v2 | 36 |
 | keyboard-row-v2 | not-started: story:keyboard-row | 58 |
 | parade-v1 | superseded-by: parade-v2 | 30 |
 | parade-v2 | not-started: story:parade | 46 |
-| press-queue-v1 | not-started: story:press-queue | 46 |
+| press-queue-v1 | superseded-by: press-queue-v2 | 46 |
+| press-queue-v2 | not-started: story:press-queue | 50 |
 | reveal-timing-v1 | not-started: story:reveal-stage | 60 |
 | scene-look-v1 | not-started: story:scene | 42 |
 | settings-record-v1 | superseded-by: settings-record-v2 | 73 |

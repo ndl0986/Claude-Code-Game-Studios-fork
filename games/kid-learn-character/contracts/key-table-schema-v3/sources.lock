@@ -1,0 +1,7 @@
+# sources.lock for key-table-schema-v3 (cut 2026-11-20, TASK-147, on design/TASK-147-word-limit 5a6451c5): the ## sections the cases cite.
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/key-table-theme-data.md#Detailed Design 73e1adf6aebe148735c3d01a73610da0dff8bddf
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/key-table-theme-data.md#Formulas 9989d1f76b40ad2b6daebad19d4fbb408f6b3595
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/key-table-theme-data.md#Edge Cases 7a0162df3d3a5d0dbe064cf719bd92b7f452b556
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/key-table-theme-data.md#The Dinosaurs theme (first content set) d4de26d7901f30940b1078aacccd682ed203a25f
+Reviewed-Section-Hash: games/kid-learn-character/design/gdd/key-table-theme-data.md#Acceptance Criteria 47c88f0a5be726a1c8912502949197a3931bd257
+Reviewed-Section-Hash: games/kid-learn-character/docs/architecture/adr-0002-modules-seams-types.md#Decision 20f4dafde70f9e0fe915e9154aff0c640178fb82

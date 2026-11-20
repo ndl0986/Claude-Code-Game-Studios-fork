@@ -213,8 +213,31 @@ line's input is its Key Table `say` / `word` text. Dinosaurs, `en-us`, as Luan p
 candidates of TASK-108): `word_ankylosaurus` "ankie low saurus", `word_juravenator` "joor uh vuh nay tor",
 `word_quetzalcoatlus` "kets all ko at lus", `word_tapejara` "tah pay jar ah", `word_wuerhosaurus` "wur hoe saurus",
 `word_xenoceratops` "zen oh sair uh tops", `word_zuniceratops` "zoo nee serra tops". Triceratops stays as spelled. The
-displayed name and the Key Table `name` / `word` are unchanged. A respelled line must still pass V15 (≤ 1.25 s,
-measured on the rendered file).
+displayed name and the Key Table `name` / `word` are unchanged. A respelled line must still pass V15 (≤ `word_len_max_s`,
+1.5 s, K-53; measured on the trimmed file, below).
+**Trimming the rendered lines** *(dated note 2026-11-20, content-pipeline/004; an ADR-0003 D5 implementation detail
+approved by the leader, no rule change)*. Kokoro's renders carry about 0.3–0.5 s of silence at each end, which would
+delay every word after its cue (E8, E9) and fail V15 and AC-6. So, before loudness normalisation:
+- the bake **trims each rendered line's leading and trailing audio below −50 dBFS**, measured on the K-weighted
+  signal's 10 ms envelope (the same weighting as the ADR-0003 D5 meter);
+- it **keeps 20 ms** before the first and after the last sample above that threshold, with a **5 ms linear fade** in
+  and out, so a trim never clicks;
+- then it normalises to the voice target (F4) and writes the `.caf`.
+The threshold (−50 dBFS), the pad (20 ms) and the fade (5 ms) are **tuning values in the voice-script data**
+(`src/voice-scripts/<locale>.json`), not code. **V15's durations and AC-6's length limits** (`word_len_max_s`,
+`letter_len_max_s`) **measure the trimmed file.**
+**A true-peak limiter after the gain** *(dated note 2026-11-20, content-pipeline/004; an ADR-0003 D5 implementation
+detail approved by the leader; F4's targets and A1 are unchanged)*. Kokoro's speech peaks about 16 dB above its
+loudness (19 dB at most), so at −16 LUFS 51 of the 72 lines would pass −1 dBTP by gain alone, and 30 would clip.
+- **The order:** trim → gain to the voice target (−16 LUFS) → a **lookahead true-peak limiter** (ceiling −1 dBTP,
+  measured 4× oversampled like the D5 meter) that reduces gain on the peaks only → a **clip guard** (no sample above
+  full scale; the bake fails naming the line) → write the `.caf`.
+- **After limiting, each line must still meet A7:** within ±1 LU of −16 LUFS and at or below −1 dBTP, measured on the
+  written file.
+- **Data, not code:** the limiter's values (ceiling, lookahead, release, and the 6 dB warning threshold) are tuning
+  data in the voice script.
+- **Recorded:** each line's maximum gain reduction is recorded in the voice provenance. A line that needs **more than
+  6 dB** is flagged as no longer transparent, for an ear check or a re-render.
 
 ### States and Transitions
 
@@ -333,19 +356,26 @@ hold_eff  ≥ min( max(hold, word_end), hold + hold_ext_max_s )
 - `T_active` is the active timing set's T (normal 2.45 s; reduced 1.2 s).
 - `word_len` comes **from data, never from playback**: the Key Table's `voiceDurations` (written by the build
   tool from the rendered files; its V15 checks each value against its file within ±0.01 s), and a build check
-  enforces `word_len ≤ word_len_max_s = hold_ext_max_s − word_offset_s = 1.5 − 0.25 = 1.25 s` (AC-6, Key Table
-  V15). If an entry is missing at run time, the Press Queue uses the bound `T_active + 1.5 s` for that word.
-- With the bound, `word_end ≤ T + 1.5`, which is always within `hold + 1.5`, so the cap never has to cut a word.
+  enforces `word_len ≤ word_len_max_s` = **1.5 s** (AC-6, Key Table V15; **K-53, 2026-11-20**: was 1.25 s, but 9 of
+  the 10 counted number phrases and quetzalcoatlus measured over it on the trimmed renders). If an entry is missing
+  at run time, the Press Queue uses the bound `T_active + word_offset_s + word_len_max_s` = `T_active + 1.75 s` for
+  that word.
+- **The cap never cuts a word** while `T_active + word_offset_s + word_len_max_s ≤ hold + hold_ext_max_s`: normal
+  2.45 + 0.25 + 1.5 = 4.20 ≤ 3.0 + 1.5 = 4.50, and reduced 2.95 ≤ 4.50. (The old form `word_len_max_s =
+  hold_ext_max_s − word_offset_s` was a stricter stand-in; the inequality above is the real limit: `word_len_max_s`
+  ≤ 1.8 s with the shipped values.)
 
 | Case | word_end | hold 3.0 → effective | extra |
 |---|---|---|---|
 | "nest" 0.5 s, normal | 2.45 + 0.25 + 0.5 = 3.20 | 3.20 | +0.20 s |
 | "triceratops" 0.9 s, normal | 3.60 | 3.60 | +0.60 s |
-| "quetzalcoatlus" 1.15 s, normal | 3.85 | 3.85 | **+0.85 s** |
-| any word ≤ 1.25 s, reduced (T 1.2) | ≤ 2.70 | 3.00 | 0 |
+| "quetzalcoatlus" 1.26 s, normal (trimmed render, K-53) | 3.96 | 3.96 | +0.96 s |
+| "five baby dinosaurs" 1.47 s, normal | 4.17 | 4.17 | **+1.17 s** |
+| any word ≤ 1.5 s, reduced (T 1.2) | ≤ 2.95 | 3.00 | 0 |
 
-**Cost:** with long words, each queued reveal waits up to about +0.9 s, so with 3 keys queued the last one starts
-about **2.7 s** later than with a plain 3.0 s hold. Luan accepted this for a word that is always heard whole.
+**Cost:** with long words, each queued reveal waits up to about **+1.2 s** (K-53; was +0.9 s), so with 3 keys queued
+the last one starts up to about **3.6 s** later than with a plain 3.0 s hold. Luan accepted this for a word that is
+always heard whole (Q1), and K-53 raised the limit knowing the hold follows it.
 
 ## Edge Cases
 
@@ -407,7 +437,7 @@ All values are bundled data (ADR-0001 Decision 6). "One-shot" means Luan played 
 | `volume` default | level 8 (gain 0.8) | 0–10 | Settings Store (K-12; owned there) | starting volume; the grown-up changes it |
 | `g_head` | −3 dB | −6 – 0 dB | F1 | headroom so the limiter is idle at the default level |
 | `word_offset_s` | 0.25 | 0–0.6 | decided (Luan Q1) | gap between the cast sound and the word; larger = longer hold (F6) |
-| `word_len_max_s` | 1.25 | 0.8–1.25 | F6 | longest word line allowed; above 1.25 the cap would cut words |
+| `word_len_max_s` | **1.5** (K-53; was 1.25) | 0.8–1.8 | F6 | longest word line allowed; above 1.8 the cap would cut words (normal set, `hold_s` 3.0, `hold_ext_max_s` 1.5) |
 | `letter_len_max_s` | 1.0 | 0.6–1.0 | proposed | longest letter or number line ("double you" is the longest); fixed, so it does not move with MorphCore's provisional reduced set. At 1.0 it ends before the reduced T (1.2 s) and well before the normal T (2.45 s) |
 | `hold_ext_max_s` | 1.5 | 0–1.5 | decided (Luan Q1) | longest hold extension for a word (Press Queue constraint) |
 | `tap_cooldown_s` | 0.9 | 0.2–3 | one-shot | taps closer than this only sparkle (owned by Reveal Stage; listed for the sound) |
@@ -472,7 +502,7 @@ Logic criteria run with an injected clock and a fake player layer (no audio hard
    stops any line still playing, without a click (AC-9).
 5. **AC-5 Player cap.** Under 10 presses/s for 60 s (logic test), never more than 7 sounds play at once, never more
    than 4 on the ui bus, and the oldest ui sound is the one reused.
-6. **AC-6 Line length (build).** The build fails if any word line is longer than `word_len_max_s` (1.25 s) or any
+6. **AC-6 Line length (build).** The build fails if any word line is longer than `word_len_max_s` (1.5 s, K-53) or any
    letter/number line is longer than `letter_len_max_s` (1.0 s), for every locale.
 7. **AC-7 Hold constraint.** With the Press Queue in the loop (integration test), a key queued during the word of
    "quetzalcoatlus" (1.15 s) starts its reveal no earlier than s = 3.85 and no later than s = 4.5; the word is

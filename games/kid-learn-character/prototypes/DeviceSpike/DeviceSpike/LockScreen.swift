@@ -23,6 +23,8 @@ struct LockScreen: View {
                     Button(kiosk.locked ? "Locked" : "Lock now") { kiosk.lock() }.disabled(kiosk.locked)
                     Button("Unlock") { kiosk.unlock() }.disabled(!kiosk.locked)
                     Button("Open gate overlay") { kiosk.overlay = true }
+                    // TASK-134 dry run: blocks the main thread 10 s so the dead-man's _exit path can be seen
+                    Button("Hang main 10 s (dead-man test)") { SpikeLog.shared.line("[lock] hanging main 10 s"); Thread.sleep(forTimeInterval: 10) }
                 }.buttonStyle(.bordered)
                 Text("While locked: ⌃⌥⌘Q opens the overlay; the overlay's Quit (hold 1.5 s) unlocks and quits.").font(.callout)
                 LogView()
@@ -78,6 +80,16 @@ final class Kiosk: ObservableObject {
     private var savedFrame: NSRect = .zero
     private var savedStyle: NSWindow.StyleMask = []
     private let delegate = FullScreenDelegate()
+    /// TASK-134 dead-man (game-qc-ios, required for Mac session 1): every lock auto-unlocks after `deadManS` seconds
+    /// (default 240; `-deadman <s>` overrides, 30…600). It runs on its own queue so a hung main thread cannot stop it:
+    /// it asks the main thread to unlock and, if the main thread has not answered within 2 s, ends the process
+    /// (`_exit`), which hands the Dock, menu bar, Force Quit and process switching back to macOS.
+    private var deadMan: DispatchSourceTimer?
+    private var lockGeneration = 0
+    static var deadManS: Double {
+        let v = UserDefaults.standard.double(forKey: "deadman")
+        return v > 0 ? min(600, max(30, v)) : 240
+    }
 
     /// Child Lock-in R2's set; .disableScreenCornerInteractions on macOS 27+ (with .hideDock).
     static var options: NSApplication.PresentationOptions {
@@ -108,6 +120,7 @@ final class Kiosk: ObservableObject {
 
     func lock() {
         guard let w = window, let screen = w.screen ?? NSScreen.main else { return }
+        armDeadMan()          // first, before any option is applied: a hang during setup is covered too (review)
         let t0 = ProcessInfo.processInfo.systemUptime
         savedFrame = w.frame; savedStyle = w.styleMask
         switch mode {
@@ -128,7 +141,38 @@ final class Kiosk: ObservableObject {
         SpikeLog.shared.line("[lock] locked mode=\(mode == .borderless ? "borderless" : "native") applied in \(String(format: "%.1f", (ProcessInfo.processInfo.systemUptime - t0) * 1000)) ms windowCoversDisplay=\(covers) covers=\(self.covers.count)")
     }
 
+    private func armDeadMan() {
+        lockGeneration += 1
+        let gen = lockGeneration, after = Self.deadManS
+        let hungMessage = Array("[lock] dead-man: main thread did not answer in 2 s; exiting to restore the desktop\n".utf8)
+        deadMan?.cancel()
+        let q = DispatchQueue(label: "spike.deadman", qos: .userInitiated)
+        let t = DispatchSource.makeTimerSource(queue: q)
+        t.schedule(deadline: .now() + after)
+        t.setEventHandler { [weak self] in
+            let answered = DispatchSemaphore(value: 0)
+            DispatchQueue.main.async {
+                MainActor.assumeIsolated {
+                    if let self, self.locked, self.lockGeneration == gen {
+                        SpikeLog.shared.line("[lock] dead-man: auto-unlock after \(Int(after)) s locked")
+                        self.unlock()
+                    }
+                }
+                answered.signal()
+            }
+            if answered.wait(timeout: .now() + 2) == .timedOut {
+                // no NSLog / print here: a hung main thread may hold a log or stdio lock (game-dev-android review);
+                // a preformatted buffer and write(2) take no lock
+                hungMessage.withUnsafeBufferPointer { b in _ = write(STDERR_FILENO, b.baseAddress, b.count) }
+                _exit(3)
+            }
+        }
+        deadMan = t; t.resume()
+        SpikeLog.shared.line("[lock] dead-man armed: auto-unlock in \(Int(after)) s")
+    }
+
     func unlock() {
+        deadMan?.cancel(); deadMan = nil
         NSApp.presentationOptions = []
         if let w = window {
             if w.styleMask.contains(.fullScreen) { w.toggleFullScreen(nil) }

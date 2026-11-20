@@ -227,14 +227,15 @@ holdEff  = max( hold_s, revealLen, min( word_end, hold_s + hold_ext_max_s ) )
 | `revealLen` | the visible reveal length from the Reveal Stage | 2.95 s normal, 1.5 s reduced (MorphCore F5) | R6 |
 | `formedS` | when `formed` is reported | T: 2.45 s normal, 1.2 s reduced | R6 |
 | `word_offset_s` | gap between the cast sound and the word | 0.25 s | Audio & Voice |
-| `word_len` | the word line's duration | ≤ 1.25 s (Key Table V15) | `voiceDurations[locale][word line]` |
+| `word_len` | the word line's duration | ≤ `word_len_max_s`, 1.5 s (Key Table V15; K-53) | `voiceDurations[locale][word line]` |
 | `hold_ext_max_s` | the longest a word may extend the hold | 1.5 s | Audio & Voice |
 | `holdEff` | the hold of this reveal | 3.0–4.5 s with shipped values | — |
 
 - If `startReveal` returns `hasWord` false (no word line, or the creature will not form so no word plays), the
   term `min(word_end, …)` is dropped.
-- If its `voiceDurations` entry is missing at run time (despite V15), `word_end = formedS + 1.5` (Audio F6 bound),
-  one debug log line.
+- If its `voiceDurations` entry is missing at run time (despite V15), `word_end = formedS + word_offset_s +
+  word_len_max_s` = **`formedS + 1.75`** (Audio F6 bound; K-53, was `+ 1.5` with the 1.25 s limit), one debug log
+  line.
 - The base hold is not measured from the press: it starts at `r0`.
 
 | Case | word_end | holdEff |
@@ -242,14 +243,16 @@ holdEff  = max( hold_s, revealLen, min( word_end, hold_s + hold_ext_max_s ) )
 | "nest" 0.5 s, normal | 2.45 + 0.25 + 0.5 = 3.20 | max(3.0, 2.95, min(3.20, 4.5)) = **3.20** |
 | "triceratops" 0.904 s, normal | 3.604 | **3.604** |
 | "quetzalcoatlus" 1.15 s, normal | 3.85 | **3.85** |
-| no `voiceDurations` entry, normal | 2.45 + 1.5 = 3.95 | **3.95** |
-| any word ≤ 1.25 s, reduced (T 1.2) | ≤ 2.70 | **3.0** |
+| "five baby dinosaurs" 1.47 s, normal | 4.17 | **4.17** |
+| no `voiceDurations` entry, normal | 2.45 + 1.75 = 4.20 | **4.20** |
+| any word ≤ 1.5 s, reduced (T 1.2) | ≤ 2.95 | **3.0** |
 | hold_s set to 1.0 (tuning test), "nest", normal | 3.20 | max(1.0, 2.95, min(3.20, 2.5)) = **2.95** (the cap would cut the word; the build check below forbids this) |
 
 **Build checks** on the shipped data, for both timing sets:
 
 1. **The cap never cuts a word:** `hold_s + hold_ext_max_s ≥ formedS_max + word_offset_s + word_len_max_s`, i.e.
-   `hold_s ≥ 2.45 + 0.25 + 1.25 − 1.5 = 2.45` (normal set; reduced needs 1.2).
+   `hold_s ≥ 2.45 + 0.25 + 1.5 − 1.5 = 2.70` (normal set; reduced needs 1.45; K-53, was 2.45 with the 1.25 s
+   limit). The shipped 3.0 passes.
 2. **The base hold covers the visible reveal** (MorphCore's constraint "normal hold ≥ T + form_s"): `hold_s ≥
    revealLen = 2.95` (normal; reduced 1.5). `holdEff ≥ revealLen` holds anyway through the `max`, but this keeps
    the 3 s rhythm from silently depending on the morph's length.
@@ -298,7 +301,7 @@ rests longer on stage and the pace of the queue is unchanged.
 - **Out-of-order timestamps:** no reordering; a stamp before `r0` counts as during the hold (R3).
 - **The same key three times:** three reveals of that key, each resolving its item at its own start (Key Table
   pick rule: no immediate repeat of the item).
-- **The word line has no duration entry:** the bound `formedS + 1.5` is used, one log line (F1).
+- **The word line has no duration entry:** the bound `formedS + 1.75` is used, one log line (F1; K-53).
 - **Art, glyph or timing data missing:** the Reveal Stage's fallback gives its own `formedS`/`revealLen` and reports
   `formed` at its end (R6, R7); the queue runs unchanged.
 - **`formed` never arrives** (a bug): after `revealLen + 1 s` the queue marks the reveal formed and logs; a late
@@ -379,7 +382,7 @@ frames, no randomness.
 - **AC-6 No jumping:** GIVEN B queued and the hold passed but no tick yet, WHEN C is pressed, THEN `queued(1)`;
   the next tick starts B, not C.
 - **AC-7 F1 table:** for each F1 row (with a fake Reveal Stage giving the normal or reduced lengths and the given
-  `voiceDurations`), holdEff equals the table within 1e-9; a missing entry gives `formedS + 1.5` and one log line.
+  `voiceDurations`), holdEff equals the table within 1e-9; a missing entry gives `formedS + 1.75` and one log line.
 - **AC-8 Mash (F3):** GIVEN rest, WHEN 10 presses arrive in one batch, THEN outcomes 1 started, 3 queued, 6
   ignored, in press order.
 - **AC-9 Outcome in the callback:** `press(p)` returns its outcome synchronously; the outcomes of N presses are N
