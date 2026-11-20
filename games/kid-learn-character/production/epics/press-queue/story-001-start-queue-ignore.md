@@ -1,12 +1,12 @@
 # Story 001: Start at once, queue during the hold, the formed guard, ignore when full
 
 > **Epic**: Press Queue (`production/epics/press-queue/EPIC.md`)
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Core
 > **Type**: Logic
 > **Estimate**: M
 > **Manifest Version**: 2026-11-20
-> **Last Updated**: —
+> **Last Updated**: 2026-11-20
 > **Milestone**: Demo 1 (K-48)
 
 ## Context
@@ -28,6 +28,11 @@
 - Forbidden: never hard-code tuning values; timing and knobs are bundled data (ADR-0001 D6)
 
 **Contracts**: press-queue-v1 (this story adds the runner file, reporting the cases not yet passing as NOT ASSESSED — it is not registered while the row is `not-started`, since ContractKit fails a registered runner on a not-started row; the row flips to `runner:` in press-queue/005)
+
+> *Note 2026-11-20 (TASK-147, K-53):* press-queue-v1 is superseded by **press-queue-v2** (merged at plan dabc9a96); this
+> story's runner targets v2. The registry row `press-queue-v2 | not-started: story:press-queue` stays until 005. The
+> runner runs an explicit list of this story's case ids (AC1–AC4 at least) and lists the rest NOT ASSESSED by id,
+> never because a case failed.
 
 ---
 
@@ -58,12 +63,10 @@ The whole state machine is KidCore (Module Ownership). Tests use an injected clo
 
 ## Files
 
-*Planned; `/dev-story` replaces this list. Roots are ADR-0001 D3 / ADR-0002 D1 (`apple/`); `engine.name` is unset by design.*
-
 - `apple/KidCore/Sources/KidCore/PressQueue.swift`
 - `apple/KidCore/Tests/KidCoreTests/PressQueueTests.swift`
-
----
+- `apple/KidCore/Tests/ContractTests/PressQueueRunner.swift`
+- `contracts/kidcore-api.md`
 
 ## QA Test Cases
 
