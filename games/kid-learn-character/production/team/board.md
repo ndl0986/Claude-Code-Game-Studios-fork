@@ -122,6 +122,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-131 | /create-control-manifest from the 8 Accepted ADRs (Proposed 0007–0010 marked pending) + Swift naming conventions (in the manifest or a short coding-conventions doc; gate concern) | architecture | game-dev-ios (review: game-dev-android) | ASSIGNED | `docs/TASK-131-control-manifest` | 2026-11-20 |
 | TASK-132 | /create-epics for Demo 1 (K-48): one epic per architectural module the core loop needs; each epic names its GDDs, ADRs (Accepted/Proposed) and gating device rows; milestone note production/milestones/demo-1.md | production | game-dev-android (review: game-qc-android) | ASSIGNED | `plan/TASK-132-demo1-epics` | 2026-11-20 |
 | TASK-133 | /asset-spec for the Dinosaurs set: 36 cast + silhouette specs (A–Z, 0–9 counts) per the art bible §5/§8 and Key Table; families, parts/pivots, palettes, file names; render constraints from ADR-0009 | content | game-art-content (review: game-dev-ios) | ASSIGNED | `design/TASK-133-dino-asset-specs` | 2026-11-20 |
+| TASK-134 | Mac session 1 (Luan, tonight 2026-11-20) on DeviceSpike macOS: M-1 (F-5 scoped tccutil), M-2, M-3–M-7 kiosk rows with a written recovery plan, M-10, M-12 (if F2 tool), M-13, M-14; M-8/M-9/M-11/M-15/M-16 NOT ASSESSED (production app) | device | game-dev-ios (build, launches) + game-qc-ios (results.md, recovery check) | PREP | `qa/TASK-134-mac-session-1` | 2026-11-20 |
 
 ## Leader log
 
