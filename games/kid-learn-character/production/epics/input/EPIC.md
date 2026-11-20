@@ -5,7 +5,7 @@
 > **Architecture Module**: KidCore (classifier on normalized events, held set, routing, hit tests) + app (UIKit presses, AppKit key monitor, touch/click adapters)
 > **Milestone**: Demo 1 (`production/milestones/demo-1.md`, K-48)
 > **Status**: Ready
-> **Stories**: Not yet created — after TASK-131's control manifest lands, run `/create-stories input`
+> **Stories**: 7 stories (TASK-137)
 
 ## Overview
 
@@ -52,6 +52,18 @@ Every press, from a hardware key or a touch, becomes one normalized event; only 
 ## Depends on
 
 - **TASK-135** (K-49): Input's keyboard-presence signal, which shows and hides the keyboard row.
+
+## Stories
+
+| # | Story | Type | Status | ADR |
+|---|-------|------|--------|-----|
+| 001 | [Classify normalized key events: letters and digits count, everything else swallowed, held keys and repeats once](story-001-key-classifier.md) | Logic | Ready | ADR-0002, ADR-0004 |
+| 002 | [Re-press window and the Title → Play switch; ⌘ release clears the held set](story-002-repress-and-title.md) | Logic | Ready | ADR-0002, ADR-0004 |
+| 003 | [Classify touches on the stage: hints within their radius, sparkle on empty stage](story-003-touch-classification.md) | Logic | Ready | ADR-0002, ADR-0006, ADR-0004 |
+| 004 | [iPad hardware-keyboard adapter: `presses…` → `KeyEvent`, system keys passed on, touch batches sorted](story-004-ipad-key-adapter.md) | Integration | Blocked | ADR-0007, ADR-0002 |
+| 005 | [Mac key monitor adapter: one local monitor → `KeyEvent`, no Input Monitoring prompt](story-005-mac-key-adapter.md) | Integration | Blocked | ADR-0007, ADR-0002 |
+| 006 | [Keyboard-presence signal that shows the on-screen row when no hardware keyboard is attached](story-006-keyboard-presence-signal.md) | Logic | Blocked | ADR-0007, ADR-0002 |
+| 007 | [All 36 keys and the same letters as hints give the same reveal; other keys and empty taps do nothing visible](story-007-keys-and-touch-same-reveal.md) | Integration | Blocked | ADR-0007, ADR-0002 |
 
 ## Definition of Done
 
