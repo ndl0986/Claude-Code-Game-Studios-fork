@@ -122,7 +122,7 @@ never more brightness"; Pillar 3).
 **R4. Priming, loading and format.**
 1. **Decoding is part of the theme load.** Key Table & Theme Data loads a theme whole, off the main thread (its
    Core Rules). Reading that theme's `.caf` files (sfx and every voice line for the active locale: uncompressed
-   16-bit linear PCM, K-52) into the players' PCM format is part of that same load. **A theme becomes Active only when its audio is decoded too.** Nothing is ever decoded on a
+   16-bit linear PCM, K-52) into the players' PCM format is part of that same load. **A theme becomes Active only when its audio is read in too.** Nothing is ever decoded on a
    press. The fixed sounds (chime, ping, twinkle, parade tune) are decoded once at start-up.
 2. **Decode at the engine's output format.** Buffers are decoded (or converted once) to the output's sample rate,
    mono, so playback needs no conversion at press time.

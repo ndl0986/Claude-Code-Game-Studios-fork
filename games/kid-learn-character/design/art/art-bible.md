@@ -564,8 +564,8 @@ the glyph rises from where it was pressed with an ease-out.
   fine on the iPad Simulator and the Mac. **On a real device: NOT ASSESSED** until Luan runs TASK-033's iPad
   procedure.
 - **Audio:** **uncompressed 16-bit linear PCM, mono, 48 kHz, in `.caf`** for storage *(amendment 2026-11-20, Luan K-52:
-  was AAC `.m4a`; AAC encoding isn't byte-stable, and ADR-0003 D4 needs byte-stable bakes; about 7–8 MB for the
-  Dinosaurs set instead of about 0.8 MB)*, loaded to PCM at theme load so a press plays at once
+  was AAC `.m4a`; AAC encoding isn't byte-stable, and ADR-0003 D4 needs byte-stable bakes; about 12–18 MB for the
+  Dinosaurs set: measured voice ≈ 11.5 MB, sfx ≤ 6.9 MB at the 2.0 s cap)*, loaded to PCM at theme load so a press plays at once
   (TASK-033: stop + schedule + play costs 3–10 ms on the main thread).
 
 ### Conflict: how the SVG art reaches the screen (Luan, 2026-11-17: record both, decide in architecture)

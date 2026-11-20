@@ -138,6 +138,6 @@ Reviewed-Content-Hash: design/gdd/audio-voice.md 9692a7ca8ace023623279458e75921c
 
 ## Update — 2026-11-20 — TASK-145 audio is uncompressed CAF, K-52 (no re-review)
 Review mode: lean · Workflow: standard
-Change: K-52 (Luan): baked audio is uncompressed 16-bit linear PCM in .caf (AAC is not byte-stable; ADR-0003 D4). R4.1 reads the .caf files into the players' PCM at theme load; R8 names the .caf pipeline and vo_<locale>_<kind>_<id>.caf; the art bible §8 reference reads LPCM .caf. No rule, timing or loudness target changes. Review: game-dev-android.
+Change: K-52 (Luan): baked audio is uncompressed 16-bit linear PCM in .caf (AAC is not byte-stable; ADR-0003 D4). R4.1 reads the .caf files into the players' PCM at theme load; R8 names the .caf pipeline and vo_<locale>_<kind>_<id>.caf; the art bible §8 reference reads LPCM .caf. R4.1 says the audio is "read in" (LPCM), not decoded. No rule, timing or loudness target changes. Review: game-dev-android.
 fixture: none (audio-plan-v1 names no file path or format in any case; 0 occurrences of .m4a)
-Reviewed-Content-Hash: design/gdd/audio-voice.md f6cb42471513a1369d7ca3c645892740351c36e8
+Reviewed-Content-Hash: design/gdd/audio-voice.md 9538c82cb168ce8556d39928028bfeb27cc30ec7
