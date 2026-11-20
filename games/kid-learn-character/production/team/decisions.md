@@ -103,6 +103,17 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-52 Baked audio is uncompressed CAF, not AAC (Luan, 2026-11-20)
+
+- TASK content-pipeline/003 and /007 found that AudioToolbox's AAC encoder is not byte-stable: the same PCM gives one
+  of two bitstreams depending on core type (P vs E cores; decoded difference ≤ −101 dBFS). ADR-0003 D4 requires
+  byte-stable bake output. Options shown: a sameness rule for .m4a (PCM hash + decoded match), or uncompressed audio.
+- **Luan chose CAF:** voice lines and sfx are baked as **uncompressed linear PCM in .caf** (16-bit, mono, 48 kHz
+  unless the audio owner shows a reason otherwise), byte-stable like every other bake. About 7–8 MB for the Dinosaurs
+  set instead of ~0.8 MB. ADR-0003 D4 (byte-stable) stands unchanged; **ADR-0003 D8's "mono AAC" gets a dated note**
+  (Accepted ADR, Luan's decision), and the Audio & Voice GDD, the stories (content-pipeline/003, 004, 007) and any
+  `.m4a` paths in theme data change to `.caf`. The AAC priming proof becomes moot.
+
 ### K-51 Link GameController on iPadOS only (Luan, 2026-11-20, PKC-13)
 
 - Luan approved linking Apple's **GameController** framework **on iPadOS only**, solely to read whether a hardware
