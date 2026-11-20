@@ -133,6 +133,10 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-141 | Contract keyboard-row-v2 (v1's 36 cases with keyboardPresent: true + AC-1, AC-15 clarified, AC-20–24, pending-drop, current-alpha); v1 → superseded-by; parade-v2 sources.lock paths fixed (repo-relative) | contracts | game-qc-android (review: game-art-content) | MERGED (96ec3066: 58 cases; plan verify PASS 668ff8b1, leader-run) | `contracts/TASK-141-keyboard-row-v2` | 2026-11-20 |
 | TASK-142 | Hint Letters meter-box clearance wording with jitter (TASK-139 finding) | design | game-art-content (review: game-qc-android) | MERGED (d671ab99) | `design/TASK-142-hint-meter-jitter` | 2026-11-20 |
 | TASK-144 | K-52: baked audio → uncompressed CAF (16-bit mono 48 kHz): ADR-0003 D8 dated note, Audio & Voice GDD + review-log fixture lines, stories 003/004/007 ACs, `.caf` paths in theme data; encoder in 003 switched, 007 rebased | content | game-dev-android (review: game-dev-ios) | ASSIGNED | `chore/TASK-144-caf-audio` | 2026-11-20 |
+| content-pipeline/001 | Cast SVG bake tool | story | game-dev-android (review: game-dev-ios) | MERGED (e9c1f7d2; plan verify PASS b22d664a, leader-run) | `feat/content-pipeline-001-svg-bake` | 2026-11-20 |
+| content-pipeline/002 | Glyph bake (Fredoka 600) | story | game-dev-android (review: game-dev-ios) | MERGED (dc32a75d; plan verify PASS b22d664a) | `feat/content-pipeline-002-glyph-bake` | 2026-11-20 |
+| TASK-145 | K-52 text: `.m4a`/AAC → `.caf`/LPCM in the Key Table GDD, Audio & Voice GDD, art bible §8 (dated entries + fixture lines) | design | game-art-content (review: game-dev-android) | ASSIGNED | `design/TASK-145-caf-text` | 2026-11-20 |
+| TASK-146 | key-table-schema-v2 (`.m4a` → `.caf`, v1 superseded) + KidCore KeyTable.swift V6/voicePath change in the same merge | contracts | game-qc-android (cases) + game-dev-android (KidCore) | ASSIGNED | `contracts/TASK-146-key-table-schema-v2` | 2026-11-20 |
 
 ## Leader log
 
