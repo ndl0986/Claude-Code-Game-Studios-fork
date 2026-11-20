@@ -43,6 +43,12 @@
   `resume()` and `settle()` are this story's; the Reveal Stage will own pausing the clock (architecture §3), which the
   runner plays for now.
 - [ ] AC-21 The build fails for `hold_s`, `queue_max` or `formed_timeout_s` missing, non-numeric or out of range, and when the F1 build check fails; no timing literal in the queue's code.
+  *Note 2026-11-20 (leader's option a):* `content/data/press-queue.json` (ADR-0003 D1) holds `hold_s` 3.0, `queue_max`
+  3 and `formed_timeout_s` 1.0; `kidtools validate` (verify) fails a value missing, not a number or outside its Tuning
+  Knobs range (KidCore `PressQueueData.problems`). F1's build checks (`PressQueueData.f1BuildCheck`) are built and
+  unit-tested, but on the real content they print **NOT ASSESSED** until MorphCore's timing data
+  (`content/data/morph-timing.json`, morphcore/001) and Audio & Voice's data exist. `PressQueue.swift` has no timing
+  literal.
 
 ---
 
@@ -64,11 +70,18 @@ The whole state machine is KidCore (Module Ownership). Tests use an injected clo
 
 - `apple/KidCore/Sources/KidCore/PlayClock.swift`
 - `apple/KidCore/Sources/KidCore/PressQueue.swift`
+- `apple/KidCore/Sources/KidCore/PressQueueData.swift`
 - `apple/KidCore/Tests/KidCoreTests/PressQueueTests.swift`
+- `apple/KidCore/Tests/KidCoreTests/PressQueueDataTests.swift`
 - `apple/KidCore/Tests/ContractTests/PressQueueRunner.swift`
 - `apple/KidCore/Tests/ContractTests/ContractHarness.swift`
+- `apple/Tools/Sources/ToolsCore/ContentValidator.swift`
+- `apple/Tools/Sources/kidtools/main.swift`
+- `apple/Tools/Tests/ToolsTests/DataValidatorTests.swift`
+- `content/data/press-queue.json`
 - `contracts/README.md`
 - `contracts/kidcore-api.md`
+- `design/gdd/press-queue.md`
 
 ## QA Test Cases
 

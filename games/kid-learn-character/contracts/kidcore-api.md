@@ -153,6 +153,17 @@ The Kotlin port diffs its names and shapes against this file (ADR-0002).
 - `PressQueue.resume()` (method): `mutating func resume()`
 - `PressQueue.settle()` (method): `mutating func settle()`
 - `PressQueue.tick(now:)` (method): `mutating func tick(now: Double)`
+- `PressQueueData.TimingSet.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `PressQueueData.TimingSet.formedS` (property): `var formedS: Double`
+- `PressQueueData.TimingSet.init(name:formedS:revealLen:)` (init): `init(name: String, formedS: Double, revealLen: Double)`
+- `PressQueueData.TimingSet.name` (property): `var name: String`
+- `PressQueueData.TimingSet.revealLen` (property): `var revealLen: Double`
+- `PressQueueData.TimingSet` (struct): `struct TimingSet`
+- `PressQueueData.f1BuildCheck(_:sets:)` (type.method): `static func f1BuildCheck(_ k: PressQueueKnobs, sets: [TimingSet]) -> [String]`
+- `PressQueueData.names` (type.property): `static let names: [String]`
+- `PressQueueData.problems(_:)` (type.method): `static func problems(_ values: [String : Double?]) -> [String]`
+- `PressQueueData.ranges` (type.property): `static let ranges: [String : ClosedRange<Double>]`
+- `PressQueueData` (enum): `enum PressQueueData`
 - `PressQueueKnobs.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
 - `PressQueueKnobs.formedTimeoutS` (property): `var formedTimeoutS: Double`
 - `PressQueueKnobs.holdExtMaxS` (property): `var holdExtMaxS: Double`

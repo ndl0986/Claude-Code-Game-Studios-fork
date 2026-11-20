@@ -113,6 +113,31 @@ public enum ContentValidator {
     }
 }
 
+/// The bundled tuning data in `content/data/` (ADR-0003 D1), checked by `kidtools validate` beside the themes.
+public enum DataValidator {
+    /// The press queue's file (Press Queue R13, AC-21): each knob present, a number and in its Tuning Knobs range.
+    /// F1's build checks need the morph timing sets and Audio & Voice's `word_offset_s` and `hold_ext_max_s`; until
+    /// those data files exist the F1 check is NOT ASSESSED, never a pass.
+    public static func run(contentDir: URL) -> (findings: [String], notAssessed: [String]) {
+        let rel = "data/press-queue.json"
+        let url = contentDir.appendingPathComponent(rel)
+        guard let data = FileManager.default.contents(atPath: url.path) else { return (["\(rel): missing (R13)"], []) }
+        guard let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            return (["\(rel): not a JSON object"], [])
+        }
+        var values: [String: Double?] = [:]
+        for n in PressQueueData.names {
+            // A JSON boolean decodes as NSNumber too: only a real number counts.
+            if let num = obj[n] as? NSNumber, CFGetTypeID(num) != CFBooleanGetTypeID() { values[n] = num.doubleValue }
+            else { values[n] = .some(nil) }
+        }
+        let findings = PressQueueData.problems(values).map { "\(rel): \($0) (R13)" }
+        let missing = ["data/morph-timing.json"].filter { !FileManager.default.fileExists(atPath: contentDir.appendingPathComponent($0).path) }
+        let na = missing.isEmpty ? [] : ["NOT ASSESSED press-queue F1 build check: no \(missing.joined(separator: ", ")) (morphcore/001) or Audio & Voice data yet"]
+        return (findings, na)
+    }
+}
+
 /// The glyph set file (Key Table §2c): `{ id, font { name, version, weight, licence, licenceFile }, baker, glyphs }`.
 public enum GlyphSetDecoder {
     public static func decode(contentsOf url: URL) throws -> GlyphSetModel {

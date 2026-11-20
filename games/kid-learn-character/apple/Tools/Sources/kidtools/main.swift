@@ -53,13 +53,17 @@ case "validate":
     if let i = rest.firstIndex(of: "--release") { release = true; rest.remove(at: i) }
     guard rest.count == 1 else { fail("usage: kidtools validate <content-dir> [--load] [--release]") }
     let r = ContentValidator.run(contentDir: URL(fileURLWithPath: rest[0]), singleItemPerKey: !load)
+    let d = DataValidator.run(contentDir: URL(fileURLWithPath: rest[0]))
     for f in r.findings { print(f) }
+    for f in d.findings { print("FAIL data \(f)") }
+    for l in d.notAssessed { print(l) }
     for t in r.inProgress { print("NOT ASSESSED theme \(t): in progress (src/ only, no theme.json yet)") }
     for l in r.notAssessed { print(l) }
-    let releaseBlocked = r.pass && !r.passes(release: release)
-    let verdict = !r.pass ? "FAIL" : (releaseBlocked ? "FAIL (release: \(r.inProgress.count) theme(s) in progress)" : "PASS")
-    print("validate: \(r.themes.count) theme(s)\(r.themes.isEmpty ? "" : " (" + r.themes.joined(separator: ", ") + ")"), \(r.inProgress.count) in progress, \(r.findings.count) finding(s): \(verdict)")
-    exit(r.passes(release: release) ? 0 : 1)
+    let dataOK = d.findings.isEmpty
+    let releaseBlocked = r.pass && dataOK && !r.passes(release: release)
+    let verdict = !(r.pass && dataOK) ? "FAIL" : (releaseBlocked ? "FAIL (release: \(r.inProgress.count) theme(s) in progress)" : "PASS")
+    print("validate: \(r.themes.count) theme(s)\(r.themes.isEmpty ? "" : " (" + r.themes.joined(separator: ", ") + ")"), \(r.inProgress.count) in progress, \(r.findings.count + d.findings.count) finding(s): \(verdict)")
+    exit(r.passes(release: release) && dataOK ? 0 : 1)
 case "bake":
     var rest = Array(args.dropFirst()), idle: URL? = nil
     if let i = rest.firstIndex(of: "--idle"), i + 1 < rest.count { idle = URL(fileURLWithPath: rest[i + 1]); rest.removeSubrange(i...(i + 1)) }

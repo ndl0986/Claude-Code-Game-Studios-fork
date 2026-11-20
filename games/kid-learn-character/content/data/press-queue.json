@@ -1,0 +1,6 @@
+{
+  "formed_timeout_s": 1.0,
+  "hold_s": 3.0,
+  "queue_max": 3,
+  "schemaVersion": 1
+}
