@@ -270,3 +270,9 @@ Review mode: lean · Workflow: standard
 Task: TASK-119
 Change: G3's "a key shows only its pressed state" gains the F2 bound per device class from ADR-0013 D7 (Accepted, K-43): the changing area is at most the class's floor area_max (58,449 / 54,105 / 4,347 px), or ΔL < 0.1. SwiftUI's default button dimming counts. No other change.
 Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 3892bfb2541135807b185feeb08ef76fbc509056
+
+## Update — 2026-11-20 — TASK-139b contract fixture lines for earlier changes (no GDD change)
+Review mode: lean · Workflow: standard
+Change: none to this GDD. ADR-0004 D6 line, found by TASK-139's drift check (game-qc-android): Detailed Design changed by TASK-119 (the keypad pressed-state flash bound) after gate-logic-v1 was cut.
+fixture: none (gate-logic-v1: a visual bound only; G13 unchanged)
+Reviewed-Content-Hash: design/gdd/parent-gate-panel.md 3892bfb2541135807b185feeb08ef76fbc509056

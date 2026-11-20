@@ -76,3 +76,10 @@ cited `##` sections only. To see which contracts cite a section that has changed
 `.claude/scripts/review-receipts.sh sections-check <contract>/sources.lock <gdd>` from the repo root (ADR-0004 D6's
 `tools/contracts/source-drift.sh` will wrap this). The output is observations only. A PR that changes a cited
 section says in that GDD's review log `fixture: <contract>-v(N+1)` or `fixture: none (<reason>)`.
+
+ADRs have no review log, so a cited ADR section's line goes here:
+
+- **2026-11-20, ADR-0002 Decision** (changed by TASK-079 S1 92908cd2 and S2 807a52ce: the test-only ContractKit module and its
+  ban-grep scope; no seam or type changed), for app-shell-v1, audio-plan-v1, gate-logic-v1, hint-letters-v1,
+  input-filter-v2, key-table-schema-v1, keyboard-row-v1, press-queue-v1, reveal-timing-v1 and settings-record-v2:
+  `fixture: none (ContractKit is test-only; no seam or type the cases use changed)` (TASK-139b, game-qc-android).

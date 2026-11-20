@@ -97,3 +97,9 @@ Reviewed-Content-Hash: design/gdd/hint-letters.md cd7dbb2f94e689df982b5680cd4b31
 Review mode: lean · Workflow: standard
 Change: The meter box is placed from queue_max (art bible §7); the clearance holds for every queue_max in 0–5 (nearest slot ≥ 124 at zero jitter, ≥ 114 at any jitter); the capacity note restated.
 Reviewed-Content-Hash: design/gdd/hint-letters.md 2dedd30359e3c318c287457b75553160fa73beb5
+
+## Update — 2026-11-20 — TASK-139b contract fixture lines for earlier changes (no GDD change)
+Review mode: lean · Workflow: standard
+Change: none to this GDD. ADR-0004 D6 line, found by TASK-139's drift check (game-qc-android): Detailed Design and Formulas changed by TASK-120 (the parade meter box) after hint-letters-v1 was cut.
+fixture: none (hint-letters-v1: all 58 cases re-run with the meter box, 0 mismatches)
+Reviewed-Content-Hash: design/gdd/hint-letters.md 2dedd30359e3c318c287457b75553160fa73beb5
