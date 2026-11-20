@@ -1,0 +1,161 @@
+# key-table/001: full validator on a scratch content tree (2026-11-20, plan dabc9a96 merged: 004 + TASK-147)
+#
+# <scratch>/content = a copy of content/, the draft (c297d8ed) as themes/dinosaurs/theme.json, batch 1's 6 cast and 6 sil
+# baked by kidtools bake, glyphs by bake-glyphs, the 72 voice lines + voiceDurations from the 004 bake (byte-stable),
+# the 36 sfx from bake-sfx. Command: kidtools validate <scratch>/content  (exit 1).
+#
+# Every one of the 150 findings belongs to the 30 items with no art yet (batches 2-6), 5 each: V7 cast, V7 sil,
+# V8 sil, stale (no src/art SVG), stale (no src/sil SVG). No other rule fails: V15 passes on the real durations under
+# K-53's 1.5 s; voice and sfx staleness pass; the raster check passes for batch 1's 6 pairs.
+
+FAIL dinosaurs V7: missing cast/cast_dino_b_brachiosaurus_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_b_brachiosaurus_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_c_triceratops_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_c_triceratops_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_e_edmontosaurus_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_e_edmontosaurus_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_f_fossil_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_f_fossil_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_g_gallimimus_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_g_gallimimus_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_h_hadrosaurus_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_h_hadrosaurus_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_i_iguanodon_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_i_iguanodon_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_j_juravenator_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_j_juravenator_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_k_kentrosaurus_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_k_kentrosaurus_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_l_lambeosaurus_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_l_lambeosaurus_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_m_maiasaura_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_m_maiasaura_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_n_nest_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_n_nest_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_o_oviraptor_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_o_oviraptor_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_q_quetzalcoatlus_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_q_quetzalcoatlus_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_s_stegosaurus_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_s_stegosaurus_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_u_utahraptor_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_u_utahraptor_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_v_velociraptor_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_v_velociraptor_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_w_wuerhosaurus_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_w_wuerhosaurus_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_x_xenoceratops_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_x_xenoceratops_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_y_yutyrannus_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_y_yutyrannus_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_z_zuniceratops_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_z_zuniceratops_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_0_nest_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_0_nest_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_1_babies_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_1_babies_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_2_babies_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_2_babies_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_3_babies_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_3_babies_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_4_babies_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_4_babies_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_5_babies_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_5_babies_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_6_babies_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_6_babies_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_7_babies_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_7_babies_01.json
+FAIL dinosaurs V7: missing cast/cast_dino_8_babies_01.json
+FAIL dinosaurs V7: missing sil/sil_dino_8_babies_01.json
+FAIL dinosaurs V8: sil/sil_dino_b_brachiosaurus_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_c_triceratops_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_e_edmontosaurus_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_f_fossil_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_g_gallimimus_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_h_hadrosaurus_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_i_iguanodon_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_j_juravenator_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_k_kentrosaurus_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_l_lambeosaurus_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_m_maiasaura_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_n_nest_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_o_oviraptor_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_q_quetzalcoatlus_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_s_stegosaurus_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_u_utahraptor_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_v_velociraptor_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_w_wuerhosaurus_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_x_xenoceratops_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_y_yutyrannus_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_z_zuniceratops_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_0_nest_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_1_babies_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_2_babies_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_3_babies_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_4_babies_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_5_babies_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_6_babies_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_7_babies_01.json: not a drawable morph-v1 path
+FAIL dinosaurs V8: sil/sil_dino_8_babies_01.json: not a drawable morph-v1 path
+FAIL dinosaurs stale: no source src/art/cast_dino_b_brachiosaurus_01.svg for cast/cast_dino_b_brachiosaurus_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_b_brachiosaurus_01.svg for sil/sil_dino_b_brachiosaurus_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_c_triceratops_01.svg for cast/cast_dino_c_triceratops_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_c_triceratops_01.svg for sil/sil_dino_c_triceratops_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_e_edmontosaurus_01.svg for cast/cast_dino_e_edmontosaurus_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_e_edmontosaurus_01.svg for sil/sil_dino_e_edmontosaurus_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_f_fossil_01.svg for cast/cast_dino_f_fossil_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_f_fossil_01.svg for sil/sil_dino_f_fossil_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_g_gallimimus_01.svg for cast/cast_dino_g_gallimimus_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_g_gallimimus_01.svg for sil/sil_dino_g_gallimimus_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_h_hadrosaurus_01.svg for cast/cast_dino_h_hadrosaurus_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_h_hadrosaurus_01.svg for sil/sil_dino_h_hadrosaurus_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_i_iguanodon_01.svg for cast/cast_dino_i_iguanodon_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_i_iguanodon_01.svg for sil/sil_dino_i_iguanodon_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_j_juravenator_01.svg for cast/cast_dino_j_juravenator_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_j_juravenator_01.svg for sil/sil_dino_j_juravenator_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_k_kentrosaurus_01.svg for cast/cast_dino_k_kentrosaurus_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_k_kentrosaurus_01.svg for sil/sil_dino_k_kentrosaurus_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_l_lambeosaurus_01.svg for cast/cast_dino_l_lambeosaurus_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_l_lambeosaurus_01.svg for sil/sil_dino_l_lambeosaurus_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_m_maiasaura_01.svg for cast/cast_dino_m_maiasaura_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_m_maiasaura_01.svg for sil/sil_dino_m_maiasaura_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_n_nest_01.svg for cast/cast_dino_n_nest_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_n_nest_01.svg for sil/sil_dino_n_nest_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_o_oviraptor_01.svg for cast/cast_dino_o_oviraptor_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_o_oviraptor_01.svg for sil/sil_dino_o_oviraptor_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_q_quetzalcoatlus_01.svg for cast/cast_dino_q_quetzalcoatlus_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_q_quetzalcoatlus_01.svg for sil/sil_dino_q_quetzalcoatlus_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_s_stegosaurus_01.svg for cast/cast_dino_s_stegosaurus_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_s_stegosaurus_01.svg for sil/sil_dino_s_stegosaurus_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_u_utahraptor_01.svg for cast/cast_dino_u_utahraptor_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_u_utahraptor_01.svg for sil/sil_dino_u_utahraptor_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_v_velociraptor_01.svg for cast/cast_dino_v_velociraptor_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_v_velociraptor_01.svg for sil/sil_dino_v_velociraptor_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_w_wuerhosaurus_01.svg for cast/cast_dino_w_wuerhosaurus_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_w_wuerhosaurus_01.svg for sil/sil_dino_w_wuerhosaurus_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_x_xenoceratops_01.svg for cast/cast_dino_x_xenoceratops_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_x_xenoceratops_01.svg for sil/sil_dino_x_xenoceratops_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_y_yutyrannus_01.svg for cast/cast_dino_y_yutyrannus_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_y_yutyrannus_01.svg for sil/sil_dino_y_yutyrannus_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_z_zuniceratops_01.svg for cast/cast_dino_z_zuniceratops_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_z_zuniceratops_01.svg for sil/sil_dino_z_zuniceratops_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_0_nest_01.svg for cast/cast_dino_0_nest_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_0_nest_01.svg for sil/sil_dino_0_nest_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_1_babies_01.svg for cast/cast_dino_1_babies_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_1_babies_01.svg for sil/sil_dino_1_babies_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_2_babies_01.svg for cast/cast_dino_2_babies_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_2_babies_01.svg for sil/sil_dino_2_babies_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_3_babies_01.svg for cast/cast_dino_3_babies_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_3_babies_01.svg for sil/sil_dino_3_babies_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_4_babies_01.svg for cast/cast_dino_4_babies_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_4_babies_01.svg for sil/sil_dino_4_babies_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_5_babies_01.svg for cast/cast_dino_5_babies_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_5_babies_01.svg for sil/sil_dino_5_babies_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_6_babies_01.svg for cast/cast_dino_6_babies_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_6_babies_01.svg for sil/sil_dino_6_babies_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_7_babies_01.svg for cast/cast_dino_7_babies_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_7_babies_01.svg for sil/sil_dino_7_babies_01.json
+FAIL dinosaurs stale: no source src/art/cast_dino_8_babies_01.svg for cast/cast_dino_8_babies_01.json
+FAIL dinosaurs stale: no source src/sil/sil_dino_8_babies_01.svg for sil/sil_dino_8_babies_01.json
+validate: 1 theme(s) (dinosaurs), 0 in progress, 150 finding(s): FAIL
