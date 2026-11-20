@@ -4,7 +4,7 @@
 > **Status**: Ready
 > **Layer**: Foundation
 > **Type**: Logic
-> **Estimate**: M
+> **Estimate**: L
 > **Manifest Version**: 2026-11-20
 > **Last Updated**: —
 > **Milestone**: Demo 1 (K-48)
@@ -37,6 +37,15 @@
 - [ ] A test word line of 1.30 s and a test letter line of 1.10 s each fail the build and name the file (Key Table AC-14).
 - [ ] Every voice and sfx file measures within ±1 LU of its class target; an sfx over 2.0 s fails naming it (ADR-0003 D5).
 - [ ] Changing one source (script or SVG) without re-baking makes the staleness check fail naming the file (ADR-0003 D3).
+
+*Added 2026-11-20 (leader; TASK-144 / K-52 follow-ups; content-pipeline/001 follow-ups):*
+
+- [ ] **Silence trim (leader-approved D5 detail):** before loudness normalisation, each rendered voice line is trimmed of leading and trailing audio below **−50 dBFS on the K-weighted 10 ms envelope**, keeping a **20 ms pad** each side with a **5 ms linear fade** in and out; the three values are tuning data in `src/voice-scripts/<locale>.json`. A test line with 0.4 s of silence at each end comes out within 20 ms (+ one envelope window) of the speech, and its first and last samples are 0 (no click). V15 and AC-6 measure the trimmed file.
+- [ ] **No clipping (game-dev-ios, TASK-144):** the loudness and true-peak step runs before the CAF write, and the bake refuses any sample with |x| > 1.0 after normalisation, naming the file (a test feeds one).
+- [ ] **Silhouette raster check (ADR-0003 D4; content-pipeline/001 follow-up):** a baked silhouette is compared with its art's body and outline at rest, at artboard scale (1 px = 1 unit), including the outer half of the 6-unit outline stroke; it passes when the symmetric difference lies within a 1 px band along the edge. A test silhouette offset by 3 units fails naming the file.
+- [ ] **Idle-part check (ADR-0003 D4; content-pipeline/001 follow-up):** every part a family's idle data moves exists in that family's art with a pivot, else the bake fails naming the part and the file. *NOT ASSESSED until the Cast Rendering idle data exists (Luan's OQ-1 for four families); the check is built against a test idle file and stays skipped, saying so, for the real content.*
+- [ ] **Staleness on CAF (K-52):** the staleness check re-renders a line or sound and compares the `.caf` bytes (byte-stable under K-52) and the re-measured `voiceDurations`.
+- [ ] **The meter:** loudness uses story 007's `LoudnessMeter` (`apple/Tools/Sources/ToolsCore/Loudness.swift`); no second meter.
 
 ---
 
