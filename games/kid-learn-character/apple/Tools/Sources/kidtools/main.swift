@@ -11,6 +11,11 @@
 //   kidtools bake-glyphs <content-dir>   bake content/fonts/Fredoka-wdth-wght.ttf at wght 600 (CoreText) into
 //        content/glyphs/fredoka600/: glyph_fredoka_<char>.json for the 36 keys A–Z, 0–9 plus glyphs.json (morph-v1 path
 //        subset, byte-stable, ADR-0003 D4). A key with no glyph names the key and the font file, writes nothing, exit 1.
+//   kidtools bake-voice <content-dir> [--python <path>] [--helper <path>]   render every voice line of each theme that has a
+//        theme.json with Kokoro (K-41, out of process via tts/kokoro_render.py, build Mac only) and encode AAC mono 48 kHz
+//        64 kbit/s to themes/<id>/voice/<locale>/vo_<locale>_<kind>_<id>.m4a, plus voice/<locale>/provenance.json
+//        (ADR-0003 D5/D6). The interpreter is --python or $KIDTOOLS_PYTHON; --helper overrides the helper script.
+//        Nothing is written unless every line renders. Loudness and voiceDurations are story 004.
 import Foundation
 import ToolsCore
 
@@ -60,6 +65,27 @@ case "bake-glyphs":
         let written = try GlyphBake.bakeContent(contentDir: URL(fileURLWithPath: args[1]))
         for f in written { print("baked \(f)") }
         print("bake-glyphs: \(written.count) file(s) baked")
+    } catch {
+        print("REJECTED \(error)"); exit(1)
+    }
+case "bake-voice":
+    var rest = Array(args.dropFirst()), python = ProcessInfo.processInfo.environment["KIDTOOLS_PYTHON"], helper: String?
+    for (flag, set) in [("--python", { python = $0 }), ("--helper", { helper = $0 })] as [(String, (String) -> Void)] {
+        if let i = rest.firstIndex(of: flag) {
+            guard i + 1 < rest.count else { fail("bake-voice: \(flag) needs a value") }
+            set(rest[i + 1]); rest.removeSubrange(i...(i + 1))
+        }
+    }
+    guard rest.count == 1 else { fail("usage: kidtools bake-voice <content-dir> [--python <path>] [--helper <path>]") }
+    guard let python else { fail("bake-voice: no interpreter: pass --python <path> or set KIDTOOLS_PYTHON (see apple/Tools/README.md)") }
+    do {
+        let r = try VoiceBake.bakeContent(contentDir: URL(fileURLWithPath: rest[0])) { script in
+            KokoroProcessEngine(python: URL(fileURLWithPath: python),
+                                helper: helper.map { URL(fileURLWithPath: $0) } ?? KokoroProcessEngine.defaultHelper, settings: script.engine)
+        }
+        for f in r.written { print("baked \(f)") }
+        for t in r.skipped { print("skipped theme \(t): no theme.json (in progress)") }
+        print("bake-voice: \(r.written.count) file(s) baked, \(r.skipped.count) theme(s) skipped")
     } catch {
         print("REJECTED \(error)"); exit(1)
     }
