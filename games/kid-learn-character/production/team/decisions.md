@@ -378,6 +378,12 @@ that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per
 - TTS engine (L-09): still open. Luan asked whether a free, ad-supported release needs a commercial licence —
   answered 2026-11-18 (yes: free + ads is commercial use); the ads question itself is raised separately.
 
+- **Dated note (game-leader, 2026-11-20, Proposed; Luan may overturn):** K-31 covers the build and the bake tools
+  the build runs. **Authoring-time tools** whose outputs are committed as sources are outside it: the Kokoro voice
+  render's scratch venv (K-41) and `content/themes/dinosaurs/src/art-tools/` (Python with shapely, BSD-3-Clause, and
+  its bundled GEOS, LGPL). They are never shipped (ADR-0003 D8 excludes `src/`) and never run by the build. Their
+  venvs stay outside git (TASK-137).
+
 ### K-30 Accessibility scope (game-leader, 2026-11-18, TASK-061; within K-29 and the art bible)
 
 - **Smart Invert: the stage opts out** (`accessibilityIgnoresInvertColors = true` on the stage view), because
