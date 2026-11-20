@@ -10,6 +10,8 @@
     "langCode": "a",
     "speed": 0.88
   },
+  "trim": { "thresholdDBFS": -50, "padSeconds": 0.02, "fadeSeconds": 0.005 },
+  "limiter": { "ceilingDBTP": -1.0, "lookaheadSeconds": 0.005, "releaseSeconds": 0.05, "warnReductionDB": 6.0 },
   "decisions": ["K-35", "K-41"],
   "respell": {
     "word_ankylosaurus": "ankie low saurus",

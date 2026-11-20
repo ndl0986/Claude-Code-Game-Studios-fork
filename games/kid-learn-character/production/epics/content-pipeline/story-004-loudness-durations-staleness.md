@@ -1,12 +1,12 @@
 # Story 004: Loudness to target, `voiceDurations` from the files, and the staleness check
 
 > **Epic**: Content Pipeline (Tools) (`production/epics/content-pipeline/EPIC.md`)
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Foundation
 > **Type**: Logic
 > **Estimate**: L
 > **Manifest Version**: 2026-11-20
-> **Last Updated**: —
+> **Last Updated**: 2026-11-20
 > **Milestone**: Demo 1 (K-48)
 
 ## Context
@@ -47,6 +47,19 @@
 - [ ] **Staleness on CAF (K-52):** the staleness check re-renders a line or sound and compares the `.caf` bytes (byte-stable under K-52) and the re-measured `voiceDurations`.
 - [ ] **The meter:** loudness uses story 007's `LoudnessMeter` (`apple/Tools/Sources/ToolsCore/Loudness.swift`); no second meter.
 
+*Technical calls (leader 2026-11-20: judged by game-dev-ios at review, not Luan's; only OQ-1 itself is Luan's, open):*
+
+- **Raster definitions** (`RasterCheck.swift`): art mask = body fills ∪ outline fills ∪ the outer half of each outline stroke
+  (the stroke minus that shape's own fill); non-zero fill for both masks; aliased Core Graphics bitmaps at 1 px = 1 unit
+  with an 8 px margin; pass when every differing pixel has an 8-neighbour across the art mask's edge (a 1 px band each
+  side); a cast file that isn't the baked layout is NOT ASSESSED, not a finding.
+- **Provisional idle data shape** (`IdlePartCheck.swift`) until Cast Rendering's idle data exists (OQ-1):
+  `{ "<idleId>": { "parts": ["neck", "head"] } }`; idle `none` moves nothing; an idle id missing from the data fails;
+  the check runs in `kidtools bake --idle <file>` only, and prints NOT ASSESSED without the file.
+
+*Note 2026-11-20 (K-53, Luan):* the word-line limit becomes **1.5 s** (letter lines stay 1.0 s) in TASK-147. This story
+merges with KidCore's 1.25 s; TASK-147 changes the AC-14 test word line from 1.30 s to the KidCore constant + 0.05 s.
+
 ---
 
 > **The meter is built in story 007** (leader, 2026-11-20): `apple/Tools/Sources/ToolsCore/Loudness.swift`, the
@@ -71,13 +84,22 @@ The loudness meter is our own Swift (K-31). The existing staleness stub in `Cont
 
 ## Files
 
-*Planned; `/dev-story` replaces this list with the files it changed. Roots are ADR-0001 D3 / ADR-0002 D1 (`apple/`); `engine.name` is unset by design.*
-
+- `apple/Tools/Sources/ToolsCore/VoiceBake.swift`
+- `apple/Tools/Sources/ToolsCore/Staleness.swift`
+- `apple/Tools/Sources/ToolsCore/RasterCheck.swift`
+- `apple/Tools/Sources/ToolsCore/IdlePartCheck.swift`
 - `apple/Tools/Sources/ToolsCore/Loudness.swift`
+- `apple/Tools/Sources/ToolsCore/SfxBake.swift`
 - `apple/Tools/Sources/ToolsCore/ContentValidator.swift`
-- `apple/Tools/Tests/ToolsTests/LoudnessTests.swift`
-
----
+- `apple/Tools/Sources/kidtools/main.swift`
+- `apple/Tools/README.md`
+- `content/themes/dinosaurs/src/voice-scripts/en-us.json`
+- `apple/Tools/Tests/ToolsTests/LoudnessGateTests.swift`
+- `apple/Tools/Tests/ToolsTests/StalenessTests.swift`
+- `apple/Tools/Tests/ToolsTests/RasterCheckTests.swift`
+- `apple/Tools/Tests/ToolsTests/IdlePartCheckTests.swift`
+- `apple/Tools/Tests/ToolsTests/VoiceBakeTests.swift`
+- `production/qa/evidence/story-004-loudness-durations-staleness/real-bake.md`
 
 ## QA Test Cases
 

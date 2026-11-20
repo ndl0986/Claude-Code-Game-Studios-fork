@@ -327,6 +327,16 @@ public enum SfxBake {
                                    truePeakDBTP: truePeak, onsets: onsets(in: out.samples, sampleRate: out.sampleRate)))
     }
 
+    /// The exact bytes `bakeTheme` writes for `recipe` (synth → normalise → CAF), rendered in memory (a temp file is used
+    /// for the encoder and removed). Byte-stable under K-52, so staleness compares it with the committed file.
+    public static func renderedBytes(recipe: SfxRecipe, constants: SfxSynthConstants) throws -> Data {
+        let (pcm, _) = try normalise(SfxSynth.render(recipe, constants: constants), recipe: recipe)
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("sfxstale-\(UUID().uuidString).caf")
+        defer { try? FileManager.default.removeItem(at: url) }
+        try VoiceBake.encode(pcm, to: url)
+        return try Data(contentsOf: url)
+    }
+
     /// Counts sound onsets by an envelope threshold: the RMS of consecutive 5 ms blocks; an onset is a block at or above
     /// 3 % of the loudest block (-30 dB) after the envelope has been below 1 % (-40 dB), or at the start. Counts chirps
     /// (each decays below -40 dB before the next starts); it is not a general onset detector.
