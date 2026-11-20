@@ -1,4 +1,5 @@
 import Foundation
+import MorphCore
 
 // Geometry for the SVG-subset bake (ADR-0003 D4): numbers, affine transforms, path data, shape-to-path conversion and
 // the morph-v1 path writer. Plain Swift; no SVG library (K-31). Internal to ToolsCore.
@@ -325,6 +326,23 @@ struct PathWriter {
                 text += "Z"; lastX = startX; lastY = startY; needMove = true
             }
         }
+    }
+}
+
+// MARK: Morph-v1 check
+
+/// The drawable rule a baked path must meet (Key Table V8, MorphCore AC-10), shared by the silhouette and glyph bakes:
+/// it parses under MorphCore's `SVGPath.polylines`, has a subpath of 2+ points, and its total length is above 0.
+enum MorphPathCheck {
+    enum Problem: Error { case unparsable(Error), notDrawable }
+
+    /// nil when `d` is drawable; otherwise what is wrong.
+    static func problem(_ d: String) -> Problem? {
+        let lines: [[Pt]]
+        do { lines = try SVGPath.polylines(d) } catch { return .unparsable(error) }
+        var total = 0.0
+        for l in lines { for j in l.indices.dropFirst() { total += ((l[j].x - l[j - 1].x) * (l[j].x - l[j - 1].x) + (l[j].y - l[j - 1].y) * (l[j].y - l[j - 1].y)).squareRoot() } }
+        return lines.contains(where: { $0.count >= 2 }) && total > 0 ? nil : .notDrawable
     }
 }
 
