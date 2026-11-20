@@ -1,8 +1,8 @@
 import KidCore
 import XCTest
 
-/// Press Queue story 001: start at once, queue during the hold, the formed guard, ignore when full
-/// (design/gdd/press-queue.md AC-1..AC-4). An injected clock, a fake Reveal Stage and fixed lengths; no wall clock.
+/// Press Queue stories 001 (start at once, queue during the hold, the formed guard, ignore when full; AC-1..AC-4)
+/// and 002 (rest, no jumping, mash; AC-5, AC-6, AC-8, AC-22) of design/gdd/press-queue.md. An injected clock, a fake Reveal Stage and fixed lengths; no wall clock.
 final class PressQueueTests: XCTestCase {
     /// A clock the test sets; `formed(revealId:)` reads it.
     final class FakeClock: UptimeClock {
@@ -125,5 +125,58 @@ final class PressQueueTests: XCTestCase {
         q.formed(revealId: 1)
         XCTAssertEqual(q.press(press("B", at: 11.0)), .queued(index: 0))
         XCTAssertEqual(q.press(press("C", at: 14.0)), .queued(index: 1))
+    }
+
+    // MARK: story 002
+
+    /// D started at 10.0 and formed at 12.5; its hold ends at 10.0 + holdEff.
+    func formedQueue() -> (PressQueue, FakeStage, FakeClock) {
+        var (q, stage, clock) = makeQueue()
+        _ = q.press(press("D", at: 10.0))
+        clock.t = 12.5
+        q.formed(revealId: 1)
+        return (q, stage, clock)
+    }
+
+    // AC-5
+    func test_press_at_rest_starts_at_its_own_time_not_the_next_tick() {
+        var (q, stage, _) = formedQueue()
+        let restAt = 10.0 + holdEff + 0.5
+        XCTAssertEqual(q.press(press("B", at: restAt)), .started(revealId: 2, r0: restAt, castId: "cast_B"))
+        XCTAssertEqual(stage.calls.last?.r0, restAt)
+        XCTAssertEqual(q.queue, [])
+    }
+
+    // AC-6
+    func test_press_after_hold_with_one_queued_queues_behind_it_and_the_tick_starts_the_first() {
+        var (q, stage, _) = formedQueue()
+        XCTAssertEqual(q.press(press("B", at: 11.0)), .queued(index: 0))
+        XCTAssertEqual(q.press(press("C", at: 10.0 + holdEff + 0.25)), .queued(index: 1))
+        q.tick(now: 10.0 + holdEff + 0.5)
+        XCTAssertEqual(stage.calls.map(\.key), ["D", "B"])
+        XCTAssertEqual(q.current?.key, "B")
+        XCTAssertEqual(q.queue.map(\.key), ["C"])
+    }
+
+    // AC-8
+    func test_ten_presses_at_rest_in_one_batch_start_one_queue_three_and_ignore_six_in_order() {
+        var (q, stage, _) = makeQueue()
+        let keys = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+        let outcomes = keys.map { q.press(press($0, at: 10.0)) }
+        XCTAssertEqual(outcomes, [.started(revealId: 1, r0: 10.0, castId: "cast_A"), .queued(index: 0), .queued(index: 1),
+                                  .queued(index: 2)] + Array(repeating: .ignored, count: 6))
+        XCTAssertEqual(q.queue.map(\.key), ["B", "C", "D"])
+        XCTAssertEqual(stage.calls.count, 1)
+        XCTAssertEqual(q.nextRevealId, 2)
+    }
+
+    // AC-22
+    func test_a_tick_far_past_two_holds_starts_only_one_reveal() {
+        var (q, stage, _) = formedQueue()
+        _ = q.press(press("B", at: 11.0))
+        _ = q.press(press("C", at: 11.0))
+        q.tick(now: 10.0 + 4 * holdEff)
+        XCTAssertEqual(stage.calls.map(\.key), ["D", "B"])
+        XCTAssertEqual(q.queue.map(\.key), ["C"])
     }
 }

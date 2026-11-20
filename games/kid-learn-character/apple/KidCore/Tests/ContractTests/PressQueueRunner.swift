@@ -3,7 +3,7 @@ import Foundation
 import KidCore
 import XCTest
 
-/// press-queue-v2, KidCore layer (ADR-0004 D3; story press-queue/001). Covers the start / queue / formed-guard /
+/// press-queue-v2, KidCore layer (ADR-0004 D3; stories press-queue/001-002). Covers the start / queue / formed-guard /
 /// ignore rules only. Not registered in `ContractHarness.runners`: the registry row stays `not-started` until
 /// press-queue/005 (ContractKit fails a registered runner on a not-started row), so `PressQueueContractTests`
 /// below runs the explicit `inScope` list itself and reports every other case id as NOT ASSESSED.
@@ -113,7 +113,7 @@ struct PressQueueRunner: ContractRunner {
             queue.formed(revealId: Int(e["revealId"]?.number ?? 0))
             return []
         default:
-            throw ContractError("event \(e["type"]?.string ?? "?") is not in press-queue/001's scope")
+            throw ContractError("event \(e["type"]?.string ?? "?") is not in press-queue/001-002's scope")
         }
     }
 
@@ -140,7 +140,7 @@ struct PressQueueRunner: ContractRunner {
             guard let c = queue.current else { return .null }
             return .object(["revealId": .int(Int64(c.revealId)), "key": .string(c.key), "holdEff": .double(c.holdEff),
                             "formed": .bool(c.formed), "formedAt": c.formedAt.map { .double($0) } ?? .null])
-        default: throw ContractError("expectState.\(name) is not in press-queue/001's scope")
+        default: throw ContractError("expectState.\(name) is not in press-queue/001-002's scope")
         }
     }
 }
@@ -152,9 +152,14 @@ final class PressQueueContractTests: XCTestCase {
     static let inScope = [
         "AC1-start-at-once", "AC2-queue-during-hold-then-advance", "AC3-formed-guard", "AC4-ignore-when-full",
         "R3-hold-passed-but-not-formed-queues", "R3-formed-but-hold-not-passed-queues",
+        // Story 002: rest, no jumping, mash (AC-5, AC-6, AC-8, AC-22), F3's mash bound on the queue_max knob, the
+        // PQ-Q2 exact boundary between rest and hold (F2, inclusive), and R5's tick-time r0 under a frame hitch.
+        "AC5-rest-then-start-at-once", "AC6-no-jumping", "AC8-mash-ten-at-rest", "AC22-one-advance-per-tick",
+        "F3-mash-ten-during-hold", "F3-queue-max-0", "F3-queue-max-2", "PQ-Q2-empty-queue-press-at-exact-boundary",
+        "PQ-Q2-tick-first-at-boundary", "PQ-Q2-press-first-at-boundary", "R5-frame-hitch-r0-is-tick-time",
     ]
 
-    func test_press_queue_v2_cases_in_story_001_scope() throws {
+    func test_press_queue_v2_cases_in_scope_of_stories_001_002() throws {
         let file = try ContractHarness.contractsRoot().appendingPathComponent("press-queue-v2/cases.json")
         let root = try Fixture.load(file)
         var fixtures: [String: JSONValue] = [:]
@@ -172,7 +177,7 @@ final class PressQueueContractTests: XCTestCase {
             } else { pass += 1 }
         }
         let notAssessed = ids.filter { !Self.inScope.contains($0) }
-        print("CONTRACT press-queue-v2: \(pass) pass, \(fail) fail; \(notAssessed.count) NOT ASSESSED (outside story press-queue/001): \(notAssessed.joined(separator: ", "))")
+        print("CONTRACT press-queue-v2: \(pass) pass, \(fail) fail; \(notAssessed.count) NOT ASSESSED (outside stories press-queue/001-002): \(notAssessed.joined(separator: ", "))")
     }
 
     /// One planted case through the harness: a press of `key` from a hint at `origin`, with `D` the only reveal.

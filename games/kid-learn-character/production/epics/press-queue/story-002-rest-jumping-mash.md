@@ -1,12 +1,12 @@
 # Story 002: Start from rest, no jumping, the mash batch and one advance per tick
 
 > **Epic**: Press Queue (`production/epics/press-queue/EPIC.md`)
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Core
 > **Type**: Logic
 > **Estimate**: S
 > **Manifest Version**: 2026-11-20
-> **Last Updated**: —
+> **Last Updated**: 2026-11-20
 > **Milestone**: Demo 1 (K-48)
 
 ## Context
@@ -56,12 +56,8 @@ The whole state machine is KidCore (Module Ownership). Tests use an injected clo
 
 ## Files
 
-*Planned; `/dev-story` replaces this list. Roots are ADR-0001 D3 / ADR-0002 D1 (`apple/`); `engine.name` is unset by design.*
-
-- `apple/KidCore/Sources/KidCore/PressQueue.swift`
 - `apple/KidCore/Tests/KidCoreTests/PressQueueTests.swift`
-
----
+- `apple/KidCore/Tests/ContractTests/PressQueueRunner.swift`
 
 ## QA Test Cases
 
