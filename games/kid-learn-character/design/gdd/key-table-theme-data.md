@@ -423,7 +423,7 @@ words, no people's given names: `REX`, `EGG`, `NEST`, `ROAR`, `DINO`, `BABY`, `M
 | K | Kentrosaurus | kentrosaurus | kay | start | plated / spikes | ochre | grumble | ✅ |
 | L | Lambeosaurus | lambeosaurus | el | start | duckbill / hatchet-crest | rose | honk | ✅ |
 | M | Maiasaura | maiasaura | em | start | duckbill / brow-baby | violet | honk | ✅ |
-| N | Nest | nest | en | start | object / nest | shared | crack | ✅ (Q6: kept) |
+| N | Nest | nest | en | start | **nest** / nest *(TASK-143)* | shared | crack | ✅ (Q6: kept) |
 | O | Oviraptor | oviraptor | oh | start, long o | ornithomimid / oviraptor | rose | chirp | ✅ (C2: kept) |
 | P | Tapejara | tapejara | pee | inside, /p/ ("ta-peh-JAR-a") | flyer / in-flight | teal | screech | ✅ (P1: replaces pteranodon) |
 | Q | Quetzalcoatlus | quetzalcoatlus | cue | start, /k/ ("KET-sal") | flyer / standing | coral | screech | ✅ (C3: kept) |
@@ -436,6 +436,11 @@ words, no people's given names: `REX`, `EGG`, `NEST`, `ROAR`, `DINO`, `BABY`, `M
 | X | Xenoceratops | xenoceratops | ex | "z" sound: **exception** | horned / xeno-horns | blue | grumble | ✳ (X1: K-09 exception) |
 | Y | Yutyrannus | yutyrannus | why | start, /j/ | rex / feathered | coral | big roar (soft) | ✅ |
 | Z | Zuniceratops | zuniceratops | zee | start | horned / zuni-horns | leaf | grumble | ✅ |
+
+**Families for the objects** *(TASK-143, 2026-11-20)*: N is its own family **`nest`** (idle `egg_wobble`, art bible §5:
+"nest egg wobble with a peek"), because only N's art has the `egg` part. F and the empty nest for 0 stay `object`,
+with idle `none`. One idle per family would otherwise name a part F and 0 don't have, which Cast Rendering treats as
+a build error.
 
 Hue-slot count (art bible §4, current table): rose 2, coral 4, ochre 4, leaf 4, mint 1, teal 3,
 blue 4, violet 2. All are within the cap of 4. Tapejara takes pteranodon's place in teal, so the

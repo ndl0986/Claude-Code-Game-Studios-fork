@@ -167,7 +167,8 @@ measure the **TASK-077 test art**. So the real set must stay inside what P-2 mea
 | horned | C tri-horn · X xeno-horns · Z zuni-horns | root, tail, head (prepared) | **none yet: OQ-1** | horn count and frill edge: 3 horns; a spiked frill; 2 horns and a plain frill |
 | plated | S plates · K spikes · W low-plates | root, tail, head (prepared) | **none yet: OQ-1** | tall rounded plates vs spikes vs long low plates |
 | ornithomimid | G gallimimus · O oviraptor | root, tail, head (prepared) | **none yet: OQ-1** | G's long neck and legs vs O's tall head crest |
-| object | F fossil · N nest · 0 empty nest | F, 0: root · N: root, egg | N: egg wobble with a peek | F slab with a bone; N bowl with an egg; 0 the bowl alone |
+| nest *(TASK-143)* | N nest | root, egg | egg wobble with a peek | N bowl with an egg vs 0 the bowl alone |
+| object | F fossil · 0 empty nest | root | none (breathe only) | F slab with a bone; 0 the bowl alone |
 | babies | 1–9 | baby_one … baby_nine | per-baby bob, 0.95 Hz | the count |
 
 **Prepared parts:** families with no idle in Cast Rendering's data yet still get `tail` and `head` as parts with
@@ -588,7 +589,7 @@ teeth nubs, drawn as one path of non-overlapping subpaths (TASK-133 render read)
 |---|---|
 | Category | Cast member, layered SVG + its silhouette |
 | Files | `src/art/cast_dino_n_nest_01.svg`, `src/sil/sil_dino_n_nest_01.svg` (baked to `cast/…json`, `sil/…json`) |
-| Family / variant | object / nest |
+| Family / variant | nest / nest *(own family, TASK-143: only N has the `egg` part its idle moves)* |
 | Outline trait | a woven bowl nest with one cream egg showing a little peeking eye (an object) |
 | Slot and colours | shared: shared constant `#a8743f`; accents egg `#f3e6c8` |
 | Parts (`data-pivot`) | `root` (320 410) · `egg` (320 352) |
@@ -603,7 +604,7 @@ teeth nubs, drawn as one path of non-overlapping subpaths (TASK-133 render read)
 |---|---|
 | Category | Cast member (the theme's `countedItem.emptyCastId`), layered SVG + its silhouette |
 | Files | `src/art/cast_dino_0_nest_01.svg`, `src/sil/sil_dino_0_nest_01.svg` |
-| Family / variant | object / nest, **empty**: N's nest drawn from the same source with the `egg` part removed (Key Table numbers) |
+| Family / variant | object / empty-nest: N's nest drawn from the same source with the `egg` part removed (Key Table numbers); family `object`, idle none (TASK-143) |
 | Slot and colours | shared constant nest `#a8743f`, far-side weave `#835a31`, inner shadow Ink at 25% |
 | Parts (`data-pivot`) | `root` (320 410) |
 | Idle | none (breathe only) |

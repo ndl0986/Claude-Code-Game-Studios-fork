@@ -42,8 +42,8 @@ Each asset is a pair: the layered cast SVG and its silhouette (S-7).
 | ASSET-024 | G | Gallimimus | ornithomimid | gallimimus | ochre | 5 | Needed | design/assets/specs/dinosaurs-assets.md |
 | ASSET-025 | O | Oviraptor | ornithomimid | oviraptor | rose | 5 | Needed | design/assets/specs/dinosaurs-assets.md |
 | ASSET-026 | F | Fossil | object | fossil | shared | 5 | Needed | design/assets/specs/dinosaurs-assets.md |
-| ASSET-027 | N | Nest | object | nest | shared | 5 | Needed | design/assets/specs/dinosaurs-assets.md |
-| ASSET-028 | 0 | an empty nest | object | nest (empty) | shared | 5 | Needed | design/assets/specs/dinosaurs-assets.md |
+| ASSET-027 | N | Nest | nest | nest | shared | 5 | Needed | design/assets/specs/dinosaurs-assets.md |
+| ASSET-028 | 0 | an empty nest | object | empty-nest | shared | 5 | Needed | design/assets/specs/dinosaurs-assets.md |
 | ASSET-029 | 1 | one baby dinosaur | babies | 1 baby | pastels | 5 | Needed | design/assets/specs/dinosaurs-assets.md |
 | ASSET-030 | 2 | two baby dinosaurs | babies | 2 babies | pastels | 6 | Needed | design/assets/specs/dinosaurs-assets.md |
 | ASSET-031 | 3 | three baby dinosaurs | babies | 3 babies | pastels | 6 | Needed | design/assets/specs/dinosaurs-assets.md |
