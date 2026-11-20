@@ -45,7 +45,7 @@ Accept, queue (up to 3) or ignore each press; report `formed` exactly once per r
 
 | # | Story | Type | Status | ADR |
 |---|-------|------|--------|-----|
-| 001 | [Start at once, queue during the hold, the formed guard, ignore when full](story-001-start-queue-ignore.md) | Logic | Ready | ADR-0002, ADR-0004 |
+| 001 | [Start at once, queue during the hold, the formed guard, ignore when full](story-001-start-queue-ignore.md) | Logic | Complete | ADR-0002, ADR-0004 |
 | 002 | [Start from rest, no jumping, the mash batch and one advance per tick](story-002-rest-jumping-mash.md) | Logic | Ready | ADR-0002, ADR-0004 |
 | 003 | [F1 holdEff, the formed rules and the fallback lengths](story-003-hold-and-formed-rules.md) | Logic | Ready | ADR-0002, ADR-0004 |
 | 004 | [Synchronous outcomes, gap-free revealIds, locked lengths, equal sources, the resting signal](story-004-ids-sources-resting.md) | Logic | Ready | ADR-0002, ADR-0004 |
