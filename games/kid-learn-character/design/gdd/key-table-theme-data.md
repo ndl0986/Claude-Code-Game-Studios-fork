@@ -109,7 +109,7 @@ same in every theme. Word lines belong to the theme. Adding a locale (K-02, Loca
 and one `voiceLocales` entry, without editing any item.
 
 **Asset formats:** SVG for the art **sources** (build-only), baked JSON for art and path data (shipped), **uncompressed
-16-bit linear PCM, mono, in `.caf`** for sound and voice (ADR-0003 D1, D8; K-52, 2026-11-20: AAC `.caf` isn't
+16-bit linear PCM, mono, in `.caf`** for sound and voice (ADR-0003 D1, D8; K-52, 2026-11-20: AAC `.m4a` isn't
 byte-stable). These are
 platform-neutral: the same files serve iOS, macOS and later Android (game-dev-ios point 11).
 

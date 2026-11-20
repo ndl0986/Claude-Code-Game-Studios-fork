@@ -113,4 +113,4 @@ Reviewed-Content-Hash: design/gdd/key-table-theme-data.md b8570e7474720983d1fec2
 Review mode: lean · Workflow: standard
 Change: K-52 (Luan): baked audio is uncompressed 16-bit LPCM in .caf. The sfx field example, the built voice path pattern and its examples, the asset-formats line, the naming list and the example item now read .caf instead of .m4a. No rule changes otherwise. Lands together with key-table-schema-v2 (TASK-146) and the KidCore validator change (game-dev-android).
 fixture: key-table-schema-v2 (TASK-146)
-Reviewed-Content-Hash: design/gdd/key-table-theme-data.md 11fc4c83ea1106038d5eeb8fd8bb2e9f103dc5e3
+Reviewed-Content-Hash: design/gdd/key-table-theme-data.md aba644515606fd8112a0ed552ce8019f0b9bba10
