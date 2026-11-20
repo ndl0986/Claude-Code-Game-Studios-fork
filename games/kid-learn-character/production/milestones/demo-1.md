@@ -35,7 +35,8 @@ The core loop, native on **macOS and iPadOS**, with the **full Dinosaurs set: A�
 ## Exit criteria
 
 1. **Playable on the child's iPad** (iPad13,4, iPadOS 27.2, K-47) **and on the Mac**: all 36 keys reveal their
-   creature with its voice and sound, through hardware keys and the keyboard row, and a parade follows every 6th new
+   creature with its voice and sound — on the Mac through hardware keys; on the iPad through the keyboard row (no
+   keyboard attached, K-49) and hardware keys (once one is available) — and a parade follows every 6th new
    creature.
 2. **A recorded demo video** of the demo path on the iPad and the Mac, retained in `production/qa/evidence/`.
 3. **No visible glitch on the demo path**: no missing art, frame hitch, audio click or pop, stuck state or debug UI,

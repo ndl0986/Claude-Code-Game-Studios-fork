@@ -49,6 +49,10 @@ Every press, from a hardware key or a touch, becomes one normalized event; only 
 
 - input-filter-v2 (`not-started: story:input`)
 
+## Depends on
+
+- **TASK-135** (K-49): Input's keyboard-presence signal, which shows and hides the keyboard row.
+
 ## Definition of Done
 
 - Every story implemented, reviewed and closed with `/story-done`
