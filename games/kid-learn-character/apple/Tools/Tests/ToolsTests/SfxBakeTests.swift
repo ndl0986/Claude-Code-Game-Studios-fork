@@ -59,20 +59,21 @@ final class SfxBakeTests: XCTestCase {
 
     // MARK: AC-1 / AC-2: files, names, format, recipes as data
 
-    func test_all_36_files_are_named_by_cast_id_and_decode_as_aac_mono_48k_with_no_priming_lead() throws {
+    func test_all_36_files_are_named_by_cast_id_and_read_as_lpcm_caf_mono_48k_16_bit() throws {
         let r = try fixture, dir = r.dir
-        XCTAssertEqual(r.written, (castIds.map { "sfx/sfx_\($0).m4a" } + ["sfx/provenance.json"]).sorted())
+        XCTAssertEqual(r.written, (castIds.map { "sfx/sfx_\($0).caf" } + ["sfx/provenance.json"]).sorted())
         XCTAssertEqual(castIds.count, 36)
         for id in castIds {
-            let url = dir.appendingPathComponent("sfx/sfx_\(id).m4a")
+            let url = dir.appendingPathComponent("sfx/sfx_\(id).caf")
             let f = try AVAudioFile(forReading: url)
-            XCTAssertEqual(f.fileFormat.settings[AVFormatIDKey] as? UInt32, kAudioFormatMPEG4AAC, id)
+            XCTAssertEqual(f.fileFormat.settings[AVFormatIDKey] as? UInt32, kAudioFormatLinearPCM, id)
+            XCTAssertEqual(f.fileFormat.settings[AVLinearPCMBitDepthKey] as? Int, VoiceBake.bitDepth, id)
             XCTAssertEqual(f.fileFormat.channelCount, 1, id)
             XCTAssertEqual(f.fileFormat.sampleRate, VoiceBake.sampleRate, id)
         }
-        // One sfx through the same encoder decodes with no priming lead and its length (story 003's priming test, for sfx).
+        // One sfx through the same encoder reads back with its exact length and no lead (LPCM has no priming, K-52).
         let rep = try XCTUnwrap(r.files.first { $0.castId == "dino_t_trex_01" })
-        let f = try AVAudioFile(forReading: dir.appendingPathComponent("sfx/sfx_dino_t_trex_01.m4a"))
+        let f = try AVAudioFile(forReading: dir.appendingPathComponent("sfx/sfx_dino_t_trex_01.caf"))
         XCTAssertLessThanOrEqual(abs(Double(f.length) - rep.duration * f.processingFormat.sampleRate), 1024)
         let buf = try XCTUnwrap(AVAudioPCMBuffer(pcmFormat: f.processingFormat, frameCapacity: AVAudioFrameCount(f.length)))
         try f.read(into: buf)
@@ -124,7 +125,7 @@ final class SfxBakeTests: XCTestCase {
         // 13 chirps: 12 * 0.17 + 0.16 = 2.2 s.
         let dir = try theme(with: try mutated { var r = $0["recipes"] as! [String: Any]; var x = r["dino_9_babies_01"] as! [String: Any]; x["n"] = 13; r["dino_9_babies_01"] = x; $0["recipes"] = r })
         XCTAssertThrowsError(try SfxBake.bakeTheme(themeDir: dir)) { e in
-            XCTAssertEqual((e as? VoiceBakeError)?.file, "sfx/sfx_dino_9_babies_01.m4a")
+            XCTAssertEqual((e as? VoiceBakeError)?.file, "sfx/sfx_dino_9_babies_01.caf")
         }
         XCTAssertFalse(FileManager.default.fileExists(atPath: dir.appendingPathComponent("sfx").path), "a failing bake writes nothing into the theme")
     }
@@ -180,8 +181,8 @@ final class SfxBakeTests: XCTestCase {
         let data = try recipesData, dir = try fixture.dir
         let text = String(decoding: try Data(contentsOf: dir.appendingPathComponent("sfx/provenance.json")), as: UTF8.self)
         let hash = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
-        for needle in ["\"recipesSha256\": \"\(hash)\"", "\"synthVersion\": \"\(SfxSynth.version)\"", "\"bitRate\": 64000", "\"channels\": 1",
-                       "\"sampleRate\": 48000", "\"codec\": \"aac-lc\"", "\"sfx_dino_t_trex_01.m4a\"", "\"loudnessBeforeLUFS\"", "\"loudnessAfterLUFS\": -20",
+        for needle in ["\"recipesSha256\": \"\(hash)\"", "\"synthVersion\": \"\(SfxSynth.version)\"", "\"bitDepth\": 16", "\"channels\": 1",
+                       "\"sampleRate\": 48000", "\"codec\": \"lpcm\"", "\"container\": \"caf\"", "\"sfx_dino_t_trex_01.caf\"", "\"loudnessBeforeLUFS\"", "\"loudnessAfterLUFS\": -20",
                        "\"truePeakDBTP\"", "\"measure\": \"momentaryMax\"", "\"measure\": \"integrated\"", "\"baker\": \"kidtools"] {
             XCTAssertTrue(text.contains(needle), needle)
         }

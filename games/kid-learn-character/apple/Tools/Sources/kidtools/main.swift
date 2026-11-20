@@ -17,7 +17,7 @@
 //        (ADR-0003 D5/D6). The interpreter is --python or $KIDTOOLS_PYTHON; --helper overrides the helper script.
 //        Nothing is written unless every line renders. Loudness and voiceDurations are story 004.
 //   kidtools bake-sfx <theme-dir>   render src/sfx/recipes.json (the prototype's synth recipes as data) to
-//        <theme-dir>/sfx/sfx_<castId>.m4a (AAC mono 48 kHz 64 kbit/s via the voice bake's encoder), each normalised to
+//        <theme-dir>/sfx/sfx_<castId>.caf (16-bit LPCM CAF, mono, 48 kHz, via the voice bake's encoder; K-52), each normalised to
 //        -20 LUFS (momentary max under 0.4 s) with true peak <= -1 dBTP by the D5 meter, plus sfx/provenance.json
 //        (ADR-0003 D5, story 007). A file over 2.0 s or over the true-peak ceiling names itself and nothing is written.
 import Foundation

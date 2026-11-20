@@ -8,14 +8,14 @@ import Foundation
 public struct SfxRecipe: Equatable, Sendable {
     /// The four prototype sound kinds; `honk` is a `chirp` on a low-passed sawtooth.
     public enum Kind: String, Sendable { case roar, chirp, honk, crack, thump }
-    /// The item's `castId`, which also names the file: `sfx/sfx_<castId>.m4a`.
+    /// The item's `castId`, which also names the file: `sfx/sfx_<castId>.caf`.
     public var castId: String
     public var kind: Kind
     /// The recipe's own numbers (`f0 f1 n` for chirp and honk; `f0 cut dur vol vib` for roar and thump; none for crack).
     public var params: [String: Double]
 
     /// The file path relative to the theme folder.
-    public var path: String { "sfx/sfx_\(castId).m4a" }
+    public var path: String { "sfx/sfx_\(castId).caf" }
 }
 
 /// The synth's graph constants, also data (`synth` in recipes.json): the prototype's numbers at `roar_volume` 0.35.
@@ -276,7 +276,7 @@ public enum SfxSynth {
 /// What the bake measured and wrote for one sound.
 public struct SfxFileReport: Equatable, Sendable {
     public var castId: String
-    /// `sfx/sfx_<castId>.m4a`
+    /// `sfx/sfx_<castId>.caf`
     public var path: String
     public var duration: Double
     /// True when judged by the momentary maximum (under 0.4 s), false when by the integrated loudness.
@@ -288,8 +288,8 @@ public struct SfxFileReport: Equatable, Sendable {
 }
 
 /// The sfx bake (TR-keytable-004 sfx half; ADR-0003 D5): recipes (data) → deterministic synth → loudness normalisation by
-/// the D5 meter → `VoiceBake.encode` (the one AAC encoder: AAC-LC, mono, 48 kHz, 64 kbit/s, priming and padding
-/// handled there) → `sfx/sfx_<castId>.m4a` plus byte-stable `sfx/provenance.json`.
+/// the D5 meter → `VoiceBake.encode` (the one encoder: uncompressed 16-bit LPCM in CAF, mono, 48 kHz, K-52; byte-stable)
+/// → `sfx/sfx_<castId>.caf` plus byte-stable `sfx/provenance.json`.
 ///
 /// Every file is normalised by ONE gain to the cast class, -20 LUFS (integrated, or the momentary maximum under 0.4 s),
 /// and must then have a true peak of at most -1 dBTP: a file that does not fails the bake, naming it (no limiter). A
@@ -299,7 +299,7 @@ public struct SfxFileReport: Equatable, Sendable {
 /// Example:
 /// ```swift
 /// let r = try SfxBake.bakeTheme(themeDir: URL(fileURLWithPath: "content/themes/dinosaurs"))
-/// // r.written == ["sfx/provenance.json", "sfx/sfx_dino_a_ankylosaurus_01.m4a", …], r.files[0].loudnessAfter ≈ -20
+/// // r.written == ["sfx/provenance.json", "sfx/sfx_dino_a_ankylosaurus_01.caf", …], r.files[0].loudnessAfter ≈ -20
 /// ```
 public enum SfxBake {
     /// The cast class target (Audio F4, A7), its tolerance (LU), the true-peak ceiling (dBTP), the length limit (s, V12).
@@ -349,29 +349,6 @@ public enum SfxBake {
         return count
     }
 
-    /// AVAudioFile writes the wall-clock time into the creation and modification fields of the MP4 `mvhd`, `tkhd` and
-    /// `mdhd` boxes, so two bakes of the same PCM differ by a few bytes. This zeroes those fields (the audio bytes are
-    /// identical between runs) so the committed files are byte-stable. Walks `moov` > `trak` > `mdia`; a malformed file throws.
-    static func zeroContainerTimestamps(at url: URL) throws {
-        var bytes = [UInt8](try Data(contentsOf: url))
-        func walk(_ start: Int, _ end: Int) throws {
-            var i = start
-            while i + 8 <= end {
-                let size = Int(bytes[i]) << 24 | Int(bytes[i + 1]) << 16 | Int(bytes[i + 2]) << 8 | Int(bytes[i + 3])
-                guard size >= 8, i + size <= end else { throw VoiceBakeError(file: url.lastPathComponent, reason: "malformed MP4 box at byte \(i)") }
-                let type = String(decoding: bytes[(i + 4)..<(i + 8)], as: UTF8.self)
-                if ["moov", "trak", "mdia"].contains(type) { try walk(i + 8, i + size) }
-                if ["mvhd", "tkhd", "mdhd"].contains(type) {
-                    let times = bytes[i + 8] == 1 ? 16 : 8   // version 1 has 64-bit times
-                    for j in (i + 12)..<(i + 12 + times) { bytes[j] = 0 }
-                }
-                i += size
-            }
-        }
-        try walk(0, bytes.count)
-        try Data(bytes).write(to: url)
-    }
-
     /// `sfx/provenance.json` bytes: recipes hash, synth version, encode settings, targets and per-file measurements. Sorted
     /// keys, 3 decimals, no timestamps.
     static func provenance(recipesData: Data, files: [SfxFileReport]) -> [UInt8] {
@@ -386,8 +363,8 @@ public enum SfxBake {
         }
         return JSONValue.object([
             "baker": .string("\(SVGBake.toolName) \(SVGBake.toolVersion)"),
-            "encode": .object(["bitRate": .number(Double(VoiceBake.bitRate)), "channels": .number(Double(VoiceBake.channels)),
-                               "codec": .string("aac-lc"), "sampleRate": .number(VoiceBake.sampleRate)]),
+            "encode": .object(["bitDepth": .number(Double(VoiceBake.bitDepth)), "channels": .number(Double(VoiceBake.channels)),
+                               "codec": .string("lpcm"), "container": .string("caf"), "sampleRate": .number(VoiceBake.sampleRate)]),
             "files": .object(perFile),
             "recipesFile": .string("src/sfx/recipes.json"),
             "recipesSha256": .string(hash),
@@ -412,7 +389,6 @@ public enum SfxBake {
             let (pcm, report) = try normalise(SfxSynth.render(r, constants: recipes.synth), recipe: r)
             let url = stage.appendingPathComponent(r.path)
             try VoiceBake.encode(pcm, to: url)
-            try zeroContainerTimestamps(at: url)
             let decoded: AVAudioFile
             do { decoded = try AVAudioFile(forReading: url) } catch { throw VoiceBakeError(file: r.path, reason: "cannot decode the encoded file: \(error)") }
             let seconds = Double(decoded.length) / decoded.processingFormat.sampleRate
