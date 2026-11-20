@@ -135,7 +135,7 @@ Every path for this game is under `games/kid-learn-character/`. Base branch:
 | TASK-144 | K-52: baked audio → uncompressed CAF (16-bit mono 48 kHz): ADR-0003 D8 dated note, Audio & Voice GDD + review-log fixture lines, stories 003/004/007 ACs, `.caf` paths in theme data; encoder in 003 switched, 007 rebased | content | game-dev-android (review: game-dev-ios) | ASSIGNED | `chore/TASK-144-caf-audio` | 2026-11-20 |
 | content-pipeline/001 | Cast SVG bake tool | story | game-dev-android (review: game-dev-ios) | MERGED (e9c1f7d2; plan verify PASS b22d664a, leader-run) | `feat/content-pipeline-001-svg-bake` | 2026-11-20 |
 | content-pipeline/002 | Glyph bake (Fredoka 600) | story | game-dev-android (review: game-dev-ios) | MERGED (dc32a75d; plan verify PASS b22d664a) | `feat/content-pipeline-002-glyph-bake` | 2026-11-20 |
-| TASK-145 | K-52 text: `.m4a`/AAC → `.caf`/LPCM in the Key Table GDD, Audio & Voice GDD, art bible §8 (dated entries + fixture lines) | design | game-art-content (review: game-dev-android) | ASSIGNED | `design/TASK-145-caf-text` | 2026-11-20 |
+| TASK-145 | K-52 text: `.m4a`/AAC → `.caf`/LPCM in the Key Table GDD, Audio & Voice GDD, art bible §8 (dated entries + fixture lines) | design | game-art-content (review: game-dev-android) | MERGED (87172f5a; game-dev-android APPROVE); 145b with TASK-146 | `design/TASK-145-caf-text` | 2026-11-20 |
 | TASK-146 | key-table-schema-v2 (`.m4a` → `.caf`, v1 superseded) + KidCore KeyTable.swift V6/voicePath change in the same merge | contracts | game-qc-android (cases) + game-dev-android (KidCore) | ASSIGNED | `contracts/TASK-146-key-table-schema-v2` | 2026-11-20 |
 
 ## Leader log
