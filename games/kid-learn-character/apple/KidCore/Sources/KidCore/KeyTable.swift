@@ -165,7 +165,7 @@ extension KeyTable {
                 // Art bible §8 naming with the same prefix, key and edition: `<category>_<stem><name>_<nn>.<ext>`.
                 if !isAssetName(it.art, dir: "cast/cast_", stem: stem, nn: nn, ext: ".json") { v.fail(6, "\(it.castId): art name") }
                 if !isAssetName(it.silhouette, dir: "sil/sil_", stem: stem, nn: nn, ext: ".json") { v.fail(6, "\(it.castId): silhouette name") }
-                if let s = it.sfx, !isAssetName(s, dir: "sfx/sfx_", stem: stem, nn: nn, ext: ".m4a") { v.fail(6, "\(it.castId): sfx name") }
+                if let s = it.sfx, !isAssetName(s, dir: "sfx/sfx_", stem: stem, nn: nn, ext: ".caf") { v.fail(6, "\(it.castId): sfx name") }
             } else { v.fail(6, "\(it.castId): no prefix to check") }
             // V7
             var files = [it.art, it.silhouette]
@@ -242,9 +242,9 @@ extension KeyTable {
         return v
     }
 
-    /// `voice/<locale>/vo_<locale>_<kind>_<id>.m4a` (§2b: voice paths are built, not stored).
+    /// `voice/<locale>/vo_<locale>_<kind>_<id>.caf` (§2b: voice paths are built, not stored; CAF linear PCM, K-52).
     public static func voicePath(_ locale: String, _ kind: String, _ id: String) -> String {
-        "voice/\(locale)/vo_\(locale)_\(kind)_\(id).m4a"
+        "voice/\(locale)/vo_\(locale)_\(kind)_\(id).caf"
     }
 
     /// V8: parses under morph-v1, has a subpath of 2+ points, and total length > 0.

@@ -294,7 +294,7 @@ final class SVGBakeTests: XCTestCase {
     func test_the_validator_fails_a_silhouette_file_with_an_arc_naming_the_file_and_accepts_a_baked_one() throws {
         let content = FileManager.default.temporaryDirectory.appendingPathComponent("content-\(UUID().uuidString)")
         defer { try? FileManager.default.removeItem(at: content) }
-        let cases = try Fixture.contractsRoot(from: #filePath).appendingPathComponent("key-table-schema-v1/cases.json")
+        let cases = try Fixture.contractsRoot(from: #filePath).appendingPathComponent("key-table-schema-v2/cases.json")
         let fx = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: cases)) as? [String: Any])
         let fixtures = try XCTUnwrap(fx["fixtures"] as? [String: Any])
         let theme = try XCTUnwrap(fixtures["theme"] as? [String: Any]), assets = try XCTUnwrap(fixtures["assets"] as? [String: Any])
