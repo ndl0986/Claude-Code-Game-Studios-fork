@@ -1,6 +1,6 @@
 # TASK-141 evidence: keyboard-row-v2
 
-- **verify:** `nice -n 10 bash tools/ci/verify.sh --dev --no-xcode` at fc4b2395: PASS (`verify-dev-no-xcode.log`,
+- **verify:** `nice -n 10 bash tools/ci/verify.sh --dev --no-xcode` at the head before this evidence commit: PASS (`verify-dev-no-xcode.log`,
   paths masked). Structure 16/16 contracts; keyboard-row-v2 NOT ASSESSED (not started: story:keyboard-row, 58 cases);
   keyboard-row-v1 SUPERSEDED; 0 FAIL.
 - **Independent model:** game-qc-android's checker re-derives every step of all 58 cases from the GDD: 0 mismatches.
