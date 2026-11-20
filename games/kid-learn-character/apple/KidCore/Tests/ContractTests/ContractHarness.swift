@@ -16,10 +16,20 @@ protocol ContractRunner {
     static func kind(out: String, field: String) -> String?
     init(given: [String: JSONValue], draws: DrawQueues) throws
     mutating func step(uptime: Double, event: [String: JSONValue]) throws -> Outputs
+    /// The state `spec.md` names, for a step's `expectState` (case-schema-v1 §4). The default throws: a runner that
+    /// exposes no state FAILs any case that checks some, never passes it unchecked (TASK-148).
+    func state(_ name: String) throws -> JSONValue
+    /// The field kind of a state field (`<name>` or a member `field` inside it), for the tolerance (§6); nil compares
+    /// a double exactly.
+    static func stateKind(name: String, field: String) -> String?
 }
 
 extension ContractRunner {
     static var layer: String? { nil }
+    func state(_ name: String) throws -> JSONValue {
+        throw ContractError("this runner exposes no state named \(name) (case-schema-v1 §4)")
+    }
+    static func stateKind(name: String, field: String) -> String? { nil }
 }
 
 /// The case's `draws`, one queue per stream (case-schema-v1 §5). A draw past the end throws; the harness FAILs a
@@ -148,6 +158,10 @@ enum ContractHarness {
         let id = c["id"]?.string ?? "?", source = c["source"]?.string ?? "?"
         let head = "\(contract)/\(id) [\(source)]"
         do {
+            // Case-level checks this harness does not implement FAIL rather than pass unchecked (case-schema-v1 §2; TASK-148).
+            for k in ["expect", "permute", "tolerance"] where c[k] != nil {
+                return "\(head) \(k): case-level \(k) is not supported by this harness yet; the case would pass unchecked (TASK-148)"
+            }
             guard case .object(let g0)? = c["given"] else { return "\(head) given: not an object" }
             var given: [String: JSONValue] = [:]
             for (k, v) in g0 { given[k] = try Patch.resolve(v, fixtures: fixtures) }
@@ -170,6 +184,21 @@ enum ContractHarness {
                                             return runner.kind(out: outKinds[i], field: String(tail[tail.index(close, offsetBy: 2)...]))
                                         }, tolerances: tolerances) {
                     return "\(head) \(d.path): expected \(d.expected), got \(d.actual) (tol \(d.tolerance))"
+                }
+                if let es = s["expectState"] {
+                    guard case .object(let names) = es else { return "\(head) steps[\(j)].expectState: not an object" }
+                    for name in names.keys.sorted() {
+                        let path = "steps[\(j)].expectState.\(name)"
+                        let got: JSONValue
+                        do { got = try r.state(name) } catch { return "\(head) \(path): \(error)" }
+                        if let d = Compare.diff(names[name]!, got, path: path, kindOf: { p in
+                            let rest = p.dropFirst(path.count)
+                            let field = rest.split(separator: ".").last.map { String($0.split(separator: "[").first ?? "") } ?? ""
+                            return runner.stateKind(name: name, field: field.isEmpty ? name : field)
+                        }, tolerances: tolerances) {
+                            return "\(head) \(d.path): expected \(d.expected), got \(d.actual) (tol \(d.tolerance))"
+                        }
+                    }
                 }
             }
             let left = queues.leftover
