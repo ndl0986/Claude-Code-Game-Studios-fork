@@ -27,3 +27,14 @@ Build: `swiftc -O -o enc enc.swift`. Run: `./enc out.m4a whole|chunked [default|
 - 003's in-process byte test (`test_encoding_the_same_audio_twice_gives_identical_bytes`) passed 15/15, likely because
   one process stays on one core class; the property it asserts does not hold across processes.
 - 003's two full 72-line voice bakes earlier matched byte for byte, by the same chance.
+
+## K-52: CAF linear PCM (2026-11-20, TASK-144)
+
+Luan chose uncompressed CAF (K-52). The same harness, CAF settings (`kAudioFormatLinearPCM`, 16-bit little-endian
+integer, mono, 48 kHz):
+- `enc.swift … whole caf` (48 kHz in, no resample): **20/20 identical** under normal scheduling and **20/20** under
+  `taskpolicy -b`, the same hash on both (144 096 bytes).
+- `caf.swift` (the bake's exact path: 24 kHz Float32 → `AVAudioConverter` → 48 kHz → CAF LPCM): **20/20 + 20/20
+  identical**, the same hash on both classes (160 096 bytes).
+
+So the voice and sfx bakes are byte-stable under K-52; 004's staleness check can compare `.caf` bytes.

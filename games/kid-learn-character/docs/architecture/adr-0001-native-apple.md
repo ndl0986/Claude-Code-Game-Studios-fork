@@ -96,6 +96,9 @@ Android later. TASK-033 answered that with a spike, and this revision records th
 - **SwiftUI:** the app shell, the optional on-screen keyboard row if it's simpler there, and the parent gate.
 - **Audio:** AVAudioEngine for the object sound and the voice line. Sounds are stored as AAC `.m4a` mono and
   decoded to PCM at load (art bible §8).
+  - *Note 2026-11-20 (K-52, Luan; TASK-144; status unchanged, Accepted):* sounds are now stored as **CAF linear PCM**, 16-bit
+    mono 48 kHz (`.caf`), so the baked files are byte-stable; they are still read into PCM buffers at load. See ADR-0003's D5
+    note.
   - **Audio note for the audio ADR:** in the spike, `AVAudioPlayerNode.stop()` + `scheduleBuffer` + `play()` on
     the main thread took **3–10 ms** before the sound was scheduled. That's **measured on the Mac and the iPad
     Simulator only**. The audio ADR keeps players primed and cuts with a short fade off the main thread.

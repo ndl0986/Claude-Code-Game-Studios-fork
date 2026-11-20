@@ -36,7 +36,7 @@
 - **Baked path format:** V8 reads a baked silhouette or glyph file's top-level `"d"` string. This is **provisional**;
   the bake tool story fixes the baked format and updates `FileProbe.pathText`.
 - The SVG subset and structure, the silhouette raster check, loudness and true peak (ADR-0003 D4, D5) are not run.
-- Durations come from `AVAudioFile` (decoded length, AAC priming excluded); V15's ±0.01 s rule is unproven on real
+- Durations come from `AVAudioFile` (decoded length; CAF LPCM has no priming, K-52); V15's ±0.01 s rule is unproven on real
   files until the TTS render story (ADR-0003 D5).
 
 ## The SVG layer-id rule (a1; K-37, ADR-0003 D4 note in TASK-084), for the bake tool
@@ -54,13 +54,14 @@ for its missing layer groups.) The bake tool enforces this rule and names the el
 
 `kidtools bake-voice <content-dir> [--python <path>] [--helper <path>]` renders every voice line of each theme that
 has a `theme.json` (a `src/`-only theme is skipped) for every locale in `voiceLocales`, and writes
-`themes/<id>/voice/<locale>/vo_<locale>_<kind>_<id>.m4a` (`KeyTable.voicePath`) plus
+`themes/<id>/voice/<locale>/vo_<locale>_<kind>_<id>.caf` (`VoiceBake.filePath`: `KeyTable.voicePath` with `.caf`, interim until KidCore switches after key-table-schema-v2) plus
 `voice/<locale>/provenance.json` (engine settings, versions the helper reported, espeak-ng as a build-time tool, encode
 settings, bake tool, line ids; byte-stable). Line text is the item's `word` (kind `word`) or `say` (other kinds);
 `respell["<kind>_<id>"]` in `src/voice-scripts/<locale>.json` replaces it for the TTS only (K-35).
 
-- **Encoding:** AAC-LC, mono, 48 000 Hz, 64 000 bit/s, `AVAudioFile` (Apple frameworks only). Engine output at another
-  rate (Kokoro 24 kHz) is resampled with `AVAudioConverter`. No trim, no loudness change: story 004.
+- **Encoding (K-52):** CAF linear PCM, 16-bit, mono, 48 000 Hz, `AVAudioFile` (Apple frameworks only). Engine output at
+  another rate (Kokoro's 24 kHz) is resampled with `AVAudioConverter` first. Byte-stable across processes and CPU core
+  classes (AAC was not: production/qa/evidence/story-003-voice-render-encode/aac-determinism/).
 - **Engine behind an adapter:** `TTSEngine` (ToolsCore). Real engine: `KokoroProcessEngine` runs `tts/kokoro_render.py`
   out of process through `--python` or `$KIDTOOLS_PYTHON`. One helper process per line. Tests use fake engines and
   never run Python.

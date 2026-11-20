@@ -156,26 +156,34 @@ public final class KokoroProcessEngine: TTSEngine {
 
 // MARK: Bake
 
-/// The build-time voice bake (TR-keytable-004 pre-rendered TTS + AAC mono, TR-audio-006 no run-time TTS; ADR-0003 D5/D6).
+/// The build-time voice bake (TR-keytable-004 pre-rendered TTS, mono; TR-audio-006 no run-time TTS; ADR-0003 D5/D6).
 ///
 /// Per theme and per locale in `voiceLocales`: every voice line of every item (Key Table `voice` kind → id) is
-/// rendered by the adapter and encoded to `voice/<locale>/vo_<locale>_<kind>_<id>.m4a` (`KeyTable.voicePath`). The text
+/// rendered by the adapter and written to `voice/<locale>/vo_<locale>_<kind>_<id>.caf` (`VoiceBake.filePath`). The text
 /// of a line is the item's `word` for kind `word`, else its `say` (letter, number); `respell["<kind>_<id>"]` replaces it
 /// for the TTS only (K-35). One line id used by several items is rendered once; if its text differs between items the
 /// bake fails. Also writes `voice/<locale>/provenance.json` (byte-stable: sorted keys, no timestamps).
 ///
-/// Encoding: AAC-LC, **mono, 48 000 Hz, 64 000 bit/s**, via `AVAudioFile` (Apple frameworks only, K-31). Engine audio
+/// Encoding (K-52, Luan 2026-11-20): **CAF linear PCM, 16-bit, mono, 48 000 Hz**, via `AVAudioFile` (Apple frameworks only,
 /// at another rate is resampled with `AVAudioConverter`. No trim, no loudness change (story 004).
 /// Output is staged in a temp folder; nothing is written to the theme unless every line renders and encodes.
 ///
 /// Example:
 /// ```swift
 /// let written = try VoiceBake.bakeTheme(themeDir: dir, theme: model) { script in KokoroProcessEngine(python: py, settings: script.engine) }
-/// // ["voice/en-us/provenance.json", "voice/en-us/vo_en-us_letter_c.m4a", …]
+/// // ["voice/en-us/provenance.json", "voice/en-us/vo_en-us_letter_c.caf", …]
 /// ```
 public enum VoiceBake {
-    /// Output AAC sample rate (Hz), channel count and bit rate (bit/s): chosen here, not in the story or ADR.
-    public static let sampleRate = 48_000.0, channels = 1, bitRate = 64_000
+    /// Output sample rate (Hz), channel count and bit depth (K-52: linear PCM in CAF; 48 kHz matches the devices'
+    /// output rate, ADR-0010 D3).
+    public static let sampleRate = 48_000.0, channels = 1, bitDepth = 16
+
+    /// The baked file of one line: `KeyTable.voicePath` with the `.caf` extension of K-52. Interim: KidCore's
+    /// `voicePath` still builds `.m4a` until key-table-schema-v2 (TASK-146) lands and it switches (TASK-144); then this
+    /// becomes `KeyTable.voicePath` itself.
+    public static func filePath(_ locale: String, _ kind: String, _ id: String) -> String {
+        (KeyTable.voicePath(locale, kind, id) as NSString).deletingPathExtension + ".caf"
+    }
 
     /// One voice line.
     public struct Line: Equatable, Sendable {
@@ -198,10 +206,10 @@ public enum VoiceBake {
                     let respell = script.respell[lineId]
                     let line = Line(kind: kind, id: id, text: respell ?? base, respelled: respell != nil)
                     if base.trimmingCharacters(in: .whitespaces).isEmpty {
-                        throw VoiceBakeError(file: KeyTable.voicePath(script.locale, kind, id), reason: "empty script text (\(it.castId))")
+                        throw VoiceBakeError(file: filePath(script.locale, kind, id), reason: "empty script text (\(it.castId))")
                     }
                     if let old = byId[lineId], old.text != line.text {
-                        throw VoiceBakeError(file: KeyTable.voicePath(script.locale, kind, id),
+                        throw VoiceBakeError(file: filePath(script.locale, kind, id),
                                              reason: "line id used with two texts: \"\(old.text)\" and \"\(line.text)\"")
                     }
                     byId[lineId] = line
@@ -234,69 +242,20 @@ public enum VoiceBake {
         return dst
     }
 
-    /// Encodes `pcm` to an AAC mono `.m4a` at `url`.
+    /// Writes `pcm` at `url` as CAF linear PCM, 16-bit little-endian, mono, `sampleRate` (K-52). Byte-stable: the same
+    /// samples give the same file in any process on either core class (AudioToolbox AAC did not:
+    /// production/qa/evidence/story-003-voice-render-encode/aac-determinism/).
     public static func encode(_ pcm: PCMAudio, to url: URL) throws {
+        guard url.pathExtension == "caf" else { throw VoiceBakeError(file: url.lastPathComponent, reason: "baked audio is .caf (K-52)") }
         let buf = try resampled(pcm, file: url.lastPathComponent)
-        let settings: [String: Any] = [AVFormatIDKey: kAudioFormatMPEG4AAC, AVSampleRateKey: sampleRate,
-                                       AVNumberOfChannelsKey: channels, AVEncoderBitRateKey: bitRate]
+        let settings: [String: Any] = [AVFormatIDKey: kAudioFormatLinearPCM, AVSampleRateKey: sampleRate,
+                                       AVNumberOfChannelsKey: channels, AVLinearPCMBitDepthKey: bitDepth,
+                                       AVLinearPCMIsFloatKey: false, AVLinearPCMIsBigEndianKey: false,
+                                       AVLinearPCMIsNonInterleaved: false]
         do {
             let file = try AVAudioFile(forWriting: url, settings: settings, commonFormat: .pcmFormatFloat32, interleaved: false)
             try file.write(from: buf)   // the file is finalised when `file` goes out of scope at the end of this block
-        } catch { throw VoiceBakeError(file: url.lastPathComponent, reason: "AAC encode failed: \(error)") }
-        try zeroMP4Timestamps(url)
-    }
-
-    /// AVAudioFile stamps the MP4 movie, track and media headers (`mvhd`, `tkhd`, `mdhd`) with the encode time, so two
-    /// bakes of the same audio differed in 12 header bytes while the decoded samples were identical. Zeroing the
-    /// creation and modification times makes the voice files byte-stable like the other baked outputs (ADR-0003 D4).
-    public static func zeroMP4Timestamps(_ url: URL) throws {
-        var bytes = [UInt8](try Data(contentsOf: url))
-        let file = url.lastPathComponent
-        func u32(_ o: Int) -> Int { bytes[o..<o + 4].reduce(0) { $0 << 8 | Int($1) } }
-        /// The child boxes of the payload `range`, walked by their size headers: (type, payload range, box start).
-        /// Types match only at box boundaries, never at an arbitrary offset (game-dev-ios review).
-        func children(_ range: Range<Int>) throws -> [(type: String, payload: Range<Int>, start: Int)] {
-            var out: [(String, Range<Int>, Int)] = [], o = range.lowerBound
-            while o + 8 <= range.upperBound {
-                var size = u32(o), header = 8
-                if size == 1 {   // a 64-bit size follows the type
-                    guard o + 16 <= range.upperBound else { break }
-                    size = bytes[o + 8..<o + 16].reduce(0) { $0 << 8 | Int($1) }; header = 16
-                } else if size == 0 { size = range.upperBound - o }   // to the end of the parent
-                guard size >= header, o + size <= range.upperBound else {
-                    throw VoiceBakeError(file: file, reason: "malformed MP4 box at byte \(o)")
-                }
-                out.append((String(decoding: bytes[o + 4..<o + 8], as: UTF8.self), (o + header)..<(o + size), o))
-                o += size
-            }
-            return out
-        }
-        /// A full box's version byte opens its payload; then creation and modification time, 4 bytes each in version 0
-        /// and 8 in version 1.
-        func zeroTimes(_ payload: Range<Int>, _ type: String) throws {
-            let version = bytes[payload.lowerBound], width = version == 1 ? 8 : 4, start = payload.lowerBound + 4
-            guard start + 2 * width <= payload.upperBound else { throw VoiceBakeError(file: file, reason: "\(type) too short") }
-            for k in start..<(start + 2 * width) { bytes[k] = 0 }
-        }
-        guard let moov = try children(0..<bytes.count).first(where: { $0.type == "moov" }) else {
-            throw VoiceBakeError(file: file, reason: "no moov box in the encoded file")
-        }
-        let inMoov = try children(moov.payload)
-        guard let mvhd = inMoov.first(where: { $0.type == "mvhd" }) else { throw VoiceBakeError(file: file, reason: "no moov/mvhd") }
-        try zeroTimes(mvhd.payload, "mvhd")
-        let traks = inMoov.filter { $0.type == "trak" }
-        guard !traks.isEmpty else { throw VoiceBakeError(file: file, reason: "no moov/trak") }
-        for trak in traks {
-            let inTrak = try children(trak.payload)
-            guard let tkhd = inTrak.first(where: { $0.type == "tkhd" }) else { throw VoiceBakeError(file: file, reason: "no trak/tkhd") }
-            try zeroTimes(tkhd.payload, "tkhd")
-            guard let mdia = inTrak.first(where: { $0.type == "mdia" }),
-                  let mdhd = try children(mdia.payload).first(where: { $0.type == "mdhd" }) else {
-                throw VoiceBakeError(file: file, reason: "no trak/mdia/mdhd")
-            }
-            try zeroTimes(mdhd.payload, "mdhd")
-        }
-        try Data(bytes).write(to: url)
+        } catch { throw VoiceBakeError(file: url.lastPathComponent, reason: "CAF write failed: \(error)") }
     }
 
     /// The provenance file bytes (K-41): engine settings, versions the engine reported, the espeak-ng fallback as a
@@ -306,8 +265,8 @@ public enum VoiceBake {
         let e = script.engine
         return JSONValue.object([
             "baker": .string("\(SVGBake.toolName) \(SVGBake.toolVersion)"),
-            "encode": .object(["bitRate": .number(Double(bitRate)), "channels": .number(Double(channels)),
-                               "codec": .string("aac-lc"), "sampleRate": .number(sampleRate)]),
+            "encode": .object(["bitDepth": .number(Double(bitDepth)), "channels": .number(Double(channels)),
+                               "codec": .string("lpcm"), "container": .string("caf"), "sampleRate": .number(sampleRate)]),
             "engine": .object(["langCode": .string(e.langCode), "name": .string(e.name), "package": .string(e.package),
                                "speed": .number(e.speed), "voice": .string(e.voice), "weightsRevision": .string(e.weightsRevision)]),
             "espeakNg": .object(["role": .string("build-time tool only, never shipped (misaki G2P fallback)"),
@@ -339,7 +298,7 @@ public enum VoiceBake {
             let lines = try Self.lines(theme: theme, script: script)
             try fm.createDirectory(at: stage.appendingPathComponent("voice/\(loc)"), withIntermediateDirectories: true)
             for line in lines {
-                let rel = KeyTable.voicePath(loc, line.kind, line.id)
+                let rel = filePath(loc, line.kind, line.id)
                 do { try encode(try engine.render(text: line.text), to: stage.appendingPathComponent(rel)) }
                 catch let e as VoiceBakeError { throw e }
                 catch { throw VoiceBakeError(file: rel, reason: "\(error)") }
