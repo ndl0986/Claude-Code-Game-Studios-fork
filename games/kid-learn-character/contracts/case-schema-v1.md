@@ -79,6 +79,11 @@ Any other key is a FAIL **(S12)**. Fields that are forbidden everywhere in a cas
   sequence and count, never as a set. An empty list means the step emits nothing. Each contract's `spec.md` lists
   its output kinds and their fields.
 - **`expectState`** (optional) checks named state after the step. `spec.md` lists the state names a runner exposes.
+  *Note 2026-11-20 (TASK-149):* a state name that `spec.md` lists **with named members** (a record, such as
+  press-queue's `current` with `revealId`, `key`, `holdEff`, `formed`, `formedAt`) is checked only on the members a
+  case writes; each written member must exist in the runner's value and compares by §6. Every other state value
+  compares whole by §6, including a map keyed by data (key-table's `lastShown`), unless `spec.md` says otherwise
+  (input-filter's `heldSet` is compared as a set).
 
 ## 5. Draws
 
