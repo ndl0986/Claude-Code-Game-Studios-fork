@@ -1,0 +1,23 @@
+== codesign -dv
+Identifier=com.galaxyandsun.letterlings
+Format=app bundle with Mach-O thin (arm64)
+Signature size=4790
+TeamIdentifier=<TEAM>
+Authority=Apple Development: <apple-id> (<cert-id>)
+Authority=Apple Worldwide Developer Relations Certification Authority
+Authority=Apple Root CA
+== codesign --verify --strict
+verify: OK (exit 0)
+== Info.plist
+CFBundleIdentifier = com.galaxyandsun.letterlings
+CFBundleDisplayName = Letterlings
+CFBundleName = Letterlings
+CFBundleExecutable = Letterlings
+== entitlements
+{
+  "application-identifier" => "<TEAM>.com.galaxyandsun.letterlings"
+  "com.apple.developer.team-identifier" => "<TEAM>"
+  "get-task-allow" => true
+}
+== embedded profile
+iOS Team Provisioning Profile: com.galaxyandsun.letterlings
