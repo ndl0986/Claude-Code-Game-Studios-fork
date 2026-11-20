@@ -147,3 +147,9 @@ Review mode: lean · Workflow: standard
 Change: A dated note in R8, the bake step story 004 implements (leader-approved D5 detail): each rendered voice line is trimmed of leading and trailing audio below −50 dBFS on the K-weighted 10 ms envelope, keeping 20 ms with a 5 ms linear fade at each end, before loudness normalisation; the three values are voice-script data; V15 durations and AC-6 limits measure the trimmed file. R8's respelled-line sentence now says "measured on the trimmed file". No rule, target or timing changes. Requested by game-dev-android for story 004.
 fixture: none (audio-plan-v1 names no audio file and has no durations; its "trims" are gain trims, AU-Q6)
 Reviewed-Content-Hash: design/gdd/audio-voice.md b9e4a3e1db1d78549afda9d6606733d00888ac58
+
+## Update — 2026-11-20 — content-pipeline/004 voice limiter note (no re-review)
+Review mode: lean · Workflow: standard
+Change: A dated note in R8 after the trim note (leader-approved D5 detail): trim → gain to −16 LUFS → lookahead true-peak limiter (ceiling −1 dBTP, 4× oversampled) → clip guard → write .caf; each line must still meet A7 after limiting; the limiter values and the 6 dB warning are voice-script data; each line's maximum gain reduction is in the voice provenance, and over 6 dB is flagged. F4 and A1 unchanged. Requested by game-dev-android for story 004.
+fixture: none (audio-plan-v1 names no audio file and models no bake step)
+Reviewed-Content-Hash: design/gdd/audio-voice.md e5877d020c3c66f38493912aac9552e67f7c19a8
