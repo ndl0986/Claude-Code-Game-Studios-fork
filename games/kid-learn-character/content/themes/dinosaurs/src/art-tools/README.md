@@ -40,7 +40,9 @@ python3 -m venv <scratch>/geovenv && <scratch>/geovenv/bin/pip install shapely
 - **Silhouette:** the union of every body shape, grown by 3 units with round joins, written as one `M`/`L`/`Z`
   path. So ADR-0003 D4's raster check holds by construction.
 - **Idle parts (OQ-1):** families with a head or tail draw them as parts with pivots, pending OQ-1.
-- **The babies (R-3):** they keep one fixed size across every number, so S-1's 60 % fill isn't checked for them.
+- **The babies (R-3):** they keep one fixed size across every number, so S-1's 60 % fill can't bind them. The spec's
+  S-1 proposed default exempts Numbers 1–3 (4–9 meet it by width); the run prints `fill exempt` for a baby figure
+  that falls short.
   Their node caps are per baby.
 
 ## Licence of the geometry library

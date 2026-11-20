@@ -72,7 +72,8 @@ def write(stem,title,root,caps,outdir,skipfill=False):
     open(os.path.join(outdir,'src/sil',f'sil_{stem}.svg'),'w').write('\n'.join(['<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="640" height="440" viewBox="0 0 640 440">',f'  <title>{title} silhouette (rest pose)</title>',f'  <path fill="#000000" d="{pathd(sil)}"/>','</svg>','']))
     minx,miny,maxx,maxy=sil.bounds
     ok=stage<=caps[0] and parade<=caps[1] and (caps[2] is None or n<=caps[2])
-    fill_ok=skipfill or (maxy-miny)>=264 or (maxx-minx)>=384
+    fills=(maxy-miny)>=264 or (maxx-minx)>=384
+    fill_ok=skipfill or fills
     inside=minx>=0 and miny>=0 and maxx<=640 and maxy<=440
-    print(f'{stem}: parts {n}, body {b}, detail {dd}, outline {ol} -> stage {stage}, parade {parade} {"OK" if ok else "OVER"}; box {minx:.0f}-{maxx:.0f} x {miny:.0f}-{maxy:.0f} fill {"OK" if fill_ok else "LOW"} {"inside" if inside else "OUTSIDE"}')
+    print(f'{stem}: parts {n}, body {b}, detail {dd}, outline {ol} -> stage {stage}, parade {parade} {"OK" if ok else "OVER"}; box {minx:.0f}-{maxx:.0f} x {miny:.0f}-{maxy:.0f} fill {"OK" if fills else ("exempt (S-1 proposed default, Numbers 1-3)" if skipfill else "LOW")} {"inside" if inside else "OUTSIDE"}')
     return ok and fill_ok and inside

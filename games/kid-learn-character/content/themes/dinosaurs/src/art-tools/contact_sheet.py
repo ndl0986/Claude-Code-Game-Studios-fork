@@ -11,7 +11,7 @@ def inner(path):
 
 def main(theme, out, stems):
     W, H, PAD, LAB = 320, 220, 12, 22            # one half-size artboard, padding, label height
-    cols = 2                                     # two (cast, silhouette) pairs per row
+    cols = 2 if len(stems) <= 12 else 4          # (cast, silhouette) pairs per row; more for big sheets
     cw = 2 * W + PAD; ch = H + LAB
     rows = math.ceil(len(stems) / cols)
     side = max(cols * cw + PAD * (cols + 1), rows * ch + PAD * (rows + 1))
