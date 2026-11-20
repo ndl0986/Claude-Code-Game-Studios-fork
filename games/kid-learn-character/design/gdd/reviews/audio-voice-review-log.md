@@ -135,3 +135,9 @@ Change: none to this GDD. ADR-0004 D6 lines, found by TASK-139's drift check (ga
 fixture: none (audio-plan-v1: cut_settle_s and the resume frame are the adapter's, ADR-0010 D4/D5/D7; Kokoro and the voice script are the pipeline's; the plan's outputs are unchanged)
 fixture: none (press-queue-v1: no case cites Audio Formulas)
 Reviewed-Content-Hash: design/gdd/audio-voice.md 9692a7ca8ace023623279458e75921c096f21f66
+
+## Update — 2026-11-20 — TASK-145 audio is uncompressed CAF, K-52 (no re-review)
+Review mode: lean · Workflow: standard
+Change: K-52 (Luan): baked audio is uncompressed 16-bit linear PCM in .caf (AAC is not byte-stable; ADR-0003 D4). R4.1 reads the .caf files into the players' PCM at theme load; R8 names the .caf pipeline and vo_<locale>_<kind>_<id>.caf; the art bible §8 reference reads LPCM .caf. R4.1 says the audio is "read in" (LPCM), not decoded. No rule, timing or loudness target changes. Review: game-dev-android.
+fixture: none (audio-plan-v1 names no file path or format in any case; 0 occurrences of .m4a)
+Reviewed-Content-Hash: design/gdd/audio-voice.md 9538c82cb168ce8556d39928028bfeb27cc30ec7

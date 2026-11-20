@@ -121,8 +121,8 @@ never more brightness"; Pillar 3).
 
 **R4. Priming, loading and format.**
 1. **Decoding is part of the theme load.** Key Table & Theme Data loads a theme whole, off the main thread (its
-   Core Rules). Decoding that theme's `.m4a` files (sfx and every voice line for the active locale) to PCM is part
-   of that same load. **A theme becomes Active only when its audio is decoded too.** Nothing is ever decoded on a
+   Core Rules). Reading that theme's `.caf` files (sfx and every voice line for the active locale: uncompressed
+   16-bit linear PCM, K-52) into the players' PCM format is part of that same load. **A theme becomes Active only when its audio is read in too.** Nothing is ever decoded on a
    press. The fixed sounds (chime, ping, twinkle, parade tune) are decoded once at start-up.
 2. **Decode at the engine's output format.** Buffers are decoded (or converted once) to the output's sample rate,
    mono, so playback needs no conversion at press time.
@@ -196,7 +196,7 @@ never more brightness"; Pillar 3).
 | A8 | **Every voice line exists for every locale** in `voiceLocales` (Key Table V7), and every line passes A3. |
 
 **R8. Voice source (decided, Luan 2026-11-18, Q3).** The MVP voice is **text-to-speech rendered at build time**
-into the same `.m4a` pipeline: the same file names and line ids (`vo_<locale>_<kind>_<id>.m4a`), loudness-matched
+into the same `.caf` pipeline (uncompressed LPCM, K-52): the same file names and line ids (`vo_<locale>_<kind>_<id>.caf`), loudness-matched
 like any other file. The app never synthesises speech at run time and never uses the network (the app is offline, ADR-0001). The script is
 the Key Table's `say` and `word` fields ("A." for A, because a TTS voice read "ay" as "eye" in the one-shot).
 Swapping in a recorded voice later replaces files only.
@@ -395,7 +395,7 @@ about **2.7 s** later than with a plain 3.0 s hold. Luan accepted this for a wor
 - **Parent Gate & Grown-up Panel:** shows the volume and mute controls (stored by the Settings Store).
 
 **Normative references:** ADR-0001 (audio note, open follow-up 3: the audio ADR); art bible §2 (brightness
-ceiling, calm), §7 UX view (every press answered; works with sound off), §8 (mono AAC `.m4a`, PCM at load,
+ceiling, calm), §7 UX view (every press answered; works with sound off), §8 (mono 16-bit LPCM `.caf`, K-52; PCM at load,
 loudness-matched, sfx ≤ 2 s).
 
 ## Tuning Knobs
