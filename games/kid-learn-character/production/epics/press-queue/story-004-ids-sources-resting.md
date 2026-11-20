@@ -1,12 +1,12 @@
 # Story 004: Synchronous outcomes, gap-free revealIds, locked lengths, equal sources, the resting signal
 
 > **Epic**: Press Queue (`production/epics/press-queue/EPIC.md`)
-> **Status**: Ready
+> **Status**: In Progress
 > **Layer**: Core
 > **Type**: Logic
 > **Estimate**: M
 > **Manifest Version**: 2026-11-20
-> **Last Updated**: —
+> **Last Updated**: 2026-11-20
 > **Milestone**: Demo 1 (K-48)
 
 ## Context
@@ -38,6 +38,10 @@
 - [ ] AC-13 Reduce Motion turned on mid-reveal leaves its holdEff; the next uses the reduced lengths with `hold_s` 3.0; AC-18 `hardwareKey`, `hint(id)` and `keyboardRow` give the same outcomes and timings.
 - [ ] AC-20 `restingSince` is none while unformed or queued, and `formedAt` once formed with an empty queue.
 
+*Note 2026-11-20 (dev):* press-queue-v2's `AC10-revealId-no-gaps` crosses a `panelOpen`/`panelClose` (R8, story 005's
+clear and settle), so that case runs with 005; AC-10 itself has a unit test here. `R11-snapshot-queue-keys-in-order`
+(no AC of its own) runs with this story.
+
 ---
 
 ## Implementation Notes
@@ -56,12 +60,10 @@ The whole state machine is KidCore (Module Ownership). Tests use an injected clo
 
 ## Files
 
-*Planned; `/dev-story` replaces this list. Roots are ADR-0001 D3 / ADR-0002 D1 (`apple/`); `engine.name` is unset by design.*
-
 - `apple/KidCore/Sources/KidCore/PressQueue.swift`
 - `apple/KidCore/Tests/KidCoreTests/PressQueueTests.swift`
-
----
+- `apple/KidCore/Tests/ContractTests/PressQueueRunner.swift`
+- `contracts/kidcore-api.md`
 
 ## QA Test Cases
 

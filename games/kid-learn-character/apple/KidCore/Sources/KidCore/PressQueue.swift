@@ -84,7 +84,8 @@ public struct RevealStart: Equatable, Sendable {
 
 /// The Reveal Stage and Key Table as the queue calls them (R6): starts a reveal and answers with its lengths.
 public protocol PressQueueStage {
-    /// Starts the reveal `revealId` for `key` at `r0`; the stage reports `formed(revealId:)` later.
+    /// Starts the reveal `revealId` for `key` at `r0`; the stage reports `formed(revealId:)` later. The stage reads
+    /// Reduce Motion itself at this start (Reveal Stage R9) and answers that timing set's lengths (F5).
     func startReveal(revealId: Int, key: String, source: PressSource, origin: PressOrigin?, r0: Double) -> RevealStart
 }
 
@@ -103,6 +104,8 @@ public struct CurrentReveal: Equatable, Sendable {
     public var formed: Bool
     /// When it formed; nil until then.
     public var formedAt: Double?
+    /// Settled by a panel open or a background (R8, R9): its hold counts as passed.
+    public var settled: Bool
 }
 
 /// The press queue (GDD R2-R7). Call `press(_:)` from Input's callback and `tick(now:)` once per frame.
@@ -114,13 +117,26 @@ public struct PressQueue {
     /// The revealId the next started reveal takes; counts from 1 with no gaps (R2).
     public private(set) var nextRevealId = 1
 
+    /// R10: the formed time of `current` while the queue is empty and `current` is formed; nil otherwise. The Parade
+    /// reads it.
+    public var restingSince: Double? {
+        guard let c = current, c.formed, queue.isEmpty else { return nil }
+        return c.formedAt
+    }
+
     private let knobs: PressQueueKnobs
     private let stage: PressQueueStage
-    private let clock: UptimeClock
+    private let clock: PlayClock
+    private let log: DebugLog
+    /// True during the Parent Gate challenge (R8a): no tick advances the queue and nothing is cleared.
+    public private(set) var frozen = false
 
-    /// A queue with no reveal on stage. `clock` stamps `formed(revealId:)` arrivals (R7).
-    public init(knobs: PressQueueKnobs, stage: PressQueueStage, clock: UptimeClock) {
-        self.knobs = knobs; self.stage = stage; self.clock = clock
+    /// A queue with no reveal on stage. Every time it keeps is play time (R8a): `clock` stamps `formed(revealId:)`
+    /// arrivals (R7) and settles, and turns a press's uptime stamp into play time on arrival. `log` takes the debug
+    /// lines for a missing `voiceDurations` entry (F1) and a formed timeout (R5). F5 (Reduce Motion locked at a
+    /// reveal's start) holds because `holdEff` is computed once, from the lengths the stage answers at that start.
+    public init(knobs: PressQueueKnobs, stage: PressQueueStage, clock: PlayClock, log: DebugLog) {
+        self.knobs = knobs; self.stage = stage; self.clock = clock; self.log = log
     }
 
     /// F1: the hold of a reveal, from the Reveal Stage's answer. A missing word length uses
@@ -136,9 +152,10 @@ public struct PressQueue {
 
     /// R3 / F2: accepts, queues or ignores a press, and returns the outcome at once (R4).
     public mutating func press(_ p: Press) -> PressOutcome {
-        if startsAtOnce(at: p.time) {
-            let started = start(p, r0: p.time)
-            return .started(revealId: started.revealId, r0: p.time, castId: started.castId)
+        let t = clock.play(p.time)
+        if startsAtOnce(at: t) {
+            let started = start(p, r0: t)
+            return .started(revealId: started.revealId, r0: t, castId: started.castId)
         }
         if queue.count < knobs.queueMax {
             queue.append(p)
@@ -147,9 +164,18 @@ public struct PressQueue {
         return .ignored
     }
 
-    /// R5.2: once per frame, before drawing. Starts the front press when the reveal is formed and its hold has
-    /// passed (inclusive); at most one reveal starts per tick.
+    /// R5: once per frame, before drawing. 1. The formed timeout: a reveal not formed by `r0 + revealLen +
+    /// formed_timeout_s` (inclusive) is marked formed at `now`, with one debug line; a later `formed` is ignored (R7).
+    /// 2. Starts the front press when the reveal is formed and its hold has passed (inclusive); at most one per tick.
+    /// `now` is the frame's play time. A frozen queue ignores the tick (R8a).
     public mutating func tick(now: Double) {
+        if frozen { return }
+        if var c = current, !c.formed, now >= c.r0 + c.revealLen + knobs.formedTimeoutS {
+            c.formed = true
+            c.formedAt = now
+            current = c
+            log.log("press-queue: reveal \(c.revealId) (\(c.key)) formed timeout at \(now)")
+        }
         guard let c = current, c.formed, !queue.isEmpty, now >= c.r0 + c.holdEff else { return }
         _ = start(queue.removeFirst(), r0: now)
     }
@@ -163,19 +189,40 @@ public struct PressQueue {
         current = c
     }
 
-    /// F2: nothing on stage, or an empty queue and a formed reveal whose hold has passed at `t`.
+    /// R8a: the Parent Gate challenge shows. The queue stops where it is; the Reveal Stage pauses the play clock.
+    public mutating func freeze() { frozen = true }
+
+    /// R8a: a wrong answer or a timeout. The queue resumes exactly where it stopped.
+    public mutating func resume() { frozen = false }
+
+    /// R8 (the panel opens, which also ends a challenge's freeze) and R9 (background): the queue is cleared with no
+    /// outcome for the dropped presses, and the current reveal settles to formed with its hold passed. A reveal not yet
+    /// formed takes `formedAt` = the play time of the settle; one already formed keeps its own.
+    public mutating func settle() {
+        frozen = false
+        queue.removeAll()
+        guard var c = current else { return }
+        if !c.formed { c.formed = true; c.formedAt = clock.now() }
+        c.settled = true
+        current = c
+    }
+
+    /// F2: nothing on stage, or an empty queue and a formed reveal whose hold has passed at `t` (or was settled).
     private func startsAtOnce(at t: Double) -> Bool {
         guard let c = current else { return true }
-        return queue.isEmpty && c.formed && t >= c.r0 + c.holdEff
+        return queue.isEmpty && c.formed && (c.settled || t >= c.r0 + c.holdEff)
     }
 
     /// R6: calls the Reveal Stage, locks `holdEff`, takes the next revealId.
     private mutating func start(_ p: Press, r0: Double) -> (revealId: Int, castId: String) {
         let id = nextRevealId
         let answer = stage.startReveal(revealId: id, key: p.key, source: p.source, origin: p.origin, r0: r0)
+        if answer.hasWord && answer.wordLen == nil {
+            log.log("press-queue: reveal \(id) (\(p.key)) has no voiceDurations entry; word end bound formedS + word_offset_s + word_len_max_s")
+        }
         current = CurrentReveal(revealId: id, key: p.key, source: p.source, origin: p.origin, r0: r0,
                                 formedS: answer.formedS, revealLen: answer.revealLen,
-                                holdEff: Self.holdEff(answer, knobs: knobs), formed: false, formedAt: nil)
+                                holdEff: Self.holdEff(answer, knobs: knobs), formed: false, formedAt: nil, settled: false)
         nextRevealId = id + 1
         return (id, answer.castId)
     }

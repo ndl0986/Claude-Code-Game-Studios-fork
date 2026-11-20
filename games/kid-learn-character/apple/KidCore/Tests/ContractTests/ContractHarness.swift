@@ -58,7 +58,7 @@ final class DrawQueues {
 /// a registry runner name to the runner type that implements it.
 enum ContractHarness {
     /// The runner types this harness implements, found by the name the registry row gives.
-    static let runners: [ContractRunner.Type] = [SettingsRecordRunner.self, KeyTableModelRunner.self]
+    static let runners: [ContractRunner.Type] = [SettingsRecordRunner.self, KeyTableModelRunner.self, PressQueueRunner.self]
 
     struct Report {
         var failures: [String] = []
