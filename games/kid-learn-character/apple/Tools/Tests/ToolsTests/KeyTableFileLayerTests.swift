@@ -4,10 +4,10 @@ import KidCore
 import ToolsCore
 import XCTest
 
-/// key-table-schema-v2, `file` layer (ADR-0004 D3, D5): theme-file bytes → Tools' decoder → the model, compared with
+/// key-table-schema-v3, `file` layer (ADR-0004 D3, D5): theme-file bytes → Tools' decoder → the model, compared with
 /// the named fixture decoded the same way. Same discovery and failure format as the KidCore harness.
 final class KeyTableFileLayerTests: XCTestCase {
-    static let contract = "key-table-schema-v2"
+    static let contract = "key-table-schema-v3"
     static let declaration = ContractDeclaration(
         givenFields: ["theme", "assets", "glyphSet", "buildSettings", "state", "themeBytes"],
         events: ["validate": [], "pick": ["n", "last", "weights"], "nextU": ["stream"], "resolve": ["key"], "peek": ["key"],

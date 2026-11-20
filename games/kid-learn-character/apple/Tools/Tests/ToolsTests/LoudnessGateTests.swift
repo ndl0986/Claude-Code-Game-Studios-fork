@@ -294,8 +294,9 @@ final class LoudnessGateTests: XCTestCase {
         return ((v.failed[15] ?? []).map { ContentValidator.voiceFile(forV15Message: $0, locales: ["en-us"]).map { "\($0) <- \($0)" } ?? $0 }, dir)
     }
 
-    func test_a_word_line_of_1_30_s_fails_V15_naming_the_file() throws {
-        let r = try v15(word: 1.30, letter: 0.6)
+    /// Key Table AC-14: a word line just over V15's limit (KidCore's `wordLenMaxSeconds`, 1.5 s under K-53) fails.
+    func test_a_word_line_just_over_the_limit_fails_V15_naming_the_file() throws {
+        let r = try v15(word: KeyTable.wordLenMaxSeconds + 0.05, letter: 0.6)
         XCTAssertEqual(r.failed.count, 1, "\(r.failed)")
         XCTAssertTrue(r.failed[0].hasPrefix("voice/en-us/vo_en-us_word_triceratops.caf"), "\(r.failed)")
     }
@@ -307,6 +308,6 @@ final class LoudnessGateTests: XCTestCase {
     }
 
     func test_lines_within_the_limits_pass_V15() throws {
-        XCTAssertEqual(try v15(word: 1.2, letter: 0.9).failed, [])
+        XCTAssertEqual(try v15(word: KeyTable.wordLenMaxSeconds - 0.1, letter: KeyTable.letterLenMaxSeconds - 0.1).failed, [])
     }
 }
