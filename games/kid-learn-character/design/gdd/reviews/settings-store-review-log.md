@@ -69,4 +69,5 @@ Reviewed-Content-Hash: design/gdd/settings-store.md 7c7b51ce297ced5efcd22c21f5f0
 ## Update — 2026-11-20 — TASK-135 keyboard row shows without a keyboard (no re-review)
 Review mode: lean · Workflow: standard
 Change: K-49: keyboardRow keeps its type and default false; its meaning is now false = automatic (shown when no hardware keyboard is attached) and true = always (forced on); presence is read live, never stored; Stage step 4 and the default row updated. No schema bump; settings-record-v2 stands. Review: game-dev-ios and game-qc-android from the diff.
+fixture: none (settings-record-v2: keyboardRow type, default and decoding unchanged; only the meaning changed)
 Reviewed-Content-Hash: design/gdd/settings-store.md b8739d84d376b746c516c1f5733c6d2632e58a37

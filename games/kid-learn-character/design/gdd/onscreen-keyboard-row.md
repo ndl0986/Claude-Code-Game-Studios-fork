@@ -182,6 +182,14 @@ TASK-135)*.
 - **Presence changes settle first:** a connect or disconnect changes `shown` only once the presence has held for
   `row_presence_settle_s` (0.5 s) of uptime, so a keyboard cover that flaps or a Bluetooth reconnect doesn't make the
   row blink. The settled value is the last one reported.
+  - **A pending, unsettled change** is dropped at the moments when nothing is being shown or the row is about to be
+    drawn afresh: **going to the background** (the return re-reads presence, below), a **Title → Play entry**, and
+    the **panel's close or the gate's `resume()`**. At each of these, the **latest reported** presence applies at once,
+    with no settle, because there is no visible row to blink.
+  - **The settle is never shorter than a fade:** `row_presence_settle_s ≥ row_fade_s`, a knob floor. So a reversal
+    reported during a fade settles only after that fade has ended. If one still meets a fade (a setting change and a
+    presence change together), the new fade **starts from the row's current alpha**, never with a jump. *(TASK-135,
+    game-qc-android's (a) and (b).)*
 - **When `shown` changes:**
   - **In Play, touchable** (Showing, Due, Changing, Fading in or out): it takes effect at once by the On and Off rules
     below.
@@ -235,7 +243,8 @@ TASK-135)*.
   adapter that also delivers key events to Input & Key Filter. Input & Key Filter's KidCore filter neither reads nor
   changes it (its key rules R2–R6 are untouched), so **input-filter's contract is unaffected**. The Input GDD should
   list the adapter's new output in its Interactions (a follow-up, not edited here).
-  - **iPadOS:** `GCKeyboard.coalesced != nil` read once before the first frame, then `GCKeyboardDidConnect` and
+  - **iPadOS:** `GCKeyboard.coalesced != nil` read before the first frame **and again on every return to the
+    foreground** (R8's background rule relies on that read), then `GCKeyboardDidConnect` and
     `GCKeyboardDidDisconnect` notifications (Game Controller framework). A keyboard is "present" while any is
     connected.
   - **macOS:** constant `true` (R9).
@@ -378,7 +387,7 @@ unless it lists a separate keyboard-row-v1): pool of 4, `last` = 1, injected `u`
 | `key_flash_s` | 0.35 s | 0.2–0.6 | one-shot | light length |
 | `press_scale` | 1.08 | 1–1.12 (1 under Reduce Motion) | proposed | press bounce |
 | `row_fade_s` / `word_fade_s` | 0.3 / 0.3 s | 0.2–0.6 | K-29 (word), proposed (row) | fades |
-| `row_presence_settle_s` | 0.5 s (uptime) | 0.2–1.5 | TASK-135 | how long a keyboard connect or disconnect must hold before the row follows it; longer is steadier, shorter answers sooner |
+| `row_presence_settle_s` | 0.5 s (uptime) | `row_fade_s` (0.3)–1.5 | TASK-135 | how long a keyboard connect or disconnect must hold before the row follows it; longer is steadier, shorter answers sooner |
 | letter size | 80 u | 70–90 | art bible §7 (hint size) | legibility |
 
 `row_lift` (110) is the Reveal Stage's knob; the pool is Key Table data.
@@ -439,8 +448,8 @@ retained in `production/qa/evidence/`.
     showing and R pressed, a short background and return shows REX again with R still counted; a Title entry
     draws a new word.
 15. **AC-15 On and off.** Turning it on in the panel shows the row with a 0.3 s fade after close and lifts the ground
-    from the next reveal; turning it off removes the hit rects at once (and, with no keyboard present, the row shows
-    again by R8: off means automatic).
+    from the next reveal. Turning it off **with a keyboard present** removes the hit rects at once and fades the row
+    out; **with none**, `shown` is unchanged (off means automatic, R8) and the row stays as it is.
 20. **AC-20 Keyboard connected (K-49).** In Play with the row Showing and `keyboardRow` false, `keyboardPresent`
     turns true at t: the row is unchanged at t + 0.49, its hit rects are gone at t + 0.5 and it is Hidden at t + 0.8;
     the next draw uses the old word as `last`. A reveal in progress keeps its ground line.
@@ -470,10 +479,12 @@ retained in `production/qa/evidence/`.
 Follow-ups (queued by the leader):
 - **Input & Key Filter:** list the platform adapter's `keyboardPresent` output in its Interactions (TASK-135; its
   KidCore rules don't change).
-- **keyboard-row contract** (TASK-135): **keyboard-row-v1's cases stand** when its harness reads a `given` with no
-  `keyboardPresent` as **true** (a keyboard attached), which is exactly the old behaviour: `keyboardRow` false hides
-  the row and `true` shows it. A **keyboard-row-v2** adds `keyboardPresent` to `given` and a `keyboard {present}`
-  event, with AC-1 and AC-20 to AC-24.
+- **keyboard-row contract** (TASK-135; ADR-0004 D6): **keyboard-row-v1 is superseded by a keyboard-row-v2**, cut by
+  game-qc-android after this merges. v1's cases use `keyboardRow` with the old meaning (false = hidden), and its
+  sources.lock pins Detailed Design, Edge Cases and Acceptance Criteria, all three of which changed here. v2 adds
+  `keyboardPresent` to `given` and a `keyboard {present}` event with the 0.5 s settle, and covers AC-1 and AC-20 to
+  AC-24; v1's other cases carry over with a keyboard present. When v2 lands, v1 is marked `superseded-by`. The
+  review-log entry carries `fixture: keyboard-row-v2`.
 - **settings-record-v2 stands:** the stored type, default and decoding of `keyboardRow` are unchanged (only its meaning
   is, in the Settings Store's text).
 - **Hint Letters:** the row band in F4; the parade-lane note.
