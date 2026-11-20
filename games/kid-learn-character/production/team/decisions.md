@@ -103,6 +103,20 @@ thing from that theme, and the letter may sit anywhere in its name (C = tricerat
 that many items (3 = three baby dinosaurs). **Demo:** one fixed item per key per theme.
 **Production:** a small database with several items per key per theme, enough for variety.
 
+### K-48 Demo 1: the first native build for leadership and partners (Luan, 2026-11-20)
+
+- **Audience:** leadership and partners (outside viewers): tidy, no visible glitches; a recorded video and a build
+  pre-installed on the iPad are likely needed.
+- **Content: the full Dinosaurs set, A–Z + 0–9** (36 keys) on macOS and iPadOS, native (not the web prototype).
+- **Leader defaults (Luan may change):** Demo 1 is the core loop: Title → Play, hardware keys and the on-screen
+  keyboard row, the morph reveal, voice (Kokoro, K-41) and creature sound, the scene, hint letters, the parade meter
+  and parade. The parent gate and panel and Child Lock-in follow in the next milestone (a simple grown-up exit stays
+  in Demo 1). Creature art is team-authored layered SVG per the art bible §8 (swappable later; no paid illustrator
+  unless Luan decides one).
+- Pre-Production order: control manifest + naming conventions, epics and stories for Demo 1 (each names its ADRs and
+  device rows), asset specs for 36 creatures, then sprints. The weekend iPad session and a Mac session block stay
+  the critical path for ADR-0007–0010.
+
 ### K-04 Name of the game (Luan, 2026-11-19)
 
 - **Brand name: Letterlings** (letters become little creatures). Luan proposed "Letterlings: Bé làm quen tiếng Anh";
