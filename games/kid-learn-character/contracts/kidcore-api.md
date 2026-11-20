@@ -61,6 +61,7 @@ The Kotlin port diffs its names and shapes against this file (ADR-0002).
 - `CurrentReveal.r0` (property): `var r0: Double`
 - `CurrentReveal.revealId` (property): `var revealId: Int`
 - `CurrentReveal.revealLen` (property): `var revealLen: Double`
+- `CurrentReveal.settled` (property): `var settled: Bool`
 - `CurrentReveal.source` (property): `var source: PressSource`
 - `CurrentReveal` (struct): `struct CurrentReveal`
 - `DebugLog.log(_:)` (method): `func log(_ line: String)`
@@ -113,6 +114,17 @@ The Kotlin port diffs its names and shapes against this file (ADR-0002).
 - `KioskEffects.remove()` (method): `func remove()`
 - `KioskEffects.windowCoversDisplay` (property): `var windowCoversDisplay: Bool { get }`
 - `KioskEffects` (protocol): `protocol KioskEffects`
+- `PlayClock.Pause.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
+- `PlayClock.Pause.background` (enum.case): `case background`
+- `PlayClock.Pause.freeze` (enum.case): `case freeze`
+- `PlayClock.Pause` (enum): `enum Pause`
+- `PlayClock.init(uptime:)` (init): `init(uptime: UptimeClock)`
+- `PlayClock.isPaused` (property): `var isPaused: Bool { get }`
+- `PlayClock.now()` (method): `func now() -> Double`
+- `PlayClock.pause(_:at:)` (method): `func pause(_ reason: Pause, at u: Double)`
+- `PlayClock.play(_:)` (method): `func play(_ u: Double) -> Double`
+- `PlayClock.resume(_:at:)` (method): `func resume(_ reason: Pause, at u: Double)`
+- `PlayClock` (class): `final class PlayClock`
 - `Press.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
 - `Press.init(key:source:time:origin:)` (init): `init(key: String, source: PressSource, time: Double, origin: PressOrigin? = nil)`
 - `Press.key` (property): `var key: String`
@@ -131,11 +143,15 @@ The Kotlin port diffs its names and shapes against this file (ADR-0002).
 - `PressOutcome` (enum): `enum PressOutcome`
 - `PressQueue.current` (property): `var current: CurrentReveal? { get }`
 - `PressQueue.formed(revealId:)` (method): `mutating func formed(revealId: Int)`
-- `PressQueue.init(knobs:stage:clock:log:)` (init): `init(knobs: PressQueueKnobs, stage: PressQueueStage, clock: UptimeClock, log: DebugLog)`
+- `PressQueue.freeze()` (method): `mutating func freeze()`
+- `PressQueue.frozen` (property): `var frozen: Bool { get }`
+- `PressQueue.init(knobs:stage:clock:log:)` (init): `init(knobs: PressQueueKnobs, stage: PressQueueStage, clock: PlayClock, log: DebugLog)`
 - `PressQueue.nextRevealId` (property): `var nextRevealId: Int { get }`
 - `PressQueue.press(_:)` (method): `mutating func press(_ p: Press) -> PressOutcome`
 - `PressQueue.queue` (property): `var queue: [Press] { get }`
 - `PressQueue.restingSince` (property): `var restingSince: Double? { get }`
+- `PressQueue.resume()` (method): `mutating func resume()`
+- `PressQueue.settle()` (method): `mutating func settle()`
 - `PressQueue.tick(now:)` (method): `mutating func tick(now: Double)`
 - `PressQueueKnobs.!=(_:_:)` (func.op): `static func != (lhs: borrowing Self, rhs: borrowing Self) -> Bool`
 - `PressQueueKnobs.formedTimeoutS` (property): `var formedTimeoutS: Double`

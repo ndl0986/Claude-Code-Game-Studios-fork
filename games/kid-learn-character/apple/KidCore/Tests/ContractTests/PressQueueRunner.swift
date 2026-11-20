@@ -3,10 +3,10 @@ import Foundation
 import KidCore
 import XCTest
 
-/// press-queue-v2, KidCore layer (ADR-0004 D3; stories press-queue/001-004). Covers the start / queue / formed-guard /
-/// ignore rules only. Not registered in `ContractHarness.runners`: the registry row stays `not-started` until
-/// press-queue/005 (ContractKit fails a registered runner on a not-started row), so `PressQueueContractTests`
-/// below runs the explicit `inScope` list itself and reports every other case id as NOT ASSESSED.
+/// press-queue-v2, KidCore layer (ADR-0004 D3; stories press-queue/001-005). Registered in `ContractHarness.runners`
+/// and in the registry (`runner: PressQueueRunner`, press-queue/005): every case runs. The fake Stage stands in for
+/// the Reveal Stage and Key Table, and the runner plays the Reveal Stage's part for freeze, panel and background
+/// (pausing the play clock and telling the queue, architecture §3).
 struct PressQueueRunner: ContractRunner {
     static let contract = "press-queue-v2"
     static let declaration = ContractDeclaration(
@@ -82,6 +82,8 @@ struct PressQueueRunner: ContractRunner {
 
     let stage: Stage
     let clock = Clock()
+    /// The play clock over the case's uptime (R8a): paused by freeze and background.
+    let play: PlayClock
     var queue: PressQueue
 
     init(given: [String: JSONValue], draws: DrawQueues) throws {
@@ -97,7 +99,8 @@ struct PressQueueRunner: ContractRunner {
         if case .object(let r)? = given["reveal"] { table = r }
         stage = Stage(table: table)
         stage.reduceMotion = given["accessibility"]?["reduceMotion"] == .bool(true)
-        queue = PressQueue(knobs: k, stage: stage, clock: clock, log: Log(stage: stage))
+        play = PlayClock(uptime: clock)
+        queue = PressQueue(knobs: k, stage: stage, clock: play, log: Log(stage: stage))
     }
 
     mutating func step(uptime: Double, event e: [String: JSONValue]) throws -> Outputs {
@@ -118,7 +121,7 @@ struct PressQueueRunner: ContractRunner {
             case .ignored: return [.object(["out": .string("ignored")])]
             }
         case "tick":
-            queue.tick(now: uptime)
+            queue.tick(now: play.play(uptime))
             try checkStage()
             return stage.calls
         case "accessibilityChanged":
@@ -127,8 +130,31 @@ struct PressQueueRunner: ContractRunner {
         case "formed":
             queue.formed(revealId: Int(e["revealId"]?.number ?? 0))
             return []
+        // The Reveal Stage's part (architecture §3): it pauses and resumes the play clock and tells the queue.
+        case "freeze":
+            play.pause(.freeze, at: uptime)
+            queue.freeze()
+            return []
+        case "resume":
+            play.resume(.freeze, at: uptime)
+            queue.resume()
+            return []
+        case "panelOpen":
+            // A correct answer opens the panel: the settle is at the (frozen) play time, then the freeze ends.
+            queue.settle()
+            play.resume(.freeze, at: uptime)
+            return []
+        case "panelClose":
+            return []
+        case "background":
+            queue.settle()
+            play.pause(.background, at: uptime)
+            return []
+        case "foreground":
+            play.resume(.background, at: uptime)
+            return []
         default:
-            throw ContractError("event \(e["type"]?.string ?? "?") is not in press-queue/001-004's scope")
+            throw ContractError("event \(e["type"]?.string ?? "?") is not a press-queue-v2 event")
         }
     }
 
@@ -156,58 +182,14 @@ struct PressQueueRunner: ContractRunner {
             guard let c = queue.current else { return .null }
             return .object(["revealId": .int(Int64(c.revealId)), "key": .string(c.key), "holdEff": .double(c.holdEff),
                             "formed": .bool(c.formed), "formedAt": c.formedAt.map { .double($0) } ?? .null])
-        default: throw ContractError("expectState.\(name) is not in press-queue/001-004's scope")
+        default: throw ContractError("expectState.\(name) is not press-queue-v2 state (spec.md State)")
         }
     }
 }
 
-/// Runs press-queue-v2's in-scope cases (all must pass) and names every other case NOT ASSESSED by id.
+/// press-queue-v2's runner self-tests (ADR-0004 V2): planted cases the real file can't hold. The real file runs in
+/// `ContractHarnessTests` through the registry row (`runner: PressQueueRunner`, story press-queue/005).
 final class PressQueueContractTests: XCTestCase {
-    /// The cases that test nothing beyond story 001: AC-1..AC-4 and the two R3.1 conjuncts (hold passed but not
-    /// formed, formed but hold not passed). Each uses only press, tick and formed on the default knobs.
-    static let inScope = [
-        "AC1-start-at-once", "AC2-queue-during-hold-then-advance", "AC3-formed-guard", "AC4-ignore-when-full",
-        "R3-hold-passed-but-not-formed-queues", "R3-formed-but-hold-not-passed-queues",
-        // Story 002: rest, no jumping, mash (AC-5, AC-6, AC-8, AC-22), F3's mash bound on the queue_max knob, the
-        // PQ-Q2 exact boundary between rest and hold (F2, inclusive), and R5's tick-time r0 under a frame hitch.
-        "AC5-rest-then-start-at-once", "AC6-no-jumping", "AC8-mash-ten-at-rest", "AC22-one-advance-per-tick",
-        "F3-mash-ten-during-hold", "F3-queue-max-0", "F3-queue-max-2", "PQ-Q2-empty-queue-press-at-exact-boundary",
-        "PQ-Q2-tick-first-at-boundary", "PQ-Q2-press-first-at-boundary", "R5-frame-hitch-r0-is-tick-time",
-        // Story 003: F1's holdEff rows and the missing-entry bound with its log line (AC-7), the formed guard and the
-        // formed timeout (AC-11, R5.1), the fallback lengths (AC-12), hasWord false (AC-24), and F4's worst wait.
-        "F1-nest-0.5-normal", "F1-triceratops-0.904-normal", "F1-quetzalcoatlus-1.15-normal", "F1-no-voiceDurations-entry",
-        "F1-five-baby-dinosaurs-1.47-normal", "F1-word-1.5-normal", "F1-reduced-word-1.5", "F1-no-entry-bound-follows-knobs",
-        "F1-reduced-word-1.25", "F1-hold-1.0-tuning-nest", "F1-word-1.25-normal-cap-not-reached", "AC24-hasWord-false",
-        "AC12-fallback-long-revealLen", "AC11-formed-for-old-reveal-ignored", "AC11-second-formed-ignored",
-        "AC11-formed-timeout-inclusive", "R5-timeout-then-advance-same-tick", "F4-worst-wait-11.55",
-        // Story 004: Reduce Motion locked at start (AC-13, F5), equal sources (AC-18, R12), restingSince (AC-20, R10)
-        // with formedAt the arrival time (R7), and the snapshot's queue keys in order (R11).
-        "AC13-reduce-motion-locked-at-start", "R5-timeout-uses-reduced-revealLen", "AC18-sources-equal-hardwareKey",
-        "AC18-sources-equal-hint", "AC18-sources-equal-keyboardRow", "AC20-restingSince", "R7-formedAt-is-arrival-time",
-        "R11-snapshot-queue-keys-in-order",
-    ]
-
-    func test_press_queue_v2_cases_in_scope_of_stories_001_004() throws {
-        let file = try ContractHarness.contractsRoot().appendingPathComponent("press-queue-v2/cases.json")
-        let root = try Fixture.load(file)
-        var fixtures: [String: JSONValue] = [:]
-        if case .object(let f)? = root["fixtures"] { fixtures = f }
-        var tolerances: [String: Double] = [:]
-        if case .object(let t)? = root["tolerance"] { for (k, v) in t { tolerances[k] = v.number } }
-        let all = root["cases"]?.array ?? []
-        let ids = all.compactMap { $0["id"]?.string }
-        var pass = 0, fail = 0
-        for id in Self.inScope {
-            guard let c = all.first(where: { $0["id"]?.string == id }) else { XCTFail("press-queue-v2/\(id): no such case"); fail += 1; continue }
-            if let msg = ContractHarness.runCase(c, contract: "press-queue-v2", runner: PressQueueRunner.self,
-                                                 fixtures: fixtures, tolerances: tolerances) {
-                XCTFail(msg); fail += 1
-            } else { pass += 1 }
-        }
-        let notAssessed = ids.filter { !Self.inScope.contains($0) }
-        print("CONTRACT press-queue-v2: \(pass) pass, \(fail) fail; \(notAssessed.count) NOT ASSESSED (outside stories press-queue/001-004): \(notAssessed.joined(separator: ", "))")
-    }
-
     /// One planted case through the harness: a press of `key` from a hint at `origin`, with `D` the only reveal.
     func planted(key: String, origin: String, expectOrigin: String) throws -> String? {
         let text = """

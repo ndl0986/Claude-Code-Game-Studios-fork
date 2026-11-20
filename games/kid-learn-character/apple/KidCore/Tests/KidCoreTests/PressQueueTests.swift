@@ -3,7 +3,8 @@ import XCTest
 
 /// Press Queue stories 001 (start at once, queue during the hold, the formed guard, ignore when full; AC-1..AC-4)
 /// 002 (rest, no jumping, mash; AC-5, AC-6, AC-8, AC-22), 003 (hold and formed rules; AC-7, AC-11, AC-12, AC-24)
-/// and 004 (ids, sources, resting; AC-9, AC-10, AC-13, AC-18, AC-20) of design/gdd/press-queue.md. An injected clock, a fake Reveal Stage and fixed lengths; no wall clock.
+/// 004 (ids, sources, resting; AC-9, AC-10, AC-13, AC-18, AC-20) and 005 (panel, background, gate freeze, title,
+/// theme; AC-14, AC-15, AC-16, AC-17, AC-23) of design/gdd/press-queue.md. An injected clock, a fake Reveal Stage and fixed lengths; no wall clock.
 final class PressQueueTests: XCTestCase {
     /// A clock the test sets; `formed(revealId:)` reads it.
     final class FakeClock: UptimeClock {
@@ -19,6 +20,8 @@ final class PressQueueTests: XCTestCase {
         /// Reduce Motion as the stage reads it at each start (Reveal Stage R9), and its set (F5: formedS 1.25,
         /// revealLen 1.5 here, dyadic).
         var reduceMotion = false
+        /// The theme's cast prefix Key Table resolves with (a theme switch changes it, AC-16).
+        var castPrefix = "cast_"
         var reducedAnswer = RevealStart(formedS: 1.25, revealLen: 1.5, hasWord: true, wordLen: 0.5, castId: "")
         init(formedS: Double, revealLen: Double, wordLen: Double) {
             answer = RevealStart(formedS: formedS, revealLen: revealLen, hasWord: true, wordLen: wordLen, castId: "")
@@ -26,7 +29,7 @@ final class PressQueueTests: XCTestCase {
         func startReveal(revealId: Int, key: String, source: PressSource, origin: PressOrigin?, r0: Double) -> RevealStart {
             calls.append(Call(revealId: revealId, key: key, source: source, origin: origin, r0: r0))
             var a = reduceMotion ? reducedAnswer : answer
-            a.castId = "cast_\(key)"
+            a.castId = "\(castPrefix)\(key)"
             return a
         }
     }
@@ -43,10 +46,14 @@ final class PressQueueTests: XCTestCase {
                                 wordLenMaxS: 1.5)
     let holdEff = 3.25
 
+    /// The play clock the last `makeQueue()` built, for the story-005 tests that pause it.
+    var play: PlayClock!
+
     func makeQueue() -> (PressQueue, FakeStage, FakeClock) {
         let stage = FakeStage(formedS: 2.5, revealLen: 3.0, wordLen: 0.5)
         let clock = FakeClock()
-        return (PressQueue(knobs: knobs, stage: stage, clock: clock, log: log), stage, clock)
+        play = PlayClock(uptime: clock)
+        return (PressQueue(knobs: knobs, stage: stage, clock: play, log: log), stage, clock)
     }
 
     func press(_ key: String, at t: Double) -> Press { Press(key: key, source: .hardwareKey, time: t) }
@@ -333,5 +340,106 @@ final class PressQueueTests: XCTestCase {
         clock.t = 15.75
         q.formed(revealId: 2)
         XCTAssertEqual(q.restingSince, 15.75)
+    }
+
+    // MARK: story 005
+
+    /// D started at 10.0 with A, B, C queued (not formed yet).
+    func busyQueue() -> (PressQueue, FakeStage, FakeClock) {
+        var (q, stage, clock) = makeQueue()
+        _ = q.press(press("D", at: 10.0))
+        for k in ["A", "B", "C"] { _ = q.press(press(k, at: 10.5)) }
+        return (q, stage, clock)
+    }
+
+    // AC-14 (R8): the panel opens mid-morph
+    func test_the_panel_clears_the_queue_and_settles_the_reveal_at_the_play_time() {
+        var (q, stage, clock) = busyQueue()
+        clock.t = 11.0
+        q.settle()
+        XCTAssertEqual(q.queue, [])
+        XCTAssertEqual(q.current?.formed, true)
+        XCTAssertEqual(q.current?.formedAt, 11.0)
+        XCTAssertEqual(q.restingSince, 11.0)
+        XCTAssertEqual(stage.calls.count, 1, "no reveal for the dropped presses")
+        // After the panel closes, the next press starts at once: the settled hold counts as passed.
+        XCTAssertEqual(q.press(press("E", at: 20.5)), .started(revealId: 2, r0: 20.5, castId: "cast_E"))
+    }
+
+    // AC-15 (R9): background clears and settles; the time away never counts
+    func test_background_settles_and_its_time_is_excluded_from_play_time() {
+        var (q, _, clock) = busyQueue()
+        clock.t = 11.0
+        q.settle()
+        play.pause(.background, at: 11.0)
+        clock.t = 311.0
+        play.resume(.background, at: 311.0)
+        XCTAssertEqual(q.current?.formedAt, 11.0)
+        XCTAssertEqual(q.press(press("C", at: 311.5)), .started(revealId: 2, r0: 11.5, castId: "cast_C"))
+    }
+
+    // AC-23 (R8a): the gate challenge for 20 s, then a timeout
+    func test_a_gate_freeze_then_timeout_keeps_the_queue_and_counts_no_frozen_time() {
+        var (q, stage, clock) = makeQueue()
+        _ = q.press(press("D", at: 10.0))
+        _ = q.press(press("A", at: 10.5))
+        _ = q.press(press("B", at: 10.5))
+        play.pause(.freeze, at: 11.0); q.freeze()
+        q.tick(now: play.play(20.0))
+        XCTAssertEqual(q.queue.map(\.key), ["A", "B"], "frozen: nothing cleared, nothing advanced")
+        play.resume(.freeze, at: 31.0); q.resume()
+        clock.t = 32.5
+        q.formed(revealId: 1)
+        XCTAssertEqual(q.current?.formedAt, 12.5)
+        q.tick(now: play.play(33.25))
+        XCTAssertEqual(stage.calls.map(\.key), ["D", "A"])
+        XCTAssertEqual(stage.calls.last?.r0, 10.0 + holdEff)
+        XCTAssertEqual(q.queue.map(\.key), ["B"])
+    }
+
+    // AC-23 (R8 after R8a): a correct answer opens the panel; the settle is at the frozen play time
+    func test_a_correct_answer_clears_and_settles_at_the_frozen_play_time() {
+        var (q, _, clock) = makeQueue()
+        _ = q.press(press("D", at: 10.0))
+        _ = q.press(press("A", at: 10.5))
+        play.pause(.freeze, at: 11.0); q.freeze()
+        clock.t = 20.0
+        q.settle()
+        play.resume(.freeze, at: 20.0)
+        XCTAssertEqual(q.queue, [])
+        XCTAssertEqual(q.current?.formedAt, 11.0)
+        XCTAssertFalse(q.frozen, "the panel ends the challenge's freeze")
+    }
+
+    // AC-17: play entered by a key
+    func test_the_first_press_of_play_starts_at_once_as_reveal_one() {
+        var (q, _, _) = makeQueue()
+        XCTAssertNil(q.current)
+        XCTAssertEqual(q.press(press("D", at: 5.0)), .started(revealId: 1, r0: 5.0, castId: "cast_D"))
+    }
+
+    // AC-16 (logic): after a theme switch the next started item is the new theme's (the stage resolves it)
+    func test_after_a_theme_switch_the_next_reveal_takes_the_new_themes_item() {
+        var (q, stage, clock) = makeQueue()
+        _ = q.press(press("D", at: 10.0))
+        clock.t = 11.0
+        q.settle()   // the theme changes in the panel; the queue is already empty
+        stage.castPrefix = "newtheme_"   // Key Table now resolves from the new theme
+        XCTAssertEqual(q.press(press("D", at: 20.0)), .started(revealId: 2, r0: 20.0, castId: "newtheme_D"))
+    }
+
+    // The play clock: overlapping pauses count once
+    func test_play_clock_excludes_overlapping_freeze_and_background_once() {
+        let up = FakeClock()
+        let p = PlayClock(uptime: up)
+        p.pause(.freeze, at: 10.0)
+        p.pause(.background, at: 12.0)
+        p.resume(.freeze, at: 15.0)
+        XCTAssertTrue(p.isPaused)
+        p.resume(.background, at: 20.0)
+        XCTAssertFalse(p.isPaused)
+        up.t = 25.0
+        XCTAssertEqual(p.now(), 15.0, "25 s of uptime minus the 10 s paused (10 to 20) once")
+        XCTAssertEqual(p.play(21.0), 11.0)
     }
 }
